@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>电话功能</title>
+</head>
+
+<body>
+	<div class="tit">电话功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.进入打电话界面</span>
+			<input id="uexCall.dial" type="text" class="textbox" value="13436827900">
+			<input class="btn" type="button" value="进入打电话界面" onclick="uexCall.dial(document.getElementById('uexCall.dial').value)">
+			<span>2.直接打电话</span>
+			<input class="btn"  type="button" value="打电话" onclick="uexCall.call(document.getElementById('uexCall.dial').value)">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

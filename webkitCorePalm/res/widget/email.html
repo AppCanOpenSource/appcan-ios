@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>邮件功能</title>
+<script type="text/javascript">
+	function fileSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('attachmentPath').value = obj.fileExplorerPath;
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">邮件功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.进入发邮件界面</span>
+			<span>收件人</span>
+			<input id="receiverEmail" type="text" class="textbox" value="">
+			<span>邮件主题</span>
+			<input id="subject" type="text" class="textbox" value="">
+			<span>邮件内容</span>
+			<input id="content" type="text" class="textbox" value="">
+			<span> 附件路径(基于file协议)</span>
+			<input  class="btn" type="button" value="启动文件浏览器" onclick="uexFileMgr.explorer('fileSuccess','fileSrcPath','');">
+			<input id="attachmentPath" type="text" class="textbox" readOnly="true">
+			<input class="btn" type="button" value="进入发邮件界面" onclick="uexEmail.open(document.getElementById('receiverEmail').value,document.getElementById('subject').value,document.getElementById('content').value,document.getElementById('attachmentPath').value)">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

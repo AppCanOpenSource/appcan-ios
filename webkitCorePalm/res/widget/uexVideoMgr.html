@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>视频功能</title>
+<script type="text/javascript">
+	function explorerSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('file').innerHTML = obj.fileExplorerPath;
+		document.getElementById('hidText').value = obj.fileExplorerPath;
+	}
+	function recordSuccess(data){
+			//alert(data);
+			//uexVideoMgr.open(data);
+		var obj = eval('('+data+')');
+			document.getElementById('videorecord').innerHTML  = obj.videoRecorderPath;
+		}
+</script>
+</head>
+
+<body>
+	<div class="tit">视频功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<input class="btn" type="button" value="选择视频文件" onclick="uexFileMgr.explorer('explorerSuccess','explorerFailed','')">
+			<span>选择好的视频文件为：</span>
+			<div class="tcxx" id="file"></div>
+			<input id="hidText" type="hidden" value="">
+			<span>8.打开视频播放界面</span>
+			<input class="btn" type="button" value="打开视频播放界面" onclick="uexVideo.open(document.getElementById('hidText').value);">
+			<span>2.录制视频</span>
+			<input class="btn" type="button" value="录视频" onclick="uexVideo.record('recordSuccess','inFailed');">
+			<span>录制好的视频文件地址为：</span>
+			<div class="tcxx" id="videorecord"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

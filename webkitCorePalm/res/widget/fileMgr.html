@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>文件管理</title>
+<script type="text/javascript">
+	function creatFile(path){
+			//alert(path);
+			uexFileMgr.createFile('creatFileSuccess','creatFileFailed','file1',path);
+			uexFileMgr.closeFile('inSuccess','inFailed','file1');
+	}
+	function creatFileSuccess(data){
+		alert("文件创建成功");
+	}
+
+	function writeFile(path,data){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file1',path,1);
+		uexFileMgr.writeFile('writeFileSuccess','writeFileeFailed','file1','0',data);
+		uexFileMgr.closeFile('inSuccess','inFailed','file1');
+	}
+	function writeFileSuccess(data){
+		alert("写文件成功");
+	}
+	function openFileFailed(data){
+		alert("文件打开失败");
+	}
+	function writeFileeFailed(data){
+		alert("写文件失败");
+	}
+
+	function readFile(path,size){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file2',path,1);
+		uexFileMgr.readFile('readFileSuccess','readFileFailed','file2',size);
+		uexFileMgr.closeFile('inSuccess','inFailed','file2');
+		
+	}
+	
+	function readFileSuccess(data,plainText){
+		
+		
+		document.getElementById('readData').innerHTML = plainText;
+	}
+	function readFileFailed(data){
+		alert("读文件失败");
+	}
+	function explorerSuccess(data){
+		
+		var obj = eval('('+data+')');
+		//alert(obj.fileExplorerPath);
+		document.getElementById('filePath1').innerHTML = obj.fileExplorerPath;
+	}
+	function fileExistSuccess(data){
+		var obj = eval('('+data+')');
+		if(obj.fileExist == 0){
+			alert("文件存在");
+		}else{
+			alert("文件不存在");
+		}
+	}
+	function isFileExistByID(path){
+		uexFileMgr.createFile('','','file2',path);
+		uexFileMgr.isFileExistByID('fileExistByIDSuccess','fileExistByIDFailed','file2');
+		uexFileMgr.closeFile('inSuccess','inFailed','file2');
+	}
+	function fileExistByIDSuccess(data){
+		var obj = eval('('+data+')');
+		if(obj.fileExist == 0){
+			alert("文件存在");
+		}else{
+			alert("文件不存在");
+		}
+
+	}
+	function fileExistByIDFailed(data){
+		alert("文件不存在");
+	}
+	function creatDirSuccess(data){
+		alert("文件夹创建成功");
+	}
+	function creatDirFailed(data){
+		alert("文件夹创建失败");
+	}
+	function deleteFileByPathSuccess(data){
+		alert("删除成功");
+	}
+	function deleteFileByPathFailed(data){
+		alert("删除失败");
+	}
+	function deleteFileByPath(){
+		uexFileMgr.createFile('','','file1',document.getElementById('dirPath').value);
+		uexFileMgr.deleteFileByID('deleteFileByPathSuccess','deleteFileByPathFailed','file1');
+		uexFileMgr.closeFile('inSuccess','inFailed','file1');
+	}
+	function getFileTypeByPathSuccess(data){
+		var obj = eval('('+data+')');
+		if(obj.fileType == 0){
+			alert("是文件");
+		}
+		if(obj.fileType == 1){
+			alert("是文件夹");
+		}
+	}
+	function getFileTypeByPathFailed(data){
+		alert("判断失败");
+	}
+	function getFileTypeByID(){
+		uexFileMgr.createFile('','','file5',document.getElementById('dirPath').value);
+		uexFileMgr.getFileTypeByID('getFileTypeByIDSuccess','getFileTypeByIDFailed','file5');
+		uexFileMgr.closeFile('inSuccess','inFailed','file5');
+	}
+	function getFileTypeByIDSuccess(data){
+		var obj = eval('('+data+')');
+		if(obj.fileType == 0){
+			alert("是文件");
+		}
+		if(obj.fileType == 1){
+			alert("是文件夹");
+		}
+	}
+	function getFileTypeByIDFailed(data){
+		alert("判断失败");
+	}
+	function seekFile(){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file6',document.getElementById('dirPath').value,1);
+		uexFileMgr.seekFile('seekFileSuccess','seekFileFailed','file6','1');
+		uexFileMgr.closeFile('inSuccess','inFailed','file6');
+	}
+	function seekFileSuccess(data){
+		alert("设置成功");
+	}
+	function seekFileFailed(data){
+		alert("设置失败");
+	}
+	function seekBeginOfFile(){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file7',document.getElementById('dirPath').value,1);
+		uexFileMgr.seekBeginOfFile('seekBeginOfFileSuccess','seekFileFailed','file7');
+		uexFileMgr.closeFile('inSuccess','inFailed','file7');
+	}
+	function seekBeginOfFileSuccess(data){
+		alert("设置成功");
+	}
+	function seekEndOfFile(){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file8',document.getElementById('dirPath').value,1);
+		uexFileMgr.seekEndOfFile('seekEndOfFileSuccess','seekFileFailed','file8');
+		uexFileMgr.closeFile('inSuccess','inFailed','file8');
+	}
+	function seekEndOfFileSuccess(data){
+		alert("设置成功");
+	}
+	function getFileSize(){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file3',document.getElementById('dirPath').value,1);
+		uexFileMgr.getFileSize('getFileSizeSuccess','getFileSizeFailed','file3');
+		uexFileMgr.closeFile('inSuccess','inFailed','file3');
+	}
+	function getFileSizeSuccess(data){
+		var obj = eval('('+data+')');
+		alert("文件长度："+obj.fileSize);
+		
+	}
+	function getFileSizeFailed(data){
+		alert("文件长度失败");
+	}
+	function getFilePath(){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed','file4',document.getElementById('dirPath').value,1);
+		uexFileMgr.getFilePath('getFilePathSuccess','getFilePathFailed','file4');
+		uexFileMgr.closeFile('inSuccess','inFailed','file4');
+	}
+	function getFilePathSuccess(data){
+		var obj = eval('('+data+')');
+		alert("文件路径："+obj.filePath);	
+	}
+	function getFilePathFailed(data){
+		alert("文件路径失败");
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">文件管理</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.创建文件</span>
+			<span>输入文件名称：</span>
+			<input class="textbox" id="dirPath" type="text" value="file:///data/test.txt">
+			<input class="btn" type="button" value="创建文件" onclick="creatFile(document.getElementById('dirPath').value);">
+			<span>2.创建文件夹</span>
+			<span>输入文件夹名称：</span>
+			<input class="textbox" id="dir" type="text" value="file:///data/test/">
+			<input class="btn" type="button" value="创建文件夹" onclick="uexFileMgr.createDir('creatDirSuccess','creatDirFailed','dir1',document.getElementById('dir').value);">
+			<span>3.写文件</span>
+			<span>输入文件内容：</span>
+			<textarea class="tcxx" id="data">test</textarea>
+			<input  class="btn" type="button" value="写文件" onclick="writeFile(document.getElementById('dirPath').value,document.getElementById('data').value);">
+			<span>4.读文件</span>
+			<input  class="btn" type="button" value="读文件" onclick="readFile(document.getElementById('dirPath').value,-1);">
+			<span>取得的文件内容为：</span>
+			<div class="tcxx" id="readData"></div>
+			<span>5.关闭文件</span>
+			<input  class="btn" type="button" value="关闭文件" onclick="uexFileMgr.closeFile('inSuccess','inFailed','file1');">
+			<span>6.通过路径判断文件是否存在</span>
+			<span>文件路径：</span>
+			<input class="textbox" id="filePath" type="text" value="file:///data/test.txt">
+			<input  class="btn" type="button" value="测试文件" onclick="uexFileMgr.isFileExistByPath('fileExistSuccess','fileExistFailed',document.getElementById('filePath').value);">
+			<span>7.通过id判断文件是否存在</span>
+			<input  class="btn" type="button" value="测试文件" onclick="isFileExistByID(document.getElementById('filePath').value);">
+			<span>8.删除文件（根据路径）</span>
+			<input class="textbox" id="deletePath" type="text" value="file:///data/test.txt">
+			<input class="btn" type="button" value="删除文件（根据路径）" onclick="uexFileMgr.deleteFileByPath('deleteFileByPathSuccess','deleteFileByPathFailed',document.getElementById('dirPath').value);">
+			<span>9.删除文件（根据文件id）</span>
+			<input class="btn" type="button" value="删除文件（根据文件id）" onclick="deleteFileByPath();">
+			<span>10.根据路径判断是文件还是文件夹</span>
+			<input class="btn" type="button" value="判断" onclick="uexFileMgr.getFileTypeByPath('getFileTypeByPathSuccess','getFileTypeByPathFailed',document.getElementById('dirPath').value);">
+			<span>11.根据文件id判断是文件还是文件夹</span>
+			<input class="btn" type="button" value="判断" onclick="getFileTypeByID();">
+			<span>12.设置文件偏移值</span>
+			<input class="btn" type="button" value="设置" onclick="seekFile()">
+			<span>13.把指针重新指向第一位</span>
+			<input class="btn" type="button" value="设置" onclick="seekBeginOfFile()">
+			<span>14.设置文件偏移值为文件结束</span>
+			<input class="btn" type="button" value="设置" onclick="seekEndOfFile()">
+			<span>15.获取文件长度</span>
+			<input class="btn" type="button" value="获取" onclick="getFileSize();">
+			<span>16.获取文件路径值</span>
+			<input class="btn" type="button" value="获取" onclick="getFilePath();">
+			<span>17.启动文件浏览器</span>
+			<input  class="btn" type="button" value="启动文件浏览器" onclick="uexFileMgr.explorer('explorerSuccess','explorerFailed','');">
+			<span>选择的文件路径为：</span>
+			<div class="tcxx" id="filePath1"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

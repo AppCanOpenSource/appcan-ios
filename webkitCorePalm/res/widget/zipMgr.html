@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>压缩/解压缩功能</title>
+<script type="text/javascript">
+	
+	function fileSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('filePath').innerHTML = obj.fileExplorerPath;
+		document.getElementById('hidText').value = obj.fileExplorerPath;
+	}
+	function zipSuccess(data){
+		alert("压缩成功");
+		
+	}
+	function zipFailed(data){
+		
+		alert("压缩失败");
+
+	}
+	function unzipSuccess(data){
+		
+		alert("解压成功");
+	}
+	function unzipFailed(data){
+		alert("解压失败");
+	}
+	function unzipfileSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('unzipPath').innerHTML = obj.fileExplorerPath;
+		document.getElementById('hidunZip').value = obj.fileExplorerPath;
+		
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">压缩/解压缩功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.压缩</span>
+			<span>选择要压缩的文件：</span>
+			<input class="btn" type="button" value="选择文件" onclick="uexFileMgr.explorer('fileSuccess','fileSrcPath','');">
+			<span>要压缩的文件路径为：</span>
+			<div class="tcxx" id="filePath"></div>
+			<input type="hidden" id="hidText">
+			<span>输入压缩后保存的文件路径：</span>
+			<input type="text" class="textbox" id="inPath" value="file:///sdcard/test.zip"></input>
+			<input class="btn" type="button" value="压缩" onclick="uexZip.zip('zipSuccess','zipFailed',document.getElementById('hidText').value,document.getElementById('inPath').value);">
+			<span>2.解压</span>
+			<span>选择要解压的文件：</span>
+			<input class="btn" type="button" value="选择文件" onclick="uexFileMgr.explorer('unzipfileSuccess','unzipfileSrcPath','');">
+			<span>要解压的文件路径为：</span>
+			<div class="tcxx" id="unzipPath"></div>
+			<input type="hidden" id="hidunZip">
+			<span>输入解压后保存的文件路径：</span>
+			<input type="text" class="textbox" id="outPath" value="file:///sdcard/"></input>
+			<input class="btn" type="button" value="解压缩" onclick="uexZip.unzip('unzipSuccess','unzipFailed',document.getElementById('hidunZip').value,document.getElementById('outPath').value);">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>
