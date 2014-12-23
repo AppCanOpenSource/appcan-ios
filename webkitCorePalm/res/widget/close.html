@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>多窗口</title>
+<script type="text/javascript">
+	function close1(){
+		uexWindow.close();
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">多窗口测试</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>关闭本窗口</span>
+			<br><br><br>
+			<input class="btn" type="button" value="关闭本窗口" onclick=close1()>
+			<br><br><br>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

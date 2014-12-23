@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>上传功能</title>
+<script type="text/javascript">
+	var uploadHttp = "http://192.168.1.28:8080/SwfUpload/FileUpload";
+	
+	function explorerSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('dirPath').value = obj.fileExplorerPath;
+	}
+	function upload(){
+		uexUploaderMgr.createUploader('createSuccess','createFailed','upload1',uploadHttp);
+		uexUploaderMgr.uploadFile('uploadSuccess','uploadFailed','PercentageCallback','upload1',document.getElementById('dirPath').value);
+		//uexUploaderMgr.closeUploader('inSuccess','inFailed','upload1');
+	}
+	function PercentageCallback(json){
+		var obj = eval('('+json+')');
+		document.getElementById('percentage').innerHTML ="文件大小："+obj.fileSize+"字节<br>上传进度："+obj.uploadPercentage;
+		
+	}
+	function uploadSuccess(data){
+		
+			alert("上传成功");
+			uexUploaderMgr.closeUploader('inSuccess','inFailed','upload1');
+			
+	}
+	function uploadFailed(data){
+		alert("上传失败");
+		uexUploaderMgr.closeUploader('inSuccess','inFailed','upload1');
+	}
+
+	function upload1(){
+		uexUploaderMgr.createUploader('createSuccess','createFailed','upload2',uploadHttp);
+		uexUploaderMgr.uploadData('datauploadSuccess','datauploadFailed','upload2',document.getElementById('data').value);
+	}
+	function datauploadSuccess(data){
+		
+			alert("数据上传成功");
+		
+		
+	}
+	function datauploadFailed(data){
+		alert("上传失败");
+		uexUploaderMgr.closeUploader('inSuccess','inFailed','upload2');
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">上传功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.文件上传</span>
+			<span>文件路径：</span>
+			<!-- 
+			<input  class="btn" type="button" value="启动文件浏览器" onclick="uexFileMgr.explorer('explorerSuccess','explorerFailed','');">
+			-->
+			<input class="textbox" id="dirPath" type="text" value="file:///data/test.txt" >
+			<input  class="btn" type="button" value="上传文件" onclick="upload();">
+			<span>文件上传状态</span>
+			<div class="tcxx" id="percentage"></div>
+			<span>2.数据上传</span>
+			<input class="textbox" id="data" type="text" value="上传的数据" >
+			<input  class="btn" type="button" value="上传数据" onclick="upload1();">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

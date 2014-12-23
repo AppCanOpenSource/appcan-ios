@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  AppCanPlugin
+
+  Created by AppCan on 13-11-13.
+  Copyright (c) 2013年 zywx. All rights reserved.
+*/
+"netAlertTitle" ="network error";
+"netAlertMessage" ="Your Application Can Only Access The Offline Resources!";
+"netAlertCancelBtn" ="Exit";
+"netAlertOtherBtn" ="Continue";
+"exitAlertTitle" ="Exit prompt";
+"exitAlertMessage" ="exit application?";
+"exitAlertCancelBtn" ="Cancel";
+"exitAlertExitBtn" ="Exit";

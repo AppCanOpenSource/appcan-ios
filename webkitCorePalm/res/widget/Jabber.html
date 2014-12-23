@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>Jabber功能</title>
+<script type="text/javascript">
+	var copyData;
+	function connect(){
+		uexJabber.login('loginSuccess','loginFailed',document.getElementById('loginUser').value,
+		document.getElementById('loginPsword').value,document.getElementById('serverip').value,document.getElementById('serverport').value);	
+	}
+	function loginSuccess(data){
+		alert("登入成功");
+	}
+	function loginFailed(data){
+		alert("登入失败");
+	}
+	function sendData(){
+		uexJabber.sendData('sendSuccess','sendFailed',document.getElementById('data').value,document.getElementById('toUser').value);
+	}
+	function uexJabberReceiveDataCallback(json,data){
+	//	alert(data);
+		if(copyData != null){
+			copyData = copyData + "\n"+data;
+		}else{
+			copyData = data;
+		}
+	document.getElementById('resdData').value = copyData;
+	}
+	function sendFile(){
+		uexJabber.sendFile('sendFileSuccess','sendFileFailed',document.getElementById('filePath').value,document.getElementById('toUser').value);
+	}
+	function sendFileSuccess(data){
+		alert("文件发送完毕");
+	}
+	function sendFileFailed(){
+		alert("文件发送失败");
+	}
+	function uexJabberReceiveFileCallBack(json){
+		var obj = eval('('+json+')');
+		 if(confirm(obj.fileSender+"给你发的"+obj.receiveFileName+" 文件，您是否接收？")){
+			uexJabber.receiveFile('receiveFileSuccessData','receiveFileFailedData',"file:///data/"+obj.receiveFileName);
+		 }else{
+			uexJabber.refuseAcceptFile('','');
+		 }
+	}
+	function receiveFileSuccessData(json){	
+			alert("文件接收完毕");
+			
+	}
+	
+	function explorerSuccess(data){
+		
+		var obj = eval('('+data+')');
+		//alert(obj.fileExplorerPath);
+		document.getElementById('filePath').value = obj.fileExplorerPath;
+	}
+	function close(){
+		uexJabber.logout('','');
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">Jabber功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.登入</span>
+			<span>用户名</span>
+			<input type="text" class="textbox" id="loginUser" value="test2"></input>
+			<span>密码</span>
+			<input type="text" class="textbox" id="loginPsword" value="123456"></input>
+			<span>服务器ip</span>
+			<input type="text" class="textbox" id="serverip" value="192.168.1.211"></input>
+			<span>服务器port</span>
+			<input type="text" class="textbox" id="serverport" value="5222"></input>
+			<input class="btn" type="button" value="登入" onclick="connect();">
+			<span>2.发送</span>
+			<span>对方名称</span>
+			<input type="text" class="textbox" id="toUser" value="test@im.3g2win.com/zywx"></input>
+			<span>发送的内容</span>
+			<input type="text" class="textbox" id="data" value="你好呀！"></input>
+			<input class="btn" type="button" value="发送数据" onclick="sendData();">
+			<span>3.得到的内容：</span>
+			<textarea id="resdData" class="tcxx"></textarea>
+			<span>3.发送文件：</span>
+			<span>文件路径：</span>
+			<input  class="btn" type="button" value="启动文件浏览器" onclick="uexFileMgr.explorer('explorerSuccess','explorerFailed','');">
+			<input type="text" class="textbox" id="filePath" value=""></input>
+			<input class="btn" type="button" value="发送文件" onclick="sendFile();">
+			<span>登出：</span>
+			<input class="btn" type="button" value="登出" onclick="uexJabber.close();">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

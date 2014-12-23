@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>阅读器功能</title>
+<script type="text/javascript">
+	var fileID = "file";
+	function readNext(path,size){
+
+		uexFileMgr.openFile('openFileSuccess','openFileFailed',fileID,path,1);
+		
+		uexFileMgr.readerNext('readerNextSuccess','readerNextFailed',fileID,size);
+		
+		uexFileMgr.closeFile('inSuccess','inFailed',fileID);
+		
+		
+	}
+	function readerNextSuccess(data,plainText){
+		document.getElementById('nextData').innerHTML = plainText;
+	}
+	function openFileFailed(data){
+		alert("文件打开失败");
+	}
+	function readerNextFailed(data){
+		alert("读取下一页失败");
+	}
+	function readPre(path,size){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed',fileID,path,1);
+		uexFileMgr.readerPre('readerPreSuccess','readerPreFailed',fileID,size);
+		uexFileMgr.closeFile('inSuccess','inFailed',fileID);
+		
+	}
+	function readerPreFailed(data){
+		alert("读取上一页失败");
+	}
+	function readerPreSuccess(data,plainText){
+
+		document.getElementById('preData').innerHTML = plainText;
+	}
+	function readPercent(path,percent,size){
+		if(percent == null || percent.length == 0){
+			alert("没填百分比");
+			return;
+		}
+		uexFileMgr.openFile('openFileSuccess','openFileFailed',fileID,path,1);
+		uexFileMgr.readerPercent('readerPercentSuccess','readerPercentFailed',fileID,percent,size);
+		uexFileMgr.closeFile('inSuccess','inFailed',fileID);
+		
+	}
+	function readerPercentFailed(data){
+		alert("读取百分比失败");
+	}
+	function readerPercentSuccess(data,plainText){
+	
+		document.getElementById('readfilepercent').innerHTML =plainText;
+	}
+	function resOffset(path){
+		uexFileMgr.openFile('openFileSuccess','openFileFailed',fileID,path,1);
+		uexFileMgr.getreaderOffset('readerOffsetSuccess','readerOffsetFailed',fileID);
+		uexFileMgr.closeFile('inSuccess','inFailed',fileID);
+		
+	}
+	function readerOffsetFailed(data){
+		alert("读取书签失败");
+	}
+	function readerOffsetSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('offset').innerHTML =obj.fileReaderOffset;
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">阅读器功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.打开TXT文件</span>
+			<span>选择的文件路径为：</span>
+			<input class="textbox" type="text" id="hidText" value="file:///data/test.txt">
+			<span>2.读文件-字节-下一页</span>
+			<input  class="btn" type="button" value="读文件-字节-下一页" onclick="readNext(document.getElementById('hidText').value,20);">
+			<span>读取的内容为：</span>
+			<div class="tcxx" id="nextData"></div>
+			<span>3.读文件-字节-上一页</span>
+			<input  class="btn" type="button" value="读文件-字节-上一页" onclick="readPre(document.getElementById('hidText').value,20);">
+			<span>读取的内容为：</span>
+			<div class="tcxx" id="preData"></div>
+			<span>4.读文件-字节-百分比</span>
+			<span>输入要读取的百分比：</span>
+			<input type="text" class="textbox" id="zdadd">
+			<input  class="btn" type="button" value="读文件-字节-百分比" onclick="readPercent(document.getElementById('hidText').value, document.getElementById('zdadd').value, 20);">
+			<span>读取的内容为：</span>
+			<div class="tcxx" id="readfilepercent"></div>
+			<span>5.返回书签值</span>
+			<input  class="btn" type="button" value="返回书签值" onclick="resOffset(document.getElementById('hidText').value);">
+			<span>当前的游标为：</span>
+			<div class="tcxx" id="offset"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

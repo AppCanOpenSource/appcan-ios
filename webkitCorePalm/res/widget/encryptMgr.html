@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>加密/解密功能</title>
+<script type="text/javascript">
+	// 加  解 密管理
+		function encryptMgr(type,text){
+
+			if(text == "" || text.lentgh == 0){
+				alert("内容不能为空");
+				return;
+			}
+		
+			// 加密
+			if(type == 0){
+			
+			
+				uexEncrypt.encrypt('encryptSuccess','encryptFailed',text);
+				
+			// 解密
+			}else if(type == 1){
+				uexEncrypt.decrypt('decryptSuccess','decryptFailed',text);
+				
+			}
+		}
+		function encryptSuccess(data){
+			var obj = eval('('+data+')');
+			document.getElementById('encrypt').innerHTML = obj.encryptRet;
+			document.getElementById('dText').value = obj.encryptRet;
+		}
+		function encryptFailed(data){
+			alert("加密失败");
+		}
+		function decryptSuccess(data){
+			var obj = eval('('+data+')');
+			document.getElementById('unencrypt').innerHTML = obj.decryptRet;
+		}
+		function decryptFailed(data){
+			alert("解密失败");
+		}
+</script>
+</head>
+
+<body>
+	<div class="tit">加密/解密功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1. 加密 </span>
+			<span>输入要加密的文本：</span>
+			<textarea id="eText" class="tcxx">abcd</textarea>
+			<input class="btn" type="button" value="加密" onclick="encryptMgr(0,document.getElementById('eText').value)">
+			<span>加密后的文本为：</span>
+			<div class="tcxx" id="encrypt"></div>
+			<input type="hidden" id="dText">
+		</div>
+		<div class="consj">
+			<span>2. 解密</span>
+			<input class="btn" type="button" value="解密" onclick="encryptMgr(1,document.getElementById('dText').value)">
+			<span>解密后的文本为：</span>
+			<div class="tcxx" id="unencrypt"></div>
+		</div>
+	</div>
+</body>
+</html>

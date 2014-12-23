@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>音乐功能</title>
+<script type="text/javascript">
+var as;
+	function musicExplorerSuccess(data){
+		var obj = eval('('+data+')');
+		
+		
+			var value = document.getElementById('musicList').value;
+			if(value != '' && value.length > 0){
+				document.getElementById('musicList').value = value+";"+obj.fileExplorerPath;
+			}else{
+				document.getElementById('musicList').value = obj.fileExplorerPath;
+			}
+
+		
+		
+	}
+	// 音乐播放
+		function audioMgr(type,url){
+		
+			if(type == -1){
+				
+				uexAudio.open('openFailed','Failed',url);
+				
+			}else if(type == 0){
+				
+				uexAudio.play('playSuccess','Failed');
+			}else if(type == 1){
+				uexAudio.replay('successCallBack','failedCallBack');
+			}else if(type == 2){
+				uexAudio.stop('successCallBack','failedCallBack');
+			}else if(type == 3){
+				uexAudio.pause('successCallBack','failedCallBack');
+			}else if(type == 4){
+				uexAudio.playNext('successCallBack','failedCallBack',url);
+			}else if(type == 5){
+				uexAudio.volumeUp('successCallBack','failedCallBack');
+			}else if(type == 6){
+				uexAudio.volumeDown('successCallBack','failedCallBack');
+			}else if(type == 7){
+			var value = document.getElementById('musicList').value;
+				if(value != '' && value.length > 0){
+					var mycars=value.split(";");
+
+					uexAudio.openPlayer('successCallBack','failedCallBack',mycars);
+				}else{
+					alert("文件列表不能为空！");
+				}
+			}else if(type == 8){
+
+				uexAudio.record('recordCallBack','failedCallBack');
+			}
+
+		}
+		function recordCallBack(data){
+				var obj = eval('('+data+')');
+	
+			document.getElementById('videorecord').innerHTML  = obj.audioRecorderPath;
+		}
+		function explorerSuccess(data){
+			var obj = eval('('+data+')');
+			document.getElementById('hidText').value = obj.fileExplorerPath;
+			document.getElementById('file').innerHTML = obj.fileExplorerPath;
+		}
+		
+		
+</script>
+</head>
+
+<body>
+	<div class="tit">音乐功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<input class="btn" type="button" value="选择音频文件" onclick="uexFileMgr.explorer('explorerSuccess','explorerFailed','')">
+			<span>选择好的音频文件为：</span>
+			<div class="tcxx" id="file"></div>
+			<input id="hidText" type="hidden" value="">
+			<span>1.打开音乐</span>
+			<input class="btn" type="button" value="打开音乐" onclick="audioMgr(-1,document.getElementById('hidText').value);">
+			<span>2.播放音乐</span>
+			<input class="btn" type="button" value="音乐播放" onclick="audioMgr(0,'');">
+			<span>3.重新播放</span>
+			<input class="btn" type="button" value="重新播放" onclick="audioMgr(1,'');">
+			<span>4.停止播放</span>
+			<input class="btn" type="button" value="停止播放" onclick="audioMgr(2,'');">
+			<span>5.暂停播放</span>
+			<input class="btn" type="button" value="暂停播放" onclick="audioMgr(3,'');">
+			<span>6.播放下一个</span>
+			<input class="btn" type="button" value="播放下一个" onclick="audioMgr(4,document.getElementById('hidText').value);">
+			<span>7.声音 +</span>
+			<input class="btn" type="button" value="声音 +" onclick="audioMgr(5,'');">
+			<span>8.声音 -</span>
+			<input class="btn" type="button" value="声音 -" onclick="audioMgr(6,'');">
+			<span>9.打开音乐播放界面</span>
+			<input class="btn" type="button" value="添加音频文件" onclick="uexFileMgr.explorer('musicExplorerSuccess','musicExplorerFailed','')">
+			<span>音频文件列表</span>
+			<textarea class="tcxx" id="musicList" readOnly="true"></textarea>
+			<input class="btn" type="button" value="打开音乐界面" onclick="audioMgr(7,document.getElementById('hidText').value);">
+			<span>10.录音</span>
+			<input class="btn" type="button" value="录音" onclick="audioMgr(8,'');">
+			<span>录制好的音频文件地址为：</span>
+			<div class="tcxx" id="videorecord"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+			
+		</div>
+	</div>
+</body>
+</html>

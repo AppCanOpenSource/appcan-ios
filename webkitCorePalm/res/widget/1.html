@@ -1,0 +1,117 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>Window功能</title>
+<script type="text/javascript">
+	function showConfirm(){
+		var value = document.getElementById('confirmbutton').value;
+		if(value == null || value.length == 0){
+			alert("参数不能为空");
+			return;
+		}
+		var mycars=value.split(";");
+
+		
+		uexWindow.confirm('ConfirmSuccess','ConfirmFailed',document.getElementById('confirmTitle').value,document.getElementById('confirmMsg').value,mycars);
+	}
+	function ConfirmSuccess(data){
+		var obj = eval('('+data+')');
+		alert("json 返回的正确数据是" +obj.confirmResult);
+	}
+	function ConfirmFailed(data){
+		alert("Confirm 失败");
+	}
+	function showPrompt(){
+		var value = document.getElementById('promptbutton').value;
+		if(value == null || value.length == 0){
+			alert("参数不能为空");
+			return;
+		}
+		var mycars=value.split(";");
+		uexWindow.prompt('promptSuccess','promptFailed',document.getElementById('promptTitle').value,document.getElementById('promptMsg').value,
+		document.getElementById('defaultMsg').value,mycars);
+	}
+	function promptSuccess(data){
+		var obj = eval('('+data+')');
+		alert("json 返回的正确数据是" +obj.promptResult);
+	}
+	function promptFailed(data){
+		alert("prompt 失败");
+	}
+
+	function windowOpen(){
+		var url = document.getElementById('nurl').value;
+		var type = document.getElementById('ntype').value;
+		var name = document.getElementById('nname').value;
+		uexWindow.open(url, type, name);
+	}
+
+	function msg(){
+	uexWindow.toast("这是提示消息");
+	window.setTimeout(function(){
+				uexWindow.toast("更改提示消息");
+   	   	   	}, 5000);
+	window.setTimeout(function(){
+				uexWindow.closeToast();
+   	   	   	}, 10000);
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">Window功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.返回</span>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+			<span>2.向前</span>
+			<input class="btn" type="button" value="向前" onclick="uexWindow.forward();">
+			<span>3.alert提示框</span>
+			<span>提示框标题</span>
+			<input class="textbox" type="text" id="alertTitle" value="alert">
+			<span>提示消息</span>
+			<input class="textbox" type="text" id="alertMsg"  value="内容">
+			<span>确定按钮名称</span>
+			<input class="textbox" type="text" id="alertbutton" value="确定">
+			<input class="btn" type="button" value="显示效果" onclick="uexWindow.alert(document.getElementById('alertTitle').value,document.getElementById('alertMsg').value,document.getElementById('alertbutton').value);">
+			<span>4.confirm提示框</span>
+			<span>提示框标题</span>
+			<input class="textbox" type="text" id="confirmTitle" value="confirm">
+			<span>提示消息</span>
+			<input class="textbox" type="text" id="confirmMsg" value="内容">
+			<span>确定按钮名称(多个时，用半角分号隔开)</span>
+			<input class="textbox" type="text" id="confirmbutton" value="第一个;第二个">
+			<input class="btn" type="button" value="显示效果" onclick="showConfirm();">
+			<span>5.prompt提示框</span>
+			<span>提示框标题</span>
+			<input class="textbox" type="text" id="promptTitle" value="prompt">
+			<span>提示消息</span>
+			<input class="textbox" type="text" id="promptMsg" value="内容">
+			<span>默认值</span>
+			<input class="textbox" type="text" id="defaultMsg" value="默认值">
+			<span>确定按钮名称(多个时，用半角分号隔开)</span>
+			<input class="textbox" type="text" id="promptbutton" value="第一个;第二个">
+			<input class="btn" type="button" value="显示效果" onclick="showPrompt();">
+
+			<span>6.自定义JS打开一个新窗口</span>
+			<span>新窗口的链接</span>
+			<input class="textbox" type="text" id="nurl" value="close.html">
+			<span>新窗口的类型：0为覆盖当前窗口；1为对话框形式</span>
+			<input class="textbox" type="text" id="ntype" value="0">
+			<span>新窗口的名称，字母和数字组成</span>
+			<input class="textbox" type="text" id="nname" value="name">
+			<input class="btn" type="button" value="打开新窗口" onclick="windowOpen()">
+
+			<span>7.弹出一个提示框</span>
+			<span>注：提示框弹出后由js控制在5秒后更改内容，10秒后自动关闭.提示框消失之前窗口不响应任何事件。
+			</span>
+			<br><br><br>
+			<input class="btn" type="button" value="弹出提示" onclick="msg()">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

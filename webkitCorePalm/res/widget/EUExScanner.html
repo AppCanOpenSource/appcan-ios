@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>条形码扫描功能</title>
+<script type="text/javascript">
+	function ScannerSuccessCallBack(barCode) {
+			//alert(barCode);
+			var obj = eval('('+barCode+')');
+			document.getElementById('scanner').innerHTML = "Result:"+obj.scannerRet+"<br>Format:"+obj.scannerRetFormat;
+	}
+	function ScannerFailedCallBack(data){
+		alert(data);
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">条形码扫描功能</div>
+	<div class="conbor">
+			<div class="consj">
+				<span>1.打开条形码扫描</span>
+				<input class="btn" type="button" value="打开条形码扫描" onclick="uexScanner.open('ScannerSuccessCallBack','ScannerFailedCallBack');">
+				<span>条形码值为:</span>
+				<div class="tcxx" id="scanner"></div>
+			</div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+</body>
+</html>

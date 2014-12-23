@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>获取当前位置</title>
+<script type="text/javascript">
+	function locationCallback(json){
+		var obj = eval('('+json+')');
+		document.getElementById('longitude').value = obj.longitude;
+		document.getElementById('latitude').value = obj.latitude;
+		document.getElementById('location').innerHTML ="经度:"+obj.longitude+"纬度:"+obj.latitude;
+			
+	}
+	function getLocation(latitude,longitude){
+		var data = uexLocation.getAddress('LocationSuccess','LocationFailed',latitude,longitude)
+		
+	}
+	function LocationSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('adre').innerHTML  = obj.location;
+	}
+	function LocationFailed(data){
+		alert(data);
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">获取当前位置信息：</div>
+	<div class="conbor">
+		<div class="consj">	
+			<span>1.获取当前经纬度：</span>
+			<input class="btn" type="button" value="获取当前经纬度" onclick="uexLocation.openLocation();">
+			<span>注意：因手机的GPS功能等同虚设，并且手机GPS功能一般都是处于关闭状态。故此功能同时使用GPS,GPRS,WiFi联合定位。所以使用此功能的手机至少要连接WiFi，或者有SIM卡且卡不欠费！</span>
+			<span>当前的经纬度值为：</span>
+			<div class="tcxx" id="location"></div>
+			<input type="hidden" id="longitude">
+			<input type="hidden" id="latitude">
+			<span>2.获取当前地址</span>
+			<input class="btn" type="button" value="获取当前地址值" onclick="getLocation(document.getElementById('latitude').value,document.getElementById('longitude').value);">
+			<span>获取当前地址值为：</span>
+			<div class="tcxx" id="adre"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

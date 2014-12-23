@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>手机震动测试</title>
+</head>
+
+<body>
+	<div class="tit">手机震动测试</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.震动</span>
+			<span>输入震动持续时间（毫秒为单位）：</span>
+			<input type="text" class="textbox" id="time" value="500"></input>
+			<input class="btn" type="button" value="震动" onclick="uexDevice.vibrate(document.getElementById('time').value);">
+			<input class="btn" type="button" value="停止震动" onclick="uexDevice.cancelVibrate();">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

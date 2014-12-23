@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>socket功能</title>
+<script type="text/javascript">
+	var socketUDP = "udp";
+	var socketTCP = "tcp";
+	function creatUDP(port){
+		uexSocketMgr.createUDPSocket('udpReceiveSuccess','udpCreatFailed',socketUDP,port);	
+		
+	}
+	function udpReceiveSuccess(data,plainText){
+		//alert(data);
+	//	alert("创建成功！udpData");
+		document.getElementById('getUDPData').innerHTML = plainText;
+	}
+	function udpCreatFailed(data){
+		alert("异常，socket中断");
+	}
+	function setUDPIPandPort(ip,port){
+		uexSocketMgr.setInetAddressAndPort('setUDPIPandPortSuccess','setUDPIPandPortFailed',socketUDP,ip,port);
+	}
+	function setUDPIPandPortSuccess(){
+		alert("设置IP和端口号成功！");
+	}
+
+	function sendUDP(data){			
+		uexSocketMgr.sendData('sendUDPSuccess','sendUDPFailed',socketUDP,data);	
+	}
+	function sendUDPSuccess(data){
+		alert("发送UDP数据成功！");
+	}
+
+	
+	function creatTCP(){
+		tcp = uexSocketMgr.createTCPSocket('tcpReceiveSuccess','tcpCreatFailed',socketTCP);
+		//tcp.setInetAddressAndPort('192.168.1.28',2009);
+	}
+	function tcpReceiveSuccess(data,plainText){
+		
+		document.getElementById('getTCPData').innerHTML =plainText;
+	}
+	function tcpCreatFailed(data){
+		alert("异常，socket中断");
+	}
+	function setTCPIPandPort(ip,port){
+		uexSocketMgr.setInetAddressAndPort('setTCPIPandPortSuccess','setTCPIPandPortFailed',socketTCP,ip,port);
+	}
+	function sendTCP(data){
+		
+		
+		uexSocketMgr.sendData('sendTCPSuccess','sendTCPFailed',socketTCP,data);
+		
+	}
+	
+	
+	function closeUDP(){
+		
+		uexSocketMgr.closeSocket('closeUDPSuccess','closeUDPFailed',socketUDP);
+	}
+	
+	function closeTCP(){
+		
+		uexSocketMgr.closeSocket('closeTCPSuccess','closeTCPFailed',socketTCP);
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">socket功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.UDP功能测试：</span>
+			<span>绑定本地的UDP端口号：</span>
+			<input class="textbox" type="text" id = "localPort" value="45666" >
+			<input class="btn" type="button" value="创建UDP" onclick="creatUDP(document.getElementById('localPort').value);">
+			<span>对方的ip：</span>
+			<input class="textbox" type="text" id = "udpId" value="192.168.1.28" >
+			<span>对方的port：</span>
+			<input class="textbox" type="text" id = "udpPort" value="22222">
+			<input class="btn" type="button" value="设置ip和port" onclick="setUDPIPandPort(document.getElementById('udpId').value,document.getElementById('udpPort').value);">
+			<span>输入要发送的UDP数据：</span>
+			<textarea class="tcxx" id="udpData">发送给UDP服务器的数据</textarea>
+			<input class="btn" type="button" value="发送UDP" onclick="sendUDP(document.getElementById('udpData').value);">
+			<span>接收到的UDP数据为：</span>
+			<div class="tcxx" id="getUDPData"></div>
+			<input class="btn" type="button" value="关闭UDP" onclick="closeUDP();">
+			<span>2.TCP功能测试：</span>
+			<input class="btn" type="button" value="创建TCP" onclick="creatTCP();">
+			<span>对方的ip：</span>
+			<input class="textbox" type="text" id = "tcpId" value="192.168.1.28" >
+			<span>对方的port：</span>
+			<input class="textbox" type="text" id = "tcpPort" value="2009">
+			<input class="btn" type="button" value="设置ip和port" onclick="setTCPIPandPort(document.getElementById('tcpId').value,document.getElementById('tcpPort').value);">
+			<span>输入要发送的TCP数据：</span>
+			<textarea class="tcxx" id="tcpData">发送给TCP服务器的数据</textarea>
+			<input class="btn" type="button" value="发送TCP" onclick="sendTCP(document.getElementById('tcpData').value)">
+			<span>接收到的TCP数据为：</span>
+			<div class="tcxx" id="getTCPData"></div>
+			<input class="btn" type="button" value="关闭TCP" onclick="closeTCP();">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

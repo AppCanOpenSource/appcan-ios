@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>短信功能</title>
+<script type="text/javascript">
+	function SMSSuccessCallBack(data){
+		alert("短信发送成功");
+	}
+	function SMSFailedCallBack(data){
+		alert("短信发送失败");
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">短信功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>输入电话号码：</span>
+			<input class="textbox" type="text" id="telnm" value="13436827900"><br>
+			<span>输入短信内容：</span>
+			<textarea class="tcxx" id ="uexSMS.open">欢迎进入WidgetOne!</textarea>
+			<br>
+			<span>1.打开短信界面</span>
+			<input class="btn" type="button" value="打开短信界面" onclick="uexSMS.open(document.getElementById('telnm').value, document.getElementById('uexSMS.open').value)"><br>
+			<span>2.发送短信</span>
+			<input class="btn" type="button" value="发送短信" onclick="uexSMS.send('SMSSuccessCallBack','SMSFailedCallBack',document.getElementById('telnm').value, document.getElementById('uexSMS.open').value)">
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>
