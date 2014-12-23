@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>WidgetOne信息</title>
+<script type="text/javascript">
+	function versionSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('widgetOneVer').innerHTML = obj.widgetoneVersion;
+	}
+	function platformSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('widgetOnePlatform').innerHTML = obj.widgetonePlatform;
+	}
+	function fileSuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('apkPath').innerHTML = obj.fileExplorerPath;
+		document.getElementById('hidApkPath').value = obj.fileExplorerPath;
+	}
+	function testW(){
+		uexWidgetOne.getWidgetNumber('inSuccess','inFailed');
+		uexWidgetOne.getWidgetInfo('inSuccess','inFailed','1');
+	}
+	function numsuc(arg){
+		var obj = eval('('+arg+')');
+		document.getElementById('widgetNum').innerHTML = "widget总数为: " + obj.widgetNumber;
+	}
+
+	function numfai(arg){
+		document.getElementById('widgetNum').innerHTML = "获取失败";
+	}
+
+	function infosuc(data){
+		var obj = eval('('+data+')');
+		document.getElementById('widgetInfo').innerHTML = "widgetID:" + obj.widgetID + "\n" + "widgetAppID:" + obj.widgetAppID + "\n" + "widgetVersion:" + obj.widgetVersion + "\n" + "widgetName:" + obj.widgetName + "\n" + "widgetIcon:" + obj.widgetIcon;
+	}
+
+	function infofai(arg){
+		document.getElementById('widgetInfo').innerHTML = "获取失败";
+	}
+
+	function loadSuccess(arg){
+		;
+	}
+
+	function loadFailed(arg){
+		alert("加载失败");
+	}
+	function checkSuc(json){
+		var obj = eval('('+json+')');
+		if(obj.result == 0){
+			document.getElementById('newWidget').innerHTML ="更新地址是："+obj.updateFileUrl+"<br>文件名："+obj.updateFileName+"<br>文件大小："+obj.updateFileSize+
+			"<br>版本号："+obj.updateFileVer;
+			
+		}else if(obj.result == 1){
+			document.getElementById('newWidget').innerHTML="当前版本是最新的";
+		}else if(obj.result == 3){
+			document.getElementById('newWidget').innerHTML="可能服务器错误";
+		}
+		alert();
+	}
+	function  checkFai(json){
+		document.getElementById('newWidget').innerHTML="更新错误";
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">WidgetOne信息</div>
+	<div class="conbor">
+		<div class="consj">
+			
+			<span>1.得到应用的版本号</span>
+			<input class="btn" type="button" value="得到应用的版本号" onclick="uexWidgetOne.getVersion('versionSuccess','versionFailed');">
+			<div class="tcxx" id="widgetOneVer"></div>
+			
+			<span>2.得到应用的平台信息</span>
+			<input class="btn" type="button" value="得到应用的平台信息" onclick="uexWidgetOne.getPlatform('platformSuccess','platformFailed');">
+			<div class="tcxx" id="widgetOnePlatform"></div>
+			
+			<span>3.通过App信息 启动应用（Android通过ActivityName, IOS通过Url）</span>
+			<span>请输入要启动的应用的信息：</span>
+			Android:
+			<input type="text" class="textbox" id="appInfo_Android" value="android.intent.action.DIAL"></input>
+			<input class="btn" type="button" value="通过appInfo启动Android应用" onclick="uexWidgetOne.loadApp(document.getElementById('appInfo_Android').value);">
+			IOS:
+			<input type="text" class="textbox" id="appInfo_ios" value="tel://13436827900"></input>
+			<input class="btn" type="button" value="通过appInfo启动IOS应用" onclick="uexWidgetOne.loadApp(document.getElementById('appInfo_ios').value);">
+			
+			<!--
+			<span>2.通过WidgetId开始一个Widget</span>
+			<span>请输入Widget的WidgetID：</span>
+			<input type="text" class="textbox"></input>
+			<input class="btn" type="button" value="开始一个Widget" onclick="testW();">
+			
+			<span>2.加载一个页面</span>
+			<span>请输入要加载的界面的URL：</span>
+			<input type="text" class="textbox" id="url" value="http://www.baidu.com"></input>
+			<input class="btn" type="button" value="加载一个页面" onclick="uexWidgetOne.loadUrl(document.getElementById('url').value);">
+			 
+			<span>2.通过包名 和class启动</span>
+			<span>请输入要启动的应用的action信息：</span>
+			<input type="text" class="textbox" id="packageNmae" value="com.android.camera"></input>
+			<input type="text" class="textbox" id="classNmae" value="com.android.camera.Camera"></input>
+			<input class="btn" type="button" value="通过包名 和class 启动" onclick="uexWidgetOne.loadAppByPackageName(document.getElementById('packageNmae').value,document.getElementById('classNmae').value);">
+			<span>3.通过activity name 启动</span>
+			<span>请输入要启动的应用的action信息：</span>
+			<input type="text" class="textbox" id="actionNmae" value="android.intent.action.DIAL"></input>
+			<input class="btn" type="button" value="通过activity name 启动" onclick="uexWidgetOne.loadAppByActionName(document.getElementById('actionNmae').value);">
+			<span>4.安装一个app</span>
+			<span>请选择一个APK包：</span>
+			<input class="btn" type="button" value="选择要安装的APK" onclick="uexFileMgr.explorer('fileSuccess','fileSrcPath','');">
+			<span>选择的APK包路径为：</span>
+			<div class="tcxx" id="apkPath"></div>
+			<input type="hidden" id="hidApkPath">
+			<input class="btn" type="button" value="安装一个app" onclick="uexWidgetOne.installApp(document.getElementById('hidApkPath').value);">
+			<span>5.卸载一个app</span>
+			<span>请输入要卸载的应用的app包名：</span>
+			<span>注：本功能默认卸载一个UC浏览器,未装UC的同事请安装UC后测试本功能,否则会报找不到应用。如果知道被卸载应用的具体包名,也可自行输入要卸载的应用包名。</span>
+			<input type="text" class="textbox" value="com.uc.browser" id="uninstall"></input>
+			<input class="btn" type="button" value="卸载一个app" onclick="uexWidgetOne.unInstallApp(document.getElementById('uninstall').value);">
+			-->
+
+			<span>6.获取widget总数</span>
+			<input class="btn" type="button" value="获取widget总数" onclick="uexWidgetOne.getWidgetNumber('numsuc','numfai');">
+			<div class="tcxx" id="widgetNum"></div>
+
+			<span>7.获取widget信息</span>
+			<span>请输widget的索引(大于0小于widget总数)：</span>
+			<input type="text" class="textbox" value="0" id="info"></input>
+			<input class="btn" type="button" value="获取widget信息" onclick="uexWidgetOne.getWidgetInfo('infosuc', 'infofai', document.getElementById('info').value);">
+			<span>Widget信息：</span>
+			<div class="tcxx" id="widgetInfo"></div>
+
+			<span>8.加载一个新的widget</span>
+			<span>请输widget的AppId：</span>
+			<input type="text" class="textbox" value="" id="load"></input>
+			<input class="btn" type="button" value="加载widget" onclick="uexWidgetOne.startWidget('loadSuccess', 'loadFailed', document.getElementById('load').value);">
+			<!-- 
+			<span>9.检查widget更新</span>
+			<input class="btn" type="button" value="检查widget更新" onclick="uexWidgetOne.chekeUpdate('checkSuc','checkFai');">
+			<div class="tcxx" id="newWidget"></div>
+			-->
+		</div>
+		<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+	</div>
+</body>
+</html>

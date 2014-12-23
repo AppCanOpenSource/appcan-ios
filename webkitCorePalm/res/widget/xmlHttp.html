@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>跨域异步请求接口</title>
+<script type="text/javascript">
+	
+	function xmlHttp(){
+		var array = new Array(2)
+		array[0] = "m=param";
+		array[1] = "appid=1000";
+		uexXmlHttpMgr.open("httpSuccess", "httpFailed", "1", "GET","http://192.168.1.5/musicmodel/api/user.api.php", array);
+		
+	}
+	function httpSuccess(data,data1){
+		document.getElementById('adre').innerHTML  = data + ":" + data1;
+	}
+	function httpFailed(data){
+		document.getElementById('adre').innerHTML  = data;
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">跨域异步请求接口</div>
+	<div class="conbor">
+		<div class="consj">	
+			<span>跨域异步请求接口测试：</span>
+			<span>注：测试地址为公司内网http://192.168.1.5/musicmodel/api/user.api.php，返回JSON数据，如没有取得数据，可能192.168.1.5的服务没开启，或网络错误.
+			</span>
+			<span>请求内容：</span>
+			<div class="tcxx" id="payy">
+			地址：http://192.168.1.5/musicmodel/api/user.api.php。<br>
+			请求ID：随机分配,不重复<br>
+			请求方式：get。<br>
+			请求数据：m=param，appid=1000<br>
+			</div>
+			<input class="btn" type="button" value="取数据" onclick=xmlHttp()>
+			<span>支付结果：</span>
+			<div class="tcxx" id="adre"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

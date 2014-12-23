@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  AppCanPlugin
+
+  Created by AppCan on 13-11-13.
+  Copyright (c) 2013年 zywx. All rights reserved.
+ */
+"netAlertTitle" ="无可用网络";
+"netAlertMessage" ="您的应用只能访问离线资源";
+"netAlertCancelBtn" ="退出应用";
+"netAlertOtherBtn" ="进入应用";
+"exitAlertTitle" ="退出提示";
+"exitAlertMessage" ="确定要退出应用吗？";
+"exitAlertCancelBtn" ="取消";
+"exitAlertExitBtn" ="退出";

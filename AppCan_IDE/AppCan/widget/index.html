@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="ui-mobile landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+  <head>
+    <title>
+	我的空间应用
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/ui-base.css"> 
+    <link rel="stylesheet" href="css/ui-media.css">
+  </head>
+  <body class="ui-mobile-viewport" >
+   
+<div id="page" class="ui-page ui-body-d ui-page-active" tabindex="0">
+<div class="ui-content ui-body-d">
+<div class="ui-grid-auto" id="cnt">
+  <div class="ui-block-auto">
+		<!--<div data-role="button" class="ui-btn ui-btn-thumb ui-corner-all ui-btn-c">
+			<span class="ui-thumb" style="background-image:url(css/res-apple/talk-act.png);"></span>
+			<span class="ui-btn-inner ui-corner-all">
+			<span class="ui-btn-text text1">房迅通房迅通</span>
+			</span>
+		</div>-->
+  </div>
+  
+</div>
+</div>
+
+</div>
+<script type="text/javascript">            
+	window.uexOnload=function(){
+		document.getElementById("cnt").innerHTML = "";
+		uexWidgetOne.getWidgetNumber();
+		uexWidgetOne.cbGetWidgetNumber = succcablck;
+		uexWidgetOne.cbGetWidgetInfo = getinfocallback;
+	};
+	function succcablck(opCode,dataType,data){
+		var num = data;
+		for(var i=0;i<num;i++){
+			uexWidgetOne.getWidgetInfo(i);
+		}
+	}
+	function getinfocallback(opCode,dataType,data){
+		var obj = eval('('+data+')');
+		if(obj.appId!='9999999'){
+			var html_= '<div class="ui-block-auto" onclick="openWdg(' + "'"+ obj.appId +"'"+ ')"><div data-role="button" class="ui-btn ui-btn-thumb ui-corner-all ui-btn-c"><span class="ui-thumb" style="background-image:url('+obj.icon+');"></span><span class="ui-btn-inner ui-corner-all"><span class="ui-btn-text text1">'+obj.name+'</span></span></div></div>';
+			document.getElementById("cnt").innerHTML += html_;
+		}
+	}
+	function openWdg(id){
+		uexWidgetOne.cleanCache();
+		uexWidget.startWidget(id,1,"","");
+	}
+
+</script>
+  </body>
+</html>
