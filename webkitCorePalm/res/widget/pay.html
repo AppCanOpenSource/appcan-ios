@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>支付接口</title>
+<script type="text/javascript">
+	
+	function pay(){
+		var subject = document.getElementById("subject").value;
+		var body = document.getElementById("bodyy").value;
+		var fee = document.getElementById("fee").value;
+		var num = document.getElementById("num").value;
+		uexPay.pay("paySuccess", "payFailed", num, subject, body, fee);
+		
+	}
+	function paySuccess(data){
+		var obj = eval('('+data+')');
+		document.getElementById('adre').innerHTML  = obj.description;
+	}
+	function payFailed(data){
+		var obj = eval('('+data+')');
+		document.getElementById('adre').innerHTML  = "支付失败：" + obj.description;
+	}
+</script>
+</head>
+
+<body>
+	<div class="tit">支付接口</div>
+	<div class="conbor">
+		<div class="consj">	
+			<span>支付接口测试：</span>
+			<span style="color:red;">注意：因公司暂未与支付宝无线支付服务签约，没有获得相关支付公钥，所以此功能默认定向支付宝公司开发测试帐户，所花费的钱款为真实花费，无法退回，<br><br>且登录支付宝后，支付宝将绑定手机，请谨慎测试！！<br><br>
+			代码中已经写死了,每笔交易额为0.01元。 ^_^<br><br>
+			此功能需安装支付宝插件，没有安装支付宝插件的同事请自行安装，此版本(0.70版)默认捆绑安装一个支付宝插件。
+			</span>
+			<span>商品信息：</span>
+			<div class="tcxx" id="payy">
+			商品名称：珍珠项链。<br>
+			商品描述：韩版,韩国流行饰品小太阳花小巧雏菊 珍珠项链2M15。<br>
+			价格：一口价 &nbsp;&nbsp; 0.01元。<br>
+			商品编号：xxxxxxxxxxxxx&nbsp;（调试用,客户端随机生成）.
+			</div>
+			<input type="hidden" id="subject" value="珍珠项链">
+			<input type="hidden" id="bodyy" value="韩版,韩国流行饰品小太阳花小巧雏菊 珍珠项链2M15。">
+			<input type="hidden" id="fee" value="0.01">
+			<input type="hidden" id="num" value="200155555">
+			<br>
+			<input class="btn" type="button" value="点击购买" onclick=pay()>
+			<span>支付结果：</span>
+			<div class="tcxx" id="adre"></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>

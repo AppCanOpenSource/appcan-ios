@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" id="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;minimum-scale=1.0; user-scalable=no;" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<title>照相机功能</title>
+<script type="text/javascript">
+	function CameraSuccessCallBack(data){
+		var obj = eval('('+data+')');
+		document.getElementById('zxj').innerHTML =obj.cameraPath;
+		document.getElementById('picc').src=obj.cameraPath;
+	}
+	function CameraFailedCallBack(data){
+		alert(data);
+	}
+	
+</script>
+</head>
+
+<body>
+	<div class="tit">照相机功能</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.打开照相机</span>
+			<input class="btn" type="button" value="打开照相机" onclick="uexCamera.open('CameraSuccessCallBack','CameraFailedCallBack');">
+			<span>照片保存地址为：</span>
+			<div class="tcxx" id="zxj"></div><br>
+			<div ><img id="picc" src="" style="width:85%;height:150px;"/></div>
+			<input class="btn" type="button" value="返回" onclick="uexWindow.back();">
+		</div>
+	</div>
+</body>
+</html>
