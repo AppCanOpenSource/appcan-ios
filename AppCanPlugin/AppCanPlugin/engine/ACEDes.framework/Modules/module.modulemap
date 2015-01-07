@@ -1,6 +1,0 @@
-framework module ACEDes {
-  umbrella header "ACEDes.h"
-
-  export *
-  module * { export * }
-}
