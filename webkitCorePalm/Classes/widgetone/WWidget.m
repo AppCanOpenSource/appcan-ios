@@ -45,6 +45,7 @@
 @synthesize orientation;
 @synthesize openAdStatus;
 @synthesize preload;
+@synthesize appKey;
 -(void)dealloc{
 	ACENSLog(@"WWidget release,widgetOneId=%d",[widgetOneId retainCount]);
 	[widgetOneId release];

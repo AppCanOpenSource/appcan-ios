@@ -27,8 +27,7 @@
 #import "EBrowser.h"
 #import "BUtility.h"
 #import "BUIAlertView.h"
-//#import "FileEncrypt.h"
-#import <ACEDes/FileEncrypt.h>
+#import "FileEncrypt.h"
 #import "WWidget.h"
 #import "EBrowserHistoryEntry.h"
 #import "JSON.h"
@@ -47,6 +46,14 @@
 #import "JSONKit.h"
 
 #define kWindowConfirmViewTag (-9999)
+
+#define UEX_EXITAPP_ALERT_TITLE @"退出提示"
+#define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗?"
+#define UEX_EXITAPP_ALERT_EXIT @"确定"
+#define UEX_EXITAPP_ALERT_CANCLE @"取消"
+
+#define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
+#define ApprootRightSlidingWinName @"rootRightSlidingWinName"
 
 @interface EScrollView : UIScrollView {
     
@@ -441,9 +448,9 @@
     }
     
     
-    if ((meBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
-        return;
-    }
+//    if ((meBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
+//        return;
+//    }
     
     if (inUExWndName.length != 0) {
         eBrwWnd = [eBrwWndContainer brwWndForKey:inUExWndName];
@@ -750,7 +757,7 @@
             
             app.leftWebController = controller;
             
-            [self addBrowserWindowToWebController:controller url:url winName:@"rootLeftSliding"];
+            [self addBrowserWindowToWebController:controller url:url winName:AppRootLeftSlidingWinName];
             
             
             if (width > 0) {
@@ -768,18 +775,21 @@
     if (rightDict != nil) {
         if (app.rightWebController == nil) {
             
+            url = [rightDict objectForKey:@"url"];
+            numW = [rightDict objectForKey:@"width"];
+            width = [numW integerValue];
             
             controller = [[ACEWebViewController alloc] init];
             
             app.rightWebController = controller;
             
-            [self addBrowserWindowToWebController:controller url:url winName:@"rootRightSliding"];
+            [self addBrowserWindowToWebController:controller url:url winName:ApprootRightSlidingWinName];
             
             if (width > 0) {
                 [app.drawerController setMaximumRightDrawerWidth:width];
             }
             
-            [app.drawerController setLeftDrawerViewController:app.rightWebController];
+            [app.drawerController setRightDrawerViewController:app.rightWebController];
             
             [controller release];
         }
@@ -1490,10 +1500,10 @@
 -(void)exitApp
 {
     
-    NSString * title = NSLocalizedString(@"exitAlertTitle", nil);
-    NSString * message = NSLocalizedString(@"exitAlertMessage", nil);
-    NSString * exit = NSLocalizedString(@"exitAlertExitBtn", nil);
-    NSString * cancel = NSLocalizedString(@"exitAlertCancelBtn", nil);
+    NSString * title = NSLocalizedString(UEX_EXITAPP_ALERT_TITLE, nil);
+    NSString * message = NSLocalizedString(UEX_EXITAPP_ALERT_MESSAGE, nil);
+    NSString * exit = NSLocalizedString(UEX_EXITAPP_ALERT_EXIT, nil);
+    NSString * cancel = NSLocalizedString(UEX_EXITAPP_ALERT_CANCLE, nil);
     
     UIAlertView *windowConfirmView = [[[UIAlertView alloc]
                                        initWithTitle:title
@@ -1720,8 +1730,8 @@
 		}
 		eBrwWnd.mFlag = 0;
         
-        NSLog(@"********animiId******%d",animiId);
-        NSLog(@"********aniDuration******%f",aniDuration);
+        ACENSLog(@"********animiId******%d",animiId);
+        ACENSLog(@"********aniDuration******%f",aniDuration);
         if (animiId>=13 && animiId<=16) {
             [self moveeBrwWnd:eBrwWnd andTime:(float)aniDuration andAnimiId:(int)animiId];
         }else {

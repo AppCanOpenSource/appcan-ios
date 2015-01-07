@@ -17,6 +17,8 @@
  */
 
 #import "PluginParser.h"
+#import "ACEPluginModel.h"
+#import "WidgetOneDelegate.h"
 
 @implementation PluginParser
 -(NSString*)compentJS:(NSString*)inClassName funArr:(NSMutableArray*)inFunArr property:(NSMutableString*)inPorpertyStr{
@@ -91,7 +93,17 @@
 	}else if ([elementName isEqualToString:@"plugin"]) {
 		if ([attributeDict objectForKey:@"name"]) {
 			className = [attributeDict objectForKey:@"name"];
-		}
+        }
+        if ([attributeDict objectForKey:@"global"]) {
+            
+            NSString *str = [attributeDict objectForKey:@"global"];
+            
+            if ([str isEqualToString:@"true"] && className != nil) {
+                
+                [self addPluginToGlobal:className];
+                
+            }
+        }
 	}
 	element=@"";
 }
@@ -118,9 +130,27 @@
 		NSString *somePluginJS = [self compentJS:className funArr:funArr property:ObjectJS];
 		[funArr removeAllObjects];
 		ObjectJS = [NSMutableString stringWithString:@""];
-		resultJS = [NSString stringWithFormat:@"%@\n%@",resultJS,somePluginJS];
+		resultJS = [NSMutableString stringWithFormat:@"%@\n%@",resultJS,somePluginJS];
 	}else if ([elementName isEqualToString:@"uexplugins"]){
 		return;
 	}
 }
+
+- (void)addPluginToGlobal:(NSString *)name
+{
+    if (name == nil) {
+        return;
+    }
+    ACEPluginModel *model = [[ACEPluginModel alloc] init];
+    
+    model.pluginName = name;
+    model.pluginObj = nil;
+    
+    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [app.globalPluginDict setObject:model forKey:name];
+    
+    [model release];
+}
+
 @end

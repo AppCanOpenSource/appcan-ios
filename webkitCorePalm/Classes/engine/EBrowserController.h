@@ -16,6 +16,8 @@
  *
  */
 
+#import "ACEBaseViewController.h"
+
 @class EBrowserMainFrame;
 @class EBrowserWidgetContainer;
 @class EBrowser;
@@ -38,7 +40,7 @@
 #define F_ForbidPlugins    @"AppCanPluginsKey"
 #define F_ForbidWindows    @"AppCanWindowsKey"
 #define F_AuthType         @"AppCanAuthType"
-@interface EBrowserController : UIViewController <UIAccelerometerDelegate,UIAlertViewDelegate>{
+@interface EBrowserController : ACEBaseViewController <UIAccelerometerDelegate,UIAlertViewDelegate>{
 	UIImageView *mStartView;
 	EBrowser *meBrw;
 	EBrowserMainFrame *meBrwMainFrm;
