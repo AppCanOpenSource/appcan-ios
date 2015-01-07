@@ -21,6 +21,9 @@
 #define F_WWIDGET_NO_OBFUSCATION	0
 #define F_WWIDGET_OBFUSCATION		1
 
+#define F_WWIDGET_NO_ENCRYPTCJ      0
+#define F_WWIDGET_ENCRYPTCJ         1
+
 #define F_WWIDGET_SPACEWIDGET		0
 #define F_WWIDGET_MAINWIDGET		1
 #define F_WWIDGET_OTHERSWIDGET		2
@@ -80,6 +83,7 @@
 	int openAdStatus;
 	//preload
 	int preload;
+     NSString * appKey;
 	
 }
 -(BOOL)getMySpaceStatus;
@@ -94,6 +98,7 @@
 @property (nonatomic,retain)	NSString *widgetOneId;
 @property (nonatomic,retain)	NSString *widgetId;
 @property (nonatomic,retain)	NSString *appId;
+@property (nonatomic,retain)	NSString *appKey;
 @property (nonatomic,retain)	NSString *widgetName;
 @property (nonatomic,retain)	NSString *ver;
 @property (nonatomic,retain)	NSString *channelCode;
@@ -109,4 +114,6 @@
 @property (nonatomic,retain)	NSString *author;
 @property (nonatomic,retain)	NSString *license;
 @property (nonatomic,assign)    BOOL isDebug;
+@property (nonatomic, assign) NSInteger enctryptcj;
+
 @end

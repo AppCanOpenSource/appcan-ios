@@ -1,4 +1,4 @@
-// Copyright (c) 2013 Mutual Mobile (http://mutualmobile.com/)
+ // Copyright (c) 2013 Mutual Mobile (http://mutualmobile.com/)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
-
+#import "BUtility.h"
 #import <QuartzCore/QuartzCore.h>
 
 CGFloat const MMDrawerDefaultWidth = 280.0f;
@@ -580,7 +580,6 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
 }
 
 #pragma mark Rotation
-
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     //If a rotation begins, we are going to cancel the current gesture and reset transform and anchor points so everything works correctly

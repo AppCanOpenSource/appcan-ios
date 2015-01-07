@@ -26,6 +26,7 @@
 #import "ZipArchive.h"
 #import "EUExWidgetOne.h"
 #import "WidgetOneDelegate.h"
+#import "FileEncrypt.h"
 
 
 NSString * webappShowAactivety;
@@ -87,10 +88,21 @@ NSString * webappShowAactivety;
 	SpecConfigParser *widgetXml = [[SpecConfigParser alloc] init];
 	NSString *mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
 	[widgetXml release];
+    
+    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
 	WWidget*wgtobj = (WWidget*)[tempArr objectAtIndex:0];
     wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG];
+    
+    NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
+    if([obfuscationStr isEqualToString:@"true"]){
+        wgtobj.obfuscation = F_WWIDGET_OBFUSCATION; //加密
+    }else {
+        wgtobj.obfuscation = F_WWIDGET_NO_OBFUSCATION;
+    }
+    
 	if (wgtobj!=nil) {
 		wgtobj.openAdStatus = 0;//不显示广告
 		if ([wgtobj.ver isEqualToString:mVer]) {
@@ -110,7 +122,11 @@ NSString * webappShowAactivety;
 	ACENSLog(@"tmpWgtDict retainCount=%d",[tmpWgtDict retainCount]);
 	NSString *tmpWgtPath =F_MAINWIDGET_NAME;
 
-    [tmpWgtDict setObject:[BUtility appKey] forKey:CONFIG_TAG_WIDGETONEID];
+    NSString * tmpWgtOneId = [BUtility appKey];
+    if (tmpWgtOneId) {
+        [tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
+    }
+    
 	[tmpWgtDict setObject:tmpWgtPath forKey:CONFIG_TAG_WIDGETPATH];
 	[tmpWgtDict setObject:[NSNumber numberWithInt:F_WWIDGET_MAINWIDGET] forKey:CONFIG_TAG_WIDGETTYPE];
 		
@@ -193,6 +209,32 @@ NSString * webappShowAactivety;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:inFileName]) {
 		NSData *configData = [NSData dataWithContentsOfFile:inFileName];
 		AllConfigParser *configParser=[[AllConfigParser alloc]init];
+        
+        BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
+        
+        if (isEncrypt) {
+            
+            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+            
+            app.enctryptcj = F_WWIDGET_ENCRYPTCJ;
+
+            
+            NSURL *url = nil;
+            if ([inFileName hasSuffix:@"file://"]) {
+                url = [BUtility stringToUrl:inFileName];;
+            } else {
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
+            }
+            
+            FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+            NSString *data = [encryptObj decryptWithPath:url appendData:nil];
+            
+            [encryptObj release];
+            
+            configData = [data dataUsingEncoding:NSUTF8StringEncoding];
+        }
+        
+        
 		NSMutableDictionary *tmpDict =[configParser initwithReqData:configData];
 		xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
 		//
@@ -251,75 +293,80 @@ NSString * webappShowAactivety;
 #pragma mark commonWidget
 
 -(WWidget*)wgtDataByAppId:(NSString*)inAppId{
-	
-	NSString *tmpAppId = [NSString stringWithString:inAppId];
-	/*if ([tmpAppId isEqualToString:self.wMainWgt.appId]) {
-		return self.wMainWgt;
-	}
-	if ([tmpAppId isEqualToString:self.wSpaceWgt.appId]) {
-		return self.wSpaceWgt;
-	}*/
-	//查询缓存
-	WWidget *wgtObj =[wgtDict objectForKey:tmpAppId];
-	if (wgtObj) {
-		return wgtObj;
-	}
-	//打开数据库
-	WidgetSQL *widgetSql =[[WidgetSQL alloc] init];
-	[widgetSql Open_database:SQL_WGTONE_DATABASE];
-	NSString *queryComWgt = [NSString stringWithFormat:@"select * from %@ where appId='%@'",SQL_WGTS_TABLE,tmpAppId];
-	//解析config.xml
-	NSString *configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
-	ACENSLog(@"configPath=%@",configPath);
-	SpecConfigParser *widgetXml = [[SpecConfigParser alloc] init];
-	NSString *mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
-	[widgetXml release];
-	//数据库里存在
-	NSMutableArray *tempArr = [widgetSql selectWgt:queryComWgt];
-	wgtObj = [tempArr objectAtIndex:0];
-	if (wgtObj!=nil) {
-		if ([wgtObj.ver isEqualToString:mVer]) {
-			[wgtDict setObject:wgtObj forKey:wgtObj.appId];
-			[widgetSql close_database];
-			[widgetSql release];
-			[tempArr removeAllObjects];
-			return wgtObj;
-		}
-	}	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:configPath]) {
-		NSMutableDictionary *tmpWgtDict = [self wgtParameters:configPath];
-		NSString *tmpWgtOneId = [BUtility appKey];
-		NSString *wgtPath=[NSString stringWithFormat:@"%@/%@",F_NAME_WIDGETS,tmpAppId];
-		if (tmpWgtOneId) {
-			[tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
-		}
-		[tmpWgtDict setObject:wgtPath forKey:CONFIG_TAG_WIDGETPATH];
-		[tmpWgtDict setObject:[NSNumber numberWithInt:F_WWIDGET_OTHERSWIDGET] forKey:CONFIG_TAG_WIDGETTYPE];
-		WWidget * tmpWgtObj = [self dictToWgt:tmpWgtDict];
-		//写数据操作
-		[self writeWgtToDB:tmpWgtObj createTab:NO];
-		//组合路径,第一次安装的时候 返回
-		NSString *DocPath = [BUtility getDocumentsPath:@""];
-		
-		tmpWgtObj.widgetPath = [NSString stringWithFormat:@"%@/%@",DocPath,tmpWgtObj.widgetPath];	
-		if ([BUtility isSimulator]==YES) {
-			if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
-				tmpWgtObj.indexUrl =[NSString stringWithFormat:@"%@/%@",DocPath,tmpWgtObj.indexUrl];
-			}
-			tmpWgtObj.iconPath = [NSString stringWithFormat:@"%@/%@",DocPath,tmpWgtObj.iconPath];
-		}else{
-			if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
-				tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@/%@",DocPath,tmpWgtObj.indexUrl];
-			}
-			tmpWgtObj.iconPath = [NSString stringWithFormat:@"file://%@/%@",DocPath,tmpWgtObj.iconPath];
-		}
-		wgtObj = tmpWgtObj;
-		[wgtDict setObject:wgtObj forKey:wgtObj.appId];
-	}else{
+    
+    NSString *tmpAppId = [NSString stringWithString:inAppId];
+    
+    //查询缓存
+    WWidget *wgtObj =[wgtDict objectForKey:tmpAppId];
+    
+    //解析config.xml
+    NSString *configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
+    ACENSLog(@"configPath=%@",configPath);
+    SpecConfigParser *widgetXml = [[SpecConfigParser alloc] init];
+    NSString *mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
+    [widgetXml release];
+    
+    
+    if ([wgtObj.ver isEqualToString:mVer]) {
+        return wgtObj;
+    }
+    //打开数据库
+    WidgetSQL *widgetSql =[[WidgetSQL alloc] init];
+    [widgetSql Open_database:SQL_WGTONE_DATABASE];
+    NSString *queryComWgt = [NSString stringWithFormat:@"select * from %@ where appId='%@'",SQL_WGTS_TABLE,tmpAppId];
+    
+    //数据库里存在
+    NSMutableArray *tempArr = [widgetSql selectWgt:queryComWgt];
+    wgtObj = [tempArr objectAtIndex:0];
+    if (wgtObj!=nil) {
+        if ([wgtObj.ver isEqualToString:mVer]) {
+            [wgtDict setObject:wgtObj forKey:wgtObj.appId];
+            [widgetSql close_database];
+            [widgetSql release];
+            [tempArr removeAllObjects];
+            return wgtObj;
+        }
+    }
+    //
+    if ([[NSFileManager defaultManager] fileExistsAtPath:configPath]) {
+        NSMutableDictionary *tmpWgtDict = [self wgtParameters:configPath];
+        NSString *tmpWgtOneId = [BUtility appKey];
+        NSString *wgtPath=[NSString stringWithFormat:@"%@/%@",F_NAME_WIDGETS,tmpAppId];
+        if (tmpWgtOneId) {
+            [tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
+        }
+        [tmpWgtDict setObject:wgtPath forKey:CONFIG_TAG_WIDGETPATH];
+        [tmpWgtDict setObject:[NSNumber numberWithInt:F_WWIDGET_OTHERSWIDGET] forKey:CONFIG_TAG_WIDGETTYPE];
+        WWidget * tmpWgtObj = [self dictToWgt:tmpWgtDict];
+        //写数据操作
+        if (wgtObj) {
+            [self removeWgtByAppId:tmpAppId];
+        }
+        [self writeWgtToDB:tmpWgtObj createTab:NO];
+        //组合路径,第一次安装的时候 返回
+        NSString *DocPath = [BUtility getDocumentsPath:@""];
+        
+        tmpWgtObj.widgetPath = [NSString stringWithFormat:@"%@/%@",DocPath,tmpWgtObj.widgetPath];
+        if ([BUtility isSimulator]==YES) {
+            if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+                tmpWgtObj.indexUrl =[NSString stringWithFormat:@"%@/%@",DocPath,tmpWgtObj.indexUrl];
+            }
+            tmpWgtObj.iconPath = [NSString stringWithFormat:@"%@/%@",DocPath,tmpWgtObj.iconPath];
+        }else{
+            if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+                tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@/%@",DocPath,tmpWgtObj.indexUrl];
+            }
+            tmpWgtObj.iconPath = [NSString stringWithFormat:@"file://%@/%@",DocPath,tmpWgtObj.iconPath];
+        }
+        wgtObj = tmpWgtObj;
+        [wgtDict setObject:wgtObj forKey:wgtObj.appId];
+    }else{
         wgtObj=nil;
     }
-	[tempArr removeAllObjects];
-	return wgtObj;
+    [widgetSql close_database];
+    [widgetSql release];
+    [tempArr removeAllObjects];
+    return wgtObj;
 }
 //plugin widget
 -(WWidget*)wgtPluginDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt{
@@ -471,6 +518,7 @@ NSString * webappShowAactivety;
 	}else {
 		tmpWgt.obfuscation = F_WWIDGET_NO_OBFUSCATION;
 	}
+    
 	//wgtType 13
 	NSString *wgtTypeStr = [tmpDict objectForKey:CONFIG_TAG_WIDGETTYPE];
 	if (wgtTypeStr) {

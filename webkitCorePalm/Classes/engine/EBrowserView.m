@@ -30,8 +30,7 @@
 #import "EBrowserWindowContainer.h"
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserToolBar.h"
-//#import "FileEncrypt.h"
-#import <ACEDes/FileEncrypt.h>
+#import "FileEncrypt.h"
 #import "EBrowserWindow.h"
 #import "EBrowserHistoryEntry.h"
 #import "EBrowserViewBounceView.h"
@@ -718,40 +717,39 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)notifyPageFinish {
-	UIScrollView *subScrollView = NULL;
-	NSString *initStr = NULL;
-    NSString *isYes=NULL;
-    NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
-    BOOL isStatusBarHidden=[UIApplication sharedApplication].statusBarHidden;
-    NSString *isFullScreen=NULL;
+    
+    UIScrollView * subScrollView = NULL;
+	NSString * initStr = NULL;
     
     ACENSLog(@"Broad in notifyPageFinish");
 	mFlag |= F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
 	mFlag |= F_EBRW_VIEW_FLAG_LOAD_FINISHED;
     version =[[[UIDevice currentDevice]systemVersion]floatValue];
-	switch (mType) {
+    
+    int iOS7Style = 0;
+    
+    
+    if (isSysVersionAbove7_0) {
+        
+        NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
+        
+        if ([statusBarStyleIOS7 boolValue] == YES) {
+            
+            iOS7Style = 1;
+        }
+    } 
+    
+    BOOL isStatusBarHidden = [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIStatusBarHidden"] boolValue];
+    
+    switch (mType) {
 		case F_EBRW_VIEW_TYPE_MAIN:
 			ACENSLog(@"Main notifyPageFinish onload url is %@", [self.request URL]);
 			[self loadUEXScript];
             
-			initStr = [[NSString alloc] initWithFormat:@"uexGameEngine.screenWidth = %f;uexGameEngine.screenHeight = %f;uexWidgetOne.platformVersion = \'%@\';", self.frame.size.width, self.frame.size.height,[[UIDevice currentDevice] systemVersion]];
+			initStr = [[NSString alloc] initWithFormat:@"uexGameEngine.screenWidth = %f;uexGameEngine.screenHeight = %f;uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", self.frame.size.width, self.frame.size.height,[[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
             [self stringByEvaluatingJavaScriptFromString:initStr];
             [initStr release];
-			//initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';", [[UIDevice currentDevice] systemVersion]];
-            //
-        if (version>=7.0) {
-            isYes = [[NSString alloc] initWithFormat:@"uexGameEngine.screenWidth = %f;uexGameEngine.screenHeight = %f;uexWidgetOne.iOS7Style = \'%d\';",self.frame.size.width, self.frame.size.height, [statusBarStyleIOS7 boolValue]];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }else {
-            isYes = [[NSString alloc] initWithFormat:@"uexGameEngine.screenWidth = %f;uexGameEngine.screenHeight = %f;uexWidgetOne.iOS7Style = \'%d\';",self.frame.size.width, self.frame.size.height, NO];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }
-            isFullScreen = [[NSString alloc] initWithFormat:@"uexGameEngine.screenWidth = %f;uexGameEngine.screenHeight = %f;uexWidgetOne.isFullScreen = \'%d\';",self.frame.size.width, self.frame.size.height,isStatusBarHidden];
-            [self stringByEvaluatingJavaScriptFromString:isFullScreen];
-            [isFullScreen release];
-            //
+            
             
             if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
                 [self stringByEvaluatingJavaScriptFromString:@"window.uexStart();"];
@@ -764,23 +762,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			break;
 		case  F_EBRW_VIEW_TYPE_SLIBING_TOP:
 			[self loadUEXScript];
-			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';", [[UIDevice currentDevice] systemVersion]];
+			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
 			[self stringByEvaluatingJavaScriptFromString:initStr];
 			[initStr release];
-            //
-        if (version>=7.0) {
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", [statusBarStyleIOS7 boolValue]];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }else{
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", NO];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }
-            isFullScreen = [[NSString alloc] initWithFormat:@"uexWidgetOne.isFullScreen = \'%d\';",isStatusBarHidden];
-            [self stringByEvaluatingJavaScriptFromString:isFullScreen];
-            [isFullScreen release];
-            //
+            
 			subScrollView = (UIScrollView*)[self.subviews objectAtIndex:0];
 			if ((self.mFlag & F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) == F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) {
 				[self setFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, subScrollView.contentSize.height)];
@@ -790,25 +775,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			break;
 		case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
 			[self loadUEXScript];
-			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';", [[UIDevice currentDevice] systemVersion]];
+			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
 			[self stringByEvaluatingJavaScriptFromString:initStr];
 			[initStr release];
-            //
-        if (version>=7.0) {
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", [statusBarStyleIOS7 boolValue]];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-           }else{
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style= \'%d\';", NO];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }
-            isFullScreen = [[NSString alloc] initWithFormat:@"uexWidgetOne.isFullScreen = \'%d\';",isStatusBarHidden];
-            [self stringByEvaluatingJavaScriptFromString:isFullScreen];
-            [isFullScreen release];
-            
-        //
-			subScrollView = (UIScrollView*)[self.subviews objectAtIndex:0];
+            			subScrollView = (UIScrollView*)[self.subviews objectAtIndex:0];
 			if ((self.mFlag & F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) == F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) {
 				[self setFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, subScrollView.contentSize.height)];
 			}
@@ -817,24 +787,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			break;
 		case F_EBRW_VIEW_TYPE_POPOVER:
 			[self loadUEXScript];
-			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';", [[UIDevice currentDevice] systemVersion]];
+			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
 			[self stringByEvaluatingJavaScriptFromString:initStr];
 			[initStr release];
-            //
-        if (version>=7.0) {
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", [statusBarStyleIOS7 boolValue]];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }else{
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", NO];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-
-        }
-            isFullScreen = [[NSString alloc] initWithFormat:@"uexWidgetOne.isFullScreen = \'%d\';",isStatusBarHidden];
-            [self stringByEvaluatingJavaScriptFromString:isFullScreen];
-            [isFullScreen release];
-            //
+            
 			if (self.superview != meBrwWnd) {
                 if (!self.isMuiltPopover)
                 {
@@ -851,7 +807,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
             if ((mFlag & F_EBRW_VIEW_FLAG_OAUTH) == F_EBRW_VIEW_FLAG_OAUTH) {
                 NSString *changedUrl = [[self curUrl] absoluteString];
                 NSString *toBeExeJs = [NSString stringWithFormat:@"if(uexWindow.onOAuthInfo!=null){uexWindow.onOAuthInfo(\'%@\',\'%@\');}", self.muexObjName, changedUrl];
-                //ACENSLog(@"toBeExeJS: %@", toBeExeJs);
                 [self.meBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:toBeExeJs];
             }
 			if (meBrwWnd.mPreOpenArray) {
@@ -865,23 +820,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			break;
 		case F_EBRW_VIEW_TYPE_AD:
 			[self loadUEXScript];
-			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';", [[UIDevice currentDevice] systemVersion]];
+			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
 			[self stringByEvaluatingJavaScriptFromString:initStr];
 			[initStr release];
-            //
-        if (version>=7.0) {
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", [statusBarStyleIOS7 boolValue]];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }else{
-            isYes = [[NSString alloc] initWithFormat:@"uexWidgetOne.iOS7Style = \'%d\';", NO];
-            [self stringByEvaluatingJavaScriptFromString:isYes];
-            [isYes release];
-        }
-            isFullScreen = [[NSString alloc] initWithFormat:@"uexWidgetOne.isFullScreen = \'%d\';",isStatusBarHidden];
-            [self stringByEvaluatingJavaScriptFromString:isFullScreen];
-            [isFullScreen release];
-            //
+            
 			if (self.superview != meBrwCtrler.meBrwMainFrm) {
 				[meBrwCtrler.meBrwMainFrm addSubview:self];
 			}
@@ -894,6 +836,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			return;
 			break;
 	}
+    
+    
 	[meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self];
 }
 

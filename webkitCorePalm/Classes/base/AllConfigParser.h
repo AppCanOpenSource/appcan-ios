@@ -34,6 +34,7 @@
 #define CONFIG_TAG_SRC				@"src"
 #define CONFIG_TAG_LOGSERVERIP			@"logServerIp"
 #define CONFIG_TAG_OBFUSCATION			@"obfuscation"
+
 #define CONFIG_TAG_UPDATEURL			@"updateUrl"
 #define CONFIG_TAG_SHOWMYSPACE			@"showMySpace"
 #define CONFIG_TAG_ORIENTATION			@"orientation"
