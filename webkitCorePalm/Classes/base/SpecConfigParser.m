@@ -23,6 +23,8 @@
 #import "WWidget.h"
 #import "WgtReportParser.h"
 #import "WidgetOneDelegate.h"
+#import "FileEncrypt.h"
+
 @implementation SpecConfigParser
 
 #pragma mark parser
@@ -31,11 +33,34 @@
 		return nil;
 	}
 	parameter = inQueryPara;
+    
+    
+    
 	if (isOfLoc &&[inXmlData isKindOfClass:[NSString class]]) {
-		xmlData = [NSData dataWithContentsOfFile:inXmlData];
+		xmlData = (NSMutableData *)[NSData dataWithContentsOfFile:inXmlData];
 	}else {
-		xmlData = [NSData dataWithData:inXmlData];
+		xmlData = (NSMutableData *)[NSData dataWithData:inXmlData];
 	}
+    
+    BOOL isEncrypt = [FileEncrypt isDataEncrypted:xmlData];
+    
+    if (isEncrypt) {
+        
+        NSURL *url = nil;
+        if ([inXmlData hasSuffix:@"file://"]) {
+            url = [BUtility stringToUrl:inXmlData];;
+        } else {
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inXmlData]];
+        }
+        
+        FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+        NSString *data = [encryptObj decryptWithPath:url appendData:nil];
+        
+        [encryptObj release];
+        
+        xmlData = (NSMutableData *)[data dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    
 	if (xmlData) {
 		queryResult = @"";
 		mParser = [[NSXMLParser alloc] initWithData:xmlData];

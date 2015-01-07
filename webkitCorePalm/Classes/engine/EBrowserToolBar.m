@@ -33,6 +33,11 @@
 #import "EBrowserController.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define UEX_EXITAPP_ALERT_TITLE @"退出提示"
+#define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗?"
+#define UEX_EXITAPP_ALERT_EXIT @"确定"
+#define UEX_EXITAPP_ALERT_CANCLE @"取消"
+
 @implementation EBrowserToolBar
 @synthesize barbtn;
 @synthesize eBrwCtrler;
@@ -120,10 +125,10 @@
         EBrowserWidgetContainer *eBrwWgtContainer = eBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
         EBrowserWindowContainer *eCurBrwWndContainer = [eBrwWgtContainer aboveWindowContainer];
         if (eCurBrwWndContainer.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
-            NSString * title = NSLocalizedString(@"exitAlertTitle", nil);
-            NSString * message = NSLocalizedString(@"exitAlertMessage", nil);
-            NSString * exit = NSLocalizedString(@"exitAlertExitBtn", nil);
-            NSString * cancel = NSLocalizedString(@"exitAlertCancelBtn", nil);
+            NSString * title = NSLocalizedString(UEX_EXITAPP_ALERT_TITLE, nil);
+            NSString * message = NSLocalizedString(UEX_EXITAPP_ALERT_MESSAGE, nil);
+            NSString * exit = NSLocalizedString(UEX_EXITAPP_ALERT_EXIT, nil);
+            NSString * cancel = NSLocalizedString(UEX_EXITAPP_ALERT_CANCLE, nil);
             
             UIAlertView *widgetOneConfirmView = [[[UIAlertView alloc]
                                                  initWithTitle:title

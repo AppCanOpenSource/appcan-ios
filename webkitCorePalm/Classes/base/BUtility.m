@@ -50,6 +50,9 @@
 #import "AllConfigParser.h"
 #import "SFHFKeychainUtils.h"
 #import "OpenUDID.h"
+#import "ACEUtils.h"
+
+
 void rc4_setup( struct rc4_state *s, unsigned char *key, int length ) 
 { 
     int i, j, k, *m, a;
@@ -372,27 +375,38 @@ static NSString *clientCertificatePwd = nil;
     return [UIScreen mainScreen].bounds.size.height;
 }
 +(CGRect)getApplicationInitFrame {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0 ){
-        int appWidth = [UIScreen mainScreen].applicationFrame.size.width;
-        int appHeight = [UIScreen mainScreen].applicationFrame.size.height;
-        return CGRectMake(0, 0, appWidth, appHeight);
-    }else{
-        int appWidth = [UIScreen mainScreen].bounds.size.width;
-        int appHeight = [UIScreen mainScreen].bounds.size.height;
+
+    int appWidth = [UIScreen mainScreen].applicationFrame.size.width;
+    int appHeight = [UIScreen mainScreen].applicationFrame.size.height;
+    
+    CGRect rect = CGRectMake(0, 0, appWidth, appHeight);
+    
+    if (isSysVersionAbove7_0){
+        
+        appWidth = [UIScreen mainScreen].bounds.size.width;
+        appHeight = [UIScreen mainScreen].bounds.size.height;
+        
         NSNumber *statusBarHidden = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIStatusBarHidden"];
         if ([statusBarHidden boolValue] == YES) {
-            return CGRectMake(0, 0, appWidth, appHeight);
+            rect = CGRectMake(0, 0, appWidth, appHeight);
         }
-        NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
-        //        int statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
-        int statusBarHeight = 20;
-        if ([statusBarStyleIOS7 boolValue] == YES) {
-            return CGRectMake(0, 0, appWidth, appHeight);
-        }else{
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-            return CGRectMake(0, statusBarHeight, appWidth, appHeight - statusBarHeight);
+        else {
+            
+            NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
+            //        int statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+            int statusBarHeight = 20;
+            if ([statusBarStyleIOS7 boolValue] == YES) {
+                rect =  CGRectMake(0, 0, appWidth, appHeight);
+            }else{
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+                rect = CGRectMake(0, statusBarHeight, appWidth, appHeight - statusBarHeight);
+            }
+            
         }
+
     }
+    
+    return rect;
 }
 +(NSString*)getScreenWAndH{
 	CGRect rect = [[UIScreen mainScreen] bounds];
@@ -1173,7 +1187,7 @@ static NSString *clientCertificatePwd = nil;
         return [Beqtucontent getContentPath];
     }
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
-    if (appKeyStr &&[appKeyStr length]>1) {
+    if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
     }
     return nil;
@@ -1185,6 +1199,27 @@ static NSString *clientCertificatePwd = nil;
     }
     return nil;
 }
+
++(NSString *)getSubWidgetAppKeyByAppid:(NSString *)inAppId {
+    
+    WWidgetMgr *wgtMgr = theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView .meBrwCtrler.mwWgtMgr;
+    WWidget * mainWgt = [wgtMgr mainWidget];
+    WWidget *startWgt = nil;
+    startWgt = (WWidget*)[wgtMgr wgtPluginDataByAppId:inAppId curWgt:mainWgt];
+    if ([BUtility getAppCanDevMode]) {
+        startWgt = (WWidget*)[wgtMgr wgtDataByAppId:inAppId];
+    }
+    startWgt = (WWidget*)[wgtMgr wgtDataByAppId:inAppId];
+    
+    NSString *appKeyStr = startWgt.appKey;
+    
+    if(appKeyStr && [appKeyStr length] > 0)
+    {
+        return appKeyStr;
+    }
+    return nil;
+}
+
 +(void)setAppCanViewActive:(int)wgtType opener:(NSString*)inOpener name:(NSString*)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd{
     //8.7数据统计
     //if (F_APPCANREPORT_USE) {

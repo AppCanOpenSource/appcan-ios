@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331574031A5AAF130036A2A2 /* ACEPluginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 331574011A5AAF130036A2A2 /* ACEPluginModel.m */; };
+		331574041A5AAF130036A2A2 /* ACEPluginModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 331574021A5AAF130036A2A2 /* ACEPluginModel.h */; };
+		331EB2D91A51820000795F0A /* ACECustomURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 331EB2D71A51820000795F0A /* ACECustomURLProtocol.m */; };
+		331EB2DA1A51820000795F0A /* ACECustomURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 331EB2D81A51820000795F0A /* ACECustomURLProtocol.h */; };
 		334D182F1A47D2A10050DD13 /* ACEBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18171A47D2A10050DD13 /* ACEBaseViewController.h */; };
 		334D18301A47D2A10050DD13 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18181A47D2A10050DD13 /* ACEBaseViewController.m */; };
 		334D18311A47D2A10050DD13 /* ACEDrawerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18191A47D2A10050DD13 /* ACEDrawerViewController.h */; };
@@ -16,18 +20,18 @@
 		334D18351A47D2A10050DD13 /* ACEWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D181D1A47D2A10050DD13 /* ACEWebViewController.h */; };
 		334D18361A47D2A10050DD13 /* ACEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D181E1A47D2A10050DD13 /* ACEWebViewController.m */; };
 		334D18371A47D2A10050DD13 /* MMDrawerBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18201A47D2A10050DD13 /* MMDrawerBarButtonItem.h */; };
-		334D18381A47D2A10050DD13 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18211A47D2A10050DD13 /* MMDrawerBarButtonItem.m */; };
+		334D18381A47D2A10050DD13 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18211A47D2A10050DD13 /* MMDrawerBarButtonItem.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		334D18391A47D2A10050DD13 /* MMDrawerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18221A47D2A10050DD13 /* MMDrawerController.h */; };
-		334D183A1A47D2A10050DD13 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18231A47D2A10050DD13 /* MMDrawerController.m */; };
+		334D183A1A47D2A10050DD13 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18231A47D2A10050DD13 /* MMDrawerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		334D183B1A47D2A10050DD13 /* MMDrawerVisualState.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18241A47D2A10050DD13 /* MMDrawerVisualState.h */; };
-		334D183C1A47D2A10050DD13 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18251A47D2A10050DD13 /* MMDrawerVisualState.m */; };
+		334D183C1A47D2A10050DD13 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18251A47D2A10050DD13 /* MMDrawerVisualState.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		334D183D1A47D2A10050DD13 /* MMExampleDrawerVisualStateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18261A47D2A10050DD13 /* MMExampleDrawerVisualStateManager.h */; };
-		334D183E1A47D2A10050DD13 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18271A47D2A10050DD13 /* MMExampleDrawerVisualStateManager.m */; };
+		334D183E1A47D2A10050DD13 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18271A47D2A10050DD13 /* MMExampleDrawerVisualStateManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		334D183F1A47D2A10050DD13 /* UIViewController+MMDrawerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18281A47D2A10050DD13 /* UIViewController+MMDrawerController.h */; };
-		334D18401A47D2A10050DD13 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18291A47D2A10050DD13 /* UIViewController+MMDrawerController.m */; };
+		334D18401A47D2A10050DD13 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18291A47D2A10050DD13 /* UIViewController+MMDrawerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		334D18411A47D2A10050DD13 /* MMNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D182C1A47D2A10050DD13 /* MMNavigationController.h */; };
-		334D18421A47D2A10050DD13 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D182D1A47D2A10050DD13 /* MMNavigationController.m */; };
-		3356F94D1A4851A300F58330 /* ACEDes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3356F94C1A4851A300F58330 /* ACEDes.framework */; };
+		334D18421A47D2A10050DD13 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D182D1A47D2A10050DD13 /* MMNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		3C5AF6F11A4D37CB008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
 		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
@@ -273,12 +277,17 @@
 		DE6D47B71A14955D00D39C79 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6D47A21A14955D00D39C79 /* CJSONSerializer.m */; };
 		DE6D47B81A14955D00D39C79 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = DE6D47A31A14955D00D39C79 /* JSONRepresentation.h */; };
 		DE814B8A18FD1EFA0069F545 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE814B8918FD1EFA0069F545 /* libc++.dylib */; };
+		DE81D4D01A4D3DCB005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CF1A4D3DCB005D3153 /* libACEDes.a */; };
 		DE90F53E1904E6E00084EC10 /* OpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = DE90F53C1904E6E00084EC10 /* OpenUDID.h */; };
 		DE90F53F1904E6E00084EC10 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = DE90F53D1904E6E00084EC10 /* OpenUDID.m */; };
 		DEA0EF4418C46884007CC6C6 /* AppCanEngineDebug-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = DEA0EF4318C46884007CC6C6 /* AppCanEngineDebug-Prefix.pch */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		331574011A5AAF130036A2A2 /* ACEPluginModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginModel.m; sourceTree = "<group>"; };
+		331574021A5AAF130036A2A2 /* ACEPluginModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginModel.h; sourceTree = "<group>"; };
+		331EB2D71A51820000795F0A /* ACECustomURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACECustomURLProtocol.m; sourceTree = "<group>"; };
+		331EB2D81A51820000795F0A /* ACECustomURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACECustomURLProtocol.h; sourceTree = "<group>"; };
 		334D18171A47D2A10050DD13 /* ACEBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseViewController.h; sourceTree = "<group>"; };
 		334D18181A47D2A10050DD13 /* ACEBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseViewController.m; sourceTree = "<group>"; };
 		334D18191A47D2A10050DD13 /* ACEDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDrawerViewController.h; sourceTree = "<group>"; };
@@ -300,7 +309,7 @@
 		334D182B1A47D2A10050DD13 /* leftside_shadow_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "leftside_shadow_bg@2x.png"; sourceTree = "<group>"; };
 		334D182C1A47D2A10050DD13 /* MMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMNavigationController.h; sourceTree = "<group>"; };
 		334D182D1A47D2A10050DD13 /* MMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMNavigationController.m; sourceTree = "<group>"; };
-		3356F94C1A4851A300F58330 /* ACEDes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ACEDes.framework; sourceTree = "<group>"; };
+		3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
 		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
@@ -547,6 +556,7 @@
 		DE6D47A21A14955D00D39C79 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		DE6D47A31A14955D00D39C79 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
 		DE814B8918FD1EFA0069F545 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		DE81D4CF1A4D3DCB005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F53C1904E6E00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 		DE90F53D1904E6E00084EC10 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
 		DEA0EF4318C46884007CC6C6 /* AppCanEngineDebug-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppCanEngineDebug-Prefix.pch"; path = "AppCanEngineDebug/AppCanEngineDebug-Prefix.pch"; sourceTree = SOURCE_ROOT; };
@@ -574,12 +584,12 @@
 				B2E52AE515A6B222003E73EA /* AVFoundation.framework in Frameworks */,
 				B2E52AE615A6B222003E73EA /* CFNetwork.framework in Frameworks */,
 				B2E52AE715A6B222003E73EA /* CoreAudio.framework in Frameworks */,
-				3356F94D1A4851A300F58330 /* ACEDes.framework in Frameworks */,
 				B2E52AF015A6B29A003E73EA /* CoreLocation.framework in Frameworks */,
 				B2E52AF115A6B29A003E73EA /* CoreMedia.framework in Frameworks */,
 				B2E52AF215A6B29A003E73EA /* CoreMotion.framework in Frameworks */,
 				B2E52AF315A6B29A003E73EA /* CoreTelephony.framework in Frameworks */,
 				B2E52AF415A6B29A003E73EA /* CoreVideo.framework in Frameworks */,
+				DE81D4D01A4D3DCB005D3153 /* libACEDes.a in Frameworks */,
 				B2E52AF515A6B29A003E73EA /* MobileCoreServices.framework in Frameworks */,
 				B2E52AF615A6B29A003E73EA /* OpenAL.framework in Frameworks */,
 				5AE8735718B74DD20040BC9A /* IOKit.framework in Frameworks */,
@@ -658,7 +668,10 @@
 		3356F94B1A4851A300F58330 /* des */ = {
 			isa = PBXGroup;
 			children = (
-				3356F94C1A4851A300F58330 /* ACEDes.framework */,
+				331EB2D71A51820000795F0A /* ACECustomURLProtocol.m */,
+				331EB2D81A51820000795F0A /* ACECustomURLProtocol.h */,
+				DE81D4CF1A4D3DCB005D3153 /* libACEDes.a */,
+				3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */,
 			);
 			path = des;
 			sourceTree = "<group>";
@@ -826,6 +839,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				331574021A5AAF130036A2A2 /* ACEPluginModel.h */,
+				331574011A5AAF130036A2A2 /* ACEPluginModel.m */,
 				5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */,
 				5AAA85EF18B1B93D000D7600 /* CBrowserMainFrame.m */,
 				5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */,
@@ -1207,6 +1222,7 @@
 				5AAA86E418B1B93D000D7600 /* EBrowserToolBar.h in Headers */,
 				DE6D47AA1A14955D00D39C79 /* CJSONSerialization.h in Headers */,
 				5AAA869618B1B93D000D7600 /* FBEncryptorAES.h in Headers */,
+				331574041A5AAF130036A2A2 /* ACEPluginModel.h in Headers */,
 				5AAA875618B1B93D000D7600 /* UIButton+WebCache.h in Headers */,
 				DE6D47AC1A14955D00D39C79 /* CJSONSerializedData.h in Headers */,
 				5AAA870918B1B93D000D7600 /* ASICacheDelegate.h in Headers */,
@@ -1227,6 +1243,7 @@
 				334D183B1A47D2A10050DD13 /* MMDrawerVisualState.h in Headers */,
 				5AAA871F18B1B93D000D7600 /* AsyncUdpSocket.h in Headers */,
 				334D18411A47D2A10050DD13 /* MMNavigationController.h in Headers */,
+				3C5AF6F11A4D37CB008F8A3D /* FileEncrypt.h in Headers */,
 				5AAA872E18B1B93D000D7600 /* unzip.h in Headers */,
 				5AAA875118B1B93D000D7600 /* SDWebImageManager.h in Headers */,
 				5AAA86DC18B1B93D000D7600 /* EBrowserController.h in Headers */,
@@ -1264,6 +1281,7 @@
 				5AAA86B518B1B93D000D7600 /* JSONKit.h in Headers */,
 				5AAA869418B1B93D000D7600 /* EUtility.h in Headers */,
 				5AAA86CC18B1B93D000D7600 /* CDataScanner.h in Headers */,
+				331EB2DA1A51820000795F0A /* ACECustomURLProtocol.h in Headers */,
 				5AAA872C18B1B93D000D7600 /* mztools.h in Headers */,
 				5AAA86AB18B1B93D000D7600 /* PluginParser.h in Headers */,
 				5AAA869F18B1B93D000D7600 /* SBJSON.h in Headers */,
@@ -1410,6 +1428,8 @@
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				DE6D47AB1A14955D00D39C79 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
+				331EB2D91A51820000795F0A /* ACECustomURLProtocol.m in Sources */,
+				331574031A5AAF130036A2A2 /* ACEPluginModel.m in Sources */,
 				334D18321A47D2A10050DD13 /* ACEDrawerViewController.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
 				DE6D47B51A14955D00D39C79 /* CJSONScanner.m in Sources */,
@@ -1507,10 +1527,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/AppCanEngine.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/liguangqiao/xos/dev2/cc_appcan/appcan_3/ios_commit/webkitCorePalm/Classes/des,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngineDebug/AppCanEngineDebug-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1518,6 +1535,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"",
 					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
+					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AppCanEngine;
@@ -1532,10 +1550,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/AppCanEngine.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/liguangqiao/xos/dev2/cc_appcan/appcan_3/ios_commit/webkitCorePalm/Classes/des,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngineDebug/AppCanEngineDebug-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1543,6 +1558,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"",
 					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
+					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AppCanEngine;
