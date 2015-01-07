@@ -62,6 +62,8 @@
 @property (nonatomic, retain) ACEWebViewController *leftWebController;
 @property (nonatomic, retain) ACEWebViewController *rightWebController;
 @property (nonatomic, retain) ACEDrawerViewController *drawerController;
+@property (nonatomic, assign) NSInteger enctryptcj;
+@property (nonatomic, retain) NSMutableDictionary *globalPluginDict;
 
 
 //-(NSString *)getPayPublicRsaKey;
