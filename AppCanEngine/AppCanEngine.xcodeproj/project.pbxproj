@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331573FF1A5AAEB70036A2A2 /* ACEPluginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */; };
+		331574001A5AAEB70036A2A2 /* ACEPluginModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */; };
+		331EB2D21A51703A00795F0A /* ACECustomURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 331EB2D01A51703A00795F0A /* ACECustomURLProtocol.m */; };
+		331EB2D31A51703A00795F0A /* ACECustomURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 331EB2D11A51703A00795F0A /* ACECustomURLProtocol.h */; };
 		333D00041A42B9CA00F501B3 /* ACEBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */; };
 		333D00051A42B9CA00F501B3 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; };
 		333D00061A42B9CA00F501B3 /* ACEUINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */; };
@@ -17,7 +21,6 @@
 		334D18061A47A9B70050DD13 /* ACEDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18041A47A9B70050DD13 /* ACEDrawerViewController.m */; };
 		334D180A1A47B4200050DD13 /* MMNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18081A47B4200050DD13 /* MMNavigationController.h */; };
 		334D180B1A47B4200050DD13 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18091A47B4200050DD13 /* MMNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		3356F9491A48517200F58330 /* ACEDes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3356F9481A48517200F58330 /* ACEDes.framework */; };
 		33AF6EC11A448EFD00DC7397 /* MMDrawerBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 33AF6EB71A448EFD00DC7397 /* MMDrawerBarButtonItem.h */; };
 		33AF6EC21A448EFD00DC7397 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EB81A448EFD00DC7397 /* MMDrawerBarButtonItem.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		33AF6EC31A448EFD00DC7397 /* MMDrawerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 33AF6EB91A448EFD00DC7397 /* MMDrawerController.h */; };
@@ -60,6 +63,7 @@
 		3C2887D41A0B099B002776E4 /* CJSONScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887C91A0B099B002776E4 /* CJSONScanner.h */; };
 		3C2887D51A0B099B002776E4 /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CA1A0B099B002776E4 /* CJSONSerializer.h */; };
 		3C2887D61A0B099B002776E4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */; };
+		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
 		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
@@ -273,11 +277,16 @@
 		B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFC15A6B2F1003E73EA /* UIKit.framework */; };
 		DE2C4FA51A2DA48B00D5B4F2 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */; };
 		DE2C4FA61A2DA48B00D5B4F2 /* ACEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */; };
+		DE81D4CD1A4D3D81005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CC1A4D3D81005D3153 /* libACEDes.a */; };
 		DE90F53A1904E6D00084EC10 /* OpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = DE90F5381904E6D00084EC10 /* OpenUDID.h */; };
 		DE90F53B1904E6D00084EC10 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = DE90F5391904E6D00084EC10 /* OpenUDID.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginModel.m; sourceTree = "<group>"; };
+		331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginModel.h; sourceTree = "<group>"; };
+		331EB2D01A51703A00795F0A /* ACECustomURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACECustomURLProtocol.m; sourceTree = "<group>"; };
+		331EB2D11A51703A00795F0A /* ACECustomURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACECustomURLProtocol.h; sourceTree = "<group>"; };
 		333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseViewController.h; sourceTree = "<group>"; };
 		333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseViewController.m; sourceTree = "<group>"; };
 		333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUINavigationController.h; sourceTree = "<group>"; };
@@ -289,7 +298,6 @@
 		334D18081A47B4200050DD13 /* MMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMNavigationController.h; sourceTree = "<group>"; };
 		334D18091A47B4200050DD13 /* MMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMNavigationController.m; sourceTree = "<group>"; };
 		334D180C1A47B5BD0050DD13 /* leftside_shadow_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "leftside_shadow_bg@2x.png"; sourceTree = "<group>"; };
-		3356F9481A48517200F58330 /* ACEDes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ACEDes.framework; sourceTree = "<group>"; };
 		33AF6EB71A448EFD00DC7397 /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
 		33AF6EB81A448EFD00DC7397 /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
 		33AF6EB91A448EFD00DC7397 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
@@ -332,6 +340,7 @@
 		3C2887C91A0B099B002776E4 /* CJSONScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONScanner.h; sourceTree = "<group>"; };
 		3C2887CA1A0B099B002776E4 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
 		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
@@ -547,6 +556,7 @@
 		B2E52AFC15A6B2F1003E73EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
 		DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEUtils.m; sourceTree = "<group>"; };
+		DE81D4CC1A4D3D81005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F5381904E6D00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 		DE90F5391904E6D00084EC10 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -572,13 +582,13 @@
 				B2E52AE515A6B222003E73EA /* AVFoundation.framework in Frameworks */,
 				B2E52AE615A6B222003E73EA /* CFNetwork.framework in Frameworks */,
 				B2E52AE715A6B222003E73EA /* CoreAudio.framework in Frameworks */,
-				3356F9491A48517200F58330 /* ACEDes.framework in Frameworks */,
 				B2E52AF015A6B29A003E73EA /* CoreLocation.framework in Frameworks */,
 				B2E52AF115A6B29A003E73EA /* CoreMedia.framework in Frameworks */,
 				B2E52AF215A6B29A003E73EA /* CoreMotion.framework in Frameworks */,
 				B2E52AF315A6B29A003E73EA /* CoreTelephony.framework in Frameworks */,
 				B2E52AF415A6B29A003E73EA /* CoreVideo.framework in Frameworks */,
 				B2E52AF515A6B29A003E73EA /* MobileCoreServices.framework in Frameworks */,
+				DE81D4CD1A4D3D81005D3153 /* libACEDes.a in Frameworks */,
 				B2E52AF615A6B29A003E73EA /* OpenAL.framework in Frameworks */,
 				5AE8735718B74DD20040BC9A /* IOKit.framework in Frameworks */,
 				B2E52AF715A6B29A003E73EA /* OpenGLES.framework in Frameworks */,
@@ -639,7 +649,10 @@
 		3356F9471A48517200F58330 /* des */ = {
 			isa = PBXGroup;
 			children = (
-				3356F9481A48517200F58330 /* ACEDes.framework */,
+				331EB2D01A51703A00795F0A /* ACECustomURLProtocol.m */,
+				331EB2D11A51703A00795F0A /* ACECustomURLProtocol.h */,
+				DE81D4CC1A4D3D81005D3153 /* libACEDes.a */,
+				3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */,
 			);
 			path = des;
 			sourceTree = "<group>";
@@ -885,6 +898,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */,
+				331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */,
 				5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */,
 				5AAA85EF18B1B93D000D7600 /* CBrowserMainFrame.m */,
 				5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */,
@@ -1213,6 +1228,7 @@
 				5AAA869218B1B93D000D7600 /* BUtility.h in Headers */,
 				3C2887CF1A0B099B002776E4 /* CJSONSerialization.h in Headers */,
 				5AAA873818B1B93D000D7600 /* ZipArchive.h in Headers */,
+				331574001A5AAEB70036A2A2 /* ACEPluginModel.h in Headers */,
 				5AAA870A18B1B93D000D7600 /* ASIDataCompressor.h in Headers */,
 				3C2887D01A0B099B002776E4 /* CJSONSerializedData.h in Headers */,
 				5AAA86E018B1B93D000D7600 /* EBrowserHistoryEntry.h in Headers */,
@@ -1233,6 +1249,7 @@
 				334D18051A47A9B70050DD13 /* ACEDrawerViewController.h in Headers */,
 				5AAA86DC18B1B93D000D7600 /* EBrowserController.h in Headers */,
 				5AAA871D18B1B93D000D7600 /* AsyncSocket.h in Headers */,
+				3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */,
 				3C2887BC1A0B0984002776E4 /* JSONRepresentation.h in Headers */,
 				5AAA871618B1B93D000D7600 /* ASIInputStream.h in Headers */,
 				5AAA86FD18B1B93D000D7600 /* EUExManager.h in Headers */,
@@ -1270,6 +1287,7 @@
 				3C2887A81A0B0984002776E4 /* CDataScanner.h in Headers */,
 				5AAA873E18B1B93D000D7600 /* AppItemView.h in Headers */,
 				3C2887B01A0B0984002776E4 /* CJSONSerializedData.h in Headers */,
+				331EB2D31A51703A00795F0A /* ACECustomURLProtocol.h in Headers */,
 				5AAA873018B1B93D000D7600 /* zip.h in Headers */,
 				5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */,
 				33AF6EC71A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.h in Headers */,
@@ -1416,6 +1434,8 @@
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				3C2887AF1A0B0984002776E4 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
+				331EB2D21A51703A00795F0A /* ACECustomURLProtocol.m in Sources */,
+				331573FF1A5AAEB70036A2A2 /* ACEPluginModel.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
 				3C2887B91A0B0984002776E4 /* CJSONScanner.m in Sources */,
 				5AAA86F318B1B93D000D7600 /* EUExAction.m in Sources */,
@@ -1513,10 +1533,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: wang ping (NXRC4JBS2X)";
 				DSTROOT = /tmp/AppCanEngine.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/liguangqiao/xos/dev2/cc_appcan/appcan_3/ios_commit/webkitCorePalm/Classes/des,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1524,6 +1541,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"",
 					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
+					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AppCanEngine;
@@ -1538,10 +1556,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: wang ping (NXRC4JBS2X)";
 				DSTROOT = /tmp/AppCanEngine.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/liguangqiao/xos/dev2/cc_appcan/appcan_3/ios_commit/webkitCorePalm/Classes/des,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1549,6 +1564,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"",
 					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
+					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";

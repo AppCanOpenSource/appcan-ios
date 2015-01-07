@@ -119,7 +119,8 @@
 
 - (void)moveViewWithX:(float)x
 {
-    x = x>320?320:x;
+    //x = x>320?320:x;
+    x = x>self.view.frame.size.width?self.view.frame.size.width:x;
     x = x<0?0:x;
     
     CGRect frame = self.view.frame;
@@ -207,7 +208,7 @@
         if (touchPoint.x - startTouch.x > 50)
         {
             [UIView animateWithDuration:0.3 animations:^{
-                [self moveViewWithX:320];
+                [self moveViewWithX:self.view.frame.size.width];
             } completion:^(BOOL finished) {
                 
                 [self popViewControllerAnimated:NO];

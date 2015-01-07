@@ -59,7 +59,13 @@
 //clientCertificate.p12
 //#define ClientCertficate_PATH [NSString stringWithFormat:@"%@/Documents/widget/wgtRes/clientCertificate.p12", NSHomeDirectory()]
 
+#define iPhone4 ([UIScreen  instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+
 #define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define iPhone6 ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && MAX([UIScreen mainScreen].bounds.size.height,[UIScreen mainScreen].bounds.size.width) == 667)
+
+#define iPhone6Plus ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && MAX([UIScreen mainScreen].bounds.size.height,[UIScreen mainScreen].bounds.size.width) == 736)
 
 
 
@@ -164,6 +170,7 @@ typedef union _BGColor {
 //数据统计
 +(NSString*)appKey;
 +(NSString*)appId;
++(NSString *)getSubWidgetAppKeyByAppid:(NSString*)appid;
 +(void)setAppCanViewBackground:(int)wgtType name:(NSString*)inName closeReason:(int)inOpenReason;
 +(void)setAppCanViewActive:(int)wgtType opener:(NSString*)inOpener name:(NSString*)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd;
 //mac

@@ -30,8 +30,7 @@
 #import "BUtility.h"
 #import <sys/utsname.h>
 #import "WWidget.h"
-//#import "FileEncrypt.h"
-#import <ACEDes/FileEncrypt.h>
+#import "FileEncrypt.h"
 #import "PluginParser.h"
 #import "JSON.h"
 #import "EUExBase.h"
@@ -43,6 +42,7 @@
 #import "ACEDrawerViewController.h"
 #import "MMExampleDrawerVisualStateManager.h"
 #import "ACEWebViewController.h"
+#import "ACECustomURLProtocol.h"
 
 
 #define kViewTagExit 100
@@ -305,6 +305,9 @@ NSString *AppCanJS = nil;
         }
         
     }
+    
+    [ACECustomURLProtocol enable];
+    _globalPluginDict = [[NSMutableDictionary alloc] init];
     
     if (_useCloseAppWithJaibroken) {
         
@@ -887,6 +890,7 @@ NSString *AppCanJS = nil;
     [_leftWebController release];
     [_rightWebController release];
     [_drawerController release];
+    [_globalPluginDict release];
 	[super dealloc];
 }
 @end

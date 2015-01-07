@@ -22,8 +22,7 @@
 #import "EBrowserController.h"
 #import "WWidget.h"
 #import "EBrowserHistory.h"
-//#import "FileEncrypt.h"
-#import <ACEDes/FileEncrypt.h>
+#import "FileEncrypt.h"
 #import "EBrowserHistoryEntry.h"
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserWindowContainer.h"

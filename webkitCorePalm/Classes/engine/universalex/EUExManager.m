@@ -22,6 +22,8 @@
 #import "EBrowserView.h"
 #import "EUExAction.h"
 #import "BUtility.h"
+#import "WidgetOneDelegate.h"
+#import "ACEPluginModel.h"
 
 
 
@@ -48,7 +50,25 @@
 - (void)doAction:(EUExAction *)inAction{
 	NSString *className = inAction.mClassName;
 	NSString *methodName = inAction.mMethodName;
-	EUExBase *eUExObj = [uexObjDict objectForKey:className];
+    
+    if (className == nil) {
+        return;
+    }
+    
+    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    ACEPluginModel *model = [app.globalPluginDict objectForKey:className];
+    
+    EUExBase *eUExObj = nil;
+    
+    
+    if (model != nil) {
+        
+        eUExObj = model.pluginObj;
+    } else {
+        
+        eUExObj = [uexObjDict objectForKey:className];
+    }
+	
 	if (!eUExObj) {
 		NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
         ACENSLog(@"fullClassName--------->%@",fullClassName);
@@ -138,9 +158,18 @@
 			return;
 		}
 #endif
-
-		[uexObjDict setObject:eUExObj forKey:className];
+        
+        if (model != nil) {
+            model.pluginObj = eUExObj;
+        } else {
+            [uexObjDict setObject:eUExObj forKey:className];
+        }
 	}
+    
+    if (model != nil) {
+        model.pluginObj.meBrwView = eBrwView;
+    }
+    
 	NSString* fullMethodName = [NSString stringWithFormat:@"%@:", methodName];
 	if ([eUExObj respondsToSelector:NSSelectorFromString(fullMethodName)]) {
         //[eUExObj performSelector:NSSelectorFromString(fullMethodName) withObject:inAction.mArguments];

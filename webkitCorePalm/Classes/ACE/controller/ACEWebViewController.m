@@ -37,6 +37,17 @@
     
     CGRect rect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     
+    NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
+    int statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+
+    if ([statusBarStyleIOS7 boolValue] == NO) {
+        
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        rect = CGRectMake(0, statusBarHeight, self.view.frame.size.width, self.view.frame.size.height - statusBarHeight);
+        self.view.backgroundColor = [UIColor blackColor];
+    }
+
+    
     _browserWindow.frame = rect;
     [self.view addSubview:_browserWindow];
     

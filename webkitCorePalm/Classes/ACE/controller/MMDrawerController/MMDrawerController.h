@@ -20,6 +20,7 @@
 
 
 #import <UIKit/UIKit.h>
+#import "ACEBaseViewController.h"
 
 /**
  `MMDrawerController` is a side drawer navigation container view controller designed to support the growing number of applications that leverage the side drawer paradigm. This library is designed to exclusively support side drawer navigation in light-weight, focused approach.
@@ -88,7 +89,8 @@ typedef NS_ENUM(NSInteger, MMDrawerOpenCenterInteractionMode) {
 @class  MMDrawerController;
 typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * drawerController, MMDrawerSide drawerSide, CGFloat percentVisible);
 
-@interface MMDrawerController : UIViewController
+@interface MMDrawerController : ACEBaseViewController
+
 
 ///---------------------------------------
 /// @name Accessing Drawer Container View Controller Properties

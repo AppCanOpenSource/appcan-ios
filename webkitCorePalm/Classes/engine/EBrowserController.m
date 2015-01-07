@@ -98,8 +98,6 @@
         mwWgtUpdate = [[WWidgetUpdate alloc] init];
 	}
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTheOrientation:) name:@"changeTheOrientation" object:nil];
-    NSString * configOrientation = [BUtility getMainWidgetConfigInterface];
-    self.wgtOrientation = [configOrientation intValue];
 	return self;
 }
 -(void)changeTheOrientation:(NSString *) orArgument
@@ -359,37 +357,75 @@
 	if (F_DEVELOPMENT_USE) {
 		[BUtility setAppCanDevMode:@"YES"];
 	}
-    NSString *hardware = [BUtility getDeviceVer];
-    NSString *oritent =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
     
-    if ([hardware hasPrefix:@"iPad"]&&([UIScreen mainScreen].applicationFrame.size.width>=748)) {
-        if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] ||[oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"] ) {
-            mStartView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default-Landscape"]];
-        }else{
-            mStartView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default-Portrait"]];
-        }
-    }else{
-        UIImage *oldImage = nil;
-        UIImage *newImage = nil;
-        if (iPhone5) {
-            oldImage = [UIImage imageNamed:@"Default-568h"];
-        }else{
-            oldImage = [UIImage imageNamed:@"Default"];
+    NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
+    
+    NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
+    
+    NSString * launchImageName = nil;
+    
+    UIImage * launchImage = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        
+        if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] || [oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]) {
+            
+            launchImageName = [NSString stringWithFormat:@"%@-700-Landscape~ipad",launchImagePrefixFile];
+            
+        } else {
+            
+            launchImageName = [NSString stringWithFormat:@"%@-700-Portrait~ipad",launchImagePrefixFile];
+            
+            
         }
         
-        if ([oritent isEqualToString:@"UIInterfaceOrientationPortrait"]) {
-            newImage = [[UIImage alloc] initWithCGImage:oldImage.CGImage scale:1.0f orientation:UIImageOrientationUp];
-        }else if ([oritent isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]){
-            newImage = [[UIImage alloc] initWithCGImage:oldImage.CGImage scale:1.0f orientation:UIImageOrientationDown];
-        }else if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"]){
-            newImage = [[UIImage alloc] initWithCGImage:oldImage.CGImage scale:1.0f orientation:UIImageOrientationRight];
-        }else if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]){
-            newImage = [[UIImage alloc] initWithCGImage:oldImage.CGImage scale:1.0f orientation:UIImageOrientationLeft];
+        launchImage = [UIImage imageNamed:launchImageName];
+        
+        if (launchImage == nil) { //iPhone包在ipad显示
+            
+            
+            launchImageName = [NSString stringWithFormat:@"%@-568h@2x",launchImagePrefixFile];
+            
+            if (isSysVersionBelow7_0) {
+                
+                launchImageName = [NSString stringWithFormat:@"%@",launchImagePrefixFile];
+                
+            }
+            
         }
-        mStartView = [[UIImageView alloc] initWithImage:newImage];
+        
+        mStartView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:launchImageName]];
+       
+        
+    } else {
+        
+        if (iPhone5) {
+            
+            launchImageName = [NSString stringWithFormat:@"%@-568h@2x", launchImagePrefixFile];
+            
+            
+        } else if (iPhone6) {
+            
+            launchImageName = [NSString stringWithFormat:@"%@-800-667h@2x", launchImagePrefixFile];
+
+            
+        } else if (iPhone6Plus) {
+            
+            launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-736h@3x", launchImagePrefixFile];
+            
+        } else {
+            
+            launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
+            
+        }
+        
+        launchImage = [UIImage imageNamed:launchImageName];
+        
+        mStartView = [[UIImageView alloc] initWithImage:launchImage];
+        
     }
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0 ){
+    if (isSysVersionBelow7_0){
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].applicationFrame.size.width, [UIScreen mainScreen].applicationFrame.size.height);
     }else{
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
@@ -398,7 +434,7 @@
 	mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
 	if ([BUtility getAppCanDevMode]) {
-		UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,320,30)];
+		UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,30)];
 		devMark.backgroundColor =[UIColor clearColor];
 		devMark.text = @"测试版本仅用于开发测试";
 		devMark.textColor = [UIColor redColor];
@@ -570,146 +606,7 @@
  */
 //  控制屏幕方向
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    switch (self.wgtOrientation)
-    {
-        case 1:
-            return NO;
-            break;
-        case 2:
-            //            if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
-            //            {
-            return NO;
-            //            }
-            break;
-        case 4:
-            //            if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
-            //            {
-            return NO;
-            //            }
-            break;
-        case 5:
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-            {
-                return NO;
-            }
-            break;
-        case 8:
-            //            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-            //            {
-            return NO;
-            //            }
-            break;
-        case 3:
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeRight || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
-            {
-                return NO;
-            }
-            break;
-        case 9:
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
-            {
-                return NO;
-            }
-            break;
-        case 10:
-            if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
-            {
-                return NO;
-            }
-            break;
-        case 11:
-            if (interfaceOrientation == UIInterfaceOrientationMaskPortraitUpsideDown)
-            {
-                return NO;
-            }
-            break;
-        case 12:
-            if (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
-            {
-                return NO;
-            }
-            break;
-        case 13:
-            if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
-            {
-                return NO;
-            }
-            break;
-        case 14:
-            if (interfaceOrientation == UIInterfaceOrientationPortrait)
-            {
-                return NO;
-            }
-            break;
-            
-        default:
-            return YES;
-            break;
-    }
-    return YES;
-}
 
--(BOOL)shouldAutorotate
-{
-    //    NSString *hardware = [BUtility getDeviceVer];
-    //    if ([hardware hasPrefix:@"iPad"])
-    //    {
-    //        return YES;
-    //    }
-    return YES;
-}
-
--(NSUInteger)supportedInterfaceOrientations
-{
-    switch (self.wgtOrientation)
-    {
-        case 1:
-            return UIInterfaceOrientationMaskPortrait;
-            break;
-        case 2:
-            return UIInterfaceOrientationMaskLandscapeLeft;
-            break;
-        case 4:
-            return UIInterfaceOrientationMaskPortraitUpsideDown;
-            break;
-        case 5:
-            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
-            break;
-        case 8:
-            return UIInterfaceOrientationMaskLandscapeRight;
-            break;
-        case 3:
-            return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskPortrait;
-            break;
-        case 9:
-            return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortrait;
-            break;
-        case 10:
-            return UIInterfaceOrientationMaskLandscape;
-            break;
-        case 11:
-            return UIInterfaceOrientationMaskAllButUpsideDown;
-            break;
-        case 12:
-            return UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskLandscapeRight;
-            break;
-        case 13:
-            return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskLandscapeRight;
-            break;
-        case 14:
-            return UIInterfaceOrientationMaskLandscapeRight|UIInterfaceOrientationMaskLandscapeLeft|UIInterfaceOrientationMaskPortraitUpsideDown;
-            break;
-        case 15:
-            return UIInterfaceOrientationMaskAll;
-            break;
-            
-        default:
-            return UIInterfaceOrientationMaskPortrait;
-            break;
-    }
-}
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
 	if (aboveWndContainer) {
