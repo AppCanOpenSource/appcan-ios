@@ -1,4 +1,5 @@
 appcan-ios
 ==========
+appcan-ios引擎
 
-appcan-ios
+参考 http://newdocx.appcan.cn/
