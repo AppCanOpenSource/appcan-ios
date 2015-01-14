@@ -65,4 +65,5 @@ void PluginLog(NSString *format, ...);
 +(void)writeLog:(NSString*)inLog;
 //20140616 softToken
 +(NSString*)md5SoftToken;
++(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable;
 @end

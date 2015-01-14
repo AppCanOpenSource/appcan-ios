@@ -144,6 +144,8 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
 		[self setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
 		[self setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 		[self setCenterHiddenInteractionMode:MMDrawerOpenCenterInteractionModeNavigationBarOnly];
+        
+        self.isGestureRecognizer = YES;
 	}
 	return self;
 }
@@ -1008,6 +1010,17 @@ static inline CGFloat originXForDrawerOriginAndTargetOriginOffset(CGFloat origin
 }
 
 #pragma mark - UIGestureRecognizerDelegate
+
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+//{
+//    return YES;
+//}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return self.isGestureRecognizer;
+}
+
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     CGPoint point = [touch locationInView:self.view];
     
