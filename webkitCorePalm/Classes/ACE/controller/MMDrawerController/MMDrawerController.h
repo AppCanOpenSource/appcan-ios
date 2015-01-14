@@ -195,6 +195,8 @@ typedef void (^MMDrawerControllerDrawerVisualStateBlock)(MMDrawerController * dr
  */
 @property (nonatomic, assign) BOOL showsShadow;
 
+@property (nonatomic, assign) BOOL isGestureRecognizer;
+
 ///---------------------------------------
 /// @name Initializing a `MMDrawerController`
 ///---------------------------------------

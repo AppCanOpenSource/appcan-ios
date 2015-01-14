@@ -63,4 +63,5 @@ void PluginLog(NSString *format, ...);
 +(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_;
 +(NSString*)getCachePath:(NSString*)fileName;
 +(void)writeLog:(NSString*)inLog;
++(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable;
 @end

@@ -27,6 +27,8 @@
 #import "EBrowserMainFrame.h"
 #import "BStatusBarWindow.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "WidgetOneDelegate.h"
+#import "ACEDrawerViewController.h"
 
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
@@ -308,5 +310,12 @@ return [BUtility isConnected];
     NSString * softToken = [[NSString alloc] initWithString:[md5Str lowercaseString]];
     
 	return softToken;
+}
+
++(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
+{
+    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    
+    app.drawerController.isGestureRecognizer = isEnable;
 }
 @end
