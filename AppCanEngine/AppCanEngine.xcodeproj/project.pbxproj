@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		331573FF1A5AAEB70036A2A2 /* ACEPluginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */; };
 		331574001A5AAEB70036A2A2 /* ACEPluginModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */; };
-		331EB2D21A51703A00795F0A /* ACECustomURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 331EB2D01A51703A00795F0A /* ACECustomURLProtocol.m */; };
-		331EB2D31A51703A00795F0A /* ACECustomURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 331EB2D11A51703A00795F0A /* ACECustomURLProtocol.h */; };
 		333D00041A42B9CA00F501B3 /* ACEBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */; };
 		333D00051A42B9CA00F501B3 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; };
 		333D00061A42B9CA00F501B3 /* ACEUINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */; };
@@ -21,6 +19,7 @@
 		334D18061A47A9B70050DD13 /* ACEDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18041A47A9B70050DD13 /* ACEDrawerViewController.m */; };
 		334D180A1A47B4200050DD13 /* MMNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18081A47B4200050DD13 /* MMNavigationController.h */; };
 		334D180B1A47B4200050DD13 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18091A47B4200050DD13 /* MMNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		33859D2E1A70CB2F000B05B8 /* ACEDes.h in Headers */ = {isa = PBXBuildFile; fileRef = 33859D2D1A70CB2F000B05B8 /* ACEDes.h */; };
 		33AF6EC11A448EFD00DC7397 /* MMDrawerBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 33AF6EB71A448EFD00DC7397 /* MMDrawerBarButtonItem.h */; };
 		33AF6EC21A448EFD00DC7397 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EB81A448EFD00DC7397 /* MMDrawerBarButtonItem.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		33AF6EC31A448EFD00DC7397 /* MMDrawerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 33AF6EB91A448EFD00DC7397 /* MMDrawerController.h */; };
@@ -285,8 +284,6 @@
 /* Begin PBXFileReference section */
 		331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginModel.m; sourceTree = "<group>"; };
 		331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginModel.h; sourceTree = "<group>"; };
-		331EB2D01A51703A00795F0A /* ACECustomURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACECustomURLProtocol.m; sourceTree = "<group>"; };
-		331EB2D11A51703A00795F0A /* ACECustomURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACECustomURLProtocol.h; sourceTree = "<group>"; };
 		333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseViewController.h; sourceTree = "<group>"; };
 		333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseViewController.m; sourceTree = "<group>"; };
 		333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUINavigationController.h; sourceTree = "<group>"; };
@@ -298,6 +295,7 @@
 		334D18081A47B4200050DD13 /* MMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMNavigationController.h; sourceTree = "<group>"; };
 		334D18091A47B4200050DD13 /* MMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMNavigationController.m; sourceTree = "<group>"; };
 		334D180C1A47B5BD0050DD13 /* leftside_shadow_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "leftside_shadow_bg@2x.png"; sourceTree = "<group>"; };
+		33859D2D1A70CB2F000B05B8 /* ACEDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDes.h; sourceTree = "<group>"; };
 		33AF6EB71A448EFD00DC7397 /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
 		33AF6EB81A448EFD00DC7397 /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
 		33AF6EB91A448EFD00DC7397 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
@@ -649,8 +647,7 @@
 		3356F9471A48517200F58330 /* des */ = {
 			isa = PBXGroup;
 			children = (
-				331EB2D01A51703A00795F0A /* ACECustomURLProtocol.m */,
-				331EB2D11A51703A00795F0A /* ACECustomURLProtocol.h */,
+				33859D2D1A70CB2F000B05B8 /* ACEDes.h */,
 				DE81D4CC1A4D3D81005D3153 /* libACEDes.a */,
 				3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */,
 			);
@@ -1198,6 +1195,7 @@
 				5AAA869918B1B93D000D7600 /* JSONParser.h in Headers */,
 				5AAA871218B1B93D000D7600 /* ASIHTTPRequest.h in Headers */,
 				3C2887AE1A0B0984002776E4 /* CJSONSerialization.h in Headers */,
+				33859D2E1A70CB2F000B05B8 /* ACEDes.h in Headers */,
 				5AAA86EE18B1B93D000D7600 /* EBrowserWindow.h in Headers */,
 				5AAA874618B1B93D000D7600 /* MKAnnotationView+WebCache.h in Headers */,
 				5AAA875C18B1B93D000D7600 /* WWidget.h in Headers */,
@@ -1287,7 +1285,6 @@
 				3C2887A81A0B0984002776E4 /* CDataScanner.h in Headers */,
 				5AAA873E18B1B93D000D7600 /* AppItemView.h in Headers */,
 				3C2887B01A0B0984002776E4 /* CJSONSerializedData.h in Headers */,
-				331EB2D31A51703A00795F0A /* ACECustomURLProtocol.h in Headers */,
 				5AAA873018B1B93D000D7600 /* zip.h in Headers */,
 				5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */,
 				33AF6EC71A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.h in Headers */,
@@ -1434,7 +1431,6 @@
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				3C2887AF1A0B0984002776E4 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
-				331EB2D21A51703A00795F0A /* ACECustomURLProtocol.m in Sources */,
 				331573FF1A5AAEB70036A2A2 /* ACEPluginModel.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
 				3C2887B91A0B0984002776E4 /* CJSONScanner.m in Sources */,
@@ -1504,7 +1500,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -1523,7 +1519,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
@@ -1543,6 +1539,7 @@
 					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
 					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AppCanEngine;
 				PROVISIONING_PROFILE = "";
@@ -1566,7 +1563,7 @@
 					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
 					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AppCanEngine;
 				PROVISIONING_PROFILE = "";

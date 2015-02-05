@@ -282,10 +282,15 @@
             //                [acAna startWithChildAppKey:inAppkey];   //inKey  目前为主widget的AppKey，子widget没有
             //            }
             id analysisObject = class_createInstance(analysisClass,0);
-            objc_msgSend(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);//mwWgtMgr.mainWidget.channelCode:widget的渠道号，	            子widget添加子widget的渠道号
-            objc_msgSend(analysisObject, @selector(setAppId:),wgtObj.appId);//mwWgtMgr.mainWidget.appId   子widget添加子widget的
-            objc_msgSend(analysisObject, @selector(setAppVersion:),wgtObj.ver);//mwWgtMgr.mainWidget.ver   字widget的版本号
-            objc_msgSend(analysisObject, @selector(startWithChildAppKey:),inAppkey); //inKey  目前为主widget的AppKey，子widget没有
+            
+            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);
+            //objc_msgSend(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);//mwWgtMgr.mainWidget.channelCode:widget的渠道号，	            子widget添加子widget的渠道号
+            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppId:),wgtObj.appId);
+            //objc_msgSend(analysisObject, @selector(setAppId:),wgtObj.appId);//mwWgtMgr.mainWidget.appId   子widget添加子widget的
+            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppVersion:),wgtObj.ver);
+            //objc_msgSend(analysisObject, @selector(setAppVersion:),wgtObj.ver);//mwWgtMgr.mainWidget.ver   字widget的版本号
+            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);
+            //objc_msgSend(analysisObject, @selector(startWithChildAppKey:),inAppkey); //inKey  目前为主widget的AppKey，子widget没有
         }
 	}else {
 		if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
@@ -520,7 +525,8 @@
         NSString *inKey=[BUtility appKey];
 //        [[AppCanAnalysis ACInstance] startWithAppKey:inKey];
         id analysisObject = class_createInstance(analysisClass,0);
-        objc_msgSend(analysisObject, @selector(startWithAppKey:),inKey);//
+        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithAppKey:), inKey);
+        //objc_msgSend(analysisObject, @selector(startWithAppKey:),inKey);//
     }
 }
 -(void)checkUpdateWgt:(id)userInfo{
