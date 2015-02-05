@@ -42,7 +42,7 @@
 #import "ACEDrawerViewController.h"
 #import "MMExampleDrawerVisualStateManager.h"
 #import "ACEWebViewController.h"
-#import "ACECustomURLProtocol.h"
+#import "ACEDes.h"
 
 
 #define kViewTagExit 100
@@ -50,7 +50,7 @@
 
 @implementation WidgetOneDelegate
 
-@synthesize mWindow;
+@synthesize window;
 @synthesize meBrwCtrler;
 @synthesize mwWgtMgr;
 @synthesize userStartReport = _userStartReport;
@@ -306,7 +306,7 @@ NSString *AppCanJS = nil;
         
     }
     
-    [ACECustomURLProtocol enable];
+    [ACEDes enable];
     _globalPluginDict = [[NSMutableDictionary alloc] init];
     
     if (_useCloseAppWithJaibroken) {
@@ -365,7 +365,9 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
-        objc_msgSend(analysisObject, @selector(setErrorReport:),YES);
+        
+        ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
+        //objc_msgSend(analysisObject, @selector(setErrorReport:),YES);
         
     }
     
@@ -414,12 +416,12 @@ NSString *AppCanJS = nil;
 	meBrwCtrler.mwWgtMgr = mwWgtMgr;
 	[self readAppCanJS];
     
-	mWindow = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-	mWindow.autoresizesSubviews = YES;
+	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+	window.autoresizesSubviews = YES;
     
 //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0) {
 //        
-//		mWindow.rootViewController = meBrwCtrler;
+//		window.rootViewController = meBrwCtrler;
 //        
 //    } else {
     
@@ -449,14 +451,14 @@ NSString *AppCanJS = nil;
          }
      }];
     
-    mWindow.rootViewController = _drawerController;
+    window.rootViewController = _drawerController;
     
     
     [meNav release];
         
 //	}
     
-    [mWindow makeKeyAndVisible];
+    [window makeKeyAndVisible];
     
     if (isSysVersionAbove8_0) {
         
@@ -683,7 +685,8 @@ NSString *AppCanJS = nil;
     Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
         id analysisObject = class_createInstance(analysisClass,0);
-        objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
+        ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
+        //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
     }
     
     [self performSelector:@selector(onResume) withObject:self afterDelay:1.0];
@@ -730,7 +733,8 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
-        objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
+        ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
+        //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
         
     }
     
@@ -773,7 +777,8 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
-        objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
+        ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
+        //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
         
     }
     
@@ -866,9 +871,9 @@ NSString *AppCanJS = nil;
 		[AppCanJS release];
 		AppCanJS = nil;
 	}
-	if (mWindow) {
-		[mWindow release];
-		mWindow = nil;
+	if (window) {
+		[window release];
+		window = nil;
 	}
 	if (meBrwCtrler) {
 		[meBrwCtrler release];

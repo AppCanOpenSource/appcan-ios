@@ -468,7 +468,8 @@
         Class analysisClass = NSClassFromString(@"AppCanAnalysis");
         if (analysisClass) {
             id analysisObject = class_createInstance(analysisClass,0);
-            objc_msgSend(analysisObject, @selector(setErrorReport:),YES);
+            ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
+            //objc_msgSend(analysisObject, @selector(setErrorReport:),YES);
         }
     }
     
@@ -479,7 +480,9 @@
         if (analysisClass) {
             NSMutableArray *array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
             id analysisObject = class_createInstance(analysisClass,0);
-            objc_msgSend(analysisObject, @selector(startEveryReport:),array);
+            
+            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            //objc_msgSend(analysisObject, @selector(startEveryReport:),array);
         }
     }
     
@@ -490,7 +493,8 @@
             return;
         }
         id analysisObject = class_createInstance(updateClass,0);
-        objc_msgSend(analysisObject, @selector(doUpdate:),dataArray);
+        ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
+        //objc_msgSend(analysisObject, @selector(doUpdate:),dataArray);
     }
 	//ACENSLog(@"init the start view :the uesdMemory is %f,the have memory is %f",[BUtility usedMemory],[BUtility availableMemory]);
 }

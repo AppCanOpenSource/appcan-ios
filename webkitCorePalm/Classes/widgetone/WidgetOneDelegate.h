@@ -26,12 +26,12 @@
 @class ACEDrawerViewController;
 
 @interface WidgetOneDelegate: NSObject <UIApplicationDelegate,UIAlertViewDelegate> {
-	UIWindow *mWindow;
+	UIWindow *window;
 	EBrowserController *meBrwCtrler;
 	WWidgetMgr *mwWgtMgr;
 	PluginParser *pluginObj;
 }
-@property (nonatomic, retain) UIWindow *mWindow;
+@property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, assign) EBrowserController *meBrwCtrler;
 @property (nonatomic, assign) WWidgetMgr *mwWgtMgr;
 @property (nonatomic) BOOL userStartReport;

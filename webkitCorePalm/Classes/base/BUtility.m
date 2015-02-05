@@ -533,8 +533,8 @@ static NSString *clientCertificatePwd = nil;
 	//"/"
 	if ([inUrl hasPrefix:@"/"]) {
 		if ([inBaseUrl hasPrefix:F_HTTP_PATH]) {
-			int s = -1;
-			int count = 0;
+			NSInteger s = -1;
+			NSInteger count = 0;
 			NSString *newS = inBaseUrl;
 			for (int i=0; i<3; i++) {
 				NSRange range = [newS rangeOfString:@"/"];
@@ -562,18 +562,24 @@ static NSString *clientCertificatePwd = nil;
 	}	
 	
 	// ../../
-	int index = [inUrl rangeOfString:@"../"].location;
-	int layer = 0;
+	NSUInteger index = [inUrl rangeOfString:@"../"].location;
+	NSInteger layer = 0;
 	while (index!=NSNotFound) {
 		layer++;			
 		inUrl =[inUrl substringFromIndex:(index+3)]; 
 		index = [inUrl rangeOfString:@"../"].location;
 	}
     
-	int count = [self lastIndexOf:inBaseUrl findChar:'/'];
+    
+    NSRange brange = [inBaseUrl rangeOfString:@"/" options:NSBackwardsSearch];
+    
+//	NSUInteger count1 = [self lastIndexOf:inBaseUrl findChar:'/'];
+    NSUInteger count = brange.location + 1;
 	while(layer>=0){
 		inBaseUrl = [inBaseUrl substringWithRange:NSMakeRange(0,count-1)];
-		count = [self lastIndexOf:inBaseUrl findChar:'/'];
+//		count = [self lastIndexOf:inBaseUrl findChar:'/'];
+        count = [inBaseUrl rangeOfString:@"/" options:NSBackwardsSearch].location + 1;
+//        count1 = [self lastIndexOf:inBaseUrl findChar:'/'];
 		layer--;
         //http://
 		if (count<=7 || count==NSNotFound) {
@@ -614,7 +620,7 @@ static NSString *clientCertificatePwd = nil;
 +(int)lastIndexOf:(NSString*)baseString findChar:(char)inChar {
 	//char inBaseChar[baseString.length];  
 	const char *inBaseChar = [baseString UTF8String];
-	int i = strlen(inBaseChar);
+	unsigned int i = (unsigned int)strlen(inBaseChar);
 	for (int j = i; j>=0; j--) {
 		if (inBaseChar[j-1]==inChar) {
 			return j;
@@ -1231,7 +1237,7 @@ static NSString *clientCertificatePwd = nil;
             //                fromUrlStr =[NSString stringWithString:inOpener];
             //            }
             if ([fromUrlStr hasPrefix:@"file"]) {
-                int dest =[fromUrlStr rangeOfString:@"widget"].location;
+                NSUInteger dest =[fromUrlStr rangeOfString:@"widget"].location;
                 
                 if (dest!=NSNotFound) {
                     fromUrlStr =[fromUrlStr substringFromIndex:(dest+7)];
@@ -1239,7 +1245,7 @@ static NSString *clientCertificatePwd = nil;
             }
             
             if ([goUrlStr hasPrefix:@"file"]) {
-                int dest =[goUrlStr rangeOfString:@"widget"].location;
+                NSUInteger dest =[goUrlStr rangeOfString:@"widget"].location;
                 
                 if (dest!=NSNotFound) {
                     goUrlStr =[goUrlStr substringFromIndex:(dest+7)];
@@ -1250,7 +1256,8 @@ static NSString *clientCertificatePwd = nil;
                 return;
             }
             id analysisObject = class_createInstance(analysisClass,0);
-            objc_msgSend(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
+            //objc_msgSend(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
+             ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
 //            AppCanAnalysis *acInstance =[AppCanAnalysis ACInstance];
 //            [acInstance setAppCanViewBecomeActive:fromUrlStr goView:goUrlStr startReason:inOpenReason mainWin:inMainWnd];
         }
@@ -1263,7 +1270,7 @@ static NSString *clientCertificatePwd = nil;
         if (wgtType ==F_WWIDGET_MAINWIDGET) {
             NSString *closeUrl =[BUtility makeSpecUrl:inName];
             if ([closeUrl hasPrefix:@"file"]) {
-                int dest =[closeUrl rangeOfString:@"widget"].location;
+                NSUInteger dest =[closeUrl rangeOfString:@"widget"].location;
                 
                 if (dest!=NSNotFound) {
                     closeUrl =[closeUrl substringFromIndex:(dest+7)];
@@ -1276,7 +1283,8 @@ static NSString *clientCertificatePwd = nil;
                 return;
             }
             id analysisObject = class_createInstance(analysisClass,0);
-            objc_msgSend(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:), closeUrl,inOpenReason);
+            //objc_msgSend(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:), closeUrl,inOpenReason);
+            ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inOpenReason);
         }
     }
 }
@@ -1605,6 +1613,8 @@ static NSString *clientCertificatePwd = nil;
         int result = setxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
         return result == 0;
     }else{
+
+#ifndef WIDGETONE_FOR_IDE_DEBUG
         assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
         NSError *error = nil;
         BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
@@ -1613,6 +1623,7 @@ static NSString *clientCertificatePwd = nil;
             ACENSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
         }
         return success;
+#endif
     }
     
     return NO;
