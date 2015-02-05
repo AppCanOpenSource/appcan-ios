@@ -18,17 +18,10 @@
 
 #import <Foundation/Foundation.h>
 
-//#include "encrypt.cpp"
-//#import "c_md5c.h"
 @interface FileEncrypt : NSObject {
     
 }
-//path为绝对路径
-//判断网页是否是被加密
-//-(BOOL)isEncrypted:(NSString *)path;
-
 +(BOOL)isDataEncrypted:(NSData *)srcData;
 
-//解密一个网页，返回解密后的数据
 -(NSString  *)decryptWithPath:(NSURL *)url appendData:(NSString *)appData;
 @end

@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		331574031A5AAF130036A2A2 /* ACEPluginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 331574011A5AAF130036A2A2 /* ACEPluginModel.m */; };
 		331574041A5AAF130036A2A2 /* ACEPluginModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 331574021A5AAF130036A2A2 /* ACEPluginModel.h */; };
-		331EB2D91A51820000795F0A /* ACECustomURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 331EB2D71A51820000795F0A /* ACECustomURLProtocol.m */; };
-		331EB2DA1A51820000795F0A /* ACECustomURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 331EB2D81A51820000795F0A /* ACECustomURLProtocol.h */; };
 		334D182F1A47D2A10050DD13 /* ACEBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18171A47D2A10050DD13 /* ACEBaseViewController.h */; };
 		334D18301A47D2A10050DD13 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18181A47D2A10050DD13 /* ACEBaseViewController.m */; };
 		334D18311A47D2A10050DD13 /* ACEDrawerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18191A47D2A10050DD13 /* ACEDrawerViewController.h */; };
@@ -276,6 +274,7 @@
 		DE6D47B61A14955D00D39C79 /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = DE6D47A11A14955D00D39C79 /* CJSONSerializer.h */; };
 		DE6D47B71A14955D00D39C79 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6D47A21A14955D00D39C79 /* CJSONSerializer.m */; };
 		DE6D47B81A14955D00D39C79 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = DE6D47A31A14955D00D39C79 /* JSONRepresentation.h */; };
+		DE8107241A78BACA007532AF /* ACEDes.h in Headers */ = {isa = PBXBuildFile; fileRef = DE8107231A78BACA007532AF /* ACEDes.h */; };
 		DE814B8A18FD1EFA0069F545 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE814B8918FD1EFA0069F545 /* libc++.dylib */; };
 		DE81D4D01A4D3DCB005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CF1A4D3DCB005D3153 /* libACEDes.a */; };
 		DE90F53E1904E6E00084EC10 /* OpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = DE90F53C1904E6E00084EC10 /* OpenUDID.h */; };
@@ -286,8 +285,6 @@
 /* Begin PBXFileReference section */
 		331574011A5AAF130036A2A2 /* ACEPluginModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginModel.m; sourceTree = "<group>"; };
 		331574021A5AAF130036A2A2 /* ACEPluginModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginModel.h; sourceTree = "<group>"; };
-		331EB2D71A51820000795F0A /* ACECustomURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACECustomURLProtocol.m; sourceTree = "<group>"; };
-		331EB2D81A51820000795F0A /* ACECustomURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACECustomURLProtocol.h; sourceTree = "<group>"; };
 		334D18171A47D2A10050DD13 /* ACEBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseViewController.h; sourceTree = "<group>"; };
 		334D18181A47D2A10050DD13 /* ACEBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseViewController.m; sourceTree = "<group>"; };
 		334D18191A47D2A10050DD13 /* ACEDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDrawerViewController.h; sourceTree = "<group>"; };
@@ -555,6 +552,7 @@
 		DE6D47A11A14955D00D39C79 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		DE6D47A21A14955D00D39C79 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		DE6D47A31A14955D00D39C79 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		DE8107231A78BACA007532AF /* ACEDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDes.h; sourceTree = "<group>"; };
 		DE814B8918FD1EFA0069F545 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		DE81D4CF1A4D3DCB005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F53C1904E6E00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
@@ -668,8 +666,7 @@
 		3356F94B1A4851A300F58330 /* des */ = {
 			isa = PBXGroup;
 			children = (
-				331EB2D71A51820000795F0A /* ACECustomURLProtocol.m */,
-				331EB2D81A51820000795F0A /* ACECustomURLProtocol.h */,
+				DE8107231A78BACA007532AF /* ACEDes.h */,
 				DE81D4CF1A4D3DCB005D3153 /* libACEDes.a */,
 				3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */,
 			);
@@ -1210,6 +1207,7 @@
 				5AAA872A18B1B93D000D7600 /* ioapi.h in Headers */,
 				5AAA875E18B1B93D000D7600 /* WWidgetMgr.h in Headers */,
 				5AAA871A18B1B93D000D7600 /* ASIProgressDelegate.h in Headers */,
+				DE8107241A78BACA007532AF /* ACEDes.h in Headers */,
 				5AAA868818B1B93D000D7600 /* BAnimitionTransform.h in Headers */,
 				DE2C4FAB1A2DA50800D5B4F2 /* ACEUtils.h in Headers */,
 				5AAA86E818B1B93D000D7600 /* EBrowserViewAnimition.h in Headers */,
@@ -1281,7 +1279,6 @@
 				5AAA86B518B1B93D000D7600 /* JSONKit.h in Headers */,
 				5AAA869418B1B93D000D7600 /* EUtility.h in Headers */,
 				5AAA86CC18B1B93D000D7600 /* CDataScanner.h in Headers */,
-				331EB2DA1A51820000795F0A /* ACECustomURLProtocol.h in Headers */,
 				5AAA872C18B1B93D000D7600 /* mztools.h in Headers */,
 				5AAA86AB18B1B93D000D7600 /* PluginParser.h in Headers */,
 				5AAA869F18B1B93D000D7600 /* SBJSON.h in Headers */,
@@ -1428,7 +1425,6 @@
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				DE6D47AB1A14955D00D39C79 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
-				331EB2D91A51820000795F0A /* ACECustomURLProtocol.m in Sources */,
 				331574031A5AAF130036A2A2 /* ACEPluginModel.m in Sources */,
 				334D18321A47D2A10050DD13 /* ACEDrawerViewController.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
@@ -1481,7 +1477,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../AppCanPlugin/AppCanPlugin/engine/";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1496,9 +1492,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -1506,7 +1502,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../AppCanPlugin/AppCanPlugin/engine/";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1514,10 +1510,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
@@ -1541,6 +1537,7 @@
 				PRODUCT_NAME = AppCanEngine;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -1564,6 +1561,7 @@
 				PRODUCT_NAME = AppCanEngine;
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
