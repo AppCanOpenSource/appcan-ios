@@ -98,9 +98,11 @@ NSString * webappShowAactivety;
     
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
     if([obfuscationStr isEqualToString:@"true"]){
-        wgtobj.obfuscation = F_WWIDGET_OBFUSCATION; //加密
+        wgtobj.obfuscation = F_WWIDGET_OBFUSCATION;
+        app.enctryptcj = F_WWIDGET_ENCRYPTCJ;
     }else {
         wgtobj.obfuscation = F_WWIDGET_NO_OBFUSCATION;
+        app.enctryptcj = F_WWIDGET_NO_ENCRYPTCJ;
     }
     
 	if (wgtobj!=nil) {
@@ -214,9 +216,9 @@ NSString * webappShowAactivety;
         
         if (isEncrypt) {
             
-            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+//            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
             
-            app.enctryptcj = F_WWIDGET_ENCRYPTCJ;
+            
 
             
             NSURL *url = nil;
