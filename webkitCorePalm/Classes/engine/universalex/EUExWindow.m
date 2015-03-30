@@ -55,11 +55,12 @@
 #define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
 
-@interface EScrollView : UIScrollView {
+@interface EScrollView : UIImageView {
     
 }
 
 @property (nonatomic, retain) NSString *mainPopName;
+@property (nonatomic, retain) UIScrollView * scrollView;
 
 @end
 
@@ -68,6 +69,7 @@
 
 - (void)dealloc {
     
+    [_scrollView release];
     [_mainPopName release];
     [super dealloc];
 }
@@ -534,6 +536,11 @@
                 NSString * urlsub = [inData substringFromIndex:10];
                 NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
                 urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                
+                if (![urlStr hasPrefix:@"file://"]) {
+                    urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
+                }
+                
             }else
             {
                 urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inData];
@@ -798,6 +805,25 @@
     
 }
 
+-(void)setRightSwipeEnable:(NSMutableArray *)inArguments
+{
+    BOOL isNeedSwipeGestureRecognizer = YES;
+    
+    if ([inArguments count] > 0) {
+        isNeedSwipeGestureRecognizer = [[inArguments objectAtIndex:0] boolValue];
+    }
+    
+    EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+    
+    if (eCurBrwWnd.webController)
+    {
+        ACEWebViewController * webViewController = eCurBrwWnd.webController;
+        webViewController.isNeedSwipeGestureRecognizer = isNeedSwipeGestureRecognizer;
+    }
+    
+}
+
+
 - (void)openWithController:(NSMutableArray *)inArguments
 {
     if (inArguments.count < 3) {
@@ -808,10 +834,7 @@
     NSString *inUExWndName = [inArguments objectAtIndex:0];
     NSString *inDataType = [inArguments objectAtIndex:1];
     NSString *inData = [inArguments objectAtIndex:2];
-    
-    
-    
-    
+    NSString *extraInfo = [inArguments objectAtIndex:3];
     
     if (meBrwView.hidden == YES) {
         return;
@@ -933,6 +956,15 @@
     if ((flag & F_EUEXWINDOW_OPEN_FLAG_OPAQUE) == F_EUEXWINDOW_OPEN_FLAG_OPAQUE) {
         eBrwWnd.meBrwView.backgroundColor = [UIColor whiteColor];
     }
+    
+    if ([extraInfo length] > 0) {
+        
+        NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
+        [extraDic setValue: @"true" forKey: @"opaque"];
+        [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
+        
+    }
+    
     if ((flag & F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) == F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) {
         [eBrwWnd.meBrwView setScalesPageToFit:YES];
         [eBrwWnd.meBrwView setMultipleTouchEnabled:YES];
@@ -967,6 +999,10 @@
                 NSString * urlsub = [inData substringFromIndex:10];
                 NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
                 urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                
+                if (![urlStr hasPrefix:@"file://"]) {
+                    urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
+                }
             }else
             {
                 urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inData];
@@ -1101,6 +1137,54 @@
     }
 }
 
+-(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
+    NSRange range = [inSouceString rangeOfString:inSubSting];
+    if (range.location!=NSNotFound) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+-(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(UIImageView *)inBrwView {
+    
+    if ([extraDic objectForKey:@"opaque"]) {
+        
+        BOOL * opaque = [[extraDic objectForKey:@"opaque"] boolValue];
+        
+        if (opaque) {
+            
+            if ([extraDic objectForKey:@"bgColor"]) {
+                
+                NSString * bgColorStr = [extraDic objectForKey:@"bgColor"];
+                if ([self isHaveString:bgColorStr subSting:@"://"]) {
+                    
+                    inBrwView.backgroundColor = [UIColor clearColor];
+                    NSString * imgPath = [self absPath:bgColorStr];
+                    inBrwView.image = [UIImage imageWithContentsOfFile:imgPath];
+                    
+                } else {
+                    
+                    inBrwView.image = nil;
+                    BGColor bgColor = [BUtility bgColorFromNSString:bgColorStr];
+                    UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+                    inBrwView.backgroundColor = color;
+                    
+                }
+                
+            }
+            
+        } else {
+            
+            inBrwView.image = nil;
+            inBrwView.backgroundColor = [UIColor clearColor];
+            
+        }
+        
+    }
+    
+}
+
 - (void)open:(NSMutableArray *)inArguments {
 	NSString *inUExWndName = [inArguments objectAtIndex:0];
 	NSString *inDataType = [inArguments objectAtIndex:1];
@@ -1113,7 +1197,10 @@
 	if ([inArguments count] >= 8) {
 		inAniDuration = [inArguments objectAtIndex:7];
 	}
-    
+    NSString * extraInfo = @"";
+    if ([inArguments count] >= 9) {
+        extraInfo = [inArguments objectAtIndex:8];
+    }
     int flag = 0;
     
     if (inFlag.length != 0) {
@@ -1144,15 +1231,13 @@
     
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
         
-        
-        
-        [self openWithController:(NSMutableArray *)@[inUExWndName, inDataType, inData]];
-        
+        [self openWithController:(NSMutableArray *)@[inUExWndName, inDataType, inData, extraInfo]];
         
         return;
+        
     } else if ((flag & F_EUExWINDOW_OPEN_FLAG_NAV_TYPE) == F_EUExWINDOW_OPEN_FLAG_NAV_TYPE) {
         
-        [self openWithController:(NSMutableArray *)@[inUExWndName, inDataType, inData]];
+        [self openWithController:(NSMutableArray *)@[inUExWndName, inDataType, inData, extraInfo]];
         
         return;
         
@@ -1252,6 +1337,14 @@
 	if ((flag & F_EUEXWINDOW_OPEN_FLAG_OPAQUE) == F_EUEXWINDOW_OPEN_FLAG_OPAQUE) {
 		eBrwWnd.meBrwView.backgroundColor = [UIColor whiteColor];
 	}
+    
+    if ([extraInfo length] > 0) {
+        
+        NSDictionary * extraDic = [extraInfo JSONValue];
+        [self setExtraInfo:[extraDic objectForKey:@"extraInfo"] toEBrowserView:eBrwWnd.meBrwView];
+        
+    }
+    
     if ((flag & F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) == F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) {
         [eBrwWnd.meBrwView setScalesPageToFit:YES];
         [eBrwWnd.meBrwView setMultipleTouchEnabled:YES];
@@ -1295,6 +1388,10 @@
                 NSString * urlsub = [inData substringFromIndex:10];
                 NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
                urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                
+                if (![urlStr hasPrefix:@"file://"]) {
+                    urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
+                }
             }else
             {
                 urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inData];
@@ -1543,15 +1640,27 @@
     }
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;//调用此close方法的window
 //    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
+    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
+    
+    EBrowserWindow *brwWnd = [eBrwWndContainer.mBrwWndDict objectForKey:windowName]; //即将关闭window链中的第一个window
     
     if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+        
+        
+        
+        ACEWebViewController *webController = brwWnd.webController;
+        if (webController) {
+            [webController.navigationController popToViewController:webController animated:YES];
+        }else{
+            webController = eBrwWnd.webController;
+            [webController.navigationController popToRootViewControllerAnimated:YES];
+        }
+        
         
         return;
     }
     
-    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
     
-    EBrowserWindow *brwWnd = [eBrwWndContainer.mBrwWndDict objectForKey:windowName]; //即将关闭window链中的第一个window
     if (brwWnd == nil) {
         ///退出应用
         [self exitApp];
@@ -1836,10 +1945,10 @@
     if (brwWnd_.mMuiltPopoverDict)
     {
         NSArray * mulitPopArray = [brwWnd_.mMuiltPopoverDict allValues];
-        for (UIScrollView * popView in mulitPopArray)
+        for (EScrollView * multiPopover in mulitPopArray)
         {
-            if (popView.subviews) {
-                [popView removeFromSuperview];
+            if (multiPopover.subviews) {
+                [multiPopover removeFromSuperview];
             }
         }
         [brwWnd_.mMuiltPopoverDict removeAllObjects];
@@ -2322,6 +2431,12 @@
 	}
 }
 
+- (void)getBounce:(NSMutableArray *)inArguments {
+    BOOL bounce = [meBrwView.mScrollView bounces];
+    NSString * jsStr = [NSString stringWithFormat:@"if(uexWindow.cbBounceState!=null){uexWindow.cbBounceState(%d);}",bounce];
+    [meBrwView stringByEvaluatingJavaScriptFromString:jsStr];
+}
+
 - (void)setBounce:(NSMutableArray *)inArguments {
 	NSString *inValue = [inArguments objectAtIndex:0];
 	int value = 0;
@@ -2559,6 +2674,62 @@
 		default:
 			break;
 	}
+}
+
+-(void)setMultiPopoverFrame:(NSMutableArray *)inArguments
+{
+    
+    if ([inArguments count] < 5) {
+        return;
+    }
+    
+    NSString * popoverName = [inArguments objectAtIndex:0];
+    float x = [[inArguments objectAtIndex:1] floatValue];
+    float y = [[inArguments objectAtIndex:2] floatValue];
+    float w = [[inArguments objectAtIndex:3] floatValue];
+    float h = [[inArguments objectAtIndex:4] floatValue];
+    
+    EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+    EScrollView * muiltPopover = [eBrwWnd.mMuiltPopoverDict objectForKey:popoverName];
+    
+    if (muiltPopover) {
+        
+        muiltPopover.frame = CGRectMake(x, y, w, h);
+        muiltPopover.scrollView.frame = CGRectMake(0, 0, w, h);
+        
+    }
+    
+}
+
+-(void)evaluateMultiPopoverScript:(NSMutableArray *)inArguments
+{
+    
+    if ([inArguments count] < 4) {
+        return;
+    }
+    
+    NSString * windowName = [inArguments objectAtIndex:0];
+    NSString * multiPopoverName = [inArguments objectAtIndex:1];
+    NSString * inPageName = [inArguments objectAtIndex:2];
+    NSString * inScript = [inArguments objectAtIndex:3];
+    
+    EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
+    
+    if ([windowName length] > 0) {
+        EBrowserWindow * tempWindow = [eBrwWndContainer brwWndForKey:windowName];
+        if (tempWindow) {
+            eBrwWnd = tempWindow;
+        }
+    }
+    
+//    UIScrollView * muiltPopover = [eBrwWnd.mMuiltPopoverDict objectForKey:multiPopoverName];
+    EBrowserView * ePopBrwView = [eBrwWnd.mPopoverBrwViewDict objectForKey:inPageName];
+    if (!ePopBrwView) {
+        return;
+    }
+    [ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
+    
 }
 
 - (void)windowBack:(NSMutableArray *)inArguments {
@@ -2948,13 +3119,15 @@
 	NSString *inH = [inArguments objectAtIndex:7];
 	NSString *inFontSize = [inArguments objectAtIndex:8];
 	NSString *inFlag = [inArguments objectAtIndex:9];
-    //****************************************************
-    
     NSString *inBottom = nil;
-    
-    if (inArguments.count > 10) {
+    if (inArguments.count >= 11) {
        inBottom =[inArguments objectAtIndex:10];
     }
+    NSString * extraInfo = @"";
+    if ([inArguments count] >= 12) {
+        extraInfo = [inArguments objectAtIndex:11];
+    }
+    NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
     
     //****************************************************
 	int x=0,
@@ -3013,7 +3186,7 @@
     
     ACENSLog(@"NavWindowTest openPopover inPopName = %@", inPopName);
     
-    [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:nil andIsMuiltPop:NO];
+    [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:nil andIsMuiltPop:NO andExtraInfo:extraDic];
 }
 
 - (void)insertPopoverAbovePopover:(NSMutableArray *)inArguments {
@@ -3815,6 +3988,10 @@
     NSString * inFontSize = [inArguments objectAtIndex:7];;
     NSString * inFlag = [inArguments objectAtIndex:8];
     NSString * popIndex = [inArguments objectAtIndex:9];
+    NSString * extraInfoAll = @"";
+    if ([inArguments count] >= 11) {
+        extraInfoAll = [inArguments objectAtIndex:10];
+    }
     int pageth = 0;
     if ([popIndex isKindOfClass:[NSString class]] && [popIndex length] > 0) {
         pageth = [popIndex intValue];
@@ -3861,7 +4038,9 @@
     
     int multNum = [pageN count];
     // define the scroll view content size and enable paging
-    EScrollView * scrollView=[[EScrollView alloc]initWithFrame:CGRectMake(x,y,w,h )];
+    EScrollView * multiPopover = [[EScrollView alloc]initWithFrame:CGRectMake(x,y,w,h)];
+    multiPopover.userInteractionEnabled = YES;
+    UIScrollView * scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
 	[scrollView setPagingEnabled: YES] ;
 	[scrollView setContentSize: CGSizeMake(scrollView.bounds.size.width * multNum, scrollView.bounds.size.height)] ;
     scrollView.delegate=self;
@@ -3873,10 +4052,19 @@
         eBrwWnd.mMuiltPopoverDict = popDic;
         [popDic release];
     }
-    [eBrwWnd.mMuiltPopoverDict setObject:scrollView forKey:inMainPopName];
-    scrollView.mainPopName = inMainPopName;
-    [eBrwWnd addSubview:scrollView];
+    [eBrwWnd.mMuiltPopoverDict setObject:multiPopover forKey:inMainPopName];
+    multiPopover.scrollView = scrollView;
+    multiPopover.mainPopName = inMainPopName;
+    [multiPopover addSubview:scrollView];
+    [eBrwWnd addSubview:multiPopover];
+    [multiPopover release];
     [scrollView release];
+    
+    if ([extraInfoAll length] > 0) {
+        NSDictionary * extraAllDic = [extraInfoAll JSONValue];
+        NSDictionary * extraDic = [extraAllDic objectForKey:@"extraInfo"];
+        [self setExtraInfo:extraDic toEBrowserView:multiPopover];
+    }
     
     //打开多个pop窗口
     for (int i=0; i<multNum;i++)
@@ -3887,6 +4075,8 @@
         NSString *inPopName = [pageInfo objectForKey:@"inPageName"];
         NSString *inUrl = [pageInfo objectForKey:@"inUrl"];
         NSString *inData = [pageInfo objectForKey:@"inData"];
+        NSDictionary *extraDic = [pageInfo objectForKey:@"extraInfo"];
+        
         NSURL *baseUrl = [meBrwView curUrl];
         if (inPopName.length == 0) {
             return;
@@ -3895,8 +4085,10 @@
             return;
         }
         int bottom=0;
-        [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES];
+        [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
     }
+    
+    
     [scrollView setContentOffset: CGPointMake(scrollView.bounds.size.width * pageth, scrollView.contentOffset.y) animated: NO] ;
 }
 
@@ -3905,21 +4097,23 @@
 #pragma mark
 -(void)setWindowScrollbarVisible:(NSArray *)inArgument
 {
-    if ([inArgument count]>0)
+    if ([inArgument count]>0 && [BUtility getSystemVersion]>=5.0)
     {
         NSString * isShowBar = [inArgument objectAtIndex:0];
         if ([isShowBar isEqualToString:@"false"])
         {
-            if ([BUtility getSystemVersion]>=5.0)
-            {
-                meBrwView.scrollView.showsVerticalScrollIndicator = NO;
-                meBrwView.scrollView.showsHorizontalScrollIndicator = NO;
-            }
+            meBrwView.scrollView.showsVerticalScrollIndicator = NO;
+            meBrwView.scrollView.showsHorizontalScrollIndicator = NO;
+            
+        } else
+        {
+            meBrwView.scrollView.showsVerticalScrollIndicator = YES;
+            meBrwView.scrollView.showsHorizontalScrollIndicator = YES;
         }
     }
 }
 
--(void)openMuilPopwith:(EBrowserWindow *)eBrwWnd and:(EBrowserView *)ePopBrwView and:(EBrowserWindowContainer *)eBrwWndContainer and:(NSString*)inPopName and:(NSString *)inDataType and:(NSString*)inUrl and:(NSString*)inData and:(NSURL*)baseUrl and:(int)x and:(int)y and:(int)w and:(int)h and:(int)fontSize and:(int)flag and:(int)bottom and:(UIScrollView *)scrollView andIsMuiltPop:(BOOL)isMuitPop
+-(void)openMuilPopwith:(EBrowserWindow *)eBrwWnd and:(EBrowserView *)ePopBrwView and:(EBrowserWindowContainer *)eBrwWndContainer and:(NSString*)inPopName and:(NSString *)inDataType and:(NSString*)inUrl and:(NSString*)inData and:(NSURL*)baseUrl and:(int)x and:(int)y and:(int)w and:(int)h and:(int)fontSize and:(int)flag and:(int)bottom and:(UIScrollView *)scrollView andIsMuiltPop:(BOOL)isMuitPop andExtraInfo:(NSDictionary *)extraDic
 {
     int dataType = 0;
     BOOL isExist = NO;
@@ -3958,10 +4152,14 @@
         
         if (ePopBrwView)
         {
+            
+            [ePopBrwView reuseWithFrame:CGRectMake(x, y, w, h) BrwCtrler:meBrwView.meBrwCtrler Wgt:meBrwView.mwWgt BrwWnd:eBrwWnd UExObjName:inPopName Type:F_EBRW_VIEW_TYPE_POPOVER];
+            
             if (isMuitPop) {
                 ePopBrwView.isMuiltPopover=YES;
+            } else {
+                ePopBrwView.isMuiltPopover = NO;
             }
-            [ePopBrwView reuseWithFrame:CGRectMake(x, y, w, h) BrwCtrler:meBrwView.meBrwCtrler Wgt:meBrwView.mwWgt BrwWnd:eBrwWnd UExObjName:inPopName Type:F_EBRW_VIEW_TYPE_POPOVER];
             
             ACENSLog(@"NavWindowTest openPopover reuse new ePopBrwView = %@, ePopBrwView Name = %@", ePopBrwView, ePopBrwView.muexObjName);
         }else
@@ -3972,6 +4170,8 @@
             
             if (isMuitPop) {
                 ePopBrwView.isMuiltPopover=YES;
+            } else {
+                ePopBrwView.isMuiltPopover = NO;
             }
             
             
@@ -3988,12 +4188,17 @@
         ePopBrwView.frame = CGRectMake(x, y, w, h);
         if (isMuitPop) {
             ePopBrwView.isMuiltPopover=YES;
+        } else {
+            ePopBrwView.isMuiltPopover = NO;
         }
     }
     if ((flag & F_EUEXWINDOW_OPEN_FLAG_OPAQUE) == F_EUEXWINDOW_OPEN_FLAG_OPAQUE)
     {
         ePopBrwView.backgroundColor = [UIColor whiteColor];
     }
+    
+    [self setExtraInfo:extraDic toEBrowserView:ePopBrwView];
+    
     if ((flag & F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) == F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE)
     {
         [ePopBrwView setScalesPageToFit:YES];
@@ -4022,6 +4227,10 @@
                         NSString * urlsub = [inUrl substringFromIndex:10];
                         NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
                         urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                        
+                        if (![urlStr hasPrefix:@"file://"]) {
+                            urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
+                        }
                     }else
                     {
                         urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
@@ -4077,16 +4286,15 @@
     {
         [eBrwWnd bringSubviewToFront:ePopBrwView];
     }
-//************************************************************************************************
-    if (bottom>0) {
-        NSNotificationCenter * notificationCenter =[NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver:ePopBrwView
-                               selector:@selector(keyboardWillChangeFrame:)
-                                   name:UIKeyboardWillChangeFrameNotification
-                                 object:nil];
+
+    if (bottom>0)
+    {
+        ePopBrwView.bottom = bottom;//footer的高度
+        
+        [ePopBrwView registerKeyboardChangeEvent];
         
     }
-//************************************************************************************************
+
     if (isMuitPop)
     {
         [scrollView addSubview:ePopBrwView];
@@ -4099,7 +4307,8 @@
 	EBrowserView *ePopBrwView = nil;
 	EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
 	if (eBrwWnd.mMuiltPopoverDict) {
-        UIScrollView * scrolView = [eBrwWnd.mMuiltPopoverDict objectForKey:inMainPopName];
+        EScrollView * multiPopover = [eBrwWnd.mMuiltPopoverDict objectForKey:inMainPopName];
+        UIScrollView * scrolView = multiPopover.scrollView;
         NSArray * popviewAry = [scrolView subviews];
         for (EBrowserView * popVews in popviewAry)
         {
@@ -4133,10 +4342,10 @@
         if (eBrwWnd.mMuiltPopoverDict)
         {
             NSArray * mulitPopArray = [eBrwWnd.mMuiltPopoverDict allValues];
-            for (UIScrollView * popView in mulitPopArray)
+            for (EScrollView * mutilPopover in mulitPopArray)
             {
-                if (popView.subviews) {
-                    [popView removeFromSuperview];
+                if (mutilPopover.subviews) {
+                    [mutilPopover removeFromSuperview];
                 }
             }
             [eBrwWnd.mMuiltPopoverDict removeAllObjects];
@@ -4151,7 +4360,8 @@
     NSString * popIndex = [inArgument objectAtIndex:1];
     int pageth = [popIndex intValue];
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
-    UIScrollView * scrollView = [eBrwWnd.mMuiltPopoverDict objectForKey:popName];
+    EScrollView * multiPopover = [eBrwWnd.mMuiltPopoverDict objectForKey:popName];
+    UIScrollView * scrollView = multiPopover.scrollView;
     // we need to scroll to the new index
 	[scrollView setContentOffset: CGPointMake(scrollView.bounds.size.width * pageth, scrollView.contentOffset.y) animated: NO] ;
 }
@@ -4267,9 +4477,9 @@
 #pragma mark UIScrollView delegate methods
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    EScrollView *scrollV = (EScrollView *)scrollView;
+    EScrollView *scrollV = (EScrollView *)scrollView.superview;
 	CGFloat pageWidth = scrollV.bounds.size.width ;
-    float fractionalPage = scrollV.contentOffset.x / pageWidth ;
+    float fractionalPage = scrollView.contentOffset.x / pageWidth ;
 	NSInteger nearestNumber = lround(fractionalPage) ;
     NSString *indexStr = [NSString stringWithFormat:@"%d", nearestNumber];
     
@@ -4286,9 +4496,9 @@
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    EScrollView *scrollV = (EScrollView *)scrollView;
+    EScrollView *scrollV = (EScrollView *)scrollView.superview;
 	CGFloat pageWidth = scrollV.bounds.size.width ;
-    float fractionalPage = scrollV.contentOffset.x / pageWidth ;
+    float fractionalPage = scrollView.contentOffset.x / pageWidth ;
 	NSInteger nearestNumber = lround(fractionalPage) ;
     NSString *indexStr = [NSString stringWithFormat:@"%d", nearestNumber];
     
