@@ -31,6 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.isNeedSwipeGestureRecognizer = YES;
     // Do any additional setup after loading the view.
     
 //    _browserWindow = (EBrowserWindow *)self.view;

@@ -51,6 +51,7 @@
 #import "SFHFKeychainUtils.h"
 #import "OpenUDID.h"
 #import "ACEUtils.h"
+#import "FileEncrypt.h"
 
 
 void rc4_setup( struct rc4_state *s, unsigned char *key, int length ) 
@@ -168,7 +169,9 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 
 "window.uexWindow={}; uexWindow.cbConfirm = null; uexWindow.cbPrompt = null; uexWindow.cbActionSheet = null; uexWindow.cbGetState = null; uexWindow.cbGetUrlQuery = null; uexWindow.onOAuthInfo = null; uexWindow.onStateChange = null; uexWindow.onBounceStateChange = null; uexWindow.didShowKeyboard = 0; uexWindow.onAnimationFinish = null;"
 "uexWindow.forward=function(){ uex.exec('uexWindow.forward/');};"
-"uexWindow.back=function(){ uex.exec('uexWindow.back/');	};"
+"uexWindow.back=function(){ uex.exec('uexWindow.back/');};"
+"uexWindow.setMultiPopoverFrame=function(){ uex.exec('uexWindow.setMultiPopoverFrame/'+uexJoin(arguments));};"
+"uexWindow.evaluateMultiPopoverScript=function(){ uex.exec('uexWindow.evaluateMultiPopoverScript/'+uexJoin(arguments));};"
 "uexWindow.pageForward=function(){ uex.exec('uexWindow.pageForward/');};"
 "uexWindow.pageBack=function(){ uex.exec('uexWindow.pageBack/');	};"
 "uexWindow.alert=function(){ uex.exec('uexWindow.alert/'+uexJoin(arguments));};"
@@ -203,11 +206,14 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.insertWindowBelowWindow=function(){ uex.exec('uexWindow.insertWindowBelowWindow/'+uexJoin(arguments));	};"
 "uexWindow.setOrientation=function(){ uex.exec('uexWindow.setOrientation/'+uexJoin(arguments));	};"
 "uexWindow.setStatusBarTitleColor=function(){ uex.exec('uexWindow.setStatusBarTitleColor/'+uexJoin(arguments));	};"
+"uexWindow.setWindowScrollbarVisible=function(){ uex.exec('uexWindow.setWindowScrollbarVisible/'+uexJoin(arguments));	};"
 "uexWindow.setPopoverFrame=function(){ uex.exec('uexWindow.setPopoverFrame/'+uexJoin(arguments));	};"
 "uexWindow.evaluatePopoverScript=function(){ uex.exec('uexWindow.evaluatePopoverScript/'+uexJoin(arguments));};"
 "uexWindow.openAd=function(){ uex.exec('uexWindow.openAd/'+uexJoin(arguments));};"
 "uexWindow.setBounce=function(){ uex.exec('uexWindow.setBounce/'+uexJoin(arguments));};"
+"uexWindow.getBounce=function(){ uex.exec('uexWindow.getBounce/'+uexJoin(arguments));};"
 "uexWindow.setBounceParams=function(){ uex.exec('uexWindow.setBounceParams/'+uexJoin(arguments));};"
+"uexWindow.setRightSwipeEnable=function(){ uex.exec('uexWindow.setRightSwipeEnable/'+uexJoin(arguments));};"
 "uexWindow.showBounceView=function(){ uex.exec('uexWindow.showBounceView/'+uexJoin(arguments));};"
 "uexWindow.hiddenBounceView=function(){ uex.exec('uexWindow.hiddenBounceView/'+uexJoin(arguments));};"
 "uexWindow.resetBounceView=function(){ uex.exec('uexWindow.resetBounceView/'+uexJoin(arguments));};"
@@ -1682,6 +1688,33 @@ static NSString *clientCertificatePwd = nil;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:inFileName]) {
 		NSData *configData = [NSData dataWithContentsOfFile:inFileName];
 		AllConfigParser *configParser=[[AllConfigParser alloc]init];
+        
+        BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
+        
+        if (isEncrypt) {
+            
+            //            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+            
+            
+            
+            
+            NSURL *url = nil;
+            if ([inFileName hasSuffix:@"file://"]) {
+                url = [BUtility stringToUrl:inFileName];;
+            } else {
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
+            }
+            
+            FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+            NSString *data = [encryptObj decryptWithPath:url appendData:nil];
+            
+            [encryptObj release];
+            
+            configData = [data dataUsingEncoding:NSUTF8StringEncoding];
+        }
+
+        
+        
 		NSMutableDictionary *tmpDict =[configParser initwithReqData:configData];
 		xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
 		//
@@ -1694,8 +1727,8 @@ static NSString *clientCertificatePwd = nil;
     return interfice;
 }
 
-//--获取config里debug
-+(BOOL)getMainWidgetConfigDebug
+//--获取config里windowBackground
++(NSDictionary *)getMainWidgetConfigWindowBackground
 {
     NSString *inFileName = nil;
     if (theApp.useUpdateWgtHtmlControl) {
@@ -1712,14 +1745,40 @@ static NSString *clientCertificatePwd = nil;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:inFileName]) {
 		NSData *configData = [NSData dataWithContentsOfFile:inFileName];
 		AllConfigParser *configParser=[[AllConfigParser alloc]init];
+        
+        BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
+        
+        if (isEncrypt) {
+            
+            //            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+            
+            
+            
+            
+            NSURL *url = nil;
+            if ([inFileName hasSuffix:@"file://"]) {
+                url = [BUtility stringToUrl:inFileName];;
+            } else {
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
+            }
+            
+            FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+            NSString *data = [encryptObj decryptWithPath:url appendData:nil];
+            
+            [encryptObj release];
+            
+            configData = [data dataUsingEncoding:NSUTF8StringEncoding];
+        }
+
+        
 		NSMutableDictionary *tmpDict =[configParser initwithReqData:configData];
 		xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
 		[tmpDict removeAllObjects];
 		[configParser release];
 	}
     
-    BOOL isDebug = [[xmlDict objectForKey:@"debug"] boolValue];
-    return isDebug;
+    NSDictionary * windowBackground = [xmlDict objectForKey:@"windowBackground"];
+    return windowBackground;
 }
 
 +(NSString *)getMainWidgetConfigLogserverip

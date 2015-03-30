@@ -50,4 +50,7 @@ typedef enum {
 //- (id)initWithFrame:(CGRect)frame andType:(int)inType;
 - (id)initWithFrame:(CGRect)frame andType:(int)inType params:(NSMutableDictionary*)dict;
 @property(nonatomic,retain)NSString * projectID;
+
+@property(nonatomic,assign) BOOL isImgCenter;
+
 @end

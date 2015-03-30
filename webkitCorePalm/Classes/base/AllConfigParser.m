@@ -89,7 +89,18 @@
 		[tmpDict removeAllObjects];
 		[tmpDict setObject:attributeDict forKey:CONFIG_TAG_CONTENT];
 		[dataDict addEntriesFromDictionary:tmpDict];
-	}
+    }else if([elementName caseInsensitiveCompare:CONFIG_TAG_WINDOWBACKGROUND]==NSOrderedSame){
+        if (attributeDict!=nil) {
+            [tmpDict removeAllObjects];
+            if ([attributeDict objectForKey:@"opaque"]) {
+                [tmpDict setObject:[attributeDict objectForKey:@"opaque"] forKey:@"opaque"];
+            }
+            if ([attributeDict objectForKey:@"bgColor"]) {
+                [tmpDict setObject:[attributeDict objectForKey:@"bgColor"] forKey:@"bgColor"];
+            }
+            [dataDict setObject:tmpDict forKey:CONFIG_TAG_WINDOWBACKGROUND];
+        }
+    }
 	element = @"";
 }
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)tagText{
@@ -150,6 +161,9 @@
 	if([elementName caseInsensitiveCompare:CONFIG_TAG_DEBUG]==NSOrderedSame){
 		[dataDict setObject:element forKey:CONFIG_TAG_DEBUG];
 	}
+//    if([elementName caseInsensitiveCompare:CONFIG_TAG_WINDOWBACKGROUND]==NSOrderedSame){
+//        [dataDict setObject:element forKey:CONFIG_TAG_WINDOWBACKGROUND];
+//    }
 }
 - (void)dealloc {
 	

@@ -7,9 +7,12 @@
  */
 
 #import "SDWebImageDownloader.h"
-
 #import "SDWebImageDecoder.h"
-@interface SDWebImageDownloader (ImageDecoder) <SDWebImageDecoderDelegate>
+#import "WidgetOneDelegate.h"
+#import "BUtility.h"
+#import "ASIFormDataRequest.h"
+
+@interface SDWebImageDownloader (ImageDecoder) <SDWebImageDecoderDelegate,ASIHTTPRequestDelegate>
 @end
 
 NSString *const SDWebImageDownloadStartNotification = @"SDWebImageDownloadStartNotification";
@@ -73,18 +76,33 @@ NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNot
 - (void)start
 {
     // In order to prevent from potential duplicate caching (NSURLCache + SDImageCache) we disable the cache for image requests
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:15];
-    self.connection = SDWIReturnAutoreleased([[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO]);
-
+//    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:15];
+//    self.connection = SDWIReturnAutoreleased([[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO]);
     // If not in low priority mode, ensure we aren't blocked by UI manipulations (default runloop mode for NSURLConnection is NSEventTrackingRunLoopMode)
-    if (!lowPriority)
-    {
-        [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//    if (!lowPriority)
+//    {
+//        [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//    }
+//    [connection start];
+//    SDWIRelease(request);
+    
+    SecIdentityRef identity = NULL;
+    SecTrustRef trust = NULL;
+    SecCertificateRef certChain=NULL;
+    NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+    [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setDelegate:self];
+    [request setRequestMethod:@"GET"];
+    NSString *scheme = [[url scheme] lowercaseString];
+    if ([scheme isEqualToString:@"https"]) {
+        [request setValidatesSecureCertificate:YES];
+        [request setClientCertificateIdentity:identity];
+    }else{
+        [request setValidatesSecureCertificate:NO];
     }
-    [connection start];
-    SDWIRelease(request);
-
-    if (connection)
+    
+    if (request)
     {
         self.imageData = [NSMutableData data];
         [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStartNotification object:nil];
@@ -96,6 +114,39 @@ NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNot
             [delegate performSelector:@selector(imageDownloader:didFailWithError:) withObject:self withObject:nil];
         }
     }
+    [request startSynchronous];
+}
+
+#pragma mark - ASIHTTPRequestDelegate
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSData *responseData = [request responseData];
+    [self.imageData appendData:responseData];
+    self.connection = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+    
+    if ([delegate respondsToSelector:@selector(imageDownloaderDidFinish:)])
+    {
+        [delegate performSelector:@selector(imageDownloaderDidFinish:) withObject:self];
+    }
+    if ([delegate respondsToSelector:@selector(imageDownloader:didFinishWithImage:)])
+    {
+        NSLog(@"connectionDidFinishLoading----url.absoluteString--->:%@",url.absoluteString);
+        UIImage *image = SDScaledImageForPath(url.absoluteString, imageData);
+        [[SDWebImageDecoder sharedImageDecoder] decodeImage:image withDelegate:self userInfo:nil];
+    }
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+    NSLog(@"didFailWithError------->:%@",request.error);
+    if ([delegate respondsToSelector:@selector(imageDownloader:didFailWithError:)])
+    {
+        [delegate performSelector:@selector(imageDownloader:didFailWithError:) withObject:self withObject:request.error];
+    }
+    self.imageData = nil;
 }
 
 - (void)cancel
@@ -108,6 +159,8 @@ NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNot
     }
 }
 
+/*
+ * 由于不支持https带证书的网络请求，所以用了ASIHttpRequest
 #pragma mark NSURLConnection (delegate)
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)response
@@ -168,6 +221,7 @@ NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNot
     self.connection = nil;
     self.imageData = nil;
 }
+*/
 
 #pragma mark SDWebImageDecoderDelegate
 

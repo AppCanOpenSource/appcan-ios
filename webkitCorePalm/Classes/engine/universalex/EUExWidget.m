@@ -490,23 +490,9 @@
 
 - (void)loadApp:(NSMutableArray *)inArguments {
 	NSString *inAction = [inArguments objectAtIndex:0];
-	//NSString *inSiftInfo = [inArguments objectAtIndex:1];
-	NSString *inData = [inArguments objectAtIndex:2];
-	ACENSLog(@"[EUExWidget loadApp],%@",inAction);
-	if ([inAction isEqualToString:@""]||inAction==nil) {
-		if ([inData hasPrefix:@"http://"]) {
-			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:inData]];
-		}else {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:inData]];
-			[self jsFailedWithOpId:0 errorCode:1220501 errorDes:UEX_ERROR_DESCRIBE_ARGS];
-		}
-
-	}else {
-		NSURL *url = [NSURL URLWithString:inAction];
-		 if ([[UIApplication sharedApplication] canOpenURL:url]) {
-			 ACENSLog(@"url = %@",url);
-			[[UIApplication sharedApplication] openURL:url];
-		 }
+    NSURL *url = [NSURL URLWithString:inAction];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url];
 	}
 }
 
@@ -762,6 +748,12 @@
 -(void)setPushState:(NSMutableArray*)inArguments{
     int isPush =[[inArguments objectAtIndex:0] intValue];
     ACENSLog(@"isPush=%d",isPush);
+    [BUtility writeLog:[NSString stringWithFormat:@"-----setPushState------>>,theApp.usePushControl==%d",theApp.usePushControl]];
+    if(theApp.usePushControl == NO) {
+        
+        return;
+    }
+
     if (isPush==1) {
         if (isSysVersionAbove8_0) {
 #ifdef __IPHONE_8_0

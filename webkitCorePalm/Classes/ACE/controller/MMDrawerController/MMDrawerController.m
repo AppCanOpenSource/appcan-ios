@@ -145,7 +145,7 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
 		[self setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 		[self setCenterHiddenInteractionMode:MMDrawerOpenCenterInteractionModeNavigationBarOnly];
         
-        self.isGestureRecognizer = YES;
+        self.isGestureRecognizer = NO;
 	}
 	return self;
 }
@@ -667,6 +667,12 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
         autoResizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight;
     }
     
+    if (_leftDrawerViewController != nil || _rightDrawerViewController != nil) {
+        self.isGestureRecognizer = YES;
+    } else {
+        self.isGestureRecognizer = NO;
+    }
+    
     if(viewController){
         [self addChildViewController:viewController];
         
@@ -768,6 +774,7 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
 }
 
 -(void)panGesture:(UIPanGestureRecognizer *)panGesture{
+    
     switch (panGesture.state) {
         case UIGestureRecognizerStateBegan:
             self.startingPanRect = self.centerContainerView.frame;
@@ -1018,6 +1025,20 @@ static inline CGFloat originXForDrawerOriginAndTargetOriginOffset(CGFloat origin
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    if (self.isGestureRecognizer) {
+        if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+            UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
+            CGPoint translate = [pan translationInView:self.view];
+            BOOL possible = translate.x != 0 && ((fabsf(translate.y) / fabsf(translate.x)) < 1.0f);
+            if (possible && ((translate.x > 0 && self.leftDrawerViewController) || (translate.x < 0 && self.rightDrawerViewController))) {
+                return YES;
+            } else {
+                return NO;
+            }
+        }
+        return YES;
+    }
+    
     return self.isGestureRecognizer;
 }
 
