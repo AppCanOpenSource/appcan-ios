@@ -41,4 +41,5 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 
 
 + (void)setNavigationBarColor:(UINavigationController *)navController color:(UIColor *)color;
+
 @end

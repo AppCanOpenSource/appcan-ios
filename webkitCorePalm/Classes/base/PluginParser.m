@@ -21,6 +21,19 @@
 #import "WidgetOneDelegate.h"
 
 @implementation PluginParser
+
+- (id)init
+{
+    self = [super init];
+    
+    if (self) {
+        
+        _classNameArray = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
+}
+
 -(NSString*)compentJS:(NSString*)inClassName funArr:(NSMutableArray*)inFunArr property:(NSMutableString*)inPorpertyStr{
 	NSString *jsTmp = nil;
 	if (!inClassName) {
@@ -49,13 +62,24 @@
 }
 
 -(void)dealloc{
-	[super dealloc];
-	[mParser release];
-	mParser = nil;
 	
-	[funArr removeAllObjects];
-	[funArr release];
-	funArr = nil;
+	[_mParser release];
+	_mParser = nil;
+	
+	[_funArr removeAllObjects];
+	[_funArr release];
+	_funArr = nil;
+    
+    self.element = nil;
+    self.resultJS = nil;
+    self.className = nil;
+    self.funName = nil;
+    self.propertyName = nil;
+    self.propertyValue = nil;
+    self.ObjectJS = nil;
+    
+    [_classNameArray release];
+    [super dealloc];
 }
 -(NSString*)initPluginJS{
 	NSString *pluginJSPath = [NSString stringWithFormat:@"%@/plugin.xml",[[NSBundle mainBundle] resourcePath]];
@@ -67,70 +91,75 @@
 	if (!pluginData ||[pluginData length]==0) {
 		return nil ;
 	}
-	funArr = [[NSMutableArray alloc] initWithCapacity:0];
-	resultJS = [NSMutableString stringWithFormat:@""];
-	ObjectJS =[NSMutableString stringWithFormat:@"\n"];
-	mParser = [[NSXMLParser alloc] initWithData:pluginData];
-	[mParser setDelegate:self];
-	[mParser setShouldProcessNamespaces:YES];
-	[mParser setShouldReportNamespacePrefixes:YES];
-	[mParser setShouldResolveExternalEntities:NO];
-	[mParser parse];
+	_funArr = [[NSMutableArray alloc] initWithCapacity:0];
+	self.resultJS = [NSMutableString stringWithFormat:@""];
+	self.ObjectJS =[NSMutableString stringWithFormat:@"\n"];
+	_mParser = [[NSXMLParser alloc] initWithData:pluginData];
+	[_mParser setDelegate:self];
+	[_mParser setShouldProcessNamespaces:YES];
+	[_mParser setShouldReportNamespacePrefixes:YES];
+	[_mParser setShouldResolveExternalEntities:NO];
+	[_mParser parse];
 	//ACENSLog(@"parseSUccess=%d\n resultJS=%@",parseSuccess,resultJS);
 	
-	return resultJS;
+	return _resultJS;
 }
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict{
 	//if ([elementName isEqualToString:@"uexplugins"]) {}
 	if ([elementName isEqualToString:@"method"]) {
 		if ([attributeDict objectForKey:@"name"]) {
-			funName = [attributeDict objectForKey:@"name"];
+			self.funName = [attributeDict objectForKey:@"name"];
 		}
 	}else if ([elementName isEqualToString:@"property"]) {
 		if ([attributeDict objectForKey:@"name"]) {
-			propertyName = [attributeDict objectForKey:@"name"];
+			self.propertyName = [attributeDict objectForKey:@"name"];
 		}
 	}else if ([elementName isEqualToString:@"plugin"]) {
 		if ([attributeDict objectForKey:@"name"]) {
-			className = [attributeDict objectForKey:@"name"];
+			self.className = [attributeDict objectForKey:@"name"];
+            
+            if (self.className != nil && ![_classNameArray containsObject:self.className]) {
+                
+                [_classNameArray addObject:self.className];
+            }
         }
         if ([attributeDict objectForKey:@"global"]) {
             
             NSString *str = [attributeDict objectForKey:@"global"];
             
-            if ([str isEqualToString:@"true"] && className != nil) {
+            if ([str isEqualToString:@"true"] && self.className != nil) {
                 
-                [self addPluginToGlobal:className];
+                [self addPluginToGlobal:_className];
                 
             }
         }
 	}
-	element=@"";
+	self.element=@"";
 }
 -(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
 	if ([string isEqualToString:@"\n\t"]==NO && [string length]>0) {
-		element = [element stringByAppendingString:string];
+		self.element = [_element stringByAppendingString:string];
 	}
 }
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
 	if ([elementName isEqualToString:@"method"]) {
-		if (funName && [funName length]>0) {
-			[funArr addObject:funName];	
+		if (_funName && [_funName length]>0) {
+			[_funArr addObject:_funName];
 		}
-		funName = @"";
+		self.funName = @"";
 	}else if([elementName isEqualToString:@"property"]){
-		if (!element ||[element length]<1) {
-			propertyName = @"";
+		if (!self.element ||[self.element length]<1) {
+			self.propertyName = @"";
 		}else {
-			ObjectJS = [NSMutableString stringWithFormat:@"%@.%@=%@;\n",className,propertyName,element];
-			propertyName = @"";
+			self.ObjectJS = [NSMutableString stringWithFormat:@"%@.%@=%@;\n",self.className,self.propertyName,self.element];
+			self.propertyName = @"";
 		}	
 	}else if ([elementName isEqualToString:@"plugin"]) {
 		//执行js
-		NSString *somePluginJS = [self compentJS:className funArr:funArr property:ObjectJS];
-		[funArr removeAllObjects];
-		ObjectJS = [NSMutableString stringWithString:@""];
-		resultJS = [NSMutableString stringWithFormat:@"%@\n%@",resultJS,somePluginJS];
+		NSString *somePluginJS = [self compentJS:self.className funArr:self.funArr property:self.ObjectJS];
+		[self.funArr removeAllObjects];
+		self.ObjectJS = [NSMutableString stringWithString:@""];
+		self.resultJS = [NSMutableString stringWithFormat:@"%@\n%@",self.resultJS,somePluginJS];
 	}else if ([elementName isEqualToString:@"uexplugins"]){
 		return;
 	}

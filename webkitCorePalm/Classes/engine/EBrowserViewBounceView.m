@@ -25,6 +25,11 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
 
 @implementation EBrowserViewBounceView
 @synthesize projectID;
+
+double radians(float degrees){
+    return (degrees*3.14159265)/180.0;
+}
+
 - (void)showActivity:(BOOL)shouldShow animated:(BOOL)animated {
   if (shouldShow) {
     [mActivityView startAnimating];
@@ -33,8 +38,15 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
       animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
       //      CABasicAnimation *animation = [ CABasicAnimation animationWithKeyPath: @"transform" ];
       animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-      animation.toValue = [ NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1.0, 0) ];
-      animation.duration = 1;
+      if (self.isImgCenter) {
+          animation.toValue = [ NSValue valueWithCATransform3D:CATransform3DMakeRotation(radians(-270.0), 0, 0, 1.0) ];
+          
+          animation.duration = 0.2;
+      } else {
+          animation.toValue = [ NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1.0, 0) ];
+          
+          animation.duration = 1;
+      }
       animation.cumulative = YES;
       animation.repeatCount = HUGE_VALF;
       [mActivityImageView.layer addAnimation:animation forKey:@"active"];
@@ -64,22 +76,33 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
 
 - (id)initWithFrame:(CGRect)frame andType:(int)inType params:(NSMutableDictionary*)dict{
   if (self = [super initWithFrame:frame]) {
+      self.isImgCenter = NO;
+      if ([[dict objectForKey:@"levelText"] length] == 0 && [[dict objectForKey:@"loadingText"] length] == 0 && [[dict objectForKey:@"pullToReloadText"] length] == 0 && [[dict objectForKey:@"releaseToReloadText"] length] == 0 && [[dict objectForKey:@"textColor"] length] == 0) {
+          if ([[dict allKeys] count] > 0) {
+              self.isImgCenter = YES;
+          }
+      }
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	    if (bounceParamsDict) {
         [bounceParamsDict release];
     }
     id colorObj = nil;
-    id imgObj =nil;
-    id levelObj =nil;
+    id imgObj = nil;
+    id levelObj = nil;
     id imgInObj = nil;
     if (dict) {
-        bounceParamsDict =[[NSMutableDictionary alloc] initWithDictionary:dict];
-        id typeStr=[bounceParamsDict objectForKey:@"type"];
-        if (typeStr &&[typeStr intValue]==inType) {
-            colorObj= [bounceParamsDict objectForKey:@"textColor"];
-            imgObj =[bounceParamsDict objectForKey:@"imagePath"];
+        
+        bounceParamsDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+        
+        id typeStr = [bounceParamsDict objectForKey:@"type"];
+        
+        if (typeStr && [typeStr intValue] == inType) {
+            
+            colorObj = [bounceParamsDict objectForKey:@"textColor"];
+            imgObj = [bounceParamsDict objectForKey:@"imagePath"];
             levelObj = [bounceParamsDict objectForKey:@"levelText"];
-             imgInObj= [bounceParamsDict objectForKey:@"loadingImagePath"];
+            imgInObj = [bounceParamsDict objectForKey:@"loadingImagePath"];
+            
         }
     }
     mType = inType;
@@ -87,11 +110,11 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
     {
         mLastUpdatedLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 30.0f, frame.size.width, 20.0f)];
 		mLastUpdatedLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-		mLastUpdatedLabel.font            = [UIFont systemFontOfSize:12.0f];
+		mLastUpdatedLabel.font = [UIFont systemFontOfSize:12.0f];
         if (levelObj) {
-            mLastUpdatedLabel.text =[NSString stringWithString:(NSString*)levelObj];
+            mLastUpdatedLabel.text = [NSString stringWithString:(NSString*)levelObj];
         }
-		mLastUpdatedLabel.textColor       = RGBCOLOR(109, 128, 153);
+        mLastUpdatedLabel.textColor = RGBCOLOR(109, 128, 153);
         if (colorObj) {
             mLastUpdatedLabel.textColor = (UIColor*)colorObj; 
         }
@@ -115,11 +138,18 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
 		[self setStatus:EBounceViewStatusPullToReload];
 		[self addSubview:mStatusLabel];
 
-		UIImage* arrowImage = [UIImage imageNamed:@"/img/blueArrow.png"];
+		UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
         if (imgObj) {
             arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgObj];
         }
 		mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake(25.0f, frame.size.height - 52.0f, arrowImage.size.width, arrowImage.size.height)];
+        if (self.isImgCenter) {
+            CGRect tempRect = mArrowImage.frame;
+            tempRect.origin.x = (frame.size.width - arrowImage.size.width)*0.5;
+            mArrowImage.frame = tempRect;
+        }
+        
+        
 		mArrowImage.image = arrowImage;
 		[mArrowImage layer].transform = CATransform3DMakeRotation(M_PI, 0.0f, 1.0f, 0.0f);
 		[self addSubview:mArrowImage];
@@ -133,10 +163,16 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
                 if (imgInObj) {
                     arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgInObj];
                 }
-                mActivityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 60.0f, arrowImage.size.width, arrowImage.size.height)];
+                if (self.isImgCenter) {
+                    mActivityImageView = [[UIImageView alloc] initWithFrame:mArrowImage.frame];
+                } else {
+                    mActivityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 60.0f, arrowImage.size.width, arrowImage.size.height)];
+                }
+                
                 mActivityImageView.image = arrowImage;
                 mActivityImageView.hidden=YES;
                 [self addSubview:mActivityImageView];
+                
 
 //                CABasicAnimation *animation = [ CABasicAnimation animationWithKeyPath: @"transform" ];
 //                animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
@@ -152,9 +188,15 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
         }else
         {
             mActivityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            mActivityView.frame = CGRectMake( 30.0f, frame.size.height - 48.0f, 20.0f, 20.0f );
+            if (self.isImgCenter) {
+                mActivityView.frame = mArrowImage.frame;
+            } else {
+                mActivityView.frame = CGRectMake( 30.0f, frame.size.height - 48.0f, 20.0f, 20.0f );
+            }
+            
             mActivityView.hidesWhenStopped  = YES;
             [self addSubview:mActivityView];
+            
         }
         
 	}
@@ -190,11 +232,16 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
 		[self setStatus:EBounceViewStatusPullToReload];
 		[self addSubview:mStatusLabel];
 		
-		UIImage* arrowImage = [UIImage imageNamed:@"/img/blueArrow.png"];
+		UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
         if (imgObj) {
             arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgObj];
         }
-		mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake(25.0f, 20.0f, arrowImage.size.width, arrowImage.size.height)];
+        if (self.isImgCenter) {
+            mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake((frame.size.width - arrowImage.size.width)*0.5, 20.0f, arrowImage.size.width, arrowImage.size.height)];
+        } else {
+            mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake(25.0f, 20.0f, arrowImage.size.width, arrowImage.size.height)];
+        }
+        
 		mArrowImage.image = arrowImage;
 		[mArrowImage layer].transform = CATransform3DMakeRotation(0, 0.0f, 0.0f, 1.0f);
 		[self addSubview:mArrowImage];
@@ -208,17 +255,28 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
                 if (imgInObj) {
                     arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgInObj];
                 }
-                mActivityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 5.0f, arrowImage.size.width, arrowImage.size.height)];
+                if (self.isImgCenter) {
+                    mActivityImageView = [[UIImageView alloc] initWithFrame:mArrowImage.frame];
+                } else {
+                    mActivityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 5.0f, arrowImage.size.width, arrowImage.size.height)];
+                }
+                
                 mActivityImageView.image = arrowImage;
                 mActivityImageView.hidden=YES;
                 [self addSubview:mActivityImageView];
+                
             }
         }else
         {
             mActivityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            mActivityView.frame = CGRectMake( 30.0f, 15.0f, 20.0f, 20.0f );
+            if (self.isImgCenter) {
+                mActivityView.frame = mArrowImage.frame;
+            } else {
+                mActivityView.frame = CGRectMake( 30.0f, 15.0f, 20.0f, 20.0f );
+            }
             mActivityView.hidesWhenStopped  = YES;
             [self addSubview:mActivityView];
+            
         }
 
 	}
@@ -234,18 +292,33 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
       float widthLabel = temRect.size.width;
       CGRect imageFrame = mArrowImage.frame;
       imageFrame.origin.x=widthLabel/2-size.width/2-imageFrame.size.width-10;
-      [mArrowImage setFrame:imageFrame];
+      if (self.isImgCenter) {
+          CGRect tempRect = imageFrame;
+          tempRect.origin.x = (frame.size.width - imageFrame.size.width)*0.5;
+          mArrowImage.frame = tempRect;
+      } else {
+          [mArrowImage setFrame:imageFrame];
+      }
       
       
       NSString * loading =[bounceParamsDict objectForKey:@"loadingText"];
       CGSize sizeLoad = [loading sizeWithFont:[UIFont systemFontOfSize:12.0f]];
       CGRect acimageFrame = mActivityImageView.frame;
       acimageFrame.origin.x=[UIScreen mainScreen].bounds.size.width/2-sizeLoad.width/2-imageFrame.size.width-35;
-      [mActivityImageView setFrame:acimageFrame];
+      if (self.isImgCenter) {
+          mActivityImageView.frame = mArrowImage.frame;
+      } else {
+          [mActivityImageView setFrame:acimageFrame];
+      }
       
       CGRect acviewFrame = mActivityView.frame;
       acviewFrame.origin.x= mArrowImage.frame.origin.x;
-      [mActivityView setFrame:acviewFrame];
+      if (self.isImgCenter) {
+          mActivityView.frame = mArrowImage.frame;
+      } else {
+          [mActivityView setFrame:acviewFrame];
+      }
+      
   }
   return self;
 }
@@ -311,8 +384,13 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
    float widthLabel = temRect.size.width;
     CGRect imageFrame = mArrowImage.frame;
     imageFrame.origin.x=widthLabel/2-size.width/2-imageFrame.size.width-10;
-    [mArrowImage setFrame:imageFrame];
-    
+    if (self.isImgCenter) {
+        CGRect tempRect = imageFrame;
+        tempRect.origin.x = (self.frame.size.width - imageFrame.size.width)*0.5;
+        mArrowImage.frame = tempRect;
+    } else {
+        [mArrowImage setFrame:imageFrame];
+    }
 //    CGRect acimageFrame = mActivityImageView.frame;
 //    acimageFrame.origin.x=[UIScreen mainScreen].bounds.size.width/2-size.width/2-imageFrame.size.width-20;
 //    [mActivityImageView setFrame:acimageFrame];
@@ -320,7 +398,12 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
     
     CGRect acviewFrame = mActivityView.frame;
     acviewFrame.origin.x= mArrowImage.frame.origin.x;
-    [mActivityView setFrame:acviewFrame];
+    if (self.isImgCenter) {
+        mActivityView.frame = mArrowImage.frame;
+    } else {
+        [mActivityView setFrame:acviewFrame];
+    }
+    
 }
 - (void)setCurrentDate {
   [self setUpdateDate:[NSDate date]];
@@ -383,7 +466,13 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
         float widthLabel = temRect.size.width;
         CGRect imageFrame = mArrowImage.frame;
         imageFrame.origin.x=widthLabel/2-size.width/2-imageFrame.size.width-10;
-        [mArrowImage setFrame:imageFrame];
+        if (self.isImgCenter) {
+            CGRect tempRect = imageFrame;
+            tempRect.origin.x = (self.frame.size.width - imageFrame.size.width)*0.5;
+            mArrowImage.frame = tempRect;
+        } else {
+            [mArrowImage setFrame:imageFrame];
+        }
         
 //        CGRect acimageFrame = mActivityImageView.frame;
 //        acimageFrame.origin.x=[UIScreen mainScreen].bounds.size.width/2-size.width/2-imageFrame.size.width-30;
@@ -392,7 +481,12 @@ const CGFloat defaultFlipTransitionDuration  = 0.7f;
         
         CGRect acviewFrame = mActivityView.frame;
         acviewFrame.origin.x= mArrowImage.frame.origin.x;
-        [mActivityView setFrame:acviewFrame];
+        if (self.isImgCenter) {
+            mActivityView.frame = mArrowImage.frame;
+        } else {
+            [mActivityView setFrame:acviewFrame];
+        }
+        
     }
 }
 

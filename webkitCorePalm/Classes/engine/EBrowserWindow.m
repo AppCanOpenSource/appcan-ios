@@ -148,7 +148,7 @@
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName {
     self = [super initWithFrame:frame];
     if (self) {
-		self.backgroundColor = [UIColor whiteColor];
+		self.backgroundColor = [UIColor clearColor];
 		self.opaque = YES;
 		meBrwCtrler = eInBrwCtrler;
 		mwWgt = inWgt;

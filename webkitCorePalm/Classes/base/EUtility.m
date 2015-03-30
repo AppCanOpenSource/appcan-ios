@@ -314,8 +314,8 @@ return [BUtility isConnected];
 
 +(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
 {
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    
-    app.drawerController.isGestureRecognizer = isEnable;
+//    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+//    
+//    app.drawerController.isGestureRecognizer = isEnable;
 }
 @end
