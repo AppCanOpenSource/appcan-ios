@@ -32,6 +32,7 @@
 #import "WidgetOneDelegate.h"
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
+#import "ACEBrowserView.h"
 
 extern NSString * webappShowAactivety;
 @implementation CBrowserWindow
@@ -57,7 +58,7 @@ extern NSString * webappShowAactivety;
 
 -(void)webViewDidStartLoad:(UIWebView *)webView{
 	if (webView != NULL) {
-		EBrowserView *eBrwView = (EBrowserView*)webView;
+		ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
 		ACENSLog(@"webViewDidStartLoad url is %@", [webView.request URL]);
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
         if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] )
@@ -76,14 +77,14 @@ extern NSString * webappShowAactivety;
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         id pushStr = [defaults objectForKey:@"pushData"];
         if (pushStr) {
-            EBrowserView *eBrwView = (EBrowserView*)webView;
+            ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
             EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
             [aboveWindowContainer pushNotify];
         }
         theApp.isFirstPageDidLoad = YES;
     }
 	if (webView != NULL) {
-		EBrowserView *eBrwView = (EBrowserView*)webView;
+		ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
         if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] )
         {
@@ -108,13 +109,13 @@ extern NSString * webappShowAactivety;
 	if (webView != NULL) {
 		ACENSLog(@"didFailLoadWithError url is %@", [webView.request URL]);
 		ACENSLog(@"page loaded failed! Error - %@ %@",[error localizedDescription],[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-		[((EBrowserView*)webView) notifyPageError];
+		[((ACEBrowserView *)webView) notifyPageError];
 	}
 }
 
 -(BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
 	if (webView != NULL) {
-		EBrowserView *eBrwView = ((EBrowserView*)webView);
+		ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
 		NSURL *requestURL = [request URL];
         //NSLog(@"ebrowserView is %@", eBrwView);
 //		NSLog(@"~~~~~~~~~~~~~~~need load url is %@", requestURL);

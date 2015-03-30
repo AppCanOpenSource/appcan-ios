@@ -16,7 +16,7 @@
  *
  */
 
-#import "EBrowserView.h"
+#import "ACEBrowserView.h"
 #import "EUExManager.h"
 #import "BUtility.h"
 #import "CBrowserWindow.h"
@@ -26,6 +26,7 @@
 #import "BUtility.h"
 #import "EBrowserController.h"
 #import "EBrowser.h"
+#import "EBrowserView.h"
 #import "EBrowserMainFrame.h"
 #import "EBrowserWindowContainer.h"
 #import "EBrowserWidgetContainer.h"
@@ -45,7 +46,7 @@
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
-@implementation EBrowserView{
+@implementation ACEBrowserView{
     float version;
 
 }
@@ -134,8 +135,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (self.indicatorView) {
         self.indicatorView =nil;
     }
-	ACENSLog(@"EBrowserView retain count is %d",[self retainCount]);
-	ACENSLog(@"EBrowserView dealloc is %x", self);
+	ACENSLog(@"ACEBrowserView retain count is %d",[self retainCount]);
+	ACENSLog(@"ACEBrowserView dealloc is %x", self);
 	ACENSLog(@"meUExManager retain count is %d",[meUExManager retainCount]);
 	[self unRegisterKeyboardListener:nil];
 	if (meUExManager) {
@@ -174,30 +175,15 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	[super dealloc];
 }
 
-//************************************************************************************************
-- (void)keyboardWillChangeFrame:(NSNotification *)notification
-{
-    NSDictionary *info = [notification userInfo];
-    //    CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    CGRect beginKeyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect endKeyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    if (beginKeyboardRect.origin.y == 0 && beginKeyboardRect.size.height == 0) {
-        return;
-    }
-    CGFloat yOffset = endKeyboardRect.origin.y - beginKeyboardRect.origin.y;
-    
-    CGRect popoverRect = self.frame;
-    popoverRect.size.height+=yOffset;
-    self.frame = popoverRect;
-    float y=mScrollView.contentSize.height-mScrollView.frame.size.height;
-    [mScrollView setContentOffset:CGPointMake(0, y) animated:NO];
-}
-//*************************************************************************************************
+
+
+
+
 
 
 - (void)reset {
-	ACENSLog(@"EBrowserView retain count is %d",[self retainCount]);
-	ACENSLog(@"EBrowserView dealloc is %x", self);
+	ACENSLog(@"ACEBrowserView retain count is %d",[self retainCount]);
+	ACENSLog(@"ACEBrowserView dealloc is %x", self);
 	ACENSLog(@"meUExManager retain count is %d",[meUExManager retainCount]);
 	[self clean];
 	[self unRegisterKeyboardListener:nil];
@@ -540,9 +526,15 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 -(NSURL*)curUrl{
+    NSLog(@"%@==%@",self.currentUrl,[self.request URL]);
     if (self.currentUrl)
     {
-        return [self.request URL];
+        if ([self.request URL]) {
+            return [self.request URL];
+        } else {
+            return self.currentUrl;
+        }
+        
     }
     else
     {
@@ -558,8 +550,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
 }
 
-- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType {
-    self.frame = frame;
+- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType  BrwView:(EBrowserView *)BrwView{
+    self.frame = CGRectMake(0.0, 0.0, frame.size.width, frame.size.height);
     
     UIActivityIndicatorView * indicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
     [indicator setCenter:CGPointMake([BUtility getScreenWidth]/2, [BUtility getScreenHeight]/2)];
@@ -570,7 +562,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     self.indicatorView=indicator;
     [self addSubview:self.indicatorView];
     
-    
+    self.scrollView.decelerationRate = 1.0;
     meBrwCtrler = eInBrwCtrler;
     mwWgt = inWgt;
     self.muexObjName = inUExObjName;
@@ -580,7 +572,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     //self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     mcBrwWnd = [[CBrowserWindow alloc]init];
     meBrwWnd = eInBrwWnd;
-    meUExManager = [[EUExManager alloc]initWithBrwView:self BrwCtrler:meBrwCtrler];
+    meUExManager = [[EUExManager alloc]initWithBrwView:BrwView BrwCtrler:meBrwCtrler];
 
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
         mScrollView = super.scrollView;
@@ -635,10 +627,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
     [singleTap release];
 }
 
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType {
+- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType  BrwView:(EBrowserView *)BrwView{
 	self = [super initWithFrame:frame];
 	if (self) {
-        [self reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType];
+        [self reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType  BrwView:(EBrowserView *)BrwView];
     }
     self.lastScrollPointY=0;
 	return self;
@@ -693,7 +685,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender_{
 	CGPoint point = [sender_ locationInView:self];
-	int viewCount = [self.meBrwWnd.subviews count];
+	int viewCount = (int)[self.meBrwWnd.subviews count];
 	UIView *topView = [self.meBrwWnd.subviews objectAtIndex:viewCount-1];
     if ([topView respondsToSelector:@selector(resetInputPosition:)]) {
         [topView performSelector:@selector(resetInputPosition:) withObject:[NSValue valueWithCGPoint:point]];
@@ -713,7 +705,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			return;
 			break;
 	}
-	[meBrwCtrler.meBrw notifyLoadPageStartOfBrwView:self];
+	[meBrwCtrler.meBrw notifyLoadPageStartOfBrwView:self.superDelegate];
 }
 
 - (void)notifyPageFinish {
@@ -751,7 +743,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
             [initStr release];
             
             
-            if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
+            if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrowserView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
                 [self stringByEvaluatingJavaScriptFromString:@"window.uexStart();"];
                 meBrwCtrler.mFlag |= F_NEED_REPORT_APP_START;
             }
@@ -794,7 +786,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			if (self.superview != meBrwWnd) {
                 if (!self.isMuiltPopover)
                 {
-                    [meBrwWnd addSubview:self];
+                    [meBrwWnd addSubview:self.superDelegate];
                 }
 			}
 			id iFontSize = [self.mPageInfoDict objectForKey:@"pFontSize"];
@@ -825,7 +817,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			[initStr release];
             
 			if (self.superview != meBrwCtrler.meBrwMainFrm) {
-				[meBrwCtrler.meBrwMainFrm addSubview:self];
+				[meBrwCtrler.meBrwMainFrm addSubview:self.superDelegate];
 			}
 			if ((self.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
 				self.hidden = NO;
@@ -838,13 +830,13 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
     
     
-	[meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self];
+	[meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self.superDelegate];
 }
 
 - (void)notifyPageError {
 	switch (mType) {
 		case F_EBRW_VIEW_TYPE_MAIN:
-			[meBrwCtrler.meBrw notifyLoadPageErrorOfBrwView:self];
+			[meBrwCtrler.meBrw notifyLoadPageErrorOfBrwView:self.superDelegate];
 			break;
 		default:
 			return;
@@ -927,13 +919,13 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)loadWithData:(NSString*)inData baseUrl:(NSURL*)inBaseUrl {
     self.currentUrl = inBaseUrl;
 	NSString *trueData = [inData stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	ACENSLog(@"EBrowserView.loadWithData: escaped file data is %@", trueData);
+	ACENSLog(@"ACEBrowserView.loadWithData: escaped file data is %@", trueData);
 	[self loadHTMLString:inData baseURL:inBaseUrl];
 }
 
 - (void)loadWithUrl: (NSURL*)inUrl {
     self.currentUrl = inUrl;
-	ACENSLog(@"EBrowserView LoadWithUrl: in Url is %@", [inUrl absoluteString]);
+	ACENSLog(@"ACEBrowserView LoadWithUrl: in Url is %@", [inUrl absoluteString]);
 	NSURLRequest *request = [NSURLRequest requestWithURL:inUrl];
 	[self loadRequest:request];
 }

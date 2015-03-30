@@ -47,6 +47,8 @@
 #define CONFIG_TAG_WIDGETPATH			@"widgetPath"
 #define CONFIG_TAG_WIDGETTYPE			@"wgtType"
 #define CONFIG_TAG_DEBUG                @"debug"
+//
+#define CONFIG_TAG_WINDOWBACKGROUND     @"windowBackground"
 
 @interface AllConfigParser : NSObject <NSXMLParserDelegate>{
 	NSXMLParser *mParser;

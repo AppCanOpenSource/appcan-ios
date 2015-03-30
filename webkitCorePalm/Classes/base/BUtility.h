@@ -196,7 +196,7 @@ typedef union _BGColor {
 // 获取config屏幕方向信息
 +(NSString * )getMainWidgetConfigInterface;
 //
-+(BOOL)getMainWidgetConfigDebug;
++(NSDictionary *)getMainWidgetConfigWindowBackground;
 +(NSString *)getMainWidgetConfigLogserverip;
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
 @end

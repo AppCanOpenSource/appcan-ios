@@ -460,8 +460,7 @@
     //update 1.1022 by xuleilei 06-25-10:09
     //data analysis
     [meBrw start:mwWgtMgr.wMainWgt];
-    
-    //NSString *clientPWd =[BUtility RC4DecryptWithInput:theApp.useCertificatePassWord key:mwWgtMgr.mainWidget.appId];
+        //NSString *clientPWd =[BUtility RC4DecryptWithInput:theApp.useCertificatePassWord key:mwWgtMgr.mainWidget.appId];
     //[BUtility setClientCertificatePwd:clientPWd];
     
     if ([BUtility getAppCanDevMode]) {
@@ -486,7 +485,7 @@
         }
     }
     
-    if (theApp.useUpdateControl) {//添加升级
+    if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
         NSMutableArray *dataArray = [NSMutableArray arrayWithObjects:mwWgtMgr.wMainWgt.appId,inKey,mwWgtMgr.wMainWgt.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
         Class  updateClass = NSClassFromString(@"EUExUpdate");
         if (!updateClass) {
@@ -498,11 +497,63 @@
     }
 	//ACENSLog(@"init the start view :the uesdMemory is %f,the have memory is %f",[BUtility usedMemory],[BUtility availableMemory]);
 }
+
+-(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
+    NSRange range = [inSouceString rangeOfString:inSubSting];
+    if (range.location!=NSNotFound) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+-(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(UIImageView *)inBrwView{
+    
+    if ([extraDic objectForKey:@"opaque"]) {
+        
+        BOOL * opaque = [[extraDic objectForKey:@"opaque"] boolValue];
+        
+        if (opaque) {
+            
+            if ([extraDic objectForKey:@"bgColor"]) {
+                
+                NSString * bgColorStr = [extraDic objectForKey:@"bgColor"];
+                if ([self isHaveString:bgColorStr subSting:@"://"]) {
+                    
+                    inBrwView.backgroundColor = [UIColor clearColor];
+                    NSString * imgPath = [BUtility getAbsPath:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView path:bgColorStr];
+                    inBrwView.image = [UIImage imageWithContentsOfFile:imgPath];
+                    
+                } else {
+                    
+                    inBrwView.image = nil;
+                    BGColor bgColor = [BUtility bgColorFromNSString:bgColorStr];
+                    UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+                    inBrwView.backgroundColor = color;
+                    
+                }
+                
+            }
+            
+        } else {
+            
+            inBrwView.image = nil;
+            inBrwView.backgroundColor = [UIColor clearColor];
+            
+        }
+        
+    }
+}
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
+    [self setExtraInfo:extraDic toEBrowserView:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView];
 }
 
 - (void)viewDidUnload {
+    
+
     //    if (self.meBrw) {
     //        self.meBrw = nil;
     //    }

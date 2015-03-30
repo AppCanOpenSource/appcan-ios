@@ -17,16 +17,18 @@
  */
 
 #import <Foundation/Foundation.h>
-@interface PluginParser : NSObject <NSXMLParserDelegate>{
-	NSXMLParser *mParser;
-	NSString *element;
-	NSMutableArray *funArr;
-	NSMutableString *resultJS;
-	NSString *className;
-	NSString *funName;
-	NSString *propertyName;
-	NSString *propertyValue;
-	NSMutableString *ObjectJS;
-}
+@interface PluginParser : NSObject <NSXMLParserDelegate>
+
+@property (nonatomic, retain) NSXMLParser *mParser;
+@property (nonatomic, retain) NSString *element;
+@property (nonatomic, retain) NSMutableArray *funArr;
+@property (nonatomic, retain) NSMutableString *resultJS;
+@property (nonatomic, retain) NSString *className;
+@property (nonatomic, retain) NSString *funName;
+@property (nonatomic, retain) NSString *propertyName;
+@property (nonatomic, retain) NSString *propertyValue;
+@property (nonatomic, retain) NSMutableString *ObjectJS;
+@property (nonatomic, retain) NSMutableArray *classNameArray;
+
 -(NSString*)initPluginJS;
 @end

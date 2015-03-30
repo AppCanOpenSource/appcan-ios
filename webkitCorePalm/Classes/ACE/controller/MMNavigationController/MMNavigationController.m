@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (C) 2014 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  */
 
 #import "MMNavigationController.h"
+#import "EUtility.h"
+#import "ACEWebViewController.h"
 
 #define KEY_WINDOW  [[UIApplication sharedApplication]keyWindow]
 #define kkBackViewHeight [UIScreen mainScreen].bounds.size.height
@@ -103,6 +105,22 @@
     return [super popViewControllerAnimated:animated];
 }
 
+- (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated{
+    for (int i = 0; i < [self.viewControllers count]; i++) {
+        UIViewController * tempViewController = [self.viewControllers objectAtIndex:i];
+        if ([tempViewController isEqual:viewController]) {
+            int j = (int)[self.viewControllers count] - 1;
+            while (j > i) {
+                [self.screenShotsList removeLastObject];
+                j--;
+            }
+        }
+    }
+    
+    return [super popToViewController:viewController animated:animated];
+}
+
+
 #pragma mark - Utility Methods -
 
 - (UIImage *)capture
@@ -159,6 +177,23 @@
     if (self.viewControllers.count <= 1 || !self.canDragBack){
         return NO;
     }
+    
+    ACEWebViewController * webViewController = [self.viewControllers lastObject];
+    if (!webViewController.isNeedSwipeGestureRecognizer) {
+        return NO;
+    }
+    
+
+    
+    
+    
+    //xrg-暂时这么写
+    float sizeOfTouchView = touch.view.frame.size.width * touch.view.frame.size.height;
+    float sizeOfScreen = [EUtility screenHeight] * [EUtility screenWidth];
+    if (![[[touch.view class] description] isEqualToString:@"UIWebBrowserView"] && (sizeOfTouchView < sizeOfScreen*0.6)) {
+        return NO;
+    }
+    
     return YES;
 }
 

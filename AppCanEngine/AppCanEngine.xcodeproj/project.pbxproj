@@ -62,6 +62,8 @@
 		3C2887D41A0B099B002776E4 /* CJSONScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887C91A0B099B002776E4 /* CJSONScanner.h */; };
 		3C2887D51A0B099B002776E4 /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CA1A0B099B002776E4 /* CJSONSerializer.h */; };
 		3C2887D61A0B099B002776E4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */; };
+		3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
+		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
@@ -112,7 +114,6 @@
 		5AAA86B318B1B93D000D7600 /* WidgetSQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85BF18B1B93D000D7600 /* WidgetSQL.h */; };
 		5AAA86B418B1B93D000D7600 /* WidgetSQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85C018B1B93D000D7600 /* WidgetSQL.m */; };
 		5AAA86B518B1B93D000D7600 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85C418B1B93D000D7600 /* JSONKit.h */; };
-		5AAA86B618B1B93D000D7600 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85C518B1B93D000D7600 /* JSONKit.m */; };
 		5AAA86CB18B1B93D000D7600 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85DF18B1B93D000D7600 /* JSONKit.h */; };
 		5AAA86D618B1B93D000D7600 /* CBrowserMainFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */; };
 		5AAA86D718B1B93D000D7600 /* CBrowserMainFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85EF18B1B93D000D7600 /* CBrowserMainFrame.m */; };
@@ -274,6 +275,7 @@
 		B2E52AFD15A6B2F1003E73EA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFA15A6B2F1003E73EA /* Security.framework */; };
 		B2E52AFE15A6B2F1003E73EA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */; };
 		B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFC15A6B2F1003E73EA /* UIKit.framework */; };
+		DE1188321AA0782F009DF581 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1188311AA0782F009DF581 /* JSONKit.m */; };
 		DE2C4FA51A2DA48B00D5B4F2 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */; };
 		DE2C4FA61A2DA48B00D5B4F2 /* ACEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */; };
 		DE81D4CD1A4D3D81005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CC1A4D3D81005D3153 /* libACEDes.a */; };
@@ -338,6 +340,8 @@
 		3C2887C91A0B099B002776E4 /* CJSONScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONScanner.h; sourceTree = "<group>"; };
 		3C2887CA1A0B099B002776E4 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBrowserView.h; sourceTree = "<group>"; };
+		3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
 		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
@@ -388,7 +392,6 @@
 		5AAA85BF18B1B93D000D7600 /* WidgetSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetSQL.h; sourceTree = "<group>"; };
 		5AAA85C018B1B93D000D7600 /* WidgetSQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetSQL.m; sourceTree = "<group>"; };
 		5AAA85C418B1B93D000D7600 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		5AAA85C518B1B93D000D7600 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		5AAA85DF18B1B93D000D7600 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBrowserMainFrame.h; sourceTree = "<group>"; };
 		5AAA85EF18B1B93D000D7600 /* CBrowserMainFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBrowserMainFrame.m; sourceTree = "<group>"; };
@@ -552,6 +555,7 @@
 		B2E52AFA15A6B2F1003E73EA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B2E52AFC15A6B2F1003E73EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DE1188311AA0782F009DF581 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
 		DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEUtils.m; sourceTree = "<group>"; };
 		DE81D4CC1A4D3D81005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
@@ -869,8 +873,8 @@
 		5AAA85C318B1B93D000D7600 /* JSONKit */ = {
 			isa = PBXGroup;
 			children = (
+				DE1188311AA0782F009DF581 /* JSONKit.m */,
 				5AAA85C418B1B93D000D7600 /* JSONKit.h */,
-				5AAA85C518B1B93D000D7600 /* JSONKit.m */,
 			);
 			path = JSONKit;
 			sourceTree = "<group>";
@@ -895,6 +899,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */,
+				3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */,
 				331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */,
 				331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */,
 				5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */,
@@ -1296,6 +1302,7 @@
 				33AF6EC11A448EFD00DC7397 /* MMDrawerBarButtonItem.h in Headers */,
 				5AAA870718B1B93D000D7600 /* ASIAuthenticationDialog.h in Headers */,
 				5AAA86B118B1B93D000D7600 /* WgtReportParser.h in Headers */,
+				3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */,
 				5AAA875418B1B93D000D7600 /* SDWebImagePrefetcher.h in Headers */,
 				5AAA875A18B1B93D000D7600 /* WidgetOneDelegate.h in Headers */,
 				5AAA874C18B1B93D000D7600 /* SDWebImageDecoder.h in Headers */,
@@ -1396,7 +1403,6 @@
 				5AAA86E318B1B93D000D7600 /* EBrowserMainFrame.m in Sources */,
 				3C2887B31A0B0984002776E4 /* CDataScanner_Extensions.m in Sources */,
 				5AAA869A18B1B93D000D7600 /* JSONParser.m in Sources */,
-				5AAA86B618B1B93D000D7600 /* JSONKit.m in Sources */,
 				5AAA871118B1B93D000D7600 /* ASIFormDataRequest.m in Sources */,
 				5AAA873318B1B93D000D7600 /* sha1.c in Sources */,
 				5AAA869518B1B93D000D7600 /* EUtility.m in Sources */,
@@ -1416,6 +1422,7 @@
 				5AAA86A818B1B93D000D7600 /* MBProgressHUD.m in Sources */,
 				5AAA869118B1B93D000D7600 /* BUIAlertView.m in Sources */,
 				5AAA871918B1B93D000D7600 /* ASINetworkQueue.m in Sources */,
+				DE1188321AA0782F009DF581 /* JSONKit.m in Sources */,
 				5AAA868F18B1B93D000D7600 /* BToastView.m in Sources */,
 				5AAA86E118B1B93D000D7600 /* EBrowserHistoryEntry.m in Sources */,
 				33AF6EC21A448EFD00DC7397 /* MMDrawerBarButtonItem.m in Sources */,
@@ -1431,6 +1438,7 @@
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				3C2887AF1A0B0984002776E4 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
+				3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */,
 				331573FF1A5AAEB70036A2A2 /* ACEPluginModel.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
 				3C2887B91A0B0984002776E4 /* CJSONScanner.m in Sources */,

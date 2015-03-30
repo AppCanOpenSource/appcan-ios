@@ -37,12 +37,11 @@
 #define F_EBRW_VIEW_FLAG_OAUTH                      0x400
 #define F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED        0x800
 #define F_EBRW_VIEW_FLAG_CUSTOM_PROCESS_DATA        0x1000
-
+ 
 #define WIDGETREPORT_WIDGETSTATUS_OPEN		@"001"
 #define WIDGETREPORT_WIDGETSTATUS_CLOSE		@"000"
 
 #import <UIKit/UIKit.h>
-
 @class EUExManager;
 @class EBrowserController;
 @class CBrowserMainFrame;
@@ -51,45 +50,40 @@
 @class WWidget;
 @class EBrowserViewBounceView;
 @class EBrowserWidgetContainer;
-
+@class EBrowserView;
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
-@class ACEBrowserView;
 
-@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate>{
-    EBrowserController *meBrwCtrler;
-    EUExManager *meUExManager;
-    CBrowserWindow *mcBrwWnd;
-    EBrowserWindow *meBrwWnd;
-    WWidget *mwWgt;
-//    NSString *muexObjName;
-    NSMutableDictionary *mPageInfoDict;
-    EBrowserViewBounceView *mTopBounceView;
-    EBrowserViewBounceView *mBottomBounceView;
-    UIScrollView *mScrollView;
-    int mType;
-    int mFlag;
-    int mTopBounceState;
-    int mBottomBounceState;
-    int mAdType;
-    int mAdDisplayTime;
-    int mAdIntervalTime;
-    int mAdFlag;
+@interface ACEBrowserView : UIWebView <UIGestureRecognizerDelegate>{
+	EBrowserController *meBrwCtrler;
+	EUExManager *meUExManager;
+	CBrowserWindow *mcBrwWnd;
+	EBrowserWindow *meBrwWnd;
+	WWidget *mwWgt;
+	NSString *muexObjName;
+	NSMutableDictionary *mPageInfoDict;
+	EBrowserViewBounceView *mTopBounceView;
+	EBrowserViewBounceView *mBottomBounceView;
+	UIScrollView *mScrollView;
+	int mType;
+	int mFlag;
+	int mTopBounceState;
+	int mBottomBounceState;
+	int mAdType;
+	int mAdDisplayTime;
+	int mAdIntervalTime;
+	int mAdFlag;
     int mAnalysis;
     
     BOOL isSwiped;
 }
-
-@property (nonatomic,assign) NSString *muexObjName;
-
-
-
+@property (nonatomic,retain) UIActivityIndicatorView * indicatorView;
 @property (nonatomic,assign) EUExManager *meUExManager;
 @property (nonatomic,assign) EBrowserController *meBrwCtrler;
 @property (nonatomic,assign) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,assign) EBrowserWindow *meBrwWnd;
 @property (nonatomic,assign) WWidget *mwWgt;
-
+@property (nonatomic,copy) NSString *muexObjName;
 @property (nonatomic,assign) NSMutableDictionary *mPageInfoDict;
 @property (nonatomic,assign) EBrowserViewBounceView *mTopBounceView;
 @property (nonatomic,assign) EBrowserViewBounceView *mBottomBounceView;
@@ -106,49 +100,13 @@
 @property int mAdDisplayTime;
 @property int mAdIntervalTime;
 @property int mAdFlag;
-@property (nonatomic,assign)NSURL *currentUrl;
-@property (nonatomic)BOOL isMuiltPopover;
+@property (nonatomic,retain) NSURL * currentUrl;
+@property (nonatomic) BOOL isMuiltPopover;
 
-@property (nonatomic,retain) ACEBrowserView * meBrowserView;
+@property (nonatomic,assign) EBrowserView * superDelegate;
 
-/**
- **UIWebView的方法和属性**************************************
- **/
-@property (nonatomic, readonly, assign) UIScrollView *scrollView;
-
-- (void)loadRequest:(NSURLRequest *)request;
-- (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
-- (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(NSURL *)baseURL;
-
-@property (nonatomic, readonly, assign) NSURLRequest *request;
-
-- (void)reload;
-- (void)stopLoading;
-
-- (void)goBack;
-- (void)goForward;
-
-@property (nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
-@property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
-@property (nonatomic, readonly, getter=isLoading) BOOL loading;
-
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
-
-@property (nonatomic) BOOL scalesPageToFit;
-@property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
-@property (nonatomic) BOOL allowsInlineMediaPlayback;
-@property (nonatomic) BOOL mediaPlaybackRequiresUserAction;
-@property (nonatomic) BOOL mediaPlaybackAllowsAirPlay;
-//********************************************************
-
-
-
-
-
-
-
-- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType;
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType;
+- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
+- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
 - (void)reset;
 - (void)notifyPageStart;
 - (void)notifyPageFinish;
@@ -165,8 +123,5 @@
 - (void)bounceViewStartLoadWithType:(int)inType;
 - (void)bounceViewFinishLoadWithType:(int)inType;
 - (void)stopAllNetService;
-- (void)keyboardWillChangeFrame:(NSNotification *)notification;
-- (void)registerKeyboardChangeEvent;
-
 
 @end
