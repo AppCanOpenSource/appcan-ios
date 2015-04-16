@@ -22,6 +22,7 @@
 typedef NS_ENUM(NSInteger, ACEWebWindowType) {
     ACEWebWindowTypeNormal, //普通类型
     ACEWebWindowTypeNavigation, //具有手势导航功能
+    ACEWebWindowTypePresent, //present
     ACEWebWindowTypeOther
 };
 
@@ -35,6 +36,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 #define isSysVersionAbove7_0 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 #define isSysVersionAbove8_0 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
+#define COEFFICIENT ([UIScreen mainScreen].bounds.size.width/320.0)
 
 
 @interface ACEUtils : NSObject

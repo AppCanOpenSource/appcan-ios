@@ -488,12 +488,43 @@
 
 }
 
-- (void)loadApp:(NSMutableArray *)inArguments {
+- (void)loadApp:(NSMutableArray *)inArguments
+{
+    
+    if ([inArguments count] < 1) {
+        return;
+    }
+    
 	NSString *inAction = [inArguments objectAtIndex:0];
     NSURL *url = [NSURL URLWithString:inAction];
-    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+    
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+    {
+        
         [[UIApplication sharedApplication] openURL:url];
-	}
+        
+    } else {
+        
+        if ([inArguments count] > 2)
+        {
+            
+            NSString *iTunesURL = [inArguments objectAtIndex:1];
+            url = [NSURL URLWithString:iTunesURL];
+            
+            if ([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                [[UIApplication sharedApplication] openURL:url];
+                
+            } else {
+                
+                NSLog(@"loadApp error");
+                
+            }
+            
+        }
+        
+    }
+    
 }
 
 -(void)checkUpdate:(NSMutableArray *)inArguments {

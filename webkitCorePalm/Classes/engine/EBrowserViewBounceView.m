@@ -64,15 +64,263 @@ double radians(float degrees){
 
 - (void)setImageFlipped:(BOOL)flipped {
     float x=0.0,y=0.0,z=1.0;
-  [UIView beginAnimations:nil context:NULL];
-  [UIView setAnimationDuration:defaultFlipTransitionDuration];
-  if (mType == EBounceViewTypeTop) {
-	  [mArrowImage layer].transform = (flipped ? CATransform3DMakeRotation(M_PI * 2,x, y, z) : CATransform3DMakeRotation(M_PI, x, y, z));
-  } else if (mType == EBounceViewTypeBottom) {
-	  [mArrowImage layer].transform = (flipped ? CATransform3DMakeRotation(M_PI, x, y, z) : CATransform3DMakeRotation(0, x, y, z));
-  }
-  [UIView commitAnimations];
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:defaultFlipTransitionDuration];
+    CATransform3D transform;
+    if (mType == EBounceViewTypeTop) {
+        if (flipped) {
+            transform = CATransform3DMakeRotation(0, x, y, z);
+        } else {
+            transform = CATransform3DMakeRotation(M_PI, x, y, z);
+        }
+        [mArrowImage layer].transform = transform;
+    } else if (mType == EBounceViewTypeBottom) {
+        if (flipped) {
+            transform = CATransform3DMakeRotation(M_PI, x, y, z);
+        } else {
+            transform = CATransform3DMakeRotation(M_PI * 2.0, x, y, z);
+        }
+        [mArrowImage layer].transform = transform;
+    }
+    [UIView commitAnimations];
 }
+
+-(void)resetDataWithType:(int)inType andParams:(NSMutableDictionary *)dict {
+    
+    self.isImgCenter = NO;
+    if ([[dict objectForKey:@"levelText"] length] == 0 && [[dict objectForKey:@"loadingText"] length] == 0 && [[dict objectForKey:@"pullToReloadText"] length] == 0 && [[dict objectForKey:@"releaseToReloadText"] length] == 0 && [[dict objectForKey:@"textColor"] length] == 0) {
+        if ([[dict allKeys] count] > 0) {
+            self.isImgCenter = YES;
+        }
+    }
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    if (bounceParamsDict) {
+        [bounceParamsDict removeAllObjects];
+        [bounceParamsDict release];
+    }
+    id colorObj = nil;
+    id imgObj = nil;
+    id levelObj = nil;
+    id imgInObj = nil;
+    if (dict) {
+        
+        bounceParamsDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+        
+        id typeStr = [bounceParamsDict objectForKey:@"type"];
+        
+        if (typeStr && [typeStr intValue] == inType) {
+            
+            colorObj = [bounceParamsDict objectForKey:@"textColor"];
+            imgObj = [bounceParamsDict objectForKey:@"imagePath"];
+            levelObj = [bounceParamsDict objectForKey:@"levelText"];
+            imgInObj = [bounceParamsDict objectForKey:@"loadingImagePath"];
+            
+        }
+    }
+    mType = inType;
+    if (inType == EBounceViewTypeTop)
+    {
+        
+        mLastUpdatedLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+        mLastUpdatedLabel.font = [UIFont systemFontOfSize:12.0f];
+        if (levelObj) {
+            mLastUpdatedLabel.text = [NSString stringWithString:(NSString*)levelObj];
+        }
+        mLastUpdatedLabel.textColor = RGBCOLOR(109, 128, 153);
+        if (colorObj) {
+            mLastUpdatedLabel.textColor = (UIColor*)colorObj;
+        }
+        //
+        mLastUpdatedLabel.backgroundColor = [UIColor clearColor];
+        mLastUpdatedLabel.textAlignment   = UITextAlignmentCenter;
+        
+        mStatusLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+        mStatusLabel.font             = [UIFont boldSystemFontOfSize:14.0f];
+        mStatusLabel.textColor        = RGBCOLOR(109, 128, 153);
+        if (colorObj) {
+            mStatusLabel.textColor = (UIColor*)colorObj;
+        }
+        
+        mStatusLabel.backgroundColor  = [UIColor clearColor];
+        mStatusLabel.textAlignment    = UITextAlignmentCenter;
+        [self setStatus:EBounceViewStatusPullToReload];
+        
+        UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
+        if (imgObj) {
+            UIImage * tempImg = [UIImage imageWithContentsOfFile:(NSString*)imgObj];
+            if (tempImg) {
+                arrowImage = tempImg;
+            }
+            
+        }
+        mArrowImage.frame = CGRectMake(25.0f, self.frame.size.height - 52.0f, arrowImage.size.width, arrowImage.size.height);
+        if (self.isImgCenter) {
+            CGRect tempRect = mArrowImage.frame;
+            tempRect.origin.x = (self.frame.size.width - arrowImage.size.width)*0.5;
+            mArrowImage.frame = tempRect;
+        }
+        
+        mArrowImage.image = arrowImage;
+        [mArrowImage layer].transform = CATransform3DMakeRotation(M_PI, 0.0f, 1.0f, 0.0f);
+        
+        
+        NSString * pjID =  [bounceParamsDict objectForKey:@"projectID"];
+        if ([pjID isKindOfClass:[NSString class]] && pjID.length>0)
+        {
+            if ([pjID isEqualToString:@"donghang"])
+            {
+                UIImage* arrowImage = nil;
+                if (imgInObj) {
+                    arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgInObj];
+                }
+                
+                
+                
+                mActivityImageView.image = arrowImage;
+                mActivityImageView.hidden=YES;
+                
+            }
+        }else
+        {
+            
+            if (self.isImgCenter) {
+                mActivityView.frame = mArrowImage.frame;
+            } else {
+                mActivityView.frame = CGRectMake( 30.0f, self.frame.size.height - 48.0f, 20.0f, 20.0f );
+            }
+            
+            mActivityView.hidesWhenStopped  = YES;
+            
+        }
+        
+    }
+    else if (inType == EBounceViewTypeBottom)
+    {
+        //mLastUpdatedLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 28.0f, frame.size.width, 20.0f)];
+        mLastUpdatedLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+        mLastUpdatedLabel.font            = [UIFont systemFontOfSize:12.0f];
+        if (levelObj) {
+            mLastUpdatedLabel.text =[NSString stringWithString:(NSString*)levelObj];
+        }
+        mLastUpdatedLabel.textColor       = RGBCOLOR(109, 128, 153);
+        if (colorObj) {
+            mLastUpdatedLabel.textColor = (UIColor*)colorObj;
+        }
+        //mLastUpdatedLabel.shadowColor     = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
+        //mLastUpdatedLabel.shadowOffset    = CGSizeMake(0.0f, 1.0f);
+        mLastUpdatedLabel.backgroundColor = [UIColor clearColor];
+        mLastUpdatedLabel.textAlignment   = UITextAlignmentCenter;
+        //            [self addSubview:mLastUpdatedLabel];
+        
+        //mStatusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 10.0f, frame.size.width, 20.0f )];
+        mStatusLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+        mStatusLabel.font             = [UIFont boldSystemFontOfSize:14.0f];
+        mStatusLabel.textColor        = RGBCOLOR(109, 128, 153);
+        if (colorObj) {
+            mStatusLabel.textColor = (UIColor*)colorObj;
+        }
+        //mStatusLabel.shadowColor      = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
+        //mStatusLabel.shadowOffset     = CGSizeMake(0.0f, 1.0f);
+        mStatusLabel.backgroundColor  = [UIColor clearColor];
+        mStatusLabel.textAlignment    = UITextAlignmentCenter;
+        [self setStatus:EBounceViewStatusPullToReload];
+        //            [self addSubview:mStatusLabel];
+        
+        UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
+        if (imgObj) {
+            UIImage * tempImg = [UIImage imageWithContentsOfFile:(NSString*)imgObj];
+            if (tempImg) {
+                arrowImage = tempImg;
+            }
+            
+        }
+        
+        if (self.isImgCenter) {
+            //mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake((frame.size.width - arrowImage.size.width)*0.5, 20.0f, arrowImage.size.width, arrowImage.size.height)];
+        } else {
+            mArrowImage.frame = CGRectMake(25.0f, 20.0f, arrowImage.size.width, arrowImage.size.height);
+        }
+        
+        mArrowImage.image = arrowImage;
+        [mArrowImage layer].transform = CATransform3DMakeRotation(0, 0.0f, 0.0f, 1.0f);
+        //            [self addSubview:mArrowImage];
+        
+        NSString * pjID =  [bounceParamsDict objectForKey:@"projectID"];
+        if ([pjID isKindOfClass:[NSString class]] && pjID.length>0)
+        {
+            if ([pjID isEqualToString:@"donghang"])
+            {
+                UIImage* arrowImage = nil;
+                if (imgInObj) {
+                    arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgInObj];
+                }
+                if (self.isImgCenter) {
+                    mActivityImageView = [[UIImageView alloc] initWithFrame:mArrowImage.frame];
+                } else {
+                    mActivityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 5.0f, arrowImage.size.width, arrowImage.size.height)];
+                }
+                
+                mActivityImageView.image = arrowImage;
+                mActivityImageView.hidden=YES;
+                //                    [self addSubview:mActivityImageView];
+                
+            }
+        }else
+        {
+            //mActivityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            if (self.isImgCenter) {
+                mActivityView.frame = mArrowImage.frame;
+            } else {
+                mActivityView.frame = CGRectMake( 30.0f, 15.0f, 20.0f, 20.0f );
+            }
+            mActivityView.hidesWhenStopped  = YES;
+            //                [self addSubview:mActivityView];
+            
+        }
+        
+    }
+    
+    CGSize sizeMstatu = [mStatusLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+    CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+    CGSize size = (sizeMstatu.width>sizeMlast.width)?sizeMstatu:sizeMlast;
+    if (size.width<70)
+    {
+        size.width=70;
+    }
+    CGRect temRect = mStatusLabel.frame;
+    float widthLabel = temRect.size.width;
+    CGRect imageFrame = mArrowImage.frame;
+    imageFrame.origin.x=widthLabel/2-size.width/2-imageFrame.size.width-10;
+    if (self.isImgCenter) {
+        CGRect tempRect = imageFrame;
+        tempRect.origin.x = (self.frame.size.width - imageFrame.size.width)*0.5;
+        mArrowImage.frame = tempRect;
+    } else {
+        [mArrowImage setFrame:imageFrame];
+    }
+    
+    
+    NSString * loading =[bounceParamsDict objectForKey:@"loadingText"];
+    CGSize sizeLoad = [loading sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+    CGRect acimageFrame = mActivityImageView.frame;
+    acimageFrame.origin.x=[UIScreen mainScreen].bounds.size.width/2-sizeLoad.width/2-imageFrame.size.width-35;
+    if (self.isImgCenter) {
+        mActivityImageView.frame = mArrowImage.frame;
+    } else {
+        [mActivityImageView setFrame:acimageFrame];
+    }
+    
+    CGRect acviewFrame = mActivityView.frame;
+    acviewFrame.origin.x= mArrowImage.frame.origin.x;
+    if (self.isImgCenter) {
+        mActivityView.frame = mArrowImage.frame;
+    } else {
+        [mActivityView setFrame:acviewFrame];
+    }
+    
+    
+}
+
 
 - (id)initWithFrame:(CGRect)frame andType:(int)inType params:(NSMutableDictionary*)dict{
   if (self = [super initWithFrame:frame]) {
@@ -140,7 +388,11 @@ double radians(float degrees){
 
 		UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
         if (imgObj) {
-            arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgObj];
+            UIImage * tempImg = [UIImage imageWithContentsOfFile:(NSString*)imgObj];
+            if (tempImg) {
+                arrowImage = tempImg;
+            }
+            
         }
 		mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake(25.0f, frame.size.height - 52.0f, arrowImage.size.width, arrowImage.size.height)];
         if (self.isImgCenter) {
@@ -234,7 +486,11 @@ double radians(float degrees){
 		
 		UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
         if (imgObj) {
-            arrowImage =[UIImage imageWithContentsOfFile:(NSString*)imgObj];
+            UIImage * tempImg = [UIImage imageWithContentsOfFile:(NSString*)imgObj];
+            if (tempImg) {
+                arrowImage = tempImg;
+            }
+            
         }
         if (self.isImgCenter) {
             mArrowImage = [[UIImageView alloc] initWithFrame:CGRectMake((frame.size.width - arrowImage.size.width)*0.5, 20.0f, arrowImage.size.width, arrowImage.size.height)];

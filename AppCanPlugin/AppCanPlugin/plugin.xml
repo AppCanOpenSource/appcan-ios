@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <uexplugins>
-	
+    
+    <plugin name="uexLocation">
+        <method name="openLocation"></method>
+        <method name="getAddress"></method>
+        <method name="closeLocation"></method>
+        
+    </plugin>
 </uexplugins>

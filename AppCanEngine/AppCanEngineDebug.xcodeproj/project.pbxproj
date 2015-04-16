@@ -251,6 +251,8 @@
 		B2E52AFD15A6B2F1003E73EA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFA15A6B2F1003E73EA /* Security.framework */; };
 		B2E52AFE15A6B2F1003E73EA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */; };
 		B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFC15A6B2F1003E73EA /* UIKit.framework */; };
+		DE26DFE81AD3ACE40018F0F8 /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = DE26DFE61AD3ACE40018F0F8 /* ACEBrowserView.h */; };
+		DE26DFE91AD3ACE40018F0F8 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE26DFE71AD3ACE40018F0F8 /* ACEBrowserView.m */; };
 		DE2C4FAB1A2DA50800D5B4F2 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2C4FA91A2DA50800D5B4F2 /* ACEUtils.h */; };
 		DE2C4FAC1A2DA50800D5B4F2 /* ACEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2C4FAA1A2DA50800D5B4F2 /* ACEUtils.m */; };
 		DE6D47A41A14955D00D39C79 /* CDataScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DE6D478C1A14955D00D39C79 /* CDataScanner.h */; };
@@ -529,6 +531,8 @@
 		B2E52AFA15A6B2F1003E73EA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B2E52AFC15A6B2F1003E73EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DE26DFE61AD3ACE40018F0F8 /* ACEBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBrowserView.h; sourceTree = "<group>"; };
+		DE26DFE71AD3ACE40018F0F8 /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
 		DE2C4FA91A2DA50800D5B4F2 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
 		DE2C4FAA1A2DA50800D5B4F2 /* ACEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEUtils.m; sourceTree = "<group>"; };
 		DE6D478C1A14955D00D39C79 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
@@ -836,6 +840,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				DE26DFE61AD3ACE40018F0F8 /* ACEBrowserView.h */,
+				DE26DFE71AD3ACE40018F0F8 /* ACEBrowserView.m */,
 				331574021A5AAF130036A2A2 /* ACEPluginModel.h */,
 				331574011A5AAF130036A2A2 /* ACEPluginModel.m */,
 				5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */,
@@ -1290,6 +1296,7 @@
 				5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */,
 				5AAA874B18B1B93D000D7600 /* SDWebImageCompat.h in Headers */,
 				5AAA86CB18B1B93D000D7600 /* JSONKit.h in Headers */,
+				DE26DFE81AD3ACE40018F0F8 /* ACEBrowserView.h in Headers */,
 				5AAA870718B1B93D000D7600 /* ASIAuthenticationDialog.h in Headers */,
 				5AAA86B118B1B93D000D7600 /* WgtReportParser.h in Headers */,
 				5AAA875418B1B93D000D7600 /* SDWebImagePrefetcher.h in Headers */,
@@ -1425,6 +1432,7 @@
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				DE6D47AB1A14955D00D39C79 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
+				DE26DFE91AD3ACE40018F0F8 /* ACEBrowserView.m in Sources */,
 				331574031A5AAF130036A2A2 /* ACEPluginModel.m in Sources */,
 				334D18321A47D2A10050DD13 /* ACEDrawerViewController.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
@@ -1494,7 +1502,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1513,7 +1521,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};

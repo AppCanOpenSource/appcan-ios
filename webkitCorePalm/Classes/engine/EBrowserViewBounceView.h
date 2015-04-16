@@ -49,6 +49,8 @@ typedef enum {
 -(void)setLevelText:(NSString*)inText;
 //- (id)initWithFrame:(CGRect)frame andType:(int)inType;
 - (id)initWithFrame:(CGRect)frame andType:(int)inType params:(NSMutableDictionary*)dict;
+
+-(void)resetDataWithType:(int)inType andParams:(NSMutableDictionary *)dict;
 @property(nonatomic,retain)NSString * projectID;
 
 @property(nonatomic,assign) BOOL isImgCenter;
