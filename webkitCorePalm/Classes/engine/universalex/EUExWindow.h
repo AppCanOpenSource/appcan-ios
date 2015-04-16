@@ -90,3 +90,12 @@
 
 - (void)closeSlibing:(NSMutableArray *)inArguments;
 @end
+
+@interface EScrollView : UIImageView {
+    
+}
+
+@property (nonatomic, retain) NSString *mainPopName;
+@property (nonatomic, retain) UIScrollView * scrollView;
+
+@end

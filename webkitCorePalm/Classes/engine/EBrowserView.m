@@ -43,8 +43,8 @@
 #import "EBrowserHistoryEntry.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-const CGFloat refreshKeyValue = -65.0f;
-const CGFloat loadingVisibleHeight = 60.0f;
+
+
 
 @implementation EBrowserView{
     float version;

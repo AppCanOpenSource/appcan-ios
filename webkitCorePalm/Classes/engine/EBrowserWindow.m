@@ -29,6 +29,9 @@
 #import "EUExWindow.h"
 
 
+
+
+
 @implementation EBrowserWindow
 
 @synthesize meBrwCtrler;
@@ -309,9 +312,37 @@
     
     for (int i = 1; i < [subviewsOfWindow count]; i++) {
         view = [subviewsOfWindow objectAtIndex:[subviewsOfWindow count] - i];
+        
         if ([view isKindOfClass:[EBrowserView class]] ) {
             return (EBrowserView *)view;
         }
+        
+        if ([view isKindOfClass:[EScrollView class]] ) {
+            
+            EScrollView * eScrollView = (EScrollView *)view;
+            UIScrollView * scrollView = eScrollView.scrollView;
+            
+            int index = scrollView.contentOffset.x/scrollView.frame.size.width;
+            
+            NSMutableArray * eBrowserViews = [NSMutableArray array];
+            for (UIView * subView in scrollView.subviews) {
+                if ([subView isKindOfClass:[EBrowserView class]]) {
+                    [eBrowserViews addObject:subView];
+                }
+            }
+            
+            EBrowserView * retView = nil;
+            
+            if ([eBrowserViews count] > index) {
+                retView = [eBrowserViews objectAtIndex:index];
+            }
+            if ([retView isKindOfClass:[EBrowserView class]]) {
+                return (EBrowserView *)retView;
+
+            }
+            
+        }
+        
     }
     return self.meBrwView;
     

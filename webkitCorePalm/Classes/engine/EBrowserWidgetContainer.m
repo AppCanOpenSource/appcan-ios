@@ -166,7 +166,7 @@
     EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
 
     
-    if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+    if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
         
