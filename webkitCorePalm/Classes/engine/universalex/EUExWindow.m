@@ -55,14 +55,7 @@
 #define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
 
-@interface EScrollView : UIImageView {
-    
-}
 
-@property (nonatomic, retain) NSString *mainPopName;
-@property (nonatomic, retain) UIScrollView * scrollView;
-
-@end
 
 @implementation EScrollView
 
@@ -72,6 +65,7 @@
     [_scrollView release];
     [_mainPopName release];
     [super dealloc];
+    
 }
 
 
@@ -116,6 +110,11 @@
 
 -(void)doRotate:(UIInterfaceOrientation)deviceOrientation_ {
 	CGRect rect;
+    EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+    float wndWidth = eBrwWnd.bounds.size.width;
+    float wndHeight = eBrwWnd.bounds.size.height;
+    
+    
 	UIDevice *myDevice = [UIDevice currentDevice];  
 	UIDeviceOrientation deviceOrientation = [myDevice orientation];
 	switch (deviceOrientation) {
@@ -125,7 +124,7 @@
 					if ([BUtility isIpad]) {
 						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:768 wndHeight:1004];
 					} else {
-						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:320 wndHeight:460];
+						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:wndWidth wndHeight:wndHeight];
 					}
 					[mToastView setFrame:rect];
 					[mToastView setSubviewsFrame:rect];
@@ -138,7 +137,7 @@
 					if ([BUtility isIpad]) {
 						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:768 wndHeight:1004];
 					} else {
-						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:320 wndHeight:460];
+						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:wndWidth wndHeight:wndHeight];
 					}
 					[mToastView setFrame:rect];
 					[mToastView setSubviewsFrame:rect];
@@ -151,7 +150,7 @@
 					if ([BUtility isIpad]) {
 						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:1024 wndHeight:748];
 					} else {
-						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:480 wndHeight:300];
+						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:wndWidth wndHeight:wndHeight];
 					}
 					[mToastView setFrame:rect];
 					[mToastView setSubviewsFrame:rect];
@@ -164,7 +163,7 @@
 					if ([BUtility isIpad]) {
 						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:1024 wndHeight:748];
 					} else {
-						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:480 wndHeight:300];
+						rect = [BToastView viewRectWithPos:mToastView.mPos wndWidth:wndWidth wndHeight:wndHeight];
 					}
 					[mToastView setFrame:rect];
 					[mToastView setSubviewsFrame:rect];
@@ -713,22 +712,68 @@
         return;
     }
     
-    NSString *argStr = (NSString *)[inArguments objectAtIndex:0];
-    NSInteger isLeft = [argStr integerValue];
+    NSDictionary * jsonDic = [[inArguments objectAtIndex:0] JSONValue];
+    NSInteger isLeft = [[jsonDic objectForKey:@"mark"] integerValue];
+    BOOL isReload = NO;
+    if ([jsonDic objectForKey:@"reload"]) {
+        isReload = [[jsonDic objectForKey:@"reload"] boolValue];
+    }
+    
     
     WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
     
     
     if (isLeft == 0) {
+        
+        if (isReload) {
+            
+            ACEWebViewController * leftViewController = (ACEWebViewController *)app.drawerController.leftDrawerViewController;
+            
+            NSArray * webViews = [leftViewController.browserWindow subviews];
+            
+            for (EBrowserView * meBrowserView in webViews) {
+                
+                if ([meBrowserView respondsToSelector:@selector(reload)]) {
+                    
+                    [meBrowserView reload];
+                    
+                }
+                
+            }
+            
+        }
+        
+        
         [app.drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
             
         }];
+        
     } else if (isLeft == 1)  {
+        
+        if (isReload) {
+            
+            ACEWebViewController * rightViewController = (ACEWebViewController *)app.drawerController.rightDrawerViewController;
+            
+            NSArray * webViews = [rightViewController.browserWindow subviews];
+            
+            for (EBrowserView * meBrowserView in webViews) {
+                
+                if ([meBrowserView respondsToSelector:@selector(reload)]) {
+                    
+                    [meBrowserView reload];
+                    
+                }
+                
+            }
+            
+        }
         
         [app.drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:^(BOOL finished) {
             
         }];
+        
     }
+    
 }
 
 - (void)setSlidingWindow:(NSMutableArray *)inArguments
@@ -823,6 +868,43 @@
     
 }
 
+- (void)openPresentWindow:(NSMutableArray *)inArguments
+{
+    NSString * inUExWndName = [inArguments objectAtIndex:0];
+    NSString * inDataType = [inArguments objectAtIndex:1];
+    NSString * inData = [inArguments objectAtIndex:2];
+    NSString * extraInfo = @"";
+    if ([inArguments count] >= 4) {
+        extraInfo = [inArguments objectAtIndex:3];
+    }
+    ACEWebWindowType type = ACEWebWindowTypePresent;
+    
+    //window 4.8
+    
+    NSArray *forbidWindow = meBrwView.meBrwCtrler.forebidWinsList;
+    if (forbidWindow && [forbidWindow count]>0) {
+        for (NSString *fWindowName in forbidWindow) {
+            if ([fWindowName isEqualToString:inUExWndName]) {
+                NSString *forbidStr = [NSString stringWithFormat:@"if(uexWidgetOne.cbError!=null){uexWidgetOne.cbError(%d,%d,\'%@\');}",0,10,inUExWndName];
+                [meBrwView stringByEvaluatingJavaScriptFromString:forbidStr];
+                //[self performSelectorOnMainThread:@selector(alertForbidView:) withObject:fWindowName waitUntilDone:NO];
+                //[self alertForbidView:fWindowName];
+                return;
+            }
+        }
+    }
+    
+    if (meBrwView.hidden == YES) {
+        return;
+    }
+    EBrowserWindow *eBrwWnd = nil;
+    EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+    
+    ACENSLog(@"PresentWindowTest open opener meBrwView = %@, meBrwView Name = %@", meBrwView, meBrwView.muexObjName);
+    
+    [self openWithController:(NSMutableArray *)@[inUExWndName, inDataType, inData, extraInfo, [NSNumber numberWithInteger:type]]];
+}
+
 
 - (void)openWithController:(NSMutableArray *)inArguments
 {
@@ -830,11 +912,16 @@
         return;
     }
     
-    
     NSString *inUExWndName = [inArguments objectAtIndex:0];
     NSString *inDataType = [inArguments objectAtIndex:1];
     NSString *inData = [inArguments objectAtIndex:2];
     NSString *extraInfo = [inArguments objectAtIndex:3];
+    
+    ACEWebWindowType type = ACEWebWindowTypeNavigation;
+    if ([inArguments count] > 4) {
+        type = [[inArguments objectAtIndex:4] integerValue];
+    }
+    
     
     if (meBrwView.hidden == YES) {
         return;
@@ -887,7 +974,7 @@
     if (eBrwWnd == nil) {
         eBrwWnd = [[EBrowserWindow alloc]initWithFrame:CGRectMake(0, 0, eBrwWndContainer.bounds.size.width, eBrwWndContainer.bounds.size.height) BrwCtrler:meBrwView.meBrwCtrler Wgt:meBrwView.mwWgt UExObjName:inUExWndName];
         
-        eBrwWnd.webWindowType = ACEWebWindowTypeNavigation;
+        eBrwWnd.webWindowType = type;
         eBrwWnd.windowName = inUExWndName;
         eBrwWnd.winContainer = eBrwWndContainer;
         
@@ -1229,6 +1316,10 @@
     
     ACENSLog(@"NavWindowTest open opener meBrwView = %@, meBrwView Name = %@", meBrwView, meBrwView.muexObjName);
     
+    if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        return;
+    }
+    
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
         
         [self openWithController:(NSMutableArray *)@[inUExWndName, inDataType, inData, extraInfo]];
@@ -1557,7 +1648,7 @@
     }else if (wndName) {
         
         
-        if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+        if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
             
             return;
         } else {
@@ -1639,33 +1730,42 @@
         return;
     }
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;//调用此close方法的window
-//    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
+    //    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
     EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
     
     EBrowserWindow *brwWnd = [eBrwWndContainer.mBrwWndDict objectForKey:windowName]; //即将关闭window链中的第一个window
-    
-    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
-        
-        
-        
-        ACEWebViewController *webController = brwWnd.webController;
-        if (webController) {
-            [webController.navigationController popToViewController:webController animated:YES];
-        }else{
-            webController = eBrwWnd.webController;
-            [webController.navigationController popToRootViewControllerAnimated:YES];
-        }
-        
-        
-        return;
-    }
-    
     
     if (brwWnd == nil) {
         ///退出应用
         [self exitApp];
         return;
     }
+    
+    
+    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+        
+        ACEWebViewController *webController = brwWnd.webController; //找到要关闭的controller
+        
+        if ([windowName isEqualToString:@"root"]) {
+            //返回ROOT窗口。
+            
+            webController = eBrwWnd.webController;
+            [webController.navigationController popToRootViewControllerAnimated:YES];
+        } else {
+            
+            if (webController) {
+                [webController.navigationController popToViewController:webController animated:NO];
+                [webController.navigationController popViewControllerAnimated:YES];
+                
+            }
+            
+        }
+        
+        return;
+    }
+    
+    
+    
     
     EBrowserWindow *cBrwWnd = nil;
     if ([windowName isEqualToString:@"root"]) {
@@ -1760,6 +1860,7 @@
             if (meBrwView.muexObjName) {
                 [meBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:meBrwView.muexObjName];
             }
+            
             if (meBrwView.superview) {
                 [meBrwView removeFromSuperview];
             }
@@ -1773,7 +1874,32 @@
             [webController.navigationController popViewControllerAnimated:YES];
         }
         
+        return;
+    }
+    
+    if (eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
+        
+        if (meBrwView.mType == F_EBRW_VIEW_TYPE_POPOVER) {
+            
+            if (meBrwView.muexObjName) {
+                [meBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:meBrwView.muexObjName];
+            }
+            
+            if (meBrwView.superview) {
+                [meBrwView removeFromSuperview];
+            }
+            
+            [meBrwView release];
+            
+        } else if (meBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
+            
+            ACEWebViewController *webController = eBrwWnd.webController;
+            
+            [webController dismissViewControllerAnimated:YES completion:^{
+                //
+            }];
+        }
         
         return;
     }
@@ -2080,6 +2206,10 @@
         return;
     }
     
+    if (meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        return;
+    }
+    
 	if (meBrwView.mType != F_EBRW_VIEW_TYPE_MAIN) {
 		return;
 	}
@@ -2274,6 +2404,9 @@
     if (meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
         return;
     }
+    if (meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        return;
+    }
 	if (meBrwView.mType != F_EBRW_VIEW_TYPE_MAIN) {
 		return;
 	}
@@ -2321,6 +2454,10 @@
 	}
     
     if (meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+        return;
+    }
+    
+    if (meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         return;
     }
     
@@ -2509,7 +2646,7 @@
                 if (levelText && levelText.length>0) {
                     [meBrwView.mTopBounceView setLevelText:levelText];
                 }
-                return;
+//                return;
             }
             break;
         case EBounceViewTypeBottom:
@@ -2518,7 +2655,7 @@
                 if (levelText && levelText.length>0) {
                     [meBrwView.mBottomBounceView setLevelText:levelText];
                 }
-                return;
+//                return;
             }
             break;
         default:
@@ -2595,7 +2732,14 @@
 				[meBrwView.mScrollView addSubview:meBrwView.mTopBounceView];
 			} else if (meBrwView.mTopBounceView.hidden == YES) {
 				meBrwView.mTopBounceView.hidden = NO;
-			}
+            } else if (meBrwView.mTopBounceView) {
+                if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
+                    [meBrwView.mTopBounceView resetDataWithType:EBounceViewTypeTop andParams:bounceParams];
+                    [meBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
+                }
+                meBrwView.mTopBounceView.backgroundColor = color;
+                meBrwView.mTopBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            }
 			break;
 		case EBounceViewTypeBottom:
 			if (!meBrwView.mBottomBounceView) {
@@ -2617,7 +2761,14 @@
 			} else if (meBrwView.mBottomBounceView.hidden == YES) {
 				[meBrwView.mBottomBounceView setFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
 				meBrwView.mBottomBounceView.hidden = NO;
-			}
+            } else if (meBrwView.mBottomBounceView) {
+                if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
+                    [meBrwView.mBottomBounceView resetDataWithType:EBounceViewTypeBottom andParams:bounceParams];
+                    [meBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
+                }
+                meBrwView.mBottomBounceView.backgroundColor = color;
+                meBrwView.mBottomBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            }
 			break;
 		default:
 			break;
@@ -2752,6 +2903,11 @@
         return;
     }
     
+    if (eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        
+        return;
+    }
+    
 	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
 	EBrowserMainFrame *eBrwMainFrm = meBrwView.meBrwCtrler.meBrwMainFrm;
 	int animiId = 0;
@@ -2818,6 +2974,10 @@
 	EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     
     if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+        
+        return;
+    }
+    if (eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         return;
     }
@@ -2944,6 +3104,13 @@
         } else {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:1];
         }
+        
+        
+        return;
+    }
+    if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        
+        
         
         
         return;
@@ -3160,12 +3327,16 @@
 	if (inY.length != 0) {
 		y = [inY intValue];
 	}
-	if (inW.length != 0) {
+	if (inW.length != 0 && [inW intValue] > 0) {
 		w = [inW intValue];
-	}
-	if (inH.length != 0) {
+    } else {
+        w = w - x;
+    }
+	if (inH.length != 0 && [inH intValue] > 0) {
 		h = [inH intValue];
-	}
+    } else {
+        h = h - y;
+    }
 	if (inFontSize.length != 0) {
 		fontSize = [inFontSize intValue];
 	}
@@ -3177,7 +3348,7 @@
 		bottom = [inBottom intValue];
 	}
     if (bottom > 0) {
-        h=h-y-bottom;
+        h = meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height - y - bottom;
     }
     //******************************************************
 	if (w == 0 || h == 0) {
@@ -3542,6 +3713,10 @@
         return;
     }
     
+    if (meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        return;
+    }
+    
     meBrwView.meBrwWnd.hidden = hidden;
 }
 
@@ -3853,6 +4028,10 @@
             return;
         }
         
+        if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+            return;
+        }
+        
         EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
         EBrowserWindow * windowA = [eBrwWndContainer brwWndForKey:inNameA];
         EBrowserWindow * windowB = [eBrwWndContainer brwWndForKey:inNameB];
@@ -3869,6 +4048,10 @@
         EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
         
         if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+            return;
+        }
+        
+        if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
             return;
         }
         
@@ -4150,6 +4333,12 @@
             ePopBrwView = nil;
         }
         
+        if (ePopBrwView != nil && meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+            
+            [ePopBrwView release];
+            ePopBrwView = nil;
+        }
+        
         if (ePopBrwView)
         {
             
@@ -4395,7 +4584,7 @@
     
     EBrowserWindowContainer *eBrwWndContainer = nil;
     
-    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         
         
@@ -4439,7 +4628,7 @@
     
     EBrowserWindowContainer *eBrwWndContainer = nil;
     
-    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         
         
