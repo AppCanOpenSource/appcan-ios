@@ -52,6 +52,8 @@
     _browserWindow.frame = rect;
     [self.view addSubview:_browserWindow];
     
+    self.view.backgroundColor = [UIColor clearColor];
+    
     ACENSLog(@"NavWindowTest ACEWebViewController viewDidLoad browserWindow");
     
 }

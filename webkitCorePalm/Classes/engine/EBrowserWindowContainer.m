@@ -29,6 +29,9 @@
 #import "AppCenter.h"
 #import "WWidget.h"
 #import "ACEWebViewController.h"
+#import "WidgetOneDelegate.h"
+#import "ACEUINavigationController.h"
+#import "ACEDrawerViewController.h"
 
 @implementation EBrowserWindowContainer
 
@@ -155,7 +158,14 @@
 //    testController.view = view;
     webController.browserWindow = view;
     view.webController = webController;
-    [meBrwCtrler.navigationController pushViewController:webController animated:YES];
+    if (view.webWindowType == ACEWebWindowTypeNavigation) {
+        [meBrwCtrler.navigationController pushViewController:webController animated:YES];
+    } else if (view.webWindowType == ACEWebWindowTypePresent) {
+        [meBrwCtrler.navigationController presentViewController:webController animated:YES completion:^{
+            //
+        }];
+    }
+    
     
     
     [webController release];
@@ -165,7 +175,7 @@
 
 	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
     
-    if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+    if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         
         if (eSuperBrwWnd.isSliding) {
@@ -274,16 +284,41 @@
 }
 
 - (EBrowserWindow*)aboveWindow {
-	int subViewCount = self.subviews.count;
-	int i = subViewCount-1;
-	while (i >= 0) {
-		UIView *aboveView = [self.subviews objectAtIndex:i];
-		if ([self ifActiveOrNot:aboveView]) {
-			return (EBrowserWindow*)aboveView;
-		}
-		i--;
-	}
-	return NULL;
+    
+    EBrowserWindow *aBrowserWin = nil;
+    
+    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    ACEUINavigationController *navController = (ACEUINavigationController *)app.drawerController.centerViewController;
+    
+    if ([navController.viewControllers count] > 1) {
+        
+        ACEWebViewController *webController = (ACEWebViewController *)navController.topViewController;
+        
+        if (webController != nil && [webController isKindOfClass:[ACEWebViewController class]]) {
+            
+            
+            aBrowserWin = webController.browserWindow;
+            
+        }
+        
+        
+    } else {
+        
+        NSUInteger subViewCount = self.subviews.count;
+        NSInteger i = subViewCount-1;
+        while (i >= 0) {
+            UIView *aboveView = [self.subviews objectAtIndex:i];
+            if ([self ifActiveOrNot:aboveView]) {
+                return (EBrowserWindow*)aboveView;
+            }
+            i--;
+        }
+        
+    }
+    
+    return aBrowserWin;
 }
 
 - (void)pushNotify {
@@ -316,7 +351,7 @@
     EBrowserWindowContainer *eBrwWndContainer = nil;
     EBrowserWindow *eBrwWnd = browserView.meBrwWnd;
     
-    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
+    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         
         

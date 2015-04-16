@@ -179,8 +179,10 @@
     }
     
     ACEWebViewController * webViewController = [self.viewControllers lastObject];
-    if (!webViewController.isNeedSwipeGestureRecognizer) {
-        return NO;
+    if ([webViewController isKindOfClass:[ACEWebViewController class]]) {
+        if (!webViewController.isNeedSwipeGestureRecognizer) {
+            return NO;
+        }
     }
     
 
