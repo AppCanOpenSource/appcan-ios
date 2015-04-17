@@ -2568,10 +2568,12 @@
 	}
 }
 
-- (void)getBounce:(NSMutableArray *)inArguments {
+- (void)getBounce:(NSMutableArray *)inArguments
+{
+    
     BOOL bounce = [meBrwView.mScrollView bounces];
-    NSString * jsStr = [NSString stringWithFormat:@"if(uexWindow.cbBounceState!=null){uexWindow.cbBounceState(%d);}",bounce];
-    [meBrwView stringByEvaluatingJavaScriptFromString:jsStr];
+    
+    [self jsSuccessWithName:@"uexWindow.cbBounceState" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:bounce];
 }
 
 - (void)setBounce:(NSMutableArray *)inArguments {
