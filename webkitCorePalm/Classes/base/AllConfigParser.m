@@ -48,7 +48,7 @@
 			ACENSLog(@"[XMLparser failed]");
 		}
 	}
-	ACENSLog(@"dataDict=%@",[dataDict description]);
+//	ACENSLog(@"dataDict=%@",[dataDict description]);
 	return dataDict;
 }
 
