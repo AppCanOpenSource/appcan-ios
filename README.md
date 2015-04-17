@@ -1,6 +1,6 @@
 appcan-ios
 ==========
-appcan-ios引擎
+appcan-ios开源引擎
 
 参考 http://newdocx.appcan.cn/
 
