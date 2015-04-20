@@ -75,6 +75,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
 @synthesize lastScrollPointY;
 @synthesize nowScrollPointY;
 
+-(void)multiPopoverDelay{
+    NSLog(@"DELAY");
+    [self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
+}
 - (void)didShowKeyboard:(NSNotification *)notification
 {
 	NSString *strKeyboardStatus = [self stringByEvaluatingJavaScriptFromString:@"uexWindow.didShowKeyboard"];
@@ -795,7 +799,12 @@ const CGFloat loadingVisibleHeight = 60.0f;
 				NSString *toSetFontSize = [NSString stringWithFormat:@"document.body.style.fontSize=%dpx;", [fontSize intValue]];
 				[self stringByEvaluatingJavaScriptFromString:toSetFontSize];
 			}
-			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
+            if(self.isMuiltPopover){
+                [self performSelector:@selector(multiPopoverDelay) withObject:nil afterDelay:0.2];
+            }else{
+                [self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
+            }
+			//[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
             if ((mFlag & F_EBRW_VIEW_FLAG_OAUTH) == F_EBRW_VIEW_FLAG_OAUTH) {
                 NSString *changedUrl = [[self curUrl] absoluteString];
                 NSString *toBeExeJs = [NSString stringWithFormat:@"if(uexWindow.onOAuthInfo!=null){uexWindow.onOAuthInfo(\'%@\',\'%@\');}", self.muexObjName, changedUrl];
@@ -809,6 +818,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
 				&& meBrwWnd.mPreOpenArray.count == 0) {
 				[self.meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self.meBrwWnd.meBrwView];
 			}
+
+            
+            
 			break;
 		case F_EBRW_VIEW_TYPE_AD:
 			[self loadUEXScript];
