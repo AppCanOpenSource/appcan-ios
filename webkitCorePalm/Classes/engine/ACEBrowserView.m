@@ -76,7 +76,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 @synthesize nowScrollPointY;
 
 -(void)multiPopoverDelay{
-
+    NSLog(@"DELAY");
     [self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
 }
 - (void)didShowKeyboard:(NSNotification *)notification
