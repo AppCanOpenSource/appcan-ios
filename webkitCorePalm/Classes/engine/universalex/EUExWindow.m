@@ -4559,110 +4559,78 @@
 
 -(void)subscribeChannelNotification:(NSArray *)inArgument
 {
-    NSString * channelId=[inArgument objectAtIndex:0];
-    NSString * function=[inArgument objectAtIndex:1];
-    if ([function isKindOfClass:[NSString class]] && [function length] > 0) {
+    if ([inArgument count] < 2) {
+        return;
+    }
+    
+    NSString * channelId = [inArgument objectAtIndex:0];
+    NSString * function = [inArgument objectAtIndex:1];
+    
+    if ([function isKindOfClass:[NSString class]] && [function length] > 0)
+    {
         [self.notificationDic setObject:function forKey:channelId];
     }
+    
 }
 
--(void)publishChannelNotification:(NSArray *)inArgument{
-    NSString * channelId=[inArgument objectAtIndex:0];
-    NSString * inContent=[inArgument objectAtIndex:1];
+-(void)publishChannelNotification:(NSArray *)inArgument
+{
+    if ([inArgument count] < 2) {
+        return;
+    }
+    
+    NSString * channelId = [inArgument objectAtIndex:0];
+    NSString * inContent = [inArgument objectAtIndex:1];
+    
     NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:channelId,@"channelId",inContent,@"inContent", nil];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SubscribeChannelNotification"
                                                        object:self userInfo:dic];
     
 }
 
--(void)respondChannelNotification:(NSNotification*)sender{
-    NSDictionary* infoDic=(NSDictionary*)sender.userInfo;
-    NSString * channelId=[infoDic objectForKey:@"channelId"];
-    NSString * inContent=[infoDic objectForKey:@"inContent"];
-    NSString * function=[self.notificationDic objectForKey:channelId];
-    NSString * cbString=[NSString stringWithFormat:@"if(uexWindow.%@!=null){uexWindow.%@(\'%@\');}",function,function,inContent];
-    EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
-//	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
+-(void)respondChannelNotification:(NSNotification*)sender
+{
     
-    EBrowserWindowContainer *eBrwWndContainer = nil;
+    NSDictionary * infoDic = (NSDictionary *)sender.userInfo;
     
-    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
-        
-        
-        if (eCurBrwWnd.superview != nil && [eCurBrwWnd.superview isKindOfClass:[EBrowserWindowContainer class]]) {
-            eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
-            
-            eCurBrwWnd.winContainer = eBrwWndContainer;
-            
-        } else {
-            
-            eBrwWndContainer = eCurBrwWnd.winContainer;
-        }
-        
-        
-    } else {
-        eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
+    NSString * channelId = [infoDic objectForKey:@"channelId"];
+    NSString * inContent = [infoDic objectForKey:@"inContent"];
+    
+    NSString * function = [self.notificationDic objectForKey:channelId];
+    
+    if (!function) {
+        return;
     }
     
-    NSArray *forbidWindow = [eBrwWndContainer.mBrwWndDict allValues];
-    for (EBrowserWindow* tempWnd in forbidWindow) {
-        [tempWnd.meBrwView stringByEvaluatingJavaScriptFromString:cbString];
-        NSArray *forbidPopWindow = [tempWnd.mPopoverBrwViewDict allValues];
-        for (EBrowserView *ePopView in forbidPopWindow) {
-            [ePopView stringByEvaluatingJavaScriptFromString:cbString];
-        }
-    }
+    NSString * cbString = [NSString stringWithFormat:@"if(uexWindow.%@!=null){uexWindow.%@(\'%@\');}",function,function,inContent];
+    
+    [meBrwView stringByEvaluatingJavaScriptFromString:cbString];
+
 }
 
 
 -(void)postGlobalNotification:(NSArray *)inArgument
 {
-    NSString * inContent=[inArgument objectAtIndex:0];
+    if ([inArgument count] < 1) {
+        return;
+    }
+    
+    NSString * inContent = [inArgument objectAtIndex:0];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"GlobalNotification" object:inContent];
+    
 }
 
--(void)respondGlobalNotification:(NSString*)data{
-    NSString *cbString=[NSString stringWithFormat:@"if(uexWindow.onGlobalNotification!=null){uexWindow.onGlobalNotification(\'%@\');}",data];
-	EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
-//	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
+-(void)respondGlobalNotification:(NSString*)data
+{
     
+    NSString * cbString = [NSString stringWithFormat:@"if(uexWindow.onGlobalNotification!=null){uexWindow.onGlobalNotification(\'%@\');}",data];
     
-    EBrowserWindowContainer *eBrwWndContainer = nil;
+    [meBrwView stringByEvaluatingJavaScriptFromString:cbString];
     
-    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
-        
-        
-        if (eCurBrwWnd.superview != nil && [eCurBrwWnd.superview isKindOfClass:[EBrowserWindowContainer class]]) {
-            eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
-            
-            eCurBrwWnd.winContainer = eBrwWndContainer;
-            
-        } else {
-            
-            eBrwWndContainer = eCurBrwWnd.winContainer;
-        }
-        
-        
-    } else {
-        eBrwWndContainer = (EBrowserWindowContainer*)eCurBrwWnd.superview;
-    }
-    
-    
-    NSArray *forbidWindow = [eBrwWndContainer.mBrwWndDict allValues];
-    for (EBrowserWindow* tempWnd in forbidWindow) {
-        [tempWnd.meBrwView stringByEvaluatingJavaScriptFromString:cbString];
-        NSArray *forbidPopWindow = [tempWnd.mPopoverBrwViewDict allValues];
-        for (EBrowserView *ePopView in forbidPopWindow) {
-            [ePopView stringByEvaluatingJavaScriptFromString:cbString];
-        }
-    }
-    NSArray * tempArr=[eCurBrwWnd.mPopoverBrwViewDict allValues];
-    for (EBrowserView *ePopView in tempArr) {
-        [ePopView stringByEvaluatingJavaScriptFromString:cbString];
-    }
 }
+
 //*****
 
 #pragma mark UIScrollView delegate methods
