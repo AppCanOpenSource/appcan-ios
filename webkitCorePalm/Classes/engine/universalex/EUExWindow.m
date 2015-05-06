@@ -4674,4 +4674,40 @@
     [self jsSuccessWithName:@"uexWindow.cbOpenMultiPopover" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:info];
 }
 
+-(void)setMultilPopoverFlippingEnbaled:(NSMutableArray *)inArgument{
+    if ([inArgument count] < 1) {
+        return;
+    }
+    NSString *str = [inArgument objectAtIndex:0];
+    BOOL multiPopoverFlippingEnbaled=NO;
+    if([str isEqual:@"0"]) {
+        multiPopoverFlippingEnbaled = NO;
+    }else if([str isEqual:@"1"]) {
+        multiPopoverFlippingEnbaled = YES;
+    }else{
+        return;
+    }
+    if(meBrwView.meBrwWnd.mMuiltPopoverDict){
+        NSEnumerator * enumeratorValue = [meBrwView.meBrwWnd.mMuiltPopoverDict objectEnumerator];
+        
+
+        for (EScrollView *eScrollV in enumeratorValue) {
+            UIScrollView *scrollView=eScrollV.scrollView;
+            scrollView.scrollEnabled=multiPopoverFlippingEnbaled;
+            NSArray * popviewAry = [scrollView subviews];
+            for (UIView * popVews in popviewAry){
+                if([popVews isKindOfClass:[EBrowserView class]]){
+                    EBrowserView *popView =(EBrowserView *)popVews;
+                    ACEBrowserView *ACEBrwView=popView.meBrowserView;
+                    UIScrollView *scrollView = (UIScrollView *)[[ACEBrwView subviews] objectAtIndex:0];
+                    scrollView.bounces = multiPopoverFlippingEnbaled;
+
+                }
+                
+            }
+            
+        }
+    };
+}
+
 @end
