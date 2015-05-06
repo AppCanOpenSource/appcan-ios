@@ -73,6 +73,9 @@ void PluginLog (NSString *format, ...) {
 + (void)brwView:(EBrowserView*)inBrwView addSubview:(UIView*)inSubView {
 	[inBrwView.meBrwWnd addSubview:inSubView];
 }
++ (void)brwView:(EBrowserView*)inBrwView addSubviewToScrollView:(UIView*)inSubView{
+    [inBrwView.mScrollView addSubview:inSubView];
+}
 +(void)doJsCB:(NSDictionary*)dict{
     EBrowserView *brwView =(EBrowserView*)[dict objectForKey:@"Brw"];
     NSString *inScript =[dict objectForKey:@"CBStr"];
