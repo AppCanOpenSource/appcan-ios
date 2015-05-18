@@ -802,8 +802,17 @@ const CGFloat loadingVisibleHeight = 60.0f;
             if(self.isMuiltPopover){
                 [self performSelector:@selector(multiPopoverDelay) withObject:nil afterDelay:0.2];
             }else{
+    
+                
                 [self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
             }
+            
+            //2015.5.18 新增onPopoverLoadFinishInRootWnd(name,url)接口
+            initStr = [[NSString alloc] initWithFormat:@"window.onPopoverLoadFinishInRootWnd(%@, %@);",self.muexObjName,[self.currentUrl absoluteString]];
+            [EUtility evaluatingJavaScriptInRootWnd:initStr];
+            [initStr release];
+            
+            
 			//[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
             if ((mFlag & F_EBRW_VIEW_FLAG_OAUTH) == F_EBRW_VIEW_FLAG_OAUTH) {
                 NSString *changedUrl = [[self curUrl] absoluteString];
