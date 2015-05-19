@@ -2586,11 +2586,13 @@
 		[meBrwView.mScrollView setBounces:NO];
 	} else if (value == 1) {
 		[meBrwView.mScrollView setBounces:YES];
+        /*
 		for( UIView *innerView in [meBrwView.mScrollView subviews] ) {
 			if( [innerView isKindOfClass:[UIImageView class]] ) {
 				innerView.hidden = YES;
 			}
 		}
+         */
 	}
     
 }
