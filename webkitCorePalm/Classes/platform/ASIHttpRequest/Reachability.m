@@ -306,6 +306,11 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 #pragma mark -
 #pragma mark Reachability Allocation Methods
 
++ (Reachability *) reachabilityWithHostname: (NSString *) hostName {
+    
+    return [Reachability reachabilityWithHostName:hostName];
+    
+}
 
 + (Reachability *) reachabilityWithHostName: (NSString *) hostName {
 	
