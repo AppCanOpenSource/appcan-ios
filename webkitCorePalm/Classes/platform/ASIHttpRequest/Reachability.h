@@ -150,6 +150,7 @@ extern NSString *const kReachabilityChangedNotification;
 
 // Use to check the reachability of a particular host name. 
 + (Reachability *) reachabilityWithHostName: (NSString*) hostName;
++ (Reachability *) reachabilityWithHostname: (NSString*) hostName;
 
 // Use to check the reachability of a particular IP address. 
 + (Reachability *) reachabilityWithAddress: (const struct sockaddr_in*) hostAddress;
