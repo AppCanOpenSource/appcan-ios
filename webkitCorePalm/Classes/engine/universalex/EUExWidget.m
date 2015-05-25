@@ -694,6 +694,11 @@
     }
 }
 -(void)setPushInfo:(NSMutableArray *)inArguments {
+    
+    if ([inArguments count] < 2) {
+        return;
+    }
+    
     NSString *uId = [inArguments objectAtIndex:0];
     NSString *uNickName =[inArguments objectAtIndex:1];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
