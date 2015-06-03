@@ -29,6 +29,12 @@
 		334D18401A47D2A10050DD13 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18291A47D2A10050DD13 /* UIViewController+MMDrawerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		334D18411A47D2A10050DD13 /* MMNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D182C1A47D2A10050DD13 /* MMNavigationController.h */; };
 		334D18421A47D2A10050DD13 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D182D1A47D2A10050DD13 /* MMNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		33C8E3011B1EE82900C33492 /* RECommonFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C8E2FB1B1EE82900C33492 /* RECommonFunctions.h */; };
+		33C8E3021B1EE82900C33492 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C8E2FC1B1EE82900C33492 /* RECommonFunctions.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		33C8E3031B1EE82900C33492 /* RESideMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C8E2FD1B1EE82900C33492 /* RESideMenu.h */; };
+		33C8E3041B1EE82900C33492 /* RESideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C8E2FE1B1EE82900C33492 /* RESideMenu.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		33C8E3051B1EE82900C33492 /* UIViewController+RESideMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C8E2FF1B1EE82900C33492 /* UIViewController+RESideMenu.h */; };
+		33C8E3061B1EE82900C33492 /* UIViewController+RESideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C8E3001B1EE82900C33492 /* UIViewController+RESideMenu.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		3C5AF6F11A4D37CB008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
@@ -308,6 +314,12 @@
 		334D182B1A47D2A10050DD13 /* leftside_shadow_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "leftside_shadow_bg@2x.png"; sourceTree = "<group>"; };
 		334D182C1A47D2A10050DD13 /* MMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMNavigationController.h; sourceTree = "<group>"; };
 		334D182D1A47D2A10050DD13 /* MMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMNavigationController.m; sourceTree = "<group>"; };
+		33C8E2FB1B1EE82900C33492 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
+		33C8E2FC1B1EE82900C33492 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
+		33C8E2FD1B1EE82900C33492 /* RESideMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RESideMenu.h; sourceTree = "<group>"; };
+		33C8E2FE1B1EE82900C33492 /* RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RESideMenu.m; sourceTree = "<group>"; };
+		33C8E2FF1B1EE82900C33492 /* UIViewController+RESideMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RESideMenu.h"; sourceTree = "<group>"; };
+		33C8E3001B1EE82900C33492 /* UIViewController+RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RESideMenu.m"; sourceTree = "<group>"; };
 		3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
@@ -619,6 +631,7 @@
 		334D18161A47D2A10050DD13 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				33C8E2FA1B1EE82900C33492 /* RESideMenu */,
 				334D18171A47D2A10050DD13 /* ACEBaseViewController.h */,
 				334D18181A47D2A10050DD13 /* ACEBaseViewController.m */,
 				334D18191A47D2A10050DD13 /* ACEDrawerViewController.h */,
@@ -675,6 +688,19 @@
 				3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */,
 			);
 			path = des;
+			sourceTree = "<group>";
+		};
+		33C8E2FA1B1EE82900C33492 /* RESideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				33C8E2FB1B1EE82900C33492 /* RECommonFunctions.h */,
+				33C8E2FC1B1EE82900C33492 /* RECommonFunctions.m */,
+				33C8E2FD1B1EE82900C33492 /* RESideMenu.h */,
+				33C8E2FE1B1EE82900C33492 /* RESideMenu.m */,
+				33C8E2FF1B1EE82900C33492 /* UIViewController+RESideMenu.h */,
+				33C8E3001B1EE82900C33492 /* UIViewController+RESideMenu.m */,
+			);
+			path = RESideMenu;
 			sourceTree = "<group>";
 		};
 		5AAA858D18B1B93D000D7600 /* Classes */ = {
@@ -1193,6 +1219,7 @@
 				DEA0EF4418C46884007CC6C6 /* AppCanEngineDebug-Prefix.pch in Headers */,
 				5AAA871218B1B93D000D7600 /* ASIHTTPRequest.h in Headers */,
 				5AAA86D118B1B93D000D7600 /* CJSONDataSerializer.h in Headers */,
+				33C8E3031B1EE82900C33492 /* RESideMenu.h in Headers */,
 				5AAA86EE18B1B93D000D7600 /* EBrowserWindow.h in Headers */,
 				334D18331A47D2A10050DD13 /* ACEUINavigationController.h in Headers */,
 				5AAA86D218B1B93D000D7600 /* CJSONDeserializer.h in Headers */,
@@ -1230,6 +1257,7 @@
 				5AAA875618B1B93D000D7600 /* UIButton+WebCache.h in Headers */,
 				DE6D47AC1A14955D00D39C79 /* CJSONSerializedData.h in Headers */,
 				5AAA870918B1B93D000D7600 /* ASICacheDelegate.h in Headers */,
+				33C8E3051B1EE82900C33492 /* UIViewController+RESideMenu.h in Headers */,
 				5AAA869218B1B93D000D7600 /* BUtility.h in Headers */,
 				5AAA873818B1B93D000D7600 /* ZipArchive.h in Headers */,
 				5AAA870A18B1B93D000D7600 /* ASIDataCompressor.h in Headers */,
@@ -1301,6 +1329,7 @@
 				5AAA86B118B1B93D000D7600 /* WgtReportParser.h in Headers */,
 				5AAA875418B1B93D000D7600 /* SDWebImagePrefetcher.h in Headers */,
 				5AAA875A18B1B93D000D7600 /* WidgetOneDelegate.h in Headers */,
+				33C8E3011B1EE82900C33492 /* RECommonFunctions.h in Headers */,
 				5AAA874C18B1B93D000D7600 /* SDWebImageDecoder.h in Headers */,
 				DE6D47A81A14955D00D39C79 /* CJSONDeserializer_BlocksExtensions.h in Headers */,
 				5AAA86F218B1B93D000D7600 /* EUExAction.h in Headers */,
@@ -1387,6 +1416,7 @@
 				5AAA874518B1B93D000D7600 /* PullDownRefreshHeaderView.m in Sources */,
 				5AAA86FB18B1B93D000D7600 /* EUExConsole.m in Sources */,
 				5AAA86DF18B1B93D000D7600 /* EBrowserHistory.m in Sources */,
+				33C8E3021B1EE82900C33492 /* RECommonFunctions.m in Sources */,
 				DE6D47A51A14955D00D39C79 /* CDataScanner.m in Sources */,
 				5AAA86B418B1B93D000D7600 /* WidgetSQL.m in Sources */,
 				5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */,
@@ -1394,6 +1424,7 @@
 				5AAA86E318B1B93D000D7600 /* EBrowserMainFrame.m in Sources */,
 				DE6D47AF1A14955D00D39C79 /* CDataScanner_Extensions.m in Sources */,
 				5AAA869A18B1B93D000D7600 /* JSONParser.m in Sources */,
+				33C8E3041B1EE82900C33492 /* RESideMenu.m in Sources */,
 				334D18381A47D2A10050DD13 /* MMDrawerBarButtonItem.m in Sources */,
 				5AAA86B618B1B93D000D7600 /* JSONKit.m in Sources */,
 				5AAA871118B1B93D000D7600 /* ASIFormDataRequest.m in Sources */,
@@ -1453,6 +1484,7 @@
 				5AAA86A618B1B93D000D7600 /* SBJsonWriter.m in Sources */,
 				5AAA869318B1B93D000D7600 /* BUtility.m in Sources */,
 				5AAA875918B1B93D000D7600 /* UIImageView+WebCache.m in Sources */,
+				33C8E3061B1EE82900C33492 /* UIViewController+RESideMenu.m in Sources */,
 				5AAA875518B1B93D000D7600 /* SDWebImagePrefetcher.m in Sources */,
 				5AAA869C18B1B93D000D7600 /* NSObject+SBJSON.m in Sources */,
 				5AAA870418B1B93D000D7600 /* EUExWidgetOne.m in Sources */,
