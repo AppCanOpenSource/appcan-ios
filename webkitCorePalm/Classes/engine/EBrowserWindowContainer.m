@@ -32,6 +32,8 @@
 #import "WidgetOneDelegate.h"
 #import "ACEUINavigationController.h"
 #import "ACEDrawerViewController.h"
+#import "UIViewController+RESideMenu.h"
+#import "RESideMenu.h"
 
 @implementation EBrowserWindowContainer
 
@@ -290,7 +292,14 @@
     WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
     
     
-    ACEUINavigationController *navController = (ACEUINavigationController *)app.drawerController.centerViewController;
+    ACEUINavigationController *navController = nil;
+    
+    if (app.drawerController) {
+        navController = (ACEUINavigationController *)app.drawerController.centerViewController;
+    } else {
+        navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
+    }
+    
     
     if ([navController.viewControllers count] > 1) {
         

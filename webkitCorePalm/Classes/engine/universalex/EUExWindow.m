@@ -44,6 +44,9 @@
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.H"
 #import "JSONKit.h"
+#import "RESideMenu.h"
+#import "UIViewController+RESideMenu.h"
+#import "ACEUINavigationController.h"
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -690,17 +693,41 @@
     if (iV == 1) {
         
         if (app.leftWebController != nil) {
-            [app.drawerController setLeftDrawerViewController:app.leftWebController];
+            
+            if (app.drawerController) {
+                [app.drawerController setLeftDrawerViewController:app.leftWebController];
+            } else {
+//                app.sideMenuViewController.leftMenuViewController = app.leftWebController;
+                app.sideMenuViewController.panGestureEnabled = YES;
+            }
+            
+            
         }
         
         if (app.rightWebController  != nil) {
-            [app.drawerController setRightDrawerViewController:app.rightWebController];
+            
+            if (app.drawerController) {
+                [app.drawerController setRightDrawerViewController:app.rightWebController];
+            } else {
+//                app.sideMenuViewController.rightMenuViewController = app.rightWebController;
+                app.sideMenuViewController.panGestureEnabled = YES;
+            }
+            
         }
         
     } else if (iV == 0) {
         
-        [app.drawerController setLeftDrawerViewController:nil];
-        [app.drawerController setRightDrawerViewController:nil];
+        if (app.drawerController) {
+            [app.drawerController setLeftDrawerViewController:nil];
+            [app.drawerController setRightDrawerViewController:nil];
+        } else {
+            
+            app.sideMenuViewController.panGestureEnabled = NO;
+//            app.sideMenuViewController.leftMenuViewController = nil;
+//            app.sideMenuViewController.rightMenuViewController = nil;
+        }
+        
+        
     }
     
 }
@@ -727,7 +754,14 @@
         
         if (isReload) {
             
-            ACEWebViewController * leftViewController = (ACEWebViewController *)app.drawerController.leftDrawerViewController;
+            
+            ACEWebViewController * leftViewController = nil;
+            
+            if (app.drawerController) {
+                leftViewController = (ACEWebViewController *)app.drawerController.leftDrawerViewController;
+            } else {
+                leftViewController = (ACEWebViewController *)app.sideMenuViewController.leftMenuViewController;
+            }
             
             NSArray * webViews = [leftViewController.browserWindow subviews];
             
@@ -744,15 +778,35 @@
         }
         
         
-        [app.drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+        if (app.drawerController) {
+            [app.drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+                
+            }];
+        } else {
             
-        }];
+            if (app.sideMenuViewController.leftMenuVisible) {
+                [app.sideMenuViewController hideMenuViewController];
+            } else {
+                [app.sideMenuViewController presentLeftMenuViewController];
+            }
+            
+        }
+        
+        
         
     } else if (isLeft == 1)  {
         
         if (isReload) {
             
-            ACEWebViewController * rightViewController = (ACEWebViewController *)app.drawerController.rightDrawerViewController;
+            ACEWebViewController * rightViewController = nil;
+            
+            if (app.drawerController) {
+                rightViewController = (ACEWebViewController *)app.drawerController.rightDrawerViewController;
+            } else {
+                rightViewController = (ACEWebViewController *)app.sideMenuViewController.rightMenuViewController;
+            }
+            
+            
             
             NSArray * webViews = [rightViewController.browserWindow subviews];
             
@@ -768,9 +822,19 @@
             
         }
         
-        [app.drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:^(BOOL finished) {
-            
-        }];
+        if (app.drawerController) {
+            [app.drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:^(BOOL finished) {
+                
+            }];
+        } else {
+            if (app.sideMenuViewController.rightMenuVisible) {
+                [app.sideMenuViewController hideMenuViewController];
+            } else {
+                [app.sideMenuViewController presentRightMenuViewController];
+            }
+        }
+        
+        
         
     }
     
@@ -788,6 +852,9 @@
     NSDictionary *leftDict = [dict objectForKey:@"leftSliding"];
     NSDictionary *rightDict = [dict objectForKey:@"rightSliding"];
     
+    NSString *animationId = [dict objectForKey:@"animationId"];
+    NSString *bgImg = [dict objectForKey:@"bg"];
+    
     WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
     
     ACEWebViewController *controller = nil;
@@ -795,6 +862,16 @@
     NSString *url = nil;
     NSNumber *numW = nil;
     NSInteger width = 0;
+    
+    ACEUINavigationController *meNav = nil;
+    
+    if (bgImg != nil
+        && animationId != nil) {
+        
+        meNav = (ACEUINavigationController *)app.drawerController.centerViewController;
+        
+        app.drawerController = nil;
+    }
     
     if (leftDict != nil) {
         
@@ -816,7 +893,11 @@
                 [app.drawerController setMaximumLeftDrawerWidth:width];
             }
             
-            [app.drawerController setLeftDrawerViewController:app.leftWebController];
+            if (app.drawerController) {
+                [app.drawerController setLeftDrawerViewController:app.leftWebController];
+            } else {
+                app.sideMenuViewController.leftMenuViewController = app.leftWebController;
+            }
             
             
             [controller release];
@@ -841,11 +922,59 @@
                 [app.drawerController setMaximumRightDrawerWidth:width];
             }
             
-            [app.drawerController setRightDrawerViewController:app.rightWebController];
+            if (app.drawerController) {
+                [app.drawerController setRightDrawerViewController:app.rightWebController];
+            } else {
+                app.sideMenuViewController.rightMenuViewController = app.rightWebController;
+            }
+            
+            
             
             [controller release];
         }
     }
+    
+    
+    if (bgImg != nil
+        && animationId != nil) {
+        
+        app.sideMenuViewController = [[[RESideMenu alloc] initWithContentViewController:meNav
+                                                                 leftMenuViewController:app.leftWebController
+                                                                rightMenuViewController:app.rightWebController] autorelease];
+//        app.sideMenuViewController.backgroundImage = [UIImage imageNamed:@"Stars"];
+        
+        NSString * imgPath = [self absPath:bgImg];
+        app.sideMenuViewController.backgroundImage = [UIImage imageWithContentsOfFile:imgPath];
+        app.sideMenuViewController.menuPreferredStatusBarStyle = 1; // UIStatusBarStyleLightContent
+        //     app.sideMenuViewController.delegate = self;
+//        app.sideMenuViewController.contentViewShadowColor = [UIColor redColor];
+//        app.sideMenuViewController.contentViewShadowOffset = CGSizeMake(0, 0);
+//        app.sideMenuViewController.contentViewShadowOpacity = 0.6;
+//        app.sideMenuViewController.contentViewShadowRadius = 12;
+        app.sideMenuViewController.contentViewShadowEnabled = NO;
+        
+        
+        if (leftDict != nil) {
+            
+            if (width > 0) {
+                app.sideMenuViewController.leftOffsetX = width;
+            }
+        }
+        
+        if (rightDict != nil) {
+            
+            if (width > 0) {
+                app.sideMenuViewController.rightOffsetX = width;
+            }
+            
+        }
+        
+        
+        app.window.rootViewController = app.sideMenuViewController;
+    }
+    
+    
+    
     
     
 }
