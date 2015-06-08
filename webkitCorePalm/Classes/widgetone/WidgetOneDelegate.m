@@ -43,10 +43,14 @@
 #import "MMExampleDrawerVisualStateManager.h"
 #import "ACEWebViewController.h"
 #import "ACEDes.h"
-
+#import "RESideMenu.h"
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
+
+@interface WidgetOneDelegate()<RESideMenuDelegate>
+
+@end
 
 @implementation WidgetOneDelegate
 

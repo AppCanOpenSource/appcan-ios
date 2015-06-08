@@ -24,6 +24,7 @@
 @class PluginParser;
 @class ACEWebViewController;
 @class ACEDrawerViewController;
+@class RESideMenu;
 
 @interface WidgetOneDelegate: NSObject <UIApplicationDelegate,UIAlertViewDelegate> {
 	UIWindow *mWindow;
@@ -62,6 +63,7 @@
 @property (nonatomic, retain) ACEWebViewController *leftWebController;
 @property (nonatomic, retain) ACEWebViewController *rightWebController;
 @property (nonatomic, retain) ACEDrawerViewController *drawerController;
+@property (nonatomic, retain) RESideMenu *sideMenuViewController;
 @property (nonatomic, assign) NSInteger enctryptcj;
 @property (nonatomic, retain) NSMutableDictionary *globalPluginDict;
 
