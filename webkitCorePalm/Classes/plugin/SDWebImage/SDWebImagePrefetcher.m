@@ -7,139 +7,106 @@
  */
 
 #import "SDWebImagePrefetcher.h"
-
-#if (!defined(DEBUG) && !defined (SD_VERBOSE)) || defined(SD_LOG_NONE)
-#define NSLog(...)
-#endif
+#import "SDWebImageManager.h"
 
 @interface SDWebImagePrefetcher ()
-
-@property (strong, nonatomic) SDWebImageManager *manager;
-@property (strong, nonatomic) NSArray *prefetchURLs;
-@property (assign, nonatomic) NSUInteger requestedCount;
-@property (assign, nonatomic) NSUInteger skippedCount;
-@property (assign, nonatomic) NSUInteger finishedCount;
-@property (assign, nonatomic) NSTimeInterval startedTime;
-@property (copy, nonatomic) SDWebImagePrefetcherCompletionBlock completionBlock;
-@property (copy, nonatomic) SDWebImagePrefetcherProgressBlock progressBlock;
-
+@property (nonatomic, retain) NSArray *prefetchURLs;
 @end
 
 @implementation SDWebImagePrefetcher
 
-+ (SDWebImagePrefetcher *)sharedImagePrefetcher {
-    static dispatch_once_t once;
-    static id instance;
-    dispatch_once(&once, ^{
-        instance = [self new];
-    });
+static SDWebImagePrefetcher *instance;
+
+@synthesize prefetchURLs;
+@synthesize maxConcurrentDownloads;
+
++ (SDWebImagePrefetcher *)sharedImagePrefetcher
+{
+    if (instance == nil)
+    {
+        instance = [[SDWebImagePrefetcher alloc] init];
+        instance.maxConcurrentDownloads = 3;
+    }
+
     return instance;
 }
 
-- (id)init {
-    if ((self = [super init])) {
-        _manager = [SDWebImageManager new];
-        _options = SDWebImageLowPriority;
-        _prefetcherQueue = dispatch_get_main_queue();
-        self.maxConcurrentDownloads = 3;
-    }
-    return self;
+- (void)startPrefetchingAtIndex:(NSUInteger)index withManager:(SDWebImageManager *)imageManager
+{
+    if (index >= [self.prefetchURLs count]) return;
+    _requestedCount++;
+    [imageManager downloadWithURL:[self.prefetchURLs objectAtIndex:index] delegate:self options:SDWebImageLowPriority];
 }
 
-- (void)setMaxConcurrentDownloads:(NSUInteger)maxConcurrentDownloads {
-    self.manager.imageDownloader.maxConcurrentDownloads = maxConcurrentDownloads;
-}
-
-- (NSUInteger)maxConcurrentDownloads {
-    return self.manager.imageDownloader.maxConcurrentDownloads;
-}
-
-- (void)startPrefetchingAtIndex:(NSUInteger)index {
-    if (index >= self.prefetchURLs.count) return;
-    self.requestedCount++;
-    [self.manager downloadImageWithURL:self.prefetchURLs[index] options:self.options progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-        if (!finished) return;
-        self.finishedCount++;
-
-        if (image) {
-            if (self.progressBlock) {
-                self.progressBlock(self.finishedCount,[self.prefetchURLs count]);
-            }
-            NSLog(@"Prefetched %@ out of %@", @(self.finishedCount), @(self.prefetchURLs.count));
-        }
-        else {
-            if (self.progressBlock) {
-                self.progressBlock(self.finishedCount,[self.prefetchURLs count]);
-            }
-            NSLog(@"Prefetched %@ out of %@ (Failed)", @(self.finishedCount), @(self.prefetchURLs.count));
-
-            // Add last failed
-            self.skippedCount++;
-        }
-        if ([self.delegate respondsToSelector:@selector(imagePrefetcher:didPrefetchURL:finishedCount:totalCount:)]) {
-            [self.delegate imagePrefetcher:self
-                            didPrefetchURL:self.prefetchURLs[index]
-                             finishedCount:self.finishedCount
-                                totalCount:self.prefetchURLs.count
-            ];
-        }
-        if (self.prefetchURLs.count > self.requestedCount) {
-            dispatch_async(self.prefetcherQueue, ^{
-                [self startPrefetchingAtIndex:self.requestedCount];
-            });
-        }
-        else if (self.finishedCount == self.requestedCount) {
-            [self reportStatus];
-            if (self.completionBlock) {
-                self.completionBlock(self.finishedCount, self.skippedCount);
-                self.completionBlock = nil;
-            }
-            self.progressBlock = nil;
-        }
-    }];
-}
-
-- (void)reportStatus {
+- (void)reportStatus
+{
     NSUInteger total = [self.prefetchURLs count];
-    NSLog(@"Finished prefetching (%@ successful, %@ skipped, timeElasped %.2f)", @(total - self.skippedCount), @(self.skippedCount), CFAbsoluteTimeGetCurrent() - self.startedTime);
-    if ([self.delegate respondsToSelector:@selector(imagePrefetcher:didFinishWithTotalCount:skippedCount:)]) {
-        [self.delegate imagePrefetcher:self
-               didFinishWithTotalCount:(total - self.skippedCount)
-                          skippedCount:self.skippedCount
-        ];
-    }
+    NSLog(@"Finished prefetching (%d successful, %d skipped, timeElasped %.2f)", total - _skippedCount, _skippedCount, CFAbsoluteTimeGetCurrent() - _startedTime);
 }
 
-- (void)prefetchURLs:(NSArray *)urls {
-    [self prefetchURLs:urls progress:nil completed:nil];
-}
-
-- (void)prefetchURLs:(NSArray *)urls progress:(SDWebImagePrefetcherProgressBlock)progressBlock completed:(SDWebImagePrefetcherCompletionBlock)completionBlock {
+- (void)prefetchURLs:(NSArray *)urls
+{
     [self cancelPrefetching]; // Prevent duplicate prefetch request
-    self.startedTime = CFAbsoluteTimeGetCurrent();
+    _startedTime = CFAbsoluteTimeGetCurrent();
     self.prefetchURLs = urls;
-    self.completionBlock = completionBlock;
-    self.progressBlock = progressBlock;
 
-    if(urls.count == 0){ 
-        if(completionBlock){
-            completionBlock(0,0);
-        }
-    }else{
-        // Starts prefetching from the very first image on the list with the max allowed concurrency
-        NSUInteger listCount = self.prefetchURLs.count;
-        for (NSUInteger i = 0; i < self.maxConcurrentDownloads && self.requestedCount < listCount; i++) {
-            [self startPrefetchingAtIndex:i];
-        }
+    // Starts prefetching from the very first image on the list with the max allowed concurrency
+    int listCount = [self.prefetchURLs count];
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    for (int i = 0; i < self.maxConcurrentDownloads && _requestedCount < listCount; i++)
+    {
+        [self startPrefetchingAtIndex:i withManager:manager];
     }
 }
 
-- (void)cancelPrefetching {
+- (void)cancelPrefetching
+{
     self.prefetchURLs = nil;
-    self.skippedCount = 0;
-    self.requestedCount = 0;
-    self.finishedCount = 0;
-    [self.manager cancelAll];
+    _skippedCount = 0;
+    _requestedCount = 0;
+    _finishedCount = 0;
+    [[SDWebImageManager sharedManager] cancelForDelegate:self];
+}
+
+#pragma mark SDWebImagePrefetcher (SDWebImageManagerDelegate)
+
+- (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image
+{
+    _finishedCount++;
+    NSLog(@"Prefetched %d out of %d", _finishedCount, [self.prefetchURLs count]);
+
+    if ([self.prefetchURLs count] > _requestedCount)
+    {
+        [self startPrefetchingAtIndex:_requestedCount withManager:imageManager];
+    }
+    else if (_finishedCount == _requestedCount)
+    {
+        [self reportStatus];
+    }
+}
+
+- (void)webImageManager:(SDWebImageManager *)imageManager didFailWithError:(NSError *)error
+{
+    _finishedCount++;
+    NSLog(@"Prefetched %d out of %d (Failed)", _finishedCount, [self.prefetchURLs count]);
+
+    // Add last failed
+    _skippedCount++;
+
+    if ([self.prefetchURLs count] > _requestedCount)
+    {
+        [self startPrefetchingAtIndex:_requestedCount withManager:imageManager];
+    }
+    else if (_finishedCount == _requestedCount)
+    {
+        [self reportStatus];
+    }
+}
+
+- (void)dealloc
+{
+    self.prefetchURLs = nil;
+    SDWISuperDealoc;
 }
 
 @end
