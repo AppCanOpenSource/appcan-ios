@@ -7,35 +7,45 @@
  */
 
 #import "SDWebImageDownloader.h"
-#import "SDWebImageDownloaderOperation.h"
-#import <ImageIO/ImageIO.h>
+#import "SDWebImageDecoder.h"
+#import "WidgetOneDelegate.h"
+#import "BUtility.h"
+#import "ASIFormDataRequest.h"
 
-static NSString *const kProgressCallbackKey = @"progress";
-static NSString *const kCompletedCallbackKey = @"completed";
+@interface SDWebImageDownloader (ImageDecoder) <SDWebImageDecoderDelegate,ASIHTTPRequestDelegate>
+@end
+
+NSString *const SDWebImageDownloadStartNotification = @"SDWebImageDownloadStartNotification";
+NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNotification";
 
 @interface SDWebImageDownloader ()
-
-@property (strong, nonatomic) NSOperationQueue *downloadQueue;
-@property (weak, nonatomic) NSOperation *lastAddedOperation;
-@property (assign, nonatomic) Class operationClass;
-@property (strong, nonatomic) NSMutableDictionary *URLCallbacks;
-@property (strong, nonatomic) NSMutableDictionary *HTTPHeaders;
-// This queue is used to serialize the handling of the network responses of all the download operation in a single queue
-@property (SDDispatchQueueSetterSementics, nonatomic) dispatch_queue_t barrierQueue;
-
+@property (nonatomic, retain) NSURLConnection *connection;
 @end
 
 @implementation SDWebImageDownloader
+@synthesize url, delegate, connection, imageData, userInfo, lowPriority;
 
-+ (void)initialize {
+#pragma mark Public Methods
+
++ (id)downloaderWithURL:(NSURL *)url delegate:(id<SDWebImageDownloaderDelegate>)delegate
+{
+    return [self downloaderWithURL:url delegate:delegate userInfo:nil];
+}
+
++ (id)downloaderWithURL:(NSURL *)url delegate:(id<SDWebImageDownloaderDelegate>)delegate userInfo:(id)userInfo
+{
+
+    return [self downloaderWithURL:url delegate:delegate userInfo:userInfo lowPriority:NO];
+}
+
++ (id)downloaderWithURL:(NSURL *)url delegate:(id<SDWebImageDownloaderDelegate>)delegate userInfo:(id)userInfo lowPriority:(BOOL)lowPriority
+{
     // Bind SDNetworkActivityIndicator if available (download it here: http://github.com/rs/SDNetworkActivityIndicator )
     // To use it, just add #import "SDNetworkActivityIndicator.h" in addition to the SDWebImage import
-    if (NSClassFromString(@"SDNetworkActivityIndicator")) {
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    if (NSClassFromString(@"SDNetworkActivityIndicator"))
+    {
+        
         id activityIndicator = [NSClassFromString(@"SDNetworkActivityIndicator") performSelector:NSSelectorFromString(@"sharedActivityIndicator")];
-#pragma clang diagnostic pop
 
         // Remove observer in case it was previously added.
         [[NSNotificationCenter defaultCenter] removeObserver:activityIndicator name:SDWebImageDownloadStartNotification object:nil];
@@ -48,177 +58,189 @@ static NSString *const kCompletedCallbackKey = @"completed";
                                                  selector:NSSelectorFromString(@"stopActivity")
                                                      name:SDWebImageDownloadStopNotification object:nil];
     }
+
+    SDWebImageDownloader *downloader = SDWIReturnAutoreleased([[SDWebImageDownloader alloc] init]);
+    downloader.url = url;
+    downloader.delegate = delegate;
+    downloader.userInfo = userInfo;
+    downloader.lowPriority = lowPriority;
+    [downloader performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:YES];
+    return downloader;
 }
 
-+ (SDWebImageDownloader *)sharedDownloader {
-    static dispatch_once_t once;
-    static id instance;
-    dispatch_once(&once, ^{
-        instance = [self new];
-    });
-    return instance;
++ (void)setMaxConcurrentDownloads:(NSUInteger)max
+{
+    // NOOP
 }
 
-- (id)init {
-    if ((self = [super init])) {
-        _operationClass = [SDWebImageDownloaderOperation class];
-        _shouldDecompressImages = YES;
-        _executionOrder = SDWebImageDownloaderFIFOExecutionOrder;
-        _downloadQueue = [NSOperationQueue new];
-        _downloadQueue.maxConcurrentOperationCount = 6;
-        _URLCallbacks = [NSMutableDictionary new];
-        _HTTPHeaders = [NSMutableDictionary dictionaryWithObject:@"image/webp,image/*;q=0.8" forKey:@"Accept"];
-        _barrierQueue = dispatch_queue_create("com.hackemist.SDWebImageDownloaderBarrierQueue", DISPATCH_QUEUE_CONCURRENT);
-        _downloadTimeout = 15.0;
+- (void)start
+{
+    // In order to prevent from potential duplicate caching (NSURLCache + SDImageCache) we disable the cache for image requests
+//    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:15];
+//    self.connection = SDWIReturnAutoreleased([[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO]);
+    // If not in low priority mode, ensure we aren't blocked by UI manipulations (default runloop mode for NSURLConnection is NSEventTrackingRunLoopMode)
+//    if (!lowPriority)
+//    {
+//        [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//    }
+//    [connection start];
+//    SDWIRelease(request);
+    
+    SecIdentityRef identity = NULL;
+    SecTrustRef trust = NULL;
+    SecCertificateRef certChain=NULL;
+    NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+    [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setDelegate:self];
+    [request setRequestMethod:@"GET"];
+    NSString *scheme = [[url scheme] lowercaseString];
+    if ([scheme isEqualToString:@"https"]) {
+        [request setValidatesSecureCertificate:YES];
+        [request setClientCertificateIdentity:identity];
+    }else{
+        [request setValidatesSecureCertificate:NO];
     }
-    return self;
-}
-
-- (void)dealloc {
-    [self.downloadQueue cancelAllOperations];
-    SDDispatchQueueRelease(_barrierQueue);
-}
-
-- (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field {
-    if (value) {
-        self.HTTPHeaders[field] = value;
+    
+    if (request)
+    {
+        self.imageData = [NSMutableData data];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStartNotification object:nil];
     }
-    else {
-        [self.HTTPHeaders removeObjectForKey:field];
+    else
+    {
+        if ([delegate respondsToSelector:@selector(imageDownloader:didFailWithError:)])
+        {
+            [delegate performSelector:@selector(imageDownloader:didFailWithError:) withObject:self withObject:nil];
+        }
+    }
+    [request startSynchronous];
+}
+
+#pragma mark - ASIHTTPRequestDelegate
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSData *responseData = [request responseData];
+    [self.imageData appendData:responseData];
+    self.connection = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+    
+    if ([delegate respondsToSelector:@selector(imageDownloaderDidFinish:)])
+    {
+        [delegate performSelector:@selector(imageDownloaderDidFinish:) withObject:self];
+    }
+    if ([delegate respondsToSelector:@selector(imageDownloader:didFinishWithImage:)])
+    {
+        NSLog(@"connectionDidFinishLoading----url.absoluteString--->:%@",url.absoluteString);
+        UIImage *image = SDScaledImageForPath(url.absoluteString, imageData);
+        [[SDWebImageDecoder sharedImageDecoder] decodeImage:image withDelegate:self userInfo:nil];
     }
 }
 
-- (NSString *)valueForHTTPHeaderField:(NSString *)field {
-    return self.HTTPHeaders[field];
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+    NSLog(@"didFailWithError------->:%@",request.error);
+    if ([delegate respondsToSelector:@selector(imageDownloader:didFailWithError:)])
+    {
+        [delegate performSelector:@selector(imageDownloader:didFailWithError:) withObject:self withObject:request.error];
+    }
+    self.imageData = nil;
 }
 
-- (void)setMaxConcurrentDownloads:(NSInteger)maxConcurrentDownloads {
-    _downloadQueue.maxConcurrentOperationCount = maxConcurrentDownloads;
+- (void)cancel
+{
+    if (connection)
+    {
+        [connection cancel];
+        self.connection = nil;
+        [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+    }
 }
 
-- (NSUInteger)currentDownloadCount {
-    return _downloadQueue.operationCount;
+/*
+ * 由于不支持https带证书的网络请求，所以用了ASIHttpRequest
+#pragma mark NSURLConnection (delegate)
+
+- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)response
+{
+    if ([((NSHTTPURLResponse *)response) statusCode] >= 400)
+    {
+        [aConnection cancel];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+
+        if ([delegate respondsToSelector:@selector(imageDownloader:didFailWithError:)])
+        {
+            NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
+                                                        code:[((NSHTTPURLResponse *)response) statusCode]
+                                                    userInfo:nil];
+            [delegate performSelector:@selector(imageDownloader:didFailWithError:) withObject:self withObject:error];
+            SDWIRelease(error);
+        }
+
+        self.connection = nil;
+        self.imageData = nil;
+    }
 }
 
-- (NSInteger)maxConcurrentDownloads {
-    return _downloadQueue.maxConcurrentOperationCount;
+- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)data
+{
+    [imageData appendData:data];
 }
 
-- (void)setOperationClass:(Class)operationClass {
-    _operationClass = operationClass ?: [SDWebImageDownloaderOperation class];
-}
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
+- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection
+{
+    self.connection = nil;
 
-- (id <SDWebImageOperation>)downloadImageWithURL:(NSURL *)url options:(SDWebImageDownloaderOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageDownloaderCompletedBlock)completedBlock {
-    __block SDWebImageDownloaderOperation *operation;
-    __weak __typeof(self)wself = self;
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
 
-    [self addProgressCallback:progressBlock andCompletedBlock:completedBlock forURL:url createCallback:^{
-        NSTimeInterval timeoutInterval = wself.downloadTimeout;
-        if (timeoutInterval == 0.0) {
-            timeoutInterval = 15.0;
-        }
-
-        // In order to prevent from potential duplicate caching (NSURLCache + SDImageCache) we disable the cache for image requests if told otherwise
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:(options & SDWebImageDownloaderUseNSURLCache ? NSURLRequestUseProtocolCachePolicy : NSURLRequestReloadIgnoringLocalCacheData) timeoutInterval:timeoutInterval];
-        request.HTTPShouldHandleCookies = (options & SDWebImageDownloaderHandleCookies);
-        request.HTTPShouldUsePipelining = YES;
-        if (wself.headersFilter) {
-            request.allHTTPHeaderFields = wself.headersFilter(url, [wself.HTTPHeaders copy]);
-        }
-        else {
-            request.allHTTPHeaderFields = wself.HTTPHeaders;
-        }
-        operation = [[wself.operationClass alloc] initWithRequest:request
-                                                          options:options
-                                                         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                                             SDWebImageDownloader *sself = wself;
-                                                             if (!sself) return;
-                                                             __block NSArray *callbacksForURL;
-                                                             dispatch_sync(sself.barrierQueue, ^{
-                                                                 callbacksForURL = [sself.URLCallbacks[url] copy];
-                                                             });
-                                                             for (NSDictionary *callbacks in callbacksForURL) {
-                                                                 SDWebImageDownloaderProgressBlock callback = callbacks[kProgressCallbackKey];
-                                                                 if (callback) callback(receivedSize, expectedSize);
-                                                             }
-                                                         }
-                                                        completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-                                                            SDWebImageDownloader *sself = wself;
-                                                            if (!sself) return;
-                                                            __block NSArray *callbacksForURL;
-                                                            dispatch_barrier_sync(sself.barrierQueue, ^{
-                                                                callbacksForURL = [sself.URLCallbacks[url] copy];
-                                                                if (finished) {
-                                                                    [sself.URLCallbacks removeObjectForKey:url];
-                                                                }
-                                                            });
-                                                            for (NSDictionary *callbacks in callbacksForURL) {
-                                                                SDWebImageDownloaderCompletedBlock callback = callbacks[kCompletedCallbackKey];
-                                                                if (callback) callback(image, data, error, finished);
-                                                            }
-                                                        }
-                                                        cancelled:^{
-                                                            SDWebImageDownloader *sself = wself;
-                                                            if (!sself) return;
-                                                            dispatch_barrier_async(sself.barrierQueue, ^{
-                                                                [sself.URLCallbacks removeObjectForKey:url];
-                                                            });
-                                                        }];
-        operation.shouldDecompressImages = wself.shouldDecompressImages;
-        
-        if (wself.username && wself.password) {
-            operation.credential = [NSURLCredential credentialWithUser:wself.username password:wself.password persistence:NSURLCredentialPersistenceForSession];
-        }
-        
-        if (options & SDWebImageDownloaderHighPriority) {
-            operation.queuePriority = NSOperationQueuePriorityHigh;
-        } else if (options & SDWebImageDownloaderLowPriority) {
-            operation.queuePriority = NSOperationQueuePriorityLow;
-        }
-
-        [wself.downloadQueue addOperation:operation];
-        if (wself.executionOrder == SDWebImageDownloaderLIFOExecutionOrder) {
-            // Emulate LIFO execution order by systematically adding new operations as last operation's dependency
-            [wself.lastAddedOperation addDependency:operation];
-            wself.lastAddedOperation = operation;
-        }
-    }];
-
-    return operation;
-}
-
-- (void)addProgressCallback:(SDWebImageDownloaderProgressBlock)progressBlock andCompletedBlock:(SDWebImageDownloaderCompletedBlock)completedBlock forURL:(NSURL *)url createCallback:(SDWebImageNoParamsBlock)createCallback {
-    // The URL will be used as the key to the callbacks dictionary so it cannot be nil. If it is nil immediately call the completed block with no image or data.
-    if (url == nil) {
-        if (completedBlock != nil) {
-            completedBlock(nil, nil, nil, NO);
-        }
-        return;
+    if ([delegate respondsToSelector:@selector(imageDownloaderDidFinish:)])
+    {
+        [delegate performSelector:@selector(imageDownloaderDidFinish:) withObject:self];
     }
 
-    dispatch_barrier_sync(self.barrierQueue, ^{
-        BOOL first = NO;
-        if (!self.URLCallbacks[url]) {
-            self.URLCallbacks[url] = [NSMutableArray new];
-            first = YES;
-        }
-
-        // Handle single download of simultaneous download request for the same URL
-        NSMutableArray *callbacksForURL = self.URLCallbacks[url];
-        NSMutableDictionary *callbacks = [NSMutableDictionary new];
-        if (progressBlock) callbacks[kProgressCallbackKey] = [progressBlock copy];
-        if (completedBlock) callbacks[kCompletedCallbackKey] = [completedBlock copy];
-        [callbacksForURL addObject:callbacks];
-        self.URLCallbacks[url] = callbacksForURL;
-
-        if (first) {
-            createCallback();
-        }
-    });
+    if ([delegate respondsToSelector:@selector(imageDownloader:didFinishWithImage:)])
+    {
+        UIImage *image = SDScaledImageForPath(url.absoluteString, imageData);
+        [[SDWebImageDecoder sharedImageDecoder] decodeImage:image withDelegate:self userInfo:nil];
+    }
 }
 
-- (void)setSuspended:(BOOL)suspended {
-    [self.downloadQueue setSuspended:suspended];
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+
+    if ([delegate respondsToSelector:@selector(imageDownloader:didFailWithError:)])
+    {
+        [delegate performSelector:@selector(imageDownloader:didFailWithError:) withObject:self withObject:error];
+    }
+
+    self.connection = nil;
+    self.imageData = nil;
 }
+*/
+
+#pragma mark SDWebImageDecoderDelegate
+
+- (void)imageDecoder:(SDWebImageDecoder *)decoder didFinishDecodingImage:(UIImage *)image userInfo:(NSDictionary *)userInfo
+{
+    [delegate performSelector:@selector(imageDownloader:didFinishWithImage:) withObject:self withObject:image];
+}
+
+#pragma mark NSObject
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    SDWISafeRelease(url);
+    SDWISafeRelease(connection);
+    SDWISafeRelease(imageData);
+    SDWISafeRelease(userInfo);
+    SDWISuperDealoc;
+}
+
 
 @end
