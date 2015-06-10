@@ -4397,9 +4397,9 @@
         if (inPopName.length == 0) {
             return;
         }
-        if (meBrwView.mType == F_EBRW_VIEW_TYPE_POPOVER) {
-            return;
-        }
+        //if (meBrwView.mType == F_EBRW_VIEW_TYPE_POPOVER) {
+        //    return;
+        //}
         int bottom=0;
         [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
     }
