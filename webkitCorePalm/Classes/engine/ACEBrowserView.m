@@ -683,6 +683,19 @@ const CGFloat loadingVisibleHeight = 60.0f;
     }
     
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    
+    if (![[[touch.view class] description] isEqualToString:@"UIWebBrowserView"]) {
+        
+        return NO;
+        
+    }
+    
+    return YES;
+    
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
 }
