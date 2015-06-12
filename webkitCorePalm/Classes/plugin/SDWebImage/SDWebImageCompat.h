@@ -9,6 +9,14 @@
 
 #import <TargetConditionals.h>
 
+#ifdef __OBJC_GC__
+#error SDWebImage does not support Objective-C Garbage Collection
+#endif
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_5_0
+#error SDWebImage doesn't support Deployement Target version < 5.0
+#endif
+
 #if !TARGET_OS_IPHONE
 #import <AppKit/AppKit.h>
 #ifndef UIImage
@@ -18,63 +26,47 @@
 #define UIImageView NSImageView
 #endif
 #else
+
 #import <UIKit/UIKit.h>
+
 #endif
 
-#if ! __has_feature(objc_arc)
-#define SDWIAutorelease(__v) ([__v autorelease]);
-#define SDWIReturnAutoreleased SDWIAutorelease
+#ifndef NS_ENUM
+#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
+#endif
 
-#define SDWIRetain(__v) ([__v retain]);
-#define SDWIReturnRetained SDWIRetain
+#ifndef NS_OPTIONS
+#define NS_OPTIONS(_type, _name) enum _name : _type _name; enum _name : _type
+#endif
 
-#define SDWIRelease(__v) ([__v release]);
-#define SDWISafeRelease(__v) ([__v release], __v = nil);
-#define SDWISuperDealoc [super dealloc];
-
-#define SDWIWeak
+#if OS_OBJECT_USE_OBJC
+    #undef SDDispatchQueueRelease
+    #undef SDDispatchQueueSetterSementics
+    #define SDDispatchQueueRelease(q)
+    #define SDDispatchQueueSetterSementics strong
 #else
-// -fobjc-arc
-#define SDWIAutorelease(__v)
-#define SDWIReturnAutoreleased(__v) (__v)
-
-#define SDWIRetain(__v)
-#define SDWIReturnRetained(__v) (__v)
-
-#define SDWIRelease(__v)
-#define SDWISafeRelease(__v) (__v = nil);
-#define SDWISuperDealoc
-
-#define SDWIWeak __unsafe_unretained
+#undef SDDispatchQueueRelease
+#undef SDDispatchQueueSetterSementics
+#define SDDispatchQueueRelease(q) (dispatch_release(q))
+#define SDDispatchQueueSetterSementics assign
 #endif
 
+extern UIImage *SDScaledImageForKey(NSString *key, UIImage *image);
 
-NS_INLINE UIImage *SDScaledImageForPath(NSString *path, NSData *imageData)
-{
-    if (!imageData)
-    {
-        return nil;
+typedef void(^SDWebImageNoParamsBlock)();
+
+extern NSString *const SDWebImageErrorDomain;
+
+#define dispatch_main_sync_safe(block)\
+    if ([NSThread isMainThread]) {\
+        block();\
+    } else {\
+        dispatch_sync(dispatch_get_main_queue(), block);\
     }
 
-    UIImage *image = [[UIImage alloc] initWithData:imageData];
-
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-    {
-        CGFloat scale = 1.0;
-        if (path.length >= 8)
-        {
-            // Search @2x. at the end of the string, before a 3 to 4 extension length (only if key len is 8 or more @2x. + 4 len ext)
-            NSRange range = [path rangeOfString:@"@2x." options:0 range:NSMakeRange(path.length - 8, 5)];
-            if (range.location != NSNotFound)
-            {
-                scale = 2.0;
-            }
-        }
-
-        UIImage *scaledImage = [[UIImage alloc] initWithCGImage:image.CGImage scale:scale orientation:UIImageOrientationUp];
-        SDWISafeRelease(image)
-        image = scaledImage;
+#define dispatch_main_async_safe(block)\
+    if ([NSThread isMainThread]) {\
+        block();\
+    } else {\
+        dispatch_async(dispatch_get_main_queue(), block);\
     }
-
-    return SDWIReturnAutoreleased(image);
-}
