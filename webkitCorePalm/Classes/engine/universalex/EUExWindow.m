@@ -4811,9 +4811,9 @@
     }
     NSString *str = [inArgument objectAtIndex:0];
     BOOL multiPopoverFlippingEnbaled=NO;
-    if([str isEqual:@"0"]) {
+    if([str isEqual:@"1"]) {
         multiPopoverFlippingEnbaled = NO;
-    }else if([str isEqual:@"1"]) {
+    }else if([str isEqual:@"0"]) {
         multiPopoverFlippingEnbaled = YES;
     }else{
         return;
