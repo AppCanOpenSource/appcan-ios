@@ -33,9 +33,9 @@
 @synthesize mOldTransform;
 
 - (void)dealloc {
-	[super dealloc];
 	[mName release];
-	[mFinishFunc release];
+    [mFinishFunc release];
+    [super dealloc];
 }
 
 
