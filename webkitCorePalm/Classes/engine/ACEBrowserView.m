@@ -821,7 +821,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
             }
             
             //2015.5.18 新增onPopoverLoadFinishInRootWnd(name,url)接口
+<<<<<<< HEAD
             initStr = [[NSString alloc] initWithFormat:@"uexWindow.onPopoverLoadFinishInRootWnd('%@', '%@');",self.muexObjName,[self.currentUrl absoluteString]];
+=======
+            initStr = [[NSString alloc] initWithFormat:@"uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");",self.muexObjName,[self.currentUrl absoluteString]];
+>>>>>>> upstream/master
             [EUtility evaluatingJavaScriptInRootWnd:initStr];
             [initStr release];
             
