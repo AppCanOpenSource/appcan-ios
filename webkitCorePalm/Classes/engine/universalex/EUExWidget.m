@@ -83,7 +83,62 @@
 	[super dealloc];
 }
 
-
+- (void)reloadWidgetByAppId:(NSMutableArray *)inArguments {
+    
+    if ([inArguments count] < 1) {
+        
+        return;
+        
+    }
+    
+    NSString * appId = [inArguments objectAtIndex:0];
+    
+    EBrowserWidgetContainer * eBrwWgtContainer = meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
+    
+    EBrowserWindowContainer * eBrwWndContainer = (EBrowserWindowContainer *)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:appId];
+    
+    
+    if (eBrwWndContainer.mBrwWndDict) {
+        
+        NSArray * brwWndArray = [eBrwWndContainer.mBrwWndDict allValues];
+        
+        for (EBrowserWindow * brwWnd in brwWndArray) {
+            
+            if (brwWnd.mPopoverBrwViewDict) {
+                
+                NSArray * brwPopViews = [brwWnd.mPopoverBrwViewDict allValues];
+                
+                for (EBrowserView * brwView in brwPopViews) {
+                    
+                    [brwView reload];
+                    
+                }
+                
+            }
+            
+            if (brwWnd.meBrwView) {
+                
+                [brwWnd.meBrwView reload];
+                
+            }
+            
+            if (brwWnd.meTopSlibingBrwView) {
+                
+                [brwWnd.meTopSlibingBrwView reload];
+                
+            }
+            
+            if (brwWnd.meBottomSlibingBrwView) {
+                
+                [brwWnd.meBottomSlibingBrwView reload];
+                
+            }
+            
+        }
+        
+    }
+    
+}
 
 -(void)setLogServerIp:(NSMutableArray *)inArguments {
     
