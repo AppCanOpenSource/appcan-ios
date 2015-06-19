@@ -505,7 +505,7 @@
         
     } else {
         
-        if ([inArguments count] > 2)
+        if ([inArguments count] > 1)
         {
             
             NSString *iTunesURL = [inArguments objectAtIndex:1];
