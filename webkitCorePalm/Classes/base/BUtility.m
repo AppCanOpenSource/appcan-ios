@@ -1199,6 +1199,12 @@ static NSString *clientCertificatePwd = nil;
 	
 }
 
++ (NSString *)bundleIdentifier {
+    
+    return [Beqtucontent getBundleIdentifier];
+    
+}
+
 +(NSString*)appKey{
     if(F_DEVELOPMENT_USE==NO){
         return [Beqtucontent getContentPath];
