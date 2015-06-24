@@ -44,6 +44,7 @@
         self.useCertificateControl = NO;
         self.useIsHiddenStatusBarControl = NO;
         self.useAppCanUpdateURL = @"";
+        self.signVerifyControl = NO;
 	}
 	return self;
 }
