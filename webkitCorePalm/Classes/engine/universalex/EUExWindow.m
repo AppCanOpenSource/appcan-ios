@@ -321,6 +321,16 @@
 	[mbAlertView.mAlertView show];
 }
 
+- (void)reload:(NSMutableArray *)inArguments {
+    
+    if (meBrwView) {
+        
+        [meBrwView reload];
+        
+    }
+    
+}
+
 - (void)prompt:(NSMutableArray *)inArguments{
 	NSString *inTitle = [inArguments objectAtIndex:0];
     if (inTitle==nil || inTitle.length<=0 )
