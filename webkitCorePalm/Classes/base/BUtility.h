@@ -199,4 +199,5 @@ typedef union _BGColor {
 +(NSDictionary *)getMainWidgetConfigWindowBackground;
 +(NSString *)getMainWidgetConfigLogserverip;
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
++ (NSString *)bundleIdentifier;
 @end

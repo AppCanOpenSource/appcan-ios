@@ -20,12 +20,32 @@
 
 @implementation Beqtucontent
 
-static NSString *html5appcandemo = @"26cf1a0e-6d52-41aa-bb54-f4efe8a35d33";
+static NSString * html5appcandemo = @"26cf1a0e-6d52-41aa-bb54-f4efe8a35d33";
 
-+(NSString*)getContentPath{
+static NSString * bundleIdentifier = @"com.zywx.appcan";
+
++ (NSString *)getContentPath {
+    
     if (!html5appcandemo) {
+        
         return @"";
+        
     }
-return html5appcandemo;
+    
+    return html5appcandemo;
+    
 }
+
++ (NSString *)getBundleIdentifier {
+    
+    if (!bundleIdentifier) {
+        
+        return @"";
+        
+    }
+    
+    return bundleIdentifier;
+    
+}
+
 @end
