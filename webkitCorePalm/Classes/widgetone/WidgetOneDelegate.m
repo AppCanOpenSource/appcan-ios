@@ -225,6 +225,8 @@ NSString *AppCanJS = nil;
         self.useAppCanMDMURL=@"";
         self.useAppCanMDMURLControl=NO;
         self.isFirstPageDidLoad = NO;
+        //本地签名校验开关
+        self.signVerifyControl = NO;
         
         [self setAppCanUserAgent];
         

@@ -46,6 +46,7 @@
 @property (nonatomic) BOOL useCloseAppWithJaibroken;
 @property (nonatomic) BOOL useRC4EncryptWithLocalstorage;
 @property (nonatomic) BOOL useUpdateWgtHtmlControl;
+@property (nonatomic) BOOL signVerifyControl;
 @property (nonatomic) BOOL useCertificateControl;
 @property (nonatomic) BOOL useIsHiddenStatusBarControl;
 @property (nonatomic,readonly) BOOL useEraseAppDataControl;
