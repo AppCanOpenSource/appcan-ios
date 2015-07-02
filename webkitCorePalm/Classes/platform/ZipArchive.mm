@@ -244,6 +244,7 @@
 			}
 			else if( read<0 )
 			{
+                success = NO;
 				[self OutputErrorMessage:@"Failed to reading zip file"];
 				break;
 			}
