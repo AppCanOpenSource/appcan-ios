@@ -29,8 +29,9 @@
 #import "EUExWindow.h"
 
 
-
-
+@interface EBrowserWindow()
+@property(nonatomic,assign)BOOL isTopWindow;
+@end
 
 @implementation EBrowserWindow
 
@@ -127,6 +128,7 @@
 	[mOAuthWndName release];
 	mOAuthWndName = nil;
     [_windowName release];
+    [self deregisterWindowSequenceChange];
 	[super dealloc];
 }
 
@@ -176,6 +178,8 @@
 		mOpenAnimiId = 0;
     }
 	ACENSLog(@"EBrowserWindow alloc is %x", self);
+    self.isTopWindow=NO;
+    [self registerWindowSequenceChange];
     return self;
 }
 
@@ -345,6 +349,67 @@
         
     }
     return self.meBrwView;
+    
+}
+
+#pragma mark - onWindowAppear & onWindowDisappear
+//20150703 by lkl
+
+NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
+
+-(void)registerWindowSequenceChange{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(wndSeqChange) name:cDidWindowSequenceChange object:nil];
+}
+-(void)deregisterWindowSequenceChange{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:cDidWindowSequenceChange object:nil];
+}
+
+
+-(void)onWindowAppear{
+
+
+    [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowAppear != null){uexWindow.onWindowAppear();}"];
+}
+-(void)onWindowDisappear{
+
+
+    [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowDisappear != null){uexWindow.onWindowDisappear();}"];
+}
+-(void)wndSeqChange{
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
+        if([eBrwWndContainer respondsToSelector:@selector(aboveWindow)]){
+            
+            EBrowserWindow * topWindow=[eBrwWndContainer aboveWindow];
+
+            if(self == topWindow && !_isTopWindow){
+
+                [self performSelectorOnMainThread:@selector(onWindowAppear) withObject:nil waitUntilDone:NO];
+                
+                
+                _isTopWindow=YES;
+                return;
+            }
+            if(self != topWindow && _isTopWindow){
+
+                [self performSelectorOnMainThread:@selector(onWindowDisappear) withObject:nil waitUntilDone:NO];
+                
+                _isTopWindow=NO;
+                return;
+            }
+            
+        }
+
+    });
+    
+}
+
++(void)postWindowSequenceChange{
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 300ull * NSEC_PER_MSEC);
+    dispatch_after(time, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+       [[NSNotificationCenter defaultCenter] postNotificationName:cDidWindowSequenceChange object:nil];
+    });
     
 }
 
