@@ -166,6 +166,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWidget.setSpaceEnable = function(){ uex.exec('uexWidget.setSpaceEnable/');};"
 "uexWidget.setPushState = function(){ uex.exec('uexWidget.setPushState/'+uexJoin(arguments));};"
 "uexWidget.setLogServerIp = function(){ uex.exec('uexWidget.setLogServerIp/'+uexJoin(arguments));};"
+//20150703 by lkl
+"uexWidget.isAppInstalled = function(){ uex.exec('uexWidget.isAppInstalled/'+uexJoin(arguments));};"
 
 "window.uexWindow={}; uexWindow.cbConfirm = null; uexWindow.cbPrompt = null; uexWindow.cbActionSheet = null; uexWindow.cbGetState = null; uexWindow.cbGetUrlQuery = null; uexWindow.onOAuthInfo = null; uexWindow.onStateChange = null; uexWindow.onBounceStateChange = null; uexWindow.didShowKeyboard = 0; uexWindow.onAnimationFinish = null;"
 "uexWindow.forward=function(){ uex.exec('uexWindow.forward/');};"

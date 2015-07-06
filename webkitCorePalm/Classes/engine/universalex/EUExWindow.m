@@ -1768,6 +1768,7 @@
 		ACENSLog(@"reset brw opening flag");
 		ACENSLog(@"reset brwWnd opening flag");
 	}
+    [EBrowserWindow postWindowSequenceChange];
 }
 - (void)closeByName:(NSMutableArray *)inArguments {
     NSString *windowName=[inArguments objectAtIndex:0];
@@ -2137,6 +2138,7 @@
             }
         }
 	}
+    [EBrowserWindow postWindowSequenceChange];
 }
 
 -(void)setSwipeRate:(NSMutableArray *)inArguments
@@ -3106,6 +3108,7 @@
 			[eBrwWnd.meBackWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
 		}
 	}
+    [EBrowserWindow postWindowSequenceChange];
 }
 
 - (void)windowForward:(NSMutableArray *)inArguments {
@@ -3182,6 +3185,7 @@
 			[eBrwWnd.meFrontWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
 		}
 	}
+     [EBrowserWindow postWindowSequenceChange];
 }
 
 - (void)loadObfuscationData:(NSMutableArray *)inArguments {
@@ -3861,6 +3865,7 @@
     }
     
     meBrwView.meBrwWnd.hidden = hidden;
+    [EBrowserWindow postWindowSequenceChange];
 }
 
 - (void)setPopoverFrame:(NSMutableArray *)inArguments {
@@ -4181,6 +4186,7 @@
         
         [eBrwWndContainer insertSubview:windowA aboveSubview:windowB];
     }
+    [EBrowserWindow postWindowSequenceChange];
 }
 -(void)insertWindowBelowWindow:(NSArray*)inArgument
 {
@@ -4204,6 +4210,7 @@
         
         [eBrwWndContainer insertSubview:windowA belowSubview:windowB];
     }
+    [EBrowserWindow postWindowSequenceChange];
 }
 
 #pragma mark
@@ -4850,5 +4857,7 @@
         }
     };
 }
+
+
 
 @end

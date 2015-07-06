@@ -899,5 +899,22 @@
         eBrwMainFrm.meBrwToolBar.flag=1;
     }
 }
+#pragma mark - isAppInstalled
+//20150706 by lkl
+-(void)isAppInstalled:(NSMutableArray *)inArguments{
+    if([inArguments count]<1) return;
+    id appData=[inArguments[0] JSONValue];
+    if([appData isKindOfClass:[NSDictionary class]]&&[appData objectForKey:@"appData"]&&[[appData objectForKey:@"appData"] isKindOfClass:[NSString class]]){
+        NSString *urlScheme =[appData objectForKey:@"appData"];
+        BOOL isInstalled=[[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlScheme]];
+        NSString *result =@"1";
+        if(isInstalled){
+            result=@"0";
+        }
+        NSDictionary *dict=[NSDictionary dictionaryWithObject:result forKey:@"installed"];
+        NSString* jsStr=[NSString stringWithFormat:@"if(uexWidget.cbIsAppInstalled != null){uexWidget.cbIsAppInstalled('%@');}",[dict JSONFragment]];
+        [EUtility brwView:meBrwView evaluateScript:jsStr];
+    }
+}
 
 @end
