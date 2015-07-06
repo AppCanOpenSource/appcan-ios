@@ -87,4 +87,7 @@
 - (void)cleanAllBrwViews;
 - (void)clean;
 -(EBrowserView *)theFrontView;
+
+
++(void)postWindowSequenceChange;
 @end
