@@ -72,6 +72,13 @@
 #define F_CB_WINDOW_ACTION_SHEET			@"uexWindow.cbActionSheet"
 #define F_CB_WINDOW_GET_STATE				@"uexWindow.cbGetState"
 
+
+
+
+
+
+
+
 @interface EUExWindow : EUExBase<UIActionSheetDelegate,UIScrollViewDelegate>{
 	UIActionSheet *mActionSheet;
 	BUIAlertView *mbAlertView;
