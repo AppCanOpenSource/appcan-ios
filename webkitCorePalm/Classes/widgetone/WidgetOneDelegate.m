@@ -655,6 +655,16 @@ NSString *AppCanJS = nil;
                                 
                             }
                             
+                        } else if (paramUrlArray1 != NULL && parmStrArray.count == 1) {
+                            
+                            NSString * paramValue = [parmStrArray objectAtIndex:0];
+                            
+                            if (paramValue) {
+                                
+                                [self performSelector:@selector(delayLoadByOtherAppWithParam:) withObject:paramValue afterDelay:1.0];
+                                
+                            }
+                            
                         }
                         
                     }
@@ -679,6 +689,14 @@ NSString *AppCanJS = nil;
     [self invokeAppDelegateMethod:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     
 	return YES;
+}
+
+- (void)delayLoadByOtherAppWithParam:(NSString *)param {
+    
+    NSString * jsSuccessCB = [NSString stringWithFormat:@"uexWidget.onLoadByOtherApp(\'%@\');",param];
+    
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
+    
 }
 
 - (void)delayLoadByOtherApp {
