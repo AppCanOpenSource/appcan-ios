@@ -532,7 +532,8 @@ static NSString *clientCertificatePwd = nil;
 	   [inUrl hasPrefix:F_APP_PATH]||
 	   [inUrl hasPrefix:F_RES_PATH]||
 	   [inUrl hasPrefix:F_DATA_PATH]||
-	   [inUrl hasPrefix:F_BOX_PATH]) {
+	   [inUrl hasPrefix:F_BOX_PATH]||
+       [inUrl hasPrefix:@"file://"]) {
 		
 		return inUrl;
 		
