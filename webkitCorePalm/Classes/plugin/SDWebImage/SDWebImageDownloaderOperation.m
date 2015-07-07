@@ -11,13 +11,15 @@
 #import "UIImage+MultiFormat.h"
 #import <ImageIO/ImageIO.h>
 #import "SDWebImageManager.h"
+#import "BUtility.h"
+#import "WidgetOneDelegate.h"
 
 NSString *const SDWebImageDownloadStartNotification = @"SDWebImageDownloadStartNotification";
 NSString *const SDWebImageDownloadReceiveResponseNotification = @"SDWebImageDownloadReceiveResponseNotification";
 NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNotification";
 NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinishNotification";
 
-@interface SDWebImageDownloaderOperation () <NSURLConnectionDataDelegate>
+@interface SDWebImageDownloaderOperation () <NSURLConnectionDataDelegate,NSURLConnectionDelegate>
 
 @property (copy, nonatomic) SDWebImageDownloaderProgressBlock progressBlock;
 @property (copy, nonatomic) SDWebImageDownloaderCompletedBlock completedBlock;
@@ -443,7 +445,12 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
 
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
     if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
-        if (!(self.options & SDWebImageDownloaderAllowInvalidSSLCertificates) &&
+        
+        NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+        if (PKCS12Data) {
+            NSURLCredential * urlCredential = [self getAppCanURLCredential];
+            [[challenge sender] useCredential:urlCredential forAuthenticationChallenge:challenge];
+        }else if (!(self.options & SDWebImageDownloaderAllowInvalidSSLCertificates) &&
             [challenge.sender respondsToSelector:@selector(performDefaultHandlingForAuthenticationChallenge:)]) {
             [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
         } else {
@@ -451,7 +458,12 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
         }
     } else {
-        if ([challenge previousFailureCount] == 0) {
+        
+        NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+        if (PKCS12Data) {
+            NSURLCredential * urlCredential = [self getAppCanURLCredential];
+            [[challenge sender] useCredential:urlCredential forAuthenticationChallenge:challenge];
+        } else if ([challenge previousFailureCount] == 0) {
             if (self.credential) {
                 [[challenge sender] useCredential:self.credential forAuthenticationChallenge:challenge];
             } else {
@@ -460,7 +472,26 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
         } else {
             [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
         }
+        
     }
+    
 }
+
+- (NSURLCredential *)getAppCanURLCredential {
+    
+    SecIdentityRef identity = NULL;
+    SecTrustRef trust = NULL;
+    SecCertificateRef certChain=NULL;
+    NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+    [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+    NSArray * certificates = [NSArray arrayWithObject:(__bridge id)(certChain)];
+    
+    NSURLCredential * urlCredential = [NSURLCredential credentialWithIdentity:identity certificates:certificates persistence:NSURLCredentialPersistencePermanent];
+    return urlCredential;
+    
+}
+
+
+
 
 @end
