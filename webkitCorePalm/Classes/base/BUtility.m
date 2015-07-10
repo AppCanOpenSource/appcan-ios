@@ -1733,11 +1733,56 @@ static NSString *clientCertificatePwd = nil;
 		//
 		[tmpDict removeAllObjects];
 		[configParser release];
-	}
+        
+    } else {//目录不存在说明还没有拷贝到document目录，所以回到原始目录找config文件
+        
+        inFileName = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+        
+        NSData * configData = [NSData dataWithContentsOfFile:inFileName];
+        
+        AllConfigParser * configParser = [[AllConfigParser alloc]init];
+        
+        BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
+        
+        if (isEncrypt) {
+            
+            NSURL * url = nil;
+            
+            if ([inFileName hasSuffix:@"file://"]) {
+                
+                url = [BUtility stringToUrl:inFileName];
+                
+            } else {
+                
+                url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
+                
+            }
+            
+            FileEncrypt * encryptObj = [[FileEncrypt alloc]init];
+            
+            NSString * data = [encryptObj decryptWithPath:url appendData:nil];
+            
+            [encryptObj release];
+            
+            configData = [data dataUsingEncoding:NSUTF8StringEncoding];
+            
+        }
+        
+        NSMutableDictionary * tmpDict = [configParser initwithReqData:configData];
+        
+        xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
+        
+        [tmpDict removeAllObjects];
+        
+        [configParser release];
+        
+    }
     
     //
     NSString *interfice = [xmlDict objectForKey:CONFIG_TAG_ORIENTATION];
+    
     return interfice;
+    
 }
 
 //--获取config里windowBackground
