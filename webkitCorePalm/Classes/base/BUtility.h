@@ -55,6 +55,7 @@
 
 #define F_UD_StandardWgt          @"standWgt"
 #define F_UD_UpdateWgtID        @"AppCanWgtID"
+#define F_UD_WgtCopyFinish       @"AppCanWgtCopyFinish"
 
 //clientCertificate.p12
 //#define ClientCertficate_PATH [NSString stringWithFormat:@"%@/Documents/widget/wgtRes/clientCertificate.p12", NSHomeDirectory()]
