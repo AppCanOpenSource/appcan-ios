@@ -235,27 +235,61 @@
     }
     int mOrientaion =meBrwView.mwWgt.orientation;
     int subOrientation = wgtObj.orientation;
-    if (subOrientation==mOrientaion)
-    {;}
-    else if (subOrientation==2 || subOrientation==3 || subOrientation==10 || subOrientation==6 || subOrientation==7 || subOrientation==14 || subOrientation==16)
-    {
+    
+    if (subOrientation == mOrientaion || subOrientation == 15) {
+        
+        //nothing
+        
+    } else if (subOrientation == 2 || subOrientation == 10) {
+        
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-        {
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-        }
-    }else
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-        {
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
             [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeRight];
+            
         }
+        
+    } else if (subOrientation == 8) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+        
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
+            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
+            
+        }
+        
+    } else if (subOrientation == 1 || subOrientation == 5) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+        
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
+            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
+            
+        }
+        
+    } else if (subOrientation == 4) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+        
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
+            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortraitUpsideDown];
+            
+        }
+        
     }
+    
 	//ACENSLog(@"wgtObj retaincount=%d",[wgtObj retainCount]);
 	if(wgtObj){
 		meBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WIDGET_IN_OPENING;
@@ -378,26 +412,59 @@
     int mOrientaion = [[BUtility getMainWidgetConfigInterface]intValue];
     int subOrientation =meBrwView.mwWgt.orientation;
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
-    if (subOrientation==mOrientaion)
-    {;}
-    else if (mOrientaion==1 || mOrientaion==5 || mOrientaion==3 || mOrientaion==9 || mOrientaion==11)
-    {
+    
+    if (subOrientation == mOrientaion || mOrientaion == 15) {
+        
+        //nothing
+        
+    } else if (mOrientaion == 2 || mOrientaion == 10) {
+        
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-        {
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
+            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeRight];
+            
         }
-    }else
-    {
+        
+    } else if (mOrientaion == 8) {
+        
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-        {
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
             [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
+            
         }
+        
+    } else if (mOrientaion == 1 || mOrientaion == 5) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+        
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
+            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
+            
+        }
+        
+    } else if (mOrientaion == 4) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+        
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            
+            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortraitUpsideDown];
+            
+        }
+        
     }
     
     
