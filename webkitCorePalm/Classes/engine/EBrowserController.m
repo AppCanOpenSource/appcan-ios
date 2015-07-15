@@ -252,18 +252,40 @@
     //        }
     //    }
 }
+
 #pragma mark - UPdateWgtHtml
--(void)doUpdateWgt{
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+
+- (void)doUpdateWgt {
     
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
     
     BOOL isNeedCopy = [mwWgtMgr isNeetUpdateWgt];
-    if (isNeedCopy) {
-        [self copyWgtToDocument];
+    
+    BOOL isCopyFinish = [[ud objectForKey:F_UD_WgtCopyFinish] boolValue];
+    
+    if (isNeedCopy || !isCopyFinish) {
+        
+        isCopyFinish = NO;
+        
+        [ud setObject:@"NO" forKey:F_UD_WgtCopyFinish];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            [self copyWgtToDocument];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+                
+            });
+            
+        });
+        
     }
+    
     //升级解压
     NSString *updateWgtID = [ud objectForKey:F_UD_UpdateWgtID];
-    if (updateWgtID) {
+    if (updateWgtID && isCopyFinish) {
         //初始化Documents路径
         NSArray *cacheList = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *folderPath = [cacheList objectAtIndex:0];
