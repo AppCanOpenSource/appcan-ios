@@ -271,11 +271,27 @@
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            [self copyWgtToDocument];
+            NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didStartCopyWidget");
+            
+            NSAutoreleasePool * autoReleasePool = [[NSAutoreleasePool alloc]init];
+            
+            BOOL isCopyFinishAndSuccess = [self copyWgtToDocument];
+            
+            [autoReleasePool drain];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+                if (isCopyFinishAndSuccess) {
+                    
+                    [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+                    
+                    NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didFinishCopyWidget");
+                    
+                } else {
+                    
+                    NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didNotFinishCopyWidget");
+                    
+                }
                 
             });
             
@@ -308,68 +324,124 @@
     }
 }
 
--(BOOL)copyWgtToDocument{
-    NSError *error;
-    NSFileManager *fileMgr =[NSFileManager defaultManager];
-	NSString *wgtOldPath =[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"widget"];
-    NSString *wgtNewPath = nil;
-    if ([BUtility getSDKVersion]<5.0) {
+- (BOOL)copyWgtToDocument {
+    
+    NSError * error;
+    
+    NSFileManager * fileMgr = [NSFileManager defaultManager];
+    
+	NSString * wgtOldPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"widget"];
+    
+    NSString * wgtNewPath = nil;
+    
+    if ([BUtility getSDKVersion] < 5.0) {
+        
         wgtNewPath = [BUtility getCachePath:@"widget"];
-    }else {
+        
+    } else {
+        
         wgtNewPath =[BUtility getDocumentsPath:@"widget"];
+        
     }
+    
     BOOL folderFlag = YES;
+    
     if (![fileMgr fileExistsAtPath:wgtNewPath isDirectory:&folderFlag]) {
-        BOOL result =[fileMgr createDirectoryAtPath:wgtNewPath withIntermediateDirectories:NO attributes:nil error:&error];
+        
+        BOOL result = [fileMgr createDirectoryAtPath:wgtNewPath withIntermediateDirectories:NO attributes:nil error:&error];
+        
         [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtNewPath]];
+        
         if (!result && error) {
-            ACENSLog(@"Failed to create wgt folder: %@ (error: %@)", wgtNewPath, error);
+            
+            NSLog(@"xrg-->copyWgtToDocument-->Failed to create wgt folder: %@ (error: %@)", wgtNewPath, error);
+            
             return NO;
+            
         }
+        
     }
     
     if ([fileMgr fileExistsAtPath:wgtOldPath]) {
-        NSError *error;
-        NSDirectoryEnumerator* oldWgtEnumerator = [fileMgr enumeratorAtPath:wgtOldPath];
-        NSString* fileName = nil;
+        
+        NSError * error;
+        
+        NSDirectoryEnumerator * oldWgtEnumerator = [fileMgr enumeratorAtPath:wgtOldPath];
+        
+        NSString * fileName = nil;
+        
         BOOL result;
+        
         while ((fileName = [oldWgtEnumerator nextObject])) {
-            NSString* oldFilePath = [wgtOldPath stringByAppendingPathComponent:fileName];
-            NSString* newFilePath = [wgtNewPath stringByAppendingPathComponent:fileName];
+            
+            NSString * oldFilePath = [wgtOldPath stringByAppendingPathComponent:fileName];
+            
+            NSString * newFilePath = [wgtNewPath stringByAppendingPathComponent:fileName];
+            
             BOOL flag = YES;
+            
             if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
+                
                 if (!flag) {
+                    
                     if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
+                        
                         if ([fileMgr fileExistsAtPath:newFilePath]) {
+                            
                             result = [fileMgr removeItemAtPath:newFilePath error:&error];
+                            
                             if (!result && error) {
-                                ACENSLog(@"Failed to remove: %@ (error: %@)", newFilePath, error);
+                                
+                                NSLog(@"xrg-->copyWgtToDocument-->Failed to remove: %@ (error: %@)", newFilePath, error);
+                                
                                 return NO;
+                                
                             }
+                            
                         }
+                        
                         result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
+                        
                         if (!result && error) {
-                            ACENSLog(@"Failed to copy: %@ (error: %@)", newFilePath, error);
+                            
+                            NSLog(@"xrg-->copyWgtToDocument-->Failed to copy: %@ (error: %@)", newFilePath, error);
+                            
                             return NO;
+                            
                         }
+                        
                     }
-                }else {
-                    result =[fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
+                    
+                } else {
+                    
+                    result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
+                    
                     if (!result && error) {
-                        ACENSLog(@"Failed to create folder: %@ (error: %@)", newFilePath, error);
+                        
+                        NSLog(@"xrg-->copyWgtToDocument-->Failed to create folder: %@ (error: %@)", newFilePath, error);
+                        
                         return NO;
+                        
                     }
                     
                 }
+                
             }
+            
         }
-    }else{
+        
+    } else {
+        
         [BUtility exitWithClearData];
+        
         return NO;
+        
     }
+    
     return YES;
     
 }
+
 - (void)loadView {
 	[super loadView];
     if (!meBrw) {
