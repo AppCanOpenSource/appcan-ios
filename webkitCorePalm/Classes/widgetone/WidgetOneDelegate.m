@@ -570,7 +570,7 @@ NSString *AppCanJS = nil;
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    
+   /*
 	UIApplicationState state = [application applicationState];
     
 	if (state == UIApplicationStateActive) {
@@ -601,7 +601,7 @@ NSString *AppCanJS = nil;
 		application.applicationIconBadgeNumber = 0;
         
 	}
-    
+    */
     [self invokeAppDelegateMethod:application didReceiveLocalNotification:notification];
 }
 
