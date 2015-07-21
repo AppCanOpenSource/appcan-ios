@@ -37,6 +37,8 @@
     self.wgtOrientation = [configOrientation intValue];
     
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTheOrientation:) name:@"changeTheOrientation" object:nil];
+    
     // Do any additional setup after loading the view.
     
 //    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)])
@@ -44,6 +46,26 @@
 //        self.navigationController.interactivePopGestureRecognizer.delegate = self;
 //        //        self.delegate = self;
 //    }
+}
+
+- (void)viewDidUnload {
+    
+    [super viewDidUnload];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"changeTheOrientation" object:nil];
+    
+}
+
+- (void)changeTheOrientation:(NSString *) orArgument
+{
+    NSString * subwgtOrientation = [[NSUserDefaults standardUserDefaults] objectForKey:@"subwgtOrientaion"];
+    
+    if (subwgtOrientation) {
+        
+        self.wgtOrientation = [subwgtOrientation intValue];
+        
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,59 +154,96 @@
     return YES;
 }
 
--(BOOL)shouldAutorotate
-{
+- (BOOL)shouldAutorotate {
+    
     return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations
-{
-    switch (self.wgtOrientation)
-    {
+- (NSUInteger)supportedInterfaceOrientations {
+    
+    switch (self.wgtOrientation) {
+            
         case 1:
+            
             return UIInterfaceOrientationMaskPortrait;
             break;
+            
         case 2:
-            return UIInterfaceOrientationMaskLandscapeLeft;
-            break;
-        case 4:
-            return UIInterfaceOrientationMaskPortraitUpsideDown;
-            break;
-        case 5:
-            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
-            break;
-        case 8:
+            
             return UIInterfaceOrientationMaskLandscapeRight;
             break;
-        case 3:
-            return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskPortrait;
+            
+        case 4:
+            
+            return UIInterfaceOrientationMaskPortraitUpsideDown;
             break;
-        case 9:
-            return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortrait;
+            
+        case 8:
+            
+            return UIInterfaceOrientationMaskLandscapeLeft;
             break;
-        case 10:
+            
+        case 3://3 = 1 + 2
+            
+            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeRight;
+            break;
+            
+        case 5://5 = 1 + 4
+            
+            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+            break;
+            
+        case 6://6 = 2 + 4
+            
+            return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskPortraitUpsideDown;
+            break;
+            
+        case 7://7 = 1 + 2 + 4
+            
+            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationLandscapeRight|UIInterfaceOrientationMaskPortraitUpsideDown;
+            break;
+            
+        case 9://9 = 1 + 8
+            
+            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft;
+            break;
+            
+        case 10://10 = 2 + 8
+            
             return UIInterfaceOrientationMaskLandscape;
             break;
-        case 11:
+            
+        case 11://11 = 1 + 2 + 8
+            
             return UIInterfaceOrientationMaskAllButUpsideDown;
             break;
-        case 12:
-            return UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskLandscapeRight;
+            
+        case 12://12 = 4 + 8
+            
+            return UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskLandscapeLeft;
             break;
-        case 13:
-            return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskLandscapeRight;
+            
+        case 13://13 = 1 + 4 + 8
+            
+            return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskPortraitUpsideDown|UIInterfaceOrientationMaskLandscapeLeft;
             break;
-        case 14:
+            
+        case 14://14 = 2 + 4 + 8
+            
             return UIInterfaceOrientationMaskLandscapeRight|UIInterfaceOrientationMaskLandscapeLeft|UIInterfaceOrientationMaskPortraitUpsideDown;
             break;
-        case 15:
+            
+        case 15://15 = 1 + 2 + 4 +8
+            
             return UIInterfaceOrientationMaskAll;
             break;
             
         default:
             return UIInterfaceOrientationMaskPortrait;
             break;
+            
     }
+    
 }
 
 
