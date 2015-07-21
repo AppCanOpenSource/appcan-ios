@@ -97,17 +97,10 @@
         }
         mwWgtUpdate = [[WWidgetUpdate alloc] init];
 	}
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTheOrientation:) name:@"changeTheOrientation" object:nil];
+    
 	return self;
 }
--(void)changeTheOrientation:(NSString *) orArgument
-{
-    NSString * subwgtOrientation = [[NSUserDefaults standardUserDefaults] objectForKey:@"subwgtOrientaion"];
-    if (subwgtOrientation)
-    {
-        self.wgtOrientation = [subwgtOrientation intValue];
-    }
-}
+
 - (void)dealloc {
 	if (mStartView) {
 		if (mStartView.superview) {
@@ -240,17 +233,8 @@
 	}
     self.wgtOrientation= [[BUtility getMainWidgetConfigInterface]intValue];
 	[mSplashLock unlock];
-    //    int subOrientation = self.wgtOrientation;
-    //    if (subOrientation==2 || subOrientation==3 || subOrientation==10 || subOrientation==6 || subOrientation==7 || subOrientation==14 || subOrientation==16)
-    //    {
-    //        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
-    //        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-    //
-    //        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-    //        {
-    //            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-    //        }
-    //    }
+    
+    
 }
 #pragma mark - UPdateWgtHtml
 -(void)doUpdateWgt{
