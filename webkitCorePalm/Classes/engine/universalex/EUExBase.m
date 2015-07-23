@@ -105,7 +105,8 @@
 		if ([inPath hasPrefix:F_RES_PATH]) {
 			relativePath =[inPath substringFromIndex:6];
 			if (eBrwWndContainer.mwWgt.wgtType==F_WWIDGET_MAINWIDGET) {
-				if (theApp.useUpdateWgtHtmlControl) {
+                BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+				if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
                     if ([BUtility getSDKVersion]<5.0) {
                         absPath =[BUtility getCachePath:@"widget/wgtRes"];
                     }else {
