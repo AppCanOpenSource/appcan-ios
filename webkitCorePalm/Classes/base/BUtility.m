@@ -767,7 +767,8 @@ static NSString *clientCertificatePwd = nil;
 	if ([inUrl hasPrefix:F_RES_PATH]) {
 		inUrl = [inUrl substringFromIndex:5];
         NSString *wgtResPath = nil;
-        if (theApp.useUpdateWgtHtmlControl) {
+        BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+        if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
             if ([BUtility getSDKVersion]<5.0) {
                 wgtResPath =[BUtility getCachePath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
             }else {
@@ -1420,7 +1421,8 @@ static NSString *clientCertificatePwd = nil;
 		if ([inPath hasPrefix:F_RES_PATH]) {
 			relativePath =[inPath substringFromIndex:6];
 			if (eBrwWndContainer.mwWgt.wgtType==F_WWIDGET_MAINWIDGET) {
-                if (theApp.useUpdateWgtHtmlControl) {
+                BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+                if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
                     if ([BUtility getSDKVersion]<5.0) {
                         absPath =[BUtility getCachePath:@"widget/wgtRes"];
                     }else {
@@ -1579,7 +1581,8 @@ static NSString *clientCertificatePwd = nil;
 }
 +(NSString*)clientCertficatePath{
     NSString *basePath =nil;
-    if (theApp.useUpdateWgtHtmlControl) {
+    BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
         if ([BUtility getSDKVersion]<5.0) {
             basePath =[BUtility getCachePath:@""];
         }else {
@@ -1687,7 +1690,8 @@ static NSString *clientCertificatePwd = nil;
 +(NSString * )getMainWidgetConfigInterface
 {
     NSString *inFileName = nil;
-    if (theApp.useUpdateWgtHtmlControl) {
+    BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
         if ([BUtility getSDKVersion]<5.0) {
             inFileName=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
         }else {
@@ -1787,20 +1791,31 @@ static NSString *clientCertificatePwd = nil;
 }
 
 //--获取config里windowBackground
-+(NSDictionary *)getMainWidgetConfigWindowBackground
-{
-    NSString *inFileName = nil;
-    if (theApp.useUpdateWgtHtmlControl) {
-        if ([BUtility getSDKVersion]<5.0) {
-            inFileName=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }else {
++ (NSDictionary *)getMainWidgetConfigWindowBackground {
+    NSString * inFileName = nil;
+    
+    BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+    
+    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
+        
+        if ([BUtility getSDKVersion] < 5.0) {
+            
+            inFileName = [BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+            
+        } else {
+            
             inFileName=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+            
         }
-    }else {
+        
+    } else {
+        
         inFileName=[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+        
     }
     
-	NSMutableDictionary *xmlDict =nil;
+	NSMutableDictionary * xmlDict = nil;
+    
 	if ([[NSFileManager defaultManager] fileExistsAtPath:inFileName]) {
 		NSData *configData = [NSData dataWithContentsOfFile:inFileName];
 		AllConfigParser *configParser=[[AllConfigParser alloc]init];
@@ -1843,7 +1858,8 @@ static NSString *clientCertificatePwd = nil;
 +(NSString *)getMainWidgetConfigLogserverip
 {
     NSString *inFileName = nil;
-    if (theApp.useUpdateWgtHtmlControl) {
+    BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
         if ([BUtility getSDKVersion]<5.0) {
             inFileName=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
         }else {

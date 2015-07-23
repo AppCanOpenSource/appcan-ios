@@ -67,29 +67,44 @@ NSString * webappShowAactivety;
 	return wgtPath;
 
 }
--(void)initMainWidget{
-	NSString *queryMainWidget = [NSString stringWithFormat:@"select * from %@ where wgtType=%d",SQL_WGTS_TABLE,F_WWIDGET_MAINWIDGET];
-	WidgetSQL *widgetSql =[[WidgetSQL alloc] init];
+- (void)initMainWidget {
+    
+	NSString * queryMainWidget = [NSString stringWithFormat:@"select * from %@ where wgtType=%d",SQL_WGTS_TABLE,F_WWIDGET_MAINWIDGET];
+	WidgetSQL * widgetSql = [[WidgetSQL alloc] init];
 	[widgetSql Open_database:SQL_WGTONE_DATABASE];
 	
 	//解析config.xml
-    //12.5
+    
+    BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+    
     NSString *configPath = nil;
-    if (theApp.useUpdateWgtHtmlControl) {
-        if ([BUtility getSDKVersion]<5.0) {
-            configPath=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }else {
-            configPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
+        
+        if ([BUtility getSDKVersion] < 5.0) {
+            
+            configPath = [BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+            
+        } else {
+            
+            configPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+            
         }
-    }else {
+        
+    } else {
+        
         configPath=[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+        
     }
-    NSMutableDictionary *tmpWgtDict = [self wgtParameters:configPath];
-	SpecConfigParser *widgetXml = [[SpecConfigParser alloc] init];
-	NSString *mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
+    
+    NSMutableDictionary * tmpWgtDict = [self wgtParameters:configPath];
+    
+	SpecConfigParser * widgetXml = [[SpecConfigParser alloc] init];
+    
+	NSString * mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
+    
 	[widgetXml release];
     
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    WidgetOneDelegate * app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
     
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
@@ -139,17 +154,29 @@ NSString * webappShowAactivety;
 	} 
 	//写数据操作
 	[self writeWgtToDB:wgtobj createTab:YES];
+    
 	//组合路径,第一次安装的时候 返回
-	NSString *resPath = nil ;
-    if (theApp.useUpdateWgtHtmlControl) {
-        if ([BUtility getSDKVersion]<5.0) {
+    
+	NSString * resPath = nil ;
+    
+    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
+        
+        if ([BUtility getSDKVersion] < 5.0) {
+            
             resPath=[BUtility getCachePath:@""];
-        }else {
+            
+        } else {
+            
             resPath=[BUtility getDocumentsPath:@""];
+            
         }
-    }else {
+        
+    } else {
+        
         resPath=[BUtility getResPath:@""];
+        
     }
+    
 	wgtobj.widgetPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.widgetPath];	
 	if ([BUtility isSimulator]==YES) {
 		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH]) {
