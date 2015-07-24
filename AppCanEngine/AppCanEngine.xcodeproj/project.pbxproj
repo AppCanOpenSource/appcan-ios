@@ -104,6 +104,7 @@
 		3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
 		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
+		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
 		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
@@ -401,6 +402,7 @@
 		3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBrowserView.h; sourceTree = "<group>"; };
 		3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
 		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
+		42FFC7FE1B625D160058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
 		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
@@ -850,6 +852,7 @@
 				5AAA859218B1B93D000D7600 /* BAnimition.m */,
 				5AAA859318B1B93D000D7600 /* BAnimitionTransform.h */,
 				5AAA859418B1B93D000D7600 /* BAnimitionTransform.m */,
+				42FFC7FE1B625D160058E363 /* PackageInfo.h */,
 				5AAA859518B1B93D000D7600 /* Beqtucontent.h */,
 				5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */,
 				5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */,
@@ -1257,6 +1260,7 @@
 				33AF6EC31A448EFD00DC7397 /* MMDrawerController.h in Headers */,
 				5AAA86A118B1B93D000D7600 /* SBJsonBase.h in Headers */,
 				33774C6B1B2A6D3500D5F279 /* UIImage+MultiFormat.h in Headers */,
+				42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */,
 				3C2887B61A0B0984002776E4 /* CJSONDeserializer.h in Headers */,
 				DE90F53A1904E6D00084EC10 /* OpenUDID.h in Headers */,
 				33774C691B2A6D3500D5F279 /* UIImage+GIF.h in Headers */,
