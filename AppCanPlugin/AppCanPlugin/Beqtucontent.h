@@ -21,5 +21,5 @@
 @interface Beqtucontent : NSObject{
 }
 + (NSString *)getContentPath;
-+ (NSString *)getBundleIdentifier;
+
 @end
