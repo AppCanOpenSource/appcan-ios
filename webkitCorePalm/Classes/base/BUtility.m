@@ -25,6 +25,7 @@
 #import "EUExAction.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "Beqtucontent.h"
+#import "PackageInfo.h"
 #import "WWidget.h"
 //#import "AppCanAnalysis.h"
 //#import "AppCanBase.h"
@@ -1205,7 +1206,7 @@ static NSString *clientCertificatePwd = nil;
 
 + (NSString *)bundleIdentifier {
     
-    return [Beqtucontent getBundleIdentifier];
+    return [PackageInfo getBundleIdentifier];
     
 }
 

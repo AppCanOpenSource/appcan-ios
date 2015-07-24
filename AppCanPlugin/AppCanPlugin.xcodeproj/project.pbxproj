@@ -10,6 +10,7 @@
 		33DDE7E31A4C1F7D003965F3 /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */; };
 		3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 3C5AF6EC1A4D36E7008F8A3D /* widget */; };
 		3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */; };
+		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6D7B316F1CB3800D8E883 /* StoreKit.framework */; };
 		6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */; };
 		6CC60340157DCC0F00A3E13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */; };
@@ -78,6 +79,8 @@
 		33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
 		3C5AF6EC1A4D36E7008F8A3D /* widget */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widget; sourceTree = "<group>"; };
 		3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
+		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
+		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
 		46D6D7B316F1CB3800D8E883 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6C9017BD159992B90034AA19 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
 		6C9017BF159992B90034AA19 /* CDataScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner_Extensions.h; sourceTree = "<group>"; };
@@ -343,6 +346,8 @@
 				6CC6033D157DCC0F00A3E13E /* AppCanPlugin-Info.plist */,
 				6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */,
 				6CC60341157DCC0F00A3E13E /* main.m */,
+				42FFC8001B625EC60058E363 /* PackageInfo.h */,
+				42FFC8011B625EC60058E363 /* PackageInfo.m */,
 				6CC604A7157DD65E00A3E13E /* Beqtucontent.h */,
 				6CC60441157DCC0F00A3E13E /* Beqtucontent.m */,
 				6CC60343157DCC0F00A3E13E /* AppCanPlugin-Prefix.pch */,
@@ -457,6 +462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */,
 				6CC60342157DCC0F00A3E13E /* main.m in Sources */,
 				6CC60442157DCC0F00A3E13E /* Beqtucontent.m in Sources */,
 				6CC603A9157DD65E00A3E13E /* WidgetOnePseudoDelegate.m in Sources */,
