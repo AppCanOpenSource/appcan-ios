@@ -483,6 +483,42 @@ const CGFloat loadingVisibleHeight = 60.0f;
     }
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        
+        [super scrollViewDidEndDecelerating:scrollView];
+        
+    }
+    
+    if (scrollView.contentOffset.y <= 0) {
+        //
+        NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedUpEdge!=null){uexWindow.slipedUpEdge();}"];
+        
+        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        
+        jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedUpEdge!=null){uexWindow.onSlipedUpEdge();}"];
+        
+        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        
+    }
+    
+    float distence = scrollView.contentSize.height - scrollView.frame.size.height;
+    
+    if (scrollView.contentOffset.y >= distence) {
+        
+        NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedDownEdge!=null){uexWindow.slipedDownEdge();}"];
+        
+        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        
+        jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedDownEdge!=null){uexWindow.onSlipedDownEdge();}"];
+        
+        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        
+    }
+    
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 	
 	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
@@ -505,28 +541,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,2);}"];
 		}
 	}
-    //滑动回调事件
-    if (scrollView.contentOffset.y<=0)
-    {
-        //
-        NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedUpEdge!=null){uexWindow.slipedUpEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
-        
-        jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedUpEdge!=null){uexWindow.onSlipedUpEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
-    }
-    float distence = scrollView.contentSize.height - scrollView.frame.size.height;
-    if (scrollView.contentOffset.y>=distence)
-    {
-        //
-        NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedDownEdge!=null){uexWindow.slipedDownEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
-        
-        jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedDownEdge!=null){uexWindow.onSlipedDownEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
-        
-        
-    }
+
 }
 
 -(NSURL*)curUrl{
@@ -898,9 +913,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	//ACENSLog(@"will begin decelerating");
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	//ACENSLog(@"end decelerating");
-}
+
 
 - (void)loadWidgetWithQuery:(NSString*)inQuery {
 	NSURL *url = NULL;
