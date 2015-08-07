@@ -38,7 +38,7 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTheOrientation:) name:@"changeTheOrientation" object:nil];
-    
+
     // Do any additional setup after loading the view.
     
 //    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)])
