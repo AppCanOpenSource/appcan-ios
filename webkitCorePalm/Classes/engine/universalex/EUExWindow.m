@@ -2419,7 +2419,7 @@
                         break;
                     case F_EUEXWINDOW_SRC_TYPE_URL_AND_DATA:
                         //inUrl && inUrl.length != 0&& inData
-                        if (KUEXIS_NSString(inUrl)&&KUEXIS_NSString(inData)) {
+                        if (KUEXIS_NSString(inUrl) && inData) {
                             NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
@@ -2452,7 +2452,7 @@
                         break;
                     case F_EUEXWINDOW_SRC_TYPE_URL_AND_DATA:
                         //inUrl && inUrl.length != 0 && inData
-                        if (KUEXIS_NSString(inUrl)&&KUEXIS_NSString(inData)) {
+                        if (KUEXIS_NSString(inUrl)&&inData) {
                             NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
@@ -2497,7 +2497,7 @@
                         }
                         break;
                     case F_EUEXWINDOW_SRC_TYPE_URL_AND_DATA:
-                        if (KUEXIS_NSString(inUrl)&&KUEXIS_NSString(inData)) {
+                        if (KUEXIS_NSString(inUrl)&&inData) {
                             NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
@@ -2527,7 +2527,7 @@
                         }
                         break;
                     case F_EUEXWINDOW_SRC_TYPE_URL_AND_DATA:
-                        if (KUEXIS_NSString(inUrl)&&KUEXIS_NSString(inData)) {
+                        if (KUEXIS_NSString(inUrl)&& inData) {
                             NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
@@ -2686,7 +2686,7 @@
     EBrowserWindow *eBrwWnd = nil;
     EBrowserView *eBrwView = nil;
     //inWndName == nil || inSlibingType == nil || inSlibingType.length == 0 || inScript == nil || inScript.length == 0
-    if (!KUEXIS_NSString(inWndName) || !KUEXIS_NSString(inSlibingType) || !KUEXIS_NSString(inScript)) {
+    if (inWndName == nil || !KUEXIS_NSString(inSlibingType) || !KUEXIS_NSString(inScript)) {
         return;
     }
     if (!meBrwView) {

@@ -550,7 +550,7 @@ NSString *AppCanJS = nil;
     if (userInfo) {
         [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
     }
-    if (userData != nil) {
+    if (userData != nil || userInfo) {
         
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
