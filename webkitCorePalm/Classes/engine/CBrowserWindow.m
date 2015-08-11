@@ -76,7 +76,8 @@ extern NSString * webappShowAactivety;
     if (!theApp.isFirstPageDidLoad) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         id pushStr = [defaults objectForKey:@"pushData"];
-        if (pushStr) {
+        id allPushStr = [defaults objectForKey:@"allPushData"];
+        if (pushStr||allPushStr) {
             ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
             EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
             [aboveWindowContainer pushNotify];
