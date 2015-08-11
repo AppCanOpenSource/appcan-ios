@@ -750,6 +750,8 @@ NSString *AppCanJS = nil;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterBackground();"];
+    
     id number = [[NSUserDefaults standardUserDefaults] objectForKey:F_UD_BadgeNumber];
     if (number) {
         
@@ -792,6 +794,8 @@ NSString *AppCanJS = nil;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterForeground();"];
     
     [self invokeAppDelegateMethodApplicationWillEnterForeground:application];
 	//[self startAllNetService];
