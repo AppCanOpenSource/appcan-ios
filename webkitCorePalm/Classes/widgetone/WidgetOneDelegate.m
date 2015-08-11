@@ -335,6 +335,11 @@ NSString *AppCanJS = nil;
         
         NSDictionary *dict = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
         NSString *userData = [dict objectForKey:@"userInfo"];
+         NSLog(@"appcan--widgetOneDelegate.m--didFinishLaunchingWithOptions--dict == %@",dict);
+        
+        if (dict) {
+            [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
+        }
         
         if (userData != nil) {
             
@@ -534,17 +539,20 @@ NSString *AppCanJS = nil;
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     {
-        
-    NSString *userinfoJson=[userInfo JSONFragment];
-    NSString *Json=[NSString stringWithFormat:@"uexWidget.onRemoteNotification(\'%@\');",userinfoJson];
-   [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];
+        NSLog(@"appcan--widgetOneDelegate.m--didReceiveRemoteNotification--userInfo == %@",userInfo);
+        NSString *userinfoJson=[userInfo JSONFragment];
+        NSString *Json=[NSString stringWithFormat:@"uexWidget.onRemoteNotification(\'%@\');",userinfoJson];
+        [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];
         
     }
     
-	NSString *userData = [userInfo objectForKey:@"userInfo"];
-	if (userData != nil) {
+    NSString *userData = [userInfo objectForKey:@"userInfo"];
+    if (userInfo) {
+        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
+    }
+    if (userData != nil || userInfo) {
         
-		[[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
+        [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
         
         if (aboveWindowContainer) {
@@ -553,17 +561,17 @@ NSString *AppCanJS = nil;
             
         }
         
-//		if (meBrwCtrler) {
-//			if (meBrwCtrler.meBrwMainFrm) {
-//				if (meBrwCtrler.meBrwMainFrm.meBrwWgtContainer) {
-//					if ([meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer]) {
-//						[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] pushNotify];
-//					}
-//				}
-//			}
-//		}
+        //		if (meBrwCtrler) {
+        //			if (meBrwCtrler.meBrwMainFrm) {
+        //				if (meBrwCtrler.meBrwMainFrm.meBrwWgtContainer) {
+        //					if ([meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer]) {
+        //						[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] pushNotify];
+        //					}
+        //				}
+        //			}
+        //		}
         
-	}
+    }
     
     [self invokeAppDelegateMethod:application didReceiveRemoteNotification:userInfo];
     
