@@ -1029,8 +1029,9 @@ static inline CGFloat originXForDrawerOriginAndTargetOriginOffset(CGFloat origin
         if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
             UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
             CGPoint translate = [pan translationInView:self.view];
-            BOOL possible = translate.x != 0 && ((fabsf(translate.y) / fabsf(translate.x)) < 1.0f);
-            if (possible && ((translate.x > 0 && self.leftDrawerViewController) || (translate.x < 0 && self.rightDrawerViewController))) {
+            
+            BOOL possible = (translate.x != 0) && ((fabsf(translate.y) / fabsf(translate.x)) < 1.0f);
+            if (possible) {
                 return YES;
             } else {
                 return NO;
