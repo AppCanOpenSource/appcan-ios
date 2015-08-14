@@ -550,7 +550,7 @@ NSString *AppCanJS = nil;
     if (userInfo) {
         [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
     }
-    if (userData != nil) {
+    if (userData != nil || userInfo) {
         
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
@@ -758,6 +758,8 @@ NSString *AppCanJS = nil;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterBackground();"];
+    
     id number = [[NSUserDefaults standardUserDefaults] objectForKey:F_UD_BadgeNumber];
     if (number) {
         
@@ -800,6 +802,8 @@ NSString *AppCanJS = nil;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterForeground();"];
     
     [self invokeAppDelegateMethodApplicationWillEnterForeground:application];
 	//[self startAllNetService];
