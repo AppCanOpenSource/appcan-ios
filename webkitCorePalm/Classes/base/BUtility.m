@@ -248,6 +248,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.setWindowFrame = function() { uex.exec('uexWindow.setWindowFrame/'+uexJoin(arguments));};"
 
 "uexWindow.setMultilPopoverFlippingEnbaled = function() { uex.exec('uexWindow.setMultilPopoverFlippingEnbaled/'+uexJoin(arguments));};"
+"uexWindow.getSlidingWindowState = function() { uex.exec('uexWindow.getSlidingWindowState/'+uexJoin(arguments));};"
 
 //
 "uexWindow.postGlobalNotification=function(){ uex.exec('uexWindow.postGlobalNotification/'+uexJoin(arguments));};"
