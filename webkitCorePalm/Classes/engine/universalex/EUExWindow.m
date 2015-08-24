@@ -4660,7 +4660,7 @@
                     }
                     //					NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
                     NSURL *url = [BUtility stringToUrl:urlStr];
-                    if (eBrwWndContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+                    if (eBrwWndContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION && ![urlStr hasPrefix:F_HTTP_PATH]&&![urlStr hasPrefix:F_HTTPS_PATH]) {
                         //                        if ((flag & F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) == F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) {
                         FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                         NSString *data = [encryptObj decryptWithPath:url appendData:nil];
