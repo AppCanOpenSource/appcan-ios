@@ -174,7 +174,6 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
     NSParameterAssert(drawerSide!=MMDrawerSideNone);
     if(self.openSide == MMDrawerSideNone){
         [self openDrawerSide:drawerSide animated:animated completion:completion];
-        [self setOpenSide:drawerSide];
     }
     else {
         if((drawerSide == MMDrawerSideLeft &&
@@ -182,7 +181,6 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
            (drawerSide == MMDrawerSideRight &&
            self.openSide == MMDrawerSideRight)){
             [self closeDrawerAnimated:animated completion:completion];
-               [self setOpenSide:MMDrawerSideNone];
         }
         else if(completion){
             completion(NO);
