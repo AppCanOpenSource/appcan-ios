@@ -105,6 +105,8 @@
 		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
+		46E576EC1B8D65B700450205 /* ACEPluginViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 46E576EA1B8D65B700450205 /* ACEPluginViewContainer.h */; };
+		46E576ED1B8D65B700450205 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E576EB1B8D65B700450205 /* ACEPluginViewContainer.m */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
 		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
@@ -403,6 +405,8 @@
 		3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
 		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
 		42FFC7FE1B625D160058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
+		46E576EA1B8D65B700450205 /* ACEPluginViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginViewContainer.h; sourceTree = "<group>"; };
+		46E576EB1B8D65B700450205 /* ACEPluginViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginViewContainer.m; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
 		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
@@ -954,6 +958,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				46E576EA1B8D65B700450205 /* ACEPluginViewContainer.h */,
+				46E576EB1B8D65B700450205 /* ACEPluginViewContainer.m */,
 				3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */,
 				3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */,
 				331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */,
@@ -1308,6 +1314,7 @@
 				3C2887CF1A0B099B002776E4 /* CJSONSerialization.h in Headers */,
 				5AAA873818B1B93D000D7600 /* ZipArchive.h in Headers */,
 				331574001A5AAEB70036A2A2 /* ACEPluginModel.h in Headers */,
+				46E576EC1B8D65B700450205 /* ACEPluginViewContainer.h in Headers */,
 				5AAA870A18B1B93D000D7600 /* ASIDataCompressor.h in Headers */,
 				3C2887D01A0B099B002776E4 /* CJSONSerializedData.h in Headers */,
 				5AAA86E018B1B93D000D7600 /* EBrowserHistoryEntry.h in Headers */,
@@ -1552,6 +1559,7 @@
 				5AAA869E18B1B93D000D7600 /* NSString+SBJSON.m in Sources */,
 				5AAA86E718B1B93D000D7600 /* EBrowserView.m in Sources */,
 				5AAA86FE18B1B93D000D7600 /* EUExManager.m in Sources */,
+				46E576ED1B8D65B700450205 /* ACEPluginViewContainer.m in Sources */,
 				33AF6EC61A448EFD00DC7397 /* MMDrawerVisualState.m in Sources */,
 				333D00051A42B9CA00F501B3 /* ACEBaseViewController.m in Sources */,
 				333D00071A42B9CA00F501B3 /* ACEUINavigationController.m in Sources */,
