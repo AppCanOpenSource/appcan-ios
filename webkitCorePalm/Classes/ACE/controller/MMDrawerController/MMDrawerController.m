@@ -703,6 +703,7 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
 }
 
 -(void)setOpenSide:(MMDrawerSide)openSide{
+    NSLog(@"openside==%ld",(long)openSide);
     if(_openSide != openSide){
         _openSide = openSide;
         [self.centerContainerView setOpenSide:openSide];
