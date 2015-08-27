@@ -110,6 +110,7 @@ NSString * webappShowAactivety;
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
 	WWidget*wgtobj = (WWidget*)[tempArr objectAtIndex:0];
     wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG];
+    wgtobj.widgetOneId = [BUtility appKey];
     
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
     if([obfuscationStr isEqualToString:@"true"]){
