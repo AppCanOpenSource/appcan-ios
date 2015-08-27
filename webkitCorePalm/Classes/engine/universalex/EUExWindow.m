@@ -744,6 +744,65 @@
     
 }
 
+- (void)getSlidingWindowState:(NSMutableArray *)inArguments {
+    
+    WidgetOneDelegate * app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    
+    
+    
+    NSInteger windowStatus = 1;
+    
+    if (app.drawerController) {
+        
+        switch (app.drawerController.openSide) {
+                
+            case MMDrawerSideNone:
+                windowStatus = 1;
+                break;
+                
+            case MMDrawerSideLeft:
+                windowStatus = 0;
+                break;
+                
+            case MMDrawerSideRight:
+                windowStatus = 2;
+                break;
+                
+            default:
+                break;
+                
+        }
+        
+        
+        
+    } else if (app.sideMenuViewController){
+        
+        switch (app.sideMenuViewController.sideStatus) {
+            case RESideLeft:
+                windowStatus = RESideLeft;
+                break;
+            case RESideNone:
+                windowStatus = RESideNone;
+                break;
+            case RESideRight:
+                windowStatus = RESideRight;
+                break;
+                
+            default:
+                break;
+        }
+        
+        
+    }
+    
+    NSString * cbStr = [NSString stringWithFormat:@"if(uexWindow.cbSlidingWindowState!=null){uexWindow.cbSlidingWindowState(%ld);}",(long)windowStatus];
+    
+    [meBrwView stringByEvaluatingJavaScriptFromString:cbStr];
+    
+    
+    
+}
+
 
 - (void)toggleSlidingWindow:(NSMutableArray *)inArguments
 {

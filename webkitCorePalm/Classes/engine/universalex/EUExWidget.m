@@ -41,6 +41,7 @@
 #import "EUtility.h"
 #import "ACEUtils.h"
 
+
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗?"
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
@@ -538,7 +539,26 @@
     }else {
         [BAnimition SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:duration];
     }
-    [eBrwWndContainer removeFromSuperview];
+    
+    {
+    
+        for (EBrowserWindow * eBrwWnd in [eBrwWndContainer.mBrwWndDict allValues]) {
+            [eBrwWnd clean];
+            if (eBrwWnd.superview) {
+                [eBrwWnd removeFromSuperview];
+            }
+            [self closeWindowAfterAnimation:eBrwWnd];
+            [eBrwWnd release];
+            
+        }
+        
+        [eBrwWndContainer.mBrwWndDict removeAllObjects];
+        
+        [eBrwWndContainer removeFromSuperview];
+    }
+    
+    
+    
     if (eBrwWndContainer != eBrwWgtContainer.meRootBrwWndContainer) {
         meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
         meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
@@ -553,6 +573,109 @@
         [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
     }
 }
+
+- (void)closeWindowAfterAnimation:(EBrowserWindow*)brwWnd_ {
+    NSString *fromViewName =NULL;
+    if (brwWnd_.meBrwView) {
+        //[eBrwWnd.meBrwView clean];
+        //8.7 data
+        int type = brwWnd_.meBrwView.mwWgt.wgtType;
+        fromViewName =[brwWnd_.meBrwView.curUrl absoluteString];
+        [BUtility setAppCanViewBackground:type name:fromViewName closeReason:0];
+        if (brwWnd_.meBrwView.superview) {
+            [brwWnd_.meBrwView removeFromSuperview];
+        }
+        [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBrwView];
+        [brwWnd_.meBrwView release];
+        ACENSLog(@"meBrwView retainCount is %d", [brwWnd_.meBrwView retainCount]);
+        brwWnd_.meBrwView = NULL;
+    }
+    if (brwWnd_.meTopSlibingBrwView) {
+        //[eBrwWnd.meTopSlibingBrwView clean];
+        if (brwWnd_.meTopSlibingBrwView.superview) {
+            [brwWnd_.meTopSlibingBrwView removeFromSuperview];
+        }
+        [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meTopSlibingBrwView];
+        [brwWnd_.meTopSlibingBrwView release];
+        brwWnd_.meTopSlibingBrwView = NULL;
+    }
+    if (brwWnd_.meBottomSlibingBrwView) {
+        //[eBrwWnd.meBottomSlibingBrwView clean];
+        if (brwWnd_.meBottomSlibingBrwView.superview) {
+            [brwWnd_.meBottomSlibingBrwView removeFromSuperview];
+        }
+        [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBottomSlibingBrwView];
+        [brwWnd_.meBottomSlibingBrwView release];
+        brwWnd_.meBottomSlibingBrwView = NULL;
+    }
+    if (brwWnd_.mPopoverBrwViewDict) {
+        NSArray *popViewArray = [brwWnd_.mPopoverBrwViewDict allValues];
+        for (EBrowserView *ePopView in popViewArray) {
+            //[ePopView clean];
+            if (ePopView.superview) {
+                [ePopView removeFromSuperview];
+            }
+            //8.8 数据统计
+            int type =ePopView.mwWgt.wgtType;
+            NSString *viewName =[ePopView.curUrl absoluteString];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+            
+            [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
+            [ePopView release];
+            [brwWnd_.mPopoverBrwViewDict removeAllObjects];
+            [brwWnd_.mPopoverBrwViewDict release];
+            brwWnd_.mPopoverBrwViewDict = NULL;
+        }
+    }
+    //
+    if (brwWnd_.mMuiltPopoverDict)
+    {
+        NSArray * mulitPopArray = [brwWnd_.mMuiltPopoverDict allValues];
+        for (UIView * multiPopover in mulitPopArray)
+        {
+            if (multiPopover.superview) {
+                [multiPopover removeFromSuperview];
+            }
+        }
+        [brwWnd_.mMuiltPopoverDict removeAllObjects];
+        //        [brwWnd_.mMuiltPopoverDict release];
+        brwWnd_.mMuiltPopoverDict = nil;
+    }
+    if (meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
+        brwWnd_.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
+        meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
+        [meBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
+    }
+    if ((brwWnd_.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
+        if ((brwWnd_.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
+            brwWnd_.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
+        }
+    }
+    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)brwWnd_.superview;
+    EBrowserWindow *eAboveWnd = [eBrwWndContainer aboveWindow];
+    [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
+    
+    int goType = eAboveWnd.meBrwView.mwWgt.wgtType;
+    NSString *goViewName =[eAboveWnd.meBrwView.curUrl absoluteString];
+    
+    [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0];
+    if (eAboveWnd.mPopoverBrwViewDict) {
+        NSArray *popViewArray = [eAboveWnd.mPopoverBrwViewDict allValues];
+        for (EBrowserView *ePopView in popViewArray) {
+            int type =ePopView.mwWgt.wgtType;
+            NSString *viewName =[ePopView.curUrl absoluteString];
+            //[BUtility setAppCanViewBackground:type name:closeViewName closeReason:0];
+            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+        }
+    }
+    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
+        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
+        ACENSLog(@"openAdStr is %@",openAdStr);
+        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
+    }
+}
+
+
 
 -(void)removeWidget:(NSMutableArray*)inArguments {
     NSString *inAppId = [inArguments objectAtIndex:0];

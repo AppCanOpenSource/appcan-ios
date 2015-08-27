@@ -299,6 +299,7 @@
     if (!self.leftMenuViewController) {
         return;
     }
+    _sideStatus = RESideLeft;
     [self.leftMenuViewController beginAppearanceTransition:YES animated:YES];
     self.leftMenuViewController.view.hidden = NO;
     self.rightMenuViewController.view.hidden = YES;
@@ -346,6 +347,7 @@
     if (!self.rightMenuViewController) {
         return;
     }
+    _sideStatus = RESideRight;
     [self.rightMenuViewController beginAppearanceTransition:YES animated:YES];
     self.leftMenuViewController.view.hidden = YES;
     self.rightMenuViewController.view.hidden = NO;
@@ -393,6 +395,7 @@
 
 - (void)hideMenuViewControllerAnimated:(BOOL)animated
 {
+    _sideStatus = RESideNone;
     BOOL rightMenuVisible = self.rightMenuVisible;
     UIViewController *visibleMenuViewController = rightMenuVisible ? self.rightMenuViewController : self.leftMenuViewController;
     [visibleMenuViewController beginAppearanceTransition:NO animated:animated];
