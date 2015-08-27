@@ -193,13 +193,16 @@
 }
 
 - (void)stopAllNetService {
+    /*
 	if (!uexObjDict) {
 		return;
 	}
 	NSArray *objArray = [uexObjDict allValues];
+    
 	for (EUExBase * eUExObj in objArray) {
 		[eUExObj clean];
 	}
+    */
 }
 
 -(void)dealloc{
