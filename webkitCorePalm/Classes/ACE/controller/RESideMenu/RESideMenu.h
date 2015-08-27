@@ -30,6 +30,13 @@
 #define IBInspectable
 #endif
 
+typedef NS_ENUM(NSInteger,RESide){
+    RESideLeft,
+    RESideNone,
+    RESideRight
+};
+
+
 @protocol RESideMenuDelegate;
 
 @interface RESideMenu : UIViewController <UIGestureRecognizerDelegate>
@@ -39,7 +46,7 @@
 @property (strong, readwrite, nonatomic) IBInspectable NSString *leftMenuViewStoryboardID;
 @property (strong, readwrite, nonatomic) IBInspectable NSString *rightMenuViewStoryboardID;
 #endif
-
+@property (nonatomic,assign) RESide sideStatus;
 @property (strong, readwrite, nonatomic) UIViewController *contentViewController;
 @property (strong, readwrite, nonatomic) UIViewController *leftMenuViewController;
 @property (strong, readwrite, nonatomic) UIViewController *rightMenuViewController;
