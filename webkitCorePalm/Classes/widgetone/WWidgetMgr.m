@@ -49,23 +49,66 @@ NSString * webappShowAactivety;
 	return wMainWgt;
 }
 //get wgtPath by wgtObj
--(NSString*)curWidgetPath:(WWidget*)inWgtObj{
-	WWidget *wgtObj = inWgtObj;
-	NSString *absPath = [BUtility getDocumentsPath:@""];
-	NSString *wgtPath = nil;
-	if (wgtObj.wgtType==F_WWIDGET_MAINWIDGET) {
-		wgtPath = [NSString stringWithFormat:@"%@/apps/%@",absPath,wgtObj.appId];
-	}else {
-		wgtPath = wgtObj.widgetPath;
-	}
-	NSFileManager *fManager =[[NSFileManager alloc] init];
-	if ([fManager fileExistsAtPath:wgtPath]==NO) {
-		[fManager createDirectoryAtPath:wgtPath withIntermediateDirectories:YES attributes:nil error:nil];
+- (NSString*)curWidgetPath:(WWidget*)inWgtObj {
+    
+    WWidget *wgtObj = inWgtObj;
+    
+    NSString *absPath = [BUtility getDocumentsPath:@""];
+    
+    NSString *wgtPath = nil;
+    
+    if (wgtObj.wgtType==F_WWIDGET_MAINWIDGET) {
+        
+        wgtPath = [NSString stringWithFormat:@"%@/apps/%@",absPath,wgtObj.appId];
+        
+    } else {
+        
+        wgtPath = wgtObj.widgetPath;
+        
+        NSString *wgtPathString = wgtObj.indexUrl;
+        
+        NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->wgtObj.indexUrl == %@",wgtObj.indexUrl);
+        
+        NSRange range = [wgtObj.indexUrl rangeOfString:@"widget/plugin/"];
+        
+        if (range.location != NSNotFound) {
+            
+            wgtPath = [wgtPathString substringToIndex:range.location+range.length];
+            
+            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->1-->wgtPath == %@",wgtPath);
+            
+            NSRange range1 = [wgtPath rangeOfString:@"file://"];
+            
+            wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
+            
+            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->2-->wgtPath == %@",wgtPath);
+            
+            wgtPath = [wgtPath stringByAppendingString:wgtObj.appId];
+            
+            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->3-->wgtPath == %@",wgtPath);
+            
+        } else {
+            
+            NSLog(@"appcan-->WWidgetMgr.m-->curWidgetPath-->range.location == NSNotFound");
+            
+        }
+        
+    }
+    
+    NSFileManager *fManager =[[NSFileManager alloc] init];
+    
+    if ([fManager fileExistsAtPath:wgtPath]==NO) {
+        
+        [fManager createDirectoryAtPath:wgtPath withIntermediateDirectories:YES attributes:nil error:nil];
+        
         [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtPath]];
-	}
-	[fManager release];
-	return wgtPath;
-
+        
+    }
+    
+    [fManager release];
+    
+    return wgtPath;
+    
 }
 - (void)initMainWidget {
     
