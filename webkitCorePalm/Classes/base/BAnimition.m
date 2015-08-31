@@ -321,13 +321,13 @@
 //			animation.subtype = kCATransitionFromTop;
 //			[inView.layer addAnimation:animation forKey:NULL];
 //			break;
-//		case F_BRW_WND_SWITCH_ANIMI_ID_LEFT_TO_RIGHT_REVEAL://把当前页面从上抽出
-//			animation.fillMode = kCAFillModeForwards;
-//			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-//			animation.type = kCATransitionReveal; 
-//			animation.subtype = kCATransitionFromLeft;
-//			[inView.layer addAnimation:animation forKey:NULL];
-//			break;
+		case F_BRW_WND_SWITCH_ANIMI_ID_LEFT_TO_RIGHT_REVEAL://把当前页面从上抽出
+			animation.fillMode = kCAFillModeForwards;
+			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
+			animation.type = kCATransitionReveal; 
+			animation.subtype = kCATransitionFromLeft;
+			[inView.layer addAnimation:animation forKey:NULL];
+			break;
 //		case F_BRW_WND_SWITCH_ANIMI_ID_RIGHT_TO_LEFT_REVEAL://从下抽出
 //			animation.fillMode = kCAFillModeForwards;
 //			[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
