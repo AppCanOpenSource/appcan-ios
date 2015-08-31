@@ -114,12 +114,26 @@
         mMuiltPopoverDict = nil;
     }
     ////
-	if (meFrontWnd) {
-		meFrontWnd.meBackWnd = NULL;
+	if (meFrontWnd && [meFrontWnd isKindOfClass:[EBrowserWindow class]]) {
+		
+        if ([meFrontWnd respondsToSelector:@selector(setMeBackWnd:)]) {
+            
+            [meFrontWnd setMeBackWnd:nil];
+            
+        }
+        
 	}
-	if (meBackWnd) {
-		meBackWnd.meFrontWnd = NULL;
-	}
+    
+    if (meBackWnd && [meBackWnd isKindOfClass:[EBrowserWindow class]]) {
+            
+        if ([meBackWnd respondsToSelector:@selector(setMeFrontWnd:)]) {
+                
+            [meBackWnd setMeFrontWnd:nil];
+        }
+            
+    }
+    
+	
     //
 	if (meBrwHistory) {
 		[meBrwHistory release];
@@ -129,6 +143,7 @@
 	mOAuthWndName = nil;
     [_windowName release];
     [self deregisterWindowSequenceChange];
+    
 	[super dealloc];
 }
 
