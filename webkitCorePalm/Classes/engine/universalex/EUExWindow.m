@@ -2140,7 +2140,7 @@
         
     } else if (meBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
         
-        if (meBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
+        if ([eBrwWndContainer.meRootBrwWnd isKindOfClass:[EBrowserWindow class]] && meBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
             return;
         }
         if ((eBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) == F_EBRW_WND_FLAG_IN_CLOSING) {
@@ -4292,7 +4292,10 @@
 }
 
 - (void)clean {
-    ACENSLog(@"uexWindow.clean");
+    if (meBrwView) {
+        meBrwView = nil;
+    }
+    
     [self removeNotificationCenter];
     [self closeToast:NULL];
     [self closeAlert];
