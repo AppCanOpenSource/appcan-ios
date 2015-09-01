@@ -4292,9 +4292,7 @@
 }
 
 - (void)clean {
-    if (meBrwView) {
-        meBrwView = nil;
-    }
+    
     
     [self removeNotificationCenter];
     [self closeToast:NULL];
