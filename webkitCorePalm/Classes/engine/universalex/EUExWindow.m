@@ -4421,6 +4421,22 @@
     }
 }
 #pragma mark
+-(void)setLoadingImagePath:(NSArray *)inArgument {
+    
+    if ([inArgument count] < 1) {
+        
+        return;
+        
+    }
+    
+    NSString * launchImagePath = [self absPath:[inArgument objectAtIndex:0]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:launchImagePath forKey:@"AppCanLaunchImage"];
+    
+}
+
+
+
 #pragma mark 设置状态条上字体的颜色
 #pragma mark
 -(void)setStatusBarTitleColor:(NSArray *)inArgument
