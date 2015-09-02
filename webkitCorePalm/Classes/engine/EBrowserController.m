@@ -472,7 +472,29 @@
             
         }
         
-        mStartView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:launchImageName]];
+        launchImage = [UIImage imageNamed:launchImageName];
+        
+        NSString * customLaunchImagePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppCanLaunchImage"];
+        
+        if (customLaunchImagePath && [customLaunchImagePath length] > 0) {
+            
+            NSData * tmpData = [NSData dataWithContentsOfFile:customLaunchImagePath];
+            
+            if (tmpData) {
+                
+                UIImage * customImage = [UIImage imageWithData:tmpData];
+                
+                if (customImage) {
+                    
+                    launchImage = customImage;
+                    
+                }
+                
+            }
+            
+        }
+        
+        mStartView = [[UIImageView alloc]initWithImage:launchImage];
        
         
     } else {
@@ -498,6 +520,26 @@
         }
         
         launchImage = [UIImage imageNamed:launchImageName];
+        
+        NSString * customLaunchImagePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppCanLaunchImage"];
+        
+        if (customLaunchImagePath && [customLaunchImagePath length] > 0) {
+            
+            NSData * tmpData = [NSData dataWithContentsOfFile:customLaunchImagePath];
+            
+            if (tmpData) {
+                
+                UIImage * customImage = [UIImage imageWithData:tmpData];
+                
+                if (customImage) {
+                    
+                    launchImage = customImage;
+                    
+                }
+                
+            }
+            
+        }
         
         mStartView = [[UIImageView alloc] initWithImage:launchImage];
         
