@@ -1280,10 +1280,9 @@ static NSString *clientCertificatePwd = nil;
                 return;
             }
             id analysisObject = class_createInstance(analysisClass,0);
-            //objc_msgSend(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
-             ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
-//            AppCanAnalysis *acInstance =[AppCanAnalysis ACInstance];
-//            [acInstance setAppCanViewBecomeActive:fromUrlStr goView:goUrlStr startReason:inOpenReason mainWin:inMainWnd];
+            
+            ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
+            
         }
     }
 }
@@ -1307,7 +1306,7 @@ static NSString *clientCertificatePwd = nil;
                 return;
             }
             id analysisObject = class_createInstance(analysisClass,0);
-            //objc_msgSend(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:), closeUrl,inOpenReason);
+            
             ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inOpenReason);
         }
     }
