@@ -366,24 +366,15 @@
         Class  analysisClass =  NSClassFromString(@"AppCanAnalysis");//判断类是否存在，如果存在子widget上报
         if (analysisClass) {
             
-            //            AppCanAnalysis *acAna = [AppCanAnalysis ACInstance];
-            //            [acAna setAppChannel:wgtObj.channelCode]; //mwWgtMgr.mainWidget.channelCode:widget的渠道号，	            子widget添加子widget的渠道号
-            //            [acAna setAppId:wgtObj.appId];//mwWgtMgr.mainWidget.appId   子widget添加子widget的appId
-            //            [acAna setAppVersion:wgtObj.ver];//mwWgtMgr.mainWidget.ver   字widget的版本号
-            //            if (inAppkey)
-            //            {
-            //                [acAna startWithChildAppKey:inAppkey];   //inKey  目前为主widget的AppKey，子widget没有
-            //            }
             id analysisObject = class_createInstance(analysisClass,0);
             
             ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);
-            //objc_msgSend(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);//mwWgtMgr.mainWidget.channelCode:widget的渠道号，	            子widget添加子widget的渠道号
+            
             ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppId:),wgtObj.appId);
-            //objc_msgSend(analysisObject, @selector(setAppId:),wgtObj.appId);//mwWgtMgr.mainWidget.appId   子widget添加子widget的
+            
             ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppVersion:),wgtObj.ver);
-            //objc_msgSend(analysisObject, @selector(setAppVersion:),wgtObj.ver);//mwWgtMgr.mainWidget.ver   字widget的版本号
-            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);
-            //objc_msgSend(analysisObject, @selector(startWithChildAppKey:),inAppkey); //inKey  目前为主widget的AppKey，子widget没有
+            
+            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);//inKey  目前为主widget的AppKey，子widget没有
         }
     }else {
         if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
@@ -846,17 +837,16 @@
     }else {
         NSDictionary *tmpDict = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:UEX_JVParametersError] forKey:UEX_JKRESULT];
         [self jsSuccessWithName:@"uexWidget.cbCheckUpdate" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:[tmpDict JSONFragment]];
-        //[self jsFailedWithOpId:0 errorCode:0 errorDes:@"check update error"];
+        
     }
 }
 -(void)checkMAMUpdate:(NSMutableArray *)inArguments{
     Class analysisClass =  NSClassFromString(@"AppCanAnalysis");//判断类是否存在，如果存在子widget上报
     if (analysisClass) {
         NSString *inKey=[BUtility appKey];
-        //        [[AppCanAnalysis ACInstance] startWithAppKey:inKey];
+        
         id analysisObject = class_createInstance(analysisClass,0);
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithAppKey:), inKey);
-        //objc_msgSend(analysisObject, @selector(startWithAppKey:),inKey);//
     }
 }
 -(void)checkUpdateWgt:(id)userInfo{
