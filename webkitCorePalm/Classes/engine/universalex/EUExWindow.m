@@ -492,7 +492,7 @@
         ACENSLog(@"NavWindowTest openWithController new window eBrwWnd = %@, eBrwWnd Name = %@, eBrwWnd.meBrwView = %@", eBrwWnd, inUExWndName, eBrwWnd.meBrwView);
         //inUExWndName != nil && inUExWndName.length != 0
         if (KUEXIS_NSString(inUExWndName)) {
-            [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inUExWndName];
+            //[eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inUExWndName];
         }
         
         
@@ -2140,7 +2140,7 @@
         
     } else if (meBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
         
-        if (meBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
+        if ([eBrwWndContainer.meRootBrwWnd isKindOfClass:[EBrowserWindow class]] && meBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
             return;
         }
         if ((eBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) == F_EBRW_WND_FLAG_IN_CLOSING) {
@@ -4292,8 +4292,9 @@
 }
 
 - (void)clean {
-    ACENSLog(@"uexWindow.clean");
-    [self removeNotificationCenter];
+    
+    
+    //[self removeNotificationCenter];
     [self closeToast:NULL];
     [self closeAlert];
 }
@@ -4420,6 +4421,22 @@
     }
 }
 #pragma mark
+-(void)setLoadingImagePath:(NSArray *)inArgument {
+    
+    if ([inArgument count] < 1) {
+        
+        return;
+        
+    }
+    
+    NSString * launchImagePath = [self absPath:[inArgument objectAtIndex:0]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:launchImagePath forKey:@"AppCanLaunchImage"];
+    
+}
+
+
+
 #pragma mark 设置状态条上字体的颜色
 #pragma mark
 -(void)setStatusBarTitleColor:(NSArray *)inArgument

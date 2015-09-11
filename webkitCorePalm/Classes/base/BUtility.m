@@ -184,6 +184,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.actionSheet=function(){ uex.exec('uexWindow.actionSheet/'+uexJoin(arguments));};"
 "uexWindow.open=function(){ uex.exec('uexWindow.open/'+uexJoin(arguments));	};"
 "uexWindow.openPresentWindow=function(){ uex.exec('uexWindow.openPresentWindow/'+uexJoin(arguments));	};"
+"uexWindow.setLoadingImagePath=function(){ uex.exec('uexWindow.setLoadingImagePath/'+uexJoin(arguments));	};"
 "uexWindow.toggleSlidingWindow=function(){ uex.exec('uexWindow.toggleSlidingWindow/'+uexJoin(arguments));	};"
 "uexWindow.setSlidingWindowEnabled=function(){ uex.exec('uexWindow.setSlidingWindowEnabled/'+uexJoin(arguments));	};"
 "uexWindow.setSlidingWindow=function(){ uex.exec('uexWindow.setSlidingWindow/'+uexJoin(arguments));	};"
@@ -1279,10 +1280,9 @@ static NSString *clientCertificatePwd = nil;
                 return;
             }
             id analysisObject = class_createInstance(analysisClass,0);
-            //objc_msgSend(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
-             ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
-//            AppCanAnalysis *acInstance =[AppCanAnalysis ACInstance];
-//            [acInstance setAppCanViewBecomeActive:fromUrlStr goView:goUrlStr startReason:inOpenReason mainWin:inMainWnd];
+            
+            ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
+            
         }
     }
 }
@@ -1306,7 +1306,7 @@ static NSString *clientCertificatePwd = nil;
                 return;
             }
             id analysisObject = class_createInstance(analysisClass,0);
-            //objc_msgSend(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:), closeUrl,inOpenReason);
+            
             ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inOpenReason);
         }
     }
