@@ -472,7 +472,29 @@
             
         }
         
-        mStartView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:launchImageName]];
+        launchImage = [UIImage imageNamed:launchImageName];
+        
+        NSString * customLaunchImagePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppCanLaunchImage"];
+        
+        if (customLaunchImagePath && [customLaunchImagePath length] > 0) {
+            
+            NSData * tmpData = [NSData dataWithContentsOfFile:customLaunchImagePath];
+            
+            if (tmpData) {
+                
+                UIImage * customImage = [UIImage imageWithData:tmpData];
+                
+                if (customImage) {
+                    
+                    launchImage = customImage;
+                    
+                }
+                
+            }
+            
+        }
+        
+        mStartView = [[UIImageView alloc]initWithImage:launchImage];
        
         
     } else {
@@ -498,6 +520,26 @@
         }
         
         launchImage = [UIImage imageNamed:launchImageName];
+        
+        NSString * customLaunchImagePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppCanLaunchImage"];
+        
+        if (customLaunchImagePath && [customLaunchImagePath length] > 0) {
+            
+            NSData * tmpData = [NSData dataWithContentsOfFile:customLaunchImagePath];
+            
+            if (tmpData) {
+                
+                UIImage * customImage = [UIImage imageWithData:tmpData];
+                
+                if (customImage) {
+                    
+                    launchImage = customImage;
+                    
+                }
+                
+            }
+            
+        }
         
         mStartView = [[UIImageView alloc] initWithImage:launchImage];
         
@@ -546,7 +588,7 @@
         if (analysisClass) {
             id analysisObject = class_createInstance(analysisClass,0);
             ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
-            //objc_msgSend(analysisObject, @selector(setErrorReport:),YES);
+            
         }
     }
     
@@ -559,7 +601,7 @@
             id analysisObject = class_createInstance(analysisClass,0);
             
             ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
-            //objc_msgSend(analysisObject, @selector(startEveryReport:),array);
+            
         }
     }
     
@@ -571,9 +613,9 @@
         }
         id analysisObject = class_createInstance(updateClass,0);
         ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
-        //objc_msgSend(analysisObject, @selector(doUpdate:),dataArray);
+        
     }
-	//ACENSLog(@"init the start view :the uesdMemory is %f,the have memory is %f",[BUtility usedMemory],[BUtility availableMemory]);
+    
 }
 
 -(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
