@@ -177,9 +177,21 @@
     
 //	EBrowserWindowContainer *eSuperBrwWndContainer = (EBrowserWindowContainer*)eSuperBrwWnd.superview;
 	EBrowserWindowContainer *eCurBrwWndContainer = [self.subviews objectAtIndex:self.subviews.count-1];
+    
+    if (!eSuperBrwWndContainer) {
+        for (EBrowserWindowContainer * brwWndContainer in self.subviews) {
+            if ([[brwWndContainer.mBrwWndDict allValues] containsObject:eSuperBrwWnd]) {
+                eSuperBrwWndContainer = brwWndContainer;
+                break;
+            }
+        }
+    }
+    
+    
 	if (!eSuperBrwWndContainer) {
 		eSuperBrwWndContainer = eCurBrwWndContainer;
 	}
+    
 	if (eSuperBrwWndContainer != eCurBrwWndContainer) {
 		if (eSuperBrwWndContainer.superview != self) {
 			[eSuperBrwWndContainer setBounds:self.bounds];
@@ -195,6 +207,11 @@
 			}
 		} else {
 			[self bringSubviewToFront:eSuperBrwWndContainer];
+            
+            if (!eSuperBrwWnd.superview) {
+                [eSuperBrwWndContainer addSubview:eSuperBrwWnd];
+            }
+            
 			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
 				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
 					if (![BUtility getAppCanDevMode]) {
