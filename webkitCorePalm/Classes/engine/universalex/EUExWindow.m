@@ -492,7 +492,7 @@
         ACENSLog(@"NavWindowTest openWithController new window eBrwWnd = %@, eBrwWnd Name = %@, eBrwWnd.meBrwView = %@", eBrwWnd, inUExWndName, eBrwWnd.meBrwView);
         //inUExWndName != nil && inUExWndName.length != 0
         if (KUEXIS_NSString(inUExWndName)) {
-            [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inUExWndName];
+            //[eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inUExWndName];
         }
         
         
@@ -4294,7 +4294,7 @@
 - (void)clean {
     
     
-    [self removeNotificationCenter];
+    //[self removeNotificationCenter];
     [self closeToast:NULL];
     [self closeAlert];
 }
