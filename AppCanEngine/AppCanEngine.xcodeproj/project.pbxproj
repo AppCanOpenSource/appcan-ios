@@ -104,6 +104,8 @@
 		3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
 		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
+		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
+		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
 		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
@@ -402,6 +404,8 @@
 		3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBrowserView.h; sourceTree = "<group>"; };
 		3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
 		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
+		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
+		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
 		42FFC7FE1B625D160058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
@@ -1013,6 +1017,8 @@
 				5AAA861D18B1B93D000D7600 /* EUExWidgetOne.m */,
 				5AAA861E18B1B93D000D7600 /* EUExWindow.h */,
 				5AAA861F18B1B93D000D7600 /* EUExWindow.m */,
+				42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */,
+				42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */,
 			);
 			path = universalex;
 			sourceTree = "<group>";
@@ -1286,6 +1292,7 @@
 				5AAA86FC18B1B93D000D7600 /* EUExLog.h in Headers */,
 				5AAA86AD18B1B93D000D7600 /* SpecConfigParser.h in Headers */,
 				33774C541B2A6D3500D5F279 /* MKAnnotationView+WebCache.h in Headers */,
+				42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */,
 				3C2887CD1A0B099B002776E4 /* CFilteringJSONSerializer.h in Headers */,
 				5AAA872A18B1B93D000D7600 /* ioapi.h in Headers */,
 				33AF6EC91A448EFD00DC7397 /* UIViewController+MMDrawerController.h in Headers */,
@@ -1462,6 +1469,7 @@
 				5AAA86EF18B1B93D000D7600 /* EBrowserWindow.m in Sources */,
 				5AAA870B18B1B93D000D7600 /* ASIDataCompressor.m in Sources */,
 				334D180B1A47B4200050DD13 /* MMNavigationController.m in Sources */,
+				42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */,
 				5AAA86B018B1B93D000D7600 /* UpdateParser.m in Sources */,
 				5AAA871318B1B93D000D7600 /* ASIHTTPRequest.m in Sources */,
 				5AAA875B18B1B93D000D7600 /* WidgetOneDelegate.m in Sources */,
