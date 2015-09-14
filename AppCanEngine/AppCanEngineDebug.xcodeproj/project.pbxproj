@@ -36,6 +36,8 @@
 		33C8E3051B1EE82900C33492 /* UIViewController+RESideMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C8E2FF1B1EE82900C33492 /* UIViewController+RESideMenu.h */; };
 		33C8E3061B1EE82900C33492 /* UIViewController+RESideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C8E3001B1EE82900C33492 /* UIViewController+RESideMenu.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		3C5AF6F11A4D37CB008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */; };
+		4201D7751BA6B59B007D6036 /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4201D7731BA6B59B007D6036 /* EUExBase+Bundle.h */; };
+		4201D7761BA6B59B007D6036 /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D7741BA6B59B007D6036 /* EUExBase+Bundle.m */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
 		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
@@ -334,6 +336,8 @@
 		33C8E2FF1B1EE82900C33492 /* UIViewController+RESideMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RESideMenu.h"; sourceTree = "<group>"; };
 		33C8E3001B1EE82900C33492 /* UIViewController+RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RESideMenu.m"; sourceTree = "<group>"; };
 		3C5AF6EF1A4D37CB008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
+		4201D7731BA6B59B007D6036 /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
+		4201D7741BA6B59B007D6036 /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
 		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
@@ -932,6 +936,8 @@
 		5AAA860A18B1B93D000D7600 /* universalex */ = {
 			isa = PBXGroup;
 			children = (
+				4201D7731BA6B59B007D6036 /* EUExBase+Bundle.h */,
+				4201D7741BA6B59B007D6036 /* EUExBase+Bundle.m */,
 				5AAA860B18B1B93D000D7600 /* EUExAction.h */,
 				5AAA860C18B1B93D000D7600 /* EUExAction.m */,
 				5AAA860D18B1B93D000D7600 /* EUExAppCenter.h */,
@@ -1290,6 +1296,7 @@
 				5AAA86E818B1B93D000D7600 /* EBrowserViewAnimition.h in Headers */,
 				F7F383C51B74941D002214D1 /* NSData+ImageContentType.h in Headers */,
 				5AAA86D418B1B93D000D7600 /* CJSONSerializer.h in Headers */,
+				4201D7751BA6B59B007D6036 /* EUExBase+Bundle.h in Headers */,
 				5AAA873C18B1B93D000D7600 /* AppCenter.h in Headers */,
 				F7F383D61B74941D002214D1 /* UIButton+WebCache.h in Headers */,
 				DE90F53E1904E6E00084EC10 /* OpenUDID.h in Headers */,
@@ -1452,6 +1459,7 @@
 				5AAA86B018B1B93D000D7600 /* UpdateParser.m in Sources */,
 				5AAA871318B1B93D000D7600 /* ASIHTTPRequest.m in Sources */,
 				5AAA875B18B1B93D000D7600 /* WidgetOneDelegate.m in Sources */,
+				4201D7761BA6B59B007D6036 /* EUExBase+Bundle.m in Sources */,
 				5AAA874318B1B93D000D7600 /* MySpaceView.m in Sources */,
 				5AAA86A218B1B93D000D7600 /* SBJsonBase.m in Sources */,
 				334D18421A47D2A10050DD13 /* MMNavigationController.m in Sources */,
