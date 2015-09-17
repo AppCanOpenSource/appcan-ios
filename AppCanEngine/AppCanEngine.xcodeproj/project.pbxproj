@@ -270,10 +270,6 @@
 		5AE8735718B74DD20040BC9A /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE8735618B74DD20040BC9A /* IOKit.framework */; };
 		B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B220D27715A3152B00D02138 /* Foundation.framework */; };
 		B29DAE4F15AD1737004FBB57 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29DAE4E15AD1737004FBB57 /* CoreGraphics.framework */; };
-		B2E52ACD15A6B210003E73EA /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AC915A6B210003E73EA /* libiconv.dylib */; };
-		B2E52ACE15A6B210003E73EA /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52ACA15A6B210003E73EA /* libicucore.dylib */; };
-		B2E52ACF15A6B210003E73EA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52ACB15A6B210003E73EA /* libsqlite3.dylib */; };
-		B2E52AD015A6B210003E73EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52ACC15A6B210003E73EA /* libz.dylib */; };
 		B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD215A6B222003E73EA /* MediaPlayer.framework */; };
 		B2E52ADE15A6B222003E73EA /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD315A6B222003E73EA /* MessageUI.framework */; };
 		B2E52ADF15A6B222003E73EA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD415A6B222003E73EA /* MapKit.framework */; };
@@ -572,10 +568,6 @@
 		B220D27715A3152B00D02138 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B220D27B15A3152B00D02138 /* AppCanEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanEngine-Prefix.pch"; sourceTree = "<group>"; };
 		B29DAE4E15AD1737004FBB57 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		B2E52AC915A6B210003E73EA /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		B2E52ACA15A6B210003E73EA /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		B2E52ACB15A6B210003E73EA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		B2E52ACC15A6B210003E73EA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B2E52AD215A6B222003E73EA /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		B2E52AD315A6B222003E73EA /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		B2E52AD415A6B222003E73EA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -613,10 +605,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */,
-				B2E52ACD15A6B210003E73EA /* libiconv.dylib in Frameworks */,
-				B2E52ACE15A6B210003E73EA /* libicucore.dylib in Frameworks */,
-				B2E52ACF15A6B210003E73EA /* libsqlite3.dylib in Frameworks */,
-				B2E52AD015A6B210003E73EA /* libz.dylib in Frameworks */,
 				B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */,
 				B2E52ADE15A6B222003E73EA /* MessageUI.framework in Frameworks */,
 				B2E52ADF15A6B222003E73EA /* MapKit.framework in Frameworks */,
@@ -1192,10 +1180,6 @@
 			isa = PBXGroup;
 			children = (
 				5AE8735618B74DD20040BC9A /* IOKit.framework */,
-				B2E52AC915A6B210003E73EA /* libiconv.dylib */,
-				B2E52ACA15A6B210003E73EA /* libicucore.dylib */,
-				B2E52ACB15A6B210003E73EA /* libsqlite3.dylib */,
-				B2E52ACC15A6B210003E73EA /* libz.dylib */,
 				B2E52AD515A6B222003E73EA /* Accelerate.framework */,
 				B2E52AD615A6B222003E73EA /* AddressBook.framework */,
 				B2E52AD715A6B222003E73EA /* AddressBookUI.framework */,
@@ -1602,7 +1586,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 arm64";
 			};
@@ -1620,7 +1604,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 arm64";
