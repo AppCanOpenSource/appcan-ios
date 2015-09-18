@@ -1633,6 +1633,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: wang ping (NXRC4JBS2X)";
 				DSTROOT = /tmp/AppCanEngine.dst;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
@@ -1657,6 +1658,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: wang ping (NXRC4JBS2X)";
 				DSTROOT = /tmp/AppCanEngine.dst;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
