@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
@@ -35,6 +33,8 @@
 	<string>2.2.38</string>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string></string>
 	<key>StatusBarStyleIOS7</key>
 	<true/>
 	<key>UIInterfaceOrientation</key>
@@ -49,5 +49,10 @@
 	<false/>
 	<key>appkey</key>
 	<string>47d9711ee8b843b6b63f5e212b880ba2</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+	</dict>
 </dict>
 </plist>
