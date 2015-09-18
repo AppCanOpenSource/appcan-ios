@@ -321,4 +321,10 @@ return [BUtility isConnected];
 //    
 //    app.drawerController.isGestureRecognizer = isEnable;
 }
+
++(NSBundle *)bundleForPlugin:(NSString *)pluginName{
+    NSString * bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
+    NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
+    return [NSBundle bundleWithPath:bundlePath];
+}
 @end
