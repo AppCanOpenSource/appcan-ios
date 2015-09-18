@@ -104,10 +104,6 @@
 		3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
 		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
-		4200417B1BABBE02000A57F5 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200417A1BABBE02000A57F5 /* libiconv.tbd */; };
-		4200417D1BABBE14000A57F5 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200417C1BABBE14000A57F5 /* libicucore.tbd */; };
-		4200417F1BABBE1E000A57F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200417E1BABBE1E000A57F5 /* libsqlite3.tbd */; };
-		420041811BABBE24000A57F5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041801BABBE24000A57F5 /* libz.tbd */; };
 		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
 		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
 		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
@@ -612,10 +608,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				420041811BABBE24000A57F5 /* libz.tbd in Frameworks */,
-				4200417F1BABBE1E000A57F5 /* libsqlite3.tbd in Frameworks */,
-				4200417D1BABBE14000A57F5 /* libicucore.tbd in Frameworks */,
-				4200417B1BABBE02000A57F5 /* libiconv.tbd in Frameworks */,
 				B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */,
 				B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */,
 				B2E52ADE15A6B222003E73EA /* MessageUI.framework in Frameworks */,
