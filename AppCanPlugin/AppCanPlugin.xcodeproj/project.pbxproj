@@ -7,22 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		33DDE7E31A4C1F7D003965F3 /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */; };
-		3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 3C5AF6EC1A4D36E7008F8A3D /* widget */; };
 		3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6D7B316F1CB3800D8E883 /* StoreKit.framework */; };
 		6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */; };
 		6CC60340157DCC0F00A3E13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */; };
 		6CC60342157DCC0F00A3E13E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC60341157DCC0F00A3E13E /* main.m */; };
-		6CC6036A157DCCEF00A3E13E /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC6034C157DCCEF00A3E13E /* libstdc++.dylib */; };
+		6CC6036A157DCCEF00A3E13E /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC6034C157DCCEF00A3E13E /* libstdc++.tbd */; };
 		6CC6036B157DCCEF00A3E13E /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC6034D157DCCEF00A3E13E /* MediaPlayer.framework */; };
 		6CC6036C157DCCEF00A3E13E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC6034E157DCCEF00A3E13E /* MessageUI.framework */; };
 		6CC6036D157DCCEF00A3E13E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC6034F157DCCEF00A3E13E /* MapKit.framework */; };
-		6CC6036E157DCCEF00A3E13E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60350157DCCEF00A3E13E /* libiconv.dylib */; };
-		6CC6036F157DCCEF00A3E13E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60351157DCCEF00A3E13E /* libicucore.dylib */; };
-		6CC60370157DCCEF00A3E13E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60352157DCCEF00A3E13E /* libsqlite3.dylib */; };
-		6CC60371157DCCEF00A3E13E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60353157DCCEF00A3E13E /* libz.dylib */; };
+		6CC6036E157DCCEF00A3E13E /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60350157DCCEF00A3E13E /* libiconv.tbd */; };
+		6CC6036F157DCCEF00A3E13E /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60351157DCCEF00A3E13E /* libicucore.tbd */; };
+		6CC60370157DCCEF00A3E13E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60352157DCCEF00A3E13E /* libsqlite3.tbd */; };
+		6CC60371157DCCEF00A3E13E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60353157DCCEF00A3E13E /* libz.tbd */; };
 		6CC60372157DCCEF00A3E13E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60354157DCCEF00A3E13E /* Accelerate.framework */; };
 		6CC60373157DCCEF00A3E13E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60355157DCCEF00A3E13E /* AddressBook.framework */; };
 		6CC60374157DCCEF00A3E13E /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60356157DCCEF00A3E13E /* AddressBookUI.framework */; };
@@ -48,19 +46,38 @@
 		6CC60394157DCD9300A3E13E /* sound in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6038F157DCD9300A3E13E /* sound */; };
 		6CC603A9157DD65E00A3E13E /* WidgetOnePseudoDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC603A8157DD65E00A3E13E /* WidgetOnePseudoDelegate.m */; };
 		6CC60442157DCC0F00A3E13E /* Beqtucontent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC60441157DCC0F00A3E13E /* Beqtucontent.m */; };
-		7CC6036E157DCCEF00A3E13E /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC60350157DCCEF00A3E13E /* libbz2.1.0.dylib */; };
+		71689A2E1BAA5DA800A90448 /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 71689A2B1BAA5CDE00A90448 /* libAppCanEngine.a */; };
+		71689A301BAA5F9900A90448 /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 71689A2F1BAA5F9900A90448 /* widget */; settings = {ASSET_TAGS = (); }; };
+		7CC6036E157DCCEF00A3E13E /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC60350157DCCEF00A3E13E /* libbz2.1.0.tbd */; };
 		B2403BF51833923A002530F6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2403BF71833923A002530F6 /* Localizable.strings */; };
-		B287DD551716BCD0000DFADA /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B287DD541716BCD0000DFADA /* libxml2.dylib */; };
+		B287DD551716BCD0000DFADA /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B287DD541716BCD0000DFADA /* libxml2.tbd */; };
 		DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE94A2D418F7CD91000CA6E7 /* CoreText.framework */; };
 		DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE94A2D618F7CD9B000CA6E7 /* ImageIO.framework */; };
 		DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE94A2D818F7CE12000CA6E7 /* QuickLook.framework */; };
 		DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE94A2DA18F7CE48000CA6E7 /* Foundation.framework */; };
-		DE94A2DE18F7E508000CA6E7 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE94A2DD18F7E508000CA6E7 /* libc++.dylib */; };
+		DE94A2DE18F7E508000CA6E7 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DE94A2DD18F7E508000CA6E7 /* libc++.tbd */; };
 		DE9F08231A5FD6460055FD61 /* CBSchemesList.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE9F08221A5FD6460055FD61 /* CBSchemesList.plist */; };
-		DED3A1271A89A60500840D47 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DED3A1261A89A60500840D47 /* libresolv.dylib */; };
-		F359287D1ACA853C0005F854 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F359287C1ACA853C0005F854 /* libstdc++.6.0.9.dylib */; };
+		DED3A1271A89A60500840D47 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DED3A1261A89A60500840D47 /* libresolv.tbd */; };
+		F359287D1ACA853C0005F854 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F359287C1ACA853C0005F854 /* libstdc++.6.0.9.tbd */; };
 		F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60367157DCCEF00A3E13E /* UIKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		71689A2A1BAA5CDE00A90448 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71689A261BAA5CDD00A90448 /* AppCanEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B220D27415A3152B00D02138;
+			remoteInfo = AppCanEngine;
+		};
+		71689A2C1BAA5DA200A90448 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71689A261BAA5CDD00A90448 /* AppCanEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B220D27315A3152B00D02138;
+			remoteInfo = AppCanEngine;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3356F9571A4851FA00F58330 /* Embed Frameworks */ = {
@@ -76,8 +93,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
-		3C5AF6EC1A4D36E7008F8A3D /* widget */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widget; sourceTree = "<group>"; };
 		3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
@@ -98,14 +113,14 @@
 		6CC6033F157DCC0F00A3E13E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6CC60341157DCC0F00A3E13E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6CC60343157DCC0F00A3E13E /* AppCanPlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanPlugin-Prefix.pch"; sourceTree = "<group>"; };
-		6CC6034C157DCCEF00A3E13E /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		6CC6034C157DCCEF00A3E13E /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		6CC6034D157DCCEF00A3E13E /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		6CC6034E157DCCEF00A3E13E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		6CC6034F157DCCEF00A3E13E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		6CC60350157DCCEF00A3E13E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		6CC60351157DCCEF00A3E13E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		6CC60352157DCCEF00A3E13E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		6CC60353157DCCEF00A3E13E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		6CC60350157DCCEF00A3E13E /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		6CC60351157DCCEF00A3E13E /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		6CC60352157DCCEF00A3E13E /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		6CC60353157DCCEF00A3E13E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		6CC60354157DCCEF00A3E13E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		6CC60355157DCCEF00A3E13E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		6CC60356157DCCEF00A3E13E /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
@@ -140,19 +155,21 @@
 		6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExBaseDefine.h; sourceTree = "<group>"; };
 		6CD1DC34159ADD8A003C3083 /* EUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUtility.h; sourceTree = "<group>"; };
 		6CD1DC36159ADD8A003C3083 /* WidgetOneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOneDelegate.h; sourceTree = "<group>"; };
-		7CC60350157DCCEF00A3E13E /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = usr/lib/libbz2.1.0.dylib; sourceTree = SDKROOT; };
+		71689A261BAA5CDD00A90448 /* AppCanEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppCanEngine.xcodeproj; path = ../AppCanEngine/AppCanEngine.xcodeproj; sourceTree = "<group>"; };
+		71689A2F1BAA5F9900A90448 /* widget */ = {isa = PBXFileReference; lastKnownFileType = folder; name = widget; path = "../../../../Desktop/普华/AppCanPlugin/AppCanPlugin/widget"; sourceTree = "<group>"; };
+		7CC60350157DCCEF00A3E13E /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
 		B2403BF61833923A002530F6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B2403BF818339267002530F6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		B287DD541716BCD0000DFADA /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		B287DD541716BCD0000DFADA /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		B2D89A9718338CF600C6F041 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		DE94A2D418F7CD91000CA6E7 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		DE94A2D618F7CD9B000CA6E7 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		DE94A2D818F7CE12000CA6E7 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		DE94A2DA18F7CE48000CA6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		DE94A2DD18F7E508000CA6E7 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		DE94A2DD18F7E508000CA6E7 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DE9F08221A5FD6460055FD61 /* CBSchemesList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBSchemesList.plist; sourceTree = "<group>"; };
-		DED3A1261A89A60500840D47 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
-		F359287C1ACA853C0005F854 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
+		DED3A1261A89A60500840D47 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		F359287C1ACA853C0005F854 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,33 +177,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F359287D1ACA853C0005F854 /* libstdc++.6.0.9.dylib in Frameworks */,
-				DED3A1271A89A60500840D47 /* libresolv.dylib in Frameworks */,
+				71689A2E1BAA5DA800A90448 /* libAppCanEngine.a in Frameworks */,
+				F359287D1ACA853C0005F854 /* libstdc++.6.0.9.tbd in Frameworks */,
+				DED3A1271A89A60500840D47 /* libresolv.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
-				DE94A2DE18F7E508000CA6E7 /* libc++.dylib in Frameworks */,
+				DE94A2DE18F7E508000CA6E7 /* libc++.tbd in Frameworks */,
 				DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */,
 				DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */,
 				DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */,
 				DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */,
-				B287DD551716BCD0000DFADA /* libxml2.dylib in Frameworks */,
-				DE94A2DE18F7E508000CA6E7 /* libc++.dylib in Frameworks */,
+				B287DD551716BCD0000DFADA /* libxml2.tbd in Frameworks */,
+				DE94A2DE18F7E508000CA6E7 /* libc++.tbd in Frameworks */,
 				DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */,
 				DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */,
-				33DDE7E31A4C1F7D003965F3 /* libAppCanEngine.a in Frameworks */,
 				DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */,
 				DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */,
-				B287DD551716BCD0000DFADA /* libxml2.dylib in Frameworks */,
+				B287DD551716BCD0000DFADA /* libxml2.tbd in Frameworks */,
 				46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */,
 				6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */,
-				6CC6036A157DCCEF00A3E13E /* libstdc++.dylib in Frameworks */,
+				6CC6036A157DCCEF00A3E13E /* libstdc++.tbd in Frameworks */,
 				6CC6036B157DCCEF00A3E13E /* MediaPlayer.framework in Frameworks */,
 				6CC6036C157DCCEF00A3E13E /* MessageUI.framework in Frameworks */,
 				6CC6036D157DCCEF00A3E13E /* MapKit.framework in Frameworks */,
-				6CC6036E157DCCEF00A3E13E /* libiconv.dylib in Frameworks */,
-				7CC6036E157DCCEF00A3E13E /* libbz2.1.0.dylib in Frameworks */,
-				6CC6036F157DCCEF00A3E13E /* libicucore.dylib in Frameworks */,
-				6CC60370157DCCEF00A3E13E /* libsqlite3.dylib in Frameworks */,
-				6CC60371157DCCEF00A3E13E /* libz.dylib in Frameworks */,
+				6CC6036E157DCCEF00A3E13E /* libiconv.tbd in Frameworks */,
+				7CC6036E157DCCEF00A3E13E /* libbz2.1.0.tbd in Frameworks */,
+				6CC6036F157DCCEF00A3E13E /* libicucore.tbd in Frameworks */,
+				6CC60370157DCCEF00A3E13E /* libsqlite3.tbd in Frameworks */,
+				6CC60371157DCCEF00A3E13E /* libz.tbd in Frameworks */,
 				6CC60372157DCCEF00A3E13E /* Accelerate.framework in Frameworks */,
 				6CC60373157DCCEF00A3E13E /* AddressBook.framework in Frameworks */,
 				6CC60374157DCCEF00A3E13E /* AddressBookUI.framework in Frameworks */,
@@ -256,6 +273,7 @@
 		6CC60326157DCC0F00A3E13E = {
 			isa = PBXGroup;
 			children = (
+				71689A261BAA5CDD00A90448 /* AppCanEngine.xcodeproj */,
 				B2403BF71833923A002530F6 /* Localizable.strings */,
 				6CC6033B157DCC0F00A3E13E /* AppCanPlugin */,
 				6CC60334157DCC0F00A3E13E /* Frameworks */,
@@ -274,9 +292,9 @@
 		6CC60334157DCC0F00A3E13E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F359287C1ACA853C0005F854 /* libstdc++.6.0.9.dylib */,
-				DED3A1261A89A60500840D47 /* libresolv.dylib */,
-				DE94A2DD18F7E508000CA6E7 /* libc++.dylib */,
+				F359287C1ACA853C0005F854 /* libstdc++.6.0.9.tbd */,
+				DED3A1261A89A60500840D47 /* libresolv.tbd */,
+				DE94A2DD18F7E508000CA6E7 /* libc++.tbd */,
 				6CC60354157DCCEF00A3E13E /* Accelerate.framework */,
 				6CC60355157DCCEF00A3E13E /* AddressBook.framework */,
 				6CC60356157DCCEF00A3E13E /* AddressBookUI.framework */,
@@ -294,13 +312,13 @@
 				6CC60360157DCCEF00A3E13E /* CoreVideo.framework */,
 				DE94A2DA18F7CE48000CA6E7 /* Foundation.framework */,
 				DE94A2D618F7CD9B000CA6E7 /* ImageIO.framework */,
-				7CC60350157DCCEF00A3E13E /* libbz2.1.0.dylib */,
-				6CC60350157DCCEF00A3E13E /* libiconv.dylib */,
-				6CC60351157DCCEF00A3E13E /* libicucore.dylib */,
-				6CC60352157DCCEF00A3E13E /* libsqlite3.dylib */,
-				6CC6034C157DCCEF00A3E13E /* libstdc++.dylib */,
-				B287DD541716BCD0000DFADA /* libxml2.dylib */,
-				6CC60353157DCCEF00A3E13E /* libz.dylib */,
+				7CC60350157DCCEF00A3E13E /* libbz2.1.0.tbd */,
+				6CC60350157DCCEF00A3E13E /* libiconv.tbd */,
+				6CC60351157DCCEF00A3E13E /* libicucore.tbd */,
+				6CC60352157DCCEF00A3E13E /* libsqlite3.tbd */,
+				6CC6034C157DCCEF00A3E13E /* libstdc++.tbd */,
+				B287DD541716BCD0000DFADA /* libxml2.tbd */,
+				6CC60353157DCCEF00A3E13E /* libz.tbd */,
 				6CC6034F157DCCEF00A3E13E /* MapKit.framework */,
 				6CC6034D157DCCEF00A3E13E /* MediaPlayer.framework */,
 				6CC6034E157DCCEF00A3E13E /* MessageUI.framework */,
@@ -337,8 +355,8 @@
 		6CC6033C157DCC0F00A3E13E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				71689A2F1BAA5F9900A90448 /* widget */,
 				DE9F08221A5FD6460055FD61 /* CBSchemesList.plist */,
-				3C5AF6EC1A4D36E7008F8A3D /* widget */,
 				6CC6038C157DCD9300A3E13E /* error */,
 				6CC6038D157DCD9300A3E13E /* img */,
 				6CC6038E157DCD9300A3E13E /* plugin.xml */,
@@ -358,7 +376,6 @@
 		6CC60388157DCD0B00A3E13E /* engine */ = {
 			isa = PBXGroup;
 			children = (
-				33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */,
 				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
 				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
 				6CD1DC34159ADD8A003C3083 /* EUtility.h */,
@@ -390,6 +407,14 @@
 			path = uexLib;
 			sourceTree = "<group>";
 		};
+		71689A271BAA5CDD00A90448 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				71689A2B1BAA5CDE00A90448 /* libAppCanEngine.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -405,6 +430,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				71689A2D1BAA5DA200A90448 /* PBXTargetDependency */,
 			);
 			name = AppCanPlugin;
 			productName = AppCanPlugin;
@@ -431,6 +457,12 @@
 			mainGroup = 6CC60326157DCC0F00A3E13E;
 			productRefGroup = 6CC60332157DCC0F00A3E13E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 71689A271BAA5CDD00A90448 /* Products */;
+					ProjectRef = 71689A261BAA5CDD00A90448 /* AppCanEngine.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6CC60330157DCC0F00A3E13E /* AppCanPlugin */,
@@ -438,15 +470,25 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		71689A2B1BAA5CDE00A90448 /* libAppCanEngine.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libAppCanEngine.a;
+			remoteRef = 71689A2A1BAA5CDE00A90448 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		6CC6032F157DCC0F00A3E13E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71689A301BAA5F9900A90448 /* widget in Resources */,
 				6CC60340157DCC0F00A3E13E /* InfoPlist.strings in Resources */,
 				6CC60391157DCD9300A3E13E /* error in Resources */,
 				DE9F08231A5FD6460055FD61 /* CBSchemesList.plist in Resources */,
-				3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */,
 				6CC60392157DCD9300A3E13E /* img in Resources */,
 				6CC60393157DCD9300A3E13E /* plugin.xml in Resources */,
 				6CC60394157DCD9300A3E13E /* sound in Resources */,
@@ -470,6 +512,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		71689A2D1BAA5DA200A90448 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AppCanEngine;
+			targetProxy = 71689A2C1BAA5DA200A90448 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */ = {
@@ -500,6 +550,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -512,7 +563,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64";
@@ -526,12 +577,13 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -557,7 +609,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -590,7 +642,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -613,12 +665,13 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -645,7 +698,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
