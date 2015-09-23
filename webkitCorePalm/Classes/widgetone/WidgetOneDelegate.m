@@ -352,33 +352,20 @@ NSString *AppCanJS = nil;
     }
 	//应用从未启动到启动，获取本地通知信息
     if (launchOptions && [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"] ) {
-        //        NSDictionary *dict =[launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
-        //        NSDictionary *userData = [dict objectForKey:@"userInfo"];
-        //        if (userData!=nil) {
-        //            NSMutableDictionary *localNotifDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"localData"];
-        //			if (!localNotifDict) {
-        //				localNotifDict = [[NSMutableDictionary alloc] initWithCapacity:2];
-        //			}
-        //			if ([userData objectForKey:@"notificationId"] && [userData objectForKey:@"msg"]) {
-        //				[localNotifDict setObject:[userData objectForKey:@"msg"] forKey:[userData objectForKey:@"notificationId"]];
-        //			}
-        //			[[NSUserDefaults standardUserDefaults] setObject:localNotifDict forKey:@"localData"];
-        //	        [[NSUserDefaults standardUserDefaults] synchronize];
-        //        }
+        
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         
     }
     
     [BUtility setAppCanDocument];
-    //        [[AppCanAnalysis ACInstance] setErrorReport:YES];
+    
     Class analysisClass = NSClassFromString(@"AppCanAnalysis");
     
-    if (analysisClass) {//类不存在直接返回
+    if (analysisClass) {
         
         id analysisObject = class_createInstance(analysisClass,0);
         
         ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
-        //objc_msgSend(analysisObject, @selector(setErrorReport:),YES);
         
     }
     
@@ -401,47 +388,24 @@ NSString *AppCanJS = nil;
         
     }
     
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0) {
-//		//
-//    } else {
-    
     meNav = [[ACEUINavigationController alloc] initWithRootViewController:meBrwCtrler];
+    
     [meNav setNavigationBarHidden:YES];
-    [ACEUtils setNavigationBarColor:meNav color:[UIColor purpleColor]];
     
-//    if (isSysVersionAbove7_0) {
-//        meNav.navigationBar.barTintColor = [UIColor yellowColor];
-//    } else {
-//        meNav.navigationBar.tintColor = [UIColor yellowColor];
-//    }
+    //[ACEUtils setNavigationBarColor:meNav color:[UIColor purpleColor]];
     
-//    meNav.navigationBar.hidden = YES;
-    
-//    [[UINavigationBar appearance] setBarTintColor:[UIColor yellowColor]];
-    
-    
-    
-//	}
-    
-	mwWgtMgr = [[WWidgetMgr alloc]init];
+    mwWgtMgr = [[WWidgetMgr alloc]init];
 	meBrwCtrler.mwWgtMgr = mwWgtMgr;
+    
 	[self readAppCanJS];
+    
+    //将这个方法提前，保证这个方法在viewController的loadView方法之前调用
+    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
     
 	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
 	window.autoresizesSubviews = YES;
     
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0) {
-//        
-//		window.rootViewController = meBrwCtrler;
-//        
-//    } else {
-    
-    
-    
-    
-    
-    
-    
+
     _drawerController = [[ACEDrawerViewController alloc]
                                              initWithCenterViewController:meNav
                                              leftDrawerViewController:nil
@@ -466,12 +430,13 @@ NSString *AppCanJS = nil;
     
     
     [meNav release];
-        
-//	}
-    
+
     [window makeKeyAndVisible];
+    
      [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
+    
     if(theApp.usePushControl == YES) {
+        
         if (isSysVersionAbove8_0) {
             
 #ifdef __IPHONE_8_0
@@ -489,7 +454,9 @@ NSString *AppCanJS = nil;
             
         }
     }
+    
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
 	//支付宝支付－－》4.0以前为单任务
 	if ([self isSingleTask]) {
         
@@ -503,11 +470,7 @@ NSString *AppCanJS = nil;
         
 	}
     
-    
-    //
-    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
-    
-	return YES;
+    return YES;
     
 }
 
