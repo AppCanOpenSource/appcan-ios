@@ -19,8 +19,54 @@
 #import <Foundation/Foundation.h>
 @class EBrowserView;
 void PluginLog(NSString *format, ...);
+
+typedef NS_ENUM(NSInteger,uexPluginCallbackType){
+    uexPluginCallbackWithJsonString,//回调json字符串（网页端需要首先JSON.parse才能使用）
+    uexPluginCallbackWithJsonObject //回调json对象（网页的可以直接使用）
+    
+};
+
+extern NSString * const cUexPluginCallbackInRootWindow;
+extern NSString * const cUexPluginCallbackInFrontWindow;
+
 @interface EUtility : NSObject {
 }
+
+
+
+/**
+ *  @method 回调网页js
+ *
+ *  @param pluginName   回调的插件名
+ *  @param functionName 回调的方法名
+ *  @param obj          回调给网页的对象（NSDictionary、NSArray、NSString、nil)
+ *  @param type         回调的方式（json字符串还是json对象）
+ *  @param targetBrwView 要回调的网页 请传cUexPluginCallbackTargetRootWindow(回调给起始Window）cUexPluginCallbackTargetFrontWindow(回调给最前端Window) 或者(EBrowserView *)实例
+ *
+ *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:meBrwView];
+ *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:cUexPluginCallbackInRootWindow];
+ *
+ *  @author  LiuKangli
+ *  @version 2015-09-23
+ */
++ (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target;
+
+
+
+/**
+ *
+ *  @method 获取插件的资源包实例
+ *
+ *
+ *  @param pluginName 插件名
+ *  @return 插件同名的.bundle文件对应的NSBundle实例
+ *
+ *  @example NSBundle * mePluginBundle = [EUtility bundleForPlugin:@"uexDemo"];
+
+ */
++(NSBundle *)bundleForPlugin:(NSString *)pluginName;
+
+
 + (NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl;
 + (NSURL*)stringToUrl:(NSString*)inString;
 + (BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation;
@@ -71,5 +117,5 @@ void PluginLog(NSString *format, ...);
 +(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable;
 
 
-+(NSBundle *)bundleForPlugin:(NSString *)pluginName;
+
 @end
