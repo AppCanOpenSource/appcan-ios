@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+#import "JSON.h"
 #import "EUtility.h"
 #import "BUtility.h"
 #import "EBrowserView.h"
@@ -30,6 +30,10 @@
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 
+
+NSString * const cUexPluginCallbackInRootWindow = @"uexPluginCallbackInRootWindow";
+NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWindow";
+
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
 	va_list args;
@@ -42,6 +46,47 @@ void PluginLog (NSString *format, ...) {
 }
 
 @implementation EUtility
+
+
+
+//2015-09-23 by lkl
++ (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target{
+    
+    NSString * result=[obj JSONFragment];
+    NSString * callbackString;
+    switch (type) {
+        case uexPluginCallbackWithJsonString: {
+            callbackString = [NSString stringWithFormat:@"if(%@.%@ != null){%@.%@('%@');}",pluginName,functionName,pluginName,functionName,result];
+            break;
+        }
+        case uexPluginCallbackWithJsonObject: {
+            callbackString = [NSString stringWithFormat:@"if(%@.%@ != null){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
+            break;
+        }
+
+    }
+    
+    if(target == cUexPluginCallbackInRootWindow){
+        [self evaluatingJavaScriptInRootWnd:callbackString];
+    }else if(target == cUexPluginCallbackInFrontWindow){
+        [self evaluatingJavaScriptInFrontWnd:callbackString];
+    }else if(target && [target isKindOfClass:[EBrowserView class]]){
+        EBrowserView * inBrwView=(EBrowserView *)target;
+        [self brwView:inBrwView evaluateScript:callbackString];
+    }
+    
+}
+
+
++(NSBundle *)bundleForPlugin:(NSString *)pluginName{
+    NSString * bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
+    NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
+    return [NSBundle bundleWithPath:bundlePath];
+}
+
+
+
+
 +(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl {
 	return [BUtility makeUrl:inBaseStr url:inUrl];
 }
@@ -322,9 +367,5 @@ return [BUtility isConnected];
 //    app.drawerController.isGestureRecognizer = isEnable;
 }
 
-+(NSBundle *)bundleForPlugin:(NSString *)pluginName{
-    NSString * bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
-    NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
-    return [NSBundle bundleWithPath:bundlePath];
-}
+
 @end
