@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		33DDE7E31A4C1F7D003965F3 /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */; };
 		3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 3C5AF6EC1A4D36E7008F8A3D /* widget */; };
 		3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */; };
 		420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041821BABCD27000A57F5 /* libstdc++.6.0.9.tbd */; };
@@ -20,6 +19,8 @@
 		420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041901BABCD6F000A57F5 /* libstdc++.tbd */; };
 		420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041921BABCD79000A57F5 /* libxml2.tbd */; };
 		420041951BABCD80000A57F5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041941BABCD80000A57F5 /* libz.tbd */; };
+		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
+		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; settings = {ASSET_TAGS = (); }; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6D7B316F1CB3800D8E883 /* StoreKit.framework */; };
 		6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */; };
@@ -76,7 +77,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
 		3C5AF6EC1A4D36E7008F8A3D /* widget */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widget; sourceTree = "<group>"; };
 		3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
 		420041821BABCD27000A57F5 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
@@ -89,6 +89,9 @@
 		420041901BABCD6F000A57F5 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		420041921BABCD79000A57F5 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		420041941BABCD80000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
+		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
+		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
 		46D6D7B316F1CB3800D8E883 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -177,7 +180,6 @@
 				DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */,
 				DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */,
 				DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */,
-				33DDE7E31A4C1F7D003965F3 /* libAppCanEngine.a in Frameworks */,
 				DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */,
 				DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */,
 				46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */,
@@ -185,6 +187,7 @@
 				6CC6036B157DCCEF00A3E13E /* MediaPlayer.framework in Frameworks */,
 				6CC6036C157DCCEF00A3E13E /* MessageUI.framework in Frameworks */,
 				6CC6036D157DCCEF00A3E13E /* MapKit.framework in Frameworks */,
+				42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */,
 				6CC60372157DCCEF00A3E13E /* Accelerate.framework in Frameworks */,
 				6CC60373157DCCEF00A3E13E /* AddressBook.framework in Frameworks */,
 				6CC60374157DCCEF00A3E13E /* AddressBookUI.framework in Frameworks */,
@@ -349,6 +352,7 @@
 				6CC604A7157DD65E00A3E13E /* Beqtucontent.h */,
 				6CC60441157DCC0F00A3E13E /* Beqtucontent.m */,
 				6CC60343157DCC0F00A3E13E /* AppCanPlugin-Prefix.pch */,
+				42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -356,7 +360,7 @@
 		6CC60388157DCD0B00A3E13E /* engine */ = {
 			isa = PBXGroup;
 			children = (
-				33DDE7E21A4C1F7D003965F3 /* libAppCanEngine.a */,
+				42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */,
 				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
 				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
 				6CD1DC34159ADD8A003C3083 /* EUtility.h */,
@@ -449,6 +453,7 @@
 				6CC60393157DCD9300A3E13E /* plugin.xml in Resources */,
 				6CC60394157DCD9300A3E13E /* sound in Resources */,
 				3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */,
+				42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */,
 				B2403BF51833923A002530F6 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -470,6 +475,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42D0AF471BBB879C002249AE /* en */,
+				42D0AF491BBB879D002249AE /* zh-Hans */,
+			);
+			name = AppCanEngineLocalization.strings;
+			sourceTree = "<group>";
+		};
 		6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -510,7 +524,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64";
@@ -529,7 +543,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -556,7 +570,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -590,7 +604,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -618,7 +632,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -646,7 +660,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",

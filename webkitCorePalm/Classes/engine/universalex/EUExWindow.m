@@ -51,9 +51,10 @@
 #define kWindowConfirmViewTag (-9999)
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
-#define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗?"
+#define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
 #define UEX_EXITAPP_ALERT_CANCLE @"取消"
+
 
 #define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
@@ -426,7 +427,7 @@
     [mActionSheet showInView:meBrwView.meBrwWnd];
 }
 -(void)alertForbidView:(NSString*)uexWinName{
-    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"%@窗口被禁止使用，请联系管理员。",uexWinName] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:[NSString stringWithFormat:@"%@窗口被禁止使用，请联系管理员。",uexWinName] delegate:nil cancelButtonTitle:nil otherButtonTitles:ACELocalized(@"确定"), nil];
     [alertView show];
     [alertView release];
 }
@@ -1893,10 +1894,10 @@
 -(void)exitApp
 {
     
-    NSString * title = NSLocalizedString(UEX_EXITAPP_ALERT_TITLE, nil);
-    NSString * message = NSLocalizedString(UEX_EXITAPP_ALERT_MESSAGE, nil);
-    NSString * exit = NSLocalizedString(UEX_EXITAPP_ALERT_EXIT, nil);
-    NSString * cancel = NSLocalizedString(UEX_EXITAPP_ALERT_CANCLE, nil);
+    NSString * title = ACELocalized(UEX_EXITAPP_ALERT_TITLE);
+    NSString * message = ACELocalized(UEX_EXITAPP_ALERT_MESSAGE);
+    NSString * exit = ACELocalized(UEX_EXITAPP_ALERT_EXIT);
+    NSString * cancel = ACELocalized(UEX_EXITAPP_ALERT_CANCLE);
     
     UIAlertView *windowConfirmView = [[[UIAlertView alloc]
                                        initWithTitle:title
