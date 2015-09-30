@@ -291,7 +291,6 @@ NSString *AppCanJS = nil;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     BOOL success;
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -321,7 +320,7 @@ NSString *AppCanJS = nil;
         
         if (isjab) {
             
-            UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:@"提示" message:@"本应用仅适用未越狱机，即将关闭。" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+            UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:ACELocalized(@"本应用仅适用未越狱机，即将关闭。") delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
             alertView.tag = kViewTagExit;
 			[alertView show];
             [alertView release];
@@ -547,7 +546,7 @@ NSString *AppCanJS = nil;
         //			[brwView  stringByEvaluatingJavaScriptFromString:jsStr];
         //		}
 		application.applicationIconBadgeNumber = 0;
-		UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+		UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:msg delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
 		alertView.tag = kViewTagLocalNotification;
 		[alertView show];
 		[alertView release];
