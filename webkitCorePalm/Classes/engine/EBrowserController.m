@@ -298,7 +298,7 @@
                 [mwWgtUpdate removeAllUD:updateWgtID];
             }else {
                 ACENSLog(@"更新失败");
-                UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:nil message:@"文件解压失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:nil message:ACELocalized(@"文件解压失败") delegate:nil cancelButtonTitle:ACELocalized(@"确定") otherButtonTitles: nil];
                 alertView.tag = KAlertWithUpdateTag;
                 [alertView show];
                 [alertView release];
@@ -556,7 +556,7 @@
 	if ([BUtility getAppCanDevMode]) {
 		UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,30)];
 		devMark.backgroundColor =[UIColor clearColor];
-		devMark.text = @"测试版本仅用于开发测试";
+		devMark.text =ACELocalized(@"测试版本仅用于开发测试");
 		devMark.textColor = [UIColor redColor];
 		devMark.textAlignment = UITextAlignmentLeft;
 		devMark.font = [UIFont boldSystemFontOfSize:24];

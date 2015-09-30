@@ -106,6 +106,8 @@
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
 		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
+		42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D0AF401BBB8641002249AE /* ACELocalization.h */; settings = {ASSET_TAGS = (); }; };
+		42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; settings = {ASSET_TAGS = (); }; };
 		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
@@ -406,6 +408,8 @@
 		420041801BABBE24000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
+		42D0AF401BBB8641002249AE /* ACELocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACELocalization.h; sourceTree = "<group>"; };
+		42D0AF411BBB8641002249AE /* ACELocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACELocalization.m; sourceTree = "<group>"; };
 		42FFC7FE1B625D160058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
@@ -840,6 +844,8 @@
 		5AAA858E18B1B93D000D7600 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				42D0AF401BBB8641002249AE /* ACELocalization.h */,
+				42D0AF411BBB8641002249AE /* ACELocalization.m */,
 				DE90F5381904E6D00084EC10 /* OpenUDID.h */,
 				DE90F5391904E6D00084EC10 /* OpenUDID.m */,
 				5AAA858F18B1B93D000D7600 /* AllConfigParser.h */,
@@ -1317,6 +1323,7 @@
 				5AAA870E18B1B93D000D7600 /* ASIDownloadCache.h in Headers */,
 				33774C711B2A6D3500D5F279 /* UIImageView+WebCache.h in Headers */,
 				5AAA871418B1B93D000D7600 /* ASIHTTPRequestConfig.h in Headers */,
+				42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */,
 				3C2887D21A0B099B002776E4 /* NSDictionary_JSONExtensions.h in Headers */,
 				33AF6EC51A448EFD00DC7397 /* MMDrawerVisualState.h in Headers */,
 				5AAA870318B1B93D000D7600 /* EUExWidgetOne.h in Headers */,
@@ -1520,6 +1527,7 @@
 				5AAA871C18B1B93D000D7600 /* Reachability.m in Sources */,
 				5AAA875D18B1B93D000D7600 /* WWidget.m in Sources */,
 				5AAA871E18B1B93D000D7600 /* AsyncSocket.m in Sources */,
+				42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */,
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				3C2887AF1A0B0984002776E4 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,

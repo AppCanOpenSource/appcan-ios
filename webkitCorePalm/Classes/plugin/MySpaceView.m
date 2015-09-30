@@ -45,7 +45,7 @@
         // Initialization code.
  		[self setUserInteractionEnabled:YES];
 		UIImage *barImage = [UIImage imageNamed:@"img/my_space_title.png"];
-		UINavigationBar *customNavigationBar = [ACUtility createNavigationBarWithBackgroundImage:barImage title:@"应用中心"];;
+		UINavigationBar *customNavigationBar = [ACUtility createNavigationBarWithBackgroundImage:barImage title:ACELocalized(@"应用中心")];;
 		//back 
 		UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 52.0, 32.0)];
 		[backButton setImage:[UIImage imageNamed:@"img/my_space_back.png"] forState:UIControlStateNormal];
@@ -87,7 +87,7 @@
 		[topView setUserInteractionEnabled:YES];
 		UILabel *firstLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, SCREEN_W, LABEL_H)];
 		[firstLabel setBackgroundColor:[UIColor clearColor]];
-		firstLabel.text = @"推荐应用";
+		firstLabel.text = ACELocalized(@"推荐应用");
 		[topView addSubview:firstLabel];
 		[firstLabel release];
 		//popview
@@ -101,7 +101,7 @@
 		[bottomView setUserInteractionEnabled:YES];
 		UILabel *secLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0, SCREEN_W, LABEL_H)];
 		[secLabel setBackgroundColor:[UIColor clearColor]];
-		[secLabel setText:@"我的应用"];
+		[secLabel setText:ACELocalized(@"我的应用")];
 		[bottomView addSubview:secLabel];
 		[secLabel release];
 		//MYAPP VIEW
@@ -205,7 +205,7 @@
  
 		AppItemView *moreItem = [[AppItemView alloc] init];
 		[moreItem setAppId:@"9999997"];
-		[moreItem setAppName:@"更多"];
+		[moreItem setAppName:ACELocalized(@"更多")];
 		NSString *pathStr= [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"img/my_space_add.png"];
 		[moreItem setAppIconUrl:[NSURL fileURLWithPath:pathStr]];
 		[recAppSet addObject:moreItem];
@@ -329,7 +329,7 @@
 	NSLog(@"long press,appid = %@",appId);
  	if (actionShowed==NO) {
 	        actionShowed = YES;
-		UIActionSheet *act = [[UIActionSheet alloc] initWithTitle:@"删除该应用" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil];
+		UIActionSheet *act = [[UIActionSheet alloc] initWithTitle:ACELocalized(@"删除该应用") delegate:self cancelButtonTitle:ACELocalized(@"取消") destructiveButtonTitle:ACELocalized(@"确定") otherButtonTitles:nil];
 		[act setTag:[appId intValue]];
 		[act showInView:self.superview];
 		[act release];

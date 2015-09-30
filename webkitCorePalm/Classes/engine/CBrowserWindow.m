@@ -239,7 +239,7 @@ extern NSString * webappShowAactivety;
 }
 
 -(void)alertForbidView:(NSString*)uexPluginName{
-    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"%@对象被禁止使用，请联系管理员。",uexPluginName] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:[NSString stringWithFormat:@"%@%@",uexPluginName,ACELocalized(@"对象被禁止使用，请联系管理员")] delegate:nil cancelButtonTitle:nil otherButtonTitles:ACELocalized(@"确定"), nil];
     [alertView show];
     [alertView release];
 }
