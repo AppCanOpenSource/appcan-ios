@@ -75,9 +75,9 @@
     NSString *dPathKey = [NSString stringWithFormat:@"%@_savePath",uniqueId];
     NSString *savePath =[[NSUserDefaults standardUserDefaults] objectForKey:dPathKey];
     if (savePath!=nil) {
-        [self ShowAlertView:@"继续更新" msg:@"上次更新未完成请继续更新" firstBtn:@"更新" secondBtn:@"取消" tag:FWGTUPDATEPrompt];
+        [self ShowAlertView:ACELocalized(@"继续更新") msg:ACELocalized(@"上次更新未完成请继续更新") firstBtn:ACELocalized(@"更新") secondBtn:ACELocalized(@"取消") tag:FWGTUPDATEPrompt];
     }else{
-        [self ShowAlertView:@"更新提示" msg:@"部分内容更新优化，请更新后请使用" firstBtn:@"更新" secondBtn:@"取消" tag:FWGTUPDATEPrompt]; 
+        [self ShowAlertView:ACELocalized(@"更新提示") msg:ACELocalized(@"部分内容更新优化，请更新后使用") firstBtn:ACELocalized(@"更新")  secondBtn:ACELocalized(@"取消") tag:FWGTUPDATEPrompt];
     }
 }
 //4.8
@@ -141,7 +141,7 @@
     [asiRequest setAllowResumeForFileDownloads:YES];
     [asiRequest startAsynchronous];
     //
-    UIAlertView *progressAlert =[[UIAlertView alloc] initWithTitle:@"更新中" message:@"请勿关闭或离开当前页面，以免造成更新失败" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+    UIAlertView *progressAlert =[[UIAlertView alloc] initWithTitle:ACELocalized(@"更新中") message:ACELocalized(@"请勿关闭或离开当前页面，以免造成更新失败") delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
     if (!_downProgress) {
         _downProgress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
         _downProgress.frame = CGRectMake(20, 100, 240, 30);
@@ -200,7 +200,7 @@
     _downProgress = nil;
     
     //提示
-    [self ShowAlertView:@"更新失败" msg:@"可能网络传输或其他问题造成，请点击重试" firstBtn:@"重试" secondBtn:@"取消" tag:FWGTUPDATEError];
+    [self ShowAlertView:@"更新失败" msg:@"可能网络传输或其他问题造成，请点击重试" firstBtn:@"重试" secondBtn:ACELocalized(@"取消") tag:FWGTUPDATEError];
 }
 
 //
