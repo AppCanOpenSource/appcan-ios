@@ -49,7 +49,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 	<key>appkey</key>
 	<string>47d9711ee8b843b6b63f5e212b880ba2</string>
 </dict>
