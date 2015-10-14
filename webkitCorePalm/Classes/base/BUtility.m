@@ -1250,68 +1250,111 @@ static NSString *clientCertificatePwd = nil;
     return nil;
 }
 
-+(void)setAppCanViewActive:(int)wgtType opener:(NSString*)inOpener name:(NSString*)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd{
-    //8.7数据统计
-    //if (F_APPCANREPORT_USE) {
++ (void)setAppCanViewActive:(int)wgtType opener:(NSString *)inOpener name:(NSString *)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd appInfo:(NSDictionary *)appInfo {
+    
     if (theApp.useDataStatisticsControl) {
-        if (wgtType ==F_WWIDGET_MAINWIDGET) {
-            NSString *fromUrlStr =[BUtility makeSpecUrl:inOpener];
-            NSString *goUrlStr =[BUtility makeSpecUrl:inName];
-            //            if ([inOpener isEqualToString:@"application"]) {
-            //                fromUrlStr =[NSString stringWithString:inOpener];
-            //            }
-            if ([fromUrlStr hasPrefix:@"file"]) {
-                NSUInteger dest =[fromUrlStr rangeOfString:@"widget"].location;
+        
+        NSString * fromUrlStr =[BUtility makeSpecUrl:inOpener];
+        
+        NSString * goUrlStr =[BUtility makeSpecUrl:inName];
+        
+        if ([fromUrlStr hasPrefix:@"file"]) {
+            
+            NSUInteger dest =[fromUrlStr rangeOfString:@"widget"].location;
+            
+            if (dest != NSNotFound) {
                 
-                if (dest!=NSNotFound) {
-                    fromUrlStr =[fromUrlStr substringFromIndex:(dest+7)];
-                }
+                fromUrlStr =[fromUrlStr substringFromIndex:(dest+7)];
+                
             }
             
-            if ([goUrlStr hasPrefix:@"file"]) {
-                NSUInteger dest =[goUrlStr rangeOfString:@"widget"].location;
-                
-                if (dest!=NSNotFound) {
-                    goUrlStr =[goUrlStr substringFromIndex:(dest+7)];
-                }
-            }
-            Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
-            if (!analysisClass) {
-                return;
-            }
-            id analysisObject = class_createInstance(analysisClass,0);
+        }
+        
+        if ([goUrlStr hasPrefix:@"file"]) {
             
+            NSUInteger dest = [goUrlStr rangeOfString:@"widget"].location;
+            
+            if (dest != NSNotFound) {
+                
+                goUrlStr =[goUrlStr substringFromIndex:(dest+7)];
+                
+            }
+            
+        }
+        
+        Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (!analysisClass) {
+            
+            return;
+            
+        }
+        
+        id analysisObject = class_createInstance(analysisClass,0);
+        
+        if ([analysisObject respondsToSelector:@selector(setAppCanViewActive:opener:name:openReason:mainWin:)]) {
+            //兼容旧的数据统计&兼容大众版的数据统计
             ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
             
-        }
-    }
-}
-+(void)setAppCanViewBackground:(int)wgtType name:(NSString*)inName closeReason:(int)inOpenReason{
-    //8.7数据统计
-    //if (F_APPCANREPORT_USE) {
-    if (theApp.useDataStatisticsControl) {
-        if (wgtType ==F_WWIDGET_MAINWIDGET) {
-            NSString *closeUrl =[BUtility makeSpecUrl:inName];
-            if ([closeUrl hasPrefix:@"file"]) {
-                NSUInteger dest =[closeUrl rangeOfString:@"widget"].location;
-                
-                if (dest!=NSNotFound) {
-                    closeUrl =[closeUrl substringFromIndex:(dest+7)];
-                }
-            }
-//            AppCanAnalysis *acInstance =[AppCanAnalysis ACInstance];
-//            [acInstance setAppCanViewBecomeBackground:closeUrl closeReason:inOpenReason];
-            Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
-            if (!analysisClass) {
-                return;
-            }
-            id analysisObject = class_createInstance(analysisClass,0);
+        } else {
             
-            ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inOpenReason);
+            [analysisObject release];
+            
+            //新的数据统计使用通知告知统计插件
+            NSDictionary * pageInfo = [NSDictionary dictionaryWithObjectsAndKeys:fromUrlStr,@"fromPage",goUrlStr,@"goPage",[NSString stringWithFormat:@"%d",inOpenReason],@"openReason",[NSString stringWithFormat:@"%d", inMainWnd],@"mainWindow",appInfo,@"appInfo", nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanDataAnalysisPageBecomeActive" object:pageInfo];
+            
         }
+        
+        
     }
+    
 }
 
++ (void)setAppCanViewBackground:(int)wgtType name:(NSString *)inName closeReason:(int)inCloseReason appInfo:(NSDictionary *)appInfo {
+    
+    if (theApp.useDataStatisticsControl) {
+        
+        NSString * closeUrl = [BUtility makeSpecUrl:inName];
+        
+        if ([closeUrl hasPrefix:@"file"]) {
+            
+            NSUInteger dest = [closeUrl rangeOfString:@"widget"].location;
+            
+            if (dest != NSNotFound) {
+                
+                closeUrl =[closeUrl substringFromIndex:(dest+7)];
+                
+            }
+            
+        }
+        
+        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (!analysisClass) {
+            
+            return;
+            
+        }
+        
+        id analysisObject = class_createInstance(analysisClass,0);
+        
+        if ([analysisObject respondsToSelector:@selector(setAppCanViewBackground:name:closeReason:appInfo:)]) {
+            
+            ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inCloseReason);
+            
+        } else {
+            
+            [analysisObject release];
+            
+            NSDictionary * pageInfo = [NSDictionary dictionaryWithObjectsAndKeys:closeUrl,@"closeUrl",[NSString stringWithFormat:@"%d",inCloseReason],@"closeReason",appInfo,@"appInfo", nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanDataAnalysisPageBackground" object:pageInfo];
+            
+        }
+        
+    }
+    
+}
 +(NSString *)macAddress{ 
 //    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 //    {
