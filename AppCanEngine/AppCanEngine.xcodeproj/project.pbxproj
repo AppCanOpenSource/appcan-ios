@@ -270,6 +270,8 @@
 		5AAA876118B1B93D000D7600 /* WWidgetUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */; };
 		5AAA876218B1B93D000D7600 /* WidgetOnePseudoDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */; };
 		5AE8735718B74DD20040BC9A /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE8735618B74DD20040BC9A /* IOKit.framework */; };
+		76DE3A8B1BB3E1A50023E1F3 /* DataAnalysisInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 76DE3A891BB3E1A50023E1F3 /* DataAnalysisInfo.h */; settings = {ASSET_TAGS = (); }; };
+		76DE3A8C1BB3E1A50023E1F3 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76DE3A8A1BB3E1A50023E1F3 /* DataAnalysisInfo.m */; settings = {ASSET_TAGS = (); }; };
 		B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B220D27715A3152B00D02138 /* Foundation.framework */; };
 		B29DAE4F15AD1737004FBB57 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29DAE4E15AD1737004FBB57 /* CoreGraphics.framework */; };
 		B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD215A6B222003E73EA /* MediaPlayer.framework */; };
@@ -572,6 +574,8 @@
 		5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetUpdate.m; sourceTree = "<group>"; };
 		5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOnePseudoDelegate.h; sourceTree = "<group>"; };
 		5AE8735618B74DD20040BC9A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		76DE3A891BB3E1A50023E1F3 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataAnalysisInfo.h; path = "../../../../appcan-ios-cuiguoshuai/webkitCorePalm/Classes/plugin/DataAnalysisInfo.h"; sourceTree = "<group>"; };
+		76DE3A8A1BB3E1A50023E1F3 /* DataAnalysisInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataAnalysisInfo.m; path = "../../../../appcan-ios-cuiguoshuai/webkitCorePalm/Classes/plugin/DataAnalysisInfo.m"; sourceTree = "<group>"; };
 		B220D27415A3152B00D02138 /* libAppCanEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAppCanEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B220D27715A3152B00D02138 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B220D27B15A3152B00D02138 /* AppCanEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanEngine-Prefix.pch"; sourceTree = "<group>"; };
@@ -1097,6 +1101,8 @@
 		5AAA865718B1B93D000D7600 /* plugin */ = {
 			isa = PBXGroup;
 			children = (
+				76DE3A891BB3E1A50023E1F3 /* DataAnalysisInfo.h */,
+				76DE3A8A1BB3E1A50023E1F3 /* DataAnalysisInfo.m */,
 				5AAA865818B1B93D000D7600 /* ACUtility.h */,
 				5AAA865918B1B93D000D7600 /* ACUtility.m */,
 				5AAA865A18B1B93D000D7600 /* AppCenter.h */,
@@ -1392,6 +1398,7 @@
 				3C2887CE1A0B099B002776E4 /* CJSONDeserializer_BlocksExtensions.h in Headers */,
 				334D180A1A47B4200050DD13 /* MMNavigationController.h in Headers */,
 				33774C6F1B2A6D3500D5F279 /* UIImageView+HighlightedWebCache.h in Headers */,
+				76DE3A8B1BB3E1A50023E1F3 /* DataAnalysisInfo.h in Headers */,
 				5AAA86FF18B1B93D000D7600 /* EUExWidget.h in Headers */,
 				5AAA86F818B1B93D000D7600 /* EUExBaseDefine.h in Headers */,
 				33774C731B2A6D3500D5F279 /* UIView+WebCacheOperation.h in Headers */,
@@ -1464,6 +1471,7 @@
 				5AAA873B18B1B93D000D7600 /* ACUtility.m in Sources */,
 				33774C6A1B2A6D3500D5F279 /* UIImage+GIF.m in Sources */,
 				5AAA872D18B1B93D000D7600 /* unzip.c in Sources */,
+				76DE3A8C1BB3E1A50023E1F3 /* DataAnalysisInfo.m in Sources */,
 				5AAA86D918B1B93D000D7600 /* CBrowserWindow.m in Sources */,
 				5AAA86EF18B1B93D000D7600 /* EBrowserWindow.m in Sources */,
 				5AAA870B18B1B93D000D7600 /* ASIDataCompressor.m in Sources */,

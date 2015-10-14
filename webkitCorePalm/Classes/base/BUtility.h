@@ -172,8 +172,9 @@ typedef union _BGColor {
 +(NSString*)appKey;
 +(NSString*)appId;
 +(NSString *)getSubWidgetAppKeyByAppid:(NSString*)appid;
-+(void)setAppCanViewBackground:(int)wgtType name:(NSString*)inName closeReason:(int)inOpenReason;
-+(void)setAppCanViewActive:(int)wgtType opener:(NSString*)inOpener name:(NSString*)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd;
++ (void)setAppCanViewActive:(int)wgtType opener:(NSString *)inOpener name:(NSString *)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd appInfo:(NSDictionary *)appInfo;
+
++ (void)setAppCanViewBackground:(int)wgtType name:(NSString *)inName closeReason:(int)inOpenReason appInfo:(NSDictionary *)appInfo;
 //mac
 +(NSString *)macAddress;
 //absPath
