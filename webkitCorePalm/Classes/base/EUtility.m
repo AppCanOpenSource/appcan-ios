@@ -29,6 +29,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
+#import "ACEPluginViewContainer.h"
 
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
@@ -68,6 +69,46 @@ void PluginLog (NSString *format, ...) {
 
 + (NSURL*)brwViewUrl:(EBrowserView*)inBrwView {
 	return [inBrwView.request URL];
+}
+
++ (void)brwView:(EBrowserView *)inBrwView addSubviewToContainer:(UIView *)inSubView WithIndex:(NSInteger)index andIndentifier:(NSString *)identifier {
+    
+    for (UIView * subView in [inBrwView.meBrwWnd subviews]) {
+        
+        if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
+            
+            ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            
+            if ([container.containerIdentifier isEqualToString:identifier]) {
+                
+                CGRect tmpRect = inSubView.frame;
+                
+                tmpRect.origin.y = 0;
+                
+                tmpRect.origin.x = index*tmpRect.size.width;
+                
+                inSubView.frame = tmpRect;
+                
+                [container addSubview:inSubView];
+                
+                if (container.maxIndex < index) {
+                    
+                    container.maxIndex = index;
+                    
+                    [container setContentSize:CGSizeMake(container.frame.size.width * (index + 1), container.frame.size.height)];
+                    
+                }
+                
+                return;
+                
+            }
+            
+        }
+        
+    }
+    
+    [inBrwView.meBrwWnd addSubview:inSubView];
+    
 }
 
 + (void)brwView:(EBrowserView*)inBrwView addSubview:(UIView*)inSubView {
