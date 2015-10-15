@@ -47,6 +47,8 @@
 #import "RESideMenu.h"
 #import "UIViewController+RESideMenu.h"
 #import "ACEUINavigationController.h"
+#import "ACEPluginViewContainer.h"
+#import "EUtility.h"
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -5018,6 +5020,71 @@
             
         }
     };
+}
+
+- (void)creatPluginViewContainer:(NSMutableArray *)inArguments {
+    
+    if ([inArguments count] < 1) {
+        return;
+    }
+    
+    NSError * error = nil;
+    
+    NSString * jsonStr = [inArguments objectAtIndex:0];
+    
+    NSData * jsonData = [jsonStr dataUsingEncoding:NSASCIIStringEncoding];
+    
+    NSDictionary * jsonDic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
+    
+    if (jsonDic == nil || error != nil){
+        
+        return;
+        
+    }
+    
+    float x = [[jsonDic objectForKey:@"x"] floatValue];
+    float y = [[jsonDic objectForKey:@"y"] floatValue];
+    float w = [[jsonDic objectForKey:@"w"] floatValue];
+    float h = [[jsonDic objectForKey:@"h"] floatValue];
+    float opId = [[jsonDic objectForKey:@"id"] floatValue];
+    NSString * identifier = [jsonDic objectForKey:@"id"];
+    
+    ACEPluginViewContainer * pluginViewContainer = [[ACEPluginViewContainer alloc]initWithFrame:CGRectMake(x, y, w, h)];
+    
+    pluginViewContainer.containerIdentifier = identifier;
+    
+    pluginViewContainer.uexObj = self;
+    
+    [EUtility brwView:meBrwView addSubview:pluginViewContainer];
+    
+    [self jsSuccessWithName:@"uexWindow.cbCreatePluginViewContainer" opId:opId dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@"success"];
+}
+
+- (void)setPageInContainer:(NSMutableArray *)inArguments {
+    
+    NSString * jsonStr = [inArguments objectAtIndex:0];
+    NSDictionary * jsonDic = [jsonStr JSONValue];
+    
+    NSString * identifier = [jsonDic objectForKey:@"id"];
+    NSInteger index = [[jsonDic objectForKey:@"index"] integerValue];
+    
+    
+    for (UIView * subView in [meBrwView.meBrwWnd subviews]) {
+        
+        if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
+            
+            ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            
+            if ([container.containerIdentifier isEqualToString:identifier]) {
+                
+                [container setContentOffset: CGPointMake(container.bounds.size.width * index, container.contentOffset.y) animated: YES];
+                
+            }
+        }
+    }
+    
+    
+    
 }
 
 
