@@ -107,6 +107,8 @@
 		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
 		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
 		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
+		464272DE1BCE562E00F4BE36 /* ACEPluginViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */; };
+		464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
 		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
@@ -407,6 +409,8 @@
 		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
 		42FFC7FE1B625D160058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
+		464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginViewContainer.h; sourceTree = "<group>"; };
+		464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginViewContainer.m; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
 		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
@@ -990,6 +994,8 @@
 				5AAA860718B1B93D000D7600 /* EBrowserWindow.m */,
 				5AAA860818B1B93D000D7600 /* EBrowserWindowContainer.h */,
 				5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */,
+				464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */,
+				464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */,
 				5AAA860A18B1B93D000D7600 /* universalex */,
 			);
 			path = engine;
@@ -1286,6 +1292,7 @@
 				5AAA86B318B1B93D000D7600 /* WidgetSQL.h in Headers */,
 				5AAA870C18B1B93D000D7600 /* ASIDataDecompressor.h in Headers */,
 				5AAA871B18B1B93D000D7600 /* Reachability.h in Headers */,
+				464272DE1BCE562E00F4BE36 /* ACEPluginViewContainer.h in Headers */,
 				33774C581B2A6D3500D5F279 /* SDImageCache.h in Headers */,
 				5AAA873A18B1B93D000D7600 /* ACUtility.h in Headers */,
 				5AAA873118B1B93D000D7600 /* SFHFKeychainUtils.h in Headers */,
@@ -1523,6 +1530,7 @@
 				5AAA870D18B1B93D000D7600 /* ASIDataDecompressor.m in Sources */,
 				5AAA86AE18B1B93D000D7600 /* SpecConfigParser.m in Sources */,
 				DE2C4FA61A2DA48B00D5B4F2 /* ACEUtils.m in Sources */,
+				464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */,
 				3C2887AB1A0B0984002776E4 /* CFilteringJSONSerializer.m in Sources */,
 				5AAA868D18B1B93D000D7600 /* BStatusBarWindow.m in Sources */,
 				5AAA871C18B1B93D000D7600 /* Reachability.m in Sources */,
