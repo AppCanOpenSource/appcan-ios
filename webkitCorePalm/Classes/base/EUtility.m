@@ -409,4 +409,22 @@ return [BUtility isConnected];
 }
 
 
+
+
++(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...{
+    NSBundle *pluginBundle = [self bundleForPlugin:pluginName];
+    if(!pluginBundle){
+        return key;
+    }
+    NSString *defaultValue=@"";
+    va_list argList;
+    va_start(argList,key);
+    id arg=va_arg(argList,id);
+    if(arg && [arg isKindOfClass:[NSString class]]){
+        defaultValue=arg;
+    }
+    va_end(argList);
+    return [pluginBundle localizedStringForKey:key value:defaultValue table:nil];
+}
+
 @end
