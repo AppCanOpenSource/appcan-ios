@@ -73,4 +73,5 @@ void PluginLog(NSString *format, ...);
 
 
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName;
++(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;
 @end
