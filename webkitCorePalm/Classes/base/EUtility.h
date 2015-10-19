@@ -67,6 +67,19 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName;
 
 
+/**
+ *  插件国际化
+ *
+ *  @param pluginName 插件名
+ *  @param key        插件bundle中Localizable.string里声明的字符串key
+ *  @param defaultValue 如果有传入第二个参数，即为defaultValue key匹配失败时会返回此值
+ *  @return key对应的国际化字符串
+ */
++(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;
+
+
+
+
 + (NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl;
 + (NSURL*)stringToUrl:(NSString*)inString;
 + (BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation;
@@ -119,6 +132,6 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 
 
 
-+(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;
+
 
 @end
