@@ -43,6 +43,8 @@
 #import "EBrowserHistoryEntry.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "DataAnalysisInfo.h"
+
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -945,7 +947,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     //first view
     int goType = eBrwWndContainer.meRootBrwWnd.meBrwView.mwWgt.wgtType;
     NSString *goViewName =[url absoluteString];
-    [BUtility setAppCanViewActive:goType opener:@"application://" name:goViewName openReason:0 mainWin:0];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWndContainer.meRootBrwWnd.meBrwView.mwWgt];
+    [BUtility setAppCanViewActive:goType opener:@"application://" name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
 }
 
 - (EBrowserWidgetContainer*)brwWidgetContainer {

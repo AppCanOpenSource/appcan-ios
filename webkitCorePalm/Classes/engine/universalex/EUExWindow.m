@@ -49,6 +49,7 @@
 #import "ACEUINavigationController.h"
 #import "ACEPluginViewContainer.h"
 #import "EUtility.h"
+#import "DataAnalysisInfo.h"
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -576,24 +577,30 @@
                     
                     int type = meBrwView.mwWgt.wgtType;
                     NSString *viewName =[meBrwView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:meBrwView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
                     if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [meBrwView.meBrwWnd.mPopoverBrwViewDict allValues];
                         for (EBrowserView *ePopView in popViewArray) {
                             int type =ePopView.mwWgt.wgtType;
                             NSString *viewName =[ePopView.curUrl absoluteString];
-                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                         }
                     }
                     int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                     NSString *goViewName =[url absoluteString];
-                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+                    {
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                    }
                     if (eBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
                         for (EBrowserView *ePopView in popViewArray) {
                             int type =ePopView.mwWgt.wgtType;
                             NSString *viewName =[ePopView.curUrl absoluteString];
-                            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
                         }
                     }
                     
@@ -627,24 +634,30 @@
             int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *viewName =[eCurBrwWnd.meBrwView.curUrl absoluteString];
             
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
             if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eCurBrwWnd.mPopoverBrwViewDict allValues];
                 for (EBrowserView *ePopView in popViewArray) {
                     int type =ePopView.mwWgt.wgtType;
                     NSString *viewName =[ePopView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                 }
             }
             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *goViewName =[url absoluteString];
-            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+            {
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+            }
             if (eBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
                 for (EBrowserView *ePopView in popViewArray) {
                     int type =ePopView.mwWgt.wgtType;
                     NSString *viewName =[ePopView.curUrl absoluteString];
-                    [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                    [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
                 }
             }
         } else if (dataType == F_EUEXWINDOW_SRC_TYPE_DATA) {
@@ -656,13 +669,15 @@
         [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *viewName =[eCurBrwWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
         if (eCurBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eCurBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             }
         }
         
@@ -672,13 +687,17 @@
         
         int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+        {
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+        }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
             }
         }
         
@@ -1312,24 +1331,30 @@
                     
                     int type = meBrwView.mwWgt.wgtType;
                     NSString *viewName =[meBrwView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:meBrwView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
                     if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [meBrwView.meBrwWnd.mPopoverBrwViewDict allValues];
                         for (EBrowserView *ePopView in popViewArray) {
                             int type =ePopView.mwWgt.wgtType;
                             NSString *viewName =[ePopView.curUrl absoluteString];
-                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                         }
                     }
                     int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                     NSString *goViewName =[url absoluteString];
-                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+                    {
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                    }
                     if (eBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
                         for (EBrowserView *ePopView in popViewArray) {
                             int type =ePopView.mwWgt.wgtType;
                             NSString *viewName =[ePopView.curUrl absoluteString];
-                            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
                         }
                     }
                     
@@ -1362,25 +1387,30 @@
             //8.7 数据统计
             int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *viewName =[eCurBrwWnd.meBrwView.curUrl absoluteString];
-            
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
             if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eCurBrwWnd.mPopoverBrwViewDict allValues];
                 for (EBrowserView *ePopView in popViewArray) {
                     int type =ePopView.mwWgt.wgtType;
                     NSString *viewName =[ePopView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                 }
             }
             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *goViewName =[url absoluteString];
-            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+            {
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+            }
             if (eBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
                 for (EBrowserView *ePopView in popViewArray) {
                     int type =ePopView.mwWgt.wgtType;
                     NSString *viewName =[ePopView.curUrl absoluteString];
-                    [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                    [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
                 }
             }
         } else if (dataType == F_EUEXWINDOW_SRC_TYPE_DATA) {
@@ -1392,13 +1422,15 @@
         [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *viewName =[eCurBrwWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
         if (eCurBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eCurBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             }
         }
         
@@ -1408,13 +1440,17 @@
         
         int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+        {
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+        }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
             }
         }
         
@@ -1715,24 +1751,30 @@
                     
                     int type = meBrwView.mwWgt.wgtType;
                     NSString *viewName =[meBrwView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:meBrwView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
                     if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [meBrwView.meBrwWnd.mPopoverBrwViewDict allValues];
                         for (EBrowserView *ePopView in popViewArray) {
                             int type =ePopView.mwWgt.wgtType;
                             NSString *viewName =[ePopView.curUrl absoluteString];
-                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                         }
                     }
                     int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                     NSString *goViewName =[url absoluteString];
-                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+                    {
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                    }
                     if (eBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
                         for (EBrowserView *ePopView in popViewArray) {
                             int type =ePopView.mwWgt.wgtType;
                             NSString *viewName =[ePopView.curUrl absoluteString];
-                            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
                         }
                     }
                     
@@ -1766,24 +1808,30 @@
             int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *viewName =[eCurBrwWnd.meBrwView.curUrl absoluteString];
             NSLog(@" eCurBrwWnd viewName=%@",viewName);
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
             if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eCurBrwWnd.mPopoverBrwViewDict allValues];
                 for (EBrowserView *ePopView in popViewArray) {
                     int type =ePopView.mwWgt.wgtType;
                     NSString *viewName =[ePopView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                 }
             }
             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *goViewName =[url absoluteString];
-            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+            {
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+            }
             if (eBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
                 for (EBrowserView *ePopView in popViewArray) {
                     int type =ePopView.mwWgt.wgtType;
                     NSString *viewName =[ePopView.curUrl absoluteString];
-                    [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                    [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
                 }
             }
         } else if (dataType == F_EUEXWINDOW_SRC_TYPE_DATA) {
@@ -1801,13 +1849,15 @@
         [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *viewName =[eCurBrwWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
         if (eCurBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eCurBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             }
         }
         
@@ -1817,13 +1867,17 @@
         
         int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0];
+        {
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+        }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
             }
         }
         
@@ -2232,7 +2286,8 @@
         //8.7 data
         int type = brwWnd_.meBrwView.mwWgt.wgtType;
         fromViewName =[brwWnd_.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:fromViewName closeReason:0];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:brwWnd_.meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:fromViewName closeReason:0 appInfo:appInfo];
         if (brwWnd_.meBrwView.superview) {
             [brwWnd_.meBrwView removeFromSuperview];
         }
@@ -2269,7 +2324,8 @@
             //8.8 数据统计
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             
             [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
             [ePopView release];
@@ -2308,15 +2364,16 @@
     
     int goType = eAboveWnd.meBrwView.mwWgt.wgtType;
     NSString *goViewName =[eAboveWnd.meBrwView.curUrl absoluteString];
-    
-    [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eAboveWnd.meBrwView.mwWgt];
+    [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
     if (eAboveWnd.mPopoverBrwViewDict) {
         NSArray *popViewArray = [eAboveWnd.mPopoverBrwViewDict allValues];
         for (EBrowserView *ePopView in popViewArray) {
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
             //[BUtility setAppCanViewBackground:type name:closeViewName closeReason:0];
-            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
         }
     }
     if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
@@ -3195,27 +3252,33 @@
         //8.7
         int type = meBrwView.mwWgt.wgtType;
         NSString *viewName =[meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
         if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [meBrwView.meBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             }
         }
         [eBrwWnd.meBackWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
         //8.7
         int goType = eBrwWnd.meBackWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBackWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0];
+        {
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBackWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
+        }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
                 //[BUtility setAppCanViewBackground:type name:closeViewName closeReason:0];
-                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
             }
         }
         if ((eBrwWnd.meBackWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
@@ -3272,13 +3335,15 @@
         //8.7
         int type = meBrwView.mwWgt.wgtType;
         NSString *viewName =[meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:viewName closeReason:1];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
         if (meBrwView.meBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [meBrwView.meBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
-                [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             }
         }
         
@@ -3287,14 +3352,18 @@
         //8.7
         int goType = eBrwWnd.meFrontWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meFrontWnd.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0];
+        {
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meFrontWnd.meBrwView.mwWgt];
+        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
+        }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
             for (EBrowserView *ePopView in popViewArray) {
                 int type =ePopView.mwWgt.wgtType;
                 NSString *viewName =[ePopView.curUrl absoluteString];
                 //[BUtility setAppCanViewBackground:type name:closeViewName closeReason:0];
-                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+                [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
             }
         }
         if ((eBrwWnd.meFrontWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
@@ -3938,7 +4007,8 @@
         //8.8 数据统计
         int type =ePopBrwView.mwWgt.wgtType;
         NSString *viewName =[ePopBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
         
         [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopBrwView];
         [ePopBrwView release];
@@ -4758,13 +4828,16 @@
                         if (![curUrlStr isEqualToString:urlStr]) {
                             int type =ePopBrwView.mwWgt.wgtType;
                             NSString *viewName =[ePopBrwView.curUrl absoluteString];
-                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                             
                             NSString *fromViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
                             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                             NSString *goViewName =[url absoluteString];
-                            [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:0 mainWin:1];
-                            
+                            {
+                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                            [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
+                            }
                             isExist =NO;
                         }
                     }else {
@@ -4772,7 +4845,8 @@
                         NSString *viewName =[eBrwWnd.meBrwView.curUrl absoluteString];
                         int goType = ePopBrwView.mwWgt.wgtType;
                         NSString *goViewName =[url absoluteString];
-                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:1];
+                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
                     }
                 }
                 else
@@ -4834,7 +4908,8 @@
                     //8.8 数据统计
                     int type =ePopBrwView.mwWgt.wgtType;
                     NSString *viewName =[ePopBrwView.curUrl absoluteString];
-                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                    [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                     
                     [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopBrwView];
                     [ePopBrwView release];
