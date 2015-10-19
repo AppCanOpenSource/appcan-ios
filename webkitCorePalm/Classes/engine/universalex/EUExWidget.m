@@ -40,6 +40,7 @@
 #import "JSONKit.h"
 #import "EUtility.h"
 #import "ACEUtils.h"
+#import "DataAnalysisInfo.h"
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -637,7 +638,8 @@
         //8.7 data
         int type = brwWnd_.meBrwView.mwWgt.wgtType;
         fromViewName =[brwWnd_.meBrwView.curUrl absoluteString];
-        [BUtility setAppCanViewBackground:type name:fromViewName closeReason:0];
+        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:brwWnd_.meBrwView.mwWgt];
+        [BUtility setAppCanViewBackground:type name:fromViewName closeReason:0 appInfo:appInfo];
         if (brwWnd_.meBrwView.superview) {
             [brwWnd_.meBrwView removeFromSuperview];
         }
@@ -674,7 +676,8 @@
             //8.8 数据统计
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             
             [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
             [ePopView release];
@@ -714,14 +717,17 @@
     int goType = eAboveWnd.meBrwView.mwWgt.wgtType;
     NSString *goViewName =[eAboveWnd.meBrwView.curUrl absoluteString];
     
-    [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eAboveWnd.meBrwView.mwWgt];
+    [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
     if (eAboveWnd.mPopoverBrwViewDict) {
         NSArray *popViewArray = [eAboveWnd.mPopoverBrwViewDict allValues];
         for (EBrowserView *ePopView in popViewArray) {
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
             //[BUtility setAppCanViewBackground:type name:closeViewName closeReason:0];
-            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+            
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
         }
     }
     if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
