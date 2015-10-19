@@ -420,7 +420,8 @@ return [BUtility isConnected];
     va_list argList;
     va_start(argList,key);
     id arg=va_arg(argList,id);
-    if(arg && [arg isKindOfClass:[NSString class]]){
+    //if(arg && [arg isKindOfClass:[NSString class]]){
+    if(arg){
         defaultValue=arg;
     }
     va_end(argList);
