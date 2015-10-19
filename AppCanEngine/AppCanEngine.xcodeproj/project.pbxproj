@@ -272,6 +272,8 @@
 		5AAA876118B1B93D000D7600 /* WWidgetUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */; };
 		5AAA876218B1B93D000D7600 /* WidgetOnePseudoDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */; };
 		5AE8735718B74DD20040BC9A /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE8735618B74DD20040BC9A /* IOKit.framework */; };
+		76F105BE1BD0913F0064CDD1 /* DataAnalysisInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */; settings = {ASSET_TAGS = (); }; };
+		76F105BF1BD0913F0064CDD1 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; settings = {ASSET_TAGS = (); }; };
 		B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B220D27715A3152B00D02138 /* Foundation.framework */; };
 		B29DAE4F15AD1737004FBB57 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29DAE4E15AD1737004FBB57 /* CoreGraphics.framework */; };
 		B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD215A6B222003E73EA /* MediaPlayer.framework */; };
@@ -576,6 +578,8 @@
 		5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetUpdate.m; sourceTree = "<group>"; };
 		5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOnePseudoDelegate.h; sourceTree = "<group>"; };
 		5AE8735618B74DD20040BC9A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
+		76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAnalysisInfo.m; sourceTree = "<group>"; };
 		B220D27415A3152B00D02138 /* libAppCanEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAppCanEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B220D27715A3152B00D02138 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B220D27B15A3152B00D02138 /* AppCanEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanEngine-Prefix.pch"; sourceTree = "<group>"; };
@@ -1103,6 +1107,8 @@
 		5AAA865718B1B93D000D7600 /* plugin */ = {
 			isa = PBXGroup;
 			children = (
+				76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */,
+				76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */,
 				5AAA865818B1B93D000D7600 /* ACUtility.h */,
 				5AAA865918B1B93D000D7600 /* ACUtility.m */,
 				5AAA865A18B1B93D000D7600 /* AppCenter.h */,
@@ -1264,6 +1270,7 @@
 			files = (
 				5AAA86F618B1B93D000D7600 /* EUExBase.h in Headers */,
 				5AAA868A18B1B93D000D7600 /* Beqtucontent.h in Headers */,
+				76F105BE1BD0913F0064CDD1 /* DataAnalysisInfo.h in Headers */,
 				5AAA872518B1B93D000D7600 /* GCDAsyncUdpSocket.h in Headers */,
 				5AAA86EA18B1B93D000D7600 /* EBrowserViewBounceView.h in Headers */,
 				5AAA86E618B1B93D000D7600 /* EBrowserView.h in Headers */,
@@ -1475,6 +1482,7 @@
 				5AAA86EF18B1B93D000D7600 /* EBrowserWindow.m in Sources */,
 				5AAA870B18B1B93D000D7600 /* ASIDataCompressor.m in Sources */,
 				334D180B1A47B4200050DD13 /* MMNavigationController.m in Sources */,
+				76F105BF1BD0913F0064CDD1 /* DataAnalysisInfo.m in Sources */,
 				42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */,
 				5AAA86B018B1B93D000D7600 /* UpdateParser.m in Sources */,
 				5AAA871318B1B93D000D7600 /* ASIHTTPRequest.m in Sources */,

@@ -44,6 +44,7 @@
 #import "ACEWebViewController.h"
 #import "ACEDes.h"
 #import "RESideMenu.h"
+#import "DataAnalysisInfo.h"
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
@@ -727,7 +728,8 @@ NSString *AppCanJS = nil;
     //data analysis
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
     NSString * viewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-    [BUtility setAppCanViewBackground:type name:viewName closeReason:2];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
+    [BUtility setAppCanViewBackground:type name:viewName closeReason:2 appInfo:appInfo];
     
     if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
         
@@ -736,7 +738,8 @@ NSString *AppCanJS = nil;
             
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             //[BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
             
         }
@@ -771,8 +774,8 @@ NSString *AppCanJS = nil;
         return;
         
     }
-    
-    [BUtility setAppCanViewActive:type opener:@"application://" name:goViewName openReason:0 mainWin:0];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
+    [BUtility setAppCanViewActive:type opener:@"application://" name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
     if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
         
         NSArray * popViewArray = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
@@ -781,7 +784,8 @@ NSString *AppCanJS = nil;
             
             int type =ePopView.mwWgt.wgtType;
             NSString * viewName =[ePopView.curUrl absoluteString];
-            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
             
         }
         
@@ -806,7 +810,8 @@ NSString *AppCanJS = nil;
     
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
     NSString * viewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-    [BUtility setAppCanViewBackground:type name:viewName closeReason:2];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
+    [BUtility setAppCanViewBackground:type name:viewName closeReason:2 appInfo:appInfo];
     
     if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
         
@@ -816,7 +821,8 @@ NSString *AppCanJS = nil;
             
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
-            [BUtility setAppCanViewBackground:type name:viewName closeReason:0];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
+            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             
         }
         
