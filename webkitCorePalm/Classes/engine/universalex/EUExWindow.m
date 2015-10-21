@@ -50,6 +50,8 @@
 #import "ACEPluginViewContainer.h"
 #import "EUtility.h"
 #import "DataAnalysisInfo.h"
+#import "ACEBrowserView.h"
+
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -62,6 +64,27 @@
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
 #define KUEXIS_NSString(x) ([x isKindOfClass:[NSString class]] && x.length>0)
 
+#define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
+
+
+//20151021 lkl 修复iOS 9 长按产生放大镜的问题
+//长按事件阻碍选项
+typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
+    ACEDisturbLongPressGestureNotDisturb =0,    //不阻碍长按事件
+    ACEDisturbLongPressGestureDisturbNormally=1,//正常阻碍长按事件
+    ACEDisturbLongPressGestureDisturbStrictly=2,//严格阻碍长按事件
+};
+
+
+//对于没有3DTouch功能的设备(非6s 6sP) 选择ACEDisturbLongPressGestureDisturbNormally阻止长按事件已经足够
+//但对于6s/6sP 用力长按时(3D Touch longPress)仍然会触发放大镜
+//设置CEDisturbLongPressGestureDisturbStrictly之后，可以阻止3D Touch longPress，但同时也会拦截网页的onclick事件，但ontouchend事件并不受影响
+//所以如果需要使得6s/6sP也解决放大镜问题，设置此falg为CEDisturbLongPressGestureDisturbStrictly需要将网页内的所有onclick事件改为ontouchend，
+
+@interface EUExWindow()
+@property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
+
+@end
 
 @implementation EScrollView
 
@@ -5161,6 +5184,67 @@
     
 }
 
+//2015-10-21 by lkl 解决iOS9上长按出现放大镜的问题
+-(void)disturbLongPressGesture:(NSMutableArray *)inArguments{
+    if(0==[inArguments count]||!iOS9){
+        return;
+    }
+    
+    if(![@[@0,@1,@2] containsObject:@([inArguments[0] integerValue])]){
+        return;
+    }
+    ACEDisturbLongPressGestureStatus status =(ACEDisturbLongPressGestureStatus)[inArguments[0] integerValue];
+    NSArray *views =[self.meBrwView.meBrowserView subviews];
+    if([views count]==0){
+        return;
+    }
+    if(self.longPressGestureDisturbRecognizer && status==ACEDisturbLongPressGestureNotDisturb){
+        //取消干扰长按手势
+        
+        for (int i=0; i<views.count; i++) {
+            UIView *webViewScrollView = views[i];
+            if ([webViewScrollView isKindOfClass:[UIScrollView class]]) {
+                NSArray *webViewScrollViewSubViews = webViewScrollView.subviews;
+                UIView *browser = webViewScrollViewSubViews[0];
+                [browser removeGestureRecognizer:self.longPressGestureDisturbRecognizer];
+                break;
+            }
+        }
+        return;
+    }
+    //添加长按手势干扰
+    if(!self.longPressGestureDisturbRecognizer){
+        self.longPressGestureDisturbRecognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(disturbLongPressGestureHandler:)] autorelease];
+        self.longPressGestureDisturbRecognizer.allowableMovement = 100.0f;
+        self.longPressGestureDisturbRecognizer.cancelsTouchesInView=NO;
+    }
+    
+    if(status == ACEDisturbLongPressGestureDisturbNormally){
+        self.longPressGestureDisturbRecognizer.minimumPressDuration = 0.45f;
+    }
+    if(status ==ACEDisturbLongPressGestureDisturbStrictly){
+        self.longPressGestureDisturbRecognizer.minimumPressDuration = 0.04f;
+    }
+    
+    for (int i=0; i<views.count; i++) {
+        UIView *webViewScrollView = views[i];
+        if ([webViewScrollView isKindOfClass:[UIScrollView class]]) {
+            NSArray *webViewScrollViewSubViews = webViewScrollView.subviews;
+            UIView *browser = webViewScrollViewSubViews[0];
+            [browser addGestureRecognizer:self.longPressGestureDisturbRecognizer];
+            break;
+            
+        }
+    }
+    
+}
+-(void)disturbLongPressGestureHandler:(UILongPressGestureRecognizer*)sender{
+    if([sender isEqual:self.longPressGestureDisturbRecognizer]){
+        if(sender.state==UIGestureRecognizerStateBegan){
+            //NSLog(@"disturbLongPressGesture");
+        }
+    }
+}
 
 
 @end
