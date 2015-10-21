@@ -261,6 +261,10 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.publishChannelNotification=function(){ uex.exec('uexWindow.publishChannelNotification/'+uexJoin(arguments));};"
 //
 
+//2015-10-21 by lkl
+"uexWindow.disturbLongPressGesture = function() { uex.exec('uexWindow.disturbLongPressGesture/'+uexJoin(arguments));};"
+
+
 "window.uexAppCenter = {}; uexAppCenter.cbGetSessionKey = null; uexAppCenter.cbLoginOut = null;"
 "uexAppCenter.appCenterLoginResult = function(){ uex.exec('uexAppCenter.appCenterLoginResult/'+uexJoin(arguments));};"
 "uexAppCenter.downloadApp = function(){ uex.exec('uexAppCenter.downloadApp/'+uexJoin(arguments));};"
