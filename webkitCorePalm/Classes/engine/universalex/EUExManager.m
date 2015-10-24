@@ -48,8 +48,21 @@
 
 
 - (void)doAction:(EUExAction *)inAction{
-	NSString *className = inAction.mClassName;
-	NSString *methodName = inAction.mMethodName;
+    
+    if (!inAction || inAction == nil || ![inAction isKindOfClass:[EUExAction class]]) {
+        return;
+    }
+    
+    NSString * className = inAction.mClassName;
+    NSString * methodName = inAction.mMethodName;
+    
+    if (className == nil || !className || ![className isKindOfClass:[NSString class]] || [className length] <= 3) {
+        return;
+    }
+    
+    if (methodName == nil || !methodName || ![methodName isKindOfClass:[NSString class]] || [methodName length] < 1) {
+        return;
+    }
     
     if (className == nil) {
         return;
@@ -130,6 +143,10 @@
 		
 #endif
 
+        if (!eBrwView || eBrwView == nil || ![eBrwView isKindOfClass:[EBrowserView class]]) {
+            return;
+        }
+        
 		eUExObj = [[NSClassFromString(fullClassName) alloc] initWithBrwView:eBrwView];
 		if (!eUExObj) {
 			return;
@@ -184,7 +201,9 @@
 		return;
 	}
 	for (EUExBase *eUExObj in [uexObjDict allValues]) {
-		[eUExObj clean];
+        if (eUExObj && [eUExObj respondsToSelector:@selector(clean)]) {
+            [eUExObj clean];
+        }
 	}
 }
 
