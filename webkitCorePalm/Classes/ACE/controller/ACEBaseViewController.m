@@ -29,6 +29,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _canAutorotate = YES;
+    _canRotate = NO;
+    
     if (isSysVersionAbove7_0) {
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
@@ -156,7 +159,16 @@
 
 - (BOOL)shouldAutorotate {
     
-    return YES;
+    if (_canRotate) {
+        
+        _canRotate = NO;
+        
+        return YES;
+        
+    }
+    
+    return _canAutorotate;
+    
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
