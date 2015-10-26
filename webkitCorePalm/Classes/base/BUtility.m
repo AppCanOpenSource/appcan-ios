@@ -1299,7 +1299,7 @@ static NSString *clientCertificatePwd = nil;
         
         id analysisObject = class_createInstance(analysisClass,0);
         
-        if ([analysisObject respondsToSelector:@selector(setAppCanViewActive:opener:name:openReason:mainWin:)]) {
+        if ([analysisObject respondsToSelector:@selector(setAppCanViewBecomeActive:goView:startReason:mainWin:)]) {
             //兼容旧的数据统计&兼容大众版的数据统计
             ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
             
@@ -1346,7 +1346,7 @@ static NSString *clientCertificatePwd = nil;
         
         id analysisObject = class_createInstance(analysisClass,0);
         
-        if ([analysisObject respondsToSelector:@selector(setAppCanViewBackground:name:closeReason:appInfo:)]) {
+        if ([analysisObject respondsToSelector:@selector(setAppCanViewBecomeBackground:closeReason:)]) {
             
             ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inCloseReason);
             
