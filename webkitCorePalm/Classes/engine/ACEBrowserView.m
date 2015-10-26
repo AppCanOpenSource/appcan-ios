@@ -744,6 +744,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)notifyPageFinish {
     
+    if (self.mType == F_EBRW_VIEW_TYPE_MAIN) {
+        if (meBrwCtrler.mStartView) {
+            [meBrwCtrler.mStartView removeFromSuperview];
+            meBrwCtrler.mStartView = nil;
+            meBrwCtrler.meBrwMainFrm.hidden = NO;
+        }
+    }
+    
     UIScrollView * subScrollView = NULL;
 	NSString * initStr = NULL;
     
