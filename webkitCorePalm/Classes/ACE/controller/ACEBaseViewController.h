@@ -19,6 +19,11 @@
 #import <UIKit/UIKit.h>
 
 @interface ACEBaseViewController : UIViewController<UIGestureRecognizerDelegate>
+
 @property (nonatomic,assign) int wgtOrientation;
+
+@property (nonatomic, assign) BOOL * canAutorotate;
+
+@property (nonatomic, assign) BOOL * canRotate;
 
 @end
