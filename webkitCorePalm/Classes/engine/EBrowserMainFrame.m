@@ -218,7 +218,7 @@
 			break;
 		case F_EBRW_VIEW_TYPE_MAIN:
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-			if (meBrwCtrler.mStartView && meBrwCtrler.mSplashFired) {
+			if (meBrwCtrler.mStartView) {
                 [meBrwCtrler.mStartView removeFromSuperview];
 				meBrwCtrler.mStartView = nil;
                 self.hidden = NO;
