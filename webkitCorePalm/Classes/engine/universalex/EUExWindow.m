@@ -4447,7 +4447,28 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [EBrowserWindow postWindowSequenceChange];
 }
 
-#pragma mark
+#pragma mark - setAutorotateEnable
+
+- (void)setAutorotateEnable:(NSMutableArray *)inArguments {
+    
+    if ([inArguments count] < 1) {
+        return;
+    }
+    
+    NSString * orientaion = [BUtility getMainWidgetConfigInterface];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:orientaion forKey:@"subwgtOrientaion"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+    
+    BOOL isAutorotate = ![[inArguments objectAtIndex:0] boolValue];
+    
+    theApp.drawerController.canAutorotate = isAutorotate;
+    
+}
+
+
+
 #pragma mark 转屏接口
 #pragma mark
 -(void)setOrientation:(NSArray *)inArgument
@@ -4456,6 +4477,10 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     {
         NSString * orientaion = [inArgument objectAtIndex:0];
         int orNumb = [orientaion intValue];
+        
+        theApp.drawerController.canRotate = YES;
+        
+        
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",orNumb] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         switch (orNumb)
@@ -4514,6 +4539,10 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 return ;
                 break;
         }
+        
+        
+        theApp.drawerController.canRotate = NO;
+        
     }
 }
 #pragma mark
