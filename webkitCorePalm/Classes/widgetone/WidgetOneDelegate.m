@@ -492,6 +492,36 @@ NSString *AppCanJS = nil;
 }
 // 接收推送通知
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    NSString *userData = [userInfo objectForKey:@"userInfo"];
+    if (userInfo) {
+        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
+    }
+    if (userData != nil || userInfo) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
+        
+        if (application.applicationState == UIApplicationStateActive) {
+            
+            EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+            
+            if (aboveWindowContainer) {
+                
+                [aboveWindowContainer pushNotify];
+                
+            }
+            
+        }
+        
+    }
+    
+    [self invokeAppDelegateMethod:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+    
+}
+
+
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     {
@@ -990,6 +1020,28 @@ NSString *AppCanJS = nil;
             
         }
     }
+}
+
+- (void)invokeAppDelegateMethod:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
+        
+        NSString * className = [pluginObj.classNameArray objectAtIndex:i];
+        
+        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        
+        Class acecls = NSClassFromString(fullClassName);
+        
+        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didReceiveRemoteNotification:fetchCompletionHandler:));
+        
+        if (delegateMethod) {
+            
+            [acecls application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+            
+        }
+        
+    }
+    
 }
 
 - (void)invokeAppDelegateMethod:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

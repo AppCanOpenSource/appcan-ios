@@ -18,6 +18,7 @@
 
 #import "EBrowserViewAnimition.h"
 #import "BAnimitionTransform.h"
+#import "BUtility.h"
 
 @implementation EBrowserViewAnimition
 @synthesize meBrwView;
@@ -93,13 +94,24 @@
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    UIView *view = (UIView*)context;
-	if (mAutoReverse) {
-		[UIView beginAnimations:mName context:view];
-		[UIView setAnimationDuration:0.1];
-		view.layer.transform = self.mOldTransform;
-		[UIView commitAnimations];
-	}
-	[self performSelectorOnMainThread:@selector(notifyAnimationFinish) withObject:nil waitUntilDone:YES];
+    
+    @try {
+        UIView *view = (UIView*)context;
+        if (mAutoReverse) {
+            [UIView beginAnimations:mName context:view];
+            [UIView setAnimationDuration:0.1];
+            view.layer.transform = self.mOldTransform;
+            [UIView commitAnimations];
+        }
+        [self performSelectorOnMainThread:@selector(notifyAnimationFinish) withObject:nil waitUntilDone:YES];
+    }
+    @catch (NSException *exception) {
+        [BUtility writeLog:[NSString stringWithFormat:@"animationDidStop==>catch==>%@,%@,%@",[exception name],[exception reason],[[exception userInfo] description]]];
+    }
+    @finally {
+        //
+    }
+    
+    
 }
 @end

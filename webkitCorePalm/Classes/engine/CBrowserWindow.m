@@ -136,11 +136,15 @@ extern NSString * webappShowAactivety;
                         if ([uexObj isEqualToString:pluginName]) {
                             [self performSelectorOnMainThread:@selector(alertForbidView:) withObject:uexObj waitUntilDone:NO];
                         }else{
-                            [eBrwView.meUExManager doAction:action];
+                            if ([eBrwView respondsToSelector:@selector(meUExManager)] && [eBrwView.meUExManager respondsToSelector:@selector(doAction:)]) {
+                                [eBrwView.meUExManager doAction:action];
+                            }
                         }
                     }
                 }else{
-                     [eBrwView.meUExManager doAction:action];
+                    if ([eBrwView respondsToSelector:@selector(meUExManager)] && [eBrwView.meUExManager respondsToSelector:@selector(doAction:)]) {
+                        [eBrwView.meUExManager doAction:action];
+                    }
                 }
 				return NO;
 			} 
