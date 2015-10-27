@@ -2388,7 +2388,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     int goType = eAboveWnd.meBrwView.mwWgt.wgtType;
     NSString *goViewName =[eAboveWnd.meBrwView.curUrl absoluteString];
     NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eAboveWnd.meBrwView.mwWgt];
-    [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
+    if(goViewName&&[goViewName length]>0){
+        [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
+    }
     if (eAboveWnd.mPopoverBrwViewDict) {
         NSArray *popViewArray = [eAboveWnd.mPopoverBrwViewDict allValues];
         for (EBrowserView *ePopView in popViewArray) {
