@@ -10,17 +10,53 @@
 
 @implementation EUExBase (Bundle)
 
--(NSBundle *)pluginBundle{
+- (NSBundle *)pluginBundle {
+    
     NSString * EUExName = NSStringFromClass([self class]);
+    
     NSString * bundleName = [NSString stringWithFormat:@"uex%@.bundle",[EUExName substringFromIndex:4]];
+    
     NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
-    return [NSBundle bundleWithPath:bundlePath];
+    
+    if ([self isUseSystemLanguage]) {
+        
+        return [NSBundle bundleWithPath:bundlePath];
+        
+    } else {
+        
+        NSString * userLanguage = [self getAppCanUserLanguage];
+        
+        return [NSBundle bundleWithPath:[[NSBundle bundleWithPath:bundlePath] pathForResource:userLanguage ofType:@"lproj"]];
+        
+    }
     
 }
 
+- (BOOL)isUseSystemLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    
+    if (!userLanguag || userLanguag == nil || userLanguag.length == 0) {
+        
+        return YES;
+        
+    }
+    
+    return NO;
+    
+}
 
-
-
+- (NSString *)getAppCanUserLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    
+    return userLanguag;
+    
+}
 
 -(NSString*)localizedString:(NSString *)key, ...{
     

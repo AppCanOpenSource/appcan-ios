@@ -77,6 +77,9 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  */
 +(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;
 
++ (BOOL)isUseSystemLanguage;
+
++ (NSString *)getAppCanUserLanguage;
 
 
 
