@@ -82,11 +82,64 @@ void PluginLog (NSString *format, ...) {
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName{
     NSString * bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
     NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
-    return [NSBundle bundleWithPath:bundlePath];
+    
+    if ([EUtility isUseSystemLanguage]) {
+        
+        return [NSBundle bundleWithPath:bundlePath];
+        
+    } else {
+        
+        NSString * userLanguage = [EUtility getAppCanUserLanguage];
+        
+        return [NSBundle bundleWithPath:[[NSBundle bundleWithPath:bundlePath] pathForResource:userLanguage ofType:@"lproj"]];
+        
+    }
+    
 }
 
++(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...{
+    
+    NSBundle *pluginBundle = [self bundleForPlugin:pluginName];
+    if(!pluginBundle){
+        return key;
+    }
+    NSString *defaultValue=@"";
+    va_list argList;
+    va_start(argList,key);
+    id arg=va_arg(argList,id);
+    //if(arg && [arg isKindOfClass:[NSString class]]){
+    if(arg){
+        defaultValue=arg;
+    }
+    va_end(argList);
+    return [pluginBundle localizedStringForKey:key value:defaultValue table:nil];
+}
 
++ (BOOL)isUseSystemLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    
+    if (!userLanguag || userLanguag == nil || userLanguag.length == 0) {
+        
+        return YES;
+        
+    }
+    
+    return NO;
+    
+}
 
++ (NSString *)getAppCanUserLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    
+    return userLanguag;
+    
+}
 
 +(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl {
 	return [BUtility makeUrl:inBaseStr url:inUrl];
@@ -411,21 +464,6 @@ return [BUtility isConnected];
 
 
 
-+(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...{
-    NSBundle *pluginBundle = [self bundleForPlugin:pluginName];
-    if(!pluginBundle){
-        return key;
-    }
-    NSString *defaultValue=@"";
-    va_list argList;
-    va_start(argList,key);
-    id arg=va_arg(argList,id);
-    //if(arg && [arg isKindOfClass:[NSString class]]){
-    if(arg){
-        defaultValue=arg;
-    }
-    va_end(argList);
-    return [pluginBundle localizedStringForKey:key value:defaultValue table:nil];
-}
+
 
 @end
