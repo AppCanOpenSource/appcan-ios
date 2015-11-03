@@ -45,6 +45,8 @@
 #import <objc/message.h>
 #import "DataAnalysisInfo.h"
 
+#import "ACEMultiPopoverScrollView.h"
+
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -999,5 +1001,16 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	if (meUExManager) {
 		[meUExManager stopAllNetService];
 	}
+}
+
+-(void)continueMultiPopoverLoading{
+    if(!self.isMuiltPopover){
+        return;
+    }
+    EBrowserView *popView=(EBrowserView *)self.superview;
+    if(popView && popView.superview && [popView.superview isKindOfClass:[ACEMultiPopoverScrollView class]]){
+        ACEMultiPopoverScrollView *multiPopoverScrollView=(ACEMultiPopoverScrollView *)popView.superview;
+        [multiPopoverScrollView continueLoading];
+    }
 }
 @end

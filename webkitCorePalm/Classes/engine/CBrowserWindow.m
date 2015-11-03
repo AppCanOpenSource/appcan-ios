@@ -102,6 +102,9 @@ extern NSString * webappShowAactivety;
         }
         
 		[eBrwView notifyPageFinish];
+        
+        [eBrwView continueMultiPopoverLoading];
+        
 	}
 	//[BUtility cookieDebugForBroad];
 }
@@ -111,6 +114,7 @@ extern NSString * webappShowAactivety;
 		ACENSLog(@"didFailLoadWithError url is %@", [webView.request URL]);
 		ACENSLog(@"page loaded failed! Error - %@ %@",[error localizedDescription],[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 		[((ACEBrowserView *)webView) notifyPageError];
+        [((ACEBrowserView *)webView) continueMultiPopoverLoading];
 	}
 }
 
