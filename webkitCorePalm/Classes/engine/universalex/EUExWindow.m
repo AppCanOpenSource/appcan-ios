@@ -53,6 +53,11 @@
 #import "ACEBrowserView.h"
 
 
+#import "EXTScope.h"
+#import "ACEMultiPopoverScrollView.h"
+
+
+
 #define kWindowConfirmViewTag (-9999)
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -336,7 +341,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                                cancelButtonTitle:nil
                                otherButtonTitles:nil] autorelease];
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_CONFIRM];
-    int buttonCount = inButtonLabels.count;
+    NSInteger buttonCount = inButtonLabels.count;
     NSString *button = nil;
     for (int i=0; i<buttonCount; i++) {
         button = (NSString*)[inButtonLabels objectAtIndex:i];
@@ -405,7 +410,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [mbAlertView.mAlertView addSubview:mbAlertView.mTextField];
     }
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_PROMPT];
-    int buttonCount = inButtonLabels.count;
+    NSInteger buttonCount = inButtonLabels.count;
     NSString *button = nil;
     for (int i=0; i<buttonCount; i++) {
         button = (NSString*)[inButtonLabels objectAtIndex:i];
@@ -4368,7 +4373,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     }
                 }
                 NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
-                [retDict setObject:[NSNumber numberWithInt:buttonIndex] forKey:@"num"];
+                [retDict setObject:[NSNumber numberWithInteger:buttonIndex] forKey:@"num"];
                 [retDict setObject:text forKey:@"value"];
                 [self jsSuccessWithName:F_CB_WINDOW_PROMPT opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:[retDict JSONFragment]];
                 [retDict release];
@@ -4653,11 +4658,11 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
     
     
-    int multNum = [pageN count];
+    NSInteger multNum = [pageN count];
     // define the scroll view content size and enable paging
     EScrollView * multiPopover = [[EScrollView alloc]initWithFrame:CGRectMake(x,y,w,h)];
     multiPopover.userInteractionEnabled = YES;
-    UIScrollView * scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
+    ACEMultiPopoverScrollView * scrollView = [[ACEMultiPopoverScrollView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
     [scrollView setPagingEnabled: YES] ;
     [scrollView setContentSize: CGSizeMake(scrollView.bounds.size.width * multNum, scrollView.bounds.size.height)] ;
     scrollView.delegate=self;
@@ -4703,11 +4708,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         //    return;
         //}
         int bottom=0;
-        [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
+        @unsafeify(self);
+        [scrollView addLoadingBlock:^{
+            @strongify(self);
+            [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
+        }];
+
     }
     
     
     [scrollView setContentOffset: CGPointMake(scrollView.bounds.size.width * pageth, scrollView.contentOffset.y) animated: NO] ;
+    [scrollView startLoadingPopViewAtIndex:pageth];
 }
 
 #pragma mark
@@ -5081,7 +5092,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     CGFloat pageWidth = scrollV.bounds.size.width ;
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger nearestNumber = lround(fractionalPage) ;
-    NSString *indexStr = [NSString stringWithFormat:@"%d", nearestNumber];
+    NSString *indexStr = [NSString stringWithFormat:@"%ld", (long)nearestNumber];
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
@@ -5100,7 +5111,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     CGFloat pageWidth = scrollV.bounds.size.width ;
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger nearestNumber = lround(fractionalPage) ;
-    NSString *indexStr = [NSString stringWithFormat:@"%d", nearestNumber];
+    NSString *indexStr = [NSString stringWithFormat:@"%ld", (long)nearestNumber];
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
