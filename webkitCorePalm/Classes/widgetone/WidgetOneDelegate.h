@@ -71,7 +71,8 @@
 
 
 //-(NSString *)getPayPublicRsaKey;
-
+-(void)rootPageDidFinishLoading;
 @end
 
 #define theApp ((WidgetOneDelegate *)[[UIApplication sharedApplication] delegate])
+

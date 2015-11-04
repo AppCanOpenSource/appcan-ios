@@ -82,6 +82,7 @@ extern NSString * webappShowAactivety;
             EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
             [aboveWindowContainer pushNotify];
         }
+        [theApp rootPageDidFinishLoading];
         theApp.isFirstPageDidLoad = YES;
     }
 	if (webView != NULL) {
