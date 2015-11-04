@@ -45,12 +45,20 @@
 #import "ACEDes.h"
 #import "RESideMenu.h"
 #import "DataAnalysisInfo.h"
+#import "EUtility.h"
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
-@interface WidgetOneDelegate()<RESideMenuDelegate>
 
+typedef void (^AppShortcutLoadingHandler)(void);
+typedef NS_ENUM(NSInteger,ACE3DTouchHandleStatus) {
+    ACE3DTouchHandleOnLaunchApp=0,
+    ACE3DTouchHandleOnWakeFromBackground,
+};
+
+@interface WidgetOneDelegate()<RESideMenuDelegate>
+@property (nonatomic,strong)AppShortcutLoadingHandler shortcutHandler;
 @end
 
 @implementation WidgetOneDelegate
@@ -462,7 +470,13 @@ NSString *AppCanJS = nil;
 		}
         
 	}
-    
+
+    if([launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey]){
+
+        UIApplicationShortcutItem *item =[launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
+        [self handle3dTouchWithShortcutItem:item type:ACE3DTouchHandleOnLaunchApp];
+        return NO;
+    }
     return YES;
     
 }
@@ -717,7 +731,11 @@ NSString *AppCanJS = nil;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
+    if(self.shortcutHandler && self.isFirstPageDidLoad){
+
+        self.shortcutHandler();
+        self.shortcutHandler=nil;
+    }
     //data analysis
     Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
@@ -730,11 +748,14 @@ NSString *AppCanJS = nil;
     
     [self invokeAppDelegateMethodApplicationDidBecomeActive:application];
     
+    /*
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         [EBrowserWindow postWindowSequenceChange];
     });
+     */
 }
+
 
 -(void)onResume{
     
@@ -907,6 +928,55 @@ NSString *AppCanJS = nil;
     
     [self invokeAppDelegateMethodApplicationDidReceiveMemoryWarning:application];
     
+}
+
+-(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
+
+    [self handle3dTouchWithShortcutItem:shortcutItem type:ACE3DTouchHandleOnWakeFromBackground];
+}
+#pragma mark - Handle 3D Touch Event
+-(void)handle3dTouchWithShortcutItem:(UIApplicationShortcutItem *)shortcutItem type:(ACE3DTouchHandleStatus)status{
+    NSMutableDictionary * shortcutInfo=[NSMutableDictionary dictionary];
+    [shortcutInfo setValue:shortcutItem.type forKey:@"type"];
+    [shortcutInfo setValue:@(status) forKey:@"status"];
+    [shortcutInfo setValue:shortcutItem.userInfo forKey:@"info"];
+    self.shortcutHandler=^{
+        [EUtility uexPlugin:@"uexWidget" callbackByName:@"onLoadByShortcutClickEvent" withObject:shortcutInfo andType:uexPluginCallbackWithJsonString inTarget:cUexPluginCallbackInRootWindow];
+    };
+
+}
+
+#pragma mark - root page finish loading invokation
+
+-(void)rootPageDidFinishLoading{
+    [EBrowserWindow postWindowSequenceChange];
+    if(self.shortcutHandler){
+
+        self.shortcutHandler();
+        self.shortcutHandler=nil;
+    }
+    [self invokeRootPageDidFinishLoading];
+    
+}
+- (void)invokeRootPageDidFinishLoading
+{
+    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
+        
+        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
+        
+        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        
+        Class acecls = NSClassFromString(fullClassName);
+        
+        Method delegateMethod = class_getClassMethod(acecls, @selector(rootPageDidFinishLoading));
+        
+        if (delegateMethod) {
+            
+            
+            [acecls rootPageDidFinishLoading];
+            
+        }
+    }
 }
 
 #pragma mark - UIAlertViewDelgate
