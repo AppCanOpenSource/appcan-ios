@@ -70,7 +70,7 @@
 @property (nonatomic, retain) NSString *windowName;
 @property (nonatomic, assign) id webController;
 @property (nonatomic, assign) BOOL isSliding;
-
+@property (nonatomic,assign) BOOL enableSwipeClose;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
@@ -90,4 +90,5 @@
 
 
 +(void)postWindowSequenceChange;
+-(void)updateSwipeCloseEnableStatus;
 @end
