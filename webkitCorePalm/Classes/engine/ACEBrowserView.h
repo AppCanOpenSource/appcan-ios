@@ -124,4 +124,6 @@
 - (void)bounceViewFinishLoadWithType:(int)inType;
 - (void)stopAllNetService;
 
+-(void)continueMultiPopoverLoading;
+
 @end

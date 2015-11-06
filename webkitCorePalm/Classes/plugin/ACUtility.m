@@ -29,7 +29,7 @@
     [rootView addSubview:HUD];
 	
     // Regisete for HUD callbacks so we can remove it from the window at the right time
-	HUD.labelText = @"请稍候...";
+    HUD.labelText = ACELocalized(@"请稍候");
 	[HUD show:YES];
 	NSURL *reqUrl = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:reqUrl];
