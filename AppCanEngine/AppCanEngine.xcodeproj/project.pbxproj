@@ -104,8 +104,15 @@
 		3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
 		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
+		4214B40D1BE753300088E31B /* ACEMultiPopoverScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */; };
+		4214B40E1BE753300088E31B /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4214B4121BE7575E0088E31B /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40F1BE7575E0088E31B /* EXTScope.h */; };
+		4214B4131BE7575E0088E31B /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B4101BE7575E0088E31B /* EXTScope.m */; };
+		4214B4141BE7575E0088E31B /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B4111BE7575E0088E31B /* metamacros.h */; };
 		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
 		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
+		42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D0AF401BBB8641002249AE /* ACELocalization.h */; };
+		42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; };
 		42FFC7FF1B625D160058E363 /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFC7FE1B625D160058E363 /* PackageInfo.h */; };
 		464272DE1BCE562E00F4BE36 /* ACEPluginViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */; };
 		464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
@@ -270,14 +277,10 @@
 		5AAA876118B1B93D000D7600 /* WWidgetUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */; };
 		5AAA876218B1B93D000D7600 /* WidgetOnePseudoDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */; };
 		5AE8735718B74DD20040BC9A /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE8735618B74DD20040BC9A /* IOKit.framework */; };
-		76F105BE1BD0913F0064CDD1 /* DataAnalysisInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */; settings = {ASSET_TAGS = (); }; };
-		76F105BF1BD0913F0064CDD1 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; settings = {ASSET_TAGS = (); }; };
+		76F105BE1BD0913F0064CDD1 /* DataAnalysisInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */; };
+		76F105BF1BD0913F0064CDD1 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; };
 		B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B220D27715A3152B00D02138 /* Foundation.framework */; };
 		B29DAE4F15AD1737004FBB57 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29DAE4E15AD1737004FBB57 /* CoreGraphics.framework */; };
-		B2E52ACD15A6B210003E73EA /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AC915A6B210003E73EA /* libiconv.dylib */; };
-		B2E52ACE15A6B210003E73EA /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52ACA15A6B210003E73EA /* libicucore.dylib */; };
-		B2E52ACF15A6B210003E73EA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52ACB15A6B210003E73EA /* libsqlite3.dylib */; };
-		B2E52AD015A6B210003E73EA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52ACC15A6B210003E73EA /* libz.dylib */; };
 		B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD215A6B222003E73EA /* MediaPlayer.framework */; };
 		B2E52ADE15A6B222003E73EA /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD315A6B222003E73EA /* MessageUI.framework */; };
 		B2E52ADF15A6B222003E73EA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD415A6B222003E73EA /* MapKit.framework */; };
@@ -408,8 +411,19 @@
 		3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBrowserView.h; sourceTree = "<group>"; };
 		3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
 		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
+		4200417A1BABBE02000A57F5 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		4200417C1BABBE14000A57F5 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		4200417E1BABBE1E000A57F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		420041801BABBE24000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMultiPopoverScrollView.h; sourceTree = "<group>"; };
+		4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMultiPopoverScrollView.m; sourceTree = "<group>"; };
+		4214B40F1BE7575E0088E31B /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
+		4214B4101BE7575E0088E31B /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
+		4214B4111BE7575E0088E31B /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
+		42D0AF401BBB8641002249AE /* ACELocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACELocalization.h; sourceTree = "<group>"; };
+		42D0AF411BBB8641002249AE /* ACELocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACELocalization.m; sourceTree = "<group>"; };
 		42FFC7FE1B625D160058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginViewContainer.h; sourceTree = "<group>"; };
 		464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginViewContainer.m; sourceTree = "<group>"; };
@@ -580,10 +594,6 @@
 		B220D27715A3152B00D02138 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B220D27B15A3152B00D02138 /* AppCanEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanEngine-Prefix.pch"; sourceTree = "<group>"; };
 		B29DAE4E15AD1737004FBB57 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		B2E52AC915A6B210003E73EA /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		B2E52ACA15A6B210003E73EA /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		B2E52ACB15A6B210003E73EA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		B2E52ACC15A6B210003E73EA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B2E52AD215A6B222003E73EA /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		B2E52AD315A6B222003E73EA /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		B2E52AD415A6B222003E73EA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -621,10 +631,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */,
-				B2E52ACD15A6B210003E73EA /* libiconv.dylib in Frameworks */,
-				B2E52ACE15A6B210003E73EA /* libicucore.dylib in Frameworks */,
-				B2E52ACF15A6B210003E73EA /* libsqlite3.dylib in Frameworks */,
-				B2E52AD015A6B210003E73EA /* libz.dylib in Frameworks */,
 				B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */,
 				B2E52ADE15A6B222003E73EA /* MessageUI.framework in Frameworks */,
 				B2E52ADF15A6B222003E73EA /* MapKit.framework in Frameworks */,
@@ -856,6 +862,8 @@
 		5AAA858E18B1B93D000D7600 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				42D0AF401BBB8641002249AE /* ACELocalization.h */,
+				42D0AF411BBB8641002249AE /* ACELocalization.m */,
 				DE90F5381904E6D00084EC10 /* OpenUDID.h */,
 				DE90F5391904E6D00084EC10 /* OpenUDID.m */,
 				5AAA858F18B1B93D000D7600 /* AllConfigParser.h */,
@@ -966,6 +974,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */,
+				4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */,
 				3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */,
 				3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */,
 				331573FE1A5AAEB70036A2A2 /* ACEPluginModel.h */,
@@ -1109,6 +1119,9 @@
 		5AAA865718B1B93D000D7600 /* plugin */ = {
 			isa = PBXGroup;
 			children = (
+				4214B40F1BE7575E0088E31B /* EXTScope.h */,
+				4214B4101BE7575E0088E31B /* EXTScope.m */,
+				4214B4111BE7575E0088E31B /* metamacros.h */,
 				76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */,
 				76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */,
 				5AAA865818B1B93D000D7600 /* ACUtility.h */,
@@ -1203,11 +1216,11 @@
 		B220D27615A3152B00D02138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				420041801BABBE24000A57F5 /* libz.tbd */,
+				4200417E1BABBE1E000A57F5 /* libsqlite3.tbd */,
+				4200417C1BABBE14000A57F5 /* libicucore.tbd */,
+				4200417A1BABBE02000A57F5 /* libiconv.tbd */,
 				5AE8735618B74DD20040BC9A /* IOKit.framework */,
-				B2E52AC915A6B210003E73EA /* libiconv.dylib */,
-				B2E52ACA15A6B210003E73EA /* libicucore.dylib */,
-				B2E52ACB15A6B210003E73EA /* libsqlite3.dylib */,
-				B2E52ACC15A6B210003E73EA /* libz.dylib */,
 				B2E52AD515A6B222003E73EA /* Accelerate.framework */,
 				B2E52AD615A6B222003E73EA /* AddressBook.framework */,
 				B2E52AD715A6B222003E73EA /* AddressBookUI.framework */,
@@ -1290,6 +1303,7 @@
 				5AAA86A718B1B93D000D7600 /* MBProgressHUD.h in Headers */,
 				5AAA868E18B1B93D000D7600 /* BToastView.h in Headers */,
 				5AAA869918B1B93D000D7600 /* JSONParser.h in Headers */,
+				4214B40D1BE753300088E31B /* ACEMultiPopoverScrollView.h in Headers */,
 				33C8E2F61B1EE7E300C33492 /* RESideMenu.h in Headers */,
 				5AAA871218B1B93D000D7600 /* ASIHTTPRequest.h in Headers */,
 				3C2887AE1A0B0984002776E4 /* CJSONSerialization.h in Headers */,
@@ -1331,6 +1345,7 @@
 				331574001A5AAEB70036A2A2 /* ACEPluginModel.h in Headers */,
 				5AAA870A18B1B93D000D7600 /* ASIDataCompressor.h in Headers */,
 				3C2887D01A0B099B002776E4 /* CJSONSerializedData.h in Headers */,
+				4214B4141BE7575E0088E31B /* metamacros.h in Headers */,
 				5AAA86E018B1B93D000D7600 /* EBrowserHistoryEntry.h in Headers */,
 				33C8E2F81B1EE7E300C33492 /* UIViewController+RESideMenu.h in Headers */,
 				5AAA86A318B1B93D000D7600 /* SBJsonParser.h in Headers */,
@@ -1339,6 +1354,7 @@
 				5AAA870E18B1B93D000D7600 /* ASIDownloadCache.h in Headers */,
 				33774C711B2A6D3500D5F279 /* UIImageView+WebCache.h in Headers */,
 				5AAA871418B1B93D000D7600 /* ASIHTTPRequestConfig.h in Headers */,
+				42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */,
 				3C2887D21A0B099B002776E4 /* NSDictionary_JSONExtensions.h in Headers */,
 				33AF6EC51A448EFD00DC7397 /* MMDrawerVisualState.h in Headers */,
 				5AAA870318B1B93D000D7600 /* EUExWidgetOne.h in Headers */,
@@ -1359,6 +1375,7 @@
 				5AAA869818B1B93D000D7600 /* JSON.h in Headers */,
 				5AAA868C18B1B93D000D7600 /* BStatusBarWindow.h in Headers */,
 				5AAA874418B1B93D000D7600 /* PullDownRefreshHeaderView.h in Headers */,
+				4214B4121BE7575E0088E31B /* EXTScope.h in Headers */,
 				5AAA86EC18B1B93D000D7600 /* EBrowserWidgetContainer.h in Headers */,
 				33774C5E1B2A6D3500D5F279 /* SDWebImageDownloader.h in Headers */,
 				333D00061A42B9CA00F501B3 /* ACEUINavigationController.h in Headers */,
@@ -1476,6 +1493,7 @@
 				33AF6EC81A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.m in Sources */,
 				333D00091A42B9CA00F501B3 /* ACEWebViewController.m in Sources */,
 				3C2887BB1A0B0984002776E4 /* CJSONSerializer.m in Sources */,
+				4214B4131BE7575E0088E31B /* EXTScope.m in Sources */,
 				5AAA873B18B1B93D000D7600 /* ACUtility.m in Sources */,
 				33774C6A1B2A6D3500D5F279 /* UIImage+GIF.m in Sources */,
 				5AAA872D18B1B93D000D7600 /* unzip.c in Sources */,
@@ -1543,7 +1561,9 @@
 				5AAA868D18B1B93D000D7600 /* BStatusBarWindow.m in Sources */,
 				5AAA871C18B1B93D000D7600 /* Reachability.m in Sources */,
 				5AAA875D18B1B93D000D7600 /* WWidget.m in Sources */,
+				4214B40E1BE753300088E31B /* ACEMultiPopoverScrollView.m in Sources */,
 				5AAA871E18B1B93D000D7600 /* AsyncSocket.m in Sources */,
+				42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */,
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
 				3C2887AF1A0B0984002776E4 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
@@ -1618,7 +1638,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 arm64";
 			};
@@ -1636,7 +1656,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 arm64";

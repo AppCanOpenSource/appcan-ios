@@ -191,7 +191,7 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
 													message:msg 
 												   delegate:self 
-										  cancelButtonTitle:@"确定" 
+										  cancelButtonTitle:ACELocalized(@"确定")
 										  otherButtonTitles:nil];
 	[alert show];
 	[alert release];
@@ -217,7 +217,7 @@
 //启动
 -(void)startWidgetWithAppId:(NSString *)appID{
 	MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:sView animated:YES];
-	hud.labelText = @"请稍候...";
+	hud.labelText = ACELocalized(@"请稍候");
 	[hud show:YES];
 	startWgtShowLoading = YES;
 	NSString *jsString = [NSString stringWithFormat:@"uexWidget.startWidget(\"%@\",\"0\",\"\",\"\");",appID];
@@ -593,7 +593,7 @@
 	NSInteger reqId = [[request.userInfo objectForKey:@"requestID"] intValue];
 	switch (reqId) {
 		case 0:
-			//[self showAlert:@"提示" message:@"加载失败"];
+			//[self showAlert:ACELocalized(@"提示") message:@"加载失败"];
 			break;
 		case 1:
 		{
@@ -937,7 +937,7 @@
 	BOOL hasInstalled = NO; 
 	if ([appID isEqualToString:@"9999997"]) {
 		if (![BUtility isConnected]) {
-			[self showAlert:@"" message:@"获取信息失败"];
+			[self showAlert:@"" message:ACELocalized(@"获取信息失败")];
 			return;
 		}
 		[self startWidgetWithAppId:appID];
@@ -990,7 +990,7 @@
 	ACENSLog(@"sessionkey = %@",sessionKey);
 	if (sessionKey==nil) {
 		[MBProgressHUD hideHUDForView:sView animated:YES];
-		[self showAlert:@"" message:@"获取信息失败"];
+		[self showAlert:@"" message:ACELocalized(@"获取信息失败")];
 	}
 	NSString *sessionKeyStr = [[sessionKey JSONValue] objectForKey:@"txSessionKey"];
 	if (sessionKeyStr!=nil&&[sessionKeyStr length]>0) {
@@ -1010,24 +1010,24 @@
 		[self.eBView stringByEvaluatingJavaScriptFromString:jsString];
 	}else {
 		[MBProgressHUD hideHUDForView:sView animated:YES];
-		[self showAlert:@"" message:@"获取信息失败"];
+		[self showAlert:@"" message:ACELocalized(@"获取信息失败")];
 	}	
 }
 -(void)sessionKeyFail{
 	ACENSLog(@"session key fail");
 	[MBProgressHUD hideHUDForView:sView animated:YES];
-	[self showAlert:@"" message:@"获取信息失败"];
+	[self showAlert:@"" message:ACELocalized(@"获取信息失败")];
 	return;
 }
 -(void)userLoginStart{
 	if (![BUtility isConnected]) {
-		[self showAlert:@"" message:@"获取信息失败"];
+		[self showAlert:@"" message:ACELocalized(@"获取信息失败")];
 		return;
 	}
 	//用户登录
 	//联网拿到sessionkey
 	MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:sView animated:YES];
-	hud.labelText = @"请稍候";
+	hud.labelText = ACELocalized(@"请稍候");
 	[hud show:YES];
 	startWgtShowLoading = YES;
 	[NSThread detachNewThreadSelector:@selector(dldSessionKey) toTarget:self withObject:nil];
@@ -1094,7 +1094,7 @@
 		if (recmdAppRefDict!=nil&&activeAppId!=NULL&&needDownload ==YES) {
 			//先判断有木有安装
 			if ([self appHasInstall:activeAppId]) {
-				[self showAlert:@"" message:@"该应用已经安装"];
+				[self showAlert:@"" message:ACELocalized(@"该应用已经安装")];
 			}else {
 				AppItemView *item = [recmdAppRefDict objectForKey:activeAppId];
 				if (item) {
@@ -1226,7 +1226,7 @@
 	//安装完成后上报
 	if (succ&&sId) {
 		MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:sView animated:YES];
-		hud.labelText = @"正在安装";
+		hud.labelText = ACELocalized(@"正在安装");
 		[hud show:YES];
 		//查询数据库
 		//如果没有表就创建一个表
@@ -1252,7 +1252,7 @@
 -(void)widgetDidDownloadFail:(ASIHTTPRequest *)request{
 	ACENSLog(@"download fail");
 	needDownload = NO;
-	[self showAlert:@"下载失败" message:@"请检查网络连接"];
+	[self showAlert:ACELocalized(@"下载失败") message: ACELocalized(@"请检查网络连接")];
 	AppItemView *item = [request.userInfo objectForKey:@"downloadItem"];
 	[myAppRefDict removeObjectForKey:item.appId];
 	[self drawBottomView:myAppRefDict];
@@ -1280,7 +1280,7 @@
 			BOOL hasInstalled =[self appHasInstall:appItem.appId]; 
 			if (hasInstalled==YES) {
 				//已经安装 
-				[self showAlert:@"" message:@"该应用已经安装"];
+				[self showAlert:@"" message:ACELocalized(@"该应用已经安装")];
 				return;
 			}
 			if (hasInstalled==NO) {
@@ -1326,7 +1326,7 @@
 			break;
 		case WIDGET_START_NOT_EXIST:
 			ACENSLog(@"app不存在");
-			[self showAlert:@"提示" message:@"该程序还没有安装"];
+			[self showAlert:ACELocalized(@"提示")  message:ACELocalized(@"该程序还没有安装")];
 			break;
 		case WIDGET_START_FAIL:
 			ACENSLog(@"加载失败");

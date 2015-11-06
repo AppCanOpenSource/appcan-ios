@@ -29,6 +29,7 @@
 
 #define startX -200;
 
+#import "EBrowserWindow.h"
 
 @interface MMNavigationController ()
 {
@@ -101,7 +102,7 @@
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
     [self.screenShotsList removeLastObject];
-    
+    [EBrowserWindow postWindowSequenceChange];
     return [super popViewControllerAnimated:animated];
 }
 
