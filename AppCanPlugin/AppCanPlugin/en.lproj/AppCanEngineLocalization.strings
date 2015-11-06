@@ -1,0 +1,42 @@
+/* 
+  AppCanEngineLocalization.strings
+  AppCanPlugin
+
+  Created by CeriNo on 15/9/30.
+  Copyright © 2015年 zywx. All rights reserved.
+*/
+"提示"="prompt";
+"该程序还没有安装"="The widget has not been installed yet!";
+"对象被禁止使用，请联系管理员"="is forbidden,please contact the admin.";
+"确定"="confirm";
+"文件解压失败"="File decompression failed";
+"测试版本仅用于开发测试"="This version is only used for TEST";
+"退出提示"="Exit prompt";
+"确定要退出程序吗"="Are you sure to exit?";
+"取消"="cancel";
+"释放刷新"="Release to refresh...";
+"拖动刷新"="Pull to refresh...";
+"加载中"="Loading...";
+"请稍候"="Please wait...";
+"获取信息失败"="Accessing to infomation FAILED";
+"该应用已经安装"="The widget has already been installed!";
+"正在安装"="Installing...";
+"下载失败"="Download failed";
+"请检查网络连接"="Please check the network connection";
+"应用中心"="Widget Center";
+"推荐应用"="recommendatory widgets";
+"我的应用"="My widgets";
+"更多"="More...";
+"删除该应用"="Delete this widget";
+"上次更新时间"="Last update";
+"本应用仅适用未越狱机，即将关闭。"="This application will be terminiate due to jailbreak";
+"继续更新"="continue upgate";
+"上次更新未完成请继续更新"="Last update has not finished,please continue updating";
+"更新"="update";
+"更新提示"="Update prompt";
+"部分内容更新优化，请更新后使用"="A considerable update is required，please try it after updating";
+"更新中"="Updating...";
+"请勿关闭或离开当前页面，以免造成更新失败"="To avoid the failure of updating,please stay in this page";
+"更新失败"="Update failed";
+"可能网络传输或其他问题造成，请点击重试"="This maybe due to connection errors,please retry";
+"重试"="Retry";

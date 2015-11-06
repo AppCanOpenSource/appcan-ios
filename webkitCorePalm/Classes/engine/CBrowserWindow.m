@@ -82,6 +82,7 @@ extern NSString * webappShowAactivety;
             EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
             [aboveWindowContainer pushNotify];
         }
+        [theApp rootPageDidFinishLoading];
         theApp.isFirstPageDidLoad = YES;
     }
 	if (webView != NULL) {
@@ -102,6 +103,9 @@ extern NSString * webappShowAactivety;
         }
         
 		[eBrwView notifyPageFinish];
+        
+        [eBrwView continueMultiPopoverLoading];
+        
 	}
 	//[BUtility cookieDebugForBroad];
 }
@@ -111,6 +115,7 @@ extern NSString * webappShowAactivety;
 		ACENSLog(@"didFailLoadWithError url is %@", [webView.request URL]);
 		ACENSLog(@"page loaded failed! Error - %@ %@",[error localizedDescription],[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 		[((ACEBrowserView *)webView) notifyPageError];
+        [((ACEBrowserView *)webView) continueMultiPopoverLoading];
 	}
 }
 
@@ -243,7 +248,7 @@ extern NSString * webappShowAactivety;
 }
 
 -(void)alertForbidView:(NSString*)uexPluginName{
-    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"%@对象被禁止使用，请联系管理员。",uexPluginName] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:[NSString stringWithFormat:@"%@%@",uexPluginName,ACELocalized(@"对象被禁止使用，请联系管理员")] delegate:nil cancelButtonTitle:nil otherButtonTitles:ACELocalized(@"确定"), nil];
     [alertView show];
     [alertView release];
 }
