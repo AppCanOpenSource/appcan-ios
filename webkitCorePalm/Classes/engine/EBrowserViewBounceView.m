@@ -678,7 +678,7 @@ double radians(float degrees){
     case EBounceViewStatusReleaseToReload: {
       [self showActivity:NO animated:NO];
       [self setImageFlipped:YES];
-      mStatusLabel.text = @"释放刷新...";
+      mStatusLabel.text = ACELocalized(@"释放刷新");
       if (releaseReload) {
          mStatusLabel.text =(NSString*)releaseReload;
       }
@@ -688,7 +688,7 @@ double radians(float degrees){
     case EBounceViewStatusPullToReload: {
       [self showActivity:NO animated:NO];
       [self setImageFlipped:NO];
-      mStatusLabel.text = @"拖动刷新...";
+      mStatusLabel.text =ACELocalized(@"拖动刷新");
       if (pullReload) {
         mStatusLabel.text =(NSString*)pullReload;
       }
@@ -698,7 +698,7 @@ double radians(float degrees){
     case EBounceViewStatusLoading: {
       [self showActivity:YES animated:YES];
       [self setImageFlipped:NO];
-      mStatusLabel.text = @"加载中...";
+      mStatusLabel.text = ACELocalized(@"加载中");
       if (loading) {
             mStatusLabel.text =(NSString*)loading;
       }

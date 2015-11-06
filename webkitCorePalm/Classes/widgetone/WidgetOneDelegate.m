@@ -45,9 +45,13 @@
 #import "ACEDes.h"
 #import "RESideMenu.h"
 #import "DataAnalysisInfo.h"
+#import "EUtility.h"
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
+
+
+
 
 @interface WidgetOneDelegate()<RESideMenuDelegate>
 
@@ -292,7 +296,6 @@ NSString *AppCanJS = nil;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     BOOL success;
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -322,7 +325,7 @@ NSString *AppCanJS = nil;
         
         if (isjab) {
             
-            UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:@"提示" message:@"本应用仅适用未越狱机，即将关闭。" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+            UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:ACELocalized(@"本应用仅适用未越狱机，即将关闭。") delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
             alertView.tag = kViewTagExit;
 			[alertView show];
             [alertView release];
@@ -463,7 +466,8 @@ NSString *AppCanJS = nil;
 		}
         
 	}
-    
+
+
     return YES;
     
 }
@@ -578,7 +582,7 @@ NSString *AppCanJS = nil;
         //			[brwView  stringByEvaluatingJavaScriptFromString:jsStr];
         //		}
 		application.applicationIconBadgeNumber = 0;
-		UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+		UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:msg delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
 		alertView.tag = kViewTagLocalNotification;
 		[alertView show];
 		[alertView release];
@@ -718,7 +722,7 @@ NSString *AppCanJS = nil;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
+
     //data analysis
     Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
@@ -731,11 +735,14 @@ NSString *AppCanJS = nil;
     
     [self invokeAppDelegateMethodApplicationDidBecomeActive:application];
     
+    /*
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         [EBrowserWindow postWindowSequenceChange];
     });
+     */
 }
+
 
 -(void)onResume{
     
@@ -908,6 +915,63 @@ NSString *AppCanJS = nil;
     
     [self invokeAppDelegateMethodApplicationDidReceiveMemoryWarning:application];
     
+}
+
+-(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
+
+    [self invokeAppDelegateMethodApplication:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
+    if(completionHandler){
+        completionHandler(YES);
+    }
+}
+
+
+
+-(void)invokeAppDelegateMethodApplication:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
+    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
+        
+        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
+        
+        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        
+        Class acecls = NSClassFromString(fullClassName);
+        
+        Method delegateMethod = class_getClassMethod(acecls, @selector(application:performActionForShortcutItem:completionHandler:));
+        
+        if (delegateMethod) {
+
+            [acecls application:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
+            
+        }
+    }
+}
+
+#pragma mark - root page finish loading invokation
+
+-(void)rootPageDidFinishLoading{
+    [EBrowserWindow postWindowSequenceChange];
+    [self invokeRootPageDidFinishLoading];
+    
+}
+- (void)invokeRootPageDidFinishLoading
+{
+    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
+        
+        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
+        
+        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        
+        Class acecls = NSClassFromString(fullClassName);
+        
+        Method delegateMethod = class_getClassMethod(acecls, @selector(rootPageDidFinishLoading));
+        
+        if (delegateMethod) {
+            
+            
+            [acecls rootPageDidFinishLoading];
+            
+        }
+    }
 }
 
 #pragma mark - UIAlertViewDelgate

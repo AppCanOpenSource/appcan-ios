@@ -53,12 +53,18 @@
 #import "ACEBrowserView.h"
 
 
+#import "EXTScope.h"
+#import "ACEMultiPopoverScrollView.h"
+
+
+
 #define kWindowConfirmViewTag (-9999)
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
-#define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗?"
+#define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
 #define UEX_EXITAPP_ALERT_CANCLE @"取消"
+
 
 #define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
@@ -335,7 +341,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                                cancelButtonTitle:nil
                                otherButtonTitles:nil] autorelease];
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_CONFIRM];
-    int buttonCount = inButtonLabels.count;
+    NSInteger buttonCount = inButtonLabels.count;
     NSString *button = nil;
     for (int i=0; i<buttonCount; i++) {
         button = (NSString*)[inButtonLabels objectAtIndex:i];
@@ -404,7 +410,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [mbAlertView.mAlertView addSubview:mbAlertView.mTextField];
     }
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_PROMPT];
-    int buttonCount = inButtonLabels.count;
+    NSInteger buttonCount = inButtonLabels.count;
     NSString *button = nil;
     for (int i=0; i<buttonCount; i++) {
         button = (NSString*)[inButtonLabels objectAtIndex:i];
@@ -452,7 +458,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [mActionSheet showInView:meBrwView.meBrwWnd];
 }
 -(void)alertForbidView:(NSString*)uexWinName{
-    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"%@窗口被禁止使用，请联系管理员。",uexWinName] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:[NSString stringWithFormat:@"%@窗口被禁止使用，请联系管理员。",uexWinName] delegate:nil cancelButtonTitle:nil otherButtonTitles:ACELocalized(@"确定"), nil];
     [alertView show];
     [alertView release];
 }
@@ -1387,7 +1393,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     eBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
                     meBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
                     
-                    
+                    [EBrowserWindow postWindowSequenceChange];
                     return;
                 }
             }
@@ -1484,6 +1490,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         meBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         
     }
+    [EBrowserWindow postWindowSequenceChange];
 }
 
 -(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
@@ -1972,10 +1979,10 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 -(void)exitApp
 {
     
-    NSString * title = NSLocalizedString(UEX_EXITAPP_ALERT_TITLE, nil);
-    NSString * message = NSLocalizedString(UEX_EXITAPP_ALERT_MESSAGE, nil);
-    NSString * exit = NSLocalizedString(UEX_EXITAPP_ALERT_EXIT, nil);
-    NSString * cancel = NSLocalizedString(UEX_EXITAPP_ALERT_CANCLE, nil);
+    NSString * title = ACELocalized(UEX_EXITAPP_ALERT_TITLE);
+    NSString * message = ACELocalized(UEX_EXITAPP_ALERT_MESSAGE);
+    NSString * exit = ACELocalized(UEX_EXITAPP_ALERT_EXIT);
+    NSString * cancel = ACELocalized(UEX_EXITAPP_ALERT_CANCLE);
     
     UIAlertView *windowConfirmView = [[[UIAlertView alloc]
                                        initWithTitle:title
@@ -2184,7 +2191,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 //
             }];
         }
-        
+        [EBrowserWindow postWindowSequenceChange];
         return;
     }
     
@@ -4367,7 +4374,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     }
                 }
                 NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
-                [retDict setObject:[NSNumber numberWithInt:buttonIndex] forKey:@"num"];
+                [retDict setObject:[NSNumber numberWithInteger:buttonIndex] forKey:@"num"];
                 [retDict setObject:text forKey:@"value"];
                 [self jsSuccessWithName:F_CB_WINDOW_PROMPT opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:[retDict JSONFragment]];
                 [retDict release];
@@ -4652,11 +4659,11 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
     
     
-    int multNum = [pageN count];
+    NSInteger multNum = [pageN count];
     // define the scroll view content size and enable paging
     EScrollView * multiPopover = [[EScrollView alloc]initWithFrame:CGRectMake(x,y,w,h)];
     multiPopover.userInteractionEnabled = YES;
-    UIScrollView * scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
+    ACEMultiPopoverScrollView * scrollView = [[ACEMultiPopoverScrollView alloc]initWithFrame:CGRectMake(0, 0, w, h)];
     [scrollView setPagingEnabled: YES] ;
     [scrollView setContentSize: CGSizeMake(scrollView.bounds.size.width * multNum, scrollView.bounds.size.height)] ;
     scrollView.delegate=self;
@@ -4702,11 +4709,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         //    return;
         //}
         int bottom=0;
-        [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
+        @unsafeify(self);
+        [scrollView addLoadingBlock:^{
+            @strongify(self);
+            [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
+        }];
+
     }
     
     
     [scrollView setContentOffset: CGPointMake(scrollView.bounds.size.width * pageth, scrollView.contentOffset.y) animated: NO] ;
+    [scrollView startLoadingPopViewAtIndex:pageth];
 }
 
 #pragma mark
@@ -5080,7 +5093,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     CGFloat pageWidth = scrollV.bounds.size.width ;
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger nearestNumber = lround(fractionalPage) ;
-    NSString *indexStr = [NSString stringWithFormat:@"%d", nearestNumber];
+    NSString *indexStr = [NSString stringWithFormat:@"%ld", (long)nearestNumber];
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
@@ -5099,7 +5112,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     CGFloat pageWidth = scrollV.bounds.size.width ;
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger nearestNumber = lround(fractionalPage) ;
-    NSString *indexStr = [NSString stringWithFormat:@"%d", nearestNumber];
+    NSString *indexStr = [NSString stringWithFormat:@"%ld", (long)nearestNumber];
     
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
@@ -5278,4 +5291,19 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 
+-(void)setSwipeCloseEnable:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    BOOL canSwipeClose=YES;
+    if([info objectForKey:@"enable"]){
+    canSwipeClose=[[info objectForKey:@"enable"]boolValue];
+    }
+    meBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
+    [meBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+}
 @end

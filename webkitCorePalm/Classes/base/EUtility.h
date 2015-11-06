@@ -66,6 +66,7 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  */
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName;
 
+
 /**
  *  插件国际化
  *
@@ -79,6 +80,7 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 + (BOOL)isUseSystemLanguage;
 
 + (NSString *)getAppCanUserLanguage;
+
 
 
 + (NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl;
