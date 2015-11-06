@@ -27,10 +27,13 @@
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserWindowContainer.h"
 #import "EUExWindow.h"
-
-
+#import "ACEUINavigationController.h"
+#import "WidgetOneDelegate.h"
+#import "ACEDrawerViewController.h"
+#import "RESideMenu.h"
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
+
 @end
 
 @implementation EBrowserWindow
@@ -194,6 +197,7 @@
     }
 	ACENSLog(@"EBrowserWindow alloc is %x", self);
     self.isTopWindow=NO;
+    self.enableSwipeClose=YES;
     [self registerWindowSequenceChange];
     return self;
 }
@@ -382,7 +386,7 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 
 -(void)onWindowAppear{
 
-
+    [self updateSwipeCloseEnableStatus];
     [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowAppear != null){uexWindow.onWindowAppear();}"];
 }
 -(void)onWindowDisappear{
@@ -421,11 +425,25 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 }
 
 +(void)postWindowSequenceChange{
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 300ull * NSEC_PER_MSEC);
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 50ull * NSEC_PER_MSEC);
     dispatch_after(time, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
        [[NSNotificationCenter defaultCenter] postNotificationName:cDidWindowSequenceChange object:nil];
     });
     
+}
+
+#pragma mark - Update Swipe Close Status
+-(void)updateSwipeCloseEnableStatus{
+    ACEUINavigationController *navController = nil;
+    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    if (app.drawerController) {
+        navController = (ACEUINavigationController *)app.drawerController.centerViewController;
+    } else {
+        navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
+    }
+    if(navController){
+        navController.canDragBack=self.enableSwipeClose;
+    }
 }
 
 @end

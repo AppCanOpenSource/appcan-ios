@@ -1393,7 +1393,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     eBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
                     meBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
                     
-                    
+                    [EBrowserWindow postWindowSequenceChange];
                     return;
                 }
             }
@@ -1490,6 +1490,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         meBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         
     }
+    [EBrowserWindow postWindowSequenceChange];
 }
 
 -(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
@@ -2190,7 +2191,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 //
             }];
         }
-        
+        [EBrowserWindow postWindowSequenceChange];
         return;
     }
     
@@ -5290,4 +5291,19 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 
+-(void)setSwipeCloseEnable:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    BOOL canSwipeClose=YES;
+    if([info objectForKey:@"enable"]){
+    canSwipeClose=[[info objectForKey:@"enable"]boolValue];
+    }
+    meBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
+    [meBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+}
 @end
