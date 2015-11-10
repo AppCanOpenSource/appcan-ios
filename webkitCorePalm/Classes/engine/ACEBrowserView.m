@@ -143,10 +143,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (self.indicatorView) {
         self.indicatorView =nil;
     }
-	ACENSLog(@"ACEBrowserView retain count is %d",[self retainCount]);
-	ACENSLog(@"ACEBrowserView dealloc is %x", self);
-	ACENSLog(@"meUExManager retain count is %d",[meUExManager retainCount]);
-	[self unRegisterKeyboardListener:nil];
+	
+    [self unRegisterKeyboardListener:nil];
 	if (meUExManager) {
 		[meUExManager clean];
 		[meUExManager release];
@@ -549,7 +547,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 -(NSURL*)curUrl{
-    NSLog(@"%@==%@",self.currentUrl,[self.request URL]);
+    
     if (self.currentUrl)
     {
         if ([self.request URL]) {
@@ -568,7 +566,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)loadUEXScript {
 	extern NSString *AppCanJS;
 	//extern NSString *AppCanPluginJS;
-	//NSLog(@"engine=%@-------\n",AppCanJS);
 	[self stringByEvaluatingJavaScriptFromString:AppCanJS];
     
 }
