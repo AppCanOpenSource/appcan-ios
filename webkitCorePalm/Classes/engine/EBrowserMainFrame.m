@@ -218,12 +218,18 @@
 			break;
 		case F_EBRW_VIEW_TYPE_MAIN:
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-			if (meBrwCtrler.mStartView) {
-                [meBrwCtrler.mStartView removeFromSuperview];
-				meBrwCtrler.mStartView = nil;
-                self.hidden = NO;
-			}
-           
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                
+                if (meBrwCtrler.mStartView) {
+                    self.hidden = NO;
+                    [meBrwCtrler.mStartView removeFromSuperview];
+                    meBrwCtrler.mStartView = nil;
+                    
+                }
+                
+            });
+            
 			mLoadDone = YES;
 			if ((eInBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
 				eInBrwView.meBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
