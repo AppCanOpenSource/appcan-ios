@@ -1541,6 +1541,18 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
 }
 
+- (void)setZoomScale:(NSMutableArray *)inArguments {
+    
+    if ([inArguments count] < 1) {
+        return;
+    }
+    
+    float scale = [[inArguments objectAtIndex:0] floatValue];
+    
+    [meBrwView.scrollView setZoomScale:scale];
+    
+}
+
 - (void)open:(NSMutableArray *)inArguments {
     NSString *inUExWndName = [inArguments objectAtIndex:0];
     NSString *inDataType = [inArguments objectAtIndex:1];
