@@ -5306,4 +5306,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     meBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
     [meBrwView.meBrwWnd updateSwipeCloseEnableStatus];
 }
+
+//设置网页是否可以滑动
+-(void)setWebViewScrollable:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    BOOL webViewScrollable =[inArguments[0] boolValue];
+    meBrwView.meBrowserView.mScrollView.scrollEnabled=webViewScrollable;
+}
 @end
