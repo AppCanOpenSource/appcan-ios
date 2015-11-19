@@ -266,6 +266,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.disturbLongPressGesture = function() { uex.exec('uexWindow.disturbLongPressGesture/'+uexJoin(arguments));};"
 //2015-11-06 by lkl
 "uexWindow.setSwipeCloseEnable = function() { uex.exec('uexWindow.setSwipeCloseEnable/'+uexJoin(arguments));};"
+"uexWindow.setWebViewScrollable = function() { uex.exec('uexWindow.setWebViewScrollable/'+uexJoin(arguments));};"
+
 
 
 "window.uexAppCenter = {}; uexAppCenter.cbGetSessionKey = null; uexAppCenter.cbLoginOut = null;"
