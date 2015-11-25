@@ -3025,7 +3025,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     @catch (NSException *exception) {
         
-        NSLog(@"AppCan-->EUExWindow-->setBounceParams-->%@",[exception description]);
         
     }
     @finally {

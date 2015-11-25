@@ -389,8 +389,6 @@
 
 -(void)finishWidget:(NSMutableArray *)inArguments {
     
-    NSLog(@"appcan-->[EUExWidget finishWidget]");
-    
     NSString *inRet = [inArguments objectAtIndex:0];
     NSString *appID = nil;
     

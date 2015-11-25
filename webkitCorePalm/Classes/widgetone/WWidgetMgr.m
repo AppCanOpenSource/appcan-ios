@@ -67,29 +67,20 @@ NSString * webappShowAactivety;
         
         NSString *wgtPathString = wgtObj.indexUrl;
         
-        NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->wgtObj.indexUrl == %@",wgtObj.indexUrl);
-        
         NSRange range = [wgtObj.indexUrl rangeOfString:@"widget/plugin/"];
         
         if (range.location != NSNotFound) {
             
             wgtPath = [wgtPathString substringToIndex:range.location+range.length];
             
-            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->1-->wgtPath == %@",wgtPath);
-            
             NSRange range1 = [wgtPath rangeOfString:@"file://"];
             
             wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
             
-            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->2-->wgtPath == %@",wgtPath);
-            
             wgtPath = [wgtPath stringByAppendingString:wgtObj.appId];
-            
-            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->3-->wgtPath == %@",wgtPath);
             
         } else {
             
-            NSLog(@"appcan-->WWidgetMgr.m-->curWidgetPath-->range.location == NSNotFound");
             
         }
         
