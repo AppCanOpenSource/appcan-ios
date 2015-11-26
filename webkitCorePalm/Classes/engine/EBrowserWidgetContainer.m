@@ -25,7 +25,7 @@
 #import	"EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "BUtility.h"
-#import "BAnimition.h"
+#import "BAnimation.h"
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowser.h"
@@ -222,10 +222,10 @@
 				}
 			}
 		}
-		if ([BAnimition isMoveIn:eSuperBrwWndContainer.mStartAnimiId]) {
-            [BAnimition doMoveInAnimition:eSuperBrwWndContainer animiId:eSuperBrwWndContainer.mStartAnimiId animiTime:eSuperBrwWndContainer.mStartAnimiDuration];
+		if ([BAnimation isMoveIn:eSuperBrwWndContainer.mStartAnimiId]) {
+            [BAnimation doMoveInAnimition:eSuperBrwWndContainer animiId:eSuperBrwWndContainer.mStartAnimiId animiTime:eSuperBrwWndContainer.mStartAnimiDuration];
         } else {
-            [BAnimition SwapAnimationWithView:self AnimiId:eSuperBrwWndContainer.mStartAnimiId AnimiTime:eSuperBrwWndContainer.mStartAnimiDuration];
+            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWndContainer.mStartAnimiId AnimiTime:eSuperBrwWndContainer.mStartAnimiDuration];
         }
 		
 		if (eCurBrwWndContainer) {

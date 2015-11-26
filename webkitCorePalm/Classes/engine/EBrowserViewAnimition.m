@@ -17,7 +17,7 @@
  */
 
 #import "EBrowserViewAnimition.h"
-#import "BAnimitionTransform.h"
+#import "BAnimationTransform.h"
 #import "BUtility.h"
 
 @implementation EBrowserViewAnimition
@@ -79,7 +79,7 @@
 	[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	CATransform3D commitTransForm = inView.layer.transform;
 	self.mOldTransform = inView.layer.transform;
-	for (BAnimitionTransform *transForm in mTransformArray) {
+	for (BAnimationTransform *transForm in mTransformArray) {
 		commitTransForm = CATransform3DConcat(commitTransForm, transForm.mTransForm3D);
 	}
 	inView.layer.transform = commitTransForm;

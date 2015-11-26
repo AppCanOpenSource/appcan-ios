@@ -109,6 +109,9 @@
 		4214B4121BE7575E0088E31B /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40F1BE7575E0088E31B /* EXTScope.h */; };
 		4214B4131BE7575E0088E31B /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B4101BE7575E0088E31B /* EXTScope.m */; };
 		4214B4141BE7575E0088E31B /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B4111BE7575E0088E31B /* metamacros.h */; };
+		428628FB1C0708920078E783 /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 428628F91C0708920078E783 /* ACEPOPAnimation.h */; };
+		428628FC1C0708920078E783 /* ACEPOPAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 428628FA1C0708920078E783 /* ACEPOPAnimation.m */; };
+		428628FE1C0708E30078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FD1C0708E30078E783 /* pop.framework */; };
 		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
 		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
 		42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D0AF401BBB8641002249AE /* ACELocalization.h */; };
@@ -118,10 +121,10 @@
 		464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
 		5AAA868518B1B93D000D7600 /* AllConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859018B1B93D000D7600 /* AllConfigParser.m */; };
-		5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimition.h */; };
-		5AAA868718B1B93D000D7600 /* BAnimition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859218B1B93D000D7600 /* BAnimition.m */; };
-		5AAA868818B1B93D000D7600 /* BAnimitionTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859318B1B93D000D7600 /* BAnimitionTransform.h */; };
-		5AAA868918B1B93D000D7600 /* BAnimitionTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859418B1B93D000D7600 /* BAnimitionTransform.m */; };
+		5AAA868618B1B93D000D7600 /* BAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859118B1B93D000D7600 /* BAnimation.h */; };
+		5AAA868718B1B93D000D7600 /* BAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859218B1B93D000D7600 /* BAnimation.m */; };
+		5AAA868818B1B93D000D7600 /* BAnimationTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859318B1B93D000D7600 /* BAnimationTransform.h */; };
+		5AAA868918B1B93D000D7600 /* BAnimationTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859418B1B93D000D7600 /* BAnimationTransform.m */; };
 		5AAA868A18B1B93D000D7600 /* Beqtucontent.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859518B1B93D000D7600 /* Beqtucontent.h */; };
 		5AAA868C18B1B93D000D7600 /* BStatusBarWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */; };
 		5AAA868D18B1B93D000D7600 /* BStatusBarWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */; };
@@ -420,6 +423,9 @@
 		4214B40F1BE7575E0088E31B /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		4214B4101BE7575E0088E31B /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		4214B4111BE7575E0088E31B /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
+		428628F91C0708920078E783 /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
+		428628FA1C0708920078E783 /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
+		428628FD1C0708E30078E783 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
 		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
 		42D0AF401BBB8641002249AE /* ACELocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACELocalization.h; sourceTree = "<group>"; };
@@ -429,10 +435,10 @@
 		464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginViewContainer.m; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
 		5AAA859018B1B93D000D7600 /* AllConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllConfigParser.m; sourceTree = "<group>"; };
-		5AAA859118B1B93D000D7600 /* BAnimition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimition.h; sourceTree = "<group>"; };
-		5AAA859218B1B93D000D7600 /* BAnimition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAnimition.m; sourceTree = "<group>"; };
-		5AAA859318B1B93D000D7600 /* BAnimitionTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimitionTransform.h; sourceTree = "<group>"; };
-		5AAA859418B1B93D000D7600 /* BAnimitionTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAnimitionTransform.m; sourceTree = "<group>"; };
+		5AAA859118B1B93D000D7600 /* BAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimation.h; sourceTree = "<group>"; };
+		5AAA859218B1B93D000D7600 /* BAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAnimation.m; sourceTree = "<group>"; };
+		5AAA859318B1B93D000D7600 /* BAnimationTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimationTransform.h; sourceTree = "<group>"; };
+		5AAA859418B1B93D000D7600 /* BAnimationTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAnimationTransform.m; sourceTree = "<group>"; };
 		5AAA859518B1B93D000D7600 /* Beqtucontent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beqtucontent.h; sourceTree = "<group>"; };
 		5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BStatusBarWindow.h; sourceTree = "<group>"; };
 		5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BStatusBarWindow.m; sourceTree = "<group>"; };
@@ -630,6 +636,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				428628FE1C0708E30078E783 /* pop.framework in Frameworks */,
 				B220D27815A3152B00D02138 /* Foundation.framework in Frameworks */,
 				B2E52ADD15A6B222003E73EA /* MediaPlayer.framework in Frameworks */,
 				B2E52ADE15A6B222003E73EA /* MessageUI.framework in Frameworks */,
@@ -868,10 +875,12 @@
 				DE90F5391904E6D00084EC10 /* OpenUDID.m */,
 				5AAA858F18B1B93D000D7600 /* AllConfigParser.h */,
 				5AAA859018B1B93D000D7600 /* AllConfigParser.m */,
-				5AAA859118B1B93D000D7600 /* BAnimition.h */,
-				5AAA859218B1B93D000D7600 /* BAnimition.m */,
-				5AAA859318B1B93D000D7600 /* BAnimitionTransform.h */,
-				5AAA859418B1B93D000D7600 /* BAnimitionTransform.m */,
+				5AAA859118B1B93D000D7600 /* BAnimation.h */,
+				5AAA859218B1B93D000D7600 /* BAnimation.m */,
+				5AAA859318B1B93D000D7600 /* BAnimationTransform.h */,
+				5AAA859418B1B93D000D7600 /* BAnimationTransform.m */,
+				428628F91C0708920078E783 /* ACEPOPAnimation.h */,
+				428628FA1C0708920078E783 /* ACEPOPAnimation.m */,
 				42FFC7FE1B625D160058E363 /* PackageInfo.h */,
 				5AAA859518B1B93D000D7600 /* Beqtucontent.h */,
 				5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */,
@@ -1119,6 +1128,7 @@
 		5AAA865718B1B93D000D7600 /* plugin */ = {
 			isa = PBXGroup;
 			children = (
+				428628FD1C0708E30078E783 /* pop.framework */,
 				4214B40F1BE7575E0088E31B /* EXTScope.h */,
 				4214B4101BE7575E0088E31B /* EXTScope.m */,
 				4214B4111BE7575E0088E31B /* metamacros.h */,
@@ -1328,7 +1338,7 @@
 				5AAA875E18B1B93D000D7600 /* WWidgetMgr.h in Headers */,
 				33774C641B2A6D3500D5F279 /* SDWebImageOperation.h in Headers */,
 				5AAA871A18B1B93D000D7600 /* ASIProgressDelegate.h in Headers */,
-				5AAA868818B1B93D000D7600 /* BAnimitionTransform.h in Headers */,
+				5AAA868818B1B93D000D7600 /* BAnimationTransform.h in Headers */,
 				5AAA86E818B1B93D000D7600 /* EBrowserViewAnimition.h in Headers */,
 				DE2C4FA51A2DA48B00D5B4F2 /* ACEUtils.h in Headers */,
 				5AAA873C18B1B93D000D7600 /* AppCenter.h in Headers */,
@@ -1367,6 +1377,7 @@
 				5AAA871D18B1B93D000D7600 /* AsyncSocket.h in Headers */,
 				3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */,
 				3C2887BC1A0B0984002776E4 /* JSONRepresentation.h in Headers */,
+				428628FB1C0708920078E783 /* ACEPOPAnimation.h in Headers */,
 				5AAA871618B1B93D000D7600 /* ASIInputStream.h in Headers */,
 				5AAA86FD18B1B93D000D7600 /* EUExManager.h in Headers */,
 				5AAA86A518B1B93D000D7600 /* SBJsonWriter.h in Headers */,
@@ -1391,7 +1402,7 @@
 				3C2887BA1A0B0984002776E4 /* CJSONSerializer.h in Headers */,
 				33774C5C1B2A6D3500D5F279 /* SDWebImageDecoder.h in Headers */,
 				3C2887B41A0B0984002776E4 /* NSDictionary_JSONExtensions.h in Headers */,
-				5AAA868618B1B93D000D7600 /* BAnimition.h in Headers */,
+				5AAA868618B1B93D000D7600 /* BAnimation.h in Headers */,
 				5AAA86DE18B1B93D000D7600 /* EBrowserHistory.h in Headers */,
 				5AAA86FA18B1B93D000D7600 /* EUExConsole.h in Headers */,
 				5AAA86B518B1B93D000D7600 /* JSONKit.h in Headers */,
@@ -1516,6 +1527,7 @@
 				5AAA86DF18B1B93D000D7600 /* EBrowserHistory.m in Sources */,
 				33774C5D1B2A6D3500D5F279 /* SDWebImageDecoder.m in Sources */,
 				33774C6C1B2A6D3500D5F279 /* UIImage+MultiFormat.m in Sources */,
+				428628FC1C0708920078E783 /* ACEPOPAnimation.m in Sources */,
 				33774C681B2A6D3500D5F279 /* UIButton+WebCache.m in Sources */,
 				3C2887A91A0B0984002776E4 /* CDataScanner.m in Sources */,
 				5AAA86B418B1B93D000D7600 /* WidgetSQL.m in Sources */,
@@ -1539,7 +1551,7 @@
 				5AAA870F18B1B93D000D7600 /* ASIDownloadCache.m in Sources */,
 				5AAA875F18B1B93D000D7600 /* WWidgetMgr.m in Sources */,
 				5AAA86DB18B1B93D000D7600 /* EBrowser.m in Sources */,
-				5AAA868918B1B93D000D7600 /* BAnimitionTransform.m in Sources */,
+				5AAA868918B1B93D000D7600 /* BAnimationTransform.m in Sources */,
 				33774C741B2A6D3500D5F279 /* UIView+WebCacheOperation.m in Sources */,
 				33774C571B2A6D3500D5F279 /* NSData+ImageContentType.m in Sources */,
 				5AAA86A818B1B93D000D7600 /* MBProgressHUD.m in Sources */,
@@ -1586,7 +1598,7 @@
 				5AAA86A018B1B93D000D7600 /* SBJSON.m in Sources */,
 				5AAA876118B1B93D000D7600 /* WWidgetUpdate.m in Sources */,
 				5AAA86ED18B1B93D000D7600 /* EBrowserWidgetContainer.m in Sources */,
-				5AAA868718B1B93D000D7600 /* BAnimition.m in Sources */,
+				5AAA868718B1B93D000D7600 /* BAnimation.m in Sources */,
 				5AAA86A618B1B93D000D7600 /* SBJsonWriter.m in Sources */,
 				5AAA869318B1B93D000D7600 /* BUtility.m in Sources */,
 				33C8E2F91B1EE7E300C33492 /* UIViewController+RESideMenu.m in Sources */,
@@ -1670,15 +1682,17 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: wang ping (NXRC4JBS2X)";
 				DSTROOT = /tmp/AppCanEngine.dst;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
+					"$(inherited)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"/**";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"",
-					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
-					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
+					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
+					"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -1695,15 +1709,17 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: wang ping (NXRC4JBS2X)";
 				DSTROOT = /tmp/AppCanEngine.dst;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
+					"$(inherited)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"/**";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../webkitCorePalm0902/Classes/plugin\"",
-					"\"$(SRCROOT)/../Engine/AppCan_Tower/AppCan/webkitCorePalm0902/Classes/plugin/three20Simu\"",
-					"\"$(SRCROOT)/../webkitCorePalm/Classes/des",
+					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
+					"$(SRCROOT)/../webkitCorePalm/Classes/des",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
