@@ -35,7 +35,7 @@
 #define F_BRW_WND_SWITCH_ANIMI_ID_TOP_TO_BOTTOM_REVEAL		15
 #define F_BRW_WND_SWITCH_ANIMI_ID_BOTTOM_TO_TOP_REVEAL		16
 
-@interface BAnimition : NSObject {
+@interface BAnimation : NSObject {
 }
 + (int)ReverseAnimiId:(int)inAnimiID;
 + (BOOL)isMoveIn:(int)inAnimiID;

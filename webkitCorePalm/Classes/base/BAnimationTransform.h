@@ -20,7 +20,7 @@
 #import <QuartzCore/CALayer.h>
 
 
-@interface BAnimitionTransform : NSObject {
+@interface BAnimationTransform : NSObject {
 	CATransform3D mTransForm3D;
 }
 @property CATransform3D mTransForm3D;

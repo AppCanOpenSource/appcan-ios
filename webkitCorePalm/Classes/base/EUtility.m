@@ -141,6 +141,112 @@ void PluginLog (NSString *format, ...) {
     
 }
 
++ (UIColor *)colorFromHTMLString:(NSString *)HTMLColor{
+        NSString *colorString=[[HTMLColor stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString];
+    UIColor *resultColor=nil;
+    if([self parseColor:&resultColor fromHexString:colorString]){
+        return resultColor;
+    }
+    if([self parseColor:&resultColor fromRGBString:colorString]){
+        return resultColor;
+    }
+    return resultColor;
+}
++ (BOOL)parseColor:(UIColor **)color fromHexString:(NSString *)colorString{
+    if(![colorString hasPrefix:@"#"]){
+        return NO;
+    }
+    unsigned int r,g,b,a;
+    NSRange range;
+    NSMutableArray *colorArray=[NSMutableArray arrayWithCapacity:4];
+    switch ([colorString length]) {
+        case 4:{//"#123"型字符串
+            [colorArray addObject:@"ff"];
+            for(int k=0;k<3;k++){
+                range.location=k+1;
+                range.length=1;
+                NSMutableString *tmp=[[colorString substringWithRange:range] mutableCopy];
+                [tmp  appendString:tmp];
+                [colorArray addObject:tmp];
+                
+            }
+            break;
+        }
+        case 7:{//"#112233"型字符串
+            [colorArray addObject:@"ff"];
+            for(int k=0;k<3;k++){
+                range.location=2*k+1;
+                range.length=2;
+                [colorArray addObject:[colorString substringWithRange:range]];
+                
+            }
+            break;
+        }
+        case 9:{//"#11223344"型字符串
+            for(int k=0;k<4;k++){
+                range.location=2*k+1;
+                range.length=2;
+                [colorArray addObject:[colorString substringWithRange:range]];
+            }
+            break;
+        }
+        default:{
+            return NO;
+            break;
+        }
+    }
+    [[NSScanner scannerWithString:colorArray[0]] scanHexInt:&a];
+    [[NSScanner scannerWithString:colorArray[1]] scanHexInt:&r];
+    [[NSScanner scannerWithString:colorArray[2]] scanHexInt:&g];
+    [[NSScanner scannerWithString:colorArray[3]] scanHexInt:&b];
+    *color=[UIColor colorWithRed:(float)r/255.0 green:(float)g/255.0 blue:(float)b/255.0 alpha:(float)a/255.0];
+    if(!*color){
+        return NO;
+    }
+    return YES;
+}
+
++ (BOOL)parseColor:(UIColor **)color fromRGBString:(NSString *)colorString{
+    NSArray *rgbArray=nil;
+    if ([colorString hasPrefix:@"rgb("]&&[colorString hasSuffix:@")"]){
+        colorString=[colorString substringWithRange:NSMakeRange(4, [colorString length] -5)];
+        rgbArray=[colorString componentsSeparatedByString:@","];
+    }
+    if ([colorString hasPrefix:@"rgba("]&&[colorString hasSuffix:@")"]){
+        colorString=[colorString substringWithRange:NSMakeRange(5, [colorString length] -6)];
+        rgbArray=[colorString componentsSeparatedByString:@","];
+    }
+    if(!rgbArray|| [rgbArray count]<3){
+        return NO;
+    }
+    CGFloat alpha=1;
+    if([rgbArray count]>3 && [rgbArray[3] isKindOfClass:[NSString class]]){
+        alpha=[[rgbArray[3] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] floatValue];
+    }
+    *color=[UIColor colorWithRed:[self rgbValueFromString:rgbArray[0]]
+                           green:[self rgbValueFromString:rgbArray[1]]
+                            blue:[self rgbValueFromString:rgbArray[2]]
+                           alpha:alpha];
+    if(!*color){
+        return NO;
+    }
+    return YES;
+    
+}
++ (CGFloat)rgbValueFromString:(NSString *)colorInfo{
+    colorInfo=[colorInfo stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    CGFloat value=0;
+    if([colorInfo hasSuffix:@"%"]){
+        colorInfo=[colorInfo substringWithRange:NSMakeRange(0, [colorInfo length] - 1)];
+        return [colorInfo floatValue]/100.0;
+    }
+    value=[colorInfo floatValue];
+    if(value>0 && value <1){
+        return value;
+    }
+    return value/255.0;
+}
+
 +(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl {
 	return [BUtility makeUrl:inBaseStr url:inUrl];
 }
