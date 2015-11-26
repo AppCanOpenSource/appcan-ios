@@ -16,10 +16,10 @@
  *
  */
 
-#import "BAnimitionTransform.h"
+#import "BAnimationTransform.h"
 
 
-@implementation BAnimitionTransform
+@implementation BAnimationTransform
 @synthesize mTransForm3D;
 
 @end

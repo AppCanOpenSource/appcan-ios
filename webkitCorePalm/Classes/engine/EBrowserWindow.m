@@ -146,7 +146,9 @@
 	mOAuthWndName = nil;
     [_windowName release];
     [self deregisterWindowSequenceChange];
-    
+    if(self.popAnimationInfo){
+        self.popAnimationInfo=nil;
+    }
 	[super dealloc];
 }
 

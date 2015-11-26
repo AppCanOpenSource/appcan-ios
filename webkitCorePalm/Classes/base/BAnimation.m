@@ -16,11 +16,11 @@
  *
  */
 
-#import "BAnimition.h"
+#import "BAnimation.h"
 #import "BUtility.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation BAnimition
+@implementation BAnimation
 
 + (BOOL)isMoveIn:(int)inAnimiID {
     switch (inAnimiID) {
