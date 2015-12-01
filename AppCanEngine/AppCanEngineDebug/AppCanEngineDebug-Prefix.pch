@@ -7,5 +7,5 @@
     #import <UIKit/UIKit.h>
     #import "ACELocalization.h"
 #endif
-#define NSLog 
+//#define NSLog
 #define WIDGETONE_FOR_IDE_DEBUG
