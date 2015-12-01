@@ -230,14 +230,14 @@ static BOOL bDraw = YES;
         NSTimeInterval secondsSinceLastDraw = -([lastDrawTime timeIntervalSinceNow]);
 		
 		
-		if (fabsf (acceleration.y) > 1.0) {
+		if (fabs (acceleration.y) > 1.0) {
 			 ballYVelocity = ballYVelocity + -(acceleration.y * secondsSinceLastDraw*20);
 		}
 		else {
 			ballYVelocity = ballYVelocity + -(acceleration.y * secondsSinceLastDraw);
 		}
 
-        if (fabsf (acceleration.x) > 1.0) {
+        if (fabs (acceleration.x) > 1.0) {
 			ballXVelocity = ballXVelocity + acceleration.x * secondsSinceLastDraw*20;
 		}
 		else {

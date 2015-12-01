@@ -370,7 +370,7 @@
 		NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 		unsigned int unitFlags = NSDayCalendarUnit;
 		NSDateComponents *comps = [gregorian components:unitFlags fromDate:readDate  toDate:[NSDate date]  options:0];
-		int days = [comps day];
+		NSInteger days = [comps day];
 		if(days>1){
 			[self downloadPopAppInfo];
 			[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"popAppLoadDate"];
@@ -863,7 +863,7 @@
 		NSHTTPURLResponse *response;
 		NSURLRequest *request = [NSURLRequest requestWithURL:url];
 		[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
-		int status = [response statusCode];
+		NSInteger status = [response statusCode];
 		if (status==200) {
 			ACENSLog(@"卸载上报成功");
 			//删除配置

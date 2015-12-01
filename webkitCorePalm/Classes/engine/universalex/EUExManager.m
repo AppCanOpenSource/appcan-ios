@@ -104,7 +104,7 @@
             documentDirectory = [paths objectAtIndex:0];
         
         
-        NSString *libName = [NSString stringWithFormat:@"/dyFiles/%@.dylib", className];
+        NSString *libName = [NSString stringWithFormat:@"/dyFiles/%@.framework/%@", className,className];
 //        NSString *libName = [NSString stringWithFormat:@"/dyFiles/Test1.dylib"];
         
         NSString *destLibPath = [documentDirectory stringByAppendingPathComponent:libName];
@@ -114,7 +114,7 @@
         {
             void *lib_handle = dlopen([destLibPath cStringUsingEncoding:NSUTF8StringEncoding], RTLD_LOCAL);
             if (!lib_handle) {
-                ACENSLog(@"load dynamic lib = %@ failed", libName);
+                ACENSLog(@"load dynamic framework = %@ failed", libName);
             }
         }
         else
@@ -263,7 +263,7 @@
     
     NSString *className = NSStringFromClass([eUExObj class]);
     
-    NSString *libName = [NSString stringWithFormat:@"/dyFiles/%@.dylib", className];
+    NSString *libName = [NSString stringWithFormat:@"/dyFiles/%@.framework/%@", className,className];
     
     NSString *destLibPath = [documentDirectory stringByAppendingPathComponent:libName];
     

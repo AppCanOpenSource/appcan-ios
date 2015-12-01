@@ -1134,8 +1134,7 @@
         }
         [FormatReq setTimeOutSeconds:60];
         [FormatReq startSynchronous];
-        int status = [FormatReq responseStatusCode];
-        NSString *responseStr = [FormatReq responseString];
+
         
         [FormatReq release];
         //        }

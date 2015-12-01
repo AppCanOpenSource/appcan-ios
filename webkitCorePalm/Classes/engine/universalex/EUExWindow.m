@@ -1148,8 +1148,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (meBrwView.hidden == YES) {
         return;
     }
-    EBrowserWindow *eBrwWnd = nil;
-    EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+
     
     ACENSLog(@"PresentWindowTest open opener meBrwView = %@, meBrwView Name = %@", meBrwView, meBrwView.muexObjName);
     

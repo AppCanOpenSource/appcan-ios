@@ -37,7 +37,7 @@
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger index = lround(fractionalPage) ;
     
-    [self performSelectorOnMainThread:@selector(onPluginContainerPageChange:) withObject:[NSString stringWithFormat:@"%d",index] waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(onPluginContainerPageChange:) withObject:[NSString stringWithFormat:@"%ld",(long)index] waitUntilDone:NO];
     
 }
 
@@ -58,7 +58,7 @@
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger index = lround(fractionalPage) ;
 
-    [self performSelectorOnMainThread:@selector(onPluginContainerPageChange:) withObject:[NSString stringWithFormat:@"%d",index] waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(onPluginContainerPageChange:) withObject:[NSString stringWithFormat:@"%ld",(long)index] waitUntilDone:NO];
     
     
     

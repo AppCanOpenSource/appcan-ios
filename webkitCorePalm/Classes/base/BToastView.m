@@ -117,7 +117,7 @@
 				mTextView = [[UILabel alloc]initWithFrame:CGRectMake(0, frame.size.height-textViewHeight, frame.size.width, textViewHeight)];
 				//mTextView.editable = NO;
 				mTextView.backgroundColor = [UIColor clearColor];
-				mTextView.textAlignment = UITextAlignmentCenter;
+				mTextView.textAlignment = NSTextAlignmentCenter;
 				mTextView.textColor = [UIColor whiteColor];
 				mTextView.numberOfLines = 2;
 				if ([BUtility isIpad]) {
@@ -135,7 +135,7 @@
 				mTextView = [[UILabel alloc]initWithFrame:CGRectMake(0, textViewHeight/2, frame.size.width, textViewHeight)];
 				//mTextView.editable = NO;
 				mTextView.backgroundColor = [UIColor clearColor];
-				mTextView.textAlignment = UITextAlignmentCenter;
+				mTextView.textAlignment = NSTextAlignmentCenter;
 				mTextView.numberOfLines = 2;
 				mTextView.textColor = [UIColor whiteColor];
 				//mTextView.lineBreakMode = UILineBreakModeWordWrap;

@@ -98,7 +98,7 @@
 	 	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 65+5, 65, 15)];
  		[label setBackgroundColor:[UIColor clearColor]];
 		label.text = titleText;
-		label.textAlignment = UITextAlignmentCenter;
+		label.textAlignment = NSTextAlignmentCenter;
 		[label setFont:[UIFont fontWithName:@"ArialMT" size:12]];
 		[self addSubview:btn];
 		[self addSubview:label];

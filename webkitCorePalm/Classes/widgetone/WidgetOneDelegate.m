@@ -253,21 +253,21 @@ NSString *AppCanJS = nil;
         NSString * subS1 = @"AppleWebKit/";
         NSRange range1 = [originalUserAgent rangeOfString:subS1];
         
-        int location1 = range1.location;
-        int lenght1 = range1.length;
+        NSUInteger location1 = range1.location;
+        NSUInteger lenght1 = range1.length;
         NSString * s1 = [originalUserAgent substringToIndex:location1+lenght1];
         NSString * s2 = [originalUserAgent substringFromIndex:location1+lenght1];
         
         NSString * subS2 = @" ";
         NSRange  rang2 = [s2 rangeOfString:subS2];
-        int location2 = rang2.location;
-        int length2 = rang2.length;
+        NSUInteger location2 = rang2.location;
+        NSUInteger length2 = rang2.length;
         NSString * s21 = [s2 substringToIndex:location2 + length2];
         NSString * s22 = [s2 substringFromIndex:location2 + length2];
         
         NSString * subS3 = @"Mobile/";
         NSRange  rang3 = [s22 rangeOfString:subS3];
-        int location3 = rang3.location;
+        NSUInteger location3 = rang3.location;
         NSMutableString *s32 = [[NSMutableString alloc]initWithString:s22];
         [s32 insertString:@"Version/8.0 "atIndex:location3];
         NSString * safari= [NSString stringWithFormat:@"Safari/%@Appcan/3.0",s21];

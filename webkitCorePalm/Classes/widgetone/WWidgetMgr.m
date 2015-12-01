@@ -792,7 +792,7 @@ NSString * webappShowAactivety;
 	//数据库里存在，
 	NSMutableArray *tmpArr =[widgetObj selectWgt:queryComWgt];
 	wgtArr =[[NSMutableArray alloc] initWithArray:tmpArr];
-	int wgtsNum = [wgtArr count];
+	NSUInteger wgtsNum = [wgtArr count];
 	[widgetObj close_database];
 	[widgetObj release];
 	[tmpArr removeAllObjects];
