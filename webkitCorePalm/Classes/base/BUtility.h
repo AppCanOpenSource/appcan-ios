@@ -17,7 +17,14 @@
  */
 
 //开发版本 控制
+//#define F_DEVELOPMENT_USE   NO
+
+#ifdef WIDGETONE_FOR_IDE_DEBUG
+#define F_DEVELOPMENT_USE   YES
+#else
 #define F_DEVELOPMENT_USE   NO
+#endif
+
 //view跳转 控制
 #define F_APPCANREPORT_USE     YES
 //自定义事件 控制

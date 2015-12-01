@@ -71,7 +71,7 @@
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 0, 160, 46)];
 	titleLabel.backgroundColor = [UIColor clearColor];
 	[titleLabel setFont:[UIFont fontWithName:@"ArialMT" size:20]];
-	[titleLabel setTextAlignment:UITextAlignmentCenter];
+	[titleLabel setTextAlignment:NSTextAlignmentCenter];
 	[titleLabel setText:title];
 	[navigationTitle setTitleView:titleLabel];
 	[titleLabel release];
