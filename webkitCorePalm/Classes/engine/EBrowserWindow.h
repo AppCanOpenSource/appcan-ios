@@ -71,6 +71,9 @@
 @property (nonatomic, assign) id webController;
 @property (nonatomic, assign) BOOL isSliding;
 @property (nonatomic,assign) BOOL enableSwipeClose;
+//
+@property (nonatomic,assign) BOOL usingPopAnimation;
+@property (nonatomic,retain) NSDictionary *popAnimationInfo;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;

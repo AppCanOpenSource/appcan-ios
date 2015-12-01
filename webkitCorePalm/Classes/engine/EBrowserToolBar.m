@@ -29,7 +29,7 @@
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowserView.h"
-#import "BAnimition.h"
+#import "BAnimation.h"
 #import "EBrowserController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -193,7 +193,7 @@
             eView.meBrwCtrler.mFlag = 1;
         }
         
-        [BAnimition SwapAnimationWithView:eView.meBrwWnd.superview AnimiId:8 AnimiTime:2.0];
+        [BAnimation SwapAnimationWithView:eView.meBrwWnd.superview AnimiId:8 AnimiTime:2.0];
         
         [self setHidden:YES];
         /*if (!eBrwCtrler.mwWgtMgr.wSpaceWgt) {
@@ -204,7 +204,7 @@
          if (eBrwWndContainer) {
          if ((eBrwWndContainer.mFlag & F_BRW_WND_CONTAINER_LOAD_WGT_DONE) == F_BRW_WND_CONTAINER_LOAD_WGT_DONE) {
          [eBrwWgtContainer bringSubviewToFront:eBrwWndContainer];
-         [BAnimition SwapAnimationWithView:eBrwWgtContainer AnimiId:eBrwWndContainer.mStartAnimiId AnimiTime:0.2f];
+         [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:eBrwWndContainer.mStartAnimiId AnimiTime:0.2f];
          [[eBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
          [[eBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
          } else {

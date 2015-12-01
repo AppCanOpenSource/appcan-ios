@@ -19,6 +19,7 @@
 		420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041901BABCD6F000A57F5 /* libstdc++.tbd */; };
 		420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041921BABCD79000A57F5 /* libxml2.tbd */; };
 		420041951BABCD80000A57F5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041941BABCD80000A57F5 /* libz.tbd */; };
+		428629001C0709BF0078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FF1C0709BF0078E783 /* pop.framework */; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
 		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
@@ -89,6 +90,7 @@
 		420041901BABCD6F000A57F5 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		420041921BABCD79000A57F5 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		420041941BABCD80000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		428628FF1C0709BF0078E783 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
 		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */,
 				6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */,
 				6CC6036B157DCCEF00A3E13E /* MediaPlayer.framework in Frameworks */,
+				428629001C0709BF0078E783 /* pop.framework in Frameworks */,
 				6CC6036C157DCCEF00A3E13E /* MessageUI.framework in Frameworks */,
 				6CC6036D157DCCEF00A3E13E /* MapKit.framework in Frameworks */,
 				42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */,
@@ -216,6 +219,7 @@
 		469DCDD0166EFA5100FC2F72 /* uexFrameworks */ = {
 			isa = PBXGroup;
 			children = (
+				428628FF1C0709BF0078E783 /* pop.framework */,
 			);
 			path = uexFrameworks;
 			sourceTree = "<group>";
@@ -566,6 +570,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
+					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
@@ -601,6 +606,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
+					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
@@ -658,6 +664,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
+					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
