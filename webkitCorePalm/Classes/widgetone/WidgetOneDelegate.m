@@ -368,11 +368,12 @@ NSString *AppCanJS = nil;
     if (analysisClass) {
         
         id analysisObject = class_createInstance(analysisClass,0);
-        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
-        
+#pragma clang diagnostic pop
     }
-    
+
     ACEUINavigationController *meNav = nil;
 	meBrwCtrler = [[EBrowserController alloc]init];
     
@@ -727,7 +728,11 @@ NSString *AppCanJS = nil;
     Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
         id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
+#pragma clang diagnostic pop
         //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
     }
     
@@ -788,7 +793,11 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
+#pragma clang diagnostic pop
+
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
         
     }
@@ -841,9 +850,11 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
-        
+#pragma clang diagnostic pop
     }
     
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
@@ -966,10 +977,11 @@ NSString *AppCanJS = nil;
         Method delegateMethod = class_getClassMethod(acecls, @selector(rootPageDidFinishLoading));
         
         if (delegateMethod) {
-            
-            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-method-access"
             [acecls rootPageDidFinishLoading];
-            
+#pragma clang diagnostic pop
+    
         }
     }
 }

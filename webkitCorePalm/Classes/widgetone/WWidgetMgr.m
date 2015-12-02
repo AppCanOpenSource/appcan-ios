@@ -152,7 +152,7 @@ NSString * webappShowAactivety;
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
 	WWidget*wgtobj = (WWidget*)[tempArr objectAtIndex:0];
-    wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG];
+    wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG]?YES:NO;
     wgtobj.widgetOneId = [BUtility appKey];
     
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
