@@ -509,7 +509,7 @@ NSString *AppCanJS = nil;
         
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
         
-        if (aboveWindowContainer) {
+        if (aboveWindowContainer && application.applicationState != UIApplicationStateBackground) {
             
             [aboveWindowContainer pushNotify];
             
