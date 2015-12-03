@@ -507,15 +507,11 @@ NSString *AppCanJS = nil;
         
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
         
-        if (application.applicationState == UIApplicationStateActive) {
+        EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+        
+        if (aboveWindowContainer) {
             
-            EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-            
-            if (aboveWindowContainer) {
-                
-                [aboveWindowContainer pushNotify];
-                
-            }
+            [aboveWindowContainer pushNotify];
             
         }
         
