@@ -331,6 +331,9 @@
 }
 
 - (void)pushNotify {
+    
+    NSLog(@"appcan-->AppCanEngine-->EBrowserWindowContainer.h-->pushNotify-->%@,%@",mPushNotifyBrwViewName,mPushNotifyCallback);
+
 	if (!mPushNotifyBrwViewName || !mPushNotifyCallback) {
 		return;
 	}

@@ -499,6 +499,8 @@ NSString *AppCanJS = nil;
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
+    NSLog(@"appcan-->AppCanEngine-->widgetOneDelegate.m-->fetchCompletionHandler-->userInfo = %@-->application.applicationState = %ld",userInfo, (long)application.applicationState);
+    
     NSString *userData = [userInfo objectForKey:@"userInfo"];
     if (userInfo) {
         [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
@@ -507,7 +509,9 @@ NSString *AppCanJS = nil;
         
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
         
-        if (application.applicationState == UIApplicationStateActive) {
+        if (application.applicationState == UIApplicationStateBackground) {
+            
+        } else {
             
             EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
             
