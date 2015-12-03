@@ -336,17 +336,17 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 }
 
 - (void)pushNotify {
-    NSUserDefaults defaults=[NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
     NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
-	if (!pushNotifyBrwViewName || !pushNotifyCallback) {
+	if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
 		return;
 	}
 	EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
 	if (!eBrwWnd) {
 		return;
 	}
-	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@ != null){%@();}",mPushNotifyCallback];
+	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@ != null){%@();}",pushNotifyCallbackFunctionName];
     [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
 
 }
