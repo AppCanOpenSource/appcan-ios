@@ -346,7 +346,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 	if (!eBrwWnd) {
 		return;
 	}
-	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@ != null){%@();}",pushNotifyCallbackFunctionName];
+	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@ != null){%@();}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName];
     [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
 
 }
