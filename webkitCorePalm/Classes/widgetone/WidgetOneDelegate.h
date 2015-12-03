@@ -70,6 +70,8 @@
 @property (nonatomic, retain) NSMutableDictionary *globalPluginDict;
 
 
+@property (nonatomic,assign) BOOL launchedByRemoteNotification;
+
 //-(NSString *)getPayPublicRsaKey;
 -(void)rootPageDidFinishLoading;
 @end

@@ -335,9 +335,9 @@ NSString *AppCanJS = nil;
         
     }
     //应用从未启动到启动，获取推送信息
-    if (launchOptions && [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"] ) {
-        
-        NSDictionary *dict = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] ) {
+        self.launchedByRemoteNotification=YES;
+        NSDictionary *dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         NSString *userData = [dict objectForKey:@"userInfo"];
          NSLog(@"appcan--widgetOneDelegate.m--didFinishLaunchingWithOptions--dict == %@",dict);
         
@@ -355,7 +355,7 @@ NSString *AppCanJS = nil;
         
     }
 	//应用从未启动到启动，获取本地通知信息
-    if (launchOptions && [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"] ) {
+    if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey] ) {
         
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         
