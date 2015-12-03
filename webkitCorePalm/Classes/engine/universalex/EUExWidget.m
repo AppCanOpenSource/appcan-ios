@@ -27,14 +27,14 @@
 #import "EBrowserToolBar.h"
 #import "EBrowser.h"
 #import "WWidget.h"
-#import "BAnimition.h"
+#import "BAnimation.h"
 #import "BUtility.h"
 #import "JSON.h"
 #import "EUExBaseDefine.h"
 #import "ASIFormDataRequest.h"
 #import "WidgetOneDelegate.h"
 #import <Security/Security.h>
-#import "BAnimition.h"
+#import "BAnimation.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "JSONKit.h"
@@ -316,12 +316,12 @@
             }
             [eBrwWgtContainer bringSubviewToFront:eBrwWndContainer];
             
-            if ([BAnimition isMoveIn:animiId]) {
-                [BAnimition doMoveInAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
-            }else if ([BAnimition isPush:animiId]) {
-                [BAnimition doPushAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
+            if ([BAnimation isMoveIn:animiId]) {
+                [BAnimation doMoveInAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
+            }else if ([BAnimation isPush:animiId]) {
+                [BAnimation doPushAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
             }else {
-                [BAnimition SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:animiDuration];
+                [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:animiDuration];
             }
             
             if (eCurBrwWndContainer) {
@@ -546,20 +546,20 @@
         
     }
     
-    int animiId = [BAnimition ReverseAnimiId:eBrwWndContainer.mStartAnimiId];
+    int animiId = [BAnimation ReverseAnimiId:eBrwWndContainer.mStartAnimiId];
     float duration = eBrwWndContainer.mStartAnimiDuration;
     
     if (isWgtBG) {
         
-        if ([BAnimition isPush:animiId]) {
+        if ([BAnimation isPush:animiId]) {
             
-            [BAnimition doPushAnimition:eBrwWndContainer animiId:animiId animiTime:duration];
+            [BAnimation doPushAnimition:eBrwWndContainer animiId:animiId animiTime:duration];
             
             [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:duration]];
             
         } else {
             
-            [BAnimition SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:duration];
+            [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:duration];
             
         }
         
@@ -576,15 +576,15 @@
         
     }
     
-    if ([BAnimition isPush:animiId]) {
+    if ([BAnimation isPush:animiId]) {
         
-        [BAnimition doPushAnimition:eBrwWndContainer animiId:animiId animiTime:duration];
+        [BAnimation doPushAnimition:eBrwWndContainer animiId:animiId animiTime:duration];
         
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:duration]];
         
     } else {
         
-        [BAnimition SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:duration];
+        [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:duration];
         
     }
     

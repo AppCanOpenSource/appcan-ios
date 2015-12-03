@@ -24,7 +24,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowser.h"
 #import "BUtility.h"
-#import "BAnimition.h"
+#import "BAnimation.h"
 //#import "AliPayInfo.h"
 #import "AppCenter.h"
 #import "WWidget.h"
@@ -34,6 +34,7 @@
 #import "ACEDrawerViewController.h"
 #import "UIViewController+RESideMenu.h"
 #import "RESideMenu.h"
+#import "ACEPOPAnimation.h"
 
 @implementation EBrowserWindowContainer
 
@@ -220,10 +221,19 @@
 		} else {
 			[self bringSubviewToFront:eSuperBrwWnd];
 		}
-        if ([BAnimition isMoveIn:eSuperBrwWnd.mOpenAnimiId]) {
-            [BAnimition doMoveInAnimition:eSuperBrwWnd animiId:eSuperBrwWnd.mOpenAnimiId animiTime:eSuperBrwWnd.mOpenAnimiDuration];
+        if([ACEPOPAnimation isPopAnimation:eSuperBrwWnd.mOpenAnimiId]){
+            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eSuperBrwWnd.popAnimationInfo];
+            [ACEPOPAnimation doAnimationInView:eSuperBrwWnd
+                                          type:(ACEPOPAnimateType)(eSuperBrwWnd.mOpenAnimiId)
+                                 configuration:config
+                                          flag:ACEPOPAnimateWhenWindowOpening
+                                    completion:^{
+                                        eSuperBrwWnd.usingPopAnimation=YES;
+                                    }];
+        }else if ([BAnimation isMoveIn:eSuperBrwWnd.mOpenAnimiId]) {
+            [BAnimation doMoveInAnimition:eSuperBrwWnd animiId:eSuperBrwWnd.mOpenAnimiId animiTime:eSuperBrwWnd.mOpenAnimiDuration];
         } else {
-            [BAnimition SwapAnimationWithView:self AnimiId:eSuperBrwWnd.mOpenAnimiId AnimiTime:eSuperBrwWnd.mOpenAnimiDuration];
+            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWnd.mOpenAnimiId AnimiTime:eSuperBrwWnd.mOpenAnimiDuration];
         }
 		if (eCurBrwWnd) {
 			[eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];

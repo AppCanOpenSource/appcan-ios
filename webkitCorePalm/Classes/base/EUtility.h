@@ -64,7 +64,7 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  *  @example NSBundle * mePluginBundle = [EUtility bundleForPlugin:@"uexDemo"];
 
  */
-+(NSBundle *)bundleForPlugin:(NSString *)pluginName;
++ (NSBundle *)bundleForPlugin:(NSString *)pluginName;
 
 
 /**
@@ -75,12 +75,21 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  *  @param defaultValue 如果有传入第二个参数，即为defaultValue key匹配失败时会返回此值
  *  @return key对应的国际化字符串
  */
-+(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;
++ (NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;
 
 + (BOOL)isUseSystemLanguage;
 
 + (NSString *)getAppCanUserLanguage;
 
+/**
+ *  解析HTML颜色字符串获取UIColor
+ *
+ *  @param HTMLColor HTML颜色字符串 目前支持#xxx #yyyyyy #zzzzzzzz rgb(x,y,z) rgba(x,y,z,w)
+ *
+ *  @return 获取到的UIColor
+ *  @warning 如果解析失败，会返回nil;
+ */
++ (UIColor *)colorFromHTMLString:(NSString *)HTMLColor;
 
 
 + (NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl;
