@@ -892,8 +892,29 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			break;
 	}
     
+    //保证uexWidget.setPushNotifyCallback()方法先执行
+    [self performSelector:@selector(pushNotifyCallBackDelay) withObject:self afterDelay:0.5];
     
 	[meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self.superDelegate];
+}
+
+- (void)pushNotifyCallBackDelay {
+    
+    if (!theApp.isFirstPageDidLoad) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        id pushStr = [defaults objectForKey:@"pushData"];
+        id allPushStr = [defaults objectForKey:@"allPushData"];
+        NSLog(@"appcan-->ACEBrowserWindow.m-->pushNotifyCallBackDelay-->allPushStr == %@",allPushStr);
+        
+        if (pushStr||allPushStr) {
+            //ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
+            EBrowserWindowContainer * aboveWindowContainer = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+            [aboveWindowContainer pushNotify];
+        }
+        [theApp rootPageDidFinishLoading];
+        theApp.isFirstPageDidLoad = YES;
+    }
+    
 }
 
 - (void)notifyPageError {

@@ -71,9 +71,10 @@ extern NSString * webappShowAactivety;
 	}
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
 	//[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
-    if (!theApp.isFirstPageDidLoad) {
+    /*if (!theApp.isFirstPageDidLoad) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         id pushStr = [defaults objectForKey:@"pushData"];
         id allPushStr = [defaults objectForKey:@"allPushData"];
@@ -84,7 +85,8 @@ extern NSString * webappShowAactivety;
         }
         [theApp rootPageDidFinishLoading];
         theApp.isFirstPageDidLoad = YES;
-    }
+    }*/
+    
 	if (webView != NULL) {
 		ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
