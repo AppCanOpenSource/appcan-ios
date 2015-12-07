@@ -35,6 +35,10 @@
 #import "UIViewController+RESideMenu.h"
 #import "RESideMenu.h"
 #import "ACEPOPAnimation.h"
+#import "EUtility.h"
+
+NSString *const kUexPushNotifyBrwViewNameKey=@"kUexPushNotifyBrwViewNameKey";
+NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFunctionNameKey";
 
 @implementation EBrowserWindowContainer
 
@@ -46,8 +50,6 @@
 @synthesize mOpenerForRet;
 @synthesize mOpenerInfo;
 @synthesize mAliPayInfo;
-@synthesize mPushNotifyBrwViewName;
-@synthesize mPushNotifyCallback;
 @synthesize mStartAnimiId;
 @synthesize mStartAnimiDuration;
 @synthesize mFlag;
@@ -70,14 +72,7 @@
 		[mAliPayInfo release];
 		mAliPayInfo = NULL;
 	}
-	if (mPushNotifyBrwViewName) {
-		[mPushNotifyBrwViewName release];
-		mPushNotifyBrwViewName = NULL;
-	}
-	if (mPushNotifyCallback) {
-		[mPushNotifyCallback release];
-		mPushNotifyCallback = NULL;
-	}
+
 
 	if (meRootBrwWnd) {
 		if (meRootBrwWnd.superview) {
@@ -341,15 +336,19 @@
 }
 
 - (void)pushNotify {
-	if (!mPushNotifyBrwViewName || !mPushNotifyCallback) {
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
+    NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
+	if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
 		return;
 	}
-	EBrowserWindow *eBrwWnd = [self brwWndForKey:mPushNotifyBrwViewName];
+	EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
 	if (!eBrwWnd) {
 		return;
 	}
-	NSString *pushNotifyStr = [NSString stringWithFormat:@"%@();",mPushNotifyCallback];
-	[eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:pushNotifyStr];
+	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@!= null){%@();}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName];
+    [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
+
 }
 
 - (void)clean {
