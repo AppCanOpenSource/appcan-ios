@@ -33,14 +33,11 @@
 }
 
 -(void)dealloc{
-	ACENSLog(@"EUExConsole retain count is %d",[self retainCount]);
-	ACENSLog(@"EUExConsole dealloc is %x", self);
 	[super dealloc];
 }
 
 -(void)log:(NSMutableArray *)inArguments {
 	NSString *logInfo = [inArguments objectAtIndex:0];
-	NSLog(@"console log is %@",logInfo);
 }
 
 
