@@ -3084,6 +3084,19 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
 }
 
+- (void)topBounceViewRefresh:(NSMutableArray *)inArguments {
+    
+    if (!meBrwView) {
+        return;
+    }
+    if (meBrwView.mType != F_EBRW_VIEW_TYPE_MAIN && meBrwView.mType != F_EBRW_VIEW_TYPE_POPOVER) {
+        return;
+    }
+    
+    [meBrwView topBounceViewRefresh];
+    
+}
+
 - (void)showBounceView:(NSMutableArray *)inArguments {
     NSString *inType = [inArguments objectAtIndex:0];
     NSString *inColor = [inArguments objectAtIndex:1];

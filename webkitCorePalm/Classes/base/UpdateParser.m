@@ -73,7 +73,6 @@
 }
 
 -(void)dealloc{
-	ACENSLog(@"Updataparser dealloc mparser count=%d",[mParser retainCount]);
 	[mParser dealloc];
 	mParser = nil;
 	[super dealloc];
