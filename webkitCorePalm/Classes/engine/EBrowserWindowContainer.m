@@ -24,7 +24,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowser.h"
 #import "BUtility.h"
-#import "BAnimition.h"
+#import "BAnimation.h"
 //#import "AliPayInfo.h"
 #import "AppCenter.h"
 #import "WWidget.h"
@@ -34,6 +34,11 @@
 #import "ACEDrawerViewController.h"
 #import "UIViewController+RESideMenu.h"
 #import "RESideMenu.h"
+#import "ACEPOPAnimation.h"
+#import "EUtility.h"
+
+NSString *const kUexPushNotifyBrwViewNameKey=@"kUexPushNotifyBrwViewNameKey";
+NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFunctionNameKey";
 
 @implementation EBrowserWindowContainer
 
@@ -45,8 +50,6 @@
 @synthesize mOpenerForRet;
 @synthesize mOpenerInfo;
 @synthesize mAliPayInfo;
-@synthesize mPushNotifyBrwViewName;
-@synthesize mPushNotifyCallback;
 @synthesize mStartAnimiId;
 @synthesize mStartAnimiDuration;
 @synthesize mFlag;
@@ -69,14 +72,7 @@
 		[mAliPayInfo release];
 		mAliPayInfo = NULL;
 	}
-	if (mPushNotifyBrwViewName) {
-		[mPushNotifyBrwViewName release];
-		mPushNotifyBrwViewName = NULL;
-	}
-	if (mPushNotifyCallback) {
-		[mPushNotifyCallback release];
-		mPushNotifyCallback = NULL;
-	}
+
 
 	if (meRootBrwWnd) {
 		if (meRootBrwWnd.superview) {
@@ -220,10 +216,19 @@
 		} else {
 			[self bringSubviewToFront:eSuperBrwWnd];
 		}
-        if ([BAnimition isMoveIn:eSuperBrwWnd.mOpenAnimiId]) {
-            [BAnimition doMoveInAnimition:eSuperBrwWnd animiId:eSuperBrwWnd.mOpenAnimiId animiTime:eSuperBrwWnd.mOpenAnimiDuration];
+        if([ACEPOPAnimation isPopAnimation:eSuperBrwWnd.mOpenAnimiId]){
+            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eSuperBrwWnd.popAnimationInfo];
+            [ACEPOPAnimation doAnimationInView:eSuperBrwWnd
+                                          type:(ACEPOPAnimateType)(eSuperBrwWnd.mOpenAnimiId)
+                                 configuration:config
+                                          flag:ACEPOPAnimateWhenWindowOpening
+                                    completion:^{
+                                        eSuperBrwWnd.usingPopAnimation=YES;
+                                    }];
+        }else if ([BAnimation isMoveIn:eSuperBrwWnd.mOpenAnimiId]) {
+            [BAnimation doMoveInAnimition:eSuperBrwWnd animiId:eSuperBrwWnd.mOpenAnimiId animiTime:eSuperBrwWnd.mOpenAnimiDuration];
         } else {
-            [BAnimition SwapAnimationWithView:self AnimiId:eSuperBrwWnd.mOpenAnimiId AnimiTime:eSuperBrwWnd.mOpenAnimiDuration];
+            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWnd.mOpenAnimiId AnimiTime:eSuperBrwWnd.mOpenAnimiDuration];
         }
 		if (eCurBrwWnd) {
 			[eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
@@ -331,15 +336,19 @@
 }
 
 - (void)pushNotify {
-	if (!mPushNotifyBrwViewName || !mPushNotifyCallback) {
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
+    NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
+	if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
 		return;
 	}
-	EBrowserWindow *eBrwWnd = [self brwWndForKey:mPushNotifyBrwViewName];
+	EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
 	if (!eBrwWnd) {
 		return;
 	}
-	NSString *pushNotifyStr = [NSString stringWithFormat:@"%@();",mPushNotifyCallback];
-	[eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:pushNotifyStr];
+	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@!= null){%@();}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName];
+    [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
+
 }
 
 - (void)clean {

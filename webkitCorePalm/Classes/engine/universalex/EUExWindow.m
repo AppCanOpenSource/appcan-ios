@@ -31,7 +31,7 @@
 #import "WWidget.h"
 #import "EBrowserHistoryEntry.h"
 #import "JSON.h"
-#import "BAnimition.h"
+#import "BAnimation.h"
 #import "BToastView.h"
 #import "EBrowserViewBounceView.h"
 #import <QuartzCore/CALayer.h>
@@ -39,7 +39,7 @@
 #import "BStatusBarWindow.h"
 #import "EUExBaseDefine.h"
 #import "EBrowserViewAnimition.h"
-#import "BAnimitionTransform.h"
+#import "BAnimationTransform.h"
 #import "ACEWebViewController.h"
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.H"
@@ -55,6 +55,7 @@
 
 #import "EXTScope.h"
 #import "ACEMultiPopoverScrollView.h"
+#import "ACEPOPAnimation.h"
 
 
 
@@ -1298,8 +1299,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (KUEXIS_NSString(extraInfo)) {
         
         NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
-        [extraDic setValue: @"true" forKey: @"opaque"];
+        if(extraDic){
+            [extraDic setValue: @"true" forKey: @"opaque"];
+        }
+        
         [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
+        NSDictionary *popAnimationInfo=[[extraInfo JSONValue] objectForKey:@"animationInfo"];
+        [eBrwWnd setPopAnimationInfo:popAnimationInfo];
         
     }
     
@@ -1702,6 +1708,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         NSDictionary * extraDic = [extraInfo JSONValue];
         [self setExtraInfo:[extraDic objectForKey:@"extraInfo"] toEBrowserView:eBrwWnd.meBrwView];
+        [eBrwWnd setPopAnimationInfo:[extraDic objectForKey:@"animationInfo"]];
         
     }
     
@@ -1755,8 +1762,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 if (![urlStr hasPrefix:@"file://"]) {
                     urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
                 }
-            }else
-            {
+            }else{
                 urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inData];
             }
             ACENSLog(@"*******url重定向%@",urlStr);
@@ -1766,12 +1772,21 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             if ((flag & F_EUEXWINDOW_OPEN_FLAG_RELOAD) != F_EUEXWINDOW_OPEN_FLAG_RELOAD) {
                 if ([[eBrwWnd.meBrwView curUrl] isEqual:url] == YES) {
                     [eBrwWndContainer bringSubviewToFront:eBrwWnd];
-                    if ([BAnimition isMoveIn:eBrwWnd.mOpenAnimiId]) {
-                        [BAnimition doMoveInAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
-                    }else if ([BAnimition isPush:eBrwWnd.mOpenAnimiId]) {
-                        [BAnimition doPushAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
+                    if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
+                        ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+                        [ACEPOPAnimation doAnimationInView:eBrwWnd
+                                                      type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
+                                             configuration:config
+                                                      flag:ACEPOPAnimateWhenWindowOpening
+                                                completion:^{
+                                                    eBrwWnd.usingPopAnimation=YES;
+                                                }];
+                    }else if ([BAnimation isMoveIn:eBrwWnd.mOpenAnimiId]) {
+                        [BAnimation doMoveInAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
+                    }else if ([BAnimation isPush:eBrwWnd.mOpenAnimiId]) {
+                        [BAnimation doPushAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
                     }else {
-                        [BAnimition SwapAnimationWithView:eBrwWndContainer AnimiId:eBrwWnd.mOpenAnimiId AnimiTime:eBrwWnd.mOpenAnimiDuration];
+                        [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:eBrwWnd.mOpenAnimiId AnimiTime:eBrwWnd.mOpenAnimiDuration];
                     }
                     [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
                     ACENSLog(@"set opening false");
@@ -1868,12 +1883,21 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     } else {
         [eBrwWndContainer bringSubviewToFront:eBrwWnd];
-        if ([BAnimition isMoveIn:eBrwWnd.mOpenAnimiId]) {
-            [BAnimition doMoveInAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
-        }else if ([BAnimition isPush:eBrwWnd.mOpenAnimiId]) {
-            [BAnimition doPushAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
+        if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
+            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            [ACEPOPAnimation doAnimationInView:eBrwWnd
+                                          type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
+                                 configuration:config
+                                          flag:ACEPOPAnimateWhenWindowOpening
+                                    completion:^{
+                                        eBrwWnd.usingPopAnimation=YES;
+                                    }];
+        }else if ([BAnimation isMoveIn:eBrwWnd.mOpenAnimiId]) {
+            [BAnimation doMoveInAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
+        }else if ([BAnimation isPush:eBrwWnd.mOpenAnimiId]) {
+            [BAnimation doPushAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
         }else {
-            [BAnimition SwapAnimationWithView:eBrwWndContainer AnimiId:eBrwWnd.mOpenAnimiId AnimiTime:eBrwWnd.mOpenAnimiDuration];
+            [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:eBrwWnd.mOpenAnimiId AnimiTime:eBrwWnd.mOpenAnimiDuration];
         }
         [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         int type = eCurBrwWnd.meBrwView.mwWgt.wgtType;
@@ -2130,14 +2154,16 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)close:(NSMutableArray *)inArguments{
     NSString *inAnimiId = NULL;
     NSString *inAniDuration = NULL;
+    
     if ([inArguments count] > 0) {
         inAnimiId = [inArguments objectAtIndex:0];
     }
     if ([inArguments count] >= 2) {
         inAniDuration = [inArguments objectAtIndex:1];
     }
-    int animiId = 0;
-    float aniDuration = 0.2;
+
+    NSInteger animiId = 0;
+    NSTimeInterval aniDuration = 0.2;
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     
     ACENSLog(@"NavWindowTest close  meBrwView = %@, meBrwView Name = %@, meBrwView.mType = %d", meBrwView, meBrwView.muexObjName, meBrwView.mType);
@@ -2238,7 +2264,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             animiId = [inAnimiId intValue];
         }
         if (animiId == -1) {
-            animiId = [BAnimition ReverseAnimiId:eBrwWnd.mOpenAnimiId];
+            if(eBrwWnd.usingPopAnimation){
+                animiId = [ACEPOPAnimation reverseAnimationId:eBrwWnd.mOpenAnimiId];
+            }else{
+                animiId = [BAnimation ReverseAnimiId:eBrwWnd.mOpenAnimiId];
+            }
+            
         }
         //inAniDuration && inAniDuration.length != 0
         if (KUEXIS_NSString(inAniDuration)) {
@@ -2260,11 +2291,30 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         ACENSLog(@"********animiId******%d",animiId);
         ACENSLog(@"********aniDuration******%f",aniDuration);
-        if (animiId>=13 && animiId<=16) {
+        if([ACEPOPAnimation isPopAnimation:animiId]){
+            NSDictionary *animateInfo=eBrwWnd.popAnimationInfo;
+            if([inArguments count]>=3 && [inArguments[2] JSONValue] && [[inArguments[2] JSONValue] isKindOfClass:[NSDictionary class]]){
+                animateInfo=[inArguments[2] JSONValue];
+            }
+            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:animateInfo];
+            config.duration=aniDuration;
+            [ACEPOPAnimation doAnimationInView:eBrwWnd
+                                          type:(ACEPOPAnimateType)animiId
+                                 configuration:config
+                                          flag:ACEPOPAnimateWhenWindowClosing
+                                    completion:^{
+                                        [eBrwWnd clean];
+                                        if (eBrwWnd.superview) {
+                                            [eBrwWnd removeFromSuperview];
+                                        }
+                                        [self closeWindowAfterAnimation:eBrwWnd];
+                                        [eBrwWnd release];
+                                    }];
+        }else if(animiId>=13 && animiId<=16) {
             [self moveeBrwWnd:eBrwWnd andTime:(float)aniDuration andAnimiId:(int)animiId];
         }else {
-            if ([BAnimition isPush:animiId]) {
-                [BAnimition doPushCloseAnimition:eBrwWnd animiId:animiId animiTime:aniDuration completion:^(BOOL finished) {
+            if ([BAnimation isPush:animiId]) {
+                [BAnimation doPushCloseAnimition:eBrwWnd animiId:animiId animiTime:aniDuration completion:^(BOOL finished) {
                     [eBrwWnd clean];
                     if (eBrwWnd.superview) {
                         [eBrwWnd removeFromSuperview];
@@ -2273,7 +2323,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     [eBrwWnd release];
                 }];
             }else {
-                [BAnimition SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:aniDuration];
+                [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:aniDuration];
                 [eBrwWnd clean];
                 if (eBrwWnd.superview) {
                     [eBrwWnd removeFromSuperview];
@@ -3272,12 +3322,21 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             animiDuration = [inAnimiDuration floatValue]/1000.0f;
         }
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meBackWnd];
-        if ([BAnimition isMoveIn:animiId]) {
-            [BAnimition doMoveInAnimition:eBrwWnd.meBackWnd animiId:animiId animiTime:animiDuration];
-        }else if ([BAnimition isPush:animiId]) {
-            [BAnimition doPushAnimition:eBrwWnd.meBackWnd animiId:animiId animiTime:animiDuration];
+        if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
+            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            [ACEPOPAnimation doAnimationInView:eBrwWnd
+                                          type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
+                                 configuration:config
+                                          flag:ACEPOPAnimateWhenWindowOpening
+                                    completion:^{
+                                        eBrwWnd.usingPopAnimation=YES;
+                                    }];
+        }else if ([BAnimation isMoveIn:animiId]) {
+            [BAnimation doMoveInAnimition:eBrwWnd.meBackWnd animiId:animiId animiTime:animiDuration];
+        }else if ([BAnimation isPush:animiId]) {
+            [BAnimation doPushAnimition:eBrwWnd.meBackWnd animiId:animiId animiTime:animiDuration];
         }else {
-            [BAnimition SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:animiDuration];
+            [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:animiDuration];
         }
         [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         //8.7
@@ -3355,12 +3414,21 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             animiDuration = [inAnimiDuration floatValue]/1000.0f;
         }
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meFrontWnd];
-        if ([BAnimition isMoveIn:animiId]) {
-            [BAnimition doMoveInAnimition:eBrwWnd.meFrontWnd animiId:animiId animiTime:animiDuration];
-        }else if ([BAnimition isPush:animiId]) {
-            [BAnimition doPushAnimition:eBrwWnd.meFrontWnd animiId:animiId animiTime:animiDuration];
+        if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
+            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            [ACEPOPAnimation doAnimationInView:eBrwWnd
+                                          type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
+                                 configuration:config
+                                          flag:ACEPOPAnimateWhenWindowOpening
+                                    completion:^{
+                                        eBrwWnd.usingPopAnimation=YES;
+                                    }];
+        }else if ([BAnimation isMoveIn:animiId]) {
+            [BAnimation doMoveInAnimition:eBrwWnd.meFrontWnd animiId:animiId animiTime:animiDuration];
+        }else if ([BAnimation isPush:animiId]) {
+            [BAnimation doPushAnimition:eBrwWnd.meFrontWnd animiId:animiId animiTime:animiDuration];
         }else {
-            [BAnimition SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:animiDuration];
+            [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:animiDuration];
         }
         [meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         //8.7
@@ -4285,7 +4353,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     float inX = [[inArguments objectAtIndex:0] floatValue];
     float inY = [[inArguments objectAtIndex:1] floatValue];
     float inZ = [[inArguments objectAtIndex:2] floatValue];
-    BAnimitionTransform *transfrom = [[BAnimitionTransform alloc]init];
+    BAnimationTransform *transfrom = [[BAnimationTransform alloc]init];
     transfrom.mTransForm3D = CATransform3DMakeTranslation(inX,inY,inZ);
     [meBrwAnimi.mTransformArray addObject:transfrom];
     [transfrom release];
@@ -4295,7 +4363,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     float inX = [[inArguments objectAtIndex:0] floatValue];
     float inY = [[inArguments objectAtIndex:1] floatValue];
     float inZ = [[inArguments objectAtIndex:2] floatValue];
-    BAnimitionTransform *transfrom = [[BAnimitionTransform alloc]init];
+    BAnimationTransform *transfrom = [[BAnimationTransform alloc]init];
     transfrom.mTransForm3D = CATransform3DMakeScale(inX,inY,inZ);
     [meBrwAnimi.mTransformArray addObject:transfrom];
     [transfrom release];
@@ -4306,7 +4374,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     float inX = [[inArguments objectAtIndex:1] floatValue];
     float inY = [[inArguments objectAtIndex:2] floatValue];
     float inZ = [[inArguments objectAtIndex:3] floatValue];
-    BAnimitionTransform *transfrom = [[BAnimitionTransform alloc]init];
+    BAnimationTransform *transfrom = [[BAnimationTransform alloc]init];
     inAngle = (inAngle/180.0f) * M_PI;
     transfrom.mTransForm3D = CATransform3DMakeRotation(inAngle, inX, inY, inZ);
     [meBrwAnimi.mTransformArray addObject:transfrom];
