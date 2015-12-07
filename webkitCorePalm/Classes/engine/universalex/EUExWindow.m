@@ -1774,6 +1774,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     [eBrwWndContainer bringSubviewToFront:eBrwWnd];
                     if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
                         ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+                        config.duration=eBrwWnd.mOpenAnimiDuration;
                         [ACEPOPAnimation doAnimationInView:eBrwWnd
                                                       type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                              configuration:config
@@ -1885,6 +1886,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWndContainer bringSubviewToFront:eBrwWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            config.duration=eBrwWnd.mOpenAnimiDuration;
             [ACEPOPAnimation doAnimationInView:eBrwWnd
                                           type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                  configuration:config
@@ -3324,6 +3326,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meBackWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            config.duration=eBrwWnd.mOpenAnimiDuration;
             [ACEPOPAnimation doAnimationInView:eBrwWnd
                                           type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                  configuration:config
@@ -3416,6 +3419,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meFrontWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            config.duration=eBrwWnd.mOpenAnimiDuration;
             [ACEPOPAnimation doAnimationInView:eBrwWnd
                                           type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                  configuration:config
