@@ -401,8 +401,7 @@ NSString *AppCanJS = nil;
     mwWgtMgr = [[WWidgetMgr alloc]init];
 	meBrwCtrler.mwWgtMgr = mwWgtMgr;
 	[self readAppCanJS];
-    //保证这个方法在viewController的loadView之前调用
-    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
+    
     
 	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
 	window.autoresizesSubviews = YES;
@@ -466,6 +465,8 @@ NSString *AppCanJS = nil;
 		}
         
 	}
+    
+    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
 
 
     return YES;
