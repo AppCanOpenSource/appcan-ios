@@ -88,59 +88,7 @@
         ACENSLog(@"methodName--------->%@",methodName);
         
 #ifdef WIDGETONE_FOR_IDE_DEBUG
-        
-        //modify for IDE debug
-        
-//        [self loadDynamicLibForIDEDebug:eUExObj];
-        
-        //        if (NO == [self loadDynamicLibForIDEDebug:eUExObj]) {
-        //            [eUExObj release];
-        //            return;
-        //        }
-        
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-        NSString *documentDirectory = nil;
-        if ([paths count] != 0)
-            documentDirectory = [paths objectAtIndex:0];
-        
-        
-        NSString *libName = [NSString stringWithFormat:@"/dyFiles/%@.framework/%@", className,className];
-//        NSString *libName = [NSString stringWithFormat:@"/dyFiles/Test1.dylib"];
-        
-        NSString *destLibPath = [documentDirectory stringByAppendingPathComponent:libName];
-        
-        NSLog(@"动态库路径是：#-------------#%@",destLibPath);
-        if ([[NSFileManager defaultManager] fileExistsAtPath:destLibPath])
-        {
-            void *lib_handle = dlopen([destLibPath cStringUsingEncoding:NSUTF8StringEncoding], RTLD_LOCAL);
-            if (!lib_handle) {
-                ACENSLog(@"load dynamic framework = %@ failed", libName);
-            }
-        }
-        else
-        {
-            BOOL success;
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"dyFiles"];
-         
-            NSString  *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:libName];
-            if ([fileManager fileExistsAtPath:defaultDBPath])
-            {
-                success = [BUtility copyMissingFile:defaultDBPath toPath:writableDBPath];
-                if (!success) {
-                    NSLog(0, @"Failed to create writable database file with message " );
-                }else
-                {
-                    void *lib_handle = dlopen([destLibPath cStringUsingEncoding:NSUTF8StringEncoding], RTLD_LOCAL);
-                    if (!lib_handle) {
-                        ACENSLog(@"load dynamic lib = %@ failed", libName);
-                    }
-                }
-            }
-        }
-		
+        [self loadDynamicFrameworkForPlugin:className];
 #endif
 
         if (!eBrwView || eBrwView == nil || ![eBrwView isKindOfClass:[EBrowserView class]]) {
@@ -152,29 +100,16 @@
 			return;
 		}
         
-#ifdef WIDGETONE_FOR_IDE_DEBUG
+
         
         NSString *superClassName = NSStringFromClass([eUExObj.superclass class]);
         
         
-        if (([eUExObj isKindOfClass:[EUExBase class]])) {
-            
-        } else if([superClassName isEqualToString:@"EUExBase"]) {
-            
-        } else {
-            
-            [eUExObj release];  //cui  20130603
+        if (![eUExObj isKindOfClass:[EUExBase class]] && ![superClassName isEqualToString:@"EUExBase"]) {
+            [eUExObj release];
 			return;
         }
-        
-#else
-        
-        
-        if (!([eUExObj isKindOfClass:[EUExBase class]])) {
-            [eUExObj release];  //cui  20130603
-			return;
-		}
-#endif
+
         
         if (model != nil) {
             model.pluginObj = eUExObj;
@@ -195,6 +130,60 @@
         ACENSLog(@"ERROR: Method '%@' not defined in Plugin '%@'", methodName, inAction.mClassName);
     }
 }
+#ifdef WIDGETONE_FOR_IDE_DEBUG
+/**
+ *  尝试载入插件的动态framework
+ *
+ *  @param pluginName uex开头的插件名
+ */
+-(void)loadDynamicFrameworkForPlugin:(NSString *)pluginName{
+    NSString *frameworkName=[NSString stringWithFormat:@"%@.framework",pluginName];
+    
+    //载入指定document子目录下的framework
+    NSBundle *dynamicBundle=[NSBundle bundleWithPath:[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:frameworkName]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+        return;
+    }
+    
+    
+    //载入res目录下的framework
+    //测试用
+    /*
+    NSBundle *dynamicBundle=[NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+        return;
+    }
+     */
+    
+    //旧IDE的载入方式
+    //xrg说需要保留
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+    NSString *documentDirectory = nil;
+    if ([paths count] != 0){
+        documentDirectory = [paths objectAtIndex:0];
+    }
+    NSString *oldDylibFolderPath=[documentDirectory stringByAppendingPathComponent:@"dyFiles"];
+    dynamicBundle=[NSBundle bundleWithPath:[oldDylibFolderPath stringByAppendingPathComponent:frameworkName]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+        return;
+    }
+    
+    NSString  *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:frameworkName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:defaultDBPath]){
+        return;
+    }
+    if (![BUtility copyMissingFile:defaultDBPath toPath:oldDylibFolderPath]){
+        return;
+    }
+    dynamicBundle=[NSBundle bundleWithPath:[oldDylibFolderPath stringByAppendingPathComponent:frameworkName]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+    }
+}
+#endif
 
 -(void)clean{
 	if (!uexObjDict) {

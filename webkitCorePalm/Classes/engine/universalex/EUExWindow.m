@@ -1511,7 +1511,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
     if ([extraDic objectForKey:@"opaque"]) {
         
-        BOOL * opaque = [[extraDic objectForKey:@"opaque"] boolValue];
+        BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
         
         if (opaque) {
             

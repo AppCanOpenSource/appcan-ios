@@ -223,6 +223,7 @@
 		}
         if([ACEPOPAnimation isPopAnimation:eSuperBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eSuperBrwWnd.popAnimationInfo];
+
             [ACEPOPAnimation doAnimationInView:eSuperBrwWnd
                                           type:(ACEPOPAnimateType)(eSuperBrwWnd.mOpenAnimiId)
                                  configuration:config

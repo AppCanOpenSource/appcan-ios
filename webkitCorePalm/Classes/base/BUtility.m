@@ -1952,4 +1952,28 @@ static NSString *clientCertificatePwd = nil;
     return retVal;
 }
 
+
+#pragma mark - IDE
+
++ (NSString *)dynamicPluginFrameworkFolderPath{
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    static NSString *dynamicFrameworkFolder =@"dynamicPlugins";
+    NSString  *dynamicPluginFrameworkFolderPath=[documentsPath stringByAppendingPathComponent:dynamicFrameworkFolder];
+    
+    NSFileManager *fm=[NSFileManager defaultManager];
+    NSError *error=nil;
+    BOOL isFolder=NO;
+    if(![fm fileExistsAtPath:dynamicPluginFrameworkFolderPath isDirectory:&isFolder] || !isFolder){// 如果目录不存在，或者目录不是文件夹，就创建一个
+        
+        [fm createDirectoryAtPath:dynamicPluginFrameworkFolderPath withIntermediateDirectories:NO attributes:nil error:&error];
+        if(error){
+            NSLog(@"%@",[error localizedDescription]);
+        }
+    }
+
+    return dynamicPluginFrameworkFolderPath;
+}
+
+
+
 @end

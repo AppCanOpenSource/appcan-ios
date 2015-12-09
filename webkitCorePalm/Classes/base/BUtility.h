@@ -209,4 +209,10 @@ typedef union _BGColor {
 +(NSString *)getMainWidgetConfigLogserverip;
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
 + (NSString *)bundleIdentifier;
+
+
+#pragma mark - IDE
+
++ (NSString *)dynamicPluginFrameworkFolderPath;
+
 @end

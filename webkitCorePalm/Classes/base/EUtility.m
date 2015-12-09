@@ -80,26 +80,53 @@ void PluginLog (NSString *format, ...) {
 
 
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName{
-    NSString * bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
-    NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
+
+
+    NSString *bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
     
-    if ([EUtility isUseSystemLanguage]) {
-        
-        return [NSBundle bundleWithPath:bundlePath];
-        
-    } else {
-        
+    //检测是否加载了动态库插件
+    NSString *dynamicFrameworkPath=[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework",pluginName]];
+    NSBundle *dynamicFramework=[NSBundle bundleWithPath:dynamicFrameworkPath];
+    
+    
+    
+    //测试用,检测res://目录下的framework
+    /*
+    if(!dynamicFramework){
+
+        dynamicFrameworkPath=[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@.framework",pluginName]];
+        dynamicFramework=[NSBundle bundleWithPath:dynamicFrameworkPath];
+    }
+    */
+    
+    if(dynamicFramework && [dynamicFramework isLoaded]){
+        //如果有动态库插件，优先查看动态库中是否有bundle
+        NSBundle *dynamicBundle=[NSBundle bundleWithPath:[dynamicFramework pathForResource:pluginName ofType:@"bundle"]];
+        if(dynamicBundle){
+        //如果有则返回
+            return dynamicBundle;
+        }
+    }
+    //返回静态库的bundle
+
+    NSString *bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
+    return [NSBundle bundleWithPath:bundlePath];
+    
+}
+
++ (NSBundle *)languageBundleForPlugin:(NSString *)pluginName{
+    if ([EUtility isUseSystemLanguage]){
+        return [self bundleForPlugin:pluginName];
+    }else{
         NSString * userLanguage = [EUtility getAppCanUserLanguage];
         
-        return [NSBundle bundleWithPath:[[NSBundle bundleWithPath:bundlePath] pathForResource:userLanguage ofType:@"lproj"]];
-        
+        return [NSBundle bundleWithPath:[[self bundleForPlugin:pluginName] pathForResource:userLanguage ofType:@"lproj"]];
     }
-    
 }
 
 +(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...{
     
-    NSBundle *pluginBundle = [self bundleForPlugin:pluginName];
+    NSBundle *pluginBundle = [self languageBundleForPlugin:pluginName];
     if(!pluginBundle){
         return key;
     }
