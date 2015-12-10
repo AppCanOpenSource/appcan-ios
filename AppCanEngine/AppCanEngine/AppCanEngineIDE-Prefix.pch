@@ -1,0 +1,11 @@
+//
+// Prefix header for all source files of the 'AppCanEngine' target in the 'AppCanEngine' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+    #import "ACELocalization.h"
+#endif
+//#define NSLog
+#define WIDGETONE_FOR_IDE_DEBUG

@@ -149,13 +149,13 @@
     
     //载入res目录下的framework
     //测试用
-    /*
-    NSBundle *dynamicBundle=[NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
+#if DEBUG
+    dynamicBundle=[NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
     if(dynamicBundle && [dynamicBundle load]){
         NSLog(@"load dynamic framework for plugin:%@",pluginName);
         return;
     }
-     */
+#endif
     
     //旧IDE的载入方式
     //xrg说需要保留
