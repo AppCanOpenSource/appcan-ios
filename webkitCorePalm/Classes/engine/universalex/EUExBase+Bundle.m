@@ -7,29 +7,14 @@
 //
 
 #import "EUExBase+Bundle.h"
-
+#import "EUtility.h"
 @implementation EUExBase (Bundle)
 
 - (NSBundle *)pluginBundle {
     
-    NSString * EUExName = NSStringFromClass([self class]);
-    
-    NSString * bundleName = [NSString stringWithFormat:@"uex%@.bundle",[EUExName substringFromIndex:4]];
-    
-    NSString * bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
-    
-    if ([self isUseSystemLanguage]) {
-        
-        return [NSBundle bundleWithPath:bundlePath];
-        
-    } else {
-        
-        NSString * userLanguage = [self getAppCanUserLanguage];
-        
-        return [NSBundle bundleWithPath:[[NSBundle bundleWithPath:bundlePath] pathForResource:userLanguage ofType:@"lproj"]];
-        
-    }
-    
+    NSString *EUExName = NSStringFromClass([self class]);
+    NSString *uexName = [NSString stringWithFormat:@"uex%@",[EUExName substringFromIndex:4]];
+    return [EUtility bundleForPlugin:uexName];
 }
 
 - (BOOL)isUseSystemLanguage {
@@ -74,11 +59,21 @@
     return [self localizedStringForKey:key defaultValue:value];
 }
 
+
+-(NSBundle *)languageBundle{
+    if ([self isUseSystemLanguage]) {
+        return meBundle;
+    } else {
+        NSString * userLanguage = [self getAppCanUserLanguage];
+        return [NSBundle bundleWithPath:[meBundle pathForResource:userLanguage ofType:@"lproj"]];
+    }
+}
+
 -(NSString *)localizedStringForKey:(NSString *)key defaultValue:(NSString *)value{
-    if(!meBundle){
+    if(![self languageBundle]){
         return value;
     }
-    return [meBundle localizedStringForKey:key value:value table:nil];
+    return [[self languageBundle] localizedStringForKey:key value:value table:nil];
     
     
 }

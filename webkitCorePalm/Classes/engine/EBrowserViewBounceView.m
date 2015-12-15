@@ -132,7 +132,7 @@ double radians(float degrees){
         }
         //
         mLastUpdatedLabel.backgroundColor = [UIColor clearColor];
-        mLastUpdatedLabel.textAlignment   = UITextAlignmentCenter;
+        mLastUpdatedLabel.textAlignment   = NSTextAlignmentCenter;
         
         mStatusLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
         mStatusLabel.font             = [UIFont boldSystemFontOfSize:14.0f];
@@ -142,7 +142,7 @@ double radians(float degrees){
         }
         
         mStatusLabel.backgroundColor  = [UIColor clearColor];
-        mStatusLabel.textAlignment    = UITextAlignmentCenter;
+        mStatusLabel.textAlignment    = NSTextAlignmentCenter;
         [self setStatus:EBounceViewStatusPullToReload];
         
         UIImage* arrowImage = [UIImage imageNamed:@"img/blueArrow.png"];
@@ -209,7 +209,7 @@ double radians(float degrees){
         //mLastUpdatedLabel.shadowColor     = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
         //mLastUpdatedLabel.shadowOffset    = CGSizeMake(0.0f, 1.0f);
         mLastUpdatedLabel.backgroundColor = [UIColor clearColor];
-        mLastUpdatedLabel.textAlignment   = UITextAlignmentCenter;
+        mLastUpdatedLabel.textAlignment   = NSTextAlignmentCenter;
         //            [self addSubview:mLastUpdatedLabel];
         
         //mStatusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 10.0f, frame.size.width, 20.0f )];
@@ -222,7 +222,7 @@ double radians(float degrees){
         //mStatusLabel.shadowColor      = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
         //mStatusLabel.shadowOffset     = CGSizeMake(0.0f, 1.0f);
         mStatusLabel.backgroundColor  = [UIColor clearColor];
-        mStatusLabel.textAlignment    = UITextAlignmentCenter;
+        mStatusLabel.textAlignment    = NSTextAlignmentCenter;
         [self setStatus:EBounceViewStatusPullToReload];
         //            [self addSubview:mStatusLabel];
         
@@ -369,7 +369,7 @@ double radians(float degrees){
 		//mLastUpdatedLabel.shadowColor     = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
 		//mLastUpdatedLabel.shadowOffset    = CGSizeMake(0.0f, 1.0f);
 		mLastUpdatedLabel.backgroundColor = [UIColor clearColor];
-		mLastUpdatedLabel.textAlignment   = UITextAlignmentCenter;
+		mLastUpdatedLabel.textAlignment   = NSTextAlignmentCenter;
 		[self addSubview:mLastUpdatedLabel];
 
 		mStatusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 48.0f, frame.size.width, 20.0f )];
@@ -382,7 +382,7 @@ double radians(float degrees){
 		//mStatusLabel.shadowColor      = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
 		//mStatusLabel.shadowOffset     = CGSizeMake(0.0f, 1.0f);
 		mStatusLabel.backgroundColor  = [UIColor clearColor];
-		mStatusLabel.textAlignment    = UITextAlignmentCenter;
+		mStatusLabel.textAlignment    = NSTextAlignmentCenter;
 		[self setStatus:EBounceViewStatusPullToReload];
 		[self addSubview:mStatusLabel];
 
@@ -467,7 +467,7 @@ double radians(float degrees){
 		//mLastUpdatedLabel.shadowColor     = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
 		//mLastUpdatedLabel.shadowOffset    = CGSizeMake(0.0f, 1.0f);
 		mLastUpdatedLabel.backgroundColor = [UIColor clearColor];
-		mLastUpdatedLabel.textAlignment   = UITextAlignmentCenter;
+		mLastUpdatedLabel.textAlignment   = NSTextAlignmentCenter;
 		[self addSubview:mLastUpdatedLabel];
 		
 		mStatusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 10.0f, frame.size.width, 20.0f )];
@@ -480,7 +480,7 @@ double radians(float degrees){
 		//mStatusLabel.shadowColor      = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
 		//mStatusLabel.shadowOffset     = CGSizeMake(0.0f, 1.0f);
 		mStatusLabel.backgroundColor  = [UIColor clearColor];
-		mStatusLabel.textAlignment    = UITextAlignmentCenter;
+		mStatusLabel.textAlignment    = NSTextAlignmentCenter;
 		[self setStatus:EBounceViewStatusPullToReload];
 		[self addSubview:mStatusLabel];
 		

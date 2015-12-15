@@ -59,13 +59,21 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  *
  *
  *  @param pluginName 插件名
- *  @return 插件同名的.bundle文件对应的NSBundle实例
+ *  @return 插件同名的资源文件对应的NSBundle实例
  *
  *  @example NSBundle * mePluginBundle = [EUtility bundleForPlugin:@"uexDemo"];
 
  */
 + (NSBundle *)bundleForPlugin:(NSString *)pluginName;
 
+/**
+ *  获取插件的语言包实例
+ *
+ *  @param pluginName 插件名
+ *
+ *  @return 插件同名的语言资源包对应的NSBundle实例
+ */
++ (NSBundle *)languageBundleForPlugin:(NSString *)pluginName;
 
 /**
  *  插件国际化

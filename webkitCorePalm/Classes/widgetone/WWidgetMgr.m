@@ -143,7 +143,7 @@ NSString * webappShowAactivety;
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
 	WWidget*wgtobj = (WWidget*)[tempArr objectAtIndex:0];
-    wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG];
+    wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG]?YES:NO;
     wgtobj.widgetOneId = [BUtility appKey];
     
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
@@ -783,7 +783,7 @@ NSString * webappShowAactivety;
 	//数据库里存在，
 	NSMutableArray *tmpArr =[widgetObj selectWgt:queryComWgt];
 	wgtArr =[[NSMutableArray alloc] initWithArray:tmpArr];
-	int wgtsNum = [wgtArr count];
+	NSUInteger wgtsNum = [wgtArr count];
 	[widgetObj close_database];
 	[widgetObj release];
 	[tmpArr removeAllObjects];

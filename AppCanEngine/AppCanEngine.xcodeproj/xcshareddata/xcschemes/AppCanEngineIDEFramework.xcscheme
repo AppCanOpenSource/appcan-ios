@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B220D27315A3152B00D02138"
-               BuildableName = "libAppCanEngine.a"
-               BlueprintName = "AppCanEngine"
+               BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+               BuildableName = "AppCanEngine.framework"
+               BlueprintName = "AppCanEngineIDEFramework"
                ReferencedContainer = "container:AppCanEngine.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B220D27315A3152B00D02138"
-            BuildableName = "libAppCanEngine.a"
-            BlueprintName = "AppCanEngine"
+            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BuildableName = "AppCanEngine.framework"
+            BlueprintName = "AppCanEngineIDEFramework"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B220D27315A3152B00D02138"
-            BuildableName = "libAppCanEngine.a"
-            BlueprintName = "AppCanEngine"
+            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BuildableName = "AppCanEngine.framework"
+            BlueprintName = "AppCanEngineIDEFramework"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
