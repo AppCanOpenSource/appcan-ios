@@ -903,8 +903,10 @@
     //	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
     EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
     if (eBrwWndContainer) {
-        eBrwWndContainer.mPushNotifyBrwViewName = meBrwView.muexObjName;
-        eBrwWndContainer.mPushNotifyCallback = [inArguments objectAtIndex:0];
+        NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+        [defaults setValue:meBrwView.muexObjName forKey:kUexPushNotifyBrwViewNameKey];
+        [defaults setValue:[inArguments objectAtIndex:0] forKey:kUexPushNotifyCallbackFunctionNameKey];
+        [defaults synchronize];
     }
 }
 

@@ -74,10 +74,8 @@ extern NSString * webappShowAactivety;
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
 	//[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
     if (!theApp.isFirstPageDidLoad) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        id pushStr = [defaults objectForKey:@"pushData"];
-        id allPushStr = [defaults objectForKey:@"allPushData"];
-        if (pushStr||allPushStr) {
+
+        if (theApp.launchedByRemoteNotification) {
             ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
             EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
             [aboveWindowContainer pushNotify];

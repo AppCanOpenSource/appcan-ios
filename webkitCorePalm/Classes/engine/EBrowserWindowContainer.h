@@ -28,6 +28,9 @@
 @class EBrowserView;
 @class AliPayInfo;
 
+extern NSString *const kUexPushNotifyBrwViewNameKey;
+extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
+
 @interface EBrowserWindowContainer : UIView {
 	EBrowserController *meBrwCtrler;
 	EBrowserWindow *meRootBrwWnd;
@@ -36,8 +39,6 @@
 	EBrowserWindowContainer	*meOpenerContainer;
 	NSString *mOpenerForRet;
 	NSString *mOpenerInfo;
-	NSString *mPushNotifyBrwViewName;
-	NSString *mPushNotifyCallback;
 	AliPayInfo *mAliPayInfo;
 	int mStartAnimiId;
 	float mStartAnimiDuration;
@@ -51,8 +52,6 @@
 @property (nonatomic, retain) NSString *mOpenerForRet;
 @property (nonatomic, retain) NSString *mOpenerInfo;
 @property (nonatomic, retain) AliPayInfo *mAliPayInfo;
-@property (nonatomic, copy) NSString *mPushNotifyBrwViewName;
-@property (nonatomic, copy) NSString *mPushNotifyCallback;
 @property int mStartAnimiId;
 @property float mStartAnimiDuration;
 @property int mFlag;
