@@ -21,16 +21,16 @@
 @class EBrowserController;
 @class EBrowser;
 @class WWidgetMgr;
-@class PluginParser;
+//@class PluginParser;
 @class ACEWebViewController;
 @class ACEDrawerViewController;
 @class RESideMenu;
-
+@class ACEPluginParser;
 @interface WidgetOneDelegate: NSObject <UIApplicationDelegate,UIAlertViewDelegate> {
 	UIWindow *window;
 	EBrowserController *meBrwCtrler;
 	WWidgetMgr *mwWgtMgr;
-	PluginParser *pluginObj;
+	ACEPluginParser *pluginObj;
 }
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, assign) EBrowserController *meBrwCtrler;
