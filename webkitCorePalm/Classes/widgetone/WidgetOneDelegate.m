@@ -31,7 +31,7 @@
 #import <sys/utsname.h>
 #import "WWidget.h"
 #import "FileEncrypt.h"
-#import "PluginParser.h"
+//#import "PluginParser.h"
 #import "JSON.h"
 #import "EUExBase.h"
 #import <objc/runtime.h>
@@ -46,6 +46,7 @@
 #import "RESideMenu.h"
 #import "DataAnalysisInfo.h"
 #import "EUtility.h"
+#import "ACEPluginParser.h"
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
@@ -103,8 +104,8 @@ NSString *AppCanJS = nil;
         
     }
     
-    pluginObj = [[PluginParser alloc] init] ;
-    NSString *pluginJS = [pluginObj initPluginJS];
+    pluginObj = [[ACEPluginParser alloc] init] ;
+    NSString *pluginJS = [pluginObj pluginBaseJS];
     
 	if (pluginJS && [pluginJS length] > 0) {
         

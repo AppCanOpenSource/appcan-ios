@@ -168,7 +168,6 @@
 		42CF1EF51C19046700F539B4 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862C18B1B93D000D7600 /* ASIFormDataRequest.m */; };
 		42CF1EF61C19046700F539B4 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865018B1B93D000D7600 /* sha1.c */; };
 		42CF1EF71C19046700F539B4 /* EUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85A018B1B93D000D7600 /* EUtility.m */; };
-		42CF1EF81C19046700F539B4 /* PluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B818B1B93D000D7600 /* PluginParser.m */; };
 		42CF1EF91C19046700F539B4 /* EUExBaseDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861218B1B93D000D7600 /* EUExBaseDefine.m */; };
 		42CF1EFA1C19046700F539B4 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864718B1B93D000D7600 /* mztools.c */; };
 		42CF1EFB1C19046700F539B4 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863218B1B93D000D7600 /* ASIInputStream.m */; };
@@ -392,7 +391,6 @@
 		42CF1FDF1C19046700F539B4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */; };
 		42CF1FE01C19046700F539B4 /* EUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859F18B1B93D000D7600 /* EUtility.h */; };
 		42CF1FE11C19046700F539B4 /* mztools.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864818B1B93D000D7600 /* mztools.h */; };
-		42CF1FE21C19046700F539B4 /* PluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B718B1B93D000D7600 /* PluginParser.h */; };
 		42CF1FE31C19046700F539B4 /* SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85AB18B1B93D000D7600 /* SBJSON.h */; };
 		42CF1FE41C19046700F539B4 /* CDataScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887901A0B0984002776E4 /* CDataScanner.h */; };
 		42CF1FE51C19046700F539B4 /* AppItemView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA865C18B1B93D000D7600 /* AppItemView.h */; };
@@ -467,7 +465,6 @@
 		42CF20301C1904F100F539B4 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862C18B1B93D000D7600 /* ASIFormDataRequest.m */; };
 		42CF20311C1904F100F539B4 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865018B1B93D000D7600 /* sha1.c */; };
 		42CF20321C1904F100F539B4 /* EUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85A018B1B93D000D7600 /* EUtility.m */; };
-		42CF20331C1904F100F539B4 /* PluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B818B1B93D000D7600 /* PluginParser.m */; };
 		42CF20341C1904F100F539B4 /* EUExBaseDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861218B1B93D000D7600 /* EUExBaseDefine.m */; };
 		42CF20351C1904F100F539B4 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864718B1B93D000D7600 /* mztools.c */; };
 		42CF20361C1904F100F539B4 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863218B1B93D000D7600 /* ASIInputStream.m */; };
@@ -691,7 +688,6 @@
 		42CF211A1C1904F100F539B4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */; };
 		42CF211B1C1904F100F539B4 /* EUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859F18B1B93D000D7600 /* EUtility.h */; };
 		42CF211C1C1904F100F539B4 /* mztools.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864818B1B93D000D7600 /* mztools.h */; };
-		42CF211D1C1904F100F539B4 /* PluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B718B1B93D000D7600 /* PluginParser.h */; };
 		42CF211E1C1904F100F539B4 /* SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85AB18B1B93D000D7600 /* SBJSON.h */; };
 		42CF211F1C1904F100F539B4 /* CDataScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887901A0B0984002776E4 /* CDataScanner.h */; };
 		42CF21201C1904F100F539B4 /* AppItemView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA865C18B1B93D000D7600 /* AppItemView.h */; };
@@ -733,6 +729,16 @@
 		42CF214D1C19070F00F539B4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF214C1C19070F00F539B4 /* libsqlite3.tbd */; };
 		42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D0AF401BBB8641002249AE /* ACELocalization.h */; };
 		42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; };
+		42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
+		42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
+		42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
+		42FFEF331C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
+		42FFEF341C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
+		42FFEF351C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
+		42FFEF361C1FF2C500294DE1 /* ACEPluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42FFEF371C1FF2C500294DE1 /* ACEPluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42FFEF381C1FF2C500294DE1 /* ACEPluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42FFEF3A1C1FF86200294DE1 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF391C1FF86200294DE1 /* libxml2.tbd */; };
 		464272DE1BCE562E00F4BE36 /* ACEPluginViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */; };
 		464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
 		5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA858F18B1B93D000D7600 /* AllConfigParser.h */; };
@@ -772,8 +778,6 @@
 		5AAA86A818B1B93D000D7600 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */; };
 		5AAA86A918B1B93D000D7600 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B518B1B93D000D7600 /* NSData+Base64.h */; };
 		5AAA86AA18B1B93D000D7600 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B618B1B93D000D7600 /* NSData+Base64.m */; };
-		5AAA86AB18B1B93D000D7600 /* PluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B718B1B93D000D7600 /* PluginParser.h */; };
-		5AAA86AC18B1B93D000D7600 /* PluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B818B1B93D000D7600 /* PluginParser.m */; };
 		5AAA86AD18B1B93D000D7600 /* SpecConfigParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B918B1B93D000D7600 /* SpecConfigParser.h */; };
 		5AAA86AE18B1B93D000D7600 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; };
 		5AAA86AF18B1B93D000D7600 /* UpdateParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85BB18B1B93D000D7600 /* UpdateParser.h */; };
@@ -1044,6 +1048,10 @@
 		42CF214C1C19070F00F539B4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		42D0AF401BBB8641002249AE /* ACELocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACELocalization.h; sourceTree = "<group>"; };
 		42D0AF411BBB8641002249AE /* ACELocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACELocalization.m; sourceTree = "<group>"; };
+		42FFEF2B1C1FF1E600294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
+		42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginParser.h; sourceTree = "<group>"; };
+		42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginParser.m; sourceTree = "<group>"; };
+		42FFEF391C1FF86200294DE1 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginViewContainer.h; sourceTree = "<group>"; };
 		464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginViewContainer.m; sourceTree = "<group>"; };
 		5AAA858F18B1B93D000D7600 /* AllConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllConfigParser.h; sourceTree = "<group>"; };
@@ -1083,8 +1091,6 @@
 		5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		5AAA85B518B1B93D000D7600 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		5AAA85B618B1B93D000D7600 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		5AAA85B718B1B93D000D7600 /* PluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginParser.h; sourceTree = "<group>"; };
-		5AAA85B818B1B93D000D7600 /* PluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginParser.m; sourceTree = "<group>"; };
 		5AAA85B918B1B93D000D7600 /* SpecConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecConfigParser.h; sourceTree = "<group>"; };
 		5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecConfigParser.m; sourceTree = "<group>"; };
 		5AAA85BB18B1B93D000D7600 /* UpdateParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateParser.h; sourceTree = "<group>"; };
@@ -1264,6 +1270,7 @@
 				42CF1F681C19046700F539B4 /* SystemConfiguration.framework in Frameworks */,
 				42CF1F691C19046700F539B4 /* UIKit.framework in Frameworks */,
 				42CF1F6A1C19046700F539B4 /* CoreGraphics.framework in Frameworks */,
+				42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1271,6 +1278,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42FFEF3A1C1FF86200294DE1 /* libxml2.tbd in Frameworks */,
 				42CF214D1C19070F00F539B4 /* libsqlite3.tbd in Frameworks */,
 				42CF214B1C1906E100F539B4 /* ImageIO.framework in Frameworks */,
 				42CF21491C1906CD00F539B4 /* libstdc++.tbd in Frameworks */,
@@ -1288,6 +1296,7 @@
 				42CF209A1C1904F100F539B4 /* CoreTelephony.framework in Frameworks */,
 				42CF209B1C1904F100F539B4 /* CoreVideo.framework in Frameworks */,
 				42CF209C1C1904F100F539B4 /* MobileCoreServices.framework in Frameworks */,
+				42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */,
 				42CF209D1C1904F100F539B4 /* libACEDes.a in Frameworks */,
 				42CF209E1C1904F100F539B4 /* OpenAL.framework in Frameworks */,
 				42CF209F1C1904F100F539B4 /* IOKit.framework in Frameworks */,
@@ -1326,6 +1335,7 @@
 				B2E52AFE15A6B2F1003E73EA /* SystemConfiguration.framework in Frameworks */,
 				B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */,
 				B29DAE4F15AD1737004FBB57 /* CoreGraphics.framework in Frameworks */,
+				42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1560,8 +1570,8 @@
 				5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */,
 				5AAA85B518B1B93D000D7600 /* NSData+Base64.h */,
 				5AAA85B618B1B93D000D7600 /* NSData+Base64.m */,
-				5AAA85B718B1B93D000D7600 /* PluginParser.h */,
-				5AAA85B818B1B93D000D7600 /* PluginParser.m */,
+				42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */,
+				42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */,
 				5AAA85B918B1B93D000D7600 /* SpecConfigParser.h */,
 				5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */,
 				5AAA85BB18B1B93D000D7600 /* UpdateParser.h */,
@@ -1788,6 +1798,7 @@
 		5AAA865718B1B93D000D7600 /* plugin */ = {
 			isa = PBXGroup;
 			children = (
+				42FFEF2B1C1FF1E600294DE1 /* Ono.framework */,
 				428628FD1C0708E30078E783 /* pop.framework */,
 				4214B40F1BE7575E0088E31B /* EXTScope.h */,
 				4214B4101BE7575E0088E31B /* EXTScope.m */,
@@ -1888,6 +1899,7 @@
 		B220D27615A3152B00D02138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42FFEF391C1FF86200294DE1 /* libxml2.tbd */,
 				42CF214C1C19070F00F539B4 /* libsqlite3.tbd */,
 				42CF214A1C1906E100F539B4 /* ImageIO.framework */,
 				42CF21481C1906CD00F539B4 /* libstdc++.tbd */,
@@ -2006,6 +2018,7 @@
 				42CF1FA11C19046700F539B4 /* UIButton+WebCache.h in Headers */,
 				42CF1FA21C19046700F539B4 /* FBEncryptorAES.h in Headers */,
 				42CF1FA31C19046700F539B4 /* ASICacheDelegate.h in Headers */,
+				42FFEF341C1FF2C500294DE1 /* ACEPluginParser.h in Headers */,
 				42CF1FA41C19046700F539B4 /* BUtility.h in Headers */,
 				42CF1FA51C19046700F539B4 /* CJSONSerialization.h in Headers */,
 				42CF1FA61C19046700F539B4 /* ZipArchive.h in Headers */,
@@ -2068,7 +2081,6 @@
 				42CF1FDF1C19046700F539B4 /* JSONRepresentation.h in Headers */,
 				42CF1FE01C19046700F539B4 /* EUtility.h in Headers */,
 				42CF1FE11C19046700F539B4 /* mztools.h in Headers */,
-				42CF1FE21C19046700F539B4 /* PluginParser.h in Headers */,
 				42CF1FE31C19046700F539B4 /* SBJSON.h in Headers */,
 				42CF1FE41C19046700F539B4 /* CDataScanner.h in Headers */,
 				42CF1FE51C19046700F539B4 /* AppItemView.h in Headers */,
@@ -2165,6 +2177,7 @@
 				42CF20DC1C1904F100F539B4 /* UIButton+WebCache.h in Headers */,
 				42CF20DD1C1904F100F539B4 /* FBEncryptorAES.h in Headers */,
 				42CF20DE1C1904F100F539B4 /* ASICacheDelegate.h in Headers */,
+				42FFEF351C1FF2C500294DE1 /* ACEPluginParser.h in Headers */,
 				42CF20DF1C1904F100F539B4 /* BUtility.h in Headers */,
 				42CF20E01C1904F100F539B4 /* CJSONSerialization.h in Headers */,
 				42CF20E11C1904F100F539B4 /* ZipArchive.h in Headers */,
@@ -2227,7 +2240,6 @@
 				42CF211A1C1904F100F539B4 /* JSONRepresentation.h in Headers */,
 				42CF211B1C1904F100F539B4 /* EUtility.h in Headers */,
 				42CF211C1C1904F100F539B4 /* mztools.h in Headers */,
-				42CF211D1C1904F100F539B4 /* PluginParser.h in Headers */,
 				42CF211E1C1904F100F539B4 /* SBJSON.h in Headers */,
 				42CF211F1C1904F100F539B4 /* CDataScanner.h in Headers */,
 				42CF21201C1904F100F539B4 /* AppItemView.h in Headers */,
@@ -2324,6 +2336,7 @@
 				33774C671B2A6D3500D5F279 /* UIButton+WebCache.h in Headers */,
 				5AAA869618B1B93D000D7600 /* FBEncryptorAES.h in Headers */,
 				5AAA870918B1B93D000D7600 /* ASICacheDelegate.h in Headers */,
+				42FFEF331C1FF2C500294DE1 /* ACEPluginParser.h in Headers */,
 				5AAA869218B1B93D000D7600 /* BUtility.h in Headers */,
 				3C2887CF1A0B099B002776E4 /* CJSONSerialization.h in Headers */,
 				5AAA873818B1B93D000D7600 /* ZipArchive.h in Headers */,
@@ -2386,7 +2399,6 @@
 				3C2887D61A0B099B002776E4 /* JSONRepresentation.h in Headers */,
 				5AAA869418B1B93D000D7600 /* EUtility.h in Headers */,
 				5AAA872C18B1B93D000D7600 /* mztools.h in Headers */,
-				5AAA86AB18B1B93D000D7600 /* PluginParser.h in Headers */,
 				5AAA869F18B1B93D000D7600 /* SBJSON.h in Headers */,
 				3C2887A81A0B0984002776E4 /* CDataScanner.h in Headers */,
 				5AAA873E18B1B93D000D7600 /* AppItemView.h in Headers */,
@@ -2584,13 +2596,13 @@
 				42CF1EF51C19046700F539B4 /* ASIFormDataRequest.m in Sources */,
 				42CF1EF61C19046700F539B4 /* sha1.c in Sources */,
 				42CF1EF71C19046700F539B4 /* EUtility.m in Sources */,
-				42CF1EF81C19046700F539B4 /* PluginParser.m in Sources */,
 				42CF1EF91C19046700F539B4 /* EUExBaseDefine.m in Sources */,
 				42CF1EFA1C19046700F539B4 /* mztools.c in Sources */,
 				42CF1EFB1C19046700F539B4 /* ASIInputStream.m in Sources */,
 				42CF1EFC1C19046700F539B4 /* SDImageCache.m in Sources */,
 				42CF1EFD1C19046700F539B4 /* EUExBase.m in Sources */,
 				42CF1EFE1C19046700F539B4 /* BallView.m in Sources */,
+				42FFEF371C1FF2C500294DE1 /* ACEPluginParser.m in Sources */,
 				42CF1EFF1C19046700F539B4 /* ioapi.c in Sources */,
 				42CF1F001C19046700F539B4 /* NSDictionary_JSONExtensions.m in Sources */,
 				42CF1F011C19046700F539B4 /* ASIDownloadCache.m in Sources */,
@@ -2716,13 +2728,13 @@
 				42CF20301C1904F100F539B4 /* ASIFormDataRequest.m in Sources */,
 				42CF20311C1904F100F539B4 /* sha1.c in Sources */,
 				42CF20321C1904F100F539B4 /* EUtility.m in Sources */,
-				42CF20331C1904F100F539B4 /* PluginParser.m in Sources */,
 				42CF20341C1904F100F539B4 /* EUExBaseDefine.m in Sources */,
 				42CF20351C1904F100F539B4 /* mztools.c in Sources */,
 				42CF20361C1904F100F539B4 /* ASIInputStream.m in Sources */,
 				42CF20371C1904F100F539B4 /* SDImageCache.m in Sources */,
 				42CF20381C1904F100F539B4 /* EUExBase.m in Sources */,
 				42CF20391C1904F100F539B4 /* BallView.m in Sources */,
+				42FFEF381C1FF2C500294DE1 /* ACEPluginParser.m in Sources */,
 				42CF203A1C1904F100F539B4 /* ioapi.c in Sources */,
 				42CF203B1C1904F100F539B4 /* NSDictionary_JSONExtensions.m in Sources */,
 				42CF203C1C1904F100F539B4 /* ASIDownloadCache.m in Sources */,
@@ -2848,13 +2860,13 @@
 				5AAA871118B1B93D000D7600 /* ASIFormDataRequest.m in Sources */,
 				5AAA873318B1B93D000D7600 /* sha1.c in Sources */,
 				5AAA869518B1B93D000D7600 /* EUtility.m in Sources */,
-				5AAA86AC18B1B93D000D7600 /* PluginParser.m in Sources */,
 				5AAA86F918B1B93D000D7600 /* EUExBaseDefine.m in Sources */,
 				5AAA872B18B1B93D000D7600 /* mztools.c in Sources */,
 				5AAA871718B1B93D000D7600 /* ASIInputStream.m in Sources */,
 				33774C591B2A6D3500D5F279 /* SDImageCache.m in Sources */,
 				5AAA86F718B1B93D000D7600 /* EUExBase.m in Sources */,
 				5AAA874118B1B93D000D7600 /* BallView.m in Sources */,
+				42FFEF361C1FF2C500294DE1 /* ACEPluginParser.m in Sources */,
 				5AAA872918B1B93D000D7600 /* ioapi.c in Sources */,
 				3C2887B51A0B0984002776E4 /* NSDictionary_JSONExtensions.m in Sources */,
 				5AAA870F18B1B93D000D7600 /* ASIDownloadCache.m in Sources */,
@@ -3021,7 +3033,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3047,10 +3059,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zywx.ide;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
+				PROVISIONING_PROFILE = "6aa2e334-3ee2-4982-a374-223f7f6e6dc7";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -3064,7 +3076,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3090,10 +3102,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zywx.ide;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
+				PROVISIONING_PROFILE = "6aa2e334-3ee2-4982-a374-223f7f6e6dc7";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
