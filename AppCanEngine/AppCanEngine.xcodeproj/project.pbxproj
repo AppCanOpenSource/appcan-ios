@@ -3033,7 +3033,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3062,7 +3062,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zywx.ide;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "6aa2e334-3ee2-4982-a374-223f7f6e6dc7";
+				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -3076,7 +3076,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3105,7 +3105,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zywx.ide;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "6aa2e334-3ee2-4982-a374-223f7f6e6dc7";
+				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
