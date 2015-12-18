@@ -269,6 +269,8 @@
                     
                     [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
                     
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
+                    
                     NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didFinishCopyWidget");
                     
                 } else {

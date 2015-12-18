@@ -5273,6 +5273,29 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [self jsSuccessWithName:@"uexWindow.cbCreatePluginViewContainer" opId:opId dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@"success"];
 }
 
+- (void)closePluginViewContainer:(NSMutableArray *)inArguments {
+    
+    NSString * jsonStr = [inArguments objectAtIndex:0];
+    NSDictionary * jsonDic = [jsonStr JSONValue];
+    
+    NSString * identifier = [jsonDic objectForKey:@"id"];
+    
+    for (UIView * subView in [meBrwView.meBrwWnd subviews]) {
+        
+        if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
+            
+            ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            
+            if ([container.containerIdentifier isEqualToString:identifier]) {
+                NSLog(@"关闭id为%@的容器",identifier);
+                [container removeFromSuperview];
+            }
+        }
+    }
+    [self jsSuccessWithName:@"uexWindow.cbClosePluginViewContainer" opId:[identifier floatValue] dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@"success"];
+    
+}
+
 - (void)setPageInContainer:(NSMutableArray *)inArguments {
     
     NSString * jsonStr = [inArguments objectAtIndex:0];
@@ -5295,9 +5318,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             }
         }
     }
-    
-    
-    
+
 }
 
 //2015-10-21 by lkl 解决iOS9上长按出现放大镜的问题
