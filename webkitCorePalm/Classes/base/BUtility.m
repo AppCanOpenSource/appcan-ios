@@ -233,7 +233,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.setAnimitionDelay = function() { uex.exec('uexWindow.setAnimitionDelay/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionDuration = function() { uex.exec('uexWindow.setAnimitionDuration/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionCurve = function() { uex.exec('uexWindow.setAnimitionCurve/'+uexJoin(arguments));};"
-"uexWindow.creatPluginViewContainer = function() { uex.exec('uexWindow.creatPluginViewContainer/'+uexJoin(arguments));};"
+"uexWindow.createPluginViewContainer = function() { uex.exec('uexWindow.createPluginViewContainer/'+uexJoin(arguments));};"
+"uexWindow.closePluginViewContainer = function() { uex.exec('uexWindow.closePluginViewContainer/'+uexJoin(arguments));};"
 "uexWindow.setPageInContainer = function() { uex.exec('uexWindow.setPageInContainer/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionRepeatCount = function() { uex.exec('uexWindow.setAnimitionRepeatCount/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionAutoReverse = function() { uex.exec('uexWindow.setAnimitionAutoReverse/'+uexJoin(arguments));};"
@@ -1263,7 +1264,7 @@ static NSString *clientCertificatePwd = nil;
 
 + (void)setAppCanViewActive:(int)wgtType opener:(NSString *)inOpener name:(NSString *)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd appInfo:(NSDictionary *)appInfo {
     
-    if (theApp.useDataStatisticsControl) {
+    if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
         
         NSString * fromUrlStr =[BUtility makeSpecUrl:inOpener];
         
@@ -1324,7 +1325,7 @@ static NSString *clientCertificatePwd = nil;
 
 + (void)setAppCanViewBackground:(int)wgtType name:(NSString *)inName closeReason:(int)inCloseReason appInfo:(NSDictionary *)appInfo {
     
-    if (theApp.useDataStatisticsControl) {
+    if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
         
         NSString * closeUrl = [BUtility makeSpecUrl:inName];
         
