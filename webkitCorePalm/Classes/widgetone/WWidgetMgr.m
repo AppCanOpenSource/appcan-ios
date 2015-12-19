@@ -67,29 +67,20 @@ NSString * webappShowAactivety;
         
         NSString *wgtPathString = wgtObj.indexUrl;
         
-        NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->wgtObj.indexUrl == %@",wgtObj.indexUrl);
-        
         NSRange range = [wgtObj.indexUrl rangeOfString:@"widget/plugin/"];
         
         if (range.location != NSNotFound) {
             
             wgtPath = [wgtPathString substringToIndex:range.location+range.length];
             
-            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->1-->wgtPath == %@",wgtPath);
-            
             NSRange range1 = [wgtPath rangeOfString:@"file://"];
             
             wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
             
-            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->2-->wgtPath == %@",wgtPath);
-            
             wgtPath = [wgtPath stringByAppendingString:wgtObj.appId];
-            
-            NSLog(@"appcan-->WWdigetMgr.m-->curWidgetPath-->3-->wgtPath == %@",wgtPath);
             
         } else {
             
-            NSLog(@"appcan-->WWidgetMgr.m-->curWidgetPath-->range.location == NSNotFound");
             
         }
         
@@ -152,7 +143,7 @@ NSString * webappShowAactivety;
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
 	WWidget*wgtobj = (WWidget*)[tempArr objectAtIndex:0];
-    wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG];
+    wgtobj.isDebug = [tmpWgtDict objectForKey:CONFIG_TAG_DEBUG]?YES:NO;
     wgtobj.widgetOneId = [BUtility appKey];
     
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
@@ -792,7 +783,7 @@ NSString * webappShowAactivety;
 	//数据库里存在，
 	NSMutableArray *tmpArr =[widgetObj selectWgt:queryComWgt];
 	wgtArr =[[NSMutableArray alloc] initWithArray:tmpArr];
-	int wgtsNum = [wgtArr count];
+	NSUInteger wgtsNum = [wgtArr count];
 	[widgetObj close_database];
 	[widgetObj release];
 	[tmpArr removeAllObjects];

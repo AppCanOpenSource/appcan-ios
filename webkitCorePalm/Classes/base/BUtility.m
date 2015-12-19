@@ -24,8 +24,6 @@
 #import <netdb.h>
 #import "EUExAction.h"
 #import <SystemConfiguration/SystemConfiguration.h>
-#import "Beqtucontent.h"
-#import "PackageInfo.h"
 #import "WWidget.h"
 //#import "AppCanAnalysis.h"
 //#import "AppCanBase.h"
@@ -221,6 +219,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.getBounce=function(){ uex.exec('uexWindow.getBounce/'+uexJoin(arguments));};"
 "uexWindow.setBounceParams=function(){ uex.exec('uexWindow.setBounceParams/'+uexJoin(arguments));};"
 "uexWindow.setRightSwipeEnable=function(){ uex.exec('uexWindow.setRightSwipeEnable/'+uexJoin(arguments));};"
+"uexWindow.topBounceViewRefresh=function(){ uex.exec('uexWindow.topBounceViewRefresh/'+uexJoin(arguments));};"
 "uexWindow.showBounceView=function(){ uex.exec('uexWindow.showBounceView/'+uexJoin(arguments));};"
 "uexWindow.hiddenBounceView=function(){ uex.exec('uexWindow.hiddenBounceView/'+uexJoin(arguments));};"
 "uexWindow.resetBounceView=function(){ uex.exec('uexWindow.resetBounceView/'+uexJoin(arguments));};"
@@ -1217,16 +1216,48 @@ static NSString *clientCertificatePwd = nil;
 	
 }
 
-+ (NSString *)bundleIdentifier {
++ (NSString *)bundleIdentifier{
     
-    return [PackageInfo getBundleIdentifier];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wundeclared-selector"
+    Class packageInfo = NSClassFromString(@"PackageInfo");
+    if(packageInfo){
+        @try {
+            return objc_msgSend(packageInfo,@selector(getBundleIdentifier));
+        }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR!!packageInfo不存在!");
+            NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
+        }
+        @finally {
+        }
+        
+    }
+    return @"com.zywx.appcan";
+#pragma clang diagnostic pop
+
     
 }
 
 +(NSString*)appKey{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wundeclared-selector"
     if(F_DEVELOPMENT_USE==NO){
-        return [Beqtucontent getContentPath];
+        Class Beqtucontent = NSClassFromString(@"Beqtucontent");
+        if(Beqtucontent){
+            @try {
+                return objc_msgSend(Beqtucontent,@selector(getContentPath));
+            }
+            @catch (NSException *exception) {
+                NSLog(@"ERROR!!Beqtucontent不存在");
+                NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
+            }
+            @finally {
+            }
+        }
     }
+#pragma clang diagnostic pop
+
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
     if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
@@ -1951,5 +1982,29 @@ static NSString *clientCertificatePwd = nil;
     }
     return retVal;
 }
+
+
+#pragma mark - IDE
+
++ (NSString *)dynamicPluginFrameworkFolderPath{
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    static NSString *dynamicFrameworkFolder =@"dynamicPlugins";
+    NSString  *dynamicPluginFrameworkFolderPath=[documentsPath stringByAppendingPathComponent:dynamicFrameworkFolder];
+    
+    NSFileManager *fm=[NSFileManager defaultManager];
+    NSError *error=nil;
+    BOOL isFolder=NO;
+    if(![fm fileExistsAtPath:dynamicPluginFrameworkFolderPath isDirectory:&isFolder] || !isFolder){// 如果目录不存在，或者目录不是文件夹，就创建一个
+        
+        [fm createDirectoryAtPath:dynamicPluginFrameworkFolderPath withIntermediateDirectories:NO attributes:nil error:&error];
+        if(error){
+            NSLog(@"%@",[error localizedDescription]);
+        }
+    }
+
+    return dynamicPluginFrameworkFolderPath;
+}
+
+
 
 @end

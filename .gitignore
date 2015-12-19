@@ -26,3 +26,7 @@ DerivedData
 # Pods/
 
 AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a
+
+AppCanEngine/AppCanEngineDebug/.DS_Store
+
+AppCanEngine/AppCanEngineDebug/.DS_Store

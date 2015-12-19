@@ -45,7 +45,7 @@
         if (__IPHONE_OS_VERSION_MAX_ALLOWED>__IPHONE_6_0) {
             mTextView.textAlignment = NSTextAlignmentCenter;
         }else{
-            mTextView.textAlignment = UITextAlignmentCenter;
+            mTextView.textAlignment = NSTextAlignmentCenter;
         }
 		mTextView.numberOfLines = 1;
 		mTextView.textColor = [UIColor whiteColor];

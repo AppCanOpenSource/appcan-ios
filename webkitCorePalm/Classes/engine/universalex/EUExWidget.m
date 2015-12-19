@@ -389,8 +389,6 @@
 
 -(void)finishWidget:(NSMutableArray *)inArguments {
     
-    NSLog(@"appcan-->[EUExWidget finishWidget]");
-    
     NSString *inRet = [inArguments objectAtIndex:0];
     NSString *appID = nil;
     
@@ -1136,8 +1134,7 @@
         }
         [FormatReq setTimeOutSeconds:60];
         [FormatReq startSynchronous];
-        int status = [FormatReq responseStatusCode];
-        NSString *responseStr = [FormatReq responseString];
+
         
         [FormatReq release];
         //        }

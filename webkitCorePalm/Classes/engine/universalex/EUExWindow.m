@@ -1148,8 +1148,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (meBrwView.hidden == YES) {
         return;
     }
-    EBrowserWindow *eBrwWnd = nil;
-    EBrowserWindow *eCurBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
+
     
     ACENSLog(@"PresentWindowTest open opener meBrwView = %@, meBrwView Name = %@", meBrwView, meBrwView.muexObjName);
     
@@ -1512,7 +1511,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
     if ([extraDic objectForKey:@"opaque"]) {
         
-        BOOL * opaque = [[extraDic objectForKey:@"opaque"] boolValue];
+        BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
         
         if (opaque) {
             
@@ -3083,6 +3082,19 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     @finally {
         //
     }
+    
+}
+
+- (void)topBounceViewRefresh:(NSMutableArray *)inArguments {
+    
+    if (!meBrwView) {
+        return;
+    }
+    if (meBrwView.mType != F_EBRW_VIEW_TYPE_MAIN && meBrwView.mType != F_EBRW_VIEW_TYPE_POPOVER) {
+        return;
+    }
+    
+    [meBrwView topBounceViewRefresh];
     
 }
 

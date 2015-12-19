@@ -143,10 +143,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (self.indicatorView) {
         self.indicatorView =nil;
     }
-	ACENSLog(@"ACEBrowserView retain count is %d",[self retainCount]);
-	ACENSLog(@"ACEBrowserView dealloc is %x", self);
-	ACENSLog(@"meUExManager retain count is %d",[meUExManager retainCount]);
-	[self unRegisterKeyboardListener:nil];
+	
+    [self unRegisterKeyboardListener:nil];
 	if (meUExManager) {
 		[meUExManager clean];
 		[meUExManager release];
@@ -190,9 +188,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 
 - (void)reset {
-	ACENSLog(@"ACEBrowserView retain count is %d",[self retainCount]);
-	ACENSLog(@"ACEBrowserView dealloc is %x", self);
-	ACENSLog(@"meUExManager retain count is %d",[meUExManager retainCount]);
 	[self clean];
 	[self unRegisterKeyboardListener:nil];
 	meBrwCtrler = NULL;
@@ -298,6 +293,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 				[mTopBounceView setStatus:EBounceViewStatusPullToReload];
 				[UIView beginAnimations:nil context:NULL];
 				[UIView setAnimationDuration:0.2f];
+                [mScrollView setContentOffset:CGPointZero];
 				mScrollView.contentInset = UIEdgeInsetsZero;
 				[UIView commitAnimations];
 			} else {
@@ -361,9 +357,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
         
     }
 	
-	ACENSLog(@"scrollViewDidScroll");
 	if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_REFRESH) != 0) {
-		if (scrollView.dragging && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) == 0)) {
+		if (((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) == 0)) {
 			if (mTopBounceView && mTopBounceView.hidden != YES) {
 				if (scrollView.contentOffset.y > refreshKeyValue && scrollView.contentOffset.y < 0.0f) {
 					[mTopBounceView setStatus:EBounceViewStatusPullToReload];
@@ -377,7 +372,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
 						mTopBounceState = EBounceViewStatusReleaseToReload;
 						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,1);}"];
 					}
-				}
+                } else {
+                    mTopBounceState = EBounceViewStatusPullToReload;
+                }
 			} else {
 				if (scrollView.contentOffset.y > refreshKeyValue && scrollView.contentOffset.y < 0.0f) {
 					if (mTopBounceState != EBounceViewStatusPullToReload) {
@@ -396,7 +393,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
 	if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_REFRESH) != 0) {
 		if (scrollView.dragging && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_LOADING) == 0)) {
-			//ACENSLog(@"contentOffset is %f and scrollSize is %f and bounce is %f", scrollView.contentOffset.y, mScrollView.contentSize.height, mScrollView.contentSize.height-refreshKeyValue);
 			if (mBottomBounceView && mBottomBounceView.hidden != YES) {
 				if (scrollView.contentOffset.y > 0.0f && scrollView.contentOffset.y < mScrollView.contentSize.height-refreshKeyValue-self.bounds.size.height) {
 					[mBottomBounceView setStatus:EBounceViewStatusPullToReload];
@@ -523,6 +519,31 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
 }
 
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    
+    if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_REFRESH) != 0) {
+        if (scrollView.contentOffset.y <= refreshKeyValue && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) == 0)) {
+            mFlag |= F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING;
+            mTopBounceState = EBounceViewStatusLoading;
+            [self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,2);}"];
+        }
+    }
+    if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) != 0) {
+        [self bounceViewStartLoadWithType:EBounceViewTypeTop];
+        if (mTopBounceView && mTopBounceView.hidden != YES) {
+            if (scrollView.contentOffset.y < 0) {
+                scrollView.contentInset = UIEdgeInsetsMake(loadingVisibleHeight, 0, 0, 0);
+            }
+        }
+        if (!mTopBounceView) {
+            if (scrollView.contentOffset.y < 0) {
+                scrollView.contentInset = UIEdgeInsetsMake(loadingVisibleHeight, 0, 0, 0);
+            }
+        }
+    }
+
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 	
 	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
@@ -549,7 +570,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 -(NSURL*)curUrl{
-    NSLog(@"%@==%@",self.currentUrl,[self.request URL]);
+    
     if (self.currentUrl)
     {
         if ([self.request URL]) {
@@ -568,7 +589,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)loadUEXScript {
 	extern NSString *AppCanJS;
 	//extern NSString *AppCanPluginJS;
-	//NSLog(@"engine=%@-------\n",AppCanJS);
 	[self stringByEvaluatingJavaScriptFromString:AppCanJS];
     
 }
@@ -907,9 +927,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-	//ACENSLog(@"end content offset is %f,%f", scrollView.contentOffset.x, scrollView.contentOffset.y);
-}
+
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
 	return YES;
@@ -1015,4 +1033,17 @@ const CGFloat loadingVisibleHeight = 60.0f;
         [multiPopoverScrollView continueLoading];
     }
 }
+
+#pragma mark - refresh
+
+- (void)topBounceViewRefresh {
+    
+    if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_REFRESH) != 0 && mTopBounceState != EBounceViewStatusLoading) {
+        
+        [self.mScrollView setContentOffset:CGPointMake(0, refreshKeyValue) animated:YES];
+        
+    }
+    
+}
+
 @end
