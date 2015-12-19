@@ -1773,6 +1773,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     [eBrwWndContainer bringSubviewToFront:eBrwWnd];
                     if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
                         ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+                        config.duration=eBrwWnd.mOpenAnimiDuration;
                         [ACEPOPAnimation doAnimationInView:eBrwWnd
                                                       type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                              configuration:config
@@ -1884,6 +1885,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWndContainer bringSubviewToFront:eBrwWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            config.duration=eBrwWnd.mOpenAnimiDuration;
             [ACEPOPAnimation doAnimationInView:eBrwWnd
                                           type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                  configuration:config
@@ -3336,6 +3338,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meBackWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            config.duration=eBrwWnd.mOpenAnimiDuration;
             [ACEPOPAnimation doAnimationInView:eBrwWnd
                                           type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                  configuration:config
@@ -3428,6 +3431,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meFrontWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
+            config.duration=eBrwWnd.mOpenAnimiDuration;
             [ACEPOPAnimation doAnimationInView:eBrwWnd
                                           type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
                                  configuration:config
@@ -5243,7 +5247,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     };
 }
 
-- (void)creatPluginViewContainer:(NSMutableArray *)inArguments {
+- (void)createPluginViewContainer:(NSMutableArray *)inArguments {
     
     if ([inArguments count] < 1) {
         return;
@@ -5279,6 +5283,29 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [EUtility brwView:meBrwView addSubview:pluginViewContainer];
     
     [self jsSuccessWithName:@"uexWindow.cbCreatePluginViewContainer" opId:opId dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@"success"];
+}
+
+- (void)closePluginViewContainer:(NSMutableArray *)inArguments {
+    
+    NSString * jsonStr = [inArguments objectAtIndex:0];
+    NSDictionary * jsonDic = [jsonStr JSONValue];
+    
+    NSString * identifier = [jsonDic objectForKey:@"id"];
+    
+    for (UIView * subView in [meBrwView.meBrwWnd subviews]) {
+        
+        if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
+            
+            ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            
+            if ([container.containerIdentifier isEqualToString:identifier]) {
+                NSLog(@"关闭id为%@的容器",identifier);
+                [container removeFromSuperview];
+            }
+        }
+    }
+    [self jsSuccessWithName:@"uexWindow.cbClosePluginViewContainer" opId:[identifier floatValue] dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@"success"];
+    
 }
 
 - (void)setPageInContainer:(NSMutableArray *)inArguments {

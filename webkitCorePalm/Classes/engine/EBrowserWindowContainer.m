@@ -218,6 +218,9 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 		}
         if([ACEPOPAnimation isPopAnimation:eSuperBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eSuperBrwWnd.popAnimationInfo];
+            config.duration=eSuperBrwWnd.mOpenAnimiDuration;
+
+
 
             [ACEPOPAnimation doAnimationInView:eSuperBrwWnd
                                           type:(ACEPOPAnimateType)(eSuperBrwWnd.mOpenAnimiId)
