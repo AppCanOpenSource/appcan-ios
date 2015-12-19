@@ -41,6 +41,7 @@
 #import "EUtility.h"
 #import "ACEUtils.h"
 #import "DataAnalysisInfo.h"
+#import "ACEDrawerViewController.h"
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -241,6 +242,8 @@
     int mOrientaion =meBrwView.mwWgt.orientation;
     int subOrientation = wgtObj.orientation;
     
+    theApp.drawerController.canRotate = YES;
+    
     if (subOrientation == mOrientaion || subOrientation == 15) {
         
         //nothing
@@ -294,6 +297,8 @@
         }
         
     }
+    
+    theApp.drawerController.canRotate = NO;
     
     //ACENSLog(@"wgtObj retaincount=%d",[wgtObj retainCount]);
     if(wgtObj){
@@ -417,6 +422,8 @@
     int mOrientaion = [[BUtility getMainWidgetConfigInterface]intValue];
     int subOrientation =meBrwView.mwWgt.orientation;
     
+    theApp.drawerController.canRotate = YES;
+    
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     
     if (subOrientation == mOrientaion || mOrientaion == 15) {
@@ -472,6 +479,8 @@
         }
         
     }
+    
+    theApp.drawerController.canRotate = NO;
     
     EBrowserWidgetContainer *eBrwWgtContainer = meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     EBrowserWindowContainer *eBrwWndContainer = nil;
@@ -947,7 +956,6 @@
             }
         }
         if (pushStr) {
-            NSLog(@"appcan--EUExWidget--getPushInfo--allPushStr-- sendReportRead--allPushStr=%@",pushStr);
             [NSThread detachNewThreadSelector:@selector(sendReportRead:) toTarget:self withObject:(id)pushStr];
         }
         
@@ -955,7 +963,6 @@
         
         id pushStr = [defaults objectForKey:@"pushData"];
         if ([pushStr isKindOfClass:[NSDictionary class]]) {
-            NSLog(@"appcan--EUExWidget--getPushInfo--pushstr is NSDictionary =%@",pushStr);
             NSString *str = [pushStr JSONFragment];
             if (KUEX_ISNSString(str)) {
                 [self jsSuccessWithName:@"uexWidget.cbGetPushInfo" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:str];
@@ -978,7 +985,6 @@
             }
         }
         if (pushStr) {
-            NSLog(@"appcan--EUExWidget--getPushInfo--pushStr-- sendReportRead--pushStr=%@",pushStr);
             [NSThread detachNewThreadSelector:@selector(sendReportRead:) toTarget:self withObject:(id)pushStr];
         }
     }
@@ -990,10 +996,8 @@
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
         if ([userInfo isKindOfClass:[NSDictionary class]]){
             dict = userInfo;
-            NSLog(@"appcan--EUExWidget--sendReportRead--userInfo is NSMutableDictionary--dict ==%@",dict);
         } else {
             dict = [userInfo JSONValue];
-            NSLog(@"appcan--EUExWidget--sendReportRead--userInfo is (NSString)--dict ==%@",dict);
         }
         
         if (dict == nil
@@ -1089,14 +1093,11 @@
         [request setTimeOutSeconds:60];
         [request setRequestMethod:@"POST"];
         [request startSynchronous];
-        
-        NSString *responseStr = [request responseString];
-        [EUtility writeLog:[NSString stringWithFormat:@"responseStr------>>%@",responseStr]];
         if (200 == request.responseStatusCode) {
             NSString *responseStr = [request responseString];
             [EUtility writeLog:[NSString stringWithFormat:@"responseStr------>>%@",responseStr]];
         }else{
-            [EUtility writeLog:[NSString stringWithFormat:@"responseStr------>>%@",request.error]];
+            
         }
     }
 }
@@ -1134,10 +1135,9 @@
         }
         [FormatReq setTimeOutSeconds:60];
         [FormatReq startSynchronous];
-
-        
+        int status = [FormatReq responseStatusCode];
+        NSString *responseStr = [FormatReq responseString];
         [FormatReq release];
-        //        }
     }
 }
 -(void)setPushState:(NSMutableArray*)inArguments{
