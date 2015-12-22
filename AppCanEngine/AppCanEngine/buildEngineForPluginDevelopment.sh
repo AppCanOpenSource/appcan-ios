@@ -18,15 +18,16 @@ mkdir ./temp
 xcodebuild -project AppCanEngine.xcodeproj -scheme AppCanEngine clean
 
 #build真机用的.a并拷贝到临时文件夹中
-xcodebuild -configuration Release -project AppCanEngine.xcodeproj -sdk iphoneos -scheme AppCanEngine
-cp -rf ../AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a ./temp/libAppCanEngine_Device.a
+xcodebuild -configuration Release -project AppCanEngine.xcodeproj -sdk iphonesimulator -arch x86_64 -arch i386 -scheme AppCanEngine
+cp -rf ../AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a ./temp/libAppCanEngine_Simulator.a
 
 #clean工程
 xcodebuild -project AppCanEngine.xcodeproj -scheme AppCanEngine clean
 
 #build真机用的.a并拷贝到临时文件夹中
-xcodebuild -configuration Release -project AppCanEngine.xcodeproj -sdk iphonesimulator -scheme AppCanEngine
-cp -rf ../AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a ./temp/libAppCanEngine_Simulator.a
+xcodebuild -configuration Release -project AppCanEngine.xcodeproj -sdk iphoneos -scheme AppCanEngine
+cp -rf ../AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a ./temp/libAppCanEngine_Device.a
+
 
 #合并.a
 lipo -info ./temp/libAppCanEngine_Simulator.a

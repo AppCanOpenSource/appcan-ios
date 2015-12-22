@@ -2498,7 +2498,7 @@
 		B220D26B15A3152B00D02138 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					427F06BF1C190C27001E17B5 = {
 						CreatedOnToolsVersion = 7.1;
@@ -2971,7 +2971,6 @@
 		42CF20071C19046700F539B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/AppCanEngine.dst;
 				ENABLE_BITCODE = NO;
@@ -3000,7 +2999,6 @@
 		42CF20081C19046700F539B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/AppCanEngine.dst;
 				ENABLE_BITCODE = NO;
@@ -3029,7 +3027,6 @@
 		42CF21421C1904F100F539B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -3072,7 +3069,6 @@
 		42CF21431C1904F100F539B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -3117,7 +3113,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3128,6 +3123,7 @@
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../AppCanPlugin/AppCanPlugin/engine/";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -3146,7 +3142,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 arm64";
+				VALID_ARCHS = "armv7 arm64 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -3154,7 +3150,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3177,14 +3172,13 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 arm64";
+				VALID_ARCHS = "armv7 arm64 i386 x86_64";
 			};
 			name = Release;
 		};
 		B220D28215A3152B00D02138 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/AppCanEngine.dst;
 				ENABLE_BITCODE = NO;
@@ -3212,7 +3206,6 @@
 		B220D28315A3152B00D02138 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/AppCanEngine.dst;
 				ENABLE_BITCODE = NO;
