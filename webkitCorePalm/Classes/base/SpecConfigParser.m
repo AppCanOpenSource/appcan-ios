@@ -124,10 +124,8 @@
 }
 
 - (void)dealloc {
-	ACENSLog(@"SpeconfigParser dealloc resultData retaincont=%d",[resultData retainCount]);
 	[resultData release];
 	resultData = nil;
-	ACENSLog(@"SpeconfigParser dealloc mParser retaincont=%d",[mParser retainCount]);
 	[mParser release];
 	mParser = nil;
     [super dealloc];
