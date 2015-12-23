@@ -38,3 +38,5 @@ AppCanEngine/AppCanEngine.framework/AppCanEngine
 AppCanEngine/AppCanEngine.framework/embedded.mobileprovision
 
 AppCanEngine/AppCanEngine.framework/Info.plist
+
+AppCanEngine/libAppCanEngine.a
