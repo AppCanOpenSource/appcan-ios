@@ -266,7 +266,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 //2015-11-06 by lkl
 "uexWindow.setSwipeCloseEnable = function() { uex.exec('uexWindow.setSwipeCloseEnable/'+uexJoin(arguments));};"
 "uexWindow.setWebViewScrollable = function() { uex.exec('uexWindow.setWebViewScrollable/'+uexJoin(arguments));};"
-
+"uexWindow.createProgressDialog = function() { uex.exec('uexWindow.createProgressDialog/'+uexJoin(arguments));};"
+"uexWindow.destroyProgressDialog = function() { uex.exec('uexWindow.destroyProgressDialog/'+uexJoin(arguments));};"
 
 
 "window.uexAppCenter = {}; uexAppCenter.cbGetSessionKey = null; uexAppCenter.cbLoginOut = null;"

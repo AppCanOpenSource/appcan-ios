@@ -729,6 +729,12 @@
 		42CF214D1C19070F00F539B4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF214C1C19070F00F539B4 /* libsqlite3.tbd */; };
 		42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D0AF401BBB8641002249AE /* ACELocalization.h */; };
 		42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; };
+		42D653CC1C33C23E000231E4 /* ACEProgressDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */; };
+		42D653CD1C33C23E000231E4 /* ACEProgressDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */; };
+		42D653CE1C33C23E000231E4 /* ACEProgressDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */; };
+		42D653CF1C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; };
+		42D653D01C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; };
+		42D653D11C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; };
 		42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
@@ -1048,6 +1054,8 @@
 		42CF214C1C19070F00F539B4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		42D0AF401BBB8641002249AE /* ACELocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACELocalization.h; sourceTree = "<group>"; };
 		42D0AF411BBB8641002249AE /* ACELocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACELocalization.m; sourceTree = "<group>"; };
+		42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEProgressDialog.h; sourceTree = "<group>"; };
+		42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEProgressDialog.m; sourceTree = "<group>"; };
 		42FFEF2B1C1FF1E600294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginParser.h; sourceTree = "<group>"; };
 		42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginParser.m; sourceTree = "<group>"; };
@@ -1580,6 +1588,8 @@
 				5AAA85BE18B1B93D000D7600 /* WgtReportParser.m */,
 				5AAA85BF18B1B93D000D7600 /* WidgetSQL.h */,
 				5AAA85C018B1B93D000D7600 /* WidgetSQL.m */,
+				42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */,
+				42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -2081,6 +2091,7 @@
 				42CF1FDF1C19046700F539B4 /* JSONRepresentation.h in Headers */,
 				42CF1FE01C19046700F539B4 /* EUtility.h in Headers */,
 				42CF1FE11C19046700F539B4 /* mztools.h in Headers */,
+				42D653CD1C33C23E000231E4 /* ACEProgressDialog.h in Headers */,
 				42CF1FE31C19046700F539B4 /* SBJSON.h in Headers */,
 				42CF1FE41C19046700F539B4 /* CDataScanner.h in Headers */,
 				42CF1FE51C19046700F539B4 /* AppItemView.h in Headers */,
@@ -2240,6 +2251,7 @@
 				42CF211A1C1904F100F539B4 /* JSONRepresentation.h in Headers */,
 				42CF211B1C1904F100F539B4 /* EUtility.h in Headers */,
 				42CF211C1C1904F100F539B4 /* mztools.h in Headers */,
+				42D653CE1C33C23E000231E4 /* ACEProgressDialog.h in Headers */,
 				42CF211E1C1904F100F539B4 /* SBJSON.h in Headers */,
 				42CF211F1C1904F100F539B4 /* CDataScanner.h in Headers */,
 				42CF21201C1904F100F539B4 /* AppItemView.h in Headers */,
@@ -2399,6 +2411,7 @@
 				3C2887D61A0B099B002776E4 /* JSONRepresentation.h in Headers */,
 				5AAA869418B1B93D000D7600 /* EUtility.h in Headers */,
 				5AAA872C18B1B93D000D7600 /* mztools.h in Headers */,
+				42D653CC1C33C23E000231E4 /* ACEProgressDialog.h in Headers */,
 				5AAA869F18B1B93D000D7600 /* SBJSON.h in Headers */,
 				3C2887A81A0B0984002776E4 /* CDataScanner.h in Headers */,
 				5AAA873E18B1B93D000D7600 /* AppItemView.h in Headers */,
@@ -2671,6 +2684,7 @@
 				42CF1F401C19046700F539B4 /* ASIAuthenticationDialog.m in Sources */,
 				42CF1F411C19046700F539B4 /* EBrowserWindowContainer.m in Sources */,
 				42CF1F421C19046700F539B4 /* SFHFKeychainUtils.m in Sources */,
+				42D653D01C33C23E000231E4 /* ACEProgressDialog.m in Sources */,
 				42CF1F431C19046700F539B4 /* CJSONSerializedData.m in Sources */,
 				42CF1F441C19046700F539B4 /* UIViewController+MMDrawerController.m in Sources */,
 				42CF1F451C19046700F539B4 /* EUExWidget.m in Sources */,
@@ -2803,6 +2817,7 @@
 				42CF207B1C1904F100F539B4 /* ASIAuthenticationDialog.m in Sources */,
 				42CF207C1C1904F100F539B4 /* EBrowserWindowContainer.m in Sources */,
 				42CF207D1C1904F100F539B4 /* SFHFKeychainUtils.m in Sources */,
+				42D653D11C33C23E000231E4 /* ACEProgressDialog.m in Sources */,
 				42CF207E1C1904F100F539B4 /* CJSONSerializedData.m in Sources */,
 				42CF207F1C1904F100F539B4 /* UIViewController+MMDrawerController.m in Sources */,
 				42CF20801C1904F100F539B4 /* EUExWidget.m in Sources */,
@@ -2935,6 +2950,7 @@
 				5AAA870818B1B93D000D7600 /* ASIAuthenticationDialog.m in Sources */,
 				5AAA86F118B1B93D000D7600 /* EBrowserWindowContainer.m in Sources */,
 				5AAA873218B1B93D000D7600 /* SFHFKeychainUtils.m in Sources */,
+				42D653CF1C33C23E000231E4 /* ACEProgressDialog.m in Sources */,
 				3C2887B11A0B0984002776E4 /* CJSONSerializedData.m in Sources */,
 				33AF6ECA1A448EFD00DC7397 /* UIViewController+MMDrawerController.m in Sources */,
 				5AAA870018B1B93D000D7600 /* EUExWidget.m in Sources */,
