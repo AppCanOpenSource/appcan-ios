@@ -57,6 +57,7 @@
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPOPAnimation.h"
 
+#import "ACEProgressDialog.h"
 
 
 #define kWindowConfirmViewTag (-9999)
@@ -4652,7 +4653,24 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
 }
 
+#pragma mark - Progress Dialog
+- (void)createProgressDialog:(NSMutableArray *)inArguments{
+    if(inArguments.count < 2){
+        return;
+    }
+    BOOL canCancel=YES;
+    if(inArguments.count > 2){
+        canCancel=!([inArguments[2] integerValue] == 1);
+    }
+    NSString *title=inArguments[0];
+    NSString *text=inArguments[1];
+    [[ACEProgressDialog sharedDialog]showWithTitle:title text:text canCancel:canCancel];
+}
 
+
+- (void)destroyProgressDialog:(NSMutableArray *)inArguments{
+    [[ACEProgressDialog sharedDialog]hide];
+}
 
 #pragma mark 设置状态条上字体的颜色
 #pragma mark
