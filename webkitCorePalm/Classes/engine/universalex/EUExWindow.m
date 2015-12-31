@@ -5408,4 +5408,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     meBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
     [meBrwView.meBrwWnd updateSwipeCloseEnableStatus];
 }
+
+
+#ifdef DEBUG
+- (void)log:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    NSLog(inArguments[0]);
+}
+
+
+#endif
+
 @end
