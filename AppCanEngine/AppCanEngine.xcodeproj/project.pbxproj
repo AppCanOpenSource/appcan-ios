@@ -116,7 +116,7 @@
 		3C2887D51A0B099B002776E4 /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CA1A0B099B002776E4 /* CJSONSerializer.h */; };
 		3C2887D61A0B099B002776E4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */; };
 		3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
-		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		4214B40D1BE753300088E31B /* ACEMultiPopoverScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */; };
 		4214B40E1BE753300088E31B /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; };
@@ -128,6 +128,12 @@
 		428628FE1C0708E30078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FD1C0708E30078E783 /* pop.framework */; };
 		42A2F4A21BA2BDE5002CBB3B /* EUExBase+Bundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */; };
 		42A2F4A31BA2BDE5002CBB3B /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
+		42A615531C40CB9A00883148 /* ACEPluginInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A615511C40CB9A00883148 /* ACEPluginInfo.h */; };
+		42A615541C40CB9A00883148 /* ACEPluginInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A615511C40CB9A00883148 /* ACEPluginInfo.h */; };
+		42A615551C40CB9A00883148 /* ACEPluginInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A615511C40CB9A00883148 /* ACEPluginInfo.h */; };
+		42A615561C40CB9A00883148 /* ACEPluginInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A615521C40CB9A00883148 /* ACEPluginInfo.m */; };
+		42A615571C40CB9A00883148 /* ACEPluginInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A615521C40CB9A00883148 /* ACEPluginInfo.m */; };
+		42A615581C40CB9A00883148 /* ACEPluginInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A615521C40CB9A00883148 /* ACEPluginInfo.m */; };
 		42CF1ECE1C19045600F539B4 /* AppCanEngineIDE-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 42CF1ECD1C19045600F539B4 /* AppCanEngineIDE-Prefix.pch */; };
 		42CF1ED11C19046700F539B4 /* AppItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865D18B1B93D000D7600 /* AppItemView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1ED21C19046700F539B4 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBE1A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.m */; };
@@ -138,7 +144,7 @@
 		42CF1ED71C19046700F539B4 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C491B2A6D3500D5F279 /* UIImage+GIF.m */; };
 		42CF1ED81C19046700F539B4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864918B1B93D000D7600 /* unzip.c */; };
 		42CF1ED91C19046700F539B4 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF1EDA1C19046700F539B4 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF1EDA1C19046700F539B4 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		42CF1EDB1C19046700F539B4 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1EDC1C19046700F539B4 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18091A47B4200050DD13 /* MMNavigationController.m */; };
 		42CF1EDD1C19046700F539B4 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -208,7 +214,7 @@
 		42CF1F1E1C19046700F539B4 /* CJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887981A0B0984002776E4 /* CJSONSerialization.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F1F1C19046700F539B4 /* EUExWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861F18B1B93D000D7600 /* EUExWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F201C19046700F539B4 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C3E1B2A6D3500D5F279 /* SDWebImageDownloader.m */; };
-		42CF1F211C19046700F539B4 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF1F211C19046700F539B4 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		42CF1F221C19046700F539B4 /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C421B2A6D3500D5F279 /* SDWebImageManager.m */; };
 		42CF1F231C19046700F539B4 /* ACEPluginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F241C19046700F539B4 /* EUExAppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860E18B1B93D000D7600 /* EUExAppCenter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -235,7 +241,6 @@
 		42CF1F391C19046700F539B4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B618B1B93D000D7600 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F3A1C19046700F539B4 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AA18B1B93D000D7600 /* NSString+SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F3B1C19046700F539B4 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF1F3C1C19046700F539B4 /* EUExManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861718B1B93D000D7600 /* EUExManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F3D1C19046700F539B4 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
 		42CF1F3E1C19046700F539B4 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F3F1C19046700F539B4 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -359,7 +364,6 @@
 		42CF1FBF1C19046700F539B4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887A71A0B0984002776E4 /* JSONRepresentation.h */; };
 		42CF1FC01C19046700F539B4 /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 428628F91C0708920078E783 /* ACEPOPAnimation.h */; };
 		42CF1FC11C19046700F539B4 /* ASIInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863118B1B93D000D7600 /* ASIInputStream.h */; };
-		42CF1FC21C19046700F539B4 /* EUExManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861618B1B93D000D7600 /* EUExManager.h */; };
 		42CF1FC31C19046700F539B4 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B118B1B93D000D7600 /* SBJsonWriter.h */; };
 		42CF1FC41C19046700F539B4 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864418B1B93D000D7600 /* crypt.h */; };
 		42CF1FC51C19046700F539B4 /* CBrowserMainFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */; };
@@ -435,7 +439,7 @@
 		42CF20121C1904F100F539B4 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C491B2A6D3500D5F279 /* UIImage+GIF.m */; };
 		42CF20131C1904F100F539B4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864918B1B93D000D7600 /* unzip.c */; };
 		42CF20141C1904F100F539B4 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF20151C1904F100F539B4 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF20151C1904F100F539B4 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		42CF20161C1904F100F539B4 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20171C1904F100F539B4 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18091A47B4200050DD13 /* MMNavigationController.m */; };
 		42CF20181C1904F100F539B4 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -505,7 +509,7 @@
 		42CF20591C1904F100F539B4 /* CJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887981A0B0984002776E4 /* CJSONSerialization.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF205A1C1904F100F539B4 /* EUExWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861F18B1B93D000D7600 /* EUExWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF205B1C1904F100F539B4 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C3E1B2A6D3500D5F279 /* SDWebImageDownloader.m */; };
-		42CF205C1C1904F100F539B4 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF205C1C1904F100F539B4 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		42CF205D1C1904F100F539B4 /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C421B2A6D3500D5F279 /* SDWebImageManager.m */; };
 		42CF205E1C1904F100F539B4 /* ACEPluginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 331573FD1A5AAEB70036A2A2 /* ACEPluginModel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF205F1C1904F100F539B4 /* EUExAppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860E18B1B93D000D7600 /* EUExAppCenter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -532,7 +536,6 @@
 		42CF20741C1904F100F539B4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B618B1B93D000D7600 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20751C1904F100F539B4 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AA18B1B93D000D7600 /* NSString+SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20761C1904F100F539B4 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF20771C1904F100F539B4 /* EUExManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861718B1B93D000D7600 /* EUExManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20781C1904F100F539B4 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
 		42CF20791C1904F100F539B4 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF207A1C1904F100F539B4 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -656,7 +659,6 @@
 		42CF20FA1C1904F100F539B4 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C2887A71A0B0984002776E4 /* JSONRepresentation.h */; };
 		42CF20FB1C1904F100F539B4 /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 428628F91C0708920078E783 /* ACEPOPAnimation.h */; };
 		42CF20FC1C1904F100F539B4 /* ASIInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863118B1B93D000D7600 /* ASIInputStream.h */; };
-		42CF20FD1C1904F100F539B4 /* EUExManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861618B1B93D000D7600 /* EUExManager.h */; };
 		42CF20FE1C1904F100F539B4 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B118B1B93D000D7600 /* SBJsonWriter.h */; };
 		42CF20FF1C1904F100F539B4 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864418B1B93D000D7600 /* crypt.h */; };
 		42CF21001C1904F100F539B4 /* CBrowserMainFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */; };
@@ -735,6 +737,18 @@
 		42D653CF1C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42D653D01C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42D653D11C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42D9DEEB1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */; };
+		42D9DEEC1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */; };
+		42D9DEED1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */; };
+		42D9DEEE1C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */; };
+		42D9DEEF1C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */; };
+		42D9DEF01C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */; };
+		42D9DEF71C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */; };
+		42D9DEF81C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */; };
+		42D9DEF91C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */; };
+		42D9DEFA1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
+		42D9DEFB1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
+		42D9DEFC1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
 		42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
@@ -819,7 +833,7 @@
 		5AAA86EC18B1B93D000D7600 /* EBrowserWidgetContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860418B1B93D000D7600 /* EBrowserWidgetContainer.h */; };
 		5AAA86ED18B1B93D000D7600 /* EBrowserWidgetContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860518B1B93D000D7600 /* EBrowserWidgetContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86EE18B1B93D000D7600 /* EBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860618B1B93D000D7600 /* EBrowserWindow.h */; };
-		5AAA86EF18B1B93D000D7600 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5AAA86EF18B1B93D000D7600 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		5AAA86F018B1B93D000D7600 /* EBrowserWindowContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860818B1B93D000D7600 /* EBrowserWindowContainer.h */; };
 		5AAA86F118B1B93D000D7600 /* EBrowserWindowContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86F218B1B93D000D7600 /* EUExAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860B18B1B93D000D7600 /* EUExAction.h */; };
@@ -833,8 +847,6 @@
 		5AAA86FA18B1B93D000D7600 /* EUExConsole.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861318B1B93D000D7600 /* EUExConsole.h */; };
 		5AAA86FB18B1B93D000D7600 /* EUExConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861418B1B93D000D7600 /* EUExConsole.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86FC18B1B93D000D7600 /* EUExLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861518B1B93D000D7600 /* EUExLog.h */; };
-		5AAA86FD18B1B93D000D7600 /* EUExManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861618B1B93D000D7600 /* EUExManager.h */; };
-		5AAA86FE18B1B93D000D7600 /* EUExManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861718B1B93D000D7600 /* EUExManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86FF18B1B93D000D7600 /* EUExWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861818B1B93D000D7600 /* EUExWidget.h */; };
 		5AAA870018B1B93D000D7600 /* EUExWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861918B1B93D000D7600 /* EUExWidget.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA870318B1B93D000D7600 /* EUExWidgetOne.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861C18B1B93D000D7600 /* EUExWidgetOne.h */; };
@@ -1044,6 +1056,8 @@
 		428628FD1C0708E30078E783 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
 		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
+		42A615511C40CB9A00883148 /* ACEPluginInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginInfo.h; sourceTree = "<group>"; };
+		42A615521C40CB9A00883148 /* ACEPluginInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginInfo.m; sourceTree = "<group>"; };
 		42CF1ECD1C19045600F539B4 /* AppCanEngineIDE-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppCanEngineIDE-Prefix.pch"; sourceTree = "<group>"; };
 		42CF20091C19046700F539B4 /* libAppCanEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAppCanEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CF21441C1904F100F539B4 /* AppCanEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCanEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1056,6 +1070,10 @@
 		42D0AF411BBB8641002249AE /* ACELocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACELocalization.m; sourceTree = "<group>"; };
 		42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEProgressDialog.h; sourceTree = "<group>"; };
 		42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEProgressDialog.m; sourceTree = "<group>"; };
+		42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCBaseJS.h; sourceTree = "<group>"; };
+		42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCBaseJS.m; sourceTree = "<group>"; };
+		42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCHandler.h; sourceTree = "<group>"; };
+		42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCHandler.m; sourceTree = "<group>"; };
 		42FFEF2B1C1FF1E600294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginParser.h; sourceTree = "<group>"; };
 		42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginParser.m; sourceTree = "<group>"; };
@@ -1148,8 +1166,6 @@
 		5AAA861318B1B93D000D7600 /* EUExConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExConsole.h; sourceTree = "<group>"; };
 		5AAA861418B1B93D000D7600 /* EUExConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUExConsole.m; sourceTree = "<group>"; };
 		5AAA861518B1B93D000D7600 /* EUExLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExLog.h; sourceTree = "<group>"; };
-		5AAA861618B1B93D000D7600 /* EUExManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExManager.h; sourceTree = "<group>"; };
-		5AAA861718B1B93D000D7600 /* EUExManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUExManager.m; sourceTree = "<group>"; };
 		5AAA861818B1B93D000D7600 /* EUExWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExWidget.h; sourceTree = "<group>"; };
 		5AAA861918B1B93D000D7600 /* EUExWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUExWidget.m; sourceTree = "<group>"; };
 		5AAA861C18B1B93D000D7600 /* EUExWidgetOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExWidgetOne.h; sourceTree = "<group>"; };
@@ -1528,6 +1544,17 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */ = {
+			isa = PBXGroup;
+			children = (
+				42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */,
+				42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */,
+				42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */,
+				42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */,
+			);
+			path = JavaScriptCoreSupport;
+			sourceTree = "<group>";
+		};
 		5AAA858D18B1B93D000D7600 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1549,6 +1576,7 @@
 		5AAA858E18B1B93D000D7600 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */,
 				42D0AF401BBB8641002249AE /* ACELocalization.h */,
 				42D0AF411BBB8641002249AE /* ACELocalization.m */,
 				DE90F5381904E6D00084EC10 /* OpenUDID.h */,
@@ -1578,6 +1606,8 @@
 				5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */,
 				5AAA85B518B1B93D000D7600 /* NSData+Base64.h */,
 				5AAA85B618B1B93D000D7600 /* NSData+Base64.m */,
+				42A615511C40CB9A00883148 /* ACEPluginInfo.h */,
+				42A615521C40CB9A00883148 /* ACEPluginInfo.m */,
 				42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */,
 				42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */,
 				5AAA85B918B1B93D000D7600 /* SpecConfigParser.h */,
@@ -1718,8 +1748,6 @@
 				5AAA861318B1B93D000D7600 /* EUExConsole.h */,
 				5AAA861418B1B93D000D7600 /* EUExConsole.m */,
 				5AAA861518B1B93D000D7600 /* EUExLog.h */,
-				5AAA861618B1B93D000D7600 /* EUExManager.h */,
-				5AAA861718B1B93D000D7600 /* EUExManager.m */,
 				5AAA861818B1B93D000D7600 /* EUExWidget.h */,
 				5AAA861918B1B93D000D7600 /* EUExWidget.m */,
 				5AAA861C18B1B93D000D7600 /* EUExWidgetOne.h */,
@@ -1978,6 +2006,7 @@
 				42CF1F6E1C19046700F539B4 /* DataAnalysisInfo.h in Headers */,
 				42CF1F6F1C19046700F539B4 /* GCDAsyncUdpSocket.h in Headers */,
 				42CF1F701C19046700F539B4 /* EBrowserViewBounceView.h in Headers */,
+				42D9DEF81C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */,
 				42CF1F711C19046700F539B4 /* EBrowserView.h in Headers */,
 				42CF1F721C19046700F539B4 /* MMDrawerController.h in Headers */,
 				42CF1F731C19046700F539B4 /* SBJsonBase.h in Headers */,
@@ -2059,7 +2088,6 @@
 				42CF1FBF1C19046700F539B4 /* JSONRepresentation.h in Headers */,
 				42CF1FC01C19046700F539B4 /* ACEPOPAnimation.h in Headers */,
 				42CF1FC11C19046700F539B4 /* ASIInputStream.h in Headers */,
-				42CF1FC21C19046700F539B4 /* EUExManager.h in Headers */,
 				42CF1FC31C19046700F539B4 /* SBJsonWriter.h in Headers */,
 				42CF1FC41C19046700F539B4 /* crypt.h in Headers */,
 				42CF1FC51C19046700F539B4 /* CBrowserMainFrame.h in Headers */,
@@ -2102,6 +2130,7 @@
 				42CF1FEA1C19046700F539B4 /* CJSONScanner.h in Headers */,
 				42CF1FEB1C19046700F539B4 /* CDataScanner_Extensions.h in Headers */,
 				42CF1FEC1C19046700F539B4 /* CJSONDeserializer.h in Headers */,
+				42A615541C40CB9A00883148 /* ACEPluginInfo.h in Headers */,
 				42CF1FED1C19046700F539B4 /* JSONKit.h in Headers */,
 				42CF1FEE1C19046700F539B4 /* MMDrawerBarButtonItem.h in Headers */,
 				42CF1FEF1C19046700F539B4 /* SDWebImagePrefetcher.h in Headers */,
@@ -2109,6 +2138,7 @@
 				42CF1FF11C19046700F539B4 /* WgtReportParser.h in Headers */,
 				42CF1FF21C19046700F539B4 /* UIImage+WebP.h in Headers */,
 				42CF1FF31C19046700F539B4 /* ACEBrowserView.h in Headers */,
+				42D9DEEC1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */,
 				42CF1FF41C19046700F539B4 /* WidgetOneDelegate.h in Headers */,
 				42CF1FF51C19046700F539B4 /* EUExAction.h in Headers */,
 				42CF1FF61C19046700F539B4 /* RECommonFunctions.h in Headers */,
@@ -2138,6 +2168,7 @@
 				42CF20A91C1904F100F539B4 /* DataAnalysisInfo.h in Headers */,
 				42CF20AA1C1904F100F539B4 /* GCDAsyncUdpSocket.h in Headers */,
 				42CF20AB1C1904F100F539B4 /* EBrowserViewBounceView.h in Headers */,
+				42D9DEF91C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */,
 				42CF20AC1C1904F100F539B4 /* EBrowserView.h in Headers */,
 				42CF20AD1C1904F100F539B4 /* MMDrawerController.h in Headers */,
 				42CF20AE1C1904F100F539B4 /* SBJsonBase.h in Headers */,
@@ -2219,7 +2250,6 @@
 				42CF20FA1C1904F100F539B4 /* JSONRepresentation.h in Headers */,
 				42CF20FB1C1904F100F539B4 /* ACEPOPAnimation.h in Headers */,
 				42CF20FC1C1904F100F539B4 /* ASIInputStream.h in Headers */,
-				42CF20FD1C1904F100F539B4 /* EUExManager.h in Headers */,
 				42CF20FE1C1904F100F539B4 /* SBJsonWriter.h in Headers */,
 				42CF20FF1C1904F100F539B4 /* crypt.h in Headers */,
 				42CF21001C1904F100F539B4 /* CBrowserMainFrame.h in Headers */,
@@ -2262,6 +2292,7 @@
 				42CF21251C1904F100F539B4 /* CJSONScanner.h in Headers */,
 				42CF21261C1904F100F539B4 /* CDataScanner_Extensions.h in Headers */,
 				42CF21271C1904F100F539B4 /* CJSONDeserializer.h in Headers */,
+				42A615551C40CB9A00883148 /* ACEPluginInfo.h in Headers */,
 				42CF21281C1904F100F539B4 /* JSONKit.h in Headers */,
 				42CF21291C1904F100F539B4 /* MMDrawerBarButtonItem.h in Headers */,
 				42CF212A1C1904F100F539B4 /* SDWebImagePrefetcher.h in Headers */,
@@ -2269,6 +2300,7 @@
 				42CF212C1C1904F100F539B4 /* WgtReportParser.h in Headers */,
 				42CF212D1C1904F100F539B4 /* UIImage+WebP.h in Headers */,
 				42CF212E1C1904F100F539B4 /* ACEBrowserView.h in Headers */,
+				42D9DEED1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */,
 				42CF212F1C1904F100F539B4 /* WidgetOneDelegate.h in Headers */,
 				42CF21301C1904F100F539B4 /* EUExAction.h in Headers */,
 				42CF21311C1904F100F539B4 /* RECommonFunctions.h in Headers */,
@@ -2298,6 +2330,7 @@
 				76F105BE1BD0913F0064CDD1 /* DataAnalysisInfo.h in Headers */,
 				5AAA872518B1B93D000D7600 /* GCDAsyncUdpSocket.h in Headers */,
 				5AAA86EA18B1B93D000D7600 /* EBrowserViewBounceView.h in Headers */,
+				42D9DEF71C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */,
 				5AAA86E618B1B93D000D7600 /* EBrowserView.h in Headers */,
 				33AF6EC31A448EFD00DC7397 /* MMDrawerController.h in Headers */,
 				5AAA86A118B1B93D000D7600 /* SBJsonBase.h in Headers */,
@@ -2379,7 +2412,6 @@
 				3C2887BC1A0B0984002776E4 /* JSONRepresentation.h in Headers */,
 				428628FB1C0708920078E783 /* ACEPOPAnimation.h in Headers */,
 				5AAA871618B1B93D000D7600 /* ASIInputStream.h in Headers */,
-				5AAA86FD18B1B93D000D7600 /* EUExManager.h in Headers */,
 				5AAA86A518B1B93D000D7600 /* SBJsonWriter.h in Headers */,
 				5AAA872818B1B93D000D7600 /* crypt.h in Headers */,
 				5AAA86D618B1B93D000D7600 /* CBrowserMainFrame.h in Headers */,
@@ -2422,6 +2454,7 @@
 				3C2887D41A0B099B002776E4 /* CJSONScanner.h in Headers */,
 				3C2887B21A0B0984002776E4 /* CDataScanner_Extensions.h in Headers */,
 				3C2887D31A0B099B002776E4 /* CJSONDeserializer.h in Headers */,
+				42A615531C40CB9A00883148 /* ACEPluginInfo.h in Headers */,
 				5AAA86CB18B1B93D000D7600 /* JSONKit.h in Headers */,
 				33AF6EC11A448EFD00DC7397 /* MMDrawerBarButtonItem.h in Headers */,
 				33774C651B2A6D3500D5F279 /* SDWebImagePrefetcher.h in Headers */,
@@ -2429,6 +2462,7 @@
 				5AAA86B118B1B93D000D7600 /* WgtReportParser.h in Headers */,
 				33774C6D1B2A6D3500D5F279 /* UIImage+WebP.h in Headers */,
 				3C5532F41AB83BF9001ACC5E /* ACEBrowserView.h in Headers */,
+				42D9DEEB1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */,
 				5AAA875A18B1B93D000D7600 /* WidgetOneDelegate.h in Headers */,
 				5AAA86F218B1B93D000D7600 /* EUExAction.h in Headers */,
 				33C8E2F41B1EE7E300C33492 /* RECommonFunctions.h in Headers */,
@@ -2659,6 +2693,7 @@
 				42CF1F271C19046700F539B4 /* ACEDrawerViewController.m in Sources */,
 				42CF1F281C19046700F539B4 /* UIImageView+HighlightedWebCache.m in Sources */,
 				42CF1F291C19046700F539B4 /* EBrowserViewAnimition.m in Sources */,
+				42D9DEEF1C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */,
 				42CF1F2A1C19046700F539B4 /* WgtReportParser.m in Sources */,
 				42CF1F2B1C19046700F539B4 /* EBrowserController.m in Sources */,
 				42CF1F2C1C19046700F539B4 /* EBrowserViewBounceView.m in Sources */,
@@ -2674,10 +2709,11 @@
 				42CF1F361C19046700F539B4 /* UIViewController+RESideMenu.m in Sources */,
 				42CF1F371C19046700F539B4 /* NSObject+SBJSON.m in Sources */,
 				42CF1F381C19046700F539B4 /* EUExWidgetOne.m in Sources */,
+				42A615571C40CB9A00883148 /* ACEPluginInfo.m in Sources */,
+				42D9DEFB1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */,
 				42CF1F391C19046700F539B4 /* NSData+Base64.m in Sources */,
 				42CF1F3A1C19046700F539B4 /* NSString+SBJSON.m in Sources */,
 				42CF1F3B1C19046700F539B4 /* EBrowserView.m in Sources */,
-				42CF1F3C1C19046700F539B4 /* EUExManager.m in Sources */,
 				42CF1F3D1C19046700F539B4 /* MMDrawerVisualState.m in Sources */,
 				42CF1F3E1C19046700F539B4 /* ACEBaseViewController.m in Sources */,
 				42CF1F3F1C19046700F539B4 /* ACEUINavigationController.m in Sources */,
@@ -2792,6 +2828,7 @@
 				42CF20621C1904F100F539B4 /* ACEDrawerViewController.m in Sources */,
 				42CF20631C1904F100F539B4 /* UIImageView+HighlightedWebCache.m in Sources */,
 				42CF20641C1904F100F539B4 /* EBrowserViewAnimition.m in Sources */,
+				42D9DEF01C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */,
 				42CF20651C1904F100F539B4 /* WgtReportParser.m in Sources */,
 				42CF20661C1904F100F539B4 /* EBrowserController.m in Sources */,
 				42CF20671C1904F100F539B4 /* EBrowserViewBounceView.m in Sources */,
@@ -2807,10 +2844,11 @@
 				42CF20711C1904F100F539B4 /* UIViewController+RESideMenu.m in Sources */,
 				42CF20721C1904F100F539B4 /* NSObject+SBJSON.m in Sources */,
 				42CF20731C1904F100F539B4 /* EUExWidgetOne.m in Sources */,
+				42A615581C40CB9A00883148 /* ACEPluginInfo.m in Sources */,
+				42D9DEFC1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */,
 				42CF20741C1904F100F539B4 /* NSData+Base64.m in Sources */,
 				42CF20751C1904F100F539B4 /* NSString+SBJSON.m in Sources */,
 				42CF20761C1904F100F539B4 /* EBrowserView.m in Sources */,
-				42CF20771C1904F100F539B4 /* EUExManager.m in Sources */,
 				42CF20781C1904F100F539B4 /* MMDrawerVisualState.m in Sources */,
 				42CF20791C1904F100F539B4 /* ACEBaseViewController.m in Sources */,
 				42CF207A1C1904F100F539B4 /* ACEUINavigationController.m in Sources */,
@@ -2925,6 +2963,7 @@
 				334D18061A47A9B70050DD13 /* ACEDrawerViewController.m in Sources */,
 				33774C701B2A6D3500D5F279 /* UIImageView+HighlightedWebCache.m in Sources */,
 				5AAA86E918B1B93D000D7600 /* EBrowserViewAnimition.m in Sources */,
+				42D9DEEE1C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */,
 				5AAA86B218B1B93D000D7600 /* WgtReportParser.m in Sources */,
 				5AAA86DD18B1B93D000D7600 /* EBrowserController.m in Sources */,
 				5AAA86EB18B1B93D000D7600 /* EBrowserViewBounceView.m in Sources */,
@@ -2940,10 +2979,11 @@
 				33C8E2F91B1EE7E300C33492 /* UIViewController+RESideMenu.m in Sources */,
 				5AAA869C18B1B93D000D7600 /* NSObject+SBJSON.m in Sources */,
 				5AAA870418B1B93D000D7600 /* EUExWidgetOne.m in Sources */,
+				42A615561C40CB9A00883148 /* ACEPluginInfo.m in Sources */,
+				42D9DEFA1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */,
 				5AAA86AA18B1B93D000D7600 /* NSData+Base64.m in Sources */,
 				5AAA869E18B1B93D000D7600 /* NSString+SBJSON.m in Sources */,
 				5AAA86E718B1B93D000D7600 /* EBrowserView.m in Sources */,
-				5AAA86FE18B1B93D000D7600 /* EUExManager.m in Sources */,
 				33AF6EC61A448EFD00DC7397 /* MMDrawerVisualState.m in Sources */,
 				333D00051A42B9CA00F501B3 /* ACEBaseViewController.m in Sources */,
 				333D00071A42B9CA00F501B3 /* ACEUINavigationController.m in Sources */,
@@ -3160,7 +3200,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 arm64 i386 x86_64";
 			};
@@ -3189,7 +3229,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 arm64 i386 x86_64";

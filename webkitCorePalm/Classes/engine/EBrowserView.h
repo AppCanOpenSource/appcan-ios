@@ -43,7 +43,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class EUExManager;
+
 @class EBrowserController;
 @class CBrowserMainFrame;
 @class CBrowserWindow;
@@ -55,10 +55,11 @@
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
 @class ACEBrowserView;
+@class JSValue;
 
 @interface EBrowserView : UIImageView<UIGestureRecognizerDelegate>{
     EBrowserController *meBrwCtrler;
-    EUExManager *meUExManager;
+
     CBrowserWindow *mcBrwWnd;
     EBrowserWindow *meBrwWnd;
     WWidget *mwWgt;
@@ -84,7 +85,7 @@
 
 
 
-@property (nonatomic,assign) EUExManager *meUExManager;
+
 @property (nonatomic,assign) EBrowserController *meBrwCtrler;
 @property (nonatomic,assign) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,assign) EBrowserWindow *meBrwWnd;
@@ -132,7 +133,7 @@
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
 
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
+- (JSValue *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
 
 @property (nonatomic) BOOL scalesPageToFit;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;

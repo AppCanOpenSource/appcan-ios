@@ -3532,12 +3532,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
 }
 
-- (void)getState:(NSMutableArray *)inArguments {
+- (id)getState:(NSMutableArray *)inArguments {
     if (!meBrwView) {
-        return;
+        return @-1;
     }
     if (!meBrwView.meBrwWnd) {
-        return;
+        return @-1;
     }
     //
     
@@ -3551,34 +3551,37 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         if (webController == webController.navigationController.topViewController) {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:0];
+            return @0;
         } else {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:1];
+            return @1;
         }
         
         
-        return;
+        
     }
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         
         
         
-        return;
+        return @-1;
     }
     
     EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
     
     
     if (!eBrwWndContainer) {
-        return;
+        return @-1;
     }
     if ([meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] == eBrwWndContainer) {
         if ([eBrwWndContainer aboveWindow] == meBrwView.meBrwWnd) {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:0];
-            return;
+            return @0;
         }
     }
     [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:1];
+    return @-1;
 }
 
 - (void)toast:(NSMutableArray *)inArguments {
@@ -4295,13 +4298,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
 }
 
-- (void)getUrlQuery:(NSMutableArray *)inArguments {
+- (id)getUrlQuery:(NSMutableArray *)inArguments {
     NSURL *curUrl = [meBrwView curUrl];
     NSString *queryData = [curUrl query];
     if (queryData) {
         [self jsSuccessWithName:@"uexWindow.cbGetUrlQuery" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:queryData];
+        return queryData;
     } else {
         [self jsSuccessWithName:@"uexWindow.cbGetUrlQuery" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@""];
+        return @"";
     }
     
 }
@@ -5411,11 +5416,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 
 #ifdef DEBUG
-- (void)log:(NSMutableArray *)inArguments{
+- (id)log:(NSMutableArray *)inArguments{
+    
     if([inArguments count] < 1){
-        return;
+        return @0;
     }
-    NSLog(inArguments[0]);
+    NSLog(@"%@",inArguments[0]);
+    return @1;
 }
 
 

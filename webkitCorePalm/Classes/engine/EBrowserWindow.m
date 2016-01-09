@@ -31,9 +31,12 @@
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 #import "RESideMenu.h"
+#import "ACEJSCHandler.h"
+#import "ACEJSCBaseJS.h"
+#import "ACEBrowserView.h"
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
-
+@property(nonatomic,strong)ACEJSCHandler *JSCHandler;
 @end
 
 @implementation EBrowserWindow
@@ -54,39 +57,39 @@
 @synthesize mFlag;
 @synthesize mMuiltPopoverDict;
 
+
+
 - (void)dealloc {
-	ACENSLog(@"EBrowserWindow retain count is %d",[self retainCount]);
-	ACENSLog(@"EBrowserWindow dealloc is %x", self);
+
 	if (meTopSlibingBrwView) {
-		ACENSLog(@"meTopSlibingBrwView retain count is %d",[meTopSlibingBrwView retainCount]);
+
 		if (meTopSlibingBrwView.superview) {
 			[meTopSlibingBrwView removeFromSuperview];
 		}
 		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meTopSlibingBrwView];
-		[meTopSlibingBrwView release];
+
 		meTopSlibingBrwView = nil;
 	}
 	if (meBrwView) {
-		ACENSLog(@"meBrwView retain count is %d",[meBrwView retainCount]);
+
 		if (meBrwView.superview) {
 			[meBrwView removeFromSuperview];
 		}
 		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meBrwView];
-		[meBrwView release];
+
 		meBrwView = nil;
 	}
 	if (meBottomSlibingBrwView) {
-		ACENSLog(@"meBottomSlibingBrwView retain count is %d",[meBottomSlibingBrwView retainCount]);
+
 		if (meBottomSlibingBrwView.superview) {
 			[meBottomSlibingBrwView removeFromSuperview];
 		}
 		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meBottomSlibingBrwView];
-		[meBottomSlibingBrwView release];
+
 		meBottomSlibingBrwView =nil;
 	}
 	if (mPreOpenArray) {
 		[mPreOpenArray removeAllObjects];
-		[mPreOpenArray release];
 		mPreOpenArray = nil;
 	}
 	if (mPopoverBrwViewDict) {
@@ -96,10 +99,10 @@
 				[popView removeFromSuperview];
 			}
 			[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:popView];
-			[popView release];
+
 		}
 		[mPopoverBrwViewDict removeAllObjects];
-		[mPopoverBrwViewDict release];
+
 		mPopoverBrwViewDict = nil;
 	}
     //
@@ -139,17 +142,17 @@
 	
     //
 	if (meBrwHistory) {
-		[meBrwHistory release];
+
 		meBrwHistory = nil;
 	}
-	[mOAuthWndName release];
+
 	mOAuthWndName = nil;
-    [_windowName release];
+
     [self deregisterWindowSequenceChange];
     if(self.popAnimationInfo){
         self.popAnimationInfo=nil;
     }
-	[super dealloc];
+
 }
 
 - (void)cleanAllBrwViews {
@@ -273,7 +276,7 @@
 			FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
 			ACENSLog(@"+++Broad+++: EBrowserWindow.goback: url is %@", eHisEntry.mUrl);
 			NSString *data = [encryptObj decryptWithPath:eHisEntry.mUrl appendData:nil];
-			[encryptObj release];
+
 			[meBrwView loadWithData:data baseUrl:eHisEntry.mUrl];
 		} else {
 			[meBrwView loadWithUrl:eHisEntry.mUrl];
@@ -288,7 +291,7 @@
 		if (eHisEntry.mIsObf == YES) {
 			FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
 			NSString *data = [encryptObj decryptWithPath:eHisEntry.mUrl appendData:nil];
-			[encryptObj release];
+
 			[meBrwView loadWithData:data baseUrl:eHisEntry.mUrl];
 		} else {
 			[meBrwView loadWithUrl:eHisEntry.mUrl];

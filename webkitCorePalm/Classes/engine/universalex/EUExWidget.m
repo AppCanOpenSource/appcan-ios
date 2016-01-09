@@ -894,7 +894,7 @@
     ACENSLog(@"jsonstr=%@",jsonStr);
     [self jsSuccessWithName:@"uexWidget.cbCheckUpdate" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:jsonStr];
     //NSMutableDictionary *dict =(NSMutableDictionary*)userInfo;
-    //[meBrwView.meUExManager processCallbackResult:dict];
+
 }
 
 -(void)setPushNotifyCallback:(NSMutableArray *)inArguments {

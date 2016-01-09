@@ -27,7 +27,7 @@
 #import "WWidgetMgr.h"
 #import "EBrowserWindowContainer.h"
 #import "EUExWindow.h"
-#import "EUExManager.h"
+
 #import "EUExAction.h"
 #import "WidgetOneDelegate.h"
 #import "EBrowserMainFrame.h"
@@ -69,22 +69,7 @@ const float AppCanFinalProgressValue = 0.9f;
 }
 
 - (void)flushCommandQueue: (EBrowserView*)eInBrwView {
-	/*NSString *curCmdCount = [eInBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands.length;"];
-	NSString *cmd = nil;
-	NSURL *cmdUrl = nil;
-	NSArray *cmdAction = nil;
-	int cmdCount = [curCmdCount intValue];
-	
-	for (int i=0 ;i<cmdCount; i++) {
-		cmd = [eInBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands.shift()[0];"];
-		cmdUrl = [NSURL URLWithString:cmd];
-		if ([[cmdUrl scheme] isEqualToString: @"uex"]) {
-			cmdAction = [BUtility convertToArray:cmdUrl];
-			if([cmdAction count] >= 3){
-				[eInBrwView.meUExManager doAction:cmdAction];
-			}
-		}
-	}*/
+
 }
 
 #pragma mark -
@@ -137,9 +122,9 @@ const float AppCanFinalProgressValue = 0.9f;
             NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
             [eBrwView stringByEvaluatingJavaScriptFromString:script];
         }
-        
+
 		[eBrwView notifyPageFinish];
-        
+ 
         [eBrwView continueMultiPopoverLoading];
         
         [self webViewDidFinishLoadOption:webView];
@@ -164,40 +149,6 @@ const float AppCanFinalProgressValue = 0.9f;
 	if (webView != NULL) {
 		ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
 		NSURL *requestURL = [request URL];
-        //NSLog(@"ebrowserView is %@", eBrwView);
-//		NSLog(@"~~~~~~~~~~~~~~~need load url is %@", requestURL);
-//		NSLog(@"~~~~~~~~~~~~~~~main document url is %@", [request mainDocumentURL]);
-		if(UIWebViewNavigationTypeOther == navigationType) {
-			//ACENSLog(@"CBrowserWindow.shouldStartLoadWithRequest: req url is %@", [requestURL absoluteString]);
-			if ([[requestURL scheme] isEqualToString: @"uex"]) {
-				EUExAction *action = [BUtility convertToAction:requestURL];
-				[eBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands.shift();"];
-                //
-               
-                if (eBrwView.meBrwCtrler.forebidPluginsList && [eBrwView.meBrwCtrler.forebidPluginsList count]>0) {
-                    NSString *uexObj = action.mClassName;
-                    NSArray *forbidList = eBrwView.meBrwCtrler.forebidPluginsList;
-                    for (NSDictionary *pluginDict in forbidList) {
-                        NSString *pluginName =[pluginDict objectForKey:@"name"];
-                        if ([uexObj isEqualToString:pluginName]) {
-                            [self performSelectorOnMainThread:@selector(alertForbidView:) withObject:uexObj waitUntilDone:NO];
-                        }else{
-                            if ([eBrwView respondsToSelector:@selector(meUExManager)] && [eBrwView.meUExManager respondsToSelector:@selector(doAction:)]) {
-                                [eBrwView.meUExManager doAction:action];
-                            }
-                        }
-                    }
-                }else{
-                    if ([eBrwView respondsToSelector:@selector(meUExManager)] && [eBrwView.meUExManager respondsToSelector:@selector(doAction:)]) {
-                        [eBrwView.meUExManager doAction:action];
-                    }
-                }
-                
-                [self completeProgress];
-                
-				return NO;
-			} 
-		}
 		if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
 			NSURL *oldURL = [eBrwView curUrl];
 			if (oldURL) {
@@ -229,7 +180,7 @@ const float AppCanFinalProgressValue = 0.9f;
 				WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
 				//EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwView.meBrwWnd.superview;
                 
-                EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eBrwView];
+                EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eBrwView.superDelegate];
                 
                 
 				if (eBrwWndContainer) {

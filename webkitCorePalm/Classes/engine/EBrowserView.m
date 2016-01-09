@@ -18,7 +18,7 @@
 
 #import "EBrowserView.h"
 #import "ACEBrowserView.h"
-#import "EUExManager.h"
+
 #import "BUtility.h"
 #import "CBrowserWindow.h"
 #import "CBrowserMainFrame.h"
@@ -52,7 +52,7 @@
 }
 
 @synthesize meBrwCtrler;
-@synthesize meUExManager;
+
 @synthesize mcBrwWnd;
 @synthesize meBrwWnd;
 @synthesize mwWgt;
@@ -224,10 +224,11 @@
     return self;
 }
 
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
+- (JSValue *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
     if (_meBrowserView) {
-        return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
+        //return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
+        return [self.meBrowserView.JSContext evaluateScript:script];
     }
     return nil;
 }
@@ -363,16 +364,7 @@
 
 
 
-//@property (nonatomic,assign) EUExManager *meUExManager;
--(EUExManager *)meUExManager
-{
-    return [_meBrowserView meUExManager];
-}
 
--(void)setMeUExManager:(EUExManager *)inmeUExManager
-{
-    [_meBrowserView setMeUExManager:inmeUExManager];
-}
 
 //@property (nonatomic,assign) EBrowserController *meBrwCtrler;
 -(EBrowserController *)meBrwCtrler

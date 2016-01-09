@@ -92,8 +92,9 @@
 //	}
 }
 
--(void)getPlatform:(NSMutableArray *)inArguments {
+-(id)getPlatform:(NSMutableArray *)inArguments {
 	[self jsSuccessWithName:F_CB_WIDGETONE_GET_PLATFORM opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:F_WIDGETONE_PLATFORM_IOS];
+    return @0;
 }
 
 -(void)exit:(NSMutableArray *)inArguments {
