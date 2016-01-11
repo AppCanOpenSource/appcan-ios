@@ -87,6 +87,17 @@
 @synthesize useAppCanUpdateURL = _useAppCanUpdateURL;
 @synthesize useAppCanMDMURLControl = _useAppCanMDMURLControl;
 @synthesize thirdInfoDict = _thirdInfoDict;
+
+//4.0
+@synthesize useAppCanEMMTenantID = _useAppCanEMMTenantID;
+@synthesize useAppCanAppStoreHost = _useAppCanAppStoreHost;
+@synthesize useAppCanMBaaSHost = _useAppCanMBaaSHost;
+@synthesize useAppCanIMXMPPHost = _useAppCanIMXMPPHost;
+@synthesize useAppCanIMHTTPHost = _useAppCanIMHTTPHost;
+@synthesize useAppCanTaskSubmitSSOHost = _useAppCanTaskSubmitSSOHost;
+@synthesize useAppCanTaskSubmitHost = _useAppCanTaskSubmitHost;
+@synthesize validatesSecureCertificate = _validatesSecureCertificate;
+
 NSString *AppCanJS = nil;
 
 
@@ -233,6 +244,23 @@ NSString *AppCanJS = nil;
         self.isFirstPageDidLoad = NO;
         //本地签名校验开关
         self.signVerifyControl = NO;
+        
+        //EMM单租户场景下默认的租户ID
+        self.useAppCanEMMTenantID = @"";
+        //uexAppstroeMgr所需的host
+        self.useAppCanAppStoreHost = @"";
+        //引擎中MBaaS读取的host
+        self.useAppCanMBaaSHost = @"";
+        //uexIM插件XMPP通道使用的host
+        self.useAppCanIMXMPPHost = @"";
+        //uexIM插件HTTP通道使用的host
+        self.useAppCanIMHTTPHost = @"";
+        //uexTaskSubmit登陆所需host
+        self.useAppCanTaskSubmitSSOHost = @"";
+        //uexTaskSubmit提交任务所需host
+        self.useAppCanTaskSubmitHost = @"";
+        //是否校验证书
+        self.validatesSecureCertificate = NO;
         
         [self setAppCanUserAgent];
         
@@ -1027,6 +1055,16 @@ NSString *AppCanJS = nil;
     self.useAppCanMAMURL = nil;
     self.useCertificatePassWord = nil;
     self.useAppCanUpdateURL = nil;
+    
+    //4.0
+    self.useAppCanEMMTenantID = nil;
+    self.useAppCanAppStoreHost = nil;
+    self.useAppCanMBaaSHost = nil;
+    self.useAppCanIMXMPPHost = nil;
+    self.useAppCanIMHTTPHost = nil;
+    self.useAppCanTaskSubmitSSOHost = nil;
+    self.useAppCanTaskSubmitHost = nil;
+    
     [_leftWebController release];
     [_rightWebController release];
     [_drawerController release];

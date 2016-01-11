@@ -36,6 +36,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "SFHFKeychainUtils.h"
+#import "EUExBase.h"
 //mac begin
 #include <sys/socket.h> // Per msqr 
 #include <sys/sysctl.h> 
@@ -516,7 +517,19 @@ static NSString *clientCertificatePwd = nil;
 + (NSURL*)stringToUrl:(NSString*)inString {
 	//inString = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	ACENSLog(@"stringToUrl: inString %@", inString);
-	NSURL *url = nil;
+    NSRange range = [inString rangeOfString:@"#"];
+    
+    if (range.location != NSNotFound) {
+        
+        inString = [inString substringToIndex:range.location];
+        
+    }
+    
+    EUExBase *euexBase = [[EUExBase alloc] init];
+    
+    inString = [euexBase absPath:inString];
+    
+    NSURL *url = nil;
 	if ([BUtility isSimulator]==NO) {
         NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		url = [NSURL URLWithString:urlStr];
