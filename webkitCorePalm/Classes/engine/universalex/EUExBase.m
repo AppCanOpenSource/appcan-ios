@@ -85,11 +85,10 @@
             
             inPath = [inPath substringFromIndex:range.location + range.length];
             
+            inPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:inPath];
+            
         }
-        
-        NSString * outPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:inPath];
-        
-        return outPath;
+        return inPath;
     }
     
 	if ([inPath hasPrefix:@"/var/mobile"]||[inPath hasPrefix:@"assets-library"]||[inPath hasPrefix:@"/private/var/mobile"]||[inPath hasPrefix:@"/Users"]||[inPath hasPrefix:@"file://"]) {
