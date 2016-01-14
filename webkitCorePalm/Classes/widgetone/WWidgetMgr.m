@@ -155,6 +155,14 @@ NSString * webappShowAactivety;
         app.enctryptcj = F_WWIDGET_NO_ENCRYPTCJ;
     }
     
+    NSString * logServerIp = [tmpWgtDict objectForKey:CONFIG_TAG_LOGSERVERIP];
+    
+    if (logServerIp && [wgtobj.logServerIp isEqualToString:logServerIp]) {
+        
+        wgtobj.logServerIp = logServerIp;
+        
+    }
+    
 	if (wgtobj!=nil) {
 		wgtobj.openAdStatus = 0;//不显示广告
 		if ([wgtobj.ver isEqualToString:mVer]) {
