@@ -26,4 +26,6 @@
 
 @property (nonatomic, assign) BOOL canRotate;
 
+@property (nonatomic, assign) BOOL isStatusBarHidden;
+
 @end
