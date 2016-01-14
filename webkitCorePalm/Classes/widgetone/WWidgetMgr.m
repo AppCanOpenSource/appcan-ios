@@ -157,7 +157,7 @@ NSString * webappShowAactivety;
     
     NSString * logServerIp = [tmpWgtDict objectForKey:CONFIG_TAG_LOGSERVERIP];
     
-    if (logServerIp && [wgtobj.logServerIp isEqualToString:logServerIp]) {
+    if (logServerIp && ![wgtobj.logServerIp isEqualToString:logServerIp]) {
         
         wgtobj.logServerIp = logServerIp;
         
