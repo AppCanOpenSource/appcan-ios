@@ -73,25 +73,9 @@
 
 -(NSString*)absPath:(NSString*)inPath{
     
-    ACENSLog(@"inpath start=%@",inPath);
     inPath = [inPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    if ([inPath hasPrefix:@"file://"]) {
-        
-        inPath = [inPath substringFromIndex:[@"file://" length]];
-        
-        NSRange range = [inPath rangeOfString:@"Documents"];
-        
-        if (range.location != NSNotFound) {
-            
-            inPath = [inPath substringFromIndex:range.location + range.length];
-            
-            inPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:inPath];
-            
-        }
-        return inPath;
-    }
     
-	if ([inPath hasPrefix:@"/var/mobile"]||[inPath hasPrefix:@"assets-library"]||[inPath hasPrefix:@"/private/var/mobile"]||[inPath hasPrefix:@"/Users"]||[inPath hasPrefix:@"file://"]) {
+    if ([inPath hasPrefix:@"/var/mobile"]||[inPath hasPrefix:@"assets-library"]||[inPath hasPrefix:@"/private/var/mobile"]||[inPath hasPrefix:@"/Users"]||[inPath hasPrefix:@"file://"]) {
 		return inPath;
 	}
 	NSURL *curURL = [self.meBrwView curUrl];
