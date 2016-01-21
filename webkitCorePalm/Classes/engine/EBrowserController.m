@@ -266,6 +266,7 @@
                 if (isCopyFinishAndSuccess) {
                     
                     [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
                     
                 } else {
                     
