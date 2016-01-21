@@ -189,6 +189,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"setWebViewScrollable":ACE_METHOD_ASYNC,
                                @"createProgressDialog":ACE_METHOD_ASYNC,
                                @"destroyProgressDialog":ACE_METHOD_ASYNC,
+                               @"hideStatusBar":ACE_METHOD_ASYNC,
+                               @"showStatusBar":ACE_METHOD_ASYNC,
 #ifdef DEBUG
                                @"log":ACE_METHOD_SYNC,
 #endif
