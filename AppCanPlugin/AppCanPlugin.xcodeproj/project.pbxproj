@@ -22,6 +22,7 @@
 		428629001C0709BF0078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FF1C0709BF0078E783 /* pop.framework */; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
 		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; };
+		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		42FFEF421C200F9400294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF411C200F9400294DE1 /* Ono.framework */; };
 		46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6D7B316F1CB3800D8E883 /* StoreKit.framework */; };
@@ -95,6 +96,8 @@
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
 		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
+		42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		42F6E8E51C5749F00073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/PrivateFrameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
 		42FFEF411C200F9400294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
@@ -167,6 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */,
 				420041951BABCD80000A57F5 /* libz.tbd in Frameworks */,
 				420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */,
 				420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */,
@@ -283,6 +287,8 @@
 		6CC60334157DCC0F00A3E13E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42F6E8E51C5749F00073C6E0 /* JavaScriptCore.framework */,
+				42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */,
 				420041941BABCD80000A57F5 /* libz.tbd */,
 				420041921BABCD79000A57F5 /* libxml2.tbd */,
 				420041901BABCD6F000A57F5 /* libstdc++.tbd */,
@@ -575,6 +581,7 @@
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
 					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
@@ -611,6 +618,7 @@
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
 					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
@@ -669,6 +677,7 @@
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
 					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
