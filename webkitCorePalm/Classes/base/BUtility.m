@@ -36,6 +36,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "SFHFKeychainUtils.h"
+#import "EUExBase.h"
 //mac begin
 #include <sys/socket.h> // Per msqr 
 #include <sys/sysctl.h> 
@@ -251,6 +252,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.bringToFront = function() { uex.exec('uexWindow.bringToFront/'+uexJoin(arguments));};"
 "uexWindow.sendToBack = function() { uex.exec('uexWindow.sendToBack/'+uexJoin(arguments));};"
 "uexWindow.setWindowFrame = function() { uex.exec('uexWindow.setWindowFrame/'+uexJoin(arguments));};"
+"uexWindow.hideStatusBar = function() { uex.exec('uexWindow.hideStatusBar/'+uexJoin(arguments));};"
+"uexWindow.showStatusBar = function() { uex.exec('uexWindow.showStatusBar/'+uexJoin(arguments));};"
 
 "uexWindow.setMultilPopoverFlippingEnbaled = function() { uex.exec('uexWindow.setMultilPopoverFlippingEnbaled/'+uexJoin(arguments));};"
 "uexWindow.getSlidingWindowState = function() { uex.exec('uexWindow.getSlidingWindowState/'+uexJoin(arguments));};"
@@ -514,23 +517,43 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSURL*)stringToUrl:(NSString*)inString {
-	//inString = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	ACENSLog(@"stringToUrl: inString %@", inString);
-	NSURL *url = nil;
+	
+    NSRange range = [inString rangeOfString:@"#"];
+    
+    if (range.location != NSNotFound) {
+        
+        inString = [inString substringToIndex:range.location];
+        
+    }
+    
+    NSURL * url = nil;
+    
 	if ([BUtility isSimulator]==NO) {
+        
         NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
 		url = [NSURL URLWithString:urlStr];
-	}else{
+        
+	} else {
+        
 		if ([inString hasPrefix:@"http://"]) {
+            
 			url = [NSURL URLWithString:inString];
-		}else if([inString hasPrefix:@"file://"]){
+            
+		} else if([inString hasPrefix:@"file://"]){
+            
 			url = [NSURL URLWithString:[inString substringFromIndex:7]];
-		}else {
+            
+		} else {
+            
 			url = [NSURL fileURLWithPath:inString];
+            
 		}
+        
 	}
-	ACENSLog(@"URL-OUT: %@", [url absoluteString]);
+    
 	return url;
+    
 }
 
 +(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl{

@@ -45,6 +45,15 @@
         self.useIsHiddenStatusBarControl = NO;
         self.useAppCanUpdateURL = @"";
         self.signVerifyControl = NO;
+        
+        self.useAppCanEMMTenantID = @"";
+        self.useAppCanAppStoreHost = @"";
+        self.useAppCanMBaaSHost = @"";
+        self.useAppCanIMXMPPHost = @"";
+        self.useAppCanIMHTTPHost = @"";
+        self.useAppCanTaskSubmitSSOHost = @"";
+        self.useAppCanTaskSubmitHost = @"";
+        self.validatesSecureCertificate = NO;
 	}
 	return self;
 }

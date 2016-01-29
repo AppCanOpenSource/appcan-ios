@@ -4573,7 +4573,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         theApp.drawerController.canRotate = YES;
         
-        
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",orNumb] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         switch (orNumb)
@@ -4692,7 +4691,32 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
 }
-#pragma mark
+#pragma mark - StatusBar
+
+- (void)hideStatusBar:(NSArray *)inArgument {
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        
+        theApp.drawerController.isStatusBarHidden = YES;
+        
+        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+        
+    }
+    
+}
+
+- (void)showStatusBar:(NSArray *)inArgument {
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        
+        theApp.drawerController.isStatusBarHidden = NO;
+        
+        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+        
+    }
+    
+}
+
 #pragma mark
 #pragma mark
 - (void)openMultiPopover:(NSMutableArray *)inArguments

@@ -32,6 +32,10 @@
     _canAutorotate = YES;
     _canRotate = NO;
     
+    NSDictionary * infoDict = [[NSBundle mainBundle]infoDictionary];
+    
+    _isStatusBarHidden = [[infoDict objectForKey:@"UIStatusBarHidden"] boolValue];
+    
     if (isSysVersionAbove7_0) {
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
@@ -255,6 +259,12 @@
             break;
             
     }
+    
+}
+
+- (BOOL)prefersStatusBarHidden {
+    
+    return _isStatusBarHidden;
     
 }
 

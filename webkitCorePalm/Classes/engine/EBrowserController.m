@@ -247,6 +247,29 @@
     
     BOOL isCopyFinish = [[ud objectForKey:F_UD_WgtCopyFinish] boolValue];
     
+    /* 
+     * 1.IDE 2.document存在widget
+     * 保证IDE首次启动读取document下的widget包.
+     */
+    
+    BOOL appCanDevMode = [BUtility getAppCanDevMode];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *configPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    
+    BOOL isExists = [fileManager fileExistsAtPath:configPath];
+    
+    if (appCanDevMode && isExists) {
+        
+        [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+        isCopyFinish = YES;
+        isNeedCopy = NO;
+        
+    } else {
+        
+        //
+    }
+    
     if (isNeedCopy || !isCopyFinish) {
         
         isCopyFinish = NO;
