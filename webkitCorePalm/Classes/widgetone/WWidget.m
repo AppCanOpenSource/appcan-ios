@@ -47,7 +47,6 @@
 @synthesize preload;
 @synthesize appKey;
 -(void)dealloc{
-	ACENSLog(@"WWidget release,widgetOneId=%d",[widgetOneId retainCount]);
 	[widgetOneId release];
 	widgetOneId =nil;
 	[widgetId release];

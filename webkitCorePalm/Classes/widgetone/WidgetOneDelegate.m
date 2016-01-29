@@ -31,7 +31,7 @@
 #import <sys/utsname.h>
 #import "WWidget.h"
 #import "FileEncrypt.h"
-#import "PluginParser.h"
+//#import "PluginParser.h"
 #import "JSON.h"
 #import "EUExBase.h"
 #import <objc/runtime.h>
@@ -46,6 +46,7 @@
 #import "RESideMenu.h"
 #import "DataAnalysisInfo.h"
 #import "EUtility.h"
+#import "ACEPluginParser.h"
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
@@ -86,6 +87,17 @@
 @synthesize useAppCanUpdateURL = _useAppCanUpdateURL;
 @synthesize useAppCanMDMURLControl = _useAppCanMDMURLControl;
 @synthesize thirdInfoDict = _thirdInfoDict;
+
+//4.0
+@synthesize useAppCanEMMTenantID = _useAppCanEMMTenantID;
+@synthesize useAppCanAppStoreHost = _useAppCanAppStoreHost;
+@synthesize useAppCanMBaaSHost = _useAppCanMBaaSHost;
+@synthesize useAppCanIMXMPPHost = _useAppCanIMXMPPHost;
+@synthesize useAppCanIMHTTPHost = _useAppCanIMHTTPHost;
+@synthesize useAppCanTaskSubmitSSOHost = _useAppCanTaskSubmitSSOHost;
+@synthesize useAppCanTaskSubmitHost = _useAppCanTaskSubmitHost;
+@synthesize validatesSecureCertificate = _validatesSecureCertificate;
+
 NSString *AppCanJS = nil;
 
 
@@ -103,8 +115,8 @@ NSString *AppCanJS = nil;
         
     }
     
-    pluginObj = [[PluginParser alloc] init] ;
-    NSString *pluginJS = [pluginObj initPluginJS];
+    pluginObj = [[ACEPluginParser alloc] init] ;
+    NSString *pluginJS = [pluginObj pluginBaseJS];
     
 	if (pluginJS && [pluginJS length] > 0) {
         
@@ -233,6 +245,23 @@ NSString *AppCanJS = nil;
         //本地签名校验开关
         self.signVerifyControl = NO;
         
+        //EMM单租户场景下默认的租户ID
+        self.useAppCanEMMTenantID = @"";
+        //uexAppstroeMgr所需的host
+        self.useAppCanAppStoreHost = @"";
+        //引擎中MBaaS读取的host
+        self.useAppCanMBaaSHost = @"";
+        //uexIM插件XMPP通道使用的host
+        self.useAppCanIMXMPPHost = @"";
+        //uexIM插件HTTP通道使用的host
+        self.useAppCanIMHTTPHost = @"";
+        //uexTaskSubmit登陆所需host
+        self.useAppCanTaskSubmitSSOHost = @"";
+        //uexTaskSubmit提交任务所需host
+        self.useAppCanTaskSubmitHost = @"";
+        //是否校验证书
+        self.validatesSecureCertificate = NO;
+        
         [self setAppCanUserAgent];
         
 	}
@@ -253,21 +282,21 @@ NSString *AppCanJS = nil;
         NSString * subS1 = @"AppleWebKit/";
         NSRange range1 = [originalUserAgent rangeOfString:subS1];
         
-        int location1 = range1.location;
-        int lenght1 = range1.length;
+        NSUInteger location1 = range1.location;
+        NSUInteger lenght1 = range1.length;
         NSString * s1 = [originalUserAgent substringToIndex:location1+lenght1];
         NSString * s2 = [originalUserAgent substringFromIndex:location1+lenght1];
         
         NSString * subS2 = @" ";
         NSRange  rang2 = [s2 rangeOfString:subS2];
-        int location2 = rang2.location;
-        int length2 = rang2.length;
+        NSUInteger location2 = rang2.location;
+        NSUInteger length2 = rang2.length;
         NSString * s21 = [s2 substringToIndex:location2 + length2];
         NSString * s22 = [s2 substringFromIndex:location2 + length2];
         
         NSString * subS3 = @"Mobile/";
         NSRange  rang3 = [s22 rangeOfString:subS3];
-        int location3 = rang3.location;
+        NSUInteger location3 = rang3.location;
         NSMutableString *s32 = [[NSMutableString alloc]initWithString:s22];
         [s32 insertString:@"Version/8.0 "atIndex:location3];
         NSString * safari= [NSString stringWithFormat:@"Safari/%@Appcan/3.0",s21];
@@ -368,11 +397,12 @@ NSString *AppCanJS = nil;
     if (analysisClass) {
         
         id analysisObject = class_createInstance(analysisClass,0);
-        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
-        
+#pragma clang diagnostic pop
     }
-    
+
     ACEUINavigationController *meNav = nil;
 	meBrwCtrler = [[EBrowserController alloc]init];
     
@@ -401,8 +431,7 @@ NSString *AppCanJS = nil;
     mwWgtMgr = [[WWidgetMgr alloc]init];
 	meBrwCtrler.mwWgtMgr = mwWgtMgr;
 	[self readAppCanJS];
-    //保证这个方法在viewController的loadView之前调用
-    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
+    
     
 	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
 	window.autoresizesSubviews = YES;
@@ -466,6 +495,8 @@ NSString *AppCanJS = nil;
 		}
         
 	}
+    
+    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
 
 
     return YES;
@@ -723,7 +754,11 @@ NSString *AppCanJS = nil;
     Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
         id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
+#pragma clang diagnostic pop
         //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
     }
     
@@ -784,7 +819,11 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
+#pragma clang diagnostic pop
+
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
         
     }
@@ -837,9 +876,11 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
-        
+#pragma clang diagnostic pop
     }
     
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
@@ -962,10 +1003,11 @@ NSString *AppCanJS = nil;
         Method delegateMethod = class_getClassMethod(acecls, @selector(rootPageDidFinishLoading));
         
         if (delegateMethod) {
-            
-            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-method-access"
             [acecls rootPageDidFinishLoading];
-            
+#pragma clang diagnostic pop
+    
         }
     }
 }
@@ -1013,6 +1055,16 @@ NSString *AppCanJS = nil;
     self.useAppCanMAMURL = nil;
     self.useCertificatePassWord = nil;
     self.useAppCanUpdateURL = nil;
+    
+    //4.0
+    self.useAppCanEMMTenantID = nil;
+    self.useAppCanAppStoreHost = nil;
+    self.useAppCanMBaaSHost = nil;
+    self.useAppCanIMXMPPHost = nil;
+    self.useAppCanIMHTTPHost = nil;
+    self.useAppCanTaskSubmitSSOHost = nil;
+    self.useAppCanTaskSubmitHost = nil;
+    
     [_leftWebController release];
     [_rightWebController release];
     [_drawerController release];

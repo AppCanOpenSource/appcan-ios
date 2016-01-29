@@ -98,7 +98,7 @@
 	 	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 65+5, 65, 15)];
  		[label setBackgroundColor:[UIColor clearColor]];
 		label.text = titleText;
-		label.textAlignment = UITextAlignmentCenter;
+		label.textAlignment = NSTextAlignmentCenter;
 		[label setFont:[UIFont fontWithName:@"ArialMT" size:12]];
 		[self addSubview:btn];
 		[self addSubview:label];
@@ -108,7 +108,7 @@
 }
 -(void)iconLongPress:(UILongPressGestureRecognizer *)sender{
 	
-	NSString *appid = [NSString stringWithFormat:@"%d",sender.view.tag];
+	NSString *appid = [NSString stringWithFormat:@"%ld",sender.view.tag];
 	if ([_delegate respondsToSelector:@selector(sendAppIdForLongPress:)]) {
 		[_delegate sendAppIdForLongPress:appid];
 	}
@@ -116,7 +116,7 @@
 -(void)iconBtnClick:(id)sender{
 	UIButton *button = (UIButton *)sender;
 	if ([_delegate respondsToSelector:@selector(iconItemClick:)]) {
-		[_delegate iconItemClick:[NSString stringWithFormat:@"%d",button.tag]];
+		[_delegate iconItemClick:[NSString stringWithFormat:@"%ld",(long)button.tag]];
 	}
 }
 - (void)setProgress:(float)newProgress{

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0640"
+   LastUpgradeVersion = "0720"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,56 +14,59 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B220D27315A3152B00D02138"
-               BuildableName = "libAppCanEngine.a"
-               BlueprintName = "AppCanEngineDebug"
-               ReferencedContainer = "container:AppCanEngineDebug.xcodeproj">
+               BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+               BuildableName = "AppCanEngine.framework"
+               BlueprintName = "AppCanEngineIDEFramework"
+               ReferencedContainer = "container:AppCanEngine.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B220D27315A3152B00D02138"
-            BuildableName = "libAppCanEngine.a"
-            BlueprintName = "AppCanEngineDebug"
-            ReferencedContainer = "container:AppCanEngineDebug.xcodeproj">
+            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BuildableName = "AppCanEngine.framework"
+            BlueprintName = "AppCanEngineIDEFramework"
+            ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B220D27315A3152B00D02138"
-            BuildableName = "libAppCanEngine.a"
-            BlueprintName = "AppCanEngineDebug"
-            ReferencedContainer = "container:AppCanEngineDebug.xcodeproj">
+            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BuildableName = "AppCanEngine.framework"
+            BlueprintName = "AppCanEngineIDEFramework"
+            ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

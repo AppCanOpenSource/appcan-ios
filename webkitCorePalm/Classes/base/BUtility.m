@@ -24,8 +24,6 @@
 #import <netdb.h>
 #import "EUExAction.h"
 #import <SystemConfiguration/SystemConfiguration.h>
-#import "Beqtucontent.h"
-#import "PackageInfo.h"
 #import "WWidget.h"
 //#import "AppCanAnalysis.h"
 //#import "AppCanBase.h"
@@ -38,6 +36,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "SFHFKeychainUtils.h"
+#import "EUExBase.h"
 //mac begin
 #include <sys/socket.h> // Per msqr 
 #include <sys/sysctl.h> 
@@ -221,6 +220,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.getBounce=function(){ uex.exec('uexWindow.getBounce/'+uexJoin(arguments));};"
 "uexWindow.setBounceParams=function(){ uex.exec('uexWindow.setBounceParams/'+uexJoin(arguments));};"
 "uexWindow.setRightSwipeEnable=function(){ uex.exec('uexWindow.setRightSwipeEnable/'+uexJoin(arguments));};"
+"uexWindow.topBounceViewRefresh=function(){ uex.exec('uexWindow.topBounceViewRefresh/'+uexJoin(arguments));};"
 "uexWindow.showBounceView=function(){ uex.exec('uexWindow.showBounceView/'+uexJoin(arguments));};"
 "uexWindow.hiddenBounceView=function(){ uex.exec('uexWindow.hiddenBounceView/'+uexJoin(arguments));};"
 "uexWindow.resetBounceView=function(){ uex.exec('uexWindow.resetBounceView/'+uexJoin(arguments));};"
@@ -233,7 +233,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.setAnimitionDelay = function() { uex.exec('uexWindow.setAnimitionDelay/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionDuration = function() { uex.exec('uexWindow.setAnimitionDuration/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionCurve = function() { uex.exec('uexWindow.setAnimitionCurve/'+uexJoin(arguments));};"
-"uexWindow.creatPluginViewContainer = function() { uex.exec('uexWindow.creatPluginViewContainer/'+uexJoin(arguments));};"
+"uexWindow.createPluginViewContainer = function() { uex.exec('uexWindow.createPluginViewContainer/'+uexJoin(arguments));};"
+"uexWindow.closePluginViewContainer = function() { uex.exec('uexWindow.closePluginViewContainer/'+uexJoin(arguments));};"
 "uexWindow.setPageInContainer = function() { uex.exec('uexWindow.setPageInContainer/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionRepeatCount = function() { uex.exec('uexWindow.setAnimitionRepeatCount/'+uexJoin(arguments));};"
 "uexWindow.setAnimitionAutoReverse = function() { uex.exec('uexWindow.setAnimitionAutoReverse/'+uexJoin(arguments));};"
@@ -251,6 +252,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.bringToFront = function() { uex.exec('uexWindow.bringToFront/'+uexJoin(arguments));};"
 "uexWindow.sendToBack = function() { uex.exec('uexWindow.sendToBack/'+uexJoin(arguments));};"
 "uexWindow.setWindowFrame = function() { uex.exec('uexWindow.setWindowFrame/'+uexJoin(arguments));};"
+"uexWindow.hideStatusBar = function() { uex.exec('uexWindow.hideStatusBar/'+uexJoin(arguments));};"
+"uexWindow.showStatusBar = function() { uex.exec('uexWindow.showStatusBar/'+uexJoin(arguments));};"
 
 "uexWindow.setMultilPopoverFlippingEnbaled = function() { uex.exec('uexWindow.setMultilPopoverFlippingEnbaled/'+uexJoin(arguments));};"
 "uexWindow.getSlidingWindowState = function() { uex.exec('uexWindow.getSlidingWindowState/'+uexJoin(arguments));};"
@@ -267,7 +270,8 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 //2015-11-06 by lkl
 "uexWindow.setSwipeCloseEnable = function() { uex.exec('uexWindow.setSwipeCloseEnable/'+uexJoin(arguments));};"
 "uexWindow.setWebViewScrollable = function() { uex.exec('uexWindow.setWebViewScrollable/'+uexJoin(arguments));};"
-
+"uexWindow.createProgressDialog = function() { uex.exec('uexWindow.createProgressDialog/'+uexJoin(arguments));};"
+"uexWindow.destroyProgressDialog = function() { uex.exec('uexWindow.destroyProgressDialog/'+uexJoin(arguments));};"
 
 
 "window.uexAppCenter = {}; uexAppCenter.cbGetSessionKey = null; uexAppCenter.cbLoginOut = null;"
@@ -513,23 +517,43 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSURL*)stringToUrl:(NSString*)inString {
-	//inString = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	ACENSLog(@"stringToUrl: inString %@", inString);
-	NSURL *url = nil;
+	
+    NSRange range = [inString rangeOfString:@"#"];
+    
+    if (range.location != NSNotFound) {
+        
+        inString = [inString substringToIndex:range.location];
+        
+    }
+    
+    NSURL * url = nil;
+    
 	if ([BUtility isSimulator]==NO) {
+        
         NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
 		url = [NSURL URLWithString:urlStr];
-	}else{
+        
+	} else {
+        
 		if ([inString hasPrefix:@"http://"]) {
+            
 			url = [NSURL URLWithString:inString];
-		}else if([inString hasPrefix:@"file://"]){
+            
+		} else if([inString hasPrefix:@"file://"]){
+            
 			url = [NSURL URLWithString:[inString substringFromIndex:7]];
-		}else {
+            
+		} else {
+            
 			url = [NSURL fileURLWithPath:inString];
+            
 		}
+        
 	}
-	ACENSLog(@"URL-OUT: %@", [url absoluteString]);
+    
 	return url;
+    
 }
 
 +(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl{
@@ -1217,16 +1241,48 @@ static NSString *clientCertificatePwd = nil;
 	
 }
 
-+ (NSString *)bundleIdentifier {
++ (NSString *)bundleIdentifier{
     
-    return [PackageInfo getBundleIdentifier];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wundeclared-selector"
+    Class packageInfo = NSClassFromString(@"PackageInfo");
+    if(packageInfo){
+        @try {
+            return objc_msgSend(packageInfo,@selector(getBundleIdentifier));
+        }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR!!packageInfo不存在!");
+            NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
+        }
+        @finally {
+        }
+        
+    }
+    return @"com.zywx.appcan";
+#pragma clang diagnostic pop
+
     
 }
 
 +(NSString*)appKey{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wundeclared-selector"
     if(F_DEVELOPMENT_USE==NO){
-        return [Beqtucontent getContentPath];
+        Class Beqtucontent = NSClassFromString(@"Beqtucontent");
+        if(Beqtucontent){
+            @try {
+                return objc_msgSend(Beqtucontent,@selector(getContentPath));
+            }
+            @catch (NSException *exception) {
+                NSLog(@"ERROR!!Beqtucontent不存在");
+                NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
+            }
+            @finally {
+            }
+        }
     }
+#pragma clang diagnostic pop
+
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
     if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
@@ -1263,7 +1319,7 @@ static NSString *clientCertificatePwd = nil;
 
 + (void)setAppCanViewActive:(int)wgtType opener:(NSString *)inOpener name:(NSString *)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd appInfo:(NSDictionary *)appInfo {
     
-    if (theApp.useDataStatisticsControl) {
+    if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
         
         NSString * fromUrlStr =[BUtility makeSpecUrl:inOpener];
         
@@ -1317,14 +1373,13 @@ static NSString *clientCertificatePwd = nil;
             
         }
         
-        
     }
     
 }
 
 + (void)setAppCanViewBackground:(int)wgtType name:(NSString *)inName closeReason:(int)inCloseReason appInfo:(NSDictionary *)appInfo {
     
-    if (theApp.useDataStatisticsControl) {
+    if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
         
         NSString * closeUrl = [BUtility makeSpecUrl:inName];
         
@@ -1951,5 +2006,29 @@ static NSString *clientCertificatePwd = nil;
     }
     return retVal;
 }
+
+
+#pragma mark - IDE
+
++ (NSString *)dynamicPluginFrameworkFolderPath{
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    static NSString *dynamicFrameworkFolder =@"dynamicPlugins";
+    NSString  *dynamicPluginFrameworkFolderPath=[documentsPath stringByAppendingPathComponent:dynamicFrameworkFolder];
+    
+    NSFileManager *fm=[NSFileManager defaultManager];
+    NSError *error=nil;
+    BOOL isFolder=NO;
+    if(![fm fileExistsAtPath:dynamicPluginFrameworkFolderPath isDirectory:&isFolder] || !isFolder){// 如果目录不存在，或者目录不是文件夹，就创建一个
+        
+        [fm createDirectoryAtPath:dynamicPluginFrameworkFolderPath withIntermediateDirectories:NO attributes:nil error:&error];
+        if(error){
+            NSLog(@"%@",[error localizedDescription]);
+        }
+    }
+
+    return dynamicPluginFrameworkFolderPath;
+}
+
+
 
 @end

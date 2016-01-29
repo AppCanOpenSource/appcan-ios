@@ -164,6 +164,7 @@
 - (EBrowserWidgetContainer*)brwWidgetContainer;
 - (void)bounceViewStartLoadWithType:(int)inType;
 - (void)bounceViewFinishLoadWithType:(int)inType;
+- (void)topBounceViewRefresh;
 - (void)stopAllNetService;
 - (void)keyboardWillChangeFrame:(NSNotification *)notification;
 - (void)registerKeyboardChangeEvent;

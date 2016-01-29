@@ -247,6 +247,29 @@
     
     BOOL isCopyFinish = [[ud objectForKey:F_UD_WgtCopyFinish] boolValue];
     
+    /* 
+     * 1.IDE 2.document存在widget
+     * 保证IDE首次启动读取document下的widget包.
+     */
+    
+    BOOL appCanDevMode = [BUtility getAppCanDevMode];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *configPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    
+    BOOL isExists = [fileManager fileExistsAtPath:configPath];
+    
+    if (appCanDevMode && isExists) {
+        
+        [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+        isCopyFinish = YES;
+        isNeedCopy = NO;
+        
+    } else {
+        
+        //
+    }
+    
     if (isNeedCopy || !isCopyFinish) {
         
         isCopyFinish = NO;
@@ -254,8 +277,6 @@
         [ud setObject:@"NO" forKey:F_UD_WgtCopyFinish];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didStartCopyWidget");
             
             NSAutoreleasePool * autoReleasePool = [[NSAutoreleasePool alloc]init];
             
@@ -268,12 +289,10 @@
                 if (isCopyFinishAndSuccess) {
                     
                     [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
-                    
-                    NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didFinishCopyWidget");
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
                     
                 } else {
                     
-                    NSLog(@"xrg-->EBrowserController-->doUpdateWgt-->didNotFinishCopyWidget");
                     
                 }
                 
@@ -338,8 +357,6 @@
         
         if (!result && error) {
             
-            NSLog(@"xrg-->copyWgtToDocument-->Failed to create wgt folder: %@ (error: %@)", wgtNewPath, error);
-            
             return NO;
             
         }
@@ -376,8 +393,6 @@
                             
                             if (!result && error) {
                                 
-                                NSLog(@"xrg-->copyWgtToDocument-->Failed to remove: %@ (error: %@)", newFilePath, error);
-                                
                                 return NO;
                                 
                             }
@@ -387,8 +402,6 @@
                         result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
                         
                         if (!result && error) {
-                            
-                            NSLog(@"xrg-->copyWgtToDocument-->Failed to copy: %@ (error: %@)", newFilePath, error);
                             
                             return NO;
                             
@@ -401,8 +414,6 @@
                     result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
                     
                     if (!result && error) {
-                        
-                        NSLog(@"xrg-->copyWgtToDocument-->Failed to create folder: %@ (error: %@)", newFilePath, error);
                         
                         return NO;
                         
@@ -576,45 +587,10 @@
 	[self.view addSubview:meBrwMainFrm];
 	meBrwMainFrm.hidden = YES;
 	[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(hideSplashScreen:) userInfo:nil repeats:NO];
-    //report data analysis
-    //update 1.1022 by xuleilei 06-25-10:09
-    //data analysis
+    
     [meBrw start:mwWgtMgr.wMainWgt];
         //NSString *clientPWd =[BUtility RC4DecryptWithInput:theApp.useCertificatePassWord key:mwWgtMgr.mainWidget.appId];
     //[BUtility setClientCertificatePwd:clientPWd];
-    
-    if ([BUtility getAppCanDevMode]) {
-        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
-        if (analysisClass) {
-            id analysisObject = class_createInstance(analysisClass,0);
-            ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
-            
-        }
-    }
-    
-    ACENSLog(@"mwWgtMgr.mainWidget.ver=%@",mwWgtMgr.mainWidget.ver);
-    NSString *inKey = [BUtility appKey];
-    if (theApp.userStartReport) {
-        Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
-        if (analysisClass) {
-            NSMutableArray *array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
-            id analysisObject = class_createInstance(analysisClass,0);
-            
-            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
-            
-        }
-    }
-    
-    if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
-        NSMutableArray *dataArray = [NSMutableArray arrayWithObjects:mwWgtMgr.wMainWgt.appId,inKey,mwWgtMgr.wMainWgt.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
-        Class  updateClass = NSClassFromString(@"EUExUpdate");
-        if (!updateClass) {
-            return;
-        }
-        id analysisObject = class_createInstance(updateClass,0);
-        ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
-        
-    }
     
 }
 
@@ -666,9 +642,62 @@
 }
 
 - (void)viewDidLoad {
+    
 	[super viewDidLoad];
+    
     NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
+    
     [self setExtraInfo:extraDic toEBrowserView:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView];
+    
+    if ([BUtility getAppCanDevMode]) {
+        
+        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (analysisClass) {
+            
+            id analysisObject = class_createInstance(analysisClass,0);
+            
+            ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
+            
+        }
+    }
+    
+    NSString * inKey = [BUtility appKey];
+    
+    if (theApp.userStartReport) {
+        
+        Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
+        
+        if (analysisClass) {
+            
+            NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
+            
+            id analysisObject = class_createInstance(analysisClass,0);
+            
+            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            
+        }
+        
+    }
+    
+    if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
+        
+        NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:mwWgtMgr.wMainWgt.appId,inKey,mwWgtMgr.wMainWgt.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
+        
+        Class  updateClass = NSClassFromString(@"EUExUpdate");
+        
+        if (!updateClass) {
+            
+            return;
+            
+        }
+        
+        id analysisObject = class_createInstance(updateClass,0);
+        
+        ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
+        
+    }
+    
 }
 
 - (void)viewDidUnload {

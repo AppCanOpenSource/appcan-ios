@@ -250,7 +250,6 @@
 }
 
 - (void)dealloc {
-	ACENSLog(@"widgetSQL dealloc");
 	[super dealloc];
 }
 @end

@@ -106,7 +106,7 @@
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
 	NSHTTPURLResponse *httpRes = (NSHTTPURLResponse*)response;
 	if ([httpRes respondsToSelector:@selector(allHeaderFields)]) {
-		int errorCode = [httpRes statusCode];
+		NSInteger errorCode = [httpRes statusCode];
 		ACENSLog(@"spec status=%d",errorCode);
 	}		
 }
@@ -124,10 +124,8 @@
 }
 
 - (void)dealloc {
-	ACENSLog(@"SpeconfigParser dealloc resultData retaincont=%d",[resultData retainCount]);
 	[resultData release];
 	resultData = nil;
-	ACENSLog(@"SpeconfigParser dealloc mParser retaincont=%d",[mParser retainCount]);
 	[mParser release];
 	mParser = nil;
     [super dealloc];

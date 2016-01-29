@@ -1249,7 +1249,8 @@ static NSOperationQueue *sharedQueue = nil;
         // Tell CFNetwork not to validate SSL certificates
         if (![self validatesSecureCertificate]) {
             // see: http://iphonedevelopment.blogspot.com/2010/05/nsstream-tcp-and-ssl.html
-            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
             sslProperties = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
 							 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredCertificates,
 							 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsAnyRoot,
@@ -1272,6 +1273,7 @@ static NSOperationQueue *sharedQueue = nil;
             CFReadStreamSetProperty((CFReadStreamRef)[self readStream],
                                     kCFStreamPropertySSLSettings,
                                     (CFTypeRef)sslProperties);
+
 			// broadzou + 23
 			//			NSString *sslMinLevel = @"kSSLProtocol3";
 			//			NSString *sslMaxLevel = @"kTLSProtocol12";
@@ -1304,7 +1306,7 @@ static NSOperationQueue *sharedQueue = nil;
             //NSMutableDictionary *sslProperties = [NSMutableDictionary dictionaryWithCapacity:1];
             
 			NSMutableArray *certificates = [NSMutableArray arrayWithCapacity:[clientCertificates count]+1];
-            
+
 			// The first object in the array is our SecIdentityRef
 			[certificates addObject:(id)clientCertificateIdentity];
             
@@ -1316,7 +1318,7 @@ static NSOperationQueue *sharedQueue = nil;
             [sslProperties setObject:certificates forKey:(NSString *)kCFStreamSSLCertificates];
             //broadzou + 1
             [sslProperties setObject:(NSString *)kCFBooleanTrue forKey:(NSString *)kCFStreamSSLAllowsAnyRoot];
-            
+#pragma clang diagnostic pop
             CFReadStreamSetProperty((CFReadStreamRef)[self readStream], kCFStreamPropertySSLSettings, sslProperties);
 		}
 		[sslProperties release];
