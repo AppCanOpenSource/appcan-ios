@@ -5455,4 +5455,39 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     meBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
     [meBrwView.meBrwWnd updateSwipeCloseEnableStatus];
 }
+
+#pragma mark - share
+
+- (void)share:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    __block NSMutableArray *shareItems = [NSMutableArray array];
+    if (info[@"text"]) {
+        [shareItems addObject:info[@"text"]];
+    }
+    if (info[@"imgPaths"] && [info[@"imgPaths"] isKindOfClass:[NSArray class]]) {
+        [info[@"imgPaths"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *path = [self absPath:obj];
+            UIImage *image = [UIImage imageWithContentsOfFile:path];
+            if (image) {
+                [shareItems addObject:image];
+            }
+        }];
+    }else if(info[@"imgPath"]){
+        NSString *path = [self absPath:info[@"imgPath"]];
+        UIImage *image = [UIImage imageWithContentsOfFile:path];
+        if (image) {
+            [shareItems addObject:image];
+        }
+    }
+    UIActivityViewController * shareVC = [[UIActivityViewController alloc]initWithActivityItems:shareItems applicationActivities:nil];
+    [EUtility brwView:self.meBrwView presentModalViewController:shareVC animated:YES];
+}
+
+
 @end
