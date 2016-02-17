@@ -814,34 +814,12 @@
     
     NSString *inAction = [inArguments objectAtIndex:0];
     NSURL *url = [NSURL URLWithString:inAction];
-    
-    if ([[UIApplication sharedApplication] canOpenURL:url])
-    {
-        
-        [[UIApplication sharedApplication] openURL:url];
-        
-    } else {
-        
-        if ([inArguments count] > 1)
-        {
-            
-            NSString *iTunesURL = [inArguments objectAtIndex:1];
-            url = [NSURL URLWithString:iTunesURL];
-            
-            if ([[UIApplication sharedApplication] canOpenURL:url])
-            {
-                [[UIApplication sharedApplication] openURL:url];
-                
-            } else {
-                
-                NSLog(@"loadApp error");
-                
-            }
-            
-        }
-        
+    BOOL openURL = [[UIApplication sharedApplication] openURL:url];
+    if (!openURL && [inArguments count] > 1) {
+        NSString *iTunesURL = [inArguments objectAtIndex:1];
+        url = [NSURL URLWithString:iTunesURL];
+        openURL = [[UIApplication sharedApplication] openURL:url];
     }
-    
 }
 
 -(void)checkUpdate:(NSMutableArray *)inArguments {
