@@ -191,6 +191,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"destroyProgressDialog":ACE_METHOD_ASYNC,
                                @"hideStatusBar":ACE_METHOD_ASYNC,
                                @"showStatusBar":ACE_METHOD_ASYNC,
+                               @"createPluginViewContainer":ACE_METHOD_ASYNC,
+                               @"closePluginViewContainer":ACE_METHOD_ASYNC,
 #ifdef DEBUG
                                @"log":ACE_METHOD_SYNC,
 #endif
