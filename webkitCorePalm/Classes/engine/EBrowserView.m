@@ -74,17 +74,10 @@
 
 -(void)dealloc
 {
-    if (_meBrowserView) {
-        [_meBrowserView release];
-    }
-
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    [super dealloc];
 }
 
 -(void)setFrame:(CGRect)frame {
-    
     [super setFrame:frame];
     [_meBrowserView setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 }
@@ -226,7 +219,7 @@
 
 - (JSValue *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
-    if (_meBrowserView) {
+    if (self.meBrowserView && self.meBrowserView.JSContext) {
         //return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
         return [self.meBrowserView.JSContext evaluateScript:script];
     }
@@ -626,7 +619,6 @@
     NSNotificationCenter * notificationCenter =[NSNotificationCenter defaultCenter];
     
     [notificationCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-    
     [notificationCenter addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
@@ -634,10 +626,11 @@
 
 
 - (void)topBounceViewRefresh {
-    
     [self.meBrowserView topBounceViewRefresh];
     
 }
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

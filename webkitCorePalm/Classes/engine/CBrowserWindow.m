@@ -26,7 +26,7 @@
 #import "EBrowserHistoryEntry.h"
 #import "WWidgetMgr.h"
 #import "EBrowserWindowContainer.h"
-#import "EUExWindow.h"
+
 
 #import "EUExAction.h"
 #import "WidgetOneDelegate.h"

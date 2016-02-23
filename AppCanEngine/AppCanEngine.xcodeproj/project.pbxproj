@@ -240,7 +240,7 @@
 		42CF1F381C19046700F539B4 /* EUExWidgetOne.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861D18B1B93D000D7600 /* EUExWidgetOne.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F391C19046700F539B4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B618B1B93D000D7600 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F3A1C19046700F539B4 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AA18B1B93D000D7600 /* NSString+SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF1F3B1C19046700F539B4 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF1F3B1C19046700F539B4 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; };
 		42CF1F3D1C19046700F539B4 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
 		42CF1F3E1C19046700F539B4 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F3F1C19046700F539B4 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -535,7 +535,7 @@
 		42CF20731C1904F100F539B4 /* EUExWidgetOne.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861D18B1B93D000D7600 /* EUExWidgetOne.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20741C1904F100F539B4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B618B1B93D000D7600 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20751C1904F100F539B4 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AA18B1B93D000D7600 /* NSString+SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF20761C1904F100F539B4 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF20761C1904F100F539B4 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; };
 		42CF20781C1904F100F539B4 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
 		42CF20791C1904F100F539B4 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF207A1C1904F100F539B4 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -825,7 +825,7 @@
 		5AAA86E418B1B93D000D7600 /* EBrowserToolBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85FC18B1B93D000D7600 /* EBrowserToolBar.h */; };
 		5AAA86E518B1B93D000D7600 /* EBrowserToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FD18B1B93D000D7600 /* EBrowserToolBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86E618B1B93D000D7600 /* EBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85FE18B1B93D000D7600 /* EBrowserView.h */; };
-		5AAA86E718B1B93D000D7600 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5AAA86E718B1B93D000D7600 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; };
 		5AAA86E818B1B93D000D7600 /* EBrowserViewAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860018B1B93D000D7600 /* EBrowserViewAnimition.h */; };
 		5AAA86E918B1B93D000D7600 /* EBrowserViewAnimition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860118B1B93D000D7600 /* EBrowserViewAnimition.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86EA18B1B93D000D7600 /* EBrowserViewBounceView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860218B1B93D000D7600 /* EBrowserViewBounceView.h */; };

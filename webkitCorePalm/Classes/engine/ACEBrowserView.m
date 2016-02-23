@@ -180,6 +180,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (self.indicatorView) {
         self.indicatorView =nil;
     }
+
+    [self.JSCHandler clean];
+    self.JSCHandler = nil;
 	
     [self unRegisterKeyboardListener:nil];
 

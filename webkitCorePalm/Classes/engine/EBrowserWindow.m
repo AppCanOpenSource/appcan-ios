@@ -31,12 +31,11 @@
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 #import "RESideMenu.h"
-#import "ACEJSCHandler.h"
+
 #import "ACEJSCBaseJS.h"
 #import "ACEBrowserView.h"
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
-@property(nonatomic,strong)ACEJSCHandler *JSCHandler;
 @end
 
 @implementation EBrowserWindow

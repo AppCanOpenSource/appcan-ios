@@ -55,6 +55,6 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 - (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView;
 
 
-
+- (void)clean;
 
 @end

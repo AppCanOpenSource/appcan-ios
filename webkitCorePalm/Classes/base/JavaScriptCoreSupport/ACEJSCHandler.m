@@ -177,9 +177,18 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     self = [super init];
     if (self) {
         _pluginDict = [NSMutableDictionary dictionary];
-        _eBrowserView=eBrowserView;
+        _eBrowserView = eBrowserView;
     }
     return self;
+}
+
+- (void)clean{
+    [self.pluginDict removeAllObjects];
+    self.eBrowserView = nil;
+}
+
+- (void)dealloc{
+    NSLog(@"www");
 }
 
 @end

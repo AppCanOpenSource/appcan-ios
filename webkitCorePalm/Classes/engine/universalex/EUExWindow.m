@@ -126,6 +126,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 
 -(void)doRotate:(UIInterfaceOrientation)deviceOrientation_ {
+    if (!meBrwView) {
+        return;
+    }
     CGRect rect;
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     float wndWidth = eBrwWnd.bounds.size.width;
@@ -2327,7 +2330,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBrwView];
 
 
-        brwWnd_.meBrwView = NULL;
+        brwWnd_.meBrwView = nil;
     }
     if (brwWnd_.meTopSlibingBrwView) {
         //[eBrwWnd.meTopSlibingBrwView clean];
