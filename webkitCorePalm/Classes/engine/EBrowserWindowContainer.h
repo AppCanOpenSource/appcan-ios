@@ -31,30 +31,18 @@
 extern NSString *const kUexPushNotifyBrwViewNameKey;
 extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
 
-@interface EBrowserWindowContainer : UIView {
-	EBrowserController *meBrwCtrler;
-	EBrowserWindow *meRootBrwWnd;
-	NSMutableDictionary *mBrwWndDict;
-	WWidget *mwWgt;
-	EBrowserWindowContainer	*meOpenerContainer;
-	NSString *mOpenerForRet;
-	NSString *mOpenerInfo;
-	AliPayInfo *mAliPayInfo;
-	int mStartAnimiId;
-	float mStartAnimiDuration;
-	int mFlag;
-}
-@property (nonatomic, assign) EBrowserController *meBrwCtrler;
-@property (nonatomic, assign) EBrowserWindow *meRootBrwWnd;
-@property (nonatomic, assign) NSMutableDictionary *mBrwWndDict;
-@property (nonatomic, retain) WWidget *mwWgt;
-@property (nonatomic, assign) EBrowserWindowContainer *meOpenerContainer;
-@property (nonatomic, retain) NSString *mOpenerForRet;
-@property (nonatomic, retain) NSString *mOpenerInfo;
-@property (nonatomic, retain) AliPayInfo *mAliPayInfo;
-@property int mStartAnimiId;
-@property float mStartAnimiDuration;
-@property int mFlag;
+@interface EBrowserWindowContainer : UIView
+@property (nonatomic, weak) EBrowserController *meBrwCtrler;
+@property (nonatomic, strong) EBrowserWindow *meRootBrwWnd;
+@property (nonatomic, strong) NSMutableDictionary *mBrwWndDict;
+@property (nonatomic, weak) WWidget *mwWgt;
+@property (nonatomic, weak) EBrowserWindowContainer *meOpenerContainer;
+@property (nonatomic, strong) NSString *mOpenerForRet;
+@property (nonatomic, strong) NSString *mOpenerInfo;
+@property (nonatomic, strong) AliPayInfo *mAliPayInfo;
+@property (nonatomic, assign)int mStartAnimiId;
+@property (nonatomic, assign)float mStartAnimiDuration;
+@property (nonatomic, assign)int mFlag;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;

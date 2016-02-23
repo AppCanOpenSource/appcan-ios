@@ -92,8 +92,8 @@
 @property (nonatomic,assign) WWidget *mwWgt;
 
 @property (nonatomic,assign) NSMutableDictionary *mPageInfoDict;
-@property (nonatomic,assign) EBrowserViewBounceView *mTopBounceView;
-@property (nonatomic,assign) EBrowserViewBounceView *mBottomBounceView;
+@property (nonatomic,weak) EBrowserViewBounceView *mTopBounceView;
+@property (nonatomic,weak) EBrowserViewBounceView *mBottomBounceView;
 @property (nonatomic,assign) UIScrollView *mScrollView;
 @property (nonatomic) float lastScrollPointY;
 @property (nonatomic) float nowScrollPointY;
