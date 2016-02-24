@@ -54,7 +54,10 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 - (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView;
 
-
+/**
+ *  @warning 由于ACEJSCHandler同时也是一个JSValue 受JavaScriptCore的GC机制管理，因此当网页被release时ACEJSCHandler不一定会被及时release!
+ *  @note 此方法用于清除所有插件，以避免由于网页已被release引起的Crash
+ */
 - (void)clean;
 
 @end
