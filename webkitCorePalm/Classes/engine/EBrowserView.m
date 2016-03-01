@@ -217,11 +217,11 @@
     return self;
 }
 
-- (JSValue *)stringByEvaluatingJavaScriptFromString:(NSString *)script
+- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
     if (self.meBrowserView && self.meBrowserView.JSContext) {
-        //return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
-        return [self.meBrowserView.JSContext evaluateScript:script];
+        return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
+        //return [self.meBrowserView.JSContext evaluateScript:script];
     }
     return nil;
 }

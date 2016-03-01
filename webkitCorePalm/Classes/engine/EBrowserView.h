@@ -111,7 +111,7 @@
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
 
-- (JSValue *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
+- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
 
 @property (nonatomic) BOOL scalesPageToFit;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
