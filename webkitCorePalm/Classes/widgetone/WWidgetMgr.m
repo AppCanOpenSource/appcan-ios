@@ -227,7 +227,7 @@ NSString * webappShowAactivety;
 		}
 		wgtobj.iconPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.iconPath];
 	}else{
-		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH]) {
+		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtobj.indexUrl hasPrefix:F_HTTPS_PATH]) {
 			wgtobj.indexUrl =[NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.indexUrl];
 		}
 		wgtobj.iconPath = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.iconPath];
@@ -570,7 +570,7 @@ NSString * webappShowAactivety;
 	//indexUrl 11
 	NSString *indexStr =[[tmpDict objectForKey:CONFIG_TAG_CONTENT] objectForKey:CONFIG_TAG_SRC];
 	//1.4 http://
-	if ([indexStr hasPrefix:F_HTTP_PATH]) {
+	if ([indexStr hasPrefix:F_HTTP_PATH] || [indexStr hasPrefix:F_HTTPS_PATH] ) {
 		tmpWgt.indexUrl =indexStr;
 	}else{
 		if ([indexStr isEqualToString:@"#"]) {
