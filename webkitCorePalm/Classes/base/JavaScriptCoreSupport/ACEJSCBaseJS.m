@@ -239,6 +239,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                   @"getMainWidgetId":ACE_METHOD_ASYNC,
                                   @"setBadgeNumber":ACE_METHOD_ASYNC,
                                   } mutableCopy];
+    uexWidgetOneInfo.properties = [@{@"platformName":@"'iOS'"} mutableCopy];
     return uexWidgetOneInfo;
     
 }

@@ -70,7 +70,7 @@
 
 #define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
-#define KUEXIS_NSString(x) ([x isKindOfClass:[NSString class]] && x.length>0)
+#define KUEXIS_NSString(x) ([x isKindOfClass:[NSString class]] && [x length]>0)
 
 #define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
 
@@ -1693,13 +1693,11 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWnd.meBrwView setMultipleTouchEnabled:YES];
     }
     //inAniID.length != 0
-    if (KUEXIS_NSString(inAniID)) {
-        eBrwWnd.mOpenAnimiId = [inAniID intValue];
-    } else {
-        eBrwWnd.mOpenAnimiId = 0;
-    }
+
+    eBrwWnd.mOpenAnimiId = [inAniID intValue];
+
     //inAniDuration && inAniDuration.length != 0
-    if (KUEXIS_NSString(inAniDuration)) {
+    if ([inAniDuration integerValue] > 0) {
         eBrwWnd.mOpenAnimiDuration = [inAniDuration floatValue]/1000.0f;
     } else {
         eBrwWnd.mOpenAnimiDuration = 0.2f;
@@ -3679,17 +3677,18 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)openPopover:(NSMutableArray *)inArguments {
+
     NSString *inPopName = [inArguments objectAtIndex:0];
-    NSString *inDataType = [inArguments objectAtIndex:1];
+    id inDataType = [inArguments objectAtIndex:1];
     NSString *inUrl = [inArguments objectAtIndex:2];
     NSString *inData = [inArguments objectAtIndex:3];
-    NSString *inX = [inArguments objectAtIndex:4];
-    NSString *inY = [inArguments objectAtIndex:5];
-    NSString *inW = [inArguments objectAtIndex:6];
-    NSString *inH = [inArguments objectAtIndex:7];
-    NSString *inFontSize = [inArguments objectAtIndex:8];
-    NSString *inFlag = [inArguments objectAtIndex:9];
-    NSString *inBottom = nil;
+    id inX = [inArguments objectAtIndex:4];
+    id inY = [inArguments objectAtIndex:5];
+    id inW = [inArguments objectAtIndex:6];
+    id inH = [inArguments objectAtIndex:7];
+    id inFontSize = [inArguments objectAtIndex:8];
+    id inFlag = [inArguments objectAtIndex:9];
+    id inBottom = nil;
     if (inArguments.count >= 11) {
         inBottom =[inArguments objectAtIndex:10];
     }
@@ -3726,38 +3725,38 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     //inX.length != 0
-    if (KUEXIS_NSString(inX)) {
-        x = [inX intValue];
-    }
+
+    x = [inX intValue];
+
     //inY.length != 0
-    if (KUEXIS_NSString(inY)) {
-        y = [inY intValue];
-    }
+
+    y = [inY intValue];
+
     //inW.length != 0
-    if ( KUEXIS_NSString(inW)&& [inW intValue] > 0) {
+    if ([inW intValue] > 0) {
         w = [inW intValue];
     } else {
         w = w - x;
     }
     //inH.length != 0
-    if (KUEXIS_NSString(inH) && [inH intValue] > 0) {
+    if ([inH intValue] > 0) {
         h = [inH intValue];
     } else {
         h = h - y;
     }
     //inFontSize.length != 0
-    if (KUEXIS_NSString(inFontSize)) {
-        fontSize = [inFontSize intValue];
-    }
+
+    fontSize = [inFontSize intValue];
+
     //inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-    }
+
+    flag = [inFlag intValue];
+
     //******************************************************
     //inBottom.length != 0
-    if (KUEXIS_NSString(inBottom)) {
-        bottom = [inBottom intValue];
-    }
+
+    bottom = [inBottom intValue];
+
     if (bottom > 0) {
         h = meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height - y - bottom;
     }
@@ -4704,27 +4703,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (!meBrwView) {
         return;
     }
-    //inX.length != 0
-    if (KUEXIS_NSString(inX)) {
-        x = [inX intValue];
-    }
-    if (KUEXIS_NSString(inY)) {
-        y = [inY intValue];
-    }
-    if (KUEXIS_NSString(inW)) {
-        w = [inW intValue];
-    }
-    if (KUEXIS_NSString(inH)) {
-        h = [inH intValue];
-    }
-    //inFontSize.length != 0
-    if (KUEXIS_NSString(inFontSize)) {
-        fontSize = [inFontSize intValue];
-    }
-    //inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-    }
+
+    x = [inX intValue];
+    y = [inY intValue];
+    w = [inW intValue];
+    h = [inH intValue];
+
+    fontSize = [inFontSize intValue];
+
+
+    flag = [inFlag intValue];
+
     if (w == 0 || h == 0) {
         return;
     }
@@ -4786,9 +4775,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         //    return;
         //}
         int bottom=0;
-        @unsafeify(self);
+        @unsafeify(scrollView);
         [scrollView addLoadingBlock:^{
-            @strongify(self);
+            @strongify(scrollView);
             [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
         }];
 
@@ -4927,85 +4916,82 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         ePopBrwView.mFlag |= F_EBRW_VIEW_FLAG_OAUTH;
     }
     //inDataType.length != 0
-    if (KUEXIS_NSString(inDataType))
+    
+    dataType = [inDataType intValue];
+    switch (dataType)
     {
-        dataType = [inDataType intValue];
-        switch (dataType)
-        {
-            case F_EUEXWINDOW_SRC_TYPE_URL:
-                //inUrl.length != 0
-                if (KUEXIS_NSString(inUrl))
+        case F_EUEXWINDOW_SRC_TYPE_URL:
+            //inUrl.length != 0
+            if (KUEXIS_NSString(inUrl))
+            {
+                NSString *urlStr = nil;
+                if ([inData hasPrefix:F_WGTROOT_PATH])
                 {
-                    NSString *urlStr = nil;
-                    if ([inData hasPrefix:F_WGTROOT_PATH])
-                    {
-                        NSString * urlsub = [inUrl substringFromIndex:10];
-                        NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
-                        urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
-                        
-                        if (![urlStr hasPrefix:@"file://"]) {
-                            urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
-                        }
-                    }else
-                    {
-                        urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
+                    NSString * urlsub = [inUrl substringFromIndex:10];
+                    NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
+                    urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                    
+                    if (![urlStr hasPrefix:@"file://"]) {
+                        urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
                     }
-                    //					NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
-                    NSURL *url = [BUtility stringToUrl:urlStr];
-                    if (eBrwWndContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION && ![urlStr hasPrefix:F_HTTP_PATH]&&![urlStr hasPrefix:F_HTTPS_PATH]) {
-                        //                        if ((flag & F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) == F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) {
-                        FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
-                        NSString *data = [encryptObj decryptWithPath:url appendData:nil];
-                        ACENSLog(@"data: %@", data);
+                }else
+                {
+                    urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
+                }
+                //					NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
+                NSURL *url = [BUtility stringToUrl:urlStr];
+                if (eBrwWndContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION && ![urlStr hasPrefix:F_HTTP_PATH]&&![urlStr hasPrefix:F_HTTPS_PATH]) {
+                    //                        if ((flag & F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) == F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) {
+                    FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+                    NSString *data = [encryptObj decryptWithPath:url appendData:nil];
+                    ACENSLog(@"data: %@", data);
+                    
+                    [ePopBrwView loadWithData:data baseUrl:url];
+                    //                        } else {
+                    //                            [ePopBrwView loadWithUrl:url];
+                    //                        }
+                } else {
+                    [ePopBrwView loadWithUrl:url];
+                }
+                //8.8 数据统计
+                if (isExist) {
+                    NSString *curUrlStr =[ePopBrwView.curUrl absoluteString];
+                    if (![curUrlStr isEqualToString:urlStr]) {
+                        int type =ePopBrwView.mwWgt.wgtType;
+                        NSString *viewName =[ePopBrwView.curUrl absoluteString];
+                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                        [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                         
-                        [ePopBrwView loadWithData:data baseUrl:url];
-                        //                        } else {
-                        //                            [ePopBrwView loadWithUrl:url];
-                        //                        }
-                    } else {
-                        [ePopBrwView loadWithUrl:url];
-                    }
-                    //8.8 数据统计
-                    if (isExist) {
-                        NSString *curUrlStr =[ePopBrwView.curUrl absoluteString];
-                        if (![curUrlStr isEqualToString:urlStr]) {
-                            int type =ePopBrwView.mwWgt.wgtType;
-                            NSString *viewName =[ePopBrwView.curUrl absoluteString];
-                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
-                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-                            
-                            NSString *fromViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-                            int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
-                            NSString *goViewName =[url absoluteString];
-                            {
+                        NSString *fromViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
+                        int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
+                        NSString *goViewName =[url absoluteString];
+                        {
                             NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
                             [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
-                            }
-                            isExist =NO;
                         }
-                    }else {
-                        //int type =eBrwWnd.meBrwView.mwWgt.wgtType;
-                        NSString *viewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-                        int goType = ePopBrwView.mwWgt.wgtType;
-                        NSString *goViewName =[url absoluteString];
-                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
-                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
+                        isExist =NO;
                     }
+                }else {
+                    //int type =eBrwWnd.meBrwView.mwWgt.wgtType;
+                    NSString *viewName =[eBrwWnd.meBrwView.curUrl absoluteString];
+                    int goType = ePopBrwView.mwWgt.wgtType;
+                    NSString *goViewName =[url absoluteString];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
                 }
-                else
-                {
-                    [eBrwWnd bringSubviewToFront:ePopBrwView];
-                }
-                break;
-
-            default:
-                break;
-        }
+            }
+            else
+            {
+                [eBrwWnd bringSubviewToFront:ePopBrwView];
+            }
+            break;
+            
+        default:
+            break;
     }
-    else
-    {
-        [eBrwWnd bringSubviewToFront:ePopBrwView];
-    }
+    
+    //[eBrwWnd bringSubviewToFront:ePopBrwView];
+    
     
     if (bottom>0)
     {

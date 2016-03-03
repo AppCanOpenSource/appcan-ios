@@ -109,6 +109,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     context[@"uex"] = self.JSCHandler;
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
+
     [self.JSContext setExceptionHandler:^(JSContext *con, JSValue *exception) {
         NSLog(@"%@", exception);
         con.exception = exception;
