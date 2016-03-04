@@ -48,6 +48,17 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
 }
 
+
+- (void)initializeWithJSContext:(JSContext *)context{
+    context[@"uex"] = self;
+    NSString *baseJS = [ACEJSCBaseJS baseJS];
+    [context evaluateScript:baseJS];
+    [context setExceptionHandler:^(JSContext *con, JSValue *exception) {
+        NSLog(@"%@", exception);
+        con.exception = exception;
+    }];
+}
+
 - (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(NSArray *)arguments asyncKey:(NSString *)asyncKey{
     if(!ACEJSCGlobalPlugins){
         [self.class initializeGlobalPlugins];

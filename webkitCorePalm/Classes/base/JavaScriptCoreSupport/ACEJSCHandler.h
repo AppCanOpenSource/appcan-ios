@@ -39,7 +39,9 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 
-
+/**
+ *  基于JavaScriptCore的插件调用管理
+ */
 @interface ACEJSCHandler : NSObject<ACEJSCHandler>
 @property (nonatomic,strong)NSMutableDictionary *pluginDict;
 @property (nonatomic,weak)EBrowserView *eBrowserView;
@@ -53,6 +55,8 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 - (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView;
+//在指定JS上下文中初始化JSCHandler;
+- (void)initializeWithJSContext:(JSContext *)context;
 
 /**
  *  @warning 由于ACEJSCHandler同时也是一个JSValue 受JavaScriptCore的GC机制管理，因此当网页被release时ACEJSCHandler不一定会被及时release!

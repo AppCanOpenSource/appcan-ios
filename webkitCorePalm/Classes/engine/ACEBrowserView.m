@@ -106,15 +106,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         [context evaluateScript:[BUtility getRC4LocalStoreJSKey]];
     }
     
-    context[@"uex"] = self.JSCHandler;
-    NSString *baseJS = [ACEJSCBaseJS baseJS];
-    [context evaluateScript:baseJS];
-
-    [self.JSContext setExceptionHandler:^(JSContext *con, JSValue *exception) {
-        NSLog(@"%@", exception);
-        con.exception = exception;
-    }];
-
+    [self.JSCHandler initializeWithJSContext:context];
 }
 
 -(void)multiPopoverDelay{
