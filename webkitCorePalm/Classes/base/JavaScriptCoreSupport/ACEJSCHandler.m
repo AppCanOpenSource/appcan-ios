@@ -199,7 +199,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 }
 
 - (void)dealloc{
-    NSLog(@"www");
+    
 }
 
 @end

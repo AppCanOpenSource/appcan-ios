@@ -5399,9 +5399,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 
-#ifdef DEBUG
+
 - (id)log:(NSMutableArray *)inArguments{
-    
     if([inArguments count] < 1){
         return @0;
     }
@@ -5410,6 +5409,10 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 
-#endif
-
+- (NSNumber *)getWidth:(NSMutableArray *)inArguments{
+    return @(self.meBrwView.bounds.size.width);
+}
+- (NSNumber *)getHeight:(NSMutableArray *)inArguments{
+    return @(self.meBrwView.bounds.size.height);
+}
 @end

@@ -193,9 +193,9 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"showStatusBar":ACE_METHOD_ASYNC,
                                @"createPluginViewContainer":ACE_METHOD_ASYNC,
                                @"closePluginViewContainer":ACE_METHOD_ASYNC,
-#ifdef DEBUG
                                @"log":ACE_METHOD_SYNC,
-#endif
+                               @"getWidth":ACE_METHOD_SYNC,
+                               @"getHeight":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWindowInfo;
 }
