@@ -78,6 +78,10 @@
 #define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
 
 
+
+NSString *const kACEEvaluateScriptJavaScriptKey = @"kACEEvaluateScriptJavaScriptKey";
+NSString *const kACEEvaluateScriptBrowserViewKey = @"kACEEvaluateScriptBrowserViewKey";
+
 //20151021 lkl 修复iOS 9 长按产生放大镜的问题
 //长按事件阻碍选项
 typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
@@ -2861,24 +2865,43 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     int slibingType = [inSlibingType intValue];
+    EBrowserView *brwView = nil;
     switch (slibingType) {
         case F_EBRW_VIEW_TYPE_MAIN:
-            [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:inScript];
+            brwView = eBrwWnd.meBrwView;
+            //[eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:inScript];
             break;
         case F_EBRW_VIEW_TYPE_SLIBING_TOP:
-            if (eBrwWnd.meTopSlibingBrwView != nil) {
-                [eBrwWnd.meTopSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
+            if (eBrwWnd.meTopSlibingBrwView) {
+                brwView = eBrwWnd.meTopSlibingBrwView;
+                //[eBrwWnd.meTopSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
             }
             break;
         case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
-            if (eBrwWnd.meBottomSlibingBrwView != nil) {
-                [eBrwWnd.meBottomSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
+            if (eBrwWnd.meBottomSlibingBrwView ) {
+                brwView = eBrwWnd.meBottomSlibingBrwView;
+                //[eBrwWnd.meBottomSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
             }
             break;
         default:
             break;
     }
+    if(!brwView){
+        return;
+    }
+    [self performSelectorOnMainThread:@selector(evaluateScriptWithInfo:) withObject:@{kACEEvaluateScriptJavaScriptKey:inScript,kACEEvaluateScriptBrowserViewKey:brwView} waitUntilDone:NO];
 }
+
+- (void)evaluateScriptWithInfo:(NSDictionary *)infoDict{
+    EBrowserView *brwView = infoDict[kACEEvaluateScriptBrowserViewKey];
+    NSString *JSStr = infoDict[kACEEvaluateScriptJavaScriptKey];
+    if (!brwView || !JSStr) {
+        return;
+    }
+    [brwView stringByEvaluatingJavaScriptFromString:JSStr];
+}
+
+
 
 - (void)getBounce:(NSMutableArray *)inArguments
 {
@@ -3217,7 +3240,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (!ePopBrwView) {
         return;
     }
-    [ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
+    [self performSelectorOnMainThread:@selector(evaluateScriptWithInfo:) withObject:@{kACEEvaluateScriptBrowserViewKey:ePopBrwView,kACEEvaluateScriptJavaScriptKey:inScript} waitUntilDone:NO];
+    //[ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
     
 }
 
