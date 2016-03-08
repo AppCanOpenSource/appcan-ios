@@ -354,7 +354,7 @@ NSString *AppCanJS = nil;
     
     [ACEDes enable];
     _globalPluginDict = [[NSMutableDictionary alloc] init];
-    
+    pluginObj = [[ACEPluginParser alloc] init];
     if (_useCloseAppWithJaibroken) {
         
         BOOL isjab = [BUtility isJailbroken];
