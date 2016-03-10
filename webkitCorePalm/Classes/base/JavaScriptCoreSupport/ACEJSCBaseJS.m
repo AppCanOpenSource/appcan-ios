@@ -196,6 +196,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"log":ACE_METHOD_SYNC,
                                @"getWidth":ACE_METHOD_SYNC,
                                @"getHeight":ACE_METHOD_SYNC,
+                               @"putLocalData":ACE_METHOD_ASYNC,
+                               @"getLocalData":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWindowInfo;
 }
@@ -238,6 +240,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                   @"getCurrentWidgetInfo":ACE_METHOD_ASYNC,
                                   @"getMainWidgetId":ACE_METHOD_ASYNC,
                                   @"setBadgeNumber":ACE_METHOD_ASYNC,
+
                                   } mutableCopy];
     uexWidgetOneInfo.properties = [@{@"platformName":@"'iOS'"} mutableCopy];
     return uexWidgetOneInfo;

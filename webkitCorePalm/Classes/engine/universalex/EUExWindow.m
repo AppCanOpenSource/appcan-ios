@@ -5415,4 +5415,31 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (NSNumber *)getHeight:(NSMutableArray *)inArguments{
     return @(self.meBrwView.bounds.size.height);
 }
+
+NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
+- (void)putLocalData:(NSMutableArray*)inArguments{
+    if([inArguments count] < 2){
+        return;
+    }
+    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *dict = [[df valueForKey:kUexWindowValueDictKey] mutableCopy];
+    if (!dict) {
+        dict = [NSMutableDictionary dictionary];
+    }
+    [dict setValue:inArguments[1] forKey:inArguments[0]];
+    [df setValue:dict forKey:kUexWindowValueDictKey];
+    [df synchronize];
+}
+
+- (id)getLocalData:(NSMutableArray*)inArguments{
+    if([inArguments count] == 0){
+        return nil;
+    }
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] valueForKey:kUexWindowValueDictKey];
+    if (!dict) {
+        return nil;
+    }
+    return dict[inArguments[0]];
+    
+}
 @end
