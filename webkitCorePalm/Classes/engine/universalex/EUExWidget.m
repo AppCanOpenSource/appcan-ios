@@ -369,20 +369,35 @@
         [self jsSuccessWithName:@"uexWidget.cbStartWidget" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:0];
         //子widget启动上报代码
         //    NSString *inKey=[BUtility appKey];
-        Class  analysisClass =  NSClassFromString(@"AppCanAnalysis");//判断类是否存在，如果存在子widget上报
-        if (analysisClass) {
+        Class  analysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
+        if (!analysisClass) {
             
-            id analysisObject = class_createInstance(analysisClass,0);
+            analysisClass =  NSClassFromString(@"AppCanAnalysis");
             
-            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);
-            
-            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppId:),wgtObj.appId);
-            
-            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppVersion:),wgtObj.ver);
-            
-            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);//inKey  目前为主widget的AppKey，子widget没有
+            if (!analysisClass) {
+                
+                return;
+            }
         }
-    }else {
+        
+        //过滤掉无appkey的子应用上报(plugin类型)
+        
+        if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_PLUGINWIDGET) return;
+        
+        if (!KUEX_ISNSString(inAppkey)) return;
+        
+        id analysisObject = class_createInstance(analysisClass,0);
+        
+        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);
+        
+        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppId:),wgtObj.appId);
+        
+        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppVersion:),wgtObj.ver);
+        
+        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);//inKey  目前为主widget的AppKey，子widget没有
+        
+    } else {
+        
         if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
             if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
                 [meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_NOT_EXIST retAppId:inAppId];
@@ -814,34 +829,12 @@
     
     NSString *inAction = [inArguments objectAtIndex:0];
     NSURL *url = [NSURL URLWithString:inAction];
-    
-    if ([[UIApplication sharedApplication] canOpenURL:url])
-    {
-        
-        [[UIApplication sharedApplication] openURL:url];
-        
-    } else {
-        
-        if ([inArguments count] > 1)
-        {
-            
-            NSString *iTunesURL = [inArguments objectAtIndex:1];
-            url = [NSURL URLWithString:iTunesURL];
-            
-            if ([[UIApplication sharedApplication] canOpenURL:url])
-            {
-                [[UIApplication sharedApplication] openURL:url];
-                
-            } else {
-                
-                NSLog(@"loadApp error");
-                
-            }
-            
-        }
-        
+    BOOL openURL = [[UIApplication sharedApplication] openURL:url];
+    if (!openURL && [inArguments count] > 1) {
+        NSString *iTunesURL = [inArguments objectAtIndex:1];
+        url = [NSURL URLWithString:iTunesURL];
+        openURL = [[UIApplication sharedApplication] openURL:url];
     }
-    
 }
 
 -(void)checkUpdate:(NSMutableArray *)inArguments {
@@ -854,13 +847,23 @@
     }
 }
 -(void)checkMAMUpdate:(NSMutableArray *)inArguments{
-    Class analysisClass =  NSClassFromString(@"AppCanAnalysis");//判断类是否存在，如果存在子widget上报
-    if (analysisClass) {
-        NSString *inKey=[BUtility appKey];
+    
+    Class  analysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
+    if (!analysisClass) {
         
-        id analysisObject = class_createInstance(analysisClass,0);
-        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithAppKey:), inKey);
+        analysisClass =  NSClassFromString(@"AppCanAnalysis");
+        
+        if (!analysisClass) {
+            
+            return;
+        }
     }
+    
+    NSString *inKey=[BUtility appKey];
+    
+    id analysisObject = class_createInstance(analysisClass,0);
+    ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithAppKey:), inKey);
+    
 }
 -(void)checkUpdateWgt:(id)userInfo{
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
@@ -950,8 +953,8 @@
                 [self jsSuccessWithName:@"uexWidget.cbGetPushInfo" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:str];
                 [defaults removeObjectForKey:@"allPushData"];
             }
-            if (str== nil
-                || [str isEqualToString:@"(null)"]) {
+            if (str== nil || [str isEqualToString:@"(null)"]) {
+                
                 return;
             }
         }
@@ -979,8 +982,7 @@
                 [self jsSuccessWithName:@"uexWidget.cbGetPushInfo" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:str];
                 [defaults removeObjectForKey:@"pushData"];
             }
-            if (str== nil
-                || [str isEqualToString:@"(null)"]) {
+            if (str== nil || [str isEqualToString:@"(null)"]) {
                 return;
             }
         }
@@ -990,9 +992,10 @@
     }
 }
 
--(void)sendReportRead:(id)userInfo
+- (void)sendReportRead:(id)userInfo
 {
     @autoreleasepool {
+        
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
         if ([userInfo isKindOfClass:[NSDictionary class]]){
             dict = userInfo;
@@ -1000,63 +1003,194 @@
             dict = [userInfo JSONValue];
         }
         
-        if (dict == nil
-            || [dict count] == 0) {
+        if (dict == nil || [dict count] == 0) {
+            
             return;
         }
-        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
-        if (analysisClass) {
-            NSString *softToken = [EUtility md5SoftToken];
-            //线程处理
-            NSString *urlStr =[NSString stringWithFormat:@"%@/report",theApp.useBindUserPushURL];
+        
+        if ([dict objectForKey:@"taskId"]) {
+            
+            NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/%@",theApp.useBindUserPushURL, [dict objectForKey:@"taskId"]];
+            NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->urlStr = %@",urlStr);
+            
             NSURL *requestUrl = [NSURL URLWithString:urlStr];
             
-            NSMutableDictionary * postData = [NSMutableDictionary dictionaryWithCapacity:4];
-            NSString *msgId = [dict objectForKey:@"msgId"];
-            if (msgId == nil
-                || msgId.length == 0) {
-                return;
+            NSString *appid = theApp.mwWgtMgr.mainWidget.appId?theApp.mwWgtMgr.mainWidget.appId:@"";
+            
+            NSString *appkey = [BUtility appKey];
+            
+            if (!appkey) {
+                
+                appkey = @"";
             }
             
-            [postData setObject:[dict objectForKey:@"msgId"] forKey:@"msgId"];
-            [postData setObject:softToken forKey:@"softtoken"];
-            [postData setObject:@"open" forKey:@"eventType"];
-            NSDate *datenow = [NSDate date];
-            NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
-            SecIdentityRef identity = NULL;
-            SecTrustRef trust = NULL;
-            SecCertificateRef certChain=NULL;
-            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+            
+            if (!deviceToken) {
+                
+                deviceToken = @"";
+            }
+            //住户ID tenantId
+            NSString *tenantId = nil;
+            
+            if ([dict objectForKey:@"tenantId"]) {
+                
+                tenantId = [NSString stringWithFormat:@"%@", [dict objectForKey:@"tenantId"]];
+            }
+            
+            NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
+            
+            NSString *varifyAppStr = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
+            
+            NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithObject:varifyAppStr forKey:@"appverify"];
+            [headerDict setObject:@"application/json" forKey:@"Content-Type"];
+            
+            NSString *masAppId = [NSString stringWithFormat:@"%@", appid];
+            
+            if (tenantId && tenantId.length > 0) {
+                
+                masAppId = [NSString stringWithFormat:@"%@:%@",tenantId, appid];
+                
+            }
+            [headerDict setObject:masAppId forKey:@"x-mas-app-id"];
+            NSMutableDictionary *bodyDict = [NSMutableDictionary dictionaryWithCapacity:5];
+            [bodyDict setObject:@"1" forKey:@"count"];
+            [bodyDict setObject:deviceToken forKey:@"deviceToken"];
             
             ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
             [request setRequestMethod:@"POST"];
-            [request setPostValue:[dict objectForKey:@"msgId"] forKey:@"msgId"];
-            [request setPostValue:softToken forKey:@"softToken"];
-            [request setPostValue:@"open" forKey:@"eventType"];
-            [request setPostValue:timeSp forKey:@"occuredAt"];
+            [request setRequestHeaders:headerDict];
+            [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+            
             if (theApp.useCertificateControl) {
-                [request setValidatesSecureCertificate:YES];
+                
+                SecIdentityRef identity = NULL;
+                SecTrustRef trust = NULL;
+                SecCertificateRef certChain = NULL;
+                NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+                [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+                
                 [request setClientCertificateIdentity:identity];
-            }else{
+            }
+            
+            if (theApp.validatesSecureCertificate) {
+                
+                [request setValidatesSecureCertificate:YES];
+                
+            } else {
+                
                 [request setValidatesSecureCertificate:NO];
             }
+            
             [request setTimeOutSeconds:60];
-            [request startSynchronous];
-            int status = request.responseStatusCode;
-            if (status == 200) {
-                NSError *error = request.error;
-                if (!error) {
+            [request setCompletionBlock:^{
+                
+                if (200 == request.responseStatusCode) {
+                    
+                    NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseString is %@",request.responseString);
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                     //清除push消息
                     [defaults removeObjectForKey:@"pushData"];
                     [defaults removeObjectForKey:@"allPushData"];
+                    [defaults synchronize];
+                    
+                } else {
+                    
+                    NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
+                    
                 }
-            }
+            }];
+            [request setFailedBlock:^{
+                
+                NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
+                
+            }];
+            
+            [request startAsynchronous];
             [request release];
         }
+        
+        Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
+        if (!analysisClass) {
+            
+            analysisClass = NSClassFromString(@"AppCanAnalysis");
+            
+            if (!analysisClass) {
+                
+                return;
+            }
+            
+        }
+        NSString *softToken = [EUtility md5SoftToken];
+        //线程处理
+        NSString *urlStr =[NSString stringWithFormat:@"%@/report",theApp.useBindUserPushURL];
+        NSURL *requestUrl = [NSURL URLWithString:urlStr];
+        
+        NSMutableDictionary * postData = [NSMutableDictionary dictionaryWithCapacity:4];
+        NSString *msgId = [dict objectForKey:@"msgId"];
+        
+        if (msgId == nil || msgId.length == 0) {
+            
+            return;
+        }
+        
+        [postData setObject:[dict objectForKey:@"msgId"] forKey:@"msgId"];
+        [postData setObject:softToken forKey:@"softtoken"];
+        [postData setObject:@"open" forKey:@"eventType"];
+        
+        NSDate *datenow = [NSDate date];
+        NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
+        
+        SecIdentityRef identity = NULL;
+        SecTrustRef trust = NULL;
+        SecCertificateRef certChain=NULL;
+        
+        NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+        [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+        
+        ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
+        [request setRequestMethod:@"POST"];
+        [request setPostValue:[dict objectForKey:@"msgId"] forKey:@"msgId"];
+        [request setPostValue:softToken forKey:@"softToken"];
+        [request setPostValue:@"open" forKey:@"eventType"];
+        [request setPostValue:timeSp forKey:@"occuredAt"];
+        
+        if (theApp.useCertificateControl) {
+            
+            [request setClientCertificateIdentity:identity];
+            
+        }else{
+            
+            [request setClientCertificateIdentity:nil];
+        }
+        
+        if (theApp.validatesSecureCertificate) {
+            
+            [request setValidatesSecureCertificate:YES];
+            
+        } else {
+            
+            [request setValidatesSecureCertificate:NO];
+            
+        }
+        
+        [request setTimeOutSeconds:60];
+        [request startSynchronous];
+        int status = request.responseStatusCode;
+        if (status == 200) {
+            NSError *error = request.error;
+            if (!error) {
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                //清除push消息
+                [defaults removeObjectForKey:@"pushData"];
+                [defaults removeObjectForKey:@"allPushData"];
+            }
+        }
+        [request release];
+        
     }
 }
+
 -(void)setPushInfo:(NSMutableArray *)inArguments {
     
     if ([inArguments count] < 2) {

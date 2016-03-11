@@ -340,20 +340,35 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 }
 
 - (void)pushNotify {
+    
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
     NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
-	if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
-		return;
-	}
-	EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
-	if (!eBrwWnd) {
-		return;
-	}
-	NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@!= null){%@();}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName];
+    
+    NSString *appStateStr = @"";
+    
+    if ([defaults objectForKey:@"appStateOfGetPushData"]) {
+        
+        appStateStr = [defaults objectForKey:@"appStateOfGetPushData"];
+        
+    }
+    
+    NSLog(@"appcan-->EBrowserWindowContainer.m-->pushNotify-->appStateOfGetPushData-->%@",appStateStr);
+    
+    
+    if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
+        return;
+    }
+    EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
+    if (!eBrwWnd) {
+        return;
+    }
+    NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@!= null){%@(\'%@\');}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName,appStateStr];
+    
     [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
-
+    
 }
+
 
 - (void)clean {
 	NSArray *wndArray = [NSArray arrayWithArray:self.subviews];
