@@ -219,6 +219,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotification:) name:@"SubscribeChannelNotification" object:nil];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotificationForJson:) name:@"SubscribeChannelNotificationJson" object:nil];
+        
         self.notificationDic = [NSMutableDictionary dictionary];
     }
     return self;
@@ -4698,9 +4700,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         
         theApp.drawerController.isStatusBarHidden = YES;
-        
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-        
+    
+        if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
+            
+            [[UIApplication sharedApplication]setStatusBarHidden:YES];
+            
+        } else {
+            
+            [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+            
+        }
+    
     }
     
 }
@@ -4711,7 +4721,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         theApp.drawerController.isStatusBarHidden = NO;
         
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+        if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
+            
+            [[UIApplication sharedApplication]setStatusBarHidden:NO];
+            
+        } else {
+            
+            [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+            
+        }
         
     }
     
@@ -5188,6 +5206,42 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
 }
 
+-(void)publishChannelNotificationForJson:(NSArray *)inArgument
+{
+    if ([inArgument count] < 2) {
+        return;
+    }
+    
+    NSString * channelId = [inArgument objectAtIndex:0];
+    
+    NSString * inContent = [inArgument objectAtIndex:1];
+    
+    NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:channelId,@"channelId",inContent,@"inContent", nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubscribeChannelNotificationForJson"
+                                                        object:self userInfo:dic];
+    
+}
+
+-(void)respondChannelNotificationForJson:(NSNotification*)sender
+{
+    
+    NSDictionary * infoDic = (NSDictionary *)sender.userInfo;
+    
+    NSString * channelId = [infoDic objectForKey:@"channelId"];
+    NSString * inContent = [infoDic objectForKey:@"inContent"];
+    
+    NSString * function = [self.notificationDic objectForKey:channelId];
+    
+    if (!function) {
+        return;
+    }
+    
+    NSString * cbString = [NSString stringWithFormat:@"if(uexWindow.%@!=null){uexWindow.%@(%@);}",function,function,inContent];
+    
+    [meBrwView stringByEvaluatingJavaScriptFromString:cbString];
+    
+}
 
 -(void)postGlobalNotification:(NSArray *)inArgument
 {
