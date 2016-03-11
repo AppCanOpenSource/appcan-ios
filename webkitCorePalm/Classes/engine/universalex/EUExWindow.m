@@ -219,7 +219,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotification:) name:@"SubscribeChannelNotification" object:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotificationForJson:) name:@"SubscribeChannelNotificationJson" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotificationForJson:) name:@"SubscribeChannelNotificationForJson" object:nil];
         
         self.notificationDic = [NSMutableDictionary dictionary];
     }
