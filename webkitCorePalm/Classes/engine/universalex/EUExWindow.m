@@ -348,19 +348,18 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 - (void)prompt:(NSMutableArray *)inArguments{
     NSString *inTitle = [inArguments objectAtIndex:0];
-    //inTitle==nil || inTitle.length<=0
-    if (!KUEXIS_NSString(inTitle))
-    {
+    if (!KUEXIS_NSString(inTitle)){
         inTitle=@" ";
     }
     NSString *inMessage = [inArguments objectAtIndex:1];
-    //    if (inMessage==nil || inMessage.length<=0 )
-    //    {
-    //        inMessage=@" ";
-    //    }
     NSString *inDefaultValue = [inArguments objectAtIndex:2];
     NSString *inButtonStr = [inArguments objectAtIndex:3];
     NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
+
+
+    
+    NSString *placeHolder = inArguments.count > 4 ? inArguments[4] : @"" ;
+
     if ((meBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) == F_EBRW_WND_FLAG_IN_CLOSING) {
         return;
     }
@@ -376,8 +375,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     {
         mbAlertView.mAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField * temp = [mbAlertView.mAlertView textFieldAtIndex:0];
-        //temp.placeholder=inDefaultValue;
-        temp.text = inDefaultValue;
+        if (KUEXIS_NSString(inDefaultValue)) {
+             temp.text = inDefaultValue;
+        }
+        if (KUEXIS_NSString(placeHolder)) {
+            temp.placeholder = placeHolder;
+        }
+        
     }else
     {
         mbAlertView.mTextField = [[UITextField alloc] init];
@@ -386,7 +390,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [mbAlertView.mTextField setBorderStyle:UITextBorderStyleRoundedRect];
         [mbAlertView.mTextField setUserInteractionEnabled:YES];
         //mbAlertView.mTextField.placeholder = inDefaultValue;
-        mbAlertView.mTextField.text = inDefaultValue;
+        if (KUEXIS_NSString(inDefaultValue)) {
+            mbAlertView.mTextField.text = inDefaultValue;
+        }
+        if (KUEXIS_NSString(placeHolder)) {
+            mbAlertView.mTextField.placeholder = placeHolder;
+        }
         [mbAlertView.mAlertView addSubview:mbAlertView.mTextField];
     }
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_PROMPT];
