@@ -820,7 +820,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			ACENSLog(@"Main notifyPageFinish onload url is %@", [self.request URL]);
 			[self loadUEXScript];
             
-			initStr = [[NSString alloc] initWithFormat:@"uexGameEngine.screenWidth = %f;uexGameEngine.screenHeight = %f;uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", self.frame.size.width, self.frame.size.height,[[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
+			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
             [self stringByEvaluatingJavaScriptFromString:initStr];
 
             
