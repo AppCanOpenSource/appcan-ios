@@ -22,7 +22,7 @@
 
 @interface ACEWebViewController : ACEBaseViewController
 
-@property (nonatomic, assign) EBrowserWindow *browserWindow;
+@property (nonatomic, strong) EBrowserWindow *browserWindow;
 
 @property (nonatomic, assign) BOOL isNeedSwipeGestureRecognizer;
 
