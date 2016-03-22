@@ -4808,8 +4808,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 {
     if ([inArgument count]>0 && [BUtility getSystemVersion]>=5.0)
     {
-        NSString * isShowBar = [inArgument objectAtIndex:0];
-        if ([isShowBar isEqualToString:@"false"])
+        id isShowBar = [inArgument objectAtIndex:0];
+        if ([isShowBar isEqual:@"false"] || ![isShowBar boolValue])
         {
             meBrwView.scrollView.showsVerticalScrollIndicator = NO;
             meBrwView.scrollView.showsHorizontalScrollIndicator = NO;
