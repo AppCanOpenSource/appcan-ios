@@ -2940,12 +2940,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)setBounce:(NSMutableArray *)inArguments {
-    NSString *inValue = [inArguments objectAtIndex:0];
-    int value = 0;
-    //inValue.length != 0
-    if (KUEXIS_NSString(inValue)) {
-        value = [inValue intValue];
+    if(inArguments.count < 1){
+        return;
     }
+
+    NSInteger value = [[inArguments objectAtIndex:0] integerValue];
+
     if (value == 0) {
         [meBrwView.mScrollView setBounces:NO];
     } else if (value == 1) {
