@@ -2990,9 +2990,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)setBounceParams:(NSMutableArray *)inArguments {
     
     @try {
-        
         NSString * inJson = [inArguments objectAtIndex:1];
-        
         bounceParams = [[NSMutableDictionary alloc] initWithDictionary:[inJson JSONValue]];
         NSString *inType = [inArguments objectAtIndex:0];
         [bounceParams setObject:inType forKey:@"type"];
@@ -3085,7 +3083,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)showBounceView:(NSMutableArray *)inArguments {
-    NSString *inType = [inArguments objectAtIndex:0];
+    id inType = [inArguments objectAtIndex:0];
     NSString *inColor = [inArguments objectAtIndex:1];
     NSString *inFlag = [inArguments objectAtIndex:2];
     if (!meBrwView) {
@@ -3095,11 +3093,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         return;
     }
-    int type = -1;
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-    }
+    int type = [inType intValue];
     UIColor *color = RGBCOLOR(226, 231, 237);
     int flag = [inFlag intValue];
     //inColor && inColor.length != 0
