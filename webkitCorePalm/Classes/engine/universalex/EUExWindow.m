@@ -318,8 +318,14 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 -(void)confirm:(NSMutableArray *)inArguments{
     NSString *inTitle = [inArguments objectAtIndex:0];
     NSString *inMessage = [inArguments objectAtIndex:1];
-    NSString *inButtonStr = [inArguments objectAtIndex:2];
-    NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
+    id inButtons = [inArguments objectAtIndex:2];
+    NSArray *inButtonLabels;
+    if([inButtons isKindOfClass:[NSArray class]]){
+        inButtonLabels = inButtons;
+    }
+    if ([inButtons isKindOfClass:[NSString class]]) {
+        inButtonLabels = [(NSString *)inButtons componentsSeparatedByString:@","];
+    }
     mbAlertView = [[BUIAlertView alloc]init];
     mbAlertView.mAlertView = [[UIAlertView alloc]
                               initWithTitle:inTitle
@@ -353,9 +359,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     NSString *inMessage = [inArguments objectAtIndex:1];
     NSString *inDefaultValue = [inArguments objectAtIndex:2];
-    NSString *inButtonStr = [inArguments objectAtIndex:3];
-    NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
 
+    id inButtons = [inArguments objectAtIndex:3];
+    NSArray *inButtonLabels;
+    if([inButtons isKindOfClass:[NSArray class]]){
+        inButtonLabels = inButtons;
+    }
+    if ([inButtons isKindOfClass:[NSString class]]) {
+        inButtonLabels = [(NSString *)inButtons componentsSeparatedByString:@","];
+    }
 
     
     NSString *placeHolder = inArguments.count > 4 ? inArguments[4] : @"" ;
@@ -411,8 +423,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)actionSheet:(NSMutableArray *)inArguments {
     NSString *inTitle = [inArguments objectAtIndex:0];
     NSString *inCancel = [inArguments objectAtIndex:1];
-    NSString *inButtonStr = [inArguments objectAtIndex:2];
-    NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
+
+    id inButtons = [inArguments objectAtIndex:2];
+    NSArray *inButtonLabels;
+    if([inButtons isKindOfClass:[NSArray class]]){
+        inButtonLabels = inButtons;
+    }
+    if ([inButtons isKindOfClass:[NSString class]]) {
+        inButtonLabels = [(NSString *)inButtons componentsSeparatedByString:@","];
+    }
     mActionSheet=[[UIActionSheet alloc]initWithTitle:inTitle delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     for (NSString *otherBtn in inButtonLabels) {
         [mActionSheet addButtonWithTitle:otherBtn];

@@ -91,13 +91,12 @@ void PluginLog (NSString *format, ...) {
     
     
     //测试用,检测res://目录下的framework
-#if DEBUG
     if(!dynamicFramework){
 
         dynamicFrameworkPath=[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@.framework",pluginName]];
         dynamicFramework=[NSBundle bundleWithPath:dynamicFrameworkPath];
     }
-#endif
+
     
     if(dynamicFramework && [dynamicFramework isLoaded]){
         //如果有动态库插件，优先查看动态库中是否有bundle

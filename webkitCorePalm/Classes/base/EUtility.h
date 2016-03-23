@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 The AppCan Open Source Project.
+ *  Copyright (C) 2016 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -29,10 +29,7 @@ typedef NS_ENUM(NSInteger,uexPluginCallbackType){
 extern NSString * const cUexPluginCallbackInRootWindow;
 extern NSString * const cUexPluginCallbackInFrontWindow;
 
-@interface EUtility : NSObject {
-}
-
-
+@interface EUtility : NSObject
 
 /**
  *  @method 回调网页js
@@ -43,10 +40,9 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  *  @param type         回调的方式（json字符串还是json对象）
  *  @param targetBrwView 要回调的网页 请传cUexPluginCallbackTargetRootWindow(回调给起始Window）cUexPluginCallbackTargetFrontWindow(回调给最前端Window) 或者(EBrowserView *)实例
  *
- *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:meBrwView];
- *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:cUexPluginCallbackInRootWindow];
+ *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:self.meBrwView];//,回调给当前网页
+ *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:cUexPluginCallbackInRootWindow];//回调给root窗口
  *
- *  @author  LiuKangli
  *  @version 2015-09-23
  */
 + (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target;
