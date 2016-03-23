@@ -381,7 +381,7 @@ const float AppCanFinalProgressValue = 0.9f;
         
         _progress = progress;
         
-        NSLog(@"AppCan==setProgress==%f",progress);
+        //NSLog(@"AppCan==setProgress==%f",progress);
         
         NSString * onProgressChangeJS = [NSString stringWithFormat:@"if(window.onProgressChanged){window.onProgressChanged(%lu)}",(unsigned long)(progress * 100)];
         
