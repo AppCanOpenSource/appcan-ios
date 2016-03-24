@@ -579,7 +579,6 @@
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
 					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
-					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
@@ -616,7 +615,6 @@
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
 					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
-					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
@@ -675,7 +673,6 @@
 					"\"$(SRCROOT)/AppCanPlugin/uexFrameworks\"",
 					"$(PROJECT_DIR)/AppCanPlugin/engine",
 					"$(PROJECT_DIR)/AppCanPlugin/uexFrameworks",
-					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";

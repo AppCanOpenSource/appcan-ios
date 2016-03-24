@@ -205,7 +205,7 @@
 }
 
 -(void)cleanCache:(NSMutableArray *)inArguments {
-	if (meBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
+	if (self.meBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
 		NSURLCache *shareCache = [NSURLCache sharedURLCache];
 		if (shareCache) {

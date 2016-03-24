@@ -178,7 +178,7 @@
 		42CF1EFA1C19046700F539B4 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864718B1B93D000D7600 /* mztools.c */; };
 		42CF1EFB1C19046700F539B4 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863218B1B93D000D7600 /* ASIInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1EFC1C19046700F539B4 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C381B2A6D3500D5F279 /* SDImageCache.m */; };
-		42CF1EFD1C19046700F539B4 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861018B1B93D000D7600 /* EUExBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF1EFD1C19046700F539B4 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861018B1B93D000D7600 /* EUExBase.m */; };
 		42CF1EFE1C19046700F539B4 /* BallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865F18B1B93D000D7600 /* BallView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1EFF1C19046700F539B4 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864518B1B93D000D7600 /* ioapi.c */; };
 		42CF1F001C19046700F539B4 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C28879F1A0B0984002776E4 /* NSDictionary_JSONExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -473,7 +473,7 @@
 		42CF20351C1904F100F539B4 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864718B1B93D000D7600 /* mztools.c */; };
 		42CF20361C1904F100F539B4 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863218B1B93D000D7600 /* ASIInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20371C1904F100F539B4 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C381B2A6D3500D5F279 /* SDImageCache.m */; };
-		42CF20381C1904F100F539B4 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861018B1B93D000D7600 /* EUExBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF20381C1904F100F539B4 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861018B1B93D000D7600 /* EUExBase.m */; };
 		42CF20391C1904F100F539B4 /* BallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865F18B1B93D000D7600 /* BallView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF203A1C1904F100F539B4 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864518B1B93D000D7600 /* ioapi.c */; };
 		42CF203B1C1904F100F539B4 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C28879F1A0B0984002776E4 /* NSDictionary_JSONExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -841,7 +841,7 @@
 		5AAA86F418B1B93D000D7600 /* EUExAppCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860D18B1B93D000D7600 /* EUExAppCenter.h */; };
 		5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860E18B1B93D000D7600 /* EUExAppCenter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86F618B1B93D000D7600 /* EUExBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860F18B1B93D000D7600 /* EUExBase.h */; };
-		5AAA86F718B1B93D000D7600 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861018B1B93D000D7600 /* EUExBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5AAA86F718B1B93D000D7600 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861018B1B93D000D7600 /* EUExBase.m */; };
 		5AAA86F818B1B93D000D7600 /* EUExBaseDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861118B1B93D000D7600 /* EUExBaseDefine.h */; };
 		5AAA86F918B1B93D000D7600 /* EUExBaseDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861218B1B93D000D7600 /* EUExBaseDefine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86FA18B1B93D000D7600 /* EUExConsole.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861318B1B93D000D7600 /* EUExConsole.h */; };

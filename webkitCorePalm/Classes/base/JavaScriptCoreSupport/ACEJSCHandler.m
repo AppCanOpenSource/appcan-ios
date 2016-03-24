@@ -194,6 +194,9 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 }
 
 - (void)clean{
+    for(__kindof EUExBase *plugin in self.pluginDict.allValues){
+        [plugin clean];
+    }
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
 }

@@ -1522,8 +1522,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 } else {
                     
                     inBrwView.image = nil;
-                    BGColor bgColor = [BUtility bgColorFromNSString:bgColorStr];
-                    UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+                    UIColor *color = [EUtility colorFromHTMLString:bgColorStr];
                     inBrwView.backgroundColor = color;
                     
                 }
@@ -3052,8 +3051,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         NSString *textColor =[bounceParams objectForKey:@"textColor"];
         //textColor && textColor.length>0
         if (KUEXIS_NSString(textColor)) {
-            BGColor bgColor = [BUtility bgColorFromNSString:textColor];
-            UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+            UIColor *color = [EUtility colorFromHTMLString:textColor];
             [bounceParams setObject:color forKey:@"textColor"];
         }
         
@@ -3098,8 +3096,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     int flag = [inFlag intValue];
     //inColor && inColor.length != 0
     if (KUEXIS_NSString(inColor)) {
-        BGColor bgColor = [BUtility bgColorFromNSString:inColor];
-        color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+
+        color = [EUtility colorFromHTMLString:inColor]?:color;
     }
     
     

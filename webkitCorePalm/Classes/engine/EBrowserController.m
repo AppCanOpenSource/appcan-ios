@@ -23,6 +23,7 @@
 #import "EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "EBrowser.h"
+#import "EUtility.h"
 #import "BUtility.h"
 #import "WWidgetMgr.h"
 #import "WWidget.h"
@@ -623,8 +624,7 @@
                 } else {
                     
                     inBrwView.image = nil;
-                    BGColor bgColor = [BUtility bgColorFromNSString:bgColorStr];
-                    UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+                    UIColor *color = [EUtility colorFromHTMLString:bgColorStr];
                     inBrwView.backgroundColor = color;
                     
                 }

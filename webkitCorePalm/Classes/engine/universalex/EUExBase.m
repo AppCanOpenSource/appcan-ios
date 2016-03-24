@@ -28,49 +28,30 @@
 #import "WidgetOneDelegate.h"
 #import "EUtility.h"
 @implementation EUExBase
+
 @synthesize meBrwView;
 
-- (id)initWithBrwView:(EBrowserView *) eInBrwView{
-    if (self=[super init]) {
+- (instancetype)init{
+    return [self initWithBrwView:nil];
+}
+
+- (instancetype)initWithBrwView:(EBrowserView *) eInBrwView{
+    self = [super init];
+    if (self) {
         meBrwView = eInBrwView;
     }
     return self;
 }
 
-- (void)stopNetService {
-}
 
 - (void)dealloc{
     //ACENSLog(@"EUExBase retain count is %d",[self retainCount]);
     //ACENSLog(@"EUExBase dealloc is %x", self);
-    if (meBrwView) {
-        meBrwView = nil;
+    if (self.meBrwView) {
+        self.meBrwView = nil;
     }
-    [super dealloc];
 }
 
-- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType strData:(NSString*)inData {
-    //inData = [inData stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d,%d,\'%@\');}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
-    ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
-    [EUtility brwView:self.meBrwView evaluateScript:jsSuccessStr];
-    
-}
-
-- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType intData:(int)inData {
-    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d,%d,%d);}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
-    ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
-    [EUtility brwView:self.meBrwView evaluateScript:jsSuccessStr];
-    
-}
-
-- (void)jsFailedWithOpId:(int)inOpId errorCode:(int)inErrorCode errorDes:(NSString*)inErrorDes {
-    inErrorDes =[inErrorDes stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *jsFailedStr = [NSString stringWithFormat:@"if(uexWidgetOne.cbError!=null){uexWidgetOne.cbError(%d,%d,\'%@\');}",inOpId,inErrorCode,inErrorDes];
-    ACENSLog(@"jsFailedStr=%@",jsFailedStr);
-    [EUtility brwView:self.meBrwView evaluateScript:jsFailedStr];
-    
-}
 
 - (void)clean{
 }
@@ -100,7 +81,7 @@
     if ([inPath hasPrefix:F_WGTS_PATH]||[inPath hasPrefix:F_APP_PATH]||[inPath hasPrefix:F_RES_PATH]) {
         //		EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
         
-        EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
+        EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
         NSString *absPath =nil;
         absPath=[self.meBrwView.meBrwCtrler.mwWgtMgr curWidgetPath:eBrwWndContainer.mwWgt];
         ACENSLog(@"abspath=%@",absPath);
@@ -139,4 +120,35 @@
     }
     return inPath;
 }
+@end
+
+
+@implementation EUExBase (Deprecated)
+
+- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType strData:(NSString*)inData {
+    //inData = [inData stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d,%d,\'%@\');}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
+    ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
+    [EUtility brwView:self.meBrwView evaluateScript:jsSuccessStr];
+    
+}
+
+- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType intData:(int)inData {
+    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d,%d,%d);}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
+    ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
+    [EUtility brwView:self.meBrwView evaluateScript:jsSuccessStr];
+    
+}
+
+- (void)jsFailedWithOpId:(int)inOpId errorCode:(int)inErrorCode errorDes:(NSString*)inErrorDes {
+    inErrorDes =[inErrorDes stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *jsFailedStr = [NSString stringWithFormat:@"if(uexWidgetOne.cbError!=null){uexWidgetOne.cbError(%d,%d,\'%@\');}",inOpId,inErrorCode,inErrorDes];
+    ACENSLog(@"jsFailedStr=%@",jsFailedStr);
+    [EUtility brwView:self.meBrwView evaluateScript:jsFailedStr];
+    
+}
+- (void)stopNetService {
+}
+
+
 @end
