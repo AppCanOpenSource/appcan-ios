@@ -18,11 +18,11 @@
 
 @class EBrowserView;
 @interface EUExBase :NSObject{
-    __unsafe_unretained EBrowserView *meBrwView;
+    __weak EBrowserView *meBrwView;
 }
 
 //插件所在的网页实例
-@property (nonatomic, assign) EBrowserView *meBrwView;
+@property (nonatomic, weak) EBrowserView *meBrwView;
 
 - (instancetype)initWithBrwView:(EBrowserView *)eInBrwView NS_DESIGNATED_INITIALIZER;
 /**

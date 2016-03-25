@@ -47,11 +47,11 @@
 - (void)dealloc{
     //ACENSLog(@"EUExBase retain count is %d",[self retainCount]);
     //ACENSLog(@"EUExBase dealloc is %x", self);
-    /*
+    
     if (self.meBrwView) {
         self.meBrwView = nil;
     }
-     */
+    
 }
 
 
