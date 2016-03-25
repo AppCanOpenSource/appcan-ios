@@ -74,7 +74,8 @@
 #define KUEXIS_ZERO(x)\
 (([x isKindOfClass:[NSString class]] && [x length] > 0 && [x floatValue] == 0)||\
 ([x isKindOfClass:[NSNumber class]] && [x floatValue] == 0))
-
+#define KUEXIS_EMPTY(x)\
+(!x || ([x isKindOfClass:[NSString class]] && [x length] == 0))
 #define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
 
 
@@ -4185,7 +4186,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     w = ePopBrwView.frame.size.width;
     h = ePopBrwView.frame.size.height;
     //inX.length != 0
-    if (!KUEXIS_ZERO(inX)) {
+    if (!KUEXIS_EMPTY(inX) ) {
         newX = [inX intValue];
         if (x != newX) {
             x = newX;
@@ -4193,7 +4194,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
     //inY.length != 0
-    if (!KUEXIS_ZERO(inY)) {
+    if (!KUEXIS_EMPTY(inY)) {
         newY = [inY intValue];
         if (y != newY) {
             y = newY;
@@ -4201,7 +4202,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
     //inH.length != 0
-    if (!KUEXIS_ZERO(inH)) {
+    if (!KUEXIS_EMPTY(inH)) {
         newH = [inH intValue];
         if (h != newH) {
             h = newH;
@@ -4209,7 +4210,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
     //inW.length != 0
-    if (!KUEXIS_ZERO(inW)) {
+    if (!KUEXIS_EMPTY(inW)) {
         newW = [inW intValue];
         if (w != newW) {
             w = newW;
