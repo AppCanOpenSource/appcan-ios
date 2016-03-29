@@ -99,7 +99,7 @@
     
     NSString * appId = [inArguments objectAtIndex:0];
     
-    EBrowserWidgetContainer * eBrwWgtContainer = meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
+    EBrowserWidgetContainer * eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     
     EBrowserWindowContainer * eBrwWndContainer = (EBrowserWindowContainer *)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:appId];
     
@@ -158,7 +158,7 @@
         return;
     }
     
-    WWidget *inCurWgt = meBrwView.mwWgt;
+    WWidget *inCurWgt = self.meBrwView.mwWgt;
     inCurWgt.logServerIp = logServerIp;
     
     if ([isDebug isEqualToString:@"1"]) {
@@ -170,7 +170,7 @@
 
 -(WWidget*)getStartWgtByAppId:(NSString*)inAppId{
     //	WWidget *inCurWgt = meBrwView.mwWgt;
-    WWidgetMgr *wgtMgr = meBrwView.meBrwCtrler.mwWgtMgr;
+    WWidgetMgr *wgtMgr = self.meBrwView.meBrwCtrler.mwWgtMgr;
     WWidget * mainWgt = [wgtMgr mainWidget];
     WWidget *startWgt = nil;
     startWgt = (WWidget*)[wgtMgr wgtPluginDataByAppId:inAppId curWgt:mainWgt];
@@ -210,10 +210,10 @@
     if ([inArguments count] >= 6) {
         inAppkey = [inArguments objectAtIndex:5];
     }
-    if ((meBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
+    if ((self.meBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
         return;
     }
-    EBrowserMainFrame *eBrwMainFrm = meBrwView.meBrwCtrler.meBrwMainFrm;
+    EBrowserMainFrame *eBrwMainFrm = self.meBrwView.meBrwCtrler.meBrwMainFrm;
     if (eBrwMainFrm.meAdBrwView) {
         eBrwMainFrm.meAdBrwView.hidden = YES;
         [eBrwMainFrm invalidateAdTimers];
@@ -239,7 +239,7 @@
     if(inAppkey){
         wgtObj.appKey = inAppkey;
     }
-    int mOrientaion =meBrwView.mwWgt.orientation;
+    int mOrientaion =self.meBrwView.mwWgt.orientation;
     int subOrientation = wgtObj.orientation;
     
     theApp.drawerController.canRotate = YES;
@@ -302,11 +302,11 @@
     
     //ACENSLog(@"wgtObj retaincount=%d",[wgtObj retainCount]);
     if(wgtObj){
-        meBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WIDGET_IN_OPENING;
-        EBrowserWidgetContainer *eBrwWgtContainer = meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
+        self.meBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WIDGET_IN_OPENING;
+        EBrowserWidgetContainer *eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
         //		EBrowserWindowContainer *eCurBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
         
-        EBrowserWindowContainer *eCurBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
+        EBrowserWindowContainer *eCurBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
         
         EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:inAppId];
         if (eBrwWndContainer) {
@@ -339,16 +339,16 @@
                 [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
             }
             if (eBrwWgtContainer.meRootBrwWndContainer == eBrwWndContainer) {
-                meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
+                self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
             }
-            if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-                if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-                    [meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:inAppId];
+            if (self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
+                if (self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
+                    [self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:inAppId];
                 }
             }
-            meBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
+            self.meBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
         } else {
-            eBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:CGRectMake(0, 0, eBrwWgtContainer.bounds.size.width, eBrwWgtContainer.bounds.size.height) BrwCtrler:meBrwView.meBrwCtrler Wgt:wgtObj];
+            eBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:CGRectMake(0, 0, eBrwWgtContainer.bounds.size.width, eBrwWgtContainer.bounds.size.height) BrwCtrler:self.meBrwView.meBrwCtrler Wgt:wgtObj];
             eBrwWndContainer.mStartAnimiId = animiId;
             eBrwWndContainer.mStartAnimiDuration = animiDuration;
             eBrwWndContainer.meOpenerContainer = eCurBrwWndContainer;
@@ -383,9 +383,9 @@
             ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);//inKey  目前为主widget的AppKey，子widget没有
         }
     }else {
-        if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-            if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-                [meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_NOT_EXIST retAppId:inAppId];
+        if (self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
+            if (self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
+                [self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_NOT_EXIST retAppId:inAppId];
             }
         }
         [self jsSuccessWithName:@"uexWidget.cbStartWidget" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:2];
@@ -420,7 +420,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
     
     int mOrientaion = [[BUtility getMainWidgetConfigInterface]intValue];
-    int subOrientation =meBrwView.mwWgt.orientation;
+    int subOrientation =self.meBrwView.mwWgt.orientation;
     
     theApp.drawerController.canRotate = YES;
     
@@ -482,7 +482,7 @@
     
     theApp.drawerController.canRotate = NO;
     
-    EBrowserWidgetContainer *eBrwWgtContainer = meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
+    EBrowserWidgetContainer *eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     EBrowserWindowContainer *eBrwWndContainer = nil;
     
     if (appID) {
@@ -492,7 +492,7 @@
     } else {
         
         //eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
-        eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
+        eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
         
     }
     
@@ -543,9 +543,9 @@
         
         if (eBrwWndContainer.meOpenerContainer.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
             
-            if (meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
+            if (self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
                 
-                meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = NO;
+                self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = NO;
                 
             }
             
@@ -570,11 +570,11 @@
             
         }
         
-        WWidgetMgr *wgtMgr = meBrwView.meBrwCtrler.mwWgtMgr;
+        WWidgetMgr *wgtMgr = self.meBrwView.meBrwCtrler.mwWgtMgr;
         
         WWidget *mainWgt=[wgtMgr mainWidget];
         
-        EBrowserWidgetContainer *eBrwWgtContainer = meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
+        EBrowserWidgetContainer *eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
         EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:mainWgt.appId];
         
         [eBrwWgtContainer bringSubviewToFront:eBrwWndContainer];
@@ -616,15 +616,15 @@
     
     if (eBrwWndContainer != eBrwWgtContainer.meRootBrwWndContainer) {
         
-        meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
-        meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
+        self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
+        self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
         
     }
     
     EBrowserWindow *eAboveWnd = [[eBrwWgtContainer aboveWindowContainer] aboveWindow];
     [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
     
-    if (meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter && meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.sView.hidden == NO) {
+    if (self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter && self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.sView.hidden == NO) {
         
         return;
         
@@ -650,7 +650,7 @@
         if (brwWnd_.meBrwView.superview) {
             [brwWnd_.meBrwView removeFromSuperview];
         }
-        [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBrwView];
+        [[self.meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBrwView];
         [brwWnd_.meBrwView release];
         
         brwWnd_.meBrwView = NULL;
@@ -660,7 +660,7 @@
         if (brwWnd_.meTopSlibingBrwView.superview) {
             [brwWnd_.meTopSlibingBrwView removeFromSuperview];
         }
-        [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meTopSlibingBrwView];
+        [[self.meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meTopSlibingBrwView];
         [brwWnd_.meTopSlibingBrwView release];
         brwWnd_.meTopSlibingBrwView = NULL;
     }
@@ -669,7 +669,7 @@
         if (brwWnd_.meBottomSlibingBrwView.superview) {
             [brwWnd_.meBottomSlibingBrwView removeFromSuperview];
         }
-        [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBottomSlibingBrwView];
+        [[self.meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBottomSlibingBrwView];
         [brwWnd_.meBottomSlibingBrwView release];
         brwWnd_.meBottomSlibingBrwView = NULL;
     }
@@ -686,7 +686,7 @@
             NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
             [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             
-            [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
+            [[self.meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
             [ePopView release];
             [brwWnd_.mPopoverBrwViewDict removeAllObjects];
             [brwWnd_.mPopoverBrwViewDict release];
@@ -707,10 +707,10 @@
         //        [brwWnd_.mMuiltPopoverDict release];
         brwWnd_.mMuiltPopoverDict = nil;
     }
-    if (meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
+    if (self.meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
         brwWnd_.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
-        [meBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
+        self.meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
+        [self.meBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
     }
     if ((brwWnd_.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
         if ((brwWnd_.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
@@ -752,13 +752,13 @@
     if (!inAppId) {
         [self jsSuccessWithName:@"uexWidget.cbRemoveWidget" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CFAILED];
     }
-    WWidgetMgr *wgtMgr = meBrwView.meBrwCtrler.mwWgtMgr;
-    if ([inAppId isEqualToString:meBrwView.mwWgt.appId] == YES) {
+    WWidgetMgr *wgtMgr = self.meBrwView.meBrwCtrler.mwWgtMgr;
+    if ([inAppId isEqualToString:self.meBrwView.mwWgt.appId] == YES) {
         [wgtMgr removeWgtByAppId:inAppId];
         [self jsSuccessWithName:@"uexWidget.cbRemoveWidget" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CSUCCESS];
         return;
     }
-    if (meBrwView.mwWgt.wgtType != F_WWIDGET_SPACEWIDGET && meBrwView.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
+    if (self.meBrwView.mwWgt.wgtType != F_WWIDGET_SPACEWIDGET && self.meBrwView.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
         [self jsSuccessWithName:@"uexWidget.cbRemoveWidget" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CFAILED];
         return;
     }
@@ -770,9 +770,9 @@
     }
 }
 - (void)getOpenerInfo:(NSMutableArray *)inArguments {
-    //	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
+    //	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)self.meBrwView.meBrwWnd.superview;
     
-    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
+    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
     
     if (eBrwWndContainer.mOpenerInfo) {
         ACENSLog(@"%@",eBrwWndContainer.mOpenerInfo);
@@ -823,8 +823,8 @@
 }
 
 -(void)checkUpdate:(NSMutableArray *)inArguments {
-    if (meBrwView.mwWgt.ver && meBrwView.mwWgt.appId) {
-        [NSThread detachNewThreadSelector:@selector(checkUpdateWgt:) toTarget:self withObject:(id)meBrwView.mwWgt];
+    if (self.meBrwView.mwWgt.ver && self.meBrwView.mwWgt.appId) {
+        [NSThread detachNewThreadSelector:@selector(checkUpdateWgt:) toTarget:self withObject:(id)self.meBrwView.mwWgt];
     }else {
         NSDictionary *tmpDict = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:UEX_JVParametersError] forKey:UEX_JKRESULT];
         [self jsSuccessWithName:@"uexWidget.cbCheckUpdate" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:[tmpDict JSONFragment]];
@@ -881,15 +881,15 @@
     ACENSLog(@"jsonstr=%@",jsonStr);
     [self jsSuccessWithName:@"uexWidget.cbCheckUpdate" opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:jsonStr];
     //NSMutableDictionary *dict =(NSMutableDictionary*)userInfo;
-    //[meBrwView.meUExManager processCallbackResult:dict];
+
 }
 
 -(void)setPushNotifyCallback:(NSMutableArray *)inArguments {
     //	EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
-    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
+    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
     if (eBrwWndContainer) {
         NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-        [defaults setValue:meBrwView.muexObjName forKey:kUexPushNotifyBrwViewNameKey];
+        [defaults setValue:self.meBrwView.muexObjName forKey:kUexPushNotifyBrwViewNameKey];
         [defaults setValue:[inArguments objectAtIndex:0] forKey:kUexPushNotifyCallbackFunctionNameKey];
         [defaults synchronize];
     }
@@ -1087,7 +1087,7 @@
         //        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
         //        if (analysisClass) {
         NSString *softToken = [EUtility md5SoftToken];
-        NSString *appId = meBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+        NSString *appId = self.meBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
         NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",theApp.useBindUserPushURL,softToken];
         ACENSLog(@"usrStr=%@",urlStr);
         
@@ -1169,9 +1169,9 @@
 
 -(void)setSpaceEnable:(NSMutableArray *)inArguments{
     
-    EBrowserMainFrame *eBrwMainFrm = meBrwView.meBrwCtrler.meBrwMainFrm;
+    EBrowserMainFrame *eBrwMainFrm = self.meBrwView.meBrwCtrler.meBrwMainFrm;
     if (!eBrwMainFrm.meBrwToolBar) {
-        EBrowserController *eInBrwCtrler = meBrwView.meBrwCtrler;
+        EBrowserController *eInBrwCtrler = self.meBrwView.meBrwCtrler;
         EBrowserToolBar *ebrowserToolBar =[[EBrowserToolBar alloc] initWithFrame:CGRectMake(BOTTOM_LOCATION_VERTICAL_X,BOTTOM_LOCATION_VERTICAL_Y, BOTTOM_VIEW_WIDTH,BOTTOM_VIEW_HEIGHT) BrwCtrler:eInBrwCtrler];
         [eBrwMainFrm addSubview:ebrowserToolBar];
         ebrowserToolBar.flag=1;
@@ -1195,7 +1195,7 @@
         }
         NSDictionary *dict=[NSDictionary dictionaryWithObject:result forKey:@"installed"];
         NSString* jsStr=[NSString stringWithFormat:@"if(uexWidget.cbIsAppInstalled != null){uexWidget.cbIsAppInstalled('%@');}",[dict JSONFragment]];
-        [EUtility brwView:meBrwView evaluateScript:jsStr];
+        [EUtility brwView:self.meBrwView evaluateScript:jsStr];
     }
 }
 

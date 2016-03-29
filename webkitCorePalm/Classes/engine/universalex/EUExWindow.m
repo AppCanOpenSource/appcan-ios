@@ -70,10 +70,18 @@
 
 #define AppRootLeftSlidingWinName  @"rootLeftSlidingWinName"
 #define ApprootRightSlidingWinName @"rootRightSlidingWinName"
-#define KUEXIS_NSString(x) ([x isKindOfClass:[NSString class]] && x.length>0)
-
+#define KUEXIS_NSString(x) ([x isKindOfClass:[NSString class]] && [x length] > 0)
+#define KUEXIS_ZERO(x)\
+(([x isKindOfClass:[NSString class]] && [x length] > 0 && [x floatValue] == 0)||\
+([x isKindOfClass:[NSNumber class]] && [x floatValue] == 0))
+#define KUEXIS_EMPTY(x)\
+(!x || ([x isKindOfClass:[NSString class]] && [x length] == 0))
 #define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
 
+
+
+NSString *const kACEEvaluateScriptJavaScriptKey = @"kACEEvaluateScriptJavaScriptKey";
+NSString *const kACEEvaluateScriptBrowserViewKey = @"kACEEvaluateScriptBrowserViewKey";
 
 //20151021 lkl 修复iOS 9 长按产生放大镜的问题
 //长按事件阻碍选项
@@ -91,19 +99,11 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 @interface EUExWindow()
 @property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
-
+@property (nonatomic,strong)NSMutableDictionary *bounceParams;
 @end
 
 @implementation EScrollView
 
-
-- (void)dealloc {
-    
-    [_scrollView release];
-    [_mainPopName release];
-    [super dealloc];
-    
-}
 
 
 @end
@@ -117,35 +117,26 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 @synthesize mToastView;
 @synthesize mToastTimer;
 @synthesize meBrwAnimi;
-
+@synthesize bounceParams;
 
 - (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:NULL];
-    
     [_notificationDic removeAllObjects];
-    [_notificationDic release];
     _notificationDic = nil;
-    
-    [mbAlertView release];
     mbAlertView = nil;
-    [mActionSheet release];
     mActionSheet = nil;
-    [mToastView release];
     mToastView = nil;
-    [mToastTimer release];
     mToastTimer = nil;
-    [meBrwAnimi release];
     meBrwAnimi = nil;
-    [self removeNotificationCenter];
-    [super dealloc];
-}
-
-
--(void)removeNotificationCenter{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
+
+
 -(void)doRotate:(UIInterfaceOrientation)deviceOrientation_ {
+    if (!meBrwView) {
+        return;
+    }
     CGRect rect;
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     float wndWidth = eBrwWnd.bounds.size.width;
@@ -309,20 +300,18 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     NSString *inTitle = [inArguments objectAtIndex:0];
     NSString *inMessage = [inArguments objectAtIndex:1];
     NSString *inButtonLabel = [inArguments objectAtIndex:2];
-    if (mbAlertView) {
-        [mbAlertView release];
-    }
+    
     if ((meBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) == F_EBRW_WND_FLAG_IN_CLOSING) {
         return;
     }
     ACENSLog(@"alertWithTitle");
     mbAlertView = [[BUIAlertView alloc]init];
-    mbAlertView.mAlertView = [[[UIAlertView alloc]
-                               initWithTitle:inTitle
-                               message:inMessage
-                               delegate:self
-                               cancelButtonTitle:inButtonLabel
-                               otherButtonTitles:nil] autorelease];
+    mbAlertView.mAlertView = [[UIAlertView alloc]
+                              initWithTitle:inTitle
+                              message:inMessage
+                              delegate:self
+                              cancelButtonTitle:inButtonLabel
+                              otherButtonTitles:nil];
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_ALERT];
     [mbAlertView.mAlertView show];
 }
@@ -330,18 +319,21 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 -(void)confirm:(NSMutableArray *)inArguments{
     NSString *inTitle = [inArguments objectAtIndex:0];
     NSString *inMessage = [inArguments objectAtIndex:1];
-    NSString *inButtonStr = [inArguments objectAtIndex:2];
-    NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
-    if (mbAlertView) {
-        [mbAlertView release];
+    id inButtons = [inArguments objectAtIndex:2];
+    NSArray *inButtonLabels;
+    if([inButtons isKindOfClass:[NSArray class]]){
+        inButtonLabels = inButtons;
+    }
+    if ([inButtons isKindOfClass:[NSString class]]) {
+        inButtonLabels = [(NSString *)inButtons componentsSeparatedByString:@","];
     }
     mbAlertView = [[BUIAlertView alloc]init];
-    mbAlertView.mAlertView = [[[UIAlertView alloc]
-                               initWithTitle:inTitle
-                               message:inMessage
-                               delegate:self
-                               cancelButtonTitle:nil
-                               otherButtonTitles:nil] autorelease];
+    mbAlertView.mAlertView = [[UIAlertView alloc]
+                              initWithTitle:inTitle
+                              message:inMessage
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:nil];
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_CONFIRM];
     NSInteger buttonCount = inButtonLabels.count;
     NSString *button = nil;
@@ -356,50 +348,53 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)reload:(NSMutableArray *)inArguments {
-    
     if (meBrwView) {
-        
         [meBrwView reload];
-        
     }
-    
 }
 
 - (void)prompt:(NSMutableArray *)inArguments{
     NSString *inTitle = [inArguments objectAtIndex:0];
-    //inTitle==nil || inTitle.length<=0
-    if (!KUEXIS_NSString(inTitle))
-    {
+    if (!KUEXIS_NSString(inTitle)){
         inTitle=@" ";
     }
     NSString *inMessage = [inArguments objectAtIndex:1];
-    //    if (inMessage==nil || inMessage.length<=0 )
-    //    {
-    //        inMessage=@" ";
-    //    }
     NSString *inDefaultValue = [inArguments objectAtIndex:2];
-    NSString *inButtonStr = [inArguments objectAtIndex:3];
-    NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
-    if (mbAlertView) {
-        [mbAlertView release];
+
+    id inButtons = [inArguments objectAtIndex:3];
+    NSArray *inButtonLabels;
+    if([inButtons isKindOfClass:[NSArray class]]){
+        inButtonLabels = inButtons;
     }
+    if ([inButtons isKindOfClass:[NSString class]]) {
+        inButtonLabels = [(NSString *)inButtons componentsSeparatedByString:@","];
+    }
+
+    
+    NSString *placeHolder = inArguments.count > 4 ? inArguments[4] : @"" ;
+
     if ((meBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) == F_EBRW_WND_FLAG_IN_CLOSING) {
         return;
     }
     mbAlertView = [[BUIAlertView alloc]init];
-    mbAlertView.mAlertView = [[[UIAlertView alloc]
-                               initWithTitle:inTitle
-                               message:inMessage
-                               delegate:self
-                               cancelButtonTitle:nil
-                               otherButtonTitles:nil] autorelease];
+    mbAlertView.mAlertView = [[UIAlertView alloc]
+                              initWithTitle:inTitle
+                              message:inMessage
+                              delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:nil];
     //适配ios7
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0)
     {
         mbAlertView.mAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField * temp = [mbAlertView.mAlertView textFieldAtIndex:0];
-        //temp.placeholder=inDefaultValue;
-        temp.text = inDefaultValue;
+        if (KUEXIS_NSString(inDefaultValue)) {
+             temp.text = inDefaultValue;
+        }
+        if (KUEXIS_NSString(placeHolder)) {
+            temp.placeholder = placeHolder;
+        }
+        
     }else
     {
         mbAlertView.mTextField = [[UITextField alloc] init];
@@ -408,7 +403,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [mbAlertView.mTextField setBorderStyle:UITextBorderStyleRoundedRect];
         [mbAlertView.mTextField setUserInteractionEnabled:YES];
         //mbAlertView.mTextField.placeholder = inDefaultValue;
-        mbAlertView.mTextField.text = inDefaultValue;
+        if (KUEXIS_NSString(inDefaultValue)) {
+            mbAlertView.mTextField.text = inDefaultValue;
+        }
+        if (KUEXIS_NSString(placeHolder)) {
+            mbAlertView.mTextField.placeholder = placeHolder;
+        }
         [mbAlertView.mAlertView addSubview:mbAlertView.mTextField];
     }
     [mbAlertView initWithType:F_BUIALERTVIEW_TYPE_PROMPT];
@@ -424,12 +424,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)actionSheet:(NSMutableArray *)inArguments {
     NSString *inTitle = [inArguments objectAtIndex:0];
     NSString *inCancel = [inArguments objectAtIndex:1];
-    NSString *inButtonStr = [inArguments objectAtIndex:2];
-    NSArray *inButtonLabels = [inButtonStr componentsSeparatedByString:@","];
-    if (mActionSheet) {
-        [mActionSheet release];
+
+    id inButtons = [inArguments objectAtIndex:2];
+    NSArray *inButtonLabels;
+    if([inButtons isKindOfClass:[NSArray class]]){
+        inButtonLabels = inButtons;
     }
-    
+    if ([inButtons isKindOfClass:[NSString class]]) {
+        inButtonLabels = [(NSString *)inButtons componentsSeparatedByString:@","];
+    }
     mActionSheet=[[UIActionSheet alloc]initWithTitle:inTitle delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     for (NSString *otherBtn in inButtonLabels) {
         [mActionSheet addButtonWithTitle:otherBtn];
@@ -462,7 +465,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 -(void)alertForbidView:(NSString*)uexWinName{
     UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:[NSString stringWithFormat:@"%@窗口被禁止使用，请联系管理员。",uexWinName] delegate:nil cancelButtonTitle:nil otherButtonTitles:ACELocalized(@"确定"), nil];
     [alertView show];
-    [alertView release];
 }
 
 
@@ -506,7 +508,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         eBrwWnd = [eBrwWndContainer brwWndForKey:inUExWndName];
         if (eBrwWnd != nil) {
             [eBrwWndContainer removeFromWndDict:inUExWndName];
-            [eBrwWnd release];
         }
         eBrwWnd = nil;
         
@@ -621,8 +622,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                     NSString *goViewName =[url absoluteString];
                     {
-                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
                     }
                     if (eBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -652,7 +653,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                 NSString *data = [encryptObj decryptWithPath:url appendData:nil];
                 
-                [encryptObj release];
                 [eBrwWnd.meBrwView loadWithData:data baseUrl:url];
                 //				} else {
                 //					[eBrwWnd.meBrwView loadWithUrl:url];
@@ -678,8 +678,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *goViewName =[url absoluteString];
             {
-            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
             }
             if (eBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -718,8 +718,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
         {
-        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
         }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1022,8 +1022,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 app.sideMenuViewController.leftMenuViewController = app.leftWebController;
             }
             
-            
-            [controller release];
         }
         
     }
@@ -1053,7 +1051,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             
             
             
-            [controller release];
         }
     }
     
@@ -1061,9 +1058,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (bgImg != nil
         && animationId != nil) {
         
-        app.sideMenuViewController = [[[RESideMenu alloc] initWithContentViewController:meNav
-                                                                 leftMenuViewController:app.leftWebController
-                                                                rightMenuViewController:app.rightWebController] autorelease];
+        app.sideMenuViewController = [[RESideMenu alloc] initWithContentViewController:meNav
+                                                                leftMenuViewController:app.leftWebController
+                                                               rightMenuViewController:app.rightWebController];
         //        app.sideMenuViewController.backgroundImage = [UIImage imageNamed:@"Stars"];
         
         NSString * imgPath = [self absPath:bgImg];
@@ -1149,7 +1146,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (meBrwView.hidden == YES) {
         return;
     }
-
+    
     
     ACENSLog(@"PresentWindowTest open opener meBrwView = %@, meBrwView Name = %@", meBrwView, meBrwView.muexObjName);
     
@@ -1217,7 +1214,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         eBrwWnd = [eBrwWndContainer brwWndForKey:inUExWndName];
         if (eBrwWnd != nil) {
             [eBrwWndContainer removeFromWndDict:inUExWndName];
-            [eBrwWnd release];
         }
         eBrwWnd = nil;
         
@@ -1379,8 +1375,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                     NSString *goViewName =[url absoluteString];
                     {
-                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
                     }
                     if (eBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1410,7 +1406,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                 NSString *data = [encryptObj decryptWithPath:url appendData:nil];
                 
-                [encryptObj release];
                 [eBrwWnd.meBrwView loadWithData:data baseUrl:url];
                 //				} else {
                 //					[eBrwWnd.meBrwView loadWithUrl:url];
@@ -1435,8 +1430,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *goViewName =[url absoluteString];
             {
-            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
             }
             if (eBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1475,8 +1470,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
         {
-        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
         }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1528,8 +1523,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 } else {
                     
                     inBrwView.image = nil;
-                    BGColor bgColor = [BUtility bgColorFromNSString:bgColorStr];
-                    UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+                    UIColor *color = [EUtility colorFromHTMLString:bgColorStr];
                     inBrwView.backgroundColor = color;
                     
                 }
@@ -1549,12 +1543,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 - (void)open:(NSMutableArray *)inArguments {
     NSString *inUExWndName = [inArguments objectAtIndex:0];
-    NSString *inDataType = [inArguments objectAtIndex:1];
+    id inDataType = [inArguments objectAtIndex:1];
     NSString *inData = [inArguments objectAtIndex:2];
-    NSString *inAniID = [inArguments objectAtIndex:3];
+    id inAniID = [inArguments objectAtIndex:3];
     //NSString *inWidth = [inArguments objectAtIndex:4];
     //NSString *inHeight = [inArguments objectAtIndex:5];
-    NSString *inFlag = [inArguments objectAtIndex:6];
+    id inFlag = [inArguments objectAtIndex:6];
     NSString *inAniDuration = NULL;
     if ([inArguments count] >= 8) {
         inAniDuration = [inArguments objectAtIndex:7];
@@ -1563,11 +1557,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([inArguments count] >= 9) {
         extraInfo = [inArguments objectAtIndex:8];
     }
-    int flag = 0;
-    //inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-    }
+    
+    NSInteger flag = [inFlag intValue];
+    
     
     //window 4.8
     NSArray *forbidWindow = meBrwView.meBrwCtrler.forebidWinsList;
@@ -1655,7 +1647,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             eCurBrwWnd.meFrontWnd = eBrwWnd;
             //
         }
-        ACENSLog(@"eBrwWnd retain count is %d", [eBrwWnd retainCount]);
+        
     } else {
         
         
@@ -1734,13 +1726,11 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [eBrwWnd.meBrwView setMultipleTouchEnabled:YES];
     }
     //inAniID.length != 0
-    if (KUEXIS_NSString(inAniID)) {
-        eBrwWnd.mOpenAnimiId = [inAniID intValue];
-    } else {
-        eBrwWnd.mOpenAnimiId = 0;
-    }
+    
+    eBrwWnd.mOpenAnimiId = [inAniID intValue];
+    
     //inAniDuration && inAniDuration.length != 0
-    if (KUEXIS_NSString(inAniDuration)) {
+    if ([inAniDuration integerValue] > 0) {
         eBrwWnd.mOpenAnimiDuration = [inAniDuration floatValue]/1000.0f;
     } else {
         eBrwWnd.mOpenAnimiDuration = 0.2f;
@@ -1810,8 +1800,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
                     NSString *goViewName =[url absoluteString];
                     {
-                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
                     }
                     if (eBrwWnd.mPopoverBrwViewDict) {
                         NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1841,7 +1831,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                 NSString *data = [encryptObj decryptWithPath:url appendData:nil];
                 ACENSLog(@"data: %@", data);
-                [encryptObj release];
                 [eBrwWnd.meBrwView loadWithData:data baseUrl:url];
                 //				} else {
                 //					[eBrwWnd.meBrwView loadWithUrl:url];
@@ -1867,8 +1856,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
             NSString *goViewName =[url absoluteString];
             {
-            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+                NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+                [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
             }
             if (eBrwWnd.mPopoverBrwViewDict) {
                 NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1923,8 +1912,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
         {
-        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
         }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -1996,7 +1985,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (brwWnd) {
         [brwWnd removeFromSuperview];
         [eBrwWndContainer removeFromWndDict: name];
-        [brwWnd release];
     }
 }
 
@@ -2010,12 +1998,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     NSString * exit = ACELocalized(UEX_EXITAPP_ALERT_EXIT);
     NSString * cancel = ACELocalized(UEX_EXITAPP_ALERT_CANCLE);
     
-    UIAlertView *windowConfirmView = [[[UIAlertView alloc]
-                                       initWithTitle:title
-                                       message:message
-                                       delegate:self
-                                       cancelButtonTitle:nil
-                                       otherButtonTitles:exit,cancel,nil] autorelease];
+    UIAlertView *windowConfirmView = [[UIAlertView alloc]
+                                      initWithTitle:title
+                                      message:message
+                                      delegate:self
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:exit,cancel,nil];
     
     
     windowConfirmView.tag = kWindowConfirmViewTag;
@@ -2163,7 +2151,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([inArguments count] >= 2) {
         inAniDuration = [inArguments objectAtIndex:1];
     }
-
+    
     NSInteger animiId = 0;
     NSTimeInterval aniDuration = 0.2;
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
@@ -2184,7 +2172,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 [meBrwView removeFromSuperview];
             }
             
-            [meBrwView release];
+            
             
         } else if (meBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
             
@@ -2209,7 +2197,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 [meBrwView removeFromSuperview];
             }
             
-            [meBrwView release];
             
         } else if (meBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
             
@@ -2243,7 +2230,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             [meBrwView removeFromSuperview];
         }
         [[meBrwView brwWidgetContainer] pushReuseBrwView:meBrwView];
-        [meBrwView release];
         return;
     } else if (meBrwView.mType == F_EBRW_VIEW_TYPE_AD) {
         
@@ -2262,9 +2248,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
         eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_CLOSING;
         //inAnimiId && inAnimiId.length != 0
-        if (KUEXIS_NSString(inAnimiId)) {
-            animiId = [inAnimiId intValue];
-        }
+        
+        animiId = [inAnimiId intValue];
+        
         if (animiId == -1) {
             if(eBrwWnd.usingPopAnimation){
                 animiId = [ACEPOPAnimation reverseAnimationId:eBrwWnd.mOpenAnimiId];
@@ -2274,9 +2260,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             
         }
         //inAniDuration && inAniDuration.length != 0
-        if (KUEXIS_NSString(inAniDuration)) {
-            aniDuration = [inAniDuration floatValue]/1000;
-        }
+        
+        aniDuration = [inAniDuration floatValue] > 0 ? [inAniDuration floatValue]/1000 : 0.2;
+        
         ////
         if ([eBrwWnd.meBackWnd isKindOfClass:[EBrowserWindow class]]) {
             eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
@@ -2310,7 +2296,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                                             [eBrwWnd removeFromSuperview];
                                         }
                                         [self closeWindowAfterAnimation:eBrwWnd];
-                                        [eBrwWnd release];
+                                        
                                     }];
         }else if(animiId>=13 && animiId<=16) {
             [self moveeBrwWnd:eBrwWnd andTime:(float)aniDuration andAnimiId:(int)animiId];
@@ -2322,7 +2308,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                         [eBrwWnd removeFromSuperview];
                     }
                     [self closeWindowAfterAnimation:eBrwWnd];
-                    [eBrwWnd release];
+                    
                 }];
             }else {
                 [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:aniDuration];
@@ -2331,7 +2317,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     [eBrwWnd removeFromSuperview];
                 }
                 [self closeWindowAfterAnimation:eBrwWnd];
-                [eBrwWnd release];
+                
             }
             
             //
@@ -2357,7 +2343,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (brwWnd.superview) {
         [brwWnd removeFromSuperview];
     }
-    [brwWnd release];
+    
 }
 
 - (void)closeWindowAfterAnimation:(EBrowserWindow*)brwWnd_ {
@@ -2373,9 +2359,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             [brwWnd_.meBrwView removeFromSuperview];
         }
         [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBrwView];
-        [brwWnd_.meBrwView release];
-        ACENSLog(@"meBrwView retainCount is %d", [brwWnd_.meBrwView retainCount]);
-        brwWnd_.meBrwView = NULL;
+        
+        
+        brwWnd_.meBrwView = nil;
     }
     if (brwWnd_.meTopSlibingBrwView) {
         //[eBrwWnd.meTopSlibingBrwView clean];
@@ -2383,7 +2369,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             [brwWnd_.meTopSlibingBrwView removeFromSuperview];
         }
         [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meTopSlibingBrwView];
-        [brwWnd_.meTopSlibingBrwView release];
+        
         brwWnd_.meTopSlibingBrwView = NULL;
     }
     if (brwWnd_.meBottomSlibingBrwView) {
@@ -2392,7 +2378,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             [brwWnd_.meBottomSlibingBrwView removeFromSuperview];
         }
         [[meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBottomSlibingBrwView];
-        [brwWnd_.meBottomSlibingBrwView release];
+        
         brwWnd_.meBottomSlibingBrwView = NULL;
     }
     if (brwWnd_.mPopoverBrwViewDict) {
@@ -2409,9 +2395,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             
             [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
-            [ePopView release];
+            
             [brwWnd_.mPopoverBrwViewDict removeAllObjects];
-            [brwWnd_.mPopoverBrwViewDict release];
+            
             brwWnd_.mPopoverBrwViewDict = NULL;
         }
     }
@@ -2426,7 +2412,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             }
         }
         [brwWnd_.mMuiltPopoverDict removeAllObjects];
-        //        [brwWnd_.mMuiltPopoverDict release];
         brwWnd_.mMuiltPopoverDict = nil;
     }
     if (meBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
@@ -2541,8 +2526,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 //    [eBrwWnd release];
 //}
 - (void)openSlibing:(NSMutableArray *)inArguments{
-    NSString *inSlibingType = [inArguments objectAtIndex:0];
-    NSString *inDataType = [inArguments objectAtIndex:1];
+    id inSlibingType = [inArguments objectAtIndex:0];
+    id inDataType = [inArguments objectAtIndex:1];
     NSString *inUrl = [inArguments objectAtIndex:2];
     NSString *inData = [inArguments objectAtIndex:3];
     //NSString *inWidth = [inArguments objectAtIndex:4];
@@ -2566,31 +2551,27 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     //inSlibingType == nil || inSlibingType.length == 0
     
-    if (!KUEXIS_NSString(inSlibingType)) {
-        return;
-    }
+    //    if (!KUEXIS_NSString(inSlibingType)) {
+    //        return;
+    //    }
     if (inHeight == nil) {
         return;
     }
     //inDataType == nil || inDataType.length == 0
-    if (!KUEXIS_NSString(inDataType)) {
-        return;
-    }
-    int height = 0;
+    //    if (!KUEXIS_NSString(inDataType)) {
+    //        return;
+    //    }
+    int height = [inHeight intValue];
     //inHeight.length == 0
-    if (!KUEXIS_NSString(inHeight)) {
+    if (height <= 0) {
         useContentSize = YES;
         height = 1;
-    } else {
-        height = [inHeight intValue];
     }
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     NSURL *baseUrl = [meBrwView curUrl];
     int slibingType = [inSlibingType intValue];
     int dataType = [inDataType intValue];
-    if (height < 0) {
-        height = 0;
-    }
+    
     if (height > eBrwWnd.bounds.size.height) {
         height = eBrwWnd.bounds.size.height;
     }
@@ -2626,7 +2607,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                             NSString *data = [encryptObj decryptWithPath:url appendData:inData];
-                            [encryptObj release];
+                            
                             [eBrwWnd.meTopSlibingBrwView loadWithData:data baseUrl:url];
                         }
                         break;
@@ -2659,7 +2640,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                             NSString *data = [encryptObj decryptWithPath:url appendData:inData];
-                            [encryptObj release];
+                            
                             [eBrwWnd.meTopSlibingBrwView loadWithData:data baseUrl:url];
                         }
                         break;
@@ -2704,7 +2685,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                             NSString *data = [encryptObj decryptWithPath:url appendData:inData];
-                            [encryptObj release];
+                            
                             [eBrwWnd.meBottomSlibingBrwView loadWithData:data baseUrl:url];
                         }
                         break;
@@ -2734,7 +2715,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                             NSURL *url = [BUtility stringToUrl:urlStr];
                             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
                             NSString *data = [encryptObj decryptWithPath:url appendData:inData];
-                            [encryptObj release];
+                            
                             [eBrwWnd.meBottomSlibingBrwView loadWithData:data baseUrl:url];
                         }
                         break;
@@ -2757,7 +2738,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)closeSlibing:(NSMutableArray *)inArguments {
-    NSString *inSlibingType = [inArguments objectAtIndex:0];
+    id inSlibingType = [inArguments objectAtIndex:0];
     if (!meBrwView) {
         return;
     }
@@ -2772,35 +2753,33 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     //!inSlibingType || inSlibingType.length == 0
-    if (!KUEXIS_NSString(inSlibingType)) {
-        return;
-    }
+    //    if (!KUEXIS_NSString(inSlibingType)) {
+    //        return;
+    //    }
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     int slibingType = [inSlibingType intValue];
     switch (slibingType) {
         case F_EBRW_VIEW_TYPE_SLIBING_TOP:
             if (eBrwWnd.meTopSlibingBrwView) {
-                ACENSLog(@"top slibing count is %d", [eBrwWnd.meTopSlibingBrwView retainCount]);
+                
                 //[eBrwWnd.meTopSlibingBrwView clean];
                 if (eBrwWnd.meTopSlibingBrwView.superview) {
                     [eBrwWnd.meTopSlibingBrwView removeFromSuperview];
                 }
-                ACENSLog(@"top slibing count is %d", [eBrwWnd.meTopSlibingBrwView retainCount]);
+                
                 [[meBrwView brwWidgetContainer] pushReuseBrwView:eBrwWnd.meTopSlibingBrwView];
-                ACENSLog(@"top slibing count is %d", [eBrwWnd.meTopSlibingBrwView retainCount]);
-                [eBrwWnd.meTopSlibingBrwView release];
                 eBrwWnd.meTopSlibingBrwView = nil;
             }
             break;
         case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
             if (eBrwWnd.meBottomSlibingBrwView) {
-                ACENSLog(@"bottom slibing count is %d", [eBrwWnd.meBottomSlibingBrwView retainCount]);
+                
                 //[eBrwWnd.meBottomSlibingBrwView clean];
                 if (eBrwWnd.meBottomSlibingBrwView.superview) {
                     [eBrwWnd.meBottomSlibingBrwView removeFromSuperview];
                 }
                 [[meBrwView brwWidgetContainer] pushReuseBrwView:eBrwWnd.meBottomSlibingBrwView];
-                [eBrwWnd.meBottomSlibingBrwView release];
+                
                 eBrwWnd.meBottomSlibingBrwView = nil;
             }
             break;
@@ -2810,7 +2789,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)showSlibing:(NSMutableArray *)inArguments {
-    NSString *inSlibingType = [inArguments objectAtIndex:0];
+    id inSlibingType = [inArguments objectAtIndex:0];
     if (!meBrwView) {
         return;
     }
@@ -2827,9 +2806,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     //!inSlibingType || inSlibingType.length == 0
-    if (!KUEXIS_NSString(inSlibingType)) {
-        return;
-    }
+    //    if (!KUEXIS_NSString(inSlibingType)) {
+    //        return;
+    //    }
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     int slibingType = [inSlibingType intValue];
     switch (slibingType) {
@@ -2888,7 +2867,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     EBrowserWindow *eBrwWnd = nil;
     EBrowserView *eBrwView = nil;
     //inWndName == nil || inSlibingType == nil || inSlibingType.length == 0 || inScript == nil || inScript.length == 0
-    if (inWndName == nil || !KUEXIS_NSString(inSlibingType) || !KUEXIS_NSString(inScript)) {
+    if (inWndName == nil || !KUEXIS_NSString(inScript)) {
         return;
     }
     if (!meBrwView) {
@@ -2914,24 +2893,43 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     int slibingType = [inSlibingType intValue];
+    EBrowserView *brwView = nil;
     switch (slibingType) {
         case F_EBRW_VIEW_TYPE_MAIN:
-            [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:inScript];
+            brwView = eBrwWnd.meBrwView;
+            //[eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:inScript];
             break;
         case F_EBRW_VIEW_TYPE_SLIBING_TOP:
-            if (eBrwWnd.meTopSlibingBrwView != nil) {
-                [eBrwWnd.meTopSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
+            if (eBrwWnd.meTopSlibingBrwView) {
+                brwView = eBrwWnd.meTopSlibingBrwView;
+                //[eBrwWnd.meTopSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
             }
             break;
         case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
-            if (eBrwWnd.meBottomSlibingBrwView != nil) {
-                [eBrwWnd.meBottomSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
+            if (eBrwWnd.meBottomSlibingBrwView ) {
+                brwView = eBrwWnd.meBottomSlibingBrwView;
+                //[eBrwWnd.meBottomSlibingBrwView stringByEvaluatingJavaScriptFromString:inScript];
             }
             break;
         default:
             break;
     }
+    if(!brwView){
+        return;
+    }
+    [self performSelectorOnMainThread:@selector(evaluateScriptWithInfo:) withObject:@{kACEEvaluateScriptJavaScriptKey:inScript,kACEEvaluateScriptBrowserViewKey:brwView} waitUntilDone:NO];
 }
+
+- (void)evaluateScriptWithInfo:(NSDictionary *)infoDict{
+    EBrowserView *brwView = infoDict[kACEEvaluateScriptBrowserViewKey];
+    NSString *JSStr = infoDict[kACEEvaluateScriptJavaScriptKey];
+    if (!brwView || !JSStr) {
+        return;
+    }
+    [brwView stringByEvaluatingJavaScriptFromString:JSStr];
+}
+
+
 
 - (void)getBounce:(NSMutableArray *)inArguments
 {
@@ -2942,12 +2940,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)setBounce:(NSMutableArray *)inArguments {
-    NSString *inValue = [inArguments objectAtIndex:0];
-    int value = 0;
-    //inValue.length != 0
-    if (KUEXIS_NSString(inValue)) {
-        value = [inValue intValue];
+    if(inArguments.count < 1){
+        return;
     }
+
+    NSInteger value = [[inArguments objectAtIndex:0] integerValue];
+
     if (value == 0) {
         [meBrwView.mScrollView setBounces:NO];
     } else if (value == 1) {
@@ -2966,16 +2964,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)notifyBounceEvent:(NSMutableArray *)inArguments {
     NSString *inType = [inArguments objectAtIndex:0];
     NSString *inValue = [inArguments objectAtIndex:1];
-    int type = -1;
-    int value = -1;
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-    }
-    //inValue.length != 0
-    if (KUEXIS_NSString(inValue)) {
-        value = [inValue intValue];
-    }
+    int type = [inType intValue];
+    int value = [inValue intValue];
+    
     switch (type) {
         case EBounceViewTypeTop:
             if (value == 0) {
@@ -2999,21 +2990,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)setBounceParams:(NSMutableArray *)inArguments {
     
     @try {
-        
         NSString * inJson = [inArguments objectAtIndex:1];
-        
-        if (bounceParams) {
-            [bounceParams release];
-        }
         bounceParams = [[NSMutableDictionary alloc] initWithDictionary:[inJson JSONValue]];
         NSString *inType = [inArguments objectAtIndex:0];
         [bounceParams setObject:inType forKey:@"type"];
         
-        int type =-1;
-        //inType.length != 0
-        if (KUEXIS_NSString(inType)) {
-            type = [inType intValue];
-        }
+        int type = [inType intValue];
+        
         switch (type)
         {
             case EBounceViewTypeTop:
@@ -3069,8 +3052,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         NSString *textColor =[bounceParams objectForKey:@"textColor"];
         //textColor && textColor.length>0
         if (KUEXIS_NSString(textColor)) {
-            BGColor bgColor = [BUtility bgColorFromNSString:textColor];
-            UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+            UIColor *color = [EUtility colorFromHTMLString:textColor];
             [bounceParams setObject:color forKey:@"textColor"];
         }
         
@@ -3100,7 +3082,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)showBounceView:(NSMutableArray *)inArguments {
-    NSString *inType = [inArguments objectAtIndex:0];
+    id inType = [inArguments objectAtIndex:0];
     NSString *inColor = [inArguments objectAtIndex:1];
     NSString *inFlag = [inArguments objectAtIndex:2];
     if (!meBrwView) {
@@ -3110,22 +3092,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         return;
     }
-    int type = -1;
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-    }
+    int type = [inType intValue];
     UIColor *color = RGBCOLOR(226, 231, 237);
-    int flag = 0;
+    int flag = [inFlag intValue];
     //inColor && inColor.length != 0
     if (KUEXIS_NSString(inColor)) {
-        BGColor bgColor = [BUtility bgColorFromNSString:inColor];
-        color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+
+        color = [EUtility colorFromHTMLString:inColor]?:color;
     }
-    //inFlag && inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-    }
+    
+    
+    
     switch (type) {
         case EBounceViewTypeTop:
             if (!meBrwView.mTopBounceView) {
@@ -3135,7 +3112,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 } else {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
-                ACENSLog(@"%d", [meBrwView.mTopBounceView retainCount]);
+                
                 meBrwView.mTopBounceView.backgroundColor = color;
                 meBrwView.mTopBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mTopBounceView];
@@ -3192,11 +3169,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (meBrwView.mType != F_EBRW_VIEW_TYPE_MAIN && meBrwView.mType != F_EBRW_VIEW_TYPE_POPOVER) {
         return;
     }
-    int type = EBounceViewTypeTop;
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-    }
+    int type = [inType intValue];
+    
     switch (type) {
         case EBounceViewTypeTop:
             if (meBrwView.mTopBounceView) {
@@ -3221,11 +3195,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (meBrwView.mType != F_EBRW_VIEW_TYPE_MAIN && meBrwView.mType != F_EBRW_VIEW_TYPE_POPOVER) {
         return;
     }
-    int type = EBounceViewTypeTop;
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-    }
+    int type = [inType intValue];
+    
     switch (type) {
         case EBounceViewTypeTop:
             [meBrwView bounceViewFinishLoadWithType:EBounceViewTypeTop];
@@ -3290,7 +3261,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (!ePopBrwView) {
         return;
     }
-    [ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
+    [self performSelectorOnMainThread:@selector(evaluateScriptWithInfo:) withObject:@{kACEEvaluateScriptBrowserViewKey:ePopBrwView,kACEEvaluateScriptJavaScriptKey:inScript} waitUntilDone:NO];
+    //[ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
     
 }
 
@@ -3328,14 +3300,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             eBrwMainFrm.meAdBrwView.hidden = YES;
             [eBrwMainFrm invalidateAdTimers];
         }
-        //inAnimiID && inAnimiID.length != 0
-        if (KUEXIS_NSString(inAnimiID)) {
-            animiId = [inAnimiID intValue];
+        
+        animiId = [inAnimiID intValue];
+        if (KUEXIS_ZERO(inAnimiDuration)){
+            animiDuration = 0;
+        }else{
+            animiDuration = [inAnimiDuration floatValue] > 0 ? [inAnimiDuration floatValue]/1000 : 0.2;
         }
-        //inAnimiDuration && inAnimiDuration.length != 0
-        if (KUEXIS_NSString(inAnimiDuration)) {
-            animiDuration = [inAnimiDuration floatValue]/1000.0f;
-        }
+        
+        
+        
+        
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meBackWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
             ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
@@ -3374,8 +3349,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         int goType = eBrwWnd.meBackWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meBackWnd.meBrwView.curUrl absoluteString];
         {
-        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBackWnd.meBrwView.mwWgt];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBackWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
         }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -3421,13 +3396,14 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             eBrwMainFrm.meAdBrwView.hidden = YES;
             [eBrwMainFrm invalidateAdTimers];
         }
-        //inAnimiID && inAnimiID.length != 0
-        if (KUEXIS_NSString(inAnimiID)) {
-            animiId = [inAnimiID intValue];
-        }
+        
+        animiId = [inAnimiID intValue];
+        
         //inAnimiDuration && inAnimiDuration.length != 0
-        if (KUEXIS_NSString(inAnimiDuration)) {
-            animiDuration = [inAnimiDuration floatValue]/1000.0f;
+        if (KUEXIS_ZERO(inAnimiDuration)){
+            animiDuration = 0;
+        }else{
+            animiDuration = [inAnimiDuration floatValue] > 0 ? [inAnimiDuration floatValue]/1000 : 0.2;
         }
         [eBrwWndContainer bringSubviewToFront:eBrwWnd.meFrontWnd];
         if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
@@ -3469,8 +3445,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         int goType = eBrwWnd.meFrontWnd.meBrwView.mwWgt.wgtType;
         NSString *goViewName =[eBrwWnd.meFrontWnd.meBrwView.curUrl absoluteString];
         {
-        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meFrontWnd.meBrwView.mwWgt];
-        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
+            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meFrontWnd.meBrwView.mwWgt];
+            [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:1 mainWin:0 appInfo:appInfo];
         }
         if (eBrwWnd.mPopoverBrwViewDict) {
             NSArray *popViewArray = [eBrwWnd.mPopoverBrwViewDict allValues];
@@ -3503,7 +3479,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (F_WWIDGET_OBFUSCATION == meBrwView.mwWgt.obfuscation) {
         FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
         NSString *data = [encryptObj decryptWithPath:url appendData:nil];
-        [encryptObj release];
+        
         EBrowserHistoryEntry *eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:url obfValue:YES];
         [eBrwWnd addHisEntry:eHisEntry];
         [meBrwView loadWithData:data baseUrl:url];
@@ -3515,7 +3491,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)closeToast:(NSMutableArray *)inArguments {
     if (mToastView) {
         [mToastView removeFromSuperview];
-        [mToastView release];
         mToastView = nil;
         if (mToastTimer) {
             [mToastTimer invalidate];
@@ -3526,18 +3501,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 - (void)closeAlert {
     if (mbAlertView) {
-        ACENSLog(@"alert view retain count is %d",[mbAlertView retainCount]);
-        [mbAlertView release];
-        mbAlertView = NULL;
+        
+        mbAlertView = nil;
     }
 }
 
-- (void)getState:(NSMutableArray *)inArguments {
+- (id)getState:(NSMutableArray *)inArguments {
     if (!meBrwView) {
-        return;
+        return @-1;
     }
     if (!meBrwView.meBrwWnd) {
-        return;
+        return @-1;
     }
     //
     
@@ -3551,34 +3525,37 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         if (webController == webController.navigationController.topViewController) {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:0];
+            return @0;
         } else {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:1];
+            return @1;
         }
         
         
-        return;
+        
     }
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
         
         
         
         
-        return;
+        return @-1;
     }
     
     EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
     
     
     if (!eBrwWndContainer) {
-        return;
+        return @-1;
     }
     if ([meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] == eBrwWndContainer) {
         if ([eBrwWndContainer aboveWindow] == meBrwView.meBrwWnd) {
             [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:0];
-            return;
+            return @0;
         }
     }
     [self jsSuccessWithName:F_CB_WINDOW_GET_STATE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:1];
+    return @-1;
 }
 
 - (void)toast:(NSMutableArray *)inArguments {
@@ -3599,29 +3576,26 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             mToastTimer = nil;
         }
     }
-    //inPos.length != 0
-    if (KUEXIS_NSString(inPos)) {
-        int temPos = [inPos intValue];
-        if (temPos >=1 && temPos<=9) {
-            pos = temPos;
-        }
+    
+    int temPos = [inPos intValue];
+    if (temPos >=1 && temPos<=9) {
+        pos = temPos;
     }
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-    }
+    
+
+    type = [inType intValue];
+
     toastViewRect = [BToastView viewRectWithPos:pos wndWidth:wndWidth wndHeight:wndHeight];
     mToastView = [[BToastView alloc]initWithFrame:toastViewRect Type:type Pos:pos];
     mToastView.mTextView.text = inMsg;
     [eBrwWnd addSubview:mToastView];
-    //inDuration && inDuration.length != 0
-    if (KUEXIS_NSString(inDuration)) {
-        int duration = [inDuration intValue];
-        if (duration > 0) {
-            float fDuration = duration * 0.001;
-            mToastTimer = [NSTimer scheduledTimerWithTimeInterval:fDuration target:self selector:@selector(closeToast:) userInfo:nil repeats:NO];
-        }
+    
+    float duration = [inDuration floatValue];
+    if (duration > 0) {
+        float fDuration = duration / 1000;
+        mToastTimer = [NSTimer scheduledTimerWithTimeInterval:fDuration target:self selector:@selector(closeToast:) userInfo:nil repeats:NO];
     }
+    
 }
 
 - (void)closeStatusBarNotification {
@@ -3725,21 +3699,22 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         //启动这个通知
         [[UIApplication sharedApplication]   scheduleLocalNotification:notification];
     }
-    [notification release];
+    
 }
 
 - (void)openPopover:(NSMutableArray *)inArguments {
+    
     NSString *inPopName = [inArguments objectAtIndex:0];
-    NSString *inDataType = [inArguments objectAtIndex:1];
+    id inDataType = [inArguments objectAtIndex:1];
     NSString *inUrl = [inArguments objectAtIndex:2];
     NSString *inData = [inArguments objectAtIndex:3];
-    NSString *inX = [inArguments objectAtIndex:4];
-    NSString *inY = [inArguments objectAtIndex:5];
-    NSString *inW = [inArguments objectAtIndex:6];
-    NSString *inH = [inArguments objectAtIndex:7];
-    NSString *inFontSize = [inArguments objectAtIndex:8];
-    NSString *inFlag = [inArguments objectAtIndex:9];
-    NSString *inBottom = nil;
+    id inX = [inArguments objectAtIndex:4];
+    id inY = [inArguments objectAtIndex:5];
+    id inW = [inArguments objectAtIndex:6];
+    id inH = [inArguments objectAtIndex:7];
+    id inFontSize = [inArguments objectAtIndex:8];
+    id inFlag = [inArguments objectAtIndex:9];
+    id inBottom = nil;
     if (inArguments.count >= 11) {
         inBottom =[inArguments objectAtIndex:10];
     }
@@ -3747,7 +3722,10 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([inArguments count] >= 12) {
         extraInfo = [inArguments objectAtIndex:11];
     }
-    NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
+    NSDictionary * extraDic = nil;
+    if (KUEXIS_NSString(extraInfo)) {
+        extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
+    }
     
     //****************************************************
     int x=0,
@@ -3776,38 +3754,38 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     //inX.length != 0
-    if (KUEXIS_NSString(inX)) {
-        x = [inX intValue];
-    }
+    
+    x = [inX intValue];
+    
     //inY.length != 0
-    if (KUEXIS_NSString(inY)) {
-        y = [inY intValue];
-    }
+    
+    y = [inY intValue];
+    
     //inW.length != 0
-    if ( KUEXIS_NSString(inW)&& [inW intValue] > 0) {
+    if ([inW intValue] > 0) {
         w = [inW intValue];
     } else {
         w = w - x;
     }
     //inH.length != 0
-    if (KUEXIS_NSString(inH) && [inH intValue] > 0) {
+    if ([inH intValue] > 0) {
         h = [inH intValue];
     } else {
         h = h - y;
     }
     //inFontSize.length != 0
-    if (KUEXIS_NSString(inFontSize)) {
-        fontSize = [inFontSize intValue];
-    }
+    
+    fontSize = [inFontSize intValue];
+    
     //inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-    }
+    
+    flag = [inFlag intValue];
+    
     //******************************************************
     //inBottom.length != 0
-    if (KUEXIS_NSString(inBottom)) {
-        bottom = [inBottom intValue];
-    }
+    
+    bottom = [inBottom intValue];
+    
     if (bottom > 0) {
         h = meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height - y - bottom;
     }
@@ -3961,26 +3939,22 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     meBrwView.mFlag |= F_EBRW_VIEW_FLAG_HAS_AD;
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)meBrwView.meBrwWnd;
     EBrowserMainFrame *eBrwMainFrm = meBrwView.meBrwCtrler.meBrwMainFrm;
-    //inType.length != 0
-    if (KUEXIS_NSString(inType)) {
-        type = [inType intValue];
-        meBrwView.mAdType = type;
-    }
-    //inDisplayTime.length != 0
-    if (KUEXIS_NSString(inDisplayTime)) {
-        meBrwView.mAdDisplayTime = [inDisplayTime intValue];
-        eBrwMainFrm.mAdDisplayTime = [inDisplayTime intValue];
-    }
-    //inInterval.length != 0
-    if (KUEXIS_NSString(inInterval)) {
-        meBrwView.mAdIntervalTime = [inInterval intValue];
-        eBrwMainFrm.mAdIntervalTime = [inInterval intValue];
-    }
-    //inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-        meBrwView.mAdFlag = flag;
-    }
+    
+    type = [inType intValue];
+    meBrwView.mAdType = type;
+    
+    
+    meBrwView.mAdDisplayTime = [inDisplayTime intValue];
+    eBrwMainFrm.mAdDisplayTime = [inDisplayTime intValue];
+    
+    
+    meBrwView.mAdIntervalTime = [inInterval intValue];
+    eBrwMainFrm.mAdIntervalTime = [inInterval intValue];
+    
+    
+    flag = [inFlag intValue];
+    meBrwView.mAdFlag = flag;
+    
     switch (type) {
         case F_EBRW_MAINFRM_AD_TYPE_TOP:
             if ([BUtility isIpad]) {
@@ -4013,7 +3987,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             break;
     }
     if (!eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView = [[[EBrowserView alloc] initWithFrame:ADFrame BrwCtrler:meBrwView.meBrwCtrler Wgt:meBrwView.mwWgt BrwWnd:eBrwWnd UExObjName:@"" Type:F_EBRW_VIEW_TYPE_AD] autorelease];
+        eBrwMainFrm.meAdBrwView = [[EBrowserView alloc] initWithFrame:ADFrame BrwCtrler:meBrwView.meBrwCtrler Wgt:meBrwView.mwWgt BrwWnd:eBrwWnd UExObjName:@"" Type:F_EBRW_VIEW_TYPE_AD];
         eBrwMainFrm.mAdType = type;
     } else {
         eBrwMainFrm.meAdBrwView.hidden = NO;
@@ -4127,7 +4101,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
         
         [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopBrwView];
-        [ePopBrwView release];
+        
     }
 }
 
@@ -4212,7 +4186,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     w = ePopBrwView.frame.size.width;
     h = ePopBrwView.frame.size.height;
     //inX.length != 0
-    if (KUEXIS_NSString(inX)) {
+    if (!KUEXIS_EMPTY(inX) ) {
         newX = [inX intValue];
         if (x != newX) {
             x = newX;
@@ -4220,7 +4194,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
     //inY.length != 0
-    if (KUEXIS_NSString(inY)) {
+    if (!KUEXIS_EMPTY(inY)) {
         newY = [inY intValue];
         if (y != newY) {
             y = newY;
@@ -4228,7 +4202,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
     //inH.length != 0
-    if (KUEXIS_NSString(inH)) {
+    if (!KUEXIS_EMPTY(inH)) {
         newH = [inH intValue];
         if (h != newH) {
             h = newH;
@@ -4236,7 +4210,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         }
     }
     //inW.length != 0
-    if (KUEXIS_NSString(inW)) {
+    if (!KUEXIS_EMPTY(inW)) {
         newW = [inW intValue];
         if (w != newW) {
             w = newW;
@@ -4295,13 +4269,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [ePopBrwView stringByEvaluatingJavaScriptFromString:inScript];
 }
 
-- (void)getUrlQuery:(NSMutableArray *)inArguments {
+- (id)getUrlQuery:(NSMutableArray *)inArguments {
     NSURL *curUrl = [meBrwView curUrl];
     NSString *queryData = [curUrl query];
     if (queryData) {
         [self jsSuccessWithName:@"uexWindow.cbGetUrlQuery" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:queryData];
+        return queryData;
     } else {
         [self jsSuccessWithName:@"uexWindow.cbGetUrlQuery" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:@""];
+        return @"";
     }
     
 }
@@ -4373,7 +4349,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     BAnimationTransform *transfrom = [[BAnimationTransform alloc]init];
     transfrom.mTransForm3D = CATransform3DMakeTranslation(inX,inY,inZ);
     [meBrwAnimi.mTransformArray addObject:transfrom];
-    [transfrom release];
+    
 }
 
 - (void)makeScale:(NSMutableArray *)inArguments {
@@ -4383,7 +4359,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     BAnimationTransform *transfrom = [[BAnimationTransform alloc]init];
     transfrom.mTransForm3D = CATransform3DMakeScale(inX,inY,inZ);
     [meBrwAnimi.mTransformArray addObject:transfrom];
-    [transfrom release];
+    
 }
 
 - (void)makeRotate:(NSMutableArray *)inArguments {
@@ -4395,7 +4371,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     inAngle = (inAngle/180.0f) * M_PI;
     transfrom.mTransForm3D = CATransform3DMakeRotation(inAngle, inX, inY, inZ);
     [meBrwAnimi.mTransformArray addObject:transfrom];
-    [transfrom release];
+    
 }
 
 - (void)commitAnimition:(NSMutableArray *)inArguments {
@@ -4431,7 +4407,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     ACENSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
                 }
             }
-            [fileMgr release];
+            
             exit(0);
         }
         
@@ -4462,7 +4438,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 [retDict setObject:[NSNumber numberWithInteger:buttonIndex] forKey:@"num"];
                 [retDict setObject:text forKey:@"value"];
                 [self jsSuccessWithName:F_CB_WINDOW_PROMPT opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:[retDict JSONFragment]];
-                [retDict release];
+                
                 break;
             }
             default:
@@ -4575,60 +4551,60 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",orNumb] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+        void (*p)(id,SEL,UIInterfaceOrientation);
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]){
+            p = (void (*)(id,SEL,UIInterfaceOrientation))[[UIDevice currentDevice] methodForSelector:@selector(setOrientation:)];
+        }else{
+            return;
+        }
+        
+        
         switch (orNumb)
         {
                 
             case 1:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
-                }
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                
                 break;
             case 2:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeRight];
-                }
-                break;
-            case 4:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortraitUpsideDown];
-                }
-                break;
-            case 8:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-                }
-                break;
-            case 10:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-                }
-                break;
-            case 5:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
-                }
-                break;
-            case 3:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-                }
-                break;
-            case 9:
-                if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)])
-                {
-                    [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeRight];
-                }
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                
+                
                 break;
                 
+            case 4:
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortraitUpsideDown);
+                
+                break;
+                
+            case 8:
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                
+                break;
+                
+            case 10:
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                
+                break;
+                
+            case 5:
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                
+                break;
+                
+            case 3:
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                
+                break;
+                
+            case 9:
+                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                
+                break;
+                
+                
             default:
-                return ;
+                return;
                 break;
         }
         
@@ -4752,27 +4728,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (!meBrwView) {
         return;
     }
-    //inX.length != 0
-    if (KUEXIS_NSString(inX)) {
-        x = [inX intValue];
-    }
-    if (KUEXIS_NSString(inY)) {
-        y = [inY intValue];
-    }
-    if (KUEXIS_NSString(inW)) {
-        w = [inW intValue];
-    }
-    if (KUEXIS_NSString(inH)) {
-        h = [inH intValue];
-    }
-    //inFontSize.length != 0
-    if (KUEXIS_NSString(inFontSize)) {
-        fontSize = [inFontSize intValue];
-    }
-    //inFlag.length != 0
-    if (KUEXIS_NSString(inFlag)) {
-        flag = [inFlag intValue];
-    }
+    
+    x = [inX intValue];
+    y = [inY intValue];
+    w = [inW intValue];
+    h = [inH intValue];
+    
+    fontSize = [inFontSize intValue];
+    
+    
+    flag = [inFlag intValue];
+    
     if (w == 0 || h == 0) {
         return;
     }
@@ -4799,15 +4765,14 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (!eBrwWnd.mMuiltPopoverDict) {
         NSMutableDictionary * popDic = [[NSMutableDictionary alloc]initWithCapacity:1];
         eBrwWnd.mMuiltPopoverDict = popDic;
-        [popDic release];
+        
     }
     [eBrwWnd.mMuiltPopoverDict setObject:multiPopover forKey:inMainPopName];
     multiPopover.scrollView = scrollView;
     multiPopover.mainPopName = inMainPopName;
     [multiPopover addSubview:scrollView];
     [eBrwWnd addSubview:multiPopover];
-    [multiPopover release];
-    [scrollView release];
+    
     //[extraInfoAll length] > 0
     if (KUEXIS_NSString(extraInfoAll)) {
         NSDictionary * extraAllDic = [extraInfoAll JSONValue];
@@ -4835,12 +4800,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         //    return;
         //}
         int bottom=0;
-        @unsafeify(self);
+        @unsafeify(scrollView);
         [scrollView addLoadingBlock:^{
-            @strongify(self);
+            @strongify(scrollView);
             [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];
         }];
-
+        
     }
     
     
@@ -4855,8 +4820,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 {
     if ([inArgument count]>0 && [BUtility getSystemVersion]>=5.0)
     {
-        NSString * isShowBar = [inArgument objectAtIndex:0];
-        if ([isShowBar isEqualToString:@"false"])
+        id isShowBar = [inArgument objectAtIndex:0];
+        if ([isShowBar isEqual:@"false"] || ![isShowBar boolValue])
         {
             meBrwView.scrollView.showsVerticalScrollIndicator = NO;
             meBrwView.scrollView.showsHorizontalScrollIndicator = NO;
@@ -4902,13 +4867,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         if (ePopBrwView != nil && meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
             
-            [ePopBrwView release];
+            
             ePopBrwView = nil;
         }
         
         if (ePopBrwView != nil && meBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent) {
             
-            [ePopBrwView release];
+            
             ePopBrwView = nil;
         }
         
@@ -4976,84 +4941,82 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         ePopBrwView.mFlag |= F_EBRW_VIEW_FLAG_OAUTH;
     }
     //inDataType.length != 0
-    if (KUEXIS_NSString(inDataType))
+    
+    dataType = [inDataType intValue];
+    switch (dataType)
     {
-        dataType = [inDataType intValue];
-        switch (dataType)
-        {
-            case F_EUEXWINDOW_SRC_TYPE_URL:
-                //inUrl.length != 0
-                if (KUEXIS_NSString(inUrl))
+        case F_EUEXWINDOW_SRC_TYPE_URL:
+            //inUrl.length != 0
+            if (KUEXIS_NSString(inUrl))
+            {
+                NSString *urlStr = nil;
+                if ([inData hasPrefix:F_WGTROOT_PATH])
                 {
-                    NSString *urlStr = nil;
-                    if ([inData hasPrefix:F_WGTROOT_PATH])
-                    {
-                        NSString * urlsub = [inUrl substringFromIndex:10];
-                        NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
-                        urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                    NSString * urlsub = [inUrl substringFromIndex:10];
+                    NSString * finaUrl = [NSString stringWithFormat:@"/%@",urlsub];
+                    urlStr = [meBrwView.mwWgt.widgetPath stringByAppendingString:finaUrl];
+                    
+                    if (![urlStr hasPrefix:@"file://"]) {
+                        urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
+                    }
+                }else
+                {
+                    urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
+                }
+                //					NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
+                NSURL *url = [BUtility stringToUrl:urlStr];
+                if (eBrwWndContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION && ![urlStr hasPrefix:F_HTTP_PATH]&&![urlStr hasPrefix:F_HTTPS_PATH]) {
+                    //                        if ((flag & F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) == F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) {
+                    FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+                    NSString *data = [encryptObj decryptWithPath:url appendData:nil];
+                    ACENSLog(@"data: %@", data);
+                    
+                    [ePopBrwView loadWithData:data baseUrl:url];
+                    //                        } else {
+                    //                            [ePopBrwView loadWithUrl:url];
+                    //                        }
+                } else {
+                    [ePopBrwView loadWithUrl:url];
+                }
+                //8.8 数据统计
+                if (isExist) {
+                    NSString *curUrlStr =[ePopBrwView.curUrl absoluteString];
+                    if (![curUrlStr isEqualToString:urlStr]) {
+                        int type =ePopBrwView.mwWgt.wgtType;
+                        NSString *viewName =[ePopBrwView.curUrl absoluteString];
+                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                        [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                         
-                        if (![urlStr hasPrefix:@"file://"]) {
-                            urlStr =[NSString stringWithFormat:@"file://%@", urlStr];
-                        }
-                    }else
-                    {
-                        urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
-                    }
-                    //					NSString *urlStr = [BUtility makeUrl:[baseUrl absoluteString] url:inUrl];
-                    NSURL *url = [BUtility stringToUrl:urlStr];
-                    if (eBrwWndContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION && ![urlStr hasPrefix:F_HTTP_PATH]&&![urlStr hasPrefix:F_HTTPS_PATH]) {
-                        //                        if ((flag & F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) == F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION) {
-                        FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
-                        NSString *data = [encryptObj decryptWithPath:url appendData:nil];
-                        ACENSLog(@"data: %@", data);
-                        [encryptObj release];
-                        [ePopBrwView loadWithData:data baseUrl:url];
-                        //                        } else {
-                        //                            [ePopBrwView loadWithUrl:url];
-                        //                        }
-                    } else {
-                        [ePopBrwView loadWithUrl:url];
-                    }
-                    //8.8 数据统计
-                    if (isExist) {
-                        NSString *curUrlStr =[ePopBrwView.curUrl absoluteString];
-                        if (![curUrlStr isEqualToString:urlStr]) {
-                            int type =ePopBrwView.mwWgt.wgtType;
-                            NSString *viewName =[ePopBrwView.curUrl absoluteString];
-                            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
-                            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-                            
-                            NSString *fromViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-                            int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
-                            NSString *goViewName =[url absoluteString];
-                            {
+                        NSString *fromViewName =[eBrwWnd.meBrwView.curUrl absoluteString];
+                        int goType = eBrwWnd.meBrwView.mwWgt.wgtType;
+                        NSString *goViewName =[url absoluteString];
+                        {
                             NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWnd.meBrwView.mwWgt];
                             [BUtility setAppCanViewActive:goType opener:fromViewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
-                            }
-                            isExist =NO;
                         }
-                    }else {
-                        //int type =eBrwWnd.meBrwView.mwWgt.wgtType;
-                        NSString *viewName =[eBrwWnd.meBrwView.curUrl absoluteString];
-                        int goType = ePopBrwView.mwWgt.wgtType;
-                        NSString *goViewName =[url absoluteString];
-                        NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
-                        [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
+                        isExist =NO;
                     }
+                }else {
+                    //int type =eBrwWnd.meBrwView.mwWgt.wgtType;
+                    NSString *viewName =[eBrwWnd.meBrwView.curUrl absoluteString];
+                    int goType = ePopBrwView.mwWgt.wgtType;
+                    NSString *goViewName =[url absoluteString];
+                    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopBrwView.mwWgt];
+                    [BUtility setAppCanViewActive:goType opener:viewName name:goViewName openReason:0 mainWin:1 appInfo:appInfo];
                 }
-                else
-                {
-                    [eBrwWnd bringSubviewToFront:ePopBrwView];
-                }
-                break;
-            default:
-                break;
-        }
+            }
+            else
+            {
+                [eBrwWnd bringSubviewToFront:ePopBrwView];
+            }
+            break;
+            
+        default:
+            break;
     }
-    else
-    {
-        [eBrwWnd bringSubviewToFront:ePopBrwView];
-    }
+    
+    //[eBrwWnd bringSubviewToFront:ePopBrwView];
+    
     
     if (bottom>0)
     {
@@ -5104,7 +5067,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                     [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
                     
                     [[meBrwView brwWidgetContainer] pushReuseBrwView:ePopBrwView];
-                    [ePopBrwView release];
+                    
                 }
             }
         }
@@ -5407,9 +5370,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     //添加长按手势干扰
     if(!self.longPressGestureDisturbRecognizer){
-        self.longPressGestureDisturbRecognizer = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(disturbLongPressGestureHandler:)] autorelease];
+        self.longPressGestureDisturbRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(disturbLongPressGestureHandler:)];
         self.longPressGestureDisturbRecognizer.allowableMovement = 100.0f;
-        self.longPressGestureDisturbRecognizer.cancelsTouchesInView=NO;
+        self.longPressGestureDisturbRecognizer.cancelsTouchesInView = NO;
     }
     
     if(status == ACEDisturbLongPressGestureDisturbNormally){
@@ -5450,9 +5413,54 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     BOOL canSwipeClose=YES;
     if([info objectForKey:@"enable"]){
-    canSwipeClose=[[info objectForKey:@"enable"]boolValue];
+        canSwipeClose=[[info objectForKey:@"enable"]boolValue];
     }
     meBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
     [meBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+}
+
+
+
+- (id)log:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return @0;
+    }
+    NSLog(@"%@",inArguments[0]);
+    return @1;
+}
+
+
+- (NSNumber *)getWidth:(NSMutableArray *)inArguments{
+    return @(self.meBrwView.bounds.size.width);
+}
+- (NSNumber *)getHeight:(NSMutableArray *)inArguments{
+    return @(self.meBrwView.bounds.size.height);
+}
+
+NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
+- (void)putLocalData:(NSMutableArray*)inArguments{
+    if([inArguments count] < 2){
+        return;
+    }
+    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *dict = [[df valueForKey:kUexWindowValueDictKey] mutableCopy];
+    if (!dict) {
+        dict = [NSMutableDictionary dictionary];
+    }
+    [dict setValue:inArguments[1] forKey:inArguments[0]];
+    [df setValue:dict forKey:kUexWindowValueDictKey];
+    [df synchronize];
+}
+
+- (id)getLocalData:(NSMutableArray*)inArguments{
+    if([inArguments count] == 0){
+        return nil;
+    }
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] valueForKey:kUexWindowValueDictKey];
+    if (!dict) {
+        return nil;
+    }
+    return dict[inArguments[0]];
+    
 }
 @end

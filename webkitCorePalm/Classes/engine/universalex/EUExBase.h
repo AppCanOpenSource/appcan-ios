@@ -17,18 +17,35 @@
  */
 
 @class EBrowserView;
-@interface EUExBase :NSObject {	
-	EBrowserView *meBrwView;
+@interface EUExBase :NSObject{
+    __weak EBrowserView *meBrwView;
 }
-@property (nonatomic, assign) EBrowserView *meBrwView;
-- (id)initWithBrwView:(EBrowserView *)eInBrwView;
-- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType strData:(NSString*)inData;
-- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType intData:(int)inData;
-- (void)jsFailedWithOpId:(int)inOpId errorCode:(int)inErrorCode errorDes:(NSString*)inErrorDes;
+
+//插件所在的网页实例
+@property (nonatomic, weak) EBrowserView *meBrwView;
+
+- (instancetype)initWithBrwView:(EBrowserView *)eInBrwView NS_DESIGNATED_INITIALIZER;
+/**
+ *  网页被关闭时，会调用此方法;
+ */
 - (void)clean;
-- (void)stopNetService;
+
+/**
+ *  根据协议路径获取绝对路径
+ *
+ *  @param inPath 协议路径
+ *
+ *  @return 绝对路径
+ */
 - (NSString*)absPath:(NSString*)inPath;
 @end
 
+
+@interface EUExBase(Deprecated)
+- (void)stopNetService;
+- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType strData:(NSString*)inData;
+- (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType intData:(int)inData;
+- (void)jsFailedWithOpId:(int)inOpId errorCode:(int)inErrorCode errorDes:(NSString*)inErrorDes;
+@end
 
 

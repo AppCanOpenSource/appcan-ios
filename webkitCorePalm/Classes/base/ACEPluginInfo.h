@@ -1,10 +1,10 @@
 /**
  *
- *	@file   	: ACEPluginParser.h  in AppCanEngine Project
+ *	@file   	: ACEPluginInfo.h  in AppCanEngine
  *
- *	@author 	: CeriNo
- *
- *	@date   	: Created on 15/12/15
+ *	@author 	: CeriNo 
+ * 
+ *	@date   	: Created on 16/1/9.
  *
  *	@copyright 	: 2015 The AppCan Open Source Project.
  *
@@ -20,22 +20,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-
+ 
 #import <Foundation/Foundation.h>
-#import "ACEPluginInfo.h"
 
-@interface ACEPluginParser : NSObject
+#define ACE_METHOD_ASYNC @"AsyncMethod"
+#define ACE_METHOD_SYNC @"SyncMethod"
+@class ONOXMLElement;
+@interface ACEPluginInfo : NSObject
+@property (nonatomic,strong)NSString *uexName;
 /**
- *  pluginDict = {uexXXX:info}
+ *  methods = {方法名:isAsync}
  */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,ACEPluginInfo *> *pluginDict;
+@property (nonatomic,strong)NSMutableDictionary<NSString *,NSString *> *methods;
 /**
- *  globalPluginDict = {EUExXXX:NSNull}
+ *  properties = {属性名:值}
  */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,id> *globalPluginDict;
-- (NSArray *)classNameArray;
-- (NSString *)pluginBaseJS;
+@property (nonatomic,strong)NSMutableDictionary<NSString *,NSString *> *properties;
 
-+ (instancetype)sharedParser;
+- (instancetype)initWithName:(NSString *)uexName;
+
+
+-(void)updateWithXMLElement:(ONOXMLElement *)XMLElement;
 @end

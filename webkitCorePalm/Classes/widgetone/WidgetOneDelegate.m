@@ -25,7 +25,7 @@
 #import "EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "EBrowser.h"
-#import "EUExManager.h"
+
 #import "WWidgetMgr.h"
 #import "BUtility.h"
 #import <sys/utsname.h>
@@ -47,7 +47,8 @@
 #import "DataAnalysisInfo.h"
 #import "EUtility.h"
 #import "ACEPluginParser.h"
-
+#import "ACEJSCHandler.h"
+#import "ACEBrowserView.h"
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
@@ -98,7 +99,13 @@
 @synthesize useAppCanTaskSubmitHost = _useAppCanTaskSubmitHost;
 @synthesize validatesSecureCertificate = _validatesSecureCertificate;
 
+/*
+
+
+
+
 NSString *AppCanJS = nil;
+
 
 
 -(void)readAppCanJS {
@@ -129,17 +136,14 @@ NSString *AppCanJS = nil;
 	}
     
 }
-
+*/
 - (void)parseURL:(NSURL *)url application:(UIApplication *)application {
-    //调用支付对象解析url，传递值给js
-    //    EUExManager *manager = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.meUExManager;
-    
-    //取window的最上层ebrview
-    //    EUExManager *manager = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow] theFrontView].meUExManager;
+
     EBrowserWindow * ebv = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
     EBrowserView * ebview = [ebv theFrontView];
-    EUExManager * manager = ebview.meUExManager;
-    NSMutableDictionary *objDict = manager.uexObjDict;
+    ACEJSCHandler *handler = ebview.meBrowserView.JSCHandler;
+
+    NSMutableDictionary *objDict = handler.pluginDict;
     //get the plist file from bundle
     NSString * plistPath = [[NSBundle mainBundle] pathForResource:@"CBSchemesList" ofType:@"plist"];
     
@@ -149,8 +153,11 @@ NSString *AppCanJS = nil;
         NSMutableArray *anArray = [NSMutableArray arrayWithArray:[pDataDict objectForKey:@"UexObjName"]];
         
         for (NSString * uexNameStr in anArray) {
-            
-            EUExBase * payObj = [objDict objectForKey:uexNameStr];
+            if(![uexNameStr hasPrefix:@"uex"]){
+                continue;
+            }
+            NSString *EUExName = [@"EUEx" stringByAppendingString:[uexNameStr substringFromIndex:3]];
+            __kindof EUExBase * payObj = [objDict objectForKey:EUExName];
             if (payObj) {
                 
                 [payObj performSelector:@selector(parseURL:application:) withObject:url withObject:application];
@@ -347,7 +354,7 @@ NSString *AppCanJS = nil;
     
     [ACEDes enable];
     _globalPluginDict = [[NSMutableDictionary alloc] init];
-    
+    pluginObj = [[ACEPluginParser alloc] init];
     if (_useCloseAppWithJaibroken) {
         
         BOOL isjab = [BUtility isJailbroken];
@@ -430,7 +437,7 @@ NSString *AppCanJS = nil;
     
     mwWgtMgr = [[WWidgetMgr alloc]init];
 	meBrwCtrler.mwWgtMgr = mwWgtMgr;
-	[self readAppCanJS];
+	//[self readAppCanJS];
     
     
 	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -1030,10 +1037,7 @@ NSString *AppCanJS = nil;
 		pluginObj = nil;
 	}
 	
-	if (AppCanJS) {
-		[AppCanJS release];
-		AppCanJS = nil;
-	}
+
 	if (window) {
 		[window release];
 		window = nil;

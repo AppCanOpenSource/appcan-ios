@@ -125,7 +125,8 @@ typedef union _BGColor {
 
 }
 //base js
-+(NSString*)getBaseJSKey;
+
+//+(NSString*)getBaseJSKey;
 //rc4 js
 +(NSString*)getRC4LocalStoreJSKey;
 //doc path
