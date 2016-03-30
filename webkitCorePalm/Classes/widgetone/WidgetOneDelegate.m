@@ -353,8 +353,9 @@ NSString *AppCanJS = nil;
     }
     
     [ACEDes enable];
+    [BUtility setAppCanDocument];
     _globalPluginDict = [[NSMutableDictionary alloc] init];
-    pluginObj = [[ACEPluginParser alloc] init];
+    pluginObj = [ACEPluginParser sharedParser];
     if (_useCloseAppWithJaibroken) {
         
         BOOL isjab = [BUtility isJailbroken];
@@ -397,7 +398,7 @@ NSString *AppCanJS = nil;
         
     }
     
-    [BUtility setAppCanDocument];
+    
     
     Class analysisClass = NSClassFromString(@"AppCanAnalysis");
     
