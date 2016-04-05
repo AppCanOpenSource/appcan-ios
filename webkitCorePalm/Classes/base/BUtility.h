@@ -210,6 +210,7 @@ typedef union _BGColor {
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
 + (NSString *)bundleIdentifier;
 
++ (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
 
 #pragma mark - IDE
 

@@ -44,6 +44,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "DataAnalysisInfo.h"
+#import "ACEDrawerViewController.h"
 
 #import "ACEMultiPopoverScrollView.h"
 
@@ -797,7 +798,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         }
     } 
     
-    BOOL isStatusBarHidden = [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIStatusBarHidden"] boolValue];
+    BOOL isStatusBarHidden = theApp.drawerController.isStatusBarHidden;
     
     switch (mType) {
 		case F_EBRW_VIEW_TYPE_MAIN:
