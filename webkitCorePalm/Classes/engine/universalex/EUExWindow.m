@@ -210,6 +210,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotification:) name:@"SubscribeChannelNotification" object:nil];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotificationForJson:) name:@"SubscribeChannelNotificationForJson" object:nil];
+        
         self.notificationDic = [NSMutableDictionary dictionary];
     }
     return self;
@@ -4683,9 +4685,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         
         theApp.drawerController.isStatusBarHidden = YES;
-        
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-        
+    
+        if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
+            
+            [[UIApplication sharedApplication]setStatusBarHidden:YES];
+            
+        } else {
+            
+            [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+            
+        }
+    
     }
     
 }
@@ -4696,7 +4706,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         theApp.drawerController.isStatusBarHidden = NO;
         
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+        if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
+            
+            [[UIApplication sharedApplication]setStatusBarHidden:NO];
+            
+        } else {
+            
+            [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+            
+        }
         
     }
     
@@ -5160,6 +5178,42 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
 }
 
+-(void)publishChannelNotificationForJson:(NSArray *)inArgument
+{
+    if ([inArgument count] < 2) {
+        return;
+    }
+    
+    NSString * channelId = [inArgument objectAtIndex:0];
+    
+    NSString * inContent = [inArgument objectAtIndex:1];
+    
+    NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:channelId,@"channelId",inContent,@"inContent", nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubscribeChannelNotificationForJson"
+                                                        object:self userInfo:dic];
+    
+}
+
+-(void)respondChannelNotificationForJson:(NSNotification*)sender
+{
+    
+    NSDictionary * infoDic = (NSDictionary *)sender.userInfo;
+    
+    NSString * channelId = [infoDic objectForKey:@"channelId"];
+    NSString * inContent = [infoDic objectForKey:@"inContent"];
+    
+    NSString * function = [self.notificationDic objectForKey:channelId];
+    
+    if (!function) {
+        return;
+    }
+    
+    NSString * cbString = [NSString stringWithFormat:@"if(uexWindow.%@!=null){uexWindow.%@(%@);}",function,function,inContent];
+    
+    [meBrwView stringByEvaluatingJavaScriptFromString:cbString];
+    
+}
 
 -(void)postGlobalNotification:(NSArray *)inArgument
 {
@@ -5424,6 +5478,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 
 
+
 - (id)log:(NSMutableArray *)inArguments{
     if([inArguments count] < 1){
         return @0;
@@ -5466,4 +5521,40 @@ NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     return dict[inArguments[0]];
     
 }
+
+#pragma mark - share
+
+- (void)share:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    __block NSMutableArray *shareItems = [NSMutableArray array];
+    if (info[@"text"]) {
+        [shareItems addObject:info[@"text"]];
+    }
+    if (info[@"imgPaths"] && [info[@"imgPaths"] isKindOfClass:[NSArray class]]) {
+        [info[@"imgPaths"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *path = [self absPath:obj];
+            UIImage *image = [UIImage imageWithContentsOfFile:path];
+            if (image) {
+                [shareItems addObject:image];
+            }
+        }];
+    }else if(info[@"imgPath"]){
+        NSString *path = [self absPath:info[@"imgPath"]];
+        UIImage *image = [UIImage imageWithContentsOfFile:path];
+        if (image) {
+            [shareItems addObject:image];
+        }
+    }
+    UIActivityViewController * shareVC = [[UIActivityViewController alloc]initWithActivityItems:shareItems applicationActivities:nil];
+    [EUtility brwView:self.meBrwView presentModalViewController:shareVC animated:YES];
+}
+
+
+
 @end

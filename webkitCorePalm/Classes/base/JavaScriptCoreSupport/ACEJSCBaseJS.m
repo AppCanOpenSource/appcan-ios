@@ -198,6 +198,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getHeight":ACE_METHOD_SYNC,
                                @"putLocalData":ACE_METHOD_ASYNC,
                                @"getLocalData":ACE_METHOD_SYNC,
+                               @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
                                } mutableCopy];
     return uexWindowInfo;
 }

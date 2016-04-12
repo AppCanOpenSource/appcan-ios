@@ -52,6 +52,8 @@
 #import "OpenUDID.h"
 #import "ACEUtils.h"
 #import "FileEncrypt.h"
+#import <CommonCrypto/CommonDigest.h>
+
 
 
 void rc4_setup( struct rc4_state *s, unsigned char *key, int length ) 
@@ -264,6 +266,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.onGlobalNotification=null;"
 "uexWindow.subscribeChannelNotification=function(){ uex.exec('uexWindow.subscribeChannelNotification/'+uexJoin(arguments));};"
 "uexWindow.publishChannelNotification=function(){ uex.exec('uexWindow.publishChannelNotification/'+uexJoin(arguments));};"
+"uexWindow.publishChannelNotificationForJson=function(){ uex.exec('uexWindow.publishChannelNotificationForJson/'+uexJoin(arguments));};"
 //
 
 //2015-10-21 by lkl
@@ -273,9 +276,14 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.setWebViewScrollable = function() { uex.exec('uexWindow.setWebViewScrollable/'+uexJoin(arguments));};"
 "uexWindow.createProgressDialog = function() { uex.exec('uexWindow.createProgressDialog/'+uexJoin(arguments));};"
 "uexWindow.destroyProgressDialog = function() { uex.exec('uexWindow.destroyProgressDialog/'+uexJoin(arguments));};"
-#ifdef DEBUG
+
+
 "uexWindow.log = function() { uex.exec('uexWindow.log/'+uexJoin(arguments));};"
-#endif
+
+
+//2016-2-1 share by lkl
+"uexWindow.share = function() { uex.exec('uexWindow.share/'+uexJoin(arguments));};"
+
 
 "window.uexAppCenter = {}; uexAppCenter.cbGetSessionKey = null; uexAppCenter.cbLoginOut = null;"
 "uexAppCenter.appCenterLoginResult = function(){ uex.exec('uexAppCenter.appCenterLoginResult/'+uexJoin(arguments));};"
@@ -1352,12 +1360,17 @@ static NSString *clientCertificatePwd = nil;
             
         }
         
-        Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
+        Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
         
         if (!analysisClass) {
             
-            return;
+            analysisClass = NSClassFromString(@"AppCanAnalysis");
             
+            if (!analysisClass) {
+                
+                return;
+                
+            }
         }
         
         id analysisObject = class_createInstance(analysisClass,0);
@@ -1398,11 +1411,17 @@ static NSString *clientCertificatePwd = nil;
             
         }
         
-        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
+        Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
         
         if (!analysisClass) {
             
-            return;
+            analysisClass = NSClassFromString(@"AppCanAnalysis");
+            
+            if (!analysisClass) {
+                
+                return;
+                
+            }
             
         }
         
@@ -2032,6 +2051,30 @@ static NSString *clientCertificatePwd = nil;
     return dynamicPluginFrameworkFolderPath;
 }
 
+//request请求的header
++ (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_ {
+    
+    unsigned long long time = time_*1000;
+    NSString *md5StrIn = [NSString stringWithFormat:@"%@:%@:%lld",appId,appKey,time];
+    NSData *md5Data = [md5StrIn dataUsingEncoding:NSUTF8StringEncoding];
+    
+    CC_MD5_CTX md5;
+    CC_MD5_Init(&md5);
+    
+    CC_MD5_Update(&md5, [md5Data bytes], (int)[md5Data length]);
+    
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5_Final(digest, &md5);
+    
+    NSString *md5Str = [NSString stringWithFormat:
+                        @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+                        digest[0], digest[1], digest[2], digest[3],
+                        digest[4], digest[5], digest[6], digest[7],
+                        digest[8], digest[9], digest[10], digest[11],
+                        digest[12], digest[13], digest[14], digest[15]];
+    NSString *varifyApp = [NSString stringWithFormat:@"md5=%@;ts=%lld",[md5Str lowercaseString],time];
+    return varifyApp;
+}
 
 
 @end
