@@ -57,19 +57,15 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 - (void)dealloc {
     
 	if (mwWgt) {
-		[mwWgt release];
 		mwWgt = nil;
 	}
 	if (mOpenerInfo) {
-		[mOpenerInfo release];
 		mOpenerInfo = NULL;
 	}
 	if (mOpenerForRet) {
-		[mOpenerForRet release];
 		mOpenerForRet = NULL;
 	}
 	if (mAliPayInfo) {
-		[mAliPayInfo release];
 		mAliPayInfo = NULL;
 	}
 
@@ -78,7 +74,6 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 		if (meRootBrwWnd.superview) {
 			[meRootBrwWnd removeFromSuperview];
 		}
-		[meRootBrwWnd release];
 		meRootBrwWnd = NULL;
 	}
 
@@ -91,10 +86,8 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 //			[brwWnd release];
 		}
 		[mBrwWndDict removeAllObjects];
-		[mBrwWndDict release];
 		mBrwWndDict = NULL;
 	}
-    [super dealloc];
 }
 
 - (void)removeAllUnActiveBrwWnd {
@@ -112,7 +105,6 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 				[brwWnd removeFromSuperview];
 			}
             [mBrwWndDict removeObjectForKey:brwWnd.meBrwView.muexObjName];
-			[brwWnd release];
 		}
 	}
 }
@@ -165,8 +157,6 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
     }
     
     
-    
-    [webController release];
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
@@ -265,7 +255,6 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 				[self.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_FAIL retAppId:eInBrwView.mwWgt.appId];
 			}
 		}
-		[self release];
 	}
 	[eSuperBrwWnd notifyLoadPageErrorOfBrwView:eInBrwView];
 }
@@ -373,7 +362,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 - (void)clean {
 	NSArray *wndArray = [NSArray arrayWithArray:self.subviews];
 	EBrowserWindow *temWnd = nil;
-	int count = wndArray.count;
+	NSUInteger count = wndArray.count;
 	for (int i=0; i<count; i++) {
 		temWnd = (EBrowserWindow*)[wndArray objectAtIndex:i];
 		if (temWnd != meRootBrwWnd) {

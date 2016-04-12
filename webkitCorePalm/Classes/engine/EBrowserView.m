@@ -18,7 +18,7 @@
 
 #import "EBrowserView.h"
 #import "ACEBrowserView.h"
-#import "EUExManager.h"
+
 #import "BUtility.h"
 #import "CBrowserWindow.h"
 #import "CBrowserMainFrame.h"
@@ -52,7 +52,7 @@
 }
 
 @synthesize meBrwCtrler;
-@synthesize meUExManager;
+
 @synthesize mcBrwWnd;
 @synthesize meBrwWnd;
 @synthesize mwWgt;
@@ -74,17 +74,10 @@
 
 -(void)dealloc
 {
-    if (_meBrowserView) {
-        [_meBrowserView release];
-    }
-
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    [super dealloc];
 }
 
 -(void)setFrame:(CGRect)frame {
-    
     [super setFrame:frame];
     [_meBrowserView setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 }
@@ -226,8 +219,9 @@
 
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
-    if (_meBrowserView) {
+    if (self.meBrowserView && self.meBrowserView.JSContext) {
         return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
+        //return [self.meBrowserView.JSContext evaluateScript:script];
     }
     return nil;
 }
@@ -363,16 +357,7 @@
 
 
 
-//@property (nonatomic,assign) EUExManager *meUExManager;
--(EUExManager *)meUExManager
-{
-    return [_meBrowserView meUExManager];
-}
 
--(void)setMeUExManager:(EUExManager *)inmeUExManager
-{
-    [_meBrowserView setMeUExManager:inmeUExManager];
-}
 
 //@property (nonatomic,assign) EBrowserController *meBrwCtrler;
 -(EBrowserController *)meBrwCtrler
@@ -634,7 +619,6 @@
     NSNotificationCenter * notificationCenter =[NSNotificationCenter defaultCenter];
     
     [notificationCenter removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-    
     [notificationCenter addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
@@ -642,10 +626,11 @@
 
 
 - (void)topBounceViewRefresh {
-    
     [self.meBrowserView topBounceViewRefresh];
     
 }
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

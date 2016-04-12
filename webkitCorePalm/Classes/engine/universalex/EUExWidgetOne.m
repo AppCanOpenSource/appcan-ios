@@ -92,8 +92,9 @@
 //	}
 }
 
--(void)getPlatform:(NSMutableArray *)inArguments {
+-(id)getPlatform:(NSMutableArray *)inArguments {
 	[self jsSuccessWithName:F_CB_WIDGETONE_GET_PLATFORM opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:F_WIDGETONE_PLATFORM_IOS];
+    return @0;
 }
 
 -(void)exit:(NSMutableArray *)inArguments {
@@ -204,7 +205,7 @@
 }
 
 -(void)cleanCache:(NSMutableArray *)inArguments {
-	if (meBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
+	if (self.meBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
 		NSURLCache *shareCache = [NSURLCache sharedURLCache];
 		if (shareCache) {

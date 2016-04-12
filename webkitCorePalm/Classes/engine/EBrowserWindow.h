@@ -35,45 +35,37 @@
 #define F_EBRW_WND_FLAG_FINISH_PREOPEN	0x8
 
 @interface EBrowserWindow : UIView {
-	EBrowserController *meBrwCtrler;
-	EBrowserView *meTopSlibingBrwView;
-	EBrowserView *meBrwView;
-	EBrowserView *meBottomSlibingBrwView;
-	NSMutableArray *mPreOpenArray;
-	NSMutableDictionary *mPopoverBrwViewDict;
-	EBrowserWindow *meFrontWnd;
-	EBrowserWindow *meBackWnd;
-	EBrowserHistory *meBrwHistory;
+
 	NSString *mOAuthWndName;
 	WWidget *mwWgt;
 	int mOpenAnimiId;
 	float mOpenAnimiDuration;
 	int mFlag;
 }
-@property (nonatomic,assign) EBrowserController *meBrwCtrler;
-@property (nonatomic,assign) EBrowserView *meTopSlibingBrwView;
-@property (nonatomic,assign) EBrowserView *meBrwView;
-@property (nonatomic,assign) EBrowserView *meBottomSlibingBrwView;
-@property (nonatomic,assign) NSMutableArray *mPreOpenArray;
-@property (nonatomic,assign) NSMutableDictionary *mPopoverBrwViewDict;
-@property (nonatomic,assign) EBrowserWindow *meFrontWnd;
-@property (nonatomic,assign) EBrowserWindow *meBackWnd;
-@property (nonatomic,assign) EBrowserHistory *meBrwHistory;
-@property (nonatomic,retain) NSString *mOAuthWndName;
-@property (nonatomic,assign) WWidget *mwWgt;
+@property (nonatomic,weak) EBrowserController *meBrwCtrler;
+@property (nonatomic,strong) EBrowserView *meTopSlibingBrwView;
+@property (nonatomic,strong) EBrowserView *meBrwView;
+@property (nonatomic,strong) EBrowserView *meBottomSlibingBrwView;
+@property (nonatomic,strong) NSMutableArray *mPreOpenArray;
+@property (nonatomic,strong) NSMutableDictionary *mPopoverBrwViewDict;
+@property (nonatomic,weak) EBrowserWindow *meFrontWnd;
+@property (nonatomic,weak) EBrowserWindow *meBackWnd;
+@property (nonatomic,strong) EBrowserHistory *meBrwHistory;
+@property (nonatomic,strong) NSString *mOAuthWndName;
+@property (nonatomic,strong) WWidget *mwWgt;
 @property int mOpenAnimiId;
 @property float mOpenAnimiDuration;
 @property int mFlag;
 @property (nonatomic,retain) NSMutableDictionary *mMuiltPopoverDict;
 @property (nonatomic, assign) ACEWebWindowType webWindowType;
-@property (nonatomic, assign) EBrowserWindowContainer *winContainer;
-@property (nonatomic, retain) NSString *windowName;
+@property (nonatomic, weak) EBrowserWindowContainer *winContainer;
+@property (nonatomic, strong) NSString *windowName;
 @property (nonatomic, assign) id webController;
 @property (nonatomic, assign) BOOL isSliding;
 @property (nonatomic,assign) BOOL enableSwipeClose;
 //
 @property (nonatomic,assign) BOOL usingPopAnimation;
-@property (nonatomic,retain) NSDictionary *popAnimationInfo;
+@property (nonatomic,strong) NSDictionary *popAnimationInfo;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
@@ -94,4 +86,7 @@
 
 +(void)postWindowSequenceChange;
 -(void)updateSwipeCloseEnableStatus;
+
+
+
 @end
