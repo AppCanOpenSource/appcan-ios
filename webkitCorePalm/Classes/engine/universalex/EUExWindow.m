@@ -3229,6 +3229,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         muiltPopover.frame = CGRectMake(x, y, w, h);
         muiltPopover.scrollView.frame = CGRectMake(0, 0, w, h);
+        for(UIView *view in muiltPopover.scrollView.subviews){
+            if (![view isKindOfClass:[EBrowserView class]]) {
+                continue;
+            }
+            CGRect newFrame = view.frame;
+            newFrame.size.height = h;
+            newFrame.size.width = w;
+            view.frame = newFrame;
+        }
         
     }
     
@@ -5220,22 +5229,16 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([inArgument count] < 1) {
         return;
     }
-    NSString *str = [inArgument objectAtIndex:0];
-    BOOL multiPopoverFlippingEnbaled=NO;
-    if([str isEqual:@"1"]) {
-        multiPopoverFlippingEnbaled = NO;
-    }else if([str isEqual:@"0"]) {
-        multiPopoverFlippingEnbaled = YES;
-    }else{
-        return;
-    }
+
+    BOOL multiPopoverFlippingEnbaled = [[inArgument objectAtIndex:0] boolValue];
     if(meBrwView.meBrwWnd.mMuiltPopoverDict){
-        NSEnumerator * enumeratorValue = [meBrwView.meBrwWnd.mMuiltPopoverDict objectEnumerator];
-        
-        
-        for (EScrollView *eScrollV in enumeratorValue) {
-            UIScrollView *scrollView=eScrollV.scrollView;
-            scrollView.scrollEnabled=multiPopoverFlippingEnbaled;
+        for (EScrollView *eScrollV in meBrwView.meBrwWnd.mMuiltPopoverDict.allValues) {
+            if (![eScrollV isKindOfClass:[EScrollView class]]) {
+                continue;
+            }
+            UIScrollView *scrollView = eScrollV.scrollView;
+            scrollView.scrollEnabled = multiPopoverFlippingEnbaled;
+            /*
             NSArray * popviewAry = [scrollView subviews];
             for (UIView * popVews in popviewAry){
                 if([popVews isKindOfClass:[EBrowserView class]]){
@@ -5247,7 +5250,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 }
                 
             }
-            
+            */
         }
     };
 }
