@@ -540,10 +540,11 @@ static NSString *clientCertificatePwd = nil;
     NSURL * url = nil;
     
 	if ([BUtility isSimulator]==NO) {
-        
-        NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
-		url = [NSURL URLWithString:urlStr];
+        url = [NSURL URLWithString:inString];
+        if(!url || url.absoluteString.length == 0){
+            NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            url = [NSURL URLWithString:urlStr];
+        }
         
 	} else {
         
