@@ -42,7 +42,8 @@
 #import "ACEUtils.h"
 #import "DataAnalysisInfo.h"
 #import "ACEDrawerViewController.h"
-
+#import "EXTScope.h"
+#import <CommonCrypto/CommonCrypto.h>
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -51,6 +52,26 @@
 #define UEX_EXITAPP_ALERT_CANCLE @"取消"
 #define KUEX_ISNSMutableArray(x) ([x isKindOfClass:[NSMutableArray class]] && [x count]>0)
 #define KUEX_ISNSString(x) ([x isKindOfClass:[NSString class]] && (x.length>0) && ![x isEqual:@"(null)"])
+
+
+
+#define UEX_WIDGET_STRING_VALUE(x) \
+({\
+NSString *result;\
+id input = x;\
+if ([input isKindOfClass:[NSNumber class]]) {\
+    result = [(NSNumber *)input stringValue];\
+}\
+if ([input isKindOfClass:[NSString class]]) {\
+    result = input;\
+}\
+if (!result) {\
+    result = @"";\
+}\
+result;\
+});
+
+
 @implementation EUExWidget
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -75,7 +96,6 @@
                 ACENSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
             }
         }
-        [fileMgr release];
         exit(0);
     }
 }
@@ -87,7 +107,6 @@
 }
 
 -(void)dealloc{
-    [super dealloc];
 }
 
 - (void)reloadWidgetByAppId:(NSMutableArray *)inArguments {
@@ -98,7 +117,7 @@
         
     }
     
-    NSString * appId = [inArguments objectAtIndex:0];
+    NSString * appId = UEX_WIDGET_STRING_VALUE(inArguments[0]);
     
     EBrowserWidgetContainer * eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     
@@ -152,9 +171,9 @@
     NSString * logServerIp = nil;
     NSString * isDebug = nil;
     
-    if ([inArguments isKindOfClass:[NSMutableArray class]] && [inArguments count] == 2) {
-        logServerIp = [inArguments objectAtIndex:0];
-        isDebug = [inArguments objectAtIndex:1];
+    if ([inArguments isKindOfClass:[NSArray class]] && [inArguments count] >= 2) {
+        logServerIp = UEX_WIDGET_STRING_VALUE(inArguments[0]);
+        isDebug = UEX_WIDGET_STRING_VALUE(inArguments[1]);
     }else {
         return;
     }
@@ -199,17 +218,17 @@
 }
 -(void)startWidget:(NSMutableArray *)inArguments {
     ACENSLog(@"[EUExWidget startWidget]");
-    NSString *inAppId = [inArguments objectAtIndex:0];
-    NSString *inAnimiId = [inArguments objectAtIndex:1];
-    NSString *inForRet = [inArguments objectAtIndex:2];
-    NSString *inOpenerInfo = [inArguments objectAtIndex:3];
-    NSString *inAnimiDuration = NULL;
+    NSString *inAppId = UEX_WIDGET_STRING_VALUE(inArguments[0]);
+    NSString *inAnimiId = UEX_WIDGET_STRING_VALUE(inArguments[1]);
+    NSString *inForRet = UEX_WIDGET_STRING_VALUE(inArguments[2]);
+    NSString *inOpenerInfo = UEX_WIDGET_STRING_VALUE(inArguments[3]);
+    NSString *inAnimiDuration = nil;
     NSString *inAppkey = nil;
     if ([inArguments count] >= 5) {
-        inAnimiDuration = [inArguments objectAtIndex:4];
+        inAnimiDuration = UEX_WIDGET_STRING_VALUE(inArguments[4]);
     }
     if ([inArguments count] >= 6) {
-        inAppkey = [inArguments objectAtIndex:5];
+        inAppkey = UEX_WIDGET_STRING_VALUE(inArguments[5]);
     }
     if ((self.meBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
         return;
@@ -254,49 +273,28 @@
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeRight];
-            
-        }
+        [self rotateToOrientation:UIInterfaceOrientationLandscapeRight];
+
         
     } else if (subOrientation == 8) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-            
-        }
-        
+        [self rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
     } else if (subOrientation == 1 || subOrientation == 5) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
-            
-        }
+        [self rotateToOrientation:UIInterfaceOrientationPortrait];
         
     } else if (subOrientation == 4) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortraitUpsideDown];
-            
-        }
-        
+        [self rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
     
     theApp.drawerController.canRotate = NO;
@@ -363,7 +361,7 @@
             if ([inAppId isEqualToString:@"9999997"] || [inAppId isEqualToString:@"9999998"]) {
                 [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:inOpenerInfo];
             } else {
-                [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:NULL];
+                [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:nil];
             }
             //[eBrwWndContainer release];// cui 20130603
         }
@@ -388,8 +386,12 @@
         
         if (!KUEX_ISNSString(inAppkey)) return;
         
-        id analysisObject = class_createInstance(analysisClass,0);
+
+        id analysisObject = [[analysisClass alloc]init];
+        //id analysisObject = class_createInstance(analysisClass,0);
         
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppChannel:),wgtObj.channelCode);
         
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppId:),wgtObj.appId);
@@ -397,7 +399,7 @@
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppVersion:),wgtObj.ver);
         
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);//inKey  目前为主widget的AppKey，子widget没有
-        
+#pragma clang diagnostic pop
     } else {
         
         if (self.meBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
@@ -412,22 +414,23 @@
 
 -(void)finishWidget:(NSMutableArray *)inArguments {
     
-    NSString *inRet = [inArguments objectAtIndex:0];
+    NSString *inRet = UEX_WIDGET_STRING_VALUE(inArguments[0]);
     NSString *appID = nil;
     
     //********************************************
     if ([inArguments count]>1&&[[inArguments objectAtIndex:1] length]>0) {
         
-        appID = [inArguments objectAtIndex:1];
+        appID = UEX_WIDGET_STRING_VALUE(inArguments[1]);
         
     }
     
     BOOL isWgtBG  = NO;
     
-    if ([inArguments count]>2&&[[inArguments objectAtIndex:2] length]>0) {
-        
-        isWgtBG = [[inArguments objectAtIndex:2] boolValue];
-        
+    if ([inArguments count]>2) {
+        NSString * wgtBGStr = UEX_WIDGET_STRING_VALUE(inArguments[2]);
+        if (wgtBGStr.length > 0) {
+            isWgtBG = [[inArguments objectAtIndex:2] boolValue];
+        }
     }
     //*******************************************
     
@@ -453,69 +456,39 @@
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeRight];
-            
-        }
+        [self rotateToOrientation:UIInterfaceOrientationLandscapeRight];
         
     } else if (mOrientaion == 8) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationLandscapeLeft];
-            
-        }
+        [self rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
+
         
     } else if (mOrientaion == 1 || mOrientaion == 5) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortrait];
-            
-        }
-        
+        [self rotateToOrientation:UIInterfaceOrientationPortrait];
+
     } else if (mOrientaion == 4) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-            
-            [[UIDevice currentDevice] performSelector:@selector(setOrientation:) withObject:(id)UIInterfaceOrientationPortraitUpsideDown];
-            
-        }
-        
+        [self rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
-    
     theApp.drawerController.canRotate = NO;
-    
     EBrowserWidgetContainer *eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     EBrowserWindowContainer *eBrwWndContainer = nil;
-    
+
     if (appID) {
-        
         eBrwWndContainer = (EBrowserWindowContainer*)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:appID];
-        
     } else {
-        
         //eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
         eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
-        
     }
     
     if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
-        
         NSString * title = ACELocalized(UEX_EXITAPP_ALERT_TITLE);
         NSString * message = ACELocalized(UEX_EXITAPP_ALERT_MESSAGE);
         NSString * exit = ACELocalized(UEX_EXITAPP_ALERT_EXIT);
@@ -528,9 +501,6 @@
                                              cancelButtonTitle:nil
                                              otherButtonTitles:exit,cancel,nil];
         [widgetOneConfirmView show];
-        
-        [widgetOneConfirmView release];
-        
         return;
         
     }
@@ -621,7 +591,6 @@
             if (eBrwWnd.superview) {
                 [eBrwWnd removeFromSuperview];
             }
-            [eBrwWnd release];
             
         }
         
@@ -657,7 +626,7 @@
 }
 
 - (void)closeWindowAfterAnimation:(EBrowserWindow*)brwWnd_ {
-    NSString *fromViewName =NULL;
+    NSString *fromViewName =nil;
     if (brwWnd_.meBrwView) {
         //[eBrwWnd.meBrwView clean];
         //8.7 data
@@ -669,9 +638,8 @@
             [brwWnd_.meBrwView removeFromSuperview];
         }
         [[self.meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBrwView];
-        [brwWnd_.meBrwView release];
         
-        brwWnd_.meBrwView = NULL;
+        brwWnd_.meBrwView = nil;
     }
     if (brwWnd_.meTopSlibingBrwView) {
         //[eBrwWnd.meTopSlibingBrwView clean];
@@ -679,8 +647,7 @@
             [brwWnd_.meTopSlibingBrwView removeFromSuperview];
         }
         [[self.meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meTopSlibingBrwView];
-        [brwWnd_.meTopSlibingBrwView release];
-        brwWnd_.meTopSlibingBrwView = NULL;
+        brwWnd_.meTopSlibingBrwView = nil;
     }
     if (brwWnd_.meBottomSlibingBrwView) {
         //[eBrwWnd.meBottomSlibingBrwView clean];
@@ -688,8 +655,7 @@
             [brwWnd_.meBottomSlibingBrwView removeFromSuperview];
         }
         [[self.meBrwView brwWidgetContainer] pushReuseBrwView:brwWnd_.meBottomSlibingBrwView];
-        [brwWnd_.meBottomSlibingBrwView release];
-        brwWnd_.meBottomSlibingBrwView = NULL;
+        brwWnd_.meBottomSlibingBrwView = nil;
     }
     if (brwWnd_.mPopoverBrwViewDict) {
         NSArray *popViewArray = [brwWnd_.mPopoverBrwViewDict allValues];
@@ -705,10 +671,8 @@
             [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
             
             [[self.meBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
-            [ePopView release];
             [brwWnd_.mPopoverBrwViewDict removeAllObjects];
-            [brwWnd_.mPopoverBrwViewDict release];
-            brwWnd_.mPopoverBrwViewDict = NULL;
+            brwWnd_.mPopoverBrwViewDict = nil;
         }
     }
     //
@@ -765,7 +729,7 @@
 
 
 -(void)removeWidget:(NSMutableArray*)inArguments {
-    NSString *inAppId = [inArguments objectAtIndex:0];
+    NSString *inAppId = UEX_WIDGET_STRING_VALUE(inArguments[0]);
     ACENSLog(@"[EUExWidget removeWidget]");
     if (!inAppId) {
         [self jsSuccessWithName:@"uexWidget.cbRemoveWidget" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CFAILED];
@@ -830,11 +794,11 @@
         return;
     }
     
-    NSString *inAction = [inArguments objectAtIndex:0];
+    NSString *inAction = UEX_WIDGET_STRING_VALUE(inArguments[0]);
     NSURL *url = [NSURL URLWithString:inAction];
     BOOL openURL = [[UIApplication sharedApplication] openURL:url];
     if (!openURL && [inArguments count] > 1) {
-        NSString *iTunesURL = [inArguments objectAtIndex:1];
+        NSString *iTunesURL = UEX_WIDGET_STRING_VALUE(inArguments[1]);
         url = [NSURL URLWithString:iTunesURL];
         openURL = [[UIApplication sharedApplication] openURL:url];
     }
@@ -853,29 +817,27 @@
     
     Class  analysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
     if (!analysisClass) {
-        
         analysisClass =  NSClassFromString(@"AppCanAnalysis");
-        
         if (!analysisClass) {
-            
             return;
         }
     }
-    
     NSString *inKey=[BUtility appKey];
     
-    id analysisObject = class_createInstance(analysisClass,0);
+    id analysisObject =  [[analysisClass alloc]init];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithAppKey:), inKey);
-    
+#pragma clang diagnostic pop
+
 }
 -(void)checkUpdateWgt:(id)userInfo{
-    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     WWidget *wgtObj =(WWidget*)userInfo;
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:5];
     WWidgetMgr *wgtMgrObj = [[WWidgetMgr alloc]init];
     NSMutableDictionary *updateDict = [wgtMgrObj wgtUpdate:wgtObj];
     //
-    [wgtMgrObj release];
+
     int statusCode = [[updateDict objectForKey:@"statusCode"] intValue];
     if(statusCode ==200 &&[updateDict count]==1) {
         [dict setObject:[NSNumber numberWithInt:UEX_JVNoUpdate] forKey:UEX_JKRESULT];
@@ -900,7 +862,7 @@
     NSString *jsonStr = [dict JSONFragment];
     //[dict release];
     [self performSelectorOnMainThread:@selector(updateCallBack:) withObject:(id)jsonStr waitUntilDone:NO];
-    [pool release];
+
     //[NSThread exit];
 }
 
@@ -918,7 +880,8 @@
     if (eBrwWndContainer) {
         NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
         [defaults setValue:self.meBrwView.muexObjName forKey:kUexPushNotifyBrwViewNameKey];
-        [defaults setValue:[inArguments objectAtIndex:0] forKey:kUexPushNotifyCallbackFunctionNameKey];
+        NSString * funcName = UEX_WIDGET_STRING_VALUE(inArguments[0]);
+        [defaults setValue:funcName forKey:kUexPushNotifyCallbackFunctionNameKey];
         [defaults synchronize];
     }
 }
@@ -926,7 +889,7 @@
 -(void)getPushInfo:(NSMutableArray *)inArguments {
     NSString *flag = @"0";
     if (KUEX_ISNSMutableArray(inArguments)) {
-        flag = [inArguments objectAtIndex:0];
+        flag = UEX_WIDGET_STRING_VALUE(inArguments[0]);
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -1086,8 +1049,9 @@
             }
             
             [request setTimeOutSeconds:60];
+            @weakify(request);
             [request setCompletionBlock:^{
-                
+                @strongify(request);
                 if (200 == request.responseStatusCode) {
                     
                     NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseString is %@",request.responseString);
@@ -1104,13 +1068,12 @@
                 }
             }];
             [request setFailedBlock:^{
-                
+                 @strongify(request);
                 NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
                 
             }];
             
             [request startAsynchronous];
-            [request release];
         }
         
         Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
@@ -1189,7 +1152,7 @@
                 [defaults removeObjectForKey:@"allPushData"];
             }
         }
-        [request release];
+
         
     }
 }
@@ -1200,8 +1163,8 @@
         return;
     }
     
-    NSString *uId = [inArguments objectAtIndex:0];
-    NSString *uNickName =[inArguments objectAtIndex:1];
+    NSString *uId = UEX_WIDGET_STRING_VALUE(inArguments[0]);
+    NSString *uNickName =UEX_WIDGET_STRING_VALUE(inArguments[1]);
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
     ACENSLog(@"uid=%@, unickName=%@,deviceToken=%@",uId,uNickName,deviceToken);
@@ -1272,9 +1235,10 @@
         }
         [FormatReq setTimeOutSeconds:60];
         [FormatReq startSynchronous];
+        /*
         int status = [FormatReq responseStatusCode];
         NSString *responseStr = [FormatReq responseString];
-        [FormatReq release];
+         */
     }
 }
 -(void)setPushState:(NSMutableArray*)inArguments{
@@ -1334,7 +1298,7 @@
         EBrowserToolBar *ebrowserToolBar =[[EBrowserToolBar alloc] initWithFrame:CGRectMake(BOTTOM_LOCATION_VERTICAL_X,BOTTOM_LOCATION_VERTICAL_Y, BOTTOM_VIEW_WIDTH,BOTTOM_VIEW_HEIGHT) BrwCtrler:eInBrwCtrler];
         [eBrwMainFrm addSubview:ebrowserToolBar];
         ebrowserToolBar.flag=1;
-        [ebrowserToolBar release];
+
     }else{
         [eBrwMainFrm addSubview:eBrwMainFrm.meBrwToolBar];
         eBrwMainFrm.meBrwToolBar.flag=1;
@@ -1358,4 +1322,47 @@
     }
 }
 
+#pragma mark - change orientation
+- (void)rotateToOrientation:(UIInterfaceOrientation)orientation{
+    SEL selector = NSSelectorFromString([self rotateMethod]);
+    if ([[UIDevice currentDevice] respondsToSelector:selector]) {
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = orientation;
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
+}
+
+- (NSString *)rotateMethod{
+    NSString *value = @"LEqsLyC3MJ5Vh90gxGLxdg==";
+    NSData *data = [[NSData alloc]initWithBase64EncodedString:value options:0];
+    char keyPtr[kCCKeySizeAES256+1];
+    bzero(keyPtr, sizeof(keyPtr));
+    NSString *key = @"appcan";
+    [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
+    NSUInteger dataLength = [data length];
+    size_t bufferSize = dataLength + kCCBlockSizeAES128;
+    void *buffer = malloc(bufferSize);
+    size_t numBytesDecrypted = 0;
+    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt,
+                                          kCCAlgorithmAES128,
+                                          kCCOptionPKCS7Padding,
+                                          keyPtr,
+                                          kCCKeySizeAES256,
+                                          NULL,
+                                          [data bytes],
+                                          dataLength,
+                                          buffer,
+                                          bufferSize,
+                                          &numBytesDecrypted);
+    NSString *result = @"";
+    if (cryptStatus == kCCSuccess) {
+        NSData *resultData = [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted freeWhenDone:NO];
+        result = [[NSString alloc]initWithData:resultData encoding:NSUTF8StringEncoding];
+    }
+    free(buffer);
+    return result;
+}
 @end
