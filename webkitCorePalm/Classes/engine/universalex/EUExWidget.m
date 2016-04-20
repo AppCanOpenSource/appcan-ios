@@ -273,7 +273,7 @@ result;\
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationLandscapeRight];
+        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
 
         
     } else if (subOrientation == 8) {
@@ -281,20 +281,20 @@ result;\
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
+        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
     } else if (subOrientation == 1 || subOrientation == 5) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationPortrait];
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
         
     } else if (subOrientation == 4) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
     
     theApp.drawerController.canRotate = NO;
@@ -451,31 +451,31 @@ result;\
         
         //nothing
         
-    } else if (mOrientaion == 2 || mOrientaion == 10) {
+    } else if (mOrientaion == 2 || mOrientaion == 10 ) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationLandscapeRight];
+        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
         
     } else if (mOrientaion == 8) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
+        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
 
         
     } else if (mOrientaion == 1 || mOrientaion == 5) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationPortrait];
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
 
     } else if (mOrientaion == 4) {
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",mOrientaion] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [self rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
     theApp.drawerController.canRotate = NO;
     EBrowserWidgetContainer *eBrwWgtContainer = self.meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
@@ -1322,47 +1322,5 @@ result;\
     }
 }
 
-#pragma mark - change orientation
-- (void)rotateToOrientation:(UIInterfaceOrientation)orientation{
-    SEL selector = NSSelectorFromString([self rotateMethod]);
-    if ([[UIDevice currentDevice] respondsToSelector:selector]) {
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
-        [invocation setSelector:selector];
-        [invocation setTarget:[UIDevice currentDevice]];
-        int val = orientation;
-        [invocation setArgument:&val atIndex:2];
-        [invocation invoke];
-    }
-}
 
-- (NSString *)rotateMethod{
-    NSString *value = @"LEqsLyC3MJ5Vh90gxGLxdg==";
-    NSData *data = [[NSData alloc]initWithBase64EncodedString:value options:0];
-    char keyPtr[kCCKeySizeAES256+1];
-    bzero(keyPtr, sizeof(keyPtr));
-    NSString *key = @"appcan";
-    [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
-    NSUInteger dataLength = [data length];
-    size_t bufferSize = dataLength + kCCBlockSizeAES128;
-    void *buffer = malloc(bufferSize);
-    size_t numBytesDecrypted = 0;
-    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt,
-                                          kCCAlgorithmAES128,
-                                          kCCOptionPKCS7Padding,
-                                          keyPtr,
-                                          kCCKeySizeAES256,
-                                          NULL,
-                                          [data bytes],
-                                          dataLength,
-                                          buffer,
-                                          bufferSize,
-                                          &numBytesDecrypted);
-    NSString *result = @"";
-    if (cryptStatus == kCCSuccess) {
-        NSData *resultData = [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted freeWhenDone:NO];
-        result = [[NSString alloc]initWithData:resultData encoding:NSUTF8StringEncoding];
-    }
-    free(buffer);
-    return result;
-}
 @end

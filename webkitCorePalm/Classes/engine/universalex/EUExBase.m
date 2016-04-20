@@ -129,14 +129,14 @@
 
 - (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType strData:(NSString*)inData {
     //inData = [inData stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d,%d,\'%@\');}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
+    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@){%@(%d,%d,\'%@\');}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
     ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
     [EUtility brwView:self.meBrwView evaluateScript:jsSuccessStr];
     
 }
 
 - (void)jsSuccessWithName:(NSString *)inCallbackName opId:(int)inOpId dataType:(int)inDataType intData:(int)inData {
-    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d,%d,%d);}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
+    NSString *jsSuccessStr = [NSString stringWithFormat:@"if(%@){%@(%d,%d,%d);}",inCallbackName,inCallbackName,inOpId,inDataType,inData];
     ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
     [EUtility brwView:self.meBrwView evaluateScript:jsSuccessStr];
     
@@ -144,7 +144,7 @@
 
 - (void)jsFailedWithOpId:(int)inOpId errorCode:(int)inErrorCode errorDes:(NSString*)inErrorDes {
     inErrorDes =[inErrorDes stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *jsFailedStr = [NSString stringWithFormat:@"if(uexWidgetOne.cbError!=null){uexWidgetOne.cbError(%d,%d,\'%@\');}",inOpId,inErrorCode,inErrorDes];
+    NSString *jsFailedStr = [NSString stringWithFormat:@"if(uexWidgetOne.cbError){uexWidgetOne.cbError(%d,%d,\'%@\');}",inOpId,inErrorCode,inErrorDes];
     ACENSLog(@"jsFailedStr=%@",jsFailedStr);
     [EUtility brwView:self.meBrwView evaluateScript:jsFailedStr];
     

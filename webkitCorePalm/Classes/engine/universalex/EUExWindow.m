@@ -4562,54 +4562,47 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",orNumb] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        void (*p)(id,SEL,UIInterfaceOrientation);
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]){
-            p = (void (*)(id,SEL,UIInterfaceOrientation))[[UIDevice currentDevice] methodForSelector:@selector(setOrientation:)];
-        }else{
-            return;
-        }
-        
-        
         switch (orNumb)
         {
                 
             case 1:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                //[BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
                 
                 break;
             case 2:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
                 
                 
                 break;
                 
             case 4:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortraitUpsideDown);
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
                 
                 break;
                 
             case 8:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 10:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 5:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
                 
                 break;
                 
             case 3:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 9:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
                 
                 break;
                 

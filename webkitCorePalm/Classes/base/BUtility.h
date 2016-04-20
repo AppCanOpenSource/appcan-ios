@@ -213,6 +213,8 @@ typedef union _BGColor {
 
 + (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
 
+
++ (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
 #pragma mark - IDE
 
 + (NSString *)dynamicPluginFrameworkFolderPath;
