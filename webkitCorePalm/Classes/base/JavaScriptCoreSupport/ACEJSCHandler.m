@@ -48,14 +48,20 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
 }
 
+- (void)test{
+    JSContext *ctx = [JSContext currentContext];
+    NSLog(@"test:%@",ctx);
+}
 
 - (void)initializeWithJSContext:(JSContext *)context{
     context[@"uex"] = self;
+    JSValue *selfJS = context[@"uex"];
+    BOOL equal = [self isEqual:selfJS];
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
-    [context setExceptionHandler:^(JSContext *con, JSValue *exception) {
-        NSLog(@"%@", exception);
-        con.exception = exception;
+    [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
+        NSLog(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
+        ctx.exception = exception;
     }];
 }
 
@@ -156,7 +162,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     
     //载入res目录下的framework
     //测试用
-#if DEBUG
+
     dynamicBundle=[NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
     if(dynamicBundle){
         if([dynamicBundle isLoaded]){
@@ -167,7 +173,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
             return;
         }
     }
-#endif
+
 }
 
 - (BOOL)isPluginInstanceValid:(id)pluginInstance{

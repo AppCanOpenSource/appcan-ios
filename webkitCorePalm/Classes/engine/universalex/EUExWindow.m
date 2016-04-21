@@ -3108,13 +3108,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     switch (type) {
         case EBounceViewTypeTop:
             if (!meBrwView.mTopBounceView) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeTop params:bounceParams];
                     [meBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
-                
+#pragma clang diagnostic pop
                 meBrwView.mTopBounceView.backgroundColor = color;
                 meBrwView.mTopBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mTopBounceView];
@@ -3131,16 +3133,22 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             break;
         case EBounceViewTypeBottom:
             if (!meBrwView.mBottomBounceView) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
+
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:bounceParams];
                     [meBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
+#pragma clang diagnostic pop
+                //NSLog(@"bouceViewFrame:%@ scrollViewFrame:%@ contentViewSizwe:%@",[NSValue valueWithCGRect:meBrwView.mBottomBounceView.frame],[NSValue valueWithCGRect:meBrwView.mScrollView.frame],[NSValue valueWithCGSize:meBrwView.mScrollView.contentSize]);
+                
                 meBrwView.mBottomBounceView.backgroundColor = color;
                 meBrwView.mBottomBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mBottomBounceView];
-                if (meBrwView.mScrollView.contentSize.height <= meBrwView.mScrollView.frame.size.height) {
+                if (meBrwView.mScrollView.contentSize.height < meBrwView.mScrollView.frame.size.height) {
                     meBrwView.mBottomBounceView.hidden = YES;
                 } else {
                     meBrwView.mBottomBounceView.hidden = NO;
@@ -5049,6 +5057,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (isMuitPop)
     {
         [scrollView addSubview:ePopBrwView];
+    }else{
+        [eBrwWnd addSubview:ePopBrwView];
+        ePopBrwView.backgroundColor = [UIColor redColor];
     }
 }
 

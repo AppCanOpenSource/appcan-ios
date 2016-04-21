@@ -864,14 +864,17 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			[self loadUEXScript];
 			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
 			[self stringByEvaluatingJavaScriptFromString:initStr];
-
             
+            
+            //20160421 popover改为在网页加载完成之前就添加到窗口中
+            /*
 			if (self.superview != meBrwWnd) {
                 if (!self.isMuiltPopover)
                 {
                     [meBrwWnd addSubview:self.superDelegate];
                 }
 			}
+             */
 			id iFontSize = [self.mPageInfoDict objectForKey:@"pFontSize"];
 			if (iFontSize) {
 				NSNumber *fontSize = (NSNumber*)iFontSize;
