@@ -53,7 +53,7 @@ const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
 @interface ACEBrowserView()
-
+@property (nonatomic,weak,readwrite)JSContext *JSContext;
 @end
 
 
@@ -89,11 +89,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 
 - (JSContext *)JSContext{
-    JSContext *context = nil;
-    @try {
-         context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    }@catch (...) {}
-    return context;
+    if (!_JSContext) {
+        JSContext *context = nil;
+        @try {
+            context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+        }@catch (...) {}
+        _JSContext = context;
+    }
+    return _JSContext;
 }
 
 

@@ -123,6 +123,12 @@
 		4214B4121BE7575E0088E31B /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40F1BE7575E0088E31B /* EXTScope.h */; };
 		4214B4131BE7575E0088E31B /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B4101BE7575E0088E31B /* EXTScope.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4214B4141BE7575E0088E31B /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B4111BE7575E0088E31B /* metamacros.h */; };
+		424C9E491CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */; };
+		424C9E4A1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */; };
+		424C9E4B1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */; };
+		424C9E4C1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
+		424C9E4D1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
+		424C9E4E1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		428628FB1C0708920078E783 /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 428628F91C0708920078E783 /* ACEPOPAnimation.h */; };
 		428628FC1C0708920078E783 /* ACEPOPAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 428628FA1C0708920078E783 /* ACEPOPAnimation.m */; };
 		428628FE1C0708E30078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FD1C0708E30078E783 /* pop.framework */; };
@@ -1050,6 +1056,8 @@
 		4214B40F1BE7575E0088E31B /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		4214B4101BE7575E0088E31B /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		4214B4111BE7575E0088E31B /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
+		424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCInvocation.h; sourceTree = "<group>"; };
+		424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCInvocation.m; sourceTree = "<group>"; };
 		427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildEngineForPluginDevelopment.sh; sourceTree = "<group>"; };
 		428628F91C0708920078E783 /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
 		428628FA1C0708920078E783 /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
@@ -1551,6 +1559,8 @@
 				42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */,
 				42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */,
 				42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */,
+				424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */,
+				424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */,
 			);
 			path = JavaScriptCoreSupport;
 			sourceTree = "<group>";
@@ -2081,6 +2091,7 @@
 				42CF1FB81C19046700F539B4 /* UpdateParser.h in Headers */,
 				42CF1FB91C19046700F539B4 /* AsyncUdpSocket.h in Headers */,
 				42CF1FBA1C19046700F539B4 /* unzip.h in Headers */,
+				424C9E4A1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */,
 				42CF1FBB1C19046700F539B4 /* ACEDrawerViewController.h in Headers */,
 				42CF1FBC1C19046700F539B4 /* EBrowserController.h in Headers */,
 				42CF1FBD1C19046700F539B4 /* AsyncSocket.h in Headers */,
@@ -2243,6 +2254,7 @@
 				42CF20F31C1904F100F539B4 /* UpdateParser.h in Headers */,
 				42CF20F41C1904F100F539B4 /* AsyncUdpSocket.h in Headers */,
 				42CF20F51C1904F100F539B4 /* unzip.h in Headers */,
+				424C9E4B1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */,
 				42CF20F61C1904F100F539B4 /* ACEDrawerViewController.h in Headers */,
 				42CF20F71C1904F100F539B4 /* EBrowserController.h in Headers */,
 				42CF20F81C1904F100F539B4 /* AsyncSocket.h in Headers */,
@@ -2405,6 +2417,7 @@
 				5AAA86AF18B1B93D000D7600 /* UpdateParser.h in Headers */,
 				5AAA871F18B1B93D000D7600 /* AsyncUdpSocket.h in Headers */,
 				5AAA872E18B1B93D000D7600 /* unzip.h in Headers */,
+				424C9E491CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */,
 				334D18051A47A9B70050DD13 /* ACEDrawerViewController.h in Headers */,
 				5AAA86DC18B1B93D000D7600 /* EBrowserController.h in Headers */,
 				5AAA871D18B1B93D000D7600 /* AsyncSocket.h in Headers */,
@@ -2666,6 +2679,7 @@
 				42CF1F0C1C19046700F539B4 /* BToastView.m in Sources */,
 				42CF1F0D1C19046700F539B4 /* EBrowserHistoryEntry.m in Sources */,
 				42CF1F0E1C19046700F539B4 /* MMDrawerBarButtonItem.m in Sources */,
+				424C9E4D1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */,
 				42CF1F0F1C19046700F539B4 /* SDWebImageDownloaderOperation.m in Sources */,
 				42CF1F101C19046700F539B4 /* UIImage+WebP.m in Sources */,
 				42CF1F111C19046700F539B4 /* AppCenter.m in Sources */,
@@ -2801,6 +2815,7 @@
 				42CF20471C1904F100F539B4 /* BToastView.m in Sources */,
 				42CF20481C1904F100F539B4 /* EBrowserHistoryEntry.m in Sources */,
 				42CF20491C1904F100F539B4 /* MMDrawerBarButtonItem.m in Sources */,
+				424C9E4E1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */,
 				42CF204A1C1904F100F539B4 /* SDWebImageDownloaderOperation.m in Sources */,
 				42CF204B1C1904F100F539B4 /* UIImage+WebP.m in Sources */,
 				42CF204C1C1904F100F539B4 /* AppCenter.m in Sources */,
@@ -2936,6 +2951,7 @@
 				5AAA868F18B1B93D000D7600 /* BToastView.m in Sources */,
 				5AAA86E118B1B93D000D7600 /* EBrowserHistoryEntry.m in Sources */,
 				33AF6EC21A448EFD00DC7397 /* MMDrawerBarButtonItem.m in Sources */,
+				424C9E4C1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */,
 				33774C611B2A6D3500D5F279 /* SDWebImageDownloaderOperation.m in Sources */,
 				33774C6E1B2A6D3500D5F279 /* UIImage+WebP.m in Sources */,
 				5AAA873D18B1B93D000D7600 /* AppCenter.m in Sources */,
