@@ -1039,9 +1039,7 @@ NSString *AppCanJS = nil;
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
 
     [self invokeAppDelegateMethodApplication:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
-    if(completionHandler){
-        completionHandler(YES);
-    }
+
 }
 
 
@@ -1064,6 +1062,30 @@ NSString *AppCanJS = nil;
         }
     }
 }
+
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    [self invokeAppDelegateMethodApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+}
+
+-(void)invokeAppDelegateMethodApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
+        
+        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
+        
+        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        
+        Class acecls = NSClassFromString(fullClassName);
+        
+        Method delegateMethod = class_getClassMethod(acecls, @selector(application:handleEventsForBackgroundURLSession:completionHandler:));
+        
+        if (delegateMethod) {
+            [acecls application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+            
+        }
+    }
+}
+
 
 #pragma mark - root page finish loading invokation
 
