@@ -79,20 +79,11 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     if (!func || [ACEJSCInvocation JSTypeOf:func] != ACEJSValueTypeFunction) {
         return;
     }
+    errorOccured = NO;
     ACEJSCInvocation *invocation = [ACEJSCInvocation invocationWithFunction:func
                                                                   arguments:arguments
                                                           completionHandler:completion];
     [invocation invokeOnMainThread];
-    /*
-    ACEJSCInvocation *invocation = [[ACEJSCInvocation alloc]init];
-    invocation.function = func;
-    invocation.arguments = arguments;
-    invocation.completionHandler = completion;
-     */
-    //[invocation performSelector:@selector(invokeOnMainThread) withObject:nil afterDelay:0];
-    //[invocation performSelectorOnMainThread:@selector(delayedInvoke) withObject:nil waitUntilDone:NO];
-    
-    errorOccured = NO;
 }
 
 

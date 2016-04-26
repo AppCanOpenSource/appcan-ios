@@ -43,10 +43,7 @@ typedef NS_ENUM(NSInteger,ACEJSValueType){
 
 @interface ACEJSCInvocation : NSObject
 
-@property (nonatomic,strong)JSValue *function;
-@property (nonatomic,strong)NSArray *arguments;
-@property (nonatomic,strong)JSValue *returnValue;
-@property (nonatomic,strong)void (^completionHandler)(JSValue * returnValue);
+
 
 
 + (instancetype)invocationWithFunction:(JSValue *)function

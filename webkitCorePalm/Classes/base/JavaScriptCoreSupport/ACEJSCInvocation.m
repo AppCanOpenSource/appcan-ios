@@ -22,6 +22,11 @@
  */
 
 #import "ACEJSCInvocation.h"
+@interface ACEJSCInvocation()
+@property (nonatomic,strong)JSValue *function;
+@property (nonatomic,strong)NSArray *arguments;
+@property (nonatomic,strong)void (^completionHandler)(JSValue * returnValue);
+@end
 
 @implementation ACEJSCInvocation
 
@@ -38,31 +43,54 @@
 }
 
 - (void)invoke{
-    self.returnValue = nil;
+
     if (!self.function || [self.class JSTypeOf:self.function] != ACEJSValueTypeFunction) {
-        [self executeBlock:nil];
+        if (self.completionHandler) {
+            self.completionHandler(nil);
+        }
     }else{
-        self.returnValue = [self.function callWithArguments:self.arguments];
-        [self executeBlock:self.returnValue];
+        @try {
+            JSContext *ctx = self.function.context;
+            JSValue *function = self.function;
+            NSArray *args = self.arguments;
+            JSValue *setTimeOut = ctx[@"setTimeout"];
+            void (^completionHandler)(JSValue * returnValue) = self.completionHandler;
+            void (^exec)(void) = ^{
+                JSValue *r = [function callWithArguments:args];
+                if (completionHandler) {
+                    completionHandler(r);
+                }
+            };
+            if ([setTimeOut isUndefined]) {
+                //ctx中没有setTimeout方法的情况
+                //多见于非网页的JSContext
+                exec();
+            }else{
+                NSString *tmp = nil;
+                do{
+                    tmp = [self.class randomJSName];
+                }while (![ctx[tmp] isUndefined]);
+                ctx[tmp] = exec;
+                [setTimeOut callWithArguments:@[ctx[tmp],@0]];
+                ctx[tmp] = nil;
+            }
+
+        } @catch (...) {}
     }
     
     
 }
 
 - (void)invokeOnMainThread{
-    [self performSelectorOnMainThread:@selector(delayedInvoke) withObject:nil waitUntilDone:NO];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self invoke];
+    });
 }
 
-- (void)delayedInvoke{
-    //加了延时之后可以解决网页中的alert卡死的问题
-    [self performSelector:@selector(invoke) withObject:nil afterDelay:0.01];
-}
 
-- (void)executeBlock:(JSValue *)returnValue{
-    if (self.completionHandler) {
-        self.completionHandler(returnValue);
-    }
-}
+
+
 
 - (void)dealloc{
    //NSLog(@"JSInvocation dealloc");
@@ -96,12 +124,17 @@
     }
     JSContext *ctx = value.context;
     NSString *tmp = nil;
-    do{
-        tmp = [[@"_" stringByAppendingString:[NSUUID UUID].UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    }while (![ctx[tmp] isUndefined]);
-    [ctx evaluateScript:[NSString stringWithFormat:@"var %@ = function(x){return typeof(x);};",tmp]];
-    NSString *type = [ctx[tmp] callWithArguments:@[value]].toString;
-    ctx[tmp] = nil;
+    NSString *type = nil;
+    @try {
+        do{
+            tmp = [self randomJSName];
+        }while (![ctx[tmp] isUndefined]);
+        [ctx evaluateScript:[NSString stringWithFormat:@"var %@ = function(x){return typeof(x);};",tmp]];
+        type = [ctx[tmp] callWithArguments:@[value]].toString;
+        ctx[tmp] = nil;
+
+    } @catch (...) {}
+    
     if ([type.lowercaseString isEqual:@"function"]) {
         return ACEJSValueTypeFunction;
     }
@@ -123,6 +156,9 @@
     return ACEJSValueTypeUnknown;
 }
 
++ (NSString *)randomJSName{
+    return [[@"_" stringByAppendingString:[NSUUID UUID].UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+}
 
 @end
 
