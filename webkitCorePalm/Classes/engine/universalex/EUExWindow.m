@@ -5288,7 +5288,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
 
-    BOOL multiPopoverFlippingEnbaled = [[inArgument objectAtIndex:0] boolValue];
+    BOOL multiPopoverFlippingEnbaled = ![[inArgument objectAtIndex:0] boolValue];
     if(meBrwView.meBrwWnd.mMuiltPopoverDict){
         for (EScrollView *eScrollV in meBrwView.meBrwWnd.mMuiltPopoverDict.allValues) {
             if (![eScrollV isKindOfClass:[EScrollView class]]) {
