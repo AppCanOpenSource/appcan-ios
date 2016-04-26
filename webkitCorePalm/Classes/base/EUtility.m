@@ -96,6 +96,31 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 }
 
 
+//2015-09-23 by lkl
++ (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target{
+    
+    BOOL isObject = [obj isKindOfClass:[NSDictionary class]] || [obj isKindOfClass:[NSArray class]];
+    NSString * result=[obj JSONFragment];
+    
+    if (type == uexPluginCallbackWithJsonString && isObject) {
+        result = [result JSONFragment];
+    }
+    if (!obj || [obj isEqual:[NSNull null]]) {
+        result = @"(undefined)";
+    }
+    
+    NSString * callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
+    
+    if([target isEqual:cUexPluginCallbackInRootWindow]){
+        [self evaluatingJavaScriptInRootWnd:callbackString];
+    }else if([target isEqual:cUexPluginCallbackInFrontWindow]){
+        [self evaluatingJavaScriptInFrontWnd:callbackString];
+    }else if(target && [target isKindOfClass:[EBrowserView class]]){
+        EBrowserView * inBrwView=(EBrowserView *)target;
+        [self brwView:inBrwView evaluateScript:callbackString];
+    }
+}
+
 
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName{
     NSString *bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
@@ -625,25 +650,7 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
     [inBrwView.meBrwCtrler.navigationController presentModalViewController:modalViewController animated:animated];
 }
 
-//2015-09-23 by lkl
-+ (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target{
-    BOOL isNSNumber = [obj isKindOfClass:[NSNumber class]];
-    NSString * result=[obj JSONFragment];
-    NSString * callbackString;
-    if (type == uexPluginCallbackWithJsonString && !isNSNumber) {
-        callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@('%@');}",pluginName,functionName,pluginName,functionName,result];
-    }else{
-        callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
-    }
-    if(target == cUexPluginCallbackInRootWindow){
-        [self evaluatingJavaScriptInRootWnd:callbackString];
-    }else if(target == cUexPluginCallbackInFrontWindow){
-        [self evaluatingJavaScriptInFrontWnd:callbackString];
-    }else if(target && [target isKindOfClass:[EBrowserView class]]){
-        EBrowserView * inBrwView=(EBrowserView *)target;
-        [self brwView:inBrwView evaluateScript:callbackString];
-    }
-}
+
 
 @end
 
