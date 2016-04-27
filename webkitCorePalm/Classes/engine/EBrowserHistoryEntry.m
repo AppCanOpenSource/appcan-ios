@@ -21,20 +21,14 @@
 
 @implementation EBrowserHistoryEntry
 
-@synthesize mUrl;
-@synthesize mIsObf;
 
-- (void)dealloc {
-	[mUrl release];
-	mUrl = NULL;
-	[super dealloc];
-}
+
 
 - (id)initWithUrl:(NSURL*)inUrl obfValue:(BOOL)inIsObf {
 	self = [super init];
 	if (self) {
-		self.mUrl = inUrl;
-		mIsObf = inIsObf;
+		_mUrl = inUrl;
+		_mIsObf = inIsObf;
 	}
 	return self;
 }
