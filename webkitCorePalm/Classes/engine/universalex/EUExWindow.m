@@ -1125,9 +1125,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     NSString * inDataType = [inArguments objectAtIndex:1];
     NSString * inData = [inArguments objectAtIndex:2];
     NSString * extraInfo = @"";
-    if ([inArguments count] >= 4) {
-        extraInfo = [inArguments objectAtIndex:3];
+    if (inArguments.count > 8) {
+        extraInfo = inArguments[8];
+    }else if (inArguments.count > 3 && [inArguments[3] JSONValue]) {
+        extraInfo = inArguments[3];
     }
+    
+
     ACEWebWindowType type = ACEWebWindowTypePresent;
     
     //window 4.8
@@ -1295,16 +1299,16 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     //[extraInfo length] > 0
     if (KUEXIS_NSString(extraInfo)) {
-        
-        NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
-        if(extraDic){
-            [extraDic setValue: @"true" forKey: @"opaque"];
+        NSDictionary *extras = [extraInfo JSONValue];
+        if (extras && [extras isKindOfClass:[NSDictionary class]]) {
+            NSMutableDictionary * extraDic = [[extras objectForKey:@"extraInfo"] mutableCopy];
+            if(extraDic){
+                [extraDic setValue: @"true" forKey: @"opaque"];
+            }
+            [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
+            NSDictionary *popAnimationInfo=[extras objectForKey:@"animationInfo"];
+            [eBrwWnd setPopAnimationInfo:popAnimationInfo];
         }
-        
-        [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
-        NSDictionary *popAnimationInfo=[[extraInfo JSONValue] objectForKey:@"animationInfo"];
-        [eBrwWnd setPopAnimationInfo:popAnimationInfo];
-        
     }
     
     if ((flag & F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) == F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) {
