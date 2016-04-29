@@ -47,16 +47,15 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     }
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
 }
-
+/*
 - (void)test{
     JSContext *ctx = [JSContext currentContext];
     NSLog(@"test:%@",ctx);
 }
-
+*/
 - (void)initializeWithJSContext:(JSContext *)context{
     context[@"uex"] = self;
     JSValue *selfJS = context[@"uex"];
-    BOOL equal = [self isEqual:selfJS];
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
     [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {

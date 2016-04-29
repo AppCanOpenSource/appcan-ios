@@ -5063,7 +5063,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [scrollView addSubview:ePopBrwView];
     }else{
         [eBrwWnd addSubview:ePopBrwView];
-        ePopBrwView.backgroundColor = [UIColor redColor];
+        //ePopBrwView.backgroundColor = [UIColor redColor];
     }
 }
 
