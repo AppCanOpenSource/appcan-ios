@@ -1125,9 +1125,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     NSString * inDataType = [inArguments objectAtIndex:1];
     NSString * inData = [inArguments objectAtIndex:2];
     NSString * extraInfo = @"";
-    if ([inArguments count] >= 4) {
-        extraInfo = [inArguments objectAtIndex:3];
+    if (inArguments.count > 8) {
+        extraInfo = inArguments[8];
+    }else if (inArguments.count > 3 && [inArguments[3] JSONValue]) {
+        extraInfo = inArguments[3];
     }
+    
+
     ACEWebWindowType type = ACEWebWindowTypePresent;
     
     //window 4.8
@@ -1295,16 +1299,16 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     //[extraInfo length] > 0
     if (KUEXIS_NSString(extraInfo)) {
-        
-        NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
-        if(extraDic){
-            [extraDic setValue: @"true" forKey: @"opaque"];
+        NSDictionary *extras = [extraInfo JSONValue];
+        if (extras && [extras isKindOfClass:[NSDictionary class]]) {
+            NSMutableDictionary * extraDic = [[extras objectForKey:@"extraInfo"] mutableCopy];
+            if(extraDic){
+                [extraDic setValue: @"true" forKey: @"opaque"];
+            }
+            [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
+            NSDictionary *popAnimationInfo=[extras objectForKey:@"animationInfo"];
+            [eBrwWnd setPopAnimationInfo:popAnimationInfo];
         }
-        
-        [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
-        NSDictionary *popAnimationInfo=[[extraInfo JSONValue] objectForKey:@"animationInfo"];
-        [eBrwWnd setPopAnimationInfo:popAnimationInfo];
-        
     }
     
     if ((flag & F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) == F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) {
@@ -3108,13 +3112,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     switch (type) {
         case EBounceViewTypeTop:
             if (!meBrwView.mTopBounceView) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeTop params:bounceParams];
                     [meBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
-                
+#pragma clang diagnostic pop
                 meBrwView.mTopBounceView.backgroundColor = color;
                 meBrwView.mTopBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mTopBounceView];
@@ -3131,16 +3137,22 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             break;
         case EBounceViewTypeBottom:
             if (!meBrwView.mBottomBounceView) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
+
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:bounceParams];
                     [meBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
+#pragma clang diagnostic pop
+                //NSLog(@"bouceViewFrame:%@ scrollViewFrame:%@ contentViewSizwe:%@",[NSValue valueWithCGRect:meBrwView.mBottomBounceView.frame],[NSValue valueWithCGRect:meBrwView.mScrollView.frame],[NSValue valueWithCGSize:meBrwView.mScrollView.contentSize]);
+                
                 meBrwView.mBottomBounceView.backgroundColor = color;
                 meBrwView.mBottomBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mBottomBounceView];
-                if (meBrwView.mScrollView.contentSize.height <= meBrwView.mScrollView.frame.size.height) {
+                if (meBrwView.mScrollView.contentSize.height < meBrwView.mScrollView.frame.size.height) {
                     meBrwView.mBottomBounceView.hidden = YES;
                 } else {
                     meBrwView.mBottomBounceView.hidden = NO;
@@ -4562,54 +4574,47 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",orNumb] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        void (*p)(id,SEL,UIInterfaceOrientation);
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]){
-            p = (void (*)(id,SEL,UIInterfaceOrientation))[[UIDevice currentDevice] methodForSelector:@selector(setOrientation:)];
-        }else{
-            return;
-        }
-        
-        
         switch (orNumb)
         {
                 
             case 1:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                //[BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
                 
                 break;
             case 2:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
                 
                 
                 break;
                 
             case 4:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortraitUpsideDown);
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
                 
                 break;
                 
             case 8:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 10:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 5:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
                 
                 break;
                 
             case 3:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 9:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
                 
                 break;
                 
@@ -5056,6 +5061,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (isMuitPop)
     {
         [scrollView addSubview:ePopBrwView];
+    }else{
+        [eBrwWnd addSubview:ePopBrwView];
+        //ePopBrwView.backgroundColor = [UIColor redColor];
     }
 }
 
@@ -5284,7 +5292,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
 
-    BOOL multiPopoverFlippingEnbaled = [[inArgument objectAtIndex:0] boolValue];
+    BOOL multiPopoverFlippingEnbaled = ![[inArgument objectAtIndex:0] boolValue];
     if(meBrwView.meBrwWnd.mMuiltPopoverDict){
         for (EScrollView *eScrollV in meBrwView.meBrwWnd.mMuiltPopoverDict.allValues) {
             if (![eScrollV isKindOfClass:[EScrollView class]]) {

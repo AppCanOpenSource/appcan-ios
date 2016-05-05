@@ -33,14 +33,12 @@
 #import "EBrowserToolBar.h"
 #import "FileEncrypt.h"
 #import "EBrowserWindow.h"
-#import "EBrowserHistoryEntry.h"
 #import "EBrowserViewBounceView.h"
 #import "WidgetOneDelegate.h"
 #import "WidgetSQL.h"
 #import "EUtility.h"
 //#import "AppCanAnalysis.h"
 #import "EBrowserHistory.h"
-#import "EBrowserHistoryEntry.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 

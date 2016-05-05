@@ -23,50 +23,45 @@
 @implementation EBrowserHistory
 
 - (void)dealloc {
-	if (mHisEntryArray) {
-		for (EBrowserHistoryEntry *entry in mHisEntryArray) {
-			[entry release];
-		}
-	}
-	[mHisEntryArray removeAllObjects];
-	[mHisEntryArray release];
-	mHisEntryArray =nil;
-	[super dealloc];
+
+	[_mHisEntryArray removeAllObjects];
+
+	_mHisEntryArray =nil;
+
 }
 
 - (id)init {
 	self = [super init];
 	if (self) {
-		mHisEntryArray = [NSMutableArray arrayWithCapacity:20];
-		[mHisEntryArray retain];
-		mCurIndex = -1;
+		_mHisEntryArray = [NSMutableArray arrayWithCapacity:20];
+		_mCurIndex = -1;
 	}
 	return self;
 }
 
 - (BOOL)canGoBack {
-	if (mCurIndex == 0) {
+	if (self.mCurIndex == 0) {
 		return NO;
 	}
 	return YES;
 }
 
 - (BOOL)canGoForward {
-	if (mCurIndex == (mHisEntryArray.count - 1)) {
+	if (self.mCurIndex == (self.mHisEntryArray.count - 1)) {
 		return NO;
 	}
 	return YES;
 }
 
 - (void)goBack {
-	if (mCurIndex > 0) {
-		mCurIndex--;
+	if (self.mCurIndex > 0) {
+		self.mCurIndex--;
 	}
 }
 
 - (void)goForward {
-	if (mCurIndex+1 < mHisEntryArray.count) {
-		mCurIndex++;
+	if (self.mCurIndex+1 < self.mHisEntryArray.count) {
+		self.mCurIndex++;
 	}
 }
 
@@ -83,14 +78,14 @@
 //    }
 //    if (!isInHis)
 //    {
-        [mHisEntryArray insertObject:eInHisEntry atIndex:++mCurIndex];
-        int arrayCount = mHisEntryArray.count;
-        if (mCurIndex+1 < arrayCount) {
+        [self.mHisEntryArray insertObject:eInHisEntry atIndex:++self.mCurIndex];
+        NSInteger arrayCount = self.mHisEntryArray.count;
+        if (self.mCurIndex+1 < arrayCount) {
             /*for (int i=mCurIndex+1; i<arrayCount; i++) {
              [(EBrowserHistoryEntry*)[mHisEntryArray objectAtIndex:i] release];
              }*/
-            NSRange range = NSMakeRange(mCurIndex+1, arrayCount-(mCurIndex+1));
-            [mHisEntryArray removeObjectsInRange:range];
+            NSRange range = NSMakeRange(self.mCurIndex+1, arrayCount-(self.mCurIndex+1));
+            [self.mHisEntryArray removeObjectsInRange:range];
         }
 //    }
 }
@@ -99,18 +94,18 @@
 	EBrowserHistoryEntry *eHisEntry = nil;
 	switch (inStep) {
 		case F_EBRW_HISTORY_STEP_BACK:
-			if (mHisEntryArray.count != 0 && mCurIndex+1 > 0) {
-				eHisEntry = (EBrowserHistoryEntry*)[mHisEntryArray objectAtIndex:mCurIndex-1];
+			if (self.mHisEntryArray.count != 0 && self.mCurIndex+1 > 0) {
+				eHisEntry = (EBrowserHistoryEntry*)[self.mHisEntryArray objectAtIndex:self.mCurIndex-1];
 			}
 			break;
 		case F_EBRW_HISTORY_STEP_CUR:
-			if (mHisEntryArray.count != 0) {
-				eHisEntry = (EBrowserHistoryEntry*)[mHisEntryArray objectAtIndex:mCurIndex];
+			if (self.mHisEntryArray.count != 0) {
+				eHisEntry = (EBrowserHistoryEntry*)[self.mHisEntryArray objectAtIndex:self.mCurIndex];
 			}
 			break;
 		case F_EBRW_HISTORY_STEP_FORWARD:
-			if (mHisEntryArray.count != 0 && mCurIndex+1 < mHisEntryArray.count) {
-				eHisEntry = (EBrowserHistoryEntry*)[mHisEntryArray objectAtIndex:mCurIndex+1];
+			if (self.mHisEntryArray.count != 0 && self.mCurIndex+1 < self.mHisEntryArray.count) {
+				eHisEntry = (EBrowserHistoryEntry*)[self.mHisEntryArray objectAtIndex:self.mCurIndex+1];
 			}
 			break;
 		default:
@@ -120,10 +115,9 @@
 }
 
 - (void)clean {
-	[mHisEntryArray release];
-	mHisEntryArray = [NSMutableArray arrayWithCapacity:20];
-	[mHisEntryArray retain];
-	mCurIndex = -1;
+	[self.mHisEntryArray removeAllObjects];
+	self.mHisEntryArray = [NSMutableArray arrayWithCapacity:20];
+	self.mCurIndex = -1;
 }
 
 @end
