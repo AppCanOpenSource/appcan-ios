@@ -19,13 +19,10 @@
 #import <Foundation/Foundation.h>
 
 
-@interface EBrowserHistoryEntry : NSObject {
-	NSURL *mUrl;
-	BOOL mIsObf;
-}
+@interface EBrowserHistoryEntry : NSObject 
 
-@property (nonatomic, retain) NSURL *mUrl;
-@property BOOL	mIsObf;
+@property (nonatomic, strong) NSURL *mUrl;
+@property (nonatomic,assign) BOOL	mIsObf;
 
 - (id)initWithUrl:(NSURL*)inUrl obfValue:(BOOL)inIsObf;
 @end
