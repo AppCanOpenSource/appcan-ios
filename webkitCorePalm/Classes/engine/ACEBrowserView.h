@@ -96,7 +96,7 @@
 @property (nonatomic) BOOL isMuiltPopover;
 
 @property (nonatomic,assign) EBrowserView * superDelegate;
-
+@property (nonatomic,weak,readonly)JSContext *JSContext;
 
 
 - (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
@@ -120,5 +120,5 @@
 - (void)stopAllNetService;
 
 -(void)continueMultiPopoverLoading;
-- (JSContext *)JSContext;
+
 @end

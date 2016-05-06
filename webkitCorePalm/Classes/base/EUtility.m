@@ -30,10 +30,9 @@
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 #import "ACEPluginViewContainer.h"
-
-
-NSString * const cUexPluginCallbackInRootWindow = @"uexPluginCallbackInRootWindow";
-NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWindow";
+#import "ACEBrowserView.h"
+#import "EXTScope.h"
+#import "ACEJSCInvocation.h"
 
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
@@ -46,23 +45,66 @@ void PluginLog (NSString *format, ...) {
     #endif
 }
 
+
+
+
 @implementation EUtility
 
++ (void)browserView:(EBrowserView *)brwView
+callbackWithFunctionKeyPath:(NSString *)JSKeyPath
+          arguments:(NSArray *)arguments
+         completion:(void (^)(JSValue *))completion{
+    __block BOOL errorOccured = YES;
+    @onExit{
+        if(errorOccured && completion){
+            completion(nil);
+        }
+    };
+    if (!brwView || !JSKeyPath) {
+        return;
+    }
+    JSContext *ctx = brwView.meBrowserView.JSContext;
+    if (!ctx || ![ctx isKindOfClass:[JSContext class]]) {
+        return;
+    }
+    JSValue *func = nil;
+    NSArray<NSString *> *components = [JSKeyPath componentsSeparatedByString:@"."];
+    for ( int i = 0; i < components.count; i++) {
+        if (!func) {
+            func = [ctx objectForKeyedSubscript:components[i]];
+        }else{
+            func = [func objectForKeyedSubscript:components[i]];
+        }
+    }
+    if (!func || [ACEJSCInvocation JSTypeOf:func] != ACEJSValueTypeFunction) {
+        return;
+    }
+    errorOccured = NO;
+    ACEJSCInvocation *invocation = [ACEJSCInvocation invocationWithFunction:func
+                                                                  arguments:arguments
+                                                          completionHandler:completion];
+    [invocation invokeOnMainThread];
+}
 
 
 //2015-09-23 by lkl
 + (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target{
-    BOOL isNSNumber = [obj isKindOfClass:[NSNumber class]];
+    
+    BOOL isObject = [obj isKindOfClass:[NSDictionary class]] || [obj isKindOfClass:[NSArray class]];
     NSString * result=[obj JSONFragment];
-    NSString * callbackString;
-    if (type == uexPluginCallbackWithJsonString && !isNSNumber) {
-        callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@('%@');}",pluginName,functionName,pluginName,functionName,result];
-    }else{
-        callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
+    
+    if (type == uexPluginCallbackWithJsonString && isObject) {
+        result = [result JSONFragment];
     }
-    if(target == cUexPluginCallbackInRootWindow){
+    if (!obj || [obj isEqual:[NSNull null]]) {
+        result = @"(undefined)";
+    }
+    
+    NSString * callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
+    
+    if([target isEqual:cUexPluginCallbackInRootWindow]){
         [self evaluatingJavaScriptInRootWnd:callbackString];
-    }else if(target == cUexPluginCallbackInFrontWindow){
+    }else if([target isEqual:cUexPluginCallbackInFrontWindow]){
         [self evaluatingJavaScriptInFrontWnd:callbackString];
     }else if(target && [target isKindOfClass:[EBrowserView class]]){
         EBrowserView * inBrwView=(EBrowserView *)target;
@@ -281,6 +323,13 @@ void PluginLog (NSString *format, ...) {
 +(BOOL)appCanDev{
     return [BUtility getAppCanDevMode];
 }
++ (EBrowserView *)rootBrwoserView{
+    return theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
+}
+
++ (EBrowserView *)topBrowserView{
+    return [theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView;
+}
 
 +(void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
 	[BUtility evaluatingJavaScriptInRootWnd:script_];
@@ -488,8 +537,12 @@ void PluginLog (NSString *format, ...) {
 
 
 
+
+
 @implementation EUtility (Deprecated)
 
+NSString * const cUexPluginCallbackInRootWindow = @"uexPluginCallbackInRootWindow";
+NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWindow";
 
 +(UIColor*)ColorFromString:(NSString*)inColor{
     UIColor *color =[UIColor blackColor];
@@ -587,5 +640,8 @@ void PluginLog (NSString *format, ...) {
 + (void)brwView:(EBrowserView*)inBrwView navigationPresentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
     [inBrwView.meBrwCtrler.navigationController presentModalViewController:modalViewController animated:animated];
 }
+
+
+
 @end
 

@@ -198,6 +198,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getHeight":ACE_METHOD_SYNC,
                                @"putLocalData":ACE_METHOD_ASYNC,
                                @"getLocalData":ACE_METHOD_SYNC,
+                               @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
                                } mutableCopy];
     return uexWindowInfo;
 }
@@ -221,7 +222,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"setSpaceEnable":ACE_METHOD_ASYNC,
                                @"setPushState":ACE_METHOD_ASYNC,
                                @"setLogServerIp":ACE_METHOD_ASYNC,
-                               @"isAppInstalled":ACE_METHOD_ASYNC,
+                               @"isAppInstalled":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWidgetInfo;
 }

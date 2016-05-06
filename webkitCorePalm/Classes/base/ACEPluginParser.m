@@ -89,10 +89,10 @@
     NSString *dynamicXML=[[BUtility dynamicPluginFrameworkFolderPath]stringByAppendingPathComponent:@"plugin.xml"];
     [paths addObject:dynamicXML];
     
-#ifdef DEBUG
+
     NSString *debugPath=[BUtility wgtResPath:@"res://plugin.xml"];
     [paths addObject:debugPath];
-#endif
+
     return paths;
 }
 

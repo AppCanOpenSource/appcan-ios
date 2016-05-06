@@ -75,7 +75,7 @@
 (([x isKindOfClass:[NSString class]] && [x length] > 0 && [x floatValue] == 0)||\
 ([x isKindOfClass:[NSNumber class]] && [x floatValue] == 0))
 #define KUEXIS_EMPTY(x)\
-(!x || ([x isKindOfClass:[NSString class]] && [x length] == 0))
+(!x || [x isKindOfClass:[NSNull class]] || ([x isKindOfClass:[NSString class]] && [x length] == 0))
 #define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
 
 
@@ -209,6 +209,8 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondGlobalNotification:) name:@"GlobalNotification" object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotification:) name:@"SubscribeChannelNotification" object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(respondChannelNotificationForJson:) name:@"SubscribeChannelNotificationForJson" object:nil];
         
         self.notificationDic = [NSMutableDictionary dictionary];
     }
@@ -1123,9 +1125,13 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     NSString * inDataType = [inArguments objectAtIndex:1];
     NSString * inData = [inArguments objectAtIndex:2];
     NSString * extraInfo = @"";
-    if ([inArguments count] >= 4) {
-        extraInfo = [inArguments objectAtIndex:3];
+    if (inArguments.count > 8) {
+        extraInfo = inArguments[8];
+    }else if (inArguments.count > 3 && [inArguments[3] JSONValue]) {
+        extraInfo = inArguments[3];
     }
+    
+
     ACEWebWindowType type = ACEWebWindowTypePresent;
     
     //window 4.8
@@ -1293,16 +1299,16 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     //[extraInfo length] > 0
     if (KUEXIS_NSString(extraInfo)) {
-        
-        NSDictionary * extraDic = [[extraInfo JSONValue] objectForKey:@"extraInfo"];
-        if(extraDic){
-            [extraDic setValue: @"true" forKey: @"opaque"];
+        NSDictionary *extras = [extraInfo JSONValue];
+        if (extras && [extras isKindOfClass:[NSDictionary class]]) {
+            NSMutableDictionary * extraDic = [[extras objectForKey:@"extraInfo"] mutableCopy];
+            if(extraDic){
+                [extraDic setValue: @"true" forKey: @"opaque"];
+            }
+            [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
+            NSDictionary *popAnimationInfo=[extras objectForKey:@"animationInfo"];
+            [eBrwWnd setPopAnimationInfo:popAnimationInfo];
         }
-        
-        [self setExtraInfo: extraDic toEBrowserView: eBrwWnd.meBrwView];
-        NSDictionary *popAnimationInfo=[[extraInfo JSONValue] objectForKey:@"animationInfo"];
-        [eBrwWnd setPopAnimationInfo:popAnimationInfo];
-        
     }
     
     if ((flag & F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) == F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE) {
@@ -3106,13 +3112,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     switch (type) {
         case EBounceViewTypeTop:
             if (!meBrwView.mTopBounceView) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeTop params:bounceParams];
                     [meBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
-                
+#pragma clang diagnostic pop
                 meBrwView.mTopBounceView.backgroundColor = color;
                 meBrwView.mTopBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mTopBounceView];
@@ -3129,16 +3137,22 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             break;
         case EBounceViewTypeBottom:
             if (!meBrwView.mBottomBounceView) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
+
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:bounceParams];
                     [meBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
                 }
+#pragma clang diagnostic pop
+                //NSLog(@"bouceViewFrame:%@ scrollViewFrame:%@ contentViewSizwe:%@",[NSValue valueWithCGRect:meBrwView.mBottomBounceView.frame],[NSValue valueWithCGRect:meBrwView.mScrollView.frame],[NSValue valueWithCGSize:meBrwView.mScrollView.contentSize]);
+                
                 meBrwView.mBottomBounceView.backgroundColor = color;
                 meBrwView.mBottomBounceView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 [meBrwView.mScrollView addSubview:meBrwView.mBottomBounceView];
-                if (meBrwView.mScrollView.contentSize.height <= meBrwView.mScrollView.frame.size.height) {
+                if (meBrwView.mScrollView.contentSize.height < meBrwView.mScrollView.frame.size.height) {
                     meBrwView.mBottomBounceView.hidden = YES;
                 } else {
                     meBrwView.mBottomBounceView.hidden = NO;
@@ -3229,6 +3243,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         muiltPopover.frame = CGRectMake(x, y, w, h);
         muiltPopover.scrollView.frame = CGRectMake(0, 0, w, h);
+        for(UIView *view in muiltPopover.scrollView.subviews){
+            if (![view isKindOfClass:[EBrowserView class]]) {
+                continue;
+            }
+            CGRect newFrame = view.frame;
+            newFrame.size.height = h;
+            newFrame.size.width = w;
+            view.frame = newFrame;
+        }
         
     }
     
@@ -4551,54 +4574,47 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",orNumb] forKey:@"subwgtOrientaion"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        void (*p)(id,SEL,UIInterfaceOrientation);
-        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]){
-            p = (void (*)(id,SEL,UIInterfaceOrientation))[[UIDevice currentDevice] methodForSelector:@selector(setOrientation:)];
-        }else{
-            return;
-        }
-        
-        
         switch (orNumb)
         {
                 
             case 1:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                //[BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
                 
                 break;
             case 2:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
                 
                 
                 break;
                 
             case 4:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortraitUpsideDown);
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
                 
                 break;
                 
             case 8:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 10:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 5:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationPortrait);
+                [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
                 
                 break;
                 
             case 3:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeLeft);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
                 
                 break;
                 
             case 9:
-                p([UIDevice currentDevice],@selector(setOrientation:),UIInterfaceOrientationLandscapeRight);
+                [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
                 
                 break;
                 
@@ -4674,9 +4690,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         
         theApp.drawerController.isStatusBarHidden = YES;
-        
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-        
+    
+        if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
+            
+            [[UIApplication sharedApplication]setStatusBarHidden:YES];
+            
+        } else {
+            
+            [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+            
+        }
+    
     }
     
 }
@@ -4687,7 +4711,15 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
         theApp.drawerController.isStatusBarHidden = NO;
         
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+        if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
+            
+            [[UIApplication sharedApplication]setStatusBarHidden:NO];
+            
+        } else {
+            
+            [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+            
+        }
         
     }
     
@@ -4729,12 +4761,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     
-    x = [inX intValue];
-    y = [inY intValue];
-    w = [inW intValue];
-    h = [inH intValue];
-    
-    fontSize = [inFontSize intValue];
+    x = KUEXIS_EMPTY(inX)? x : [inX intValue];
+    y = KUEXIS_EMPTY(inY)? y : [inY intValue];
+    w = KUEXIS_EMPTY(inW)? w : [inW intValue];
+    h = KUEXIS_EMPTY(inH)? h : [inH intValue];
+
+    fontSize = KUEXIS_EMPTY(inFontSize) ? 0 : [inFontSize intValue];
     
     
     flag = [inFlag intValue];
@@ -5029,6 +5061,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if (isMuitPop)
     {
         [scrollView addSubview:ePopBrwView];
+    }else{
+        [eBrwWnd addSubview:ePopBrwView];
+        //ePopBrwView.backgroundColor = [UIColor redColor];
     }
 }
 
@@ -5151,6 +5186,42 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     
 }
 
+-(void)publishChannelNotificationForJson:(NSArray *)inArgument
+{
+    if ([inArgument count] < 2) {
+        return;
+    }
+    
+    NSString * channelId = [inArgument objectAtIndex:0];
+    
+    NSString * inContent = [inArgument objectAtIndex:1];
+    
+    NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:channelId,@"channelId",inContent,@"inContent", nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubscribeChannelNotificationForJson"
+                                                        object:self userInfo:dic];
+    
+}
+
+-(void)respondChannelNotificationForJson:(NSNotification*)sender
+{
+    
+    NSDictionary * infoDic = (NSDictionary *)sender.userInfo;
+    
+    NSString * channelId = [infoDic objectForKey:@"channelId"];
+    NSString * inContent = [infoDic objectForKey:@"inContent"];
+    
+    NSString * function = [self.notificationDic objectForKey:channelId];
+    
+    if (!function) {
+        return;
+    }
+    
+    NSString * cbString = [NSString stringWithFormat:@"if(uexWindow.%@!=null){uexWindow.%@(%@);}",function,function,inContent];
+    
+    [meBrwView stringByEvaluatingJavaScriptFromString:cbString];
+    
+}
 
 -(void)postGlobalNotification:(NSArray *)inArgument
 {
@@ -5220,22 +5291,16 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if ([inArgument count] < 1) {
         return;
     }
-    NSString *str = [inArgument objectAtIndex:0];
-    BOOL multiPopoverFlippingEnbaled=NO;
-    if([str isEqual:@"1"]) {
-        multiPopoverFlippingEnbaled = NO;
-    }else if([str isEqual:@"0"]) {
-        multiPopoverFlippingEnbaled = YES;
-    }else{
-        return;
-    }
+
+    BOOL multiPopoverFlippingEnbaled = ![[inArgument objectAtIndex:0] boolValue];
     if(meBrwView.meBrwWnd.mMuiltPopoverDict){
-        NSEnumerator * enumeratorValue = [meBrwView.meBrwWnd.mMuiltPopoverDict objectEnumerator];
-        
-        
-        for (EScrollView *eScrollV in enumeratorValue) {
-            UIScrollView *scrollView=eScrollV.scrollView;
-            scrollView.scrollEnabled=multiPopoverFlippingEnbaled;
+        for (EScrollView *eScrollV in meBrwView.meBrwWnd.mMuiltPopoverDict.allValues) {
+            if (![eScrollV isKindOfClass:[EScrollView class]]) {
+                continue;
+            }
+            UIScrollView *scrollView = eScrollV.scrollView;
+            scrollView.scrollEnabled = multiPopoverFlippingEnbaled;
+            /*
             NSArray * popviewAry = [scrollView subviews];
             for (UIView * popVews in popviewAry){
                 if([popVews isKindOfClass:[EBrowserView class]]){
@@ -5247,7 +5312,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 }
                 
             }
-            
+            */
         }
     };
 }
@@ -5421,6 +5486,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 
 
+
 - (id)log:(NSMutableArray *)inArguments{
     if([inArguments count] < 1){
         return @0;
@@ -5463,4 +5529,40 @@ NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     return dict[inArguments[0]];
     
 }
+
+#pragma mark - share
+
+- (void)share:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    __block NSMutableArray *shareItems = [NSMutableArray array];
+    if (info[@"text"]) {
+        [shareItems addObject:info[@"text"]];
+    }
+    if (info[@"imgPaths"] && [info[@"imgPaths"] isKindOfClass:[NSArray class]]) {
+        [info[@"imgPaths"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *path = [self absPath:obj];
+            UIImage *image = [UIImage imageWithContentsOfFile:path];
+            if (image) {
+                [shareItems addObject:image];
+            }
+        }];
+    }else if(info[@"imgPath"]){
+        NSString *path = [self absPath:info[@"imgPath"]];
+        UIImage *image = [UIImage imageWithContentsOfFile:path];
+        if (image) {
+            [shareItems addObject:image];
+        }
+    }
+    UIActivityViewController * shareVC = [[UIActivityViewController alloc]initWithActivityItems:shareItems applicationActivities:nil];
+    [EUtility brwView:self.meBrwView presentModalViewController:shareVC animated:YES];
+}
+
+
+
 @end

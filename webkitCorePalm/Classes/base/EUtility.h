@@ -17,8 +17,101 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 @class EBrowserView;
+
 void PluginLog(NSString *format, ...);
+
+
+
+
+@interface EUtility : NSObject
+
+
+#pragma mark - JavaScript Callback JS回调的相关方法
+
+#pragma mark 调用网页中的JS函数
+
+
+/**
+*  调用网页中的JS函数
+*
+*  @param brwView    回调的网页
+*  @param JSKeyPath  函数的路径,比如@"uexWidget.onSuspend"
+*  @param arguments  调用的参数数组,此NSArray中的每一个元素代表一个参数. arguments可为空
+*  @discussion arguments中的每个元素都必须能够被转换为JSValue 详见https://developer.apple.com/library/ios/documentation/JavaScriptCore/Reference/JSValue_Ref/
+*  @param completion JS函数执行完毕之后,会执行此Block.此Block永远会在主线程被执行.
+*  @discussion 此Block有一个JSValue类型的参数returnValue
+        如果returnValue为nil,代表调用失败
+        如果网页中的JS函数没有返回值,returnValue为一个代表<code>undefined</code>的JSValue,而不是nil
+        如果网页中的JS函数有返回值，则returnValue为此返回值
+* 
+*  @example
+@code
+//下列方法相当于在root页面中执行如下JS
+//  => var rValue = uexMyPlugin.myCallback("stringParam",2,{"key":"value"});
+//并在执行完成之后,调用completion Block,Block的参数是由<code>rValue</code>转换而来的JSValue
+ 
+ [EUtility browserView:[EUtility rootBrwoserView] callbackWithFunctionKeyPath:@"uexMyPlugin.myCallback"
+             arguments:@[@"stringParam",@2,@{@"key":@"value"}]
+            completion:^(JSValue *returnValue) {
+                if (returnValue) {
+                    NSLog(@"函数执行成功!,返回值为:%@",returnValue);
+                }else{
+                    NSLog(@"函数执行失败!");
+                }
+ }];
+@endcode
+*
+*  @warning 此方法为3.3引擎新增,3.2引擎请用brwView:evaluateScript:或者uexPlugin:callbackByName:withObject:andType:inTarget:方法
+*/
++ (void)browserView:(EBrowserView *)brwView callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue *returnValue))completion;
+
+#pragma mark 在指定网页中执行JS脚本
+
+/**
+ *  在指定网页中执行JS脚本
+ *
+ *  @param inBrwView 要执行JS的网页
+ *  @param inScript  需要执行的JS脚本
+ */
++ (void)brwView:(EBrowserView*)inBrwView evaluateScript:(NSString*)inScript;
+
+#pragma mark - 获取root窗口的网页对象
+/**
+ *  获取root窗口的网页对象
+ *
+ *  @return root窗口的网页对象
+ */
++ (EBrowserView *)rootBrwoserView;
+
+#pragma mark - 获取最顶端窗口的网页对象
+/**
+ *  获取最顶端窗口的网页对象
+ *
+ *  @return 最顶端窗口的网页对象
+ */
++ (EBrowserView *)topBrowserView;
+
+#pragma mark 在root窗口中执行JS脚本
+/**
+ *  在root窗口中执行JS脚本
+ *
+ *  @param script 需要执行的JS脚本
+ */
++ (void)evaluatingJavaScriptInRootWnd:(NSString*)script;
+
+#pragma mark 在最顶端的窗口中执行JS脚本
+
+/**
+ *  在最顶端的窗口中执行JS脚本
+ *
+ *  @param script 需要执行的JS脚本
+ */
++ (void)evaluatingJavaScriptInFrontWnd:(NSString*)script;
+
+#pragma mark 执行JS脚本的进一步封装
 
 typedef NS_ENUM(NSInteger,uexPluginCallbackType){
     uexPluginCallbackWithJsonString,//回调json字符串（网页端需要首先JSON.parse才能使用）
@@ -29,12 +122,8 @@ typedef NS_ENUM(NSInteger,uexPluginCallbackType){
 extern NSString * const cUexPluginCallbackInRootWindow;
 extern NSString * const cUexPluginCallbackInFrontWindow;
 
-@interface EUtility : NSObject
-
-
-#pragma mark - JavaScript Callback JS回调的相关方法
-#pragma mark 回调网页JS
 /**
+ *  @deprecated 3.3引擎推荐使用browserView:callbackWithFunctionKeyPath:arguments:方法
  *  @method 回调网页js
  *
  *  @param pluginName   回调的插件名
@@ -49,32 +138,6 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  */
 + (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target;
 
-#pragma mark 在指定网页中执行JS脚本
-
-/**
- *  在指定网页中执行JS脚本
- *
- *  @param inBrwView 要执行JS的网页
- *  @param inScript  需要执行的JS脚本
- */
-+ (void)brwView:(EBrowserView*)inBrwView evaluateScript:(NSString*)inScript;
-
-#pragma mark 在主窗口中执行JS脚本
-/**
- *  在主窗口中执行JS脚本
- *
- *  @param script 需要执行的JS脚本
- */
-+ (void)evaluatingJavaScriptInRootWnd:(NSString*)script;
-
-#pragma mark 在最顶端的窗口中执行JS脚本
-
-/**
- *  在最顶端的窗口中执行JS脚本
- *
- *  @param script 需要执行的JS脚本
- */
-+ (void)evaluatingJavaScriptInFrontWnd:(NSString*)script;
 
 
 #pragma mark - Plugin Bundle 插件资源Bundle的相关方法
@@ -270,6 +333,11 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 #pragma mark - 已废弃的方法
 
 @interface EUtility(Deprecated)
+
+
+
+
+
 +(UIColor*)ColorFromString:(NSString*)inColor;
 +(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable;
 +(void)writeLog:(NSString*)inLog;

@@ -23,10 +23,9 @@
 #define F_EBRW_HISTORY_STEP_CUR		0
 #define F_EBRW_HISTORY_STEP_FORWARD	1
 
-@interface EBrowserHistory : NSObject {
-	NSMutableArray *mHisEntryArray;
-	int mCurIndex;
-}
+@interface EBrowserHistory : NSObject
+@property (nonatomic,strong)NSMutableArray *mHisEntryArray;
+@property (nonatomic,assign)int mCurIndex;
 
 - (BOOL)canGoBack;
 - (BOOL)canGoForward;

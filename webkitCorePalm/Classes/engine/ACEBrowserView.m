@@ -44,6 +44,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "DataAnalysisInfo.h"
+#import "ACEDrawerViewController.h"
 
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEJSCHandler.h"
@@ -52,7 +53,7 @@ const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
 @interface ACEBrowserView()
-
+@property (nonatomic,weak,readwrite)JSContext *JSContext;
 @end
 
 
@@ -88,11 +89,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 
 - (JSContext *)JSContext{
-    JSContext *context = nil;
-    @try {
-         context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    }@catch (...) {}
-    return context;
+    if (!_JSContext) {
+        JSContext *context = nil;
+        @try {
+            context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+        }@catch (...) {}
+        _JSContext = context;
+    }
+    return _JSContext;
 }
 
 
@@ -813,7 +817,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         }
     } 
     
-    BOOL isStatusBarHidden = [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIStatusBarHidden"] boolValue];
+    BOOL isStatusBarHidden = theApp.drawerController.isStatusBarHidden;
     
     switch (mType) {
 		case F_EBRW_VIEW_TYPE_MAIN:
@@ -826,7 +830,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
             
             
             if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrowserView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
-                [self stringByEvaluatingJavaScriptFromString:@"window.uexStart();"];
+                [self stringByEvaluatingJavaScriptFromString:@"if(window.uexStart){window.uexStart();}"];
                 meBrwCtrler.mFlag |= F_NEED_REPORT_APP_START;
             }
 			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
@@ -863,14 +867,17 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			[self loadUEXScript];
 			initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
 			[self stringByEvaluatingJavaScriptFromString:initStr];
-
             
+            
+            //20160421 popover改为在网页加载完成之前就添加到窗口中
+            /*
 			if (self.superview != meBrwWnd) {
                 if (!self.isMuiltPopover)
                 {
                     [meBrwWnd addSubview:self.superDelegate];
                 }
 			}
+             */
 			id iFontSize = [self.mPageInfoDict objectForKey:@"pFontSize"];
 			if (iFontSize) {
 				NSNumber *fontSize = (NSNumber*)iFontSize;
@@ -886,7 +893,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
             }
             
             //2015.5.18 新增onPopoverLoadFinishInRootWnd(name,url)接口
-            initStr = [[NSString alloc] initWithFormat:@"if(uexWindow.onPopoverLoadFinishInRootWnd){uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");}",self.muexObjName,[self.currentUrl absoluteString]];
+            initStr = [[NSString alloc] initWithFormat:@"if(uexWindow.onPopoverLoadFinishInRootWnd){uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");}",self.muexObjName,[self.request.URL absoluteString]];
             [EUtility evaluatingJavaScriptInRootWnd:initStr];
 
             
