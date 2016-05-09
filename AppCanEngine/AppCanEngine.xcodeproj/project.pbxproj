@@ -950,6 +950,10 @@
 		DE81D4CD1A4D3D81005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CC1A4D3D81005D3153 /* libACEDes.a */; };
 		DE90F53A1904E6D00084EC10 /* OpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = DE90F5381904E6D00084EC10 /* OpenUDID.h */; };
 		DE90F53B1904E6D00084EC10 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = DE90F5391904E6D00084EC10 /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F78333911CE06F9900A52C8C /* Beqtucontent.h in Headers */ = {isa = PBXBuildFile; fileRef = F783338F1CE06F9800A52C8C /* Beqtucontent.h */; };
+		F78333921CE06F9900A52C8C /* PackageInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F78333901CE06F9800A52C8C /* PackageInfo.h */; };
+		F78333951CE0722C00A52C8C /* ACEKeychainItemWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = F78333931CE0722C00A52C8C /* ACEKeychainItemWrapper.h */; };
+		F78333961CE0722C00A52C8C /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1273,6 +1277,10 @@
 		DE81D4CC1A4D3D81005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F5381904E6D00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 		DE90F5391904E6D00084EC10 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
+		F783338F1CE06F9800A52C8C /* Beqtucontent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beqtucontent.h; sourceTree = "<group>"; };
+		F78333901CE06F9800A52C8C /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
+		F78333931CE0722C00A52C8C /* ACEKeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEKeychainItemWrapper.h; sourceTree = "<group>"; };
+		F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEKeychainItemWrapper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1586,6 +1594,8 @@
 		5AAA858E18B1B93D000D7600 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				F783338F1CE06F9800A52C8C /* Beqtucontent.h */,
+				F78333901CE06F9800A52C8C /* PackageInfo.h */,
 				42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */,
 				42D0AF401BBB8641002249AE /* ACELocalization.h */,
 				42D0AF411BBB8641002249AE /* ACELocalization.m */,
@@ -1773,6 +1783,8 @@
 		5AAA862018B1B93D000D7600 /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				F78333931CE0722C00A52C8C /* ACEKeychainItemWrapper.h */,
+				F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */,
 				5AAA862118B1B93D000D7600 /* ASIHttpRequest */,
 				5AAA863818B1B93D000D7600 /* AsyncSocket.h */,
 				5AAA863918B1B93D000D7600 /* AsyncSocket.m */,
@@ -2341,6 +2353,7 @@
 				5AAA86F618B1B93D000D7600 /* EUExBase.h in Headers */,
 				76F105BE1BD0913F0064CDD1 /* DataAnalysisInfo.h in Headers */,
 				5AAA872518B1B93D000D7600 /* GCDAsyncUdpSocket.h in Headers */,
+				F78333921CE06F9900A52C8C /* PackageInfo.h in Headers */,
 				5AAA86EA18B1B93D000D7600 /* EBrowserViewBounceView.h in Headers */,
 				42D9DEF71C40B0B50039E6E2 /* ACEJSCHandler.h in Headers */,
 				5AAA86E618B1B93D000D7600 /* EBrowserView.h in Headers */,
@@ -2383,6 +2396,7 @@
 				33774C641B2A6D3500D5F279 /* SDWebImageOperation.h in Headers */,
 				5AAA871A18B1B93D000D7600 /* ASIProgressDelegate.h in Headers */,
 				5AAA868818B1B93D000D7600 /* BAnimationTransform.h in Headers */,
+				F78333911CE06F9900A52C8C /* Beqtucontent.h in Headers */,
 				5AAA86E818B1B93D000D7600 /* EBrowserViewAnimition.h in Headers */,
 				DE2C4FA51A2DA48B00D5B4F2 /* ACEUtils.h in Headers */,
 				5AAA873C18B1B93D000D7600 /* AppCenter.h in Headers */,
@@ -2397,6 +2411,7 @@
 				5AAA869218B1B93D000D7600 /* BUtility.h in Headers */,
 				3C2887CF1A0B099B002776E4 /* CJSONSerialization.h in Headers */,
 				5AAA873818B1B93D000D7600 /* ZipArchive.h in Headers */,
+				F78333951CE0722C00A52C8C /* ACEKeychainItemWrapper.h in Headers */,
 				331574001A5AAEB70036A2A2 /* ACEPluginModel.h in Headers */,
 				5AAA870A18B1B93D000D7600 /* ASIDataCompressor.h in Headers */,
 				3C2887D01A0B099B002776E4 /* CJSONSerializedData.h in Headers */,
@@ -2987,6 +3002,7 @@
 				5AAA86E518B1B93D000D7600 /* EBrowserToolBar.m in Sources */,
 				3C2887B71A0B0984002776E4 /* CJSONDeserializer.m in Sources */,
 				5AAA86A018B1B93D000D7600 /* SBJSON.m in Sources */,
+				F78333961CE0722C00A52C8C /* ACEKeychainItemWrapper.m in Sources */,
 				5AAA876118B1B93D000D7600 /* WWidgetUpdate.m in Sources */,
 				5AAA86ED18B1B93D000D7600 /* EBrowserWidgetContainer.m in Sources */,
 				5AAA868718B1B93D000D7600 /* BAnimation.m in Sources */,

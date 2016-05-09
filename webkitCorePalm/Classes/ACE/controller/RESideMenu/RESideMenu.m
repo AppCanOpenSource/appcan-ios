@@ -28,6 +28,7 @@
 #import "RECommonFunctions.h"
 #import <stdio.h>
 #import <stdlib.h>
+#import "EUtility.h"
 
 @interface RESideMenu ()
 
@@ -299,7 +300,7 @@
     if (!self.leftMenuViewController) {
         return;
     }
-    _sideStatus = RESideLeft;
+    [self setSideStatus:RESideLeft];
     [self.leftMenuViewController beginAppearanceTransition:YES animated:YES];
     self.leftMenuViewController.view.hidden = NO;
     self.rightMenuViewController.view.hidden = YES;
@@ -347,7 +348,7 @@
     if (!self.rightMenuViewController) {
         return;
     }
-    _sideStatus = RESideRight;
+    [self setSideStatus:RESideRight];
     [self.rightMenuViewController beginAppearanceTransition:YES animated:YES];
     self.leftMenuViewController.view.hidden = YES;
     self.rightMenuViewController.view.hidden = NO;
@@ -395,7 +396,7 @@
 
 - (void)hideMenuViewControllerAnimated:(BOOL)animated
 {
-    _sideStatus = RESideNone;
+    [self setSideStatus:RESideNone];
     BOOL rightMenuVisible = self.rightMenuVisible;
     UIViewController *visibleMenuViewController = rightMenuVisible ? self.rightMenuViewController : self.leftMenuViewController;
     [visibleMenuViewController beginAppearanceTransition:NO animated:animated];
@@ -908,6 +909,14 @@
         }
     );
     return statusBarAnimation;
+}
+
+- (void)setSideStatus:(RESide)sideStatus {
+    
+    _sideStatus = sideStatus;
+    NSString * jsStr = [NSString stringWithFormat:@"if(uexWindow.onSlidingWindowStateChanged){uexWindow.onSlidingWindowStateChanged(%ld)};",(long)sideStatus];
+    [EUtility evaluatingJavaScriptInRootWnd:jsStr];
+    
 }
 
 @end

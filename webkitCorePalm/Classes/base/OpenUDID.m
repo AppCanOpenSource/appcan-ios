@@ -52,6 +52,7 @@
 #endif
 
 #define OpenUDIDLog(fmt, ...)
+#import "ACEKeychainItemWrapper.h"
 //#define OpenUDIDLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 //#define OpenUDIDLog(fmt, ...) NSLog((@"[Line %d] " fmt), __LINE__, ##__VA_ARGS__);
 
@@ -155,7 +156,45 @@ static int const kOpenUDIDRedundancySlots = 100;
 // Otherwise, it will register the current app and return the OpenUDID
 //
 + (NSString*) value {
-    return [OpenUDID valueWithError:nil];
+    
+    ACEKeychainItemWrapper * wrapper = [[ACEKeychainItemWrapper alloc] initWithIdentifier:@"com.3g2win.identifier" accessGroup:nil];
+    
+    NSString * openUDID = (NSString*)[wrapper objectForKey:(__bridge id)kSecAttrDescription];
+    
+    if ([openUDID isKindOfClass:[NSString class]] && openUDID.length>0) {
+        
+        [wrapper release];
+        
+        return openUDID;
+        
+    } else {
+        
+        [wrapper resetKeychainItem];
+        
+        openUDID = [OpenUDID valueWithError:nil];
+        
+        if (openUDID) {
+            
+            [wrapper setObject:openUDID forKey:(__bridge id)kSecAttrDescription];
+            
+            [wrapper release];
+            
+            return openUDID;
+            
+        } else {
+            
+            NSString * uuid = [[[NSUUID UUID] UUIDString] lowercaseString];
+            
+            [wrapper setObject:openUDID forKey:(__bridge id)kSecAttrDescription];
+            
+            [wrapper release];
+            
+            return uuid;
+            
+        }
+        
+    }
+    
 }
 
 + (NSString*) valueWithError:(NSError **)error {

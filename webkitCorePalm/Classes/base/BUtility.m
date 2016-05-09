@@ -24,6 +24,8 @@
 #import <netdb.h>
 #import "EUExAction.h"
 #import <SystemConfiguration/SystemConfiguration.h>
+#import "Beqtucontent.h"
+#import "PackageInfo.h"
 #import "WWidget.h"
 //#import "AppCanAnalysis.h"
 //#import "AppCanBase.h"
@@ -1253,48 +1255,16 @@ static NSString *clientCertificatePwd = nil;
 	
 }
 
-+ (NSString *)bundleIdentifier{
++ (NSString *)bundleIdentifier {
     
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wundeclared-selector"
-    Class packageInfo = NSClassFromString(@"PackageInfo");
-    if(packageInfo){
-        @try {
-            return objc_msgSend(packageInfo,@selector(getBundleIdentifier));
-        }
-        @catch (NSException *exception) {
-            NSLog(@"ERROR!!packageInfo不存在!");
-            NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
-        }
-        @finally {
-        }
-        
-    }
-    return @"com.zywx.appcan";
-#pragma clang diagnostic pop
-
+    return [PackageInfo getBundleIdentifier];
     
 }
 
 +(NSString*)appKey{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wundeclared-selector"
     if(F_DEVELOPMENT_USE==NO){
-        Class Beqtucontent = NSClassFromString(@"Beqtucontent");
-        if(Beqtucontent){
-            @try {
-                return objc_msgSend(Beqtucontent,@selector(getContentPath));
-            }
-            @catch (NSException *exception) {
-                NSLog(@"ERROR!!Beqtucontent不存在");
-                NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
-            }
-            @finally {
-            }
-        }
+        return [Beqtucontent getContentPath];
     }
-#pragma clang diagnostic pop
-
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
     if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
