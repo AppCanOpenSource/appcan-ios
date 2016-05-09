@@ -1306,20 +1306,25 @@ result;\
 }
 #pragma mark - isAppInstalled
 //20150706 by lkl
--(void)isAppInstalled:(NSMutableArray *)inArguments{
-    if([inArguments count]<1) return;
+-(NSNumber *)isAppInstalled:(NSMutableArray *)inArguments{
+    if([inArguments count]<1){
+        return @(NO);
+    }
     id appData=[inArguments[0] JSONValue];
     if([appData isKindOfClass:[NSDictionary class]]&&[appData objectForKey:@"appData"]&&[[appData objectForKey:@"appData"] isKindOfClass:[NSString class]]){
         NSString *urlScheme =[appData objectForKey:@"appData"];
         BOOL isInstalled=[[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlScheme]];
-        NSString *result =@"1";
+        NSNumber *result = @(NO);
+
         if(isInstalled){
-            result=@"0";
+            result = @(YES);
         }
         NSDictionary *dict=[NSDictionary dictionaryWithObject:result forKey:@"installed"];
         NSString* jsStr=[NSString stringWithFormat:@"if(uexWidget.cbIsAppInstalled != null){uexWidget.cbIsAppInstalled('%@');}",[dict JSONFragment]];
         [EUtility brwView:self.meBrwView evaluateScript:jsStr];
+        return result;
     }
+    return @(NO);
 }
 
 
