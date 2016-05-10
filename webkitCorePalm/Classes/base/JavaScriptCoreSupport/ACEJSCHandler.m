@@ -27,11 +27,17 @@
 #import <objc/message.h>
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
-
+#import "ACEJSFunctionRefPrivate.h"
+#import "ACEJSCInvocation.h"
+#import "ACENil.h"
 static NSMutableDictionary *ACEJSCGlobalPlugins;
+@interface ACEJSCHandler()
 
+@end
 
 @implementation ACEJSCHandler
+
+
 
 + (void)initializeGlobalPlugins{
     ACEJSCGlobalPlugins = [NSMutableDictionary dictionary];
@@ -47,28 +53,54 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     }
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
 }
-/*
-- (void)test{
-    JSContext *ctx = [JSContext currentContext];
-    NSLog(@"test:%@",ctx);
+
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+
+    }
+    return self;
 }
-*/
+
++ (instancetype)currentHandler{
+    JSContext *ctx = [JSContext currentContext];
+    id handler = ctx[@"uex"];
+    if (handler && [handler isKindOfClass:[self class]]) {
+        return handler;
+    }
+    return nil;
+}
+
+
 - (void)initializeWithJSContext:(JSContext *)context{
     context[@"uex"] = self;
     JSValue *selfJS = context[@"uex"];
+    selfJS[@"log"] = ^(){
+        NSArray *args = [JSContext currentArguments];
+        NSMutableString *log = [NSMutableString string];
+        for (int i = 0; i < args.count; i++) {
+            [log appendFormat:@"%@",args[i]];
+        }
+        NSLog(@"%@",log);
+    };
+    self.managedValue = [JSValue valueWithNewObjectInContext:context];
+
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
     [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
         NSLog(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
         ctx.exception = exception;
     }];
+    self.ctx = context;
 }
 
-- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(NSArray *)arguments asyncKey:(NSString *)asyncKey{
+
+
+
+- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode{
     if(!ACEJSCGlobalPlugins){
         [self.class initializeGlobalPlugins];
     }
-
     if(!pluginName || ![pluginName hasPrefix:@"uex"] || !methodName || methodName.length < 1){
         return nil;
     }
@@ -81,29 +113,53 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(![self isPluginInstanceValid:pluginInstance]){
         return nil;
     }
-    __block NSMutableArray *args = [NSMutableArray array];
-    if([arguments isKindOfClass:[NSArray class]]){
-        [arguments enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [args addObject:[obj copy]];
-        }];
-    }
-
     SEL method = NSSelectorFromString([methodName stringByAppendingString:@":"]);
     if(![pluginInstance respondsToSelector:method]){
         return nil;
     }
-    BOOL async = [asyncKey isEqual:ACE_METHOD_SYNC]?NO:YES;
-    if(async){
-        dispatch_async(dispatch_get_main_queue(), ^{
+    NSMutableArray *args = [self arrayFromArguments:arguments count:argCount];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            [pluginInstance performSelector:method withObject:args];
-        });
-        return nil;
+    switch (mode) {
+        case ACEPluginMethodExecuteModeAsynchronous: {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [pluginInstance performSelector:method withObject:args];
+            });
+            return nil;
+        }
+        case ACEPluginMethodExecuteModeSynchronous: {
+            return [pluginInstance performSelector:method withObject:args];
+        }
     }
-    return [pluginInstance performSelector:method withObject:args];;
 #pragma clang diagnostic pop
 }
+
+
+- (NSMutableArray *)arrayFromArguments:(JSValue *)arguments count:(NSInteger)argCount{
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i = 0; i < argCount; i++) {
+        JSValue *value = arguments[i];
+        if ([ACEJSCInvocation JSTypeOf:value] != ACEJSValueTypeFunction) {
+            id obj = [value toObject];
+            if (!obj || [obj isKindOfClass:[NSNull class]]) {
+                obj = [ACENil null];
+            }
+            [array addObject:obj];
+            continue;
+        }
+        id ref = [[ACEJSFunctionRef alloc]initWithJSCHandler:self function:value];
+        if (!ref) {
+            ref = [ACENil null];
+        }
+        [array addObject:ref];
+    }
+    return array;
+}
+
+
+
+
+
 
 - (id)getGlobalPluginInstanceByClassName:(NSString *)className{
     if(!ACEJSCGlobalPlugins[className]){
@@ -124,6 +180,14 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     [ACEJSCGlobalPlugins setValue:instance forKey:className];
     return instance;
 }
+
+
+
+
+
+
+
+
 
 - (id)getNormalPluginInstanceByClassName:(NSString *)className{
 
@@ -204,6 +268,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     }
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
+    self.managedValue = nil;
 }
 
 - (void)dealloc{

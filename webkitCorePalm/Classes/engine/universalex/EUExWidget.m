@@ -42,7 +42,7 @@
 #import "ACEUtils.h"
 #import "DataAnalysisInfo.h"
 #import "ACEDrawerViewController.h"
-#import "EXTScope.h"
+#import "ACEEXTScope.h"
 #import <CommonCrypto/CommonCrypto.h>
 
 

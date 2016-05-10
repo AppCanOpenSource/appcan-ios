@@ -53,7 +53,7 @@
 #import "ACEBrowserView.h"
 
 
-#import "EXTScope.h"
+#import "ACEEXTScope.h"
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPOPAnimation.h"
 

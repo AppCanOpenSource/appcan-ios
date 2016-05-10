@@ -23,6 +23,7 @@
  
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "ACEPluginInfo.h"
 @class EBrowserView;
 
 
@@ -32,9 +33,14 @@
 
 
 
-JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(NSArray *)arguments asyncKey:(NSString *)asyncKey);
+JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode);
+
+
+
 
 @end
+
+
 
 
 
@@ -45,6 +51,8 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 @interface ACEJSCHandler : NSObject<ACEJSCHandler>
 @property (nonatomic,strong)NSMutableDictionary *pluginDict;
 @property (nonatomic,weak)EBrowserView *eBrowserView;
+@property (nonatomic,strong)JSValue *managedValue;
+@property (nonatomic,weak)JSContext *ctx;
 
 /**
  *  注册全局插件
@@ -63,5 +71,10 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
  *  @note 此方法用于清除所有插件，以避免由于网页已被release引起的Crash
  */
 - (void)clean;
+
+
+
+
+
 
 @end

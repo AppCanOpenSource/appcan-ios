@@ -31,7 +31,7 @@
 #import "ACEDrawerViewController.h"
 #import "ACEPluginViewContainer.h"
 #import "ACEBrowserView.h"
-#import "EXTScope.h"
+#import "ACEEXTScope.h"
 #import "ACEJSCInvocation.h"
 
 void PluginLog (NSString *format, ...) {

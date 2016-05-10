@@ -7,9 +7,9 @@
 //  Released under the MIT license.
 //
 
-#import "EXTScope.h"
+#import "ACEEXTScope.h"
 
-void ext_executeCleanupBlock (__strong ext_cleanupBlock_t *block) {
+void ace_executeCleanupBlock (__strong ace_cleanupBlock_t *block) {
     (*block)();
 }
 
