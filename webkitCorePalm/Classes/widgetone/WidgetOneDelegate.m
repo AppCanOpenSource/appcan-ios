@@ -756,7 +756,7 @@ NSString *AppCanJS = nil;
 
 - (void)delayLoadByOtherAppWithParam:(NSString *)param {
     
-    NSString * jsSuccessCB = [NSString stringWithFormat:@"uexWidget.onLoadByOtherApp(\'%@\');",param];
+    NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",param];
     
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
     
@@ -765,7 +765,7 @@ NSString *AppCanJS = nil;
 - (void)delayLoadByOtherApp {
     
     NSString * josnStr = [_thirdInfoDict JSONFragment];
-    NSString * jsSuccessCB = [NSString stringWithFormat:@"uexWidget.onLoadByOtherApp(\'%@\');",josnStr];
+    NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",josnStr];
     
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
     
@@ -779,7 +779,7 @@ NSString *AppCanJS = nil;
     
 	[UIApplication sharedApplication].applicationIconBadgeNumber = -1;
     //	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
-	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
+	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSuspend){uexWidget.onSuspend();}"];
     
     [self invokeAppDelegateMethodApplicationWillResignActive:application];
     
@@ -829,13 +829,13 @@ NSString *AppCanJS = nil;
 
 -(void)onResume{
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onResume();"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onResume){uexWidget.onResume();}"];
     
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterBackground();"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterBackground){uexWidget.onEnterBackground();}"];
     
     id number = [[NSUserDefaults standardUserDefaults] objectForKey:F_UD_BadgeNumber];
     if (number) {
@@ -902,7 +902,7 @@ NSString *AppCanJS = nil;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterForeground();"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterForeground){uexWidget.onEnterForeground();}"];
     
     [self invokeAppDelegateMethodApplicationWillEnterForeground:application];
 	//[self startAllNetService];

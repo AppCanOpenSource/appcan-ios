@@ -75,7 +75,7 @@
 (([x isKindOfClass:[NSString class]] && [x length] > 0 && [x floatValue] == 0)||\
 ([x isKindOfClass:[NSNumber class]] && [x floatValue] == 0))
 #define KUEXIS_EMPTY(x)\
-(!x || ([x isKindOfClass:[NSString class]] && [x length] == 0))
+(!x || [x isKindOfClass:[NSNull class]] || ([x isKindOfClass:[NSString class]] && [x length] == 0))
 #define iOS9 ([[[UIDevice currentDevice]systemVersion] floatValue] >= 9.0)
 
 
@@ -4761,12 +4761,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         return;
     }
     
-    x = [inX intValue];
-    y = [inY intValue];
-    w = [inW intValue];
-    h = [inH intValue];
-    
-    fontSize = [inFontSize intValue];
+    x = KUEXIS_EMPTY(inX)? x : [inX intValue];
+    y = KUEXIS_EMPTY(inY)? y : [inY intValue];
+    w = KUEXIS_EMPTY(inW)? w : [inW intValue];
+    h = KUEXIS_EMPTY(inH)? h : [inH intValue];
+
+    fontSize = KUEXIS_EMPTY(inFontSize) ? 0 : [inFontSize intValue];
     
     
     flag = [inFlag intValue];

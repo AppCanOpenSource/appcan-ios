@@ -229,7 +229,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"setSpaceEnable":ACE_METHOD_ASYNC,
                                @"setPushState":ACE_METHOD_ASYNC,
                                @"setLogServerIp":ACE_METHOD_ASYNC,
-                               @"isAppInstalled":ACE_METHOD_ASYNC,
+                               @"isAppInstalled":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWidgetInfo;
 }
