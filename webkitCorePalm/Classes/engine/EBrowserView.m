@@ -41,6 +41,7 @@
 #import "EBrowserHistory.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "ACEUtils.h"
 
 
 
@@ -591,7 +592,8 @@
     
     CGFloat hOffset = endKeyboardRect.origin.y - self.frame.origin.y - self.bottom;
     
-    if (isSysVersionBelow7_0)
+    //if (isSysVersionBelow7_0)
+    if (ACE_iOSVersion < 7.0)
     {
         hOffset -= 20;
     }

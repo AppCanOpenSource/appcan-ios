@@ -1,11 +1,72 @@
 /**
+ *
+ *	@file   	: ACEMetamacros.h  in AppCanEngine
+ *
+ *	@author 	: CeriNo
+ *
+ *	@date   	: Created on 16/5/4.
+ *
+ *	@copyright 	: 2016 The AppCan Open Source Project.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#pragma mark - ACE EXTERN
+
+#ifdef __cplusplus
+#define ACE_EXTERN		extern "C" __attribute__((visibility ("default")))
+#else
+#define ACE_EXTERN	        extern __attribute__((visibility ("default")))
+#endif
+
+
+#pragma mark - KEYWORDIFY
+
+/**
+ * extobjc Keywordify
+ *
+ * Copyright (C) 2012 Justin Spahr-Summers
+ * Released under the MIT license
+ */
+//
+// Details about the choice of backing keyword:
+//
+// The use of @try/@catch/@finally can cause the compiler to suppress
+// return-type warnings.
+// The use of @autoreleasepool {} is not optimized away by the compiler,
+// resulting in superfluous creation of autorelease pools.
+//
+// Since neither option is perfect, and with no other alternatives, the
+// compromise is to use @autorelease in DEBUG builds to maintain compiler
+// analysis, and to use @try/@catch otherwise to avoid insertion of unnecessary
+// autorelease pools.
+#if DEBUG
+#define ace_keywordify autoreleasepool {}
+#else
+#define ace_keywordify try {} @catch (...) {}
+#endif
+
+
+#pragma mark - EXT METAMACROS
+
+
+/**
  * Macros for metaprogramming
  * ExtendedC
  *
  * Copyright (C) 2012 Justin Spahr-Summers
  * Released under the MIT license
  */
-
 #ifndef EXTC_METAMACROS_H
 #define EXTC_METAMACROS_H
 
@@ -665,3 +726,14 @@ metamacro_if_eq(0, 1)(true)(false)
 #define metamacro_drop20(...) metamacro_drop19(metamacro_tail(__VA_ARGS__))
 
 #endif
+
+
+#pragma mark - PRIVATE UTILS
+
+
+
+#define _ACE_ClassFromName(name) NSClassFromString(@metamacro_stringify(name))
+#define _ACE_AssertClassExist(clsName,msg,ver) NSCAssert((_ACE_ClassFromName(clsName) != nil),(_ACE_ErrorMsg_RequireEngineVersion(msg,ver)))
+#define _ACE_ErrorMsg_RequireEngineVersion(msg,ver) ([NSString stringWithFormat:@"%@ 需要引擎版本至少为:%@",@metamacro_stringify(msg),@metamacro_stringify(ver)])
+
+

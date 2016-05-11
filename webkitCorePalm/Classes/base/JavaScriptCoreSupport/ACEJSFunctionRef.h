@@ -1,12 +1,12 @@
 /**
  *
- *	@file   	: ACEPluginParser.h  in AppCanEngine Project
+ *	@file   	: ACEJSFunctionRef.h  in AppCanEngine
  *
- *	@author 	: CeriNo
+ *	@author 	: CeriNo 
+ * 
+ *	@date   	: Created on 16/5/5.
  *
- *	@date   	: Created on 15/12/15
- *
- *	@copyright 	: 2015 The AppCan Open Source Project.
+ *	@copyright 	: 2016 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -23,19 +23,12 @@
 
 
 #import <Foundation/Foundation.h>
-#import "ACEPluginInfo.h"
+#import "EUExBase.h"
+@class JSValue;
+@interface ACEJSFunctionRef : NSObject<ACEJSFunctionReference>
 
-@interface ACEPluginParser : NSObject
-/**
- *  pluginDict = {uexXXX:info}
- */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,ACEPluginInfo *> *pluginDict;
-/**
- *  globalPluginDict = {EUExXXX:NSNull}
- */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,id> *globalPluginDict;
-- (NSArray *)classNameArray;
-//- (NSString *)pluginBaseJS;
 
-+ (instancetype)sharedParser;
+
+
+
 @end

@@ -53,7 +53,7 @@
 #import "ACEBrowserView.h"
 
 
-#import "EXTScope.h"
+#import "ACEUtils.h"
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPOPAnimation.h"
 
@@ -4729,10 +4729,12 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 #pragma mark
 - (void)openMultiPopover:(NSMutableArray *)inArguments
 {
-    NSString * inContent = [inArguments objectAtIndex:0];
+    //NSString * inContent = [inArguments objectAtIndex:0];
     //'{"content":[{"inPageName":"p1", "inUrl":"xx.html","inData":""},{"inPageName":"p2", "inUrl":"xx.html","inData":""},{"inPageName":"p3", "inUrl":"xx.html","inData":""},{"inPageName":"p4", "inUrl":"xx.html","inData":""},{"inPageName":"p5", "inUrl":"xx.html","inData":""},{"inPageName":"p6", "inUrl":"xx.html","inData":""},]}';
-    NSDictionary * contentPage = (NSDictionary *)[inContent JSONValue];
-    NSArray * pageN = [contentPage objectForKey:@"content"];
+    ACE_ArgsUnpack(NSDictionary *inContent,NSString *inMainPopName,NSString *inDataType,NSNumber *inX,NSNumber *inY,NSNumber *inW,NSNumber *inH,NSNumber *inFontSize,NSString *inFlag,NSNumber *popIndex,NSDictionary *extraInfo) = inArguments;
+
+    NSArray * pageN = [inContent objectForKey:@"content"];
+    /*
     NSString * inMainPopName = [inArguments objectAtIndex:1];
     NSString * inDataType = [inArguments objectAtIndex:2];
     NSString * inX = [inArguments objectAtIndex:3];
@@ -4743,30 +4745,32 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     NSString * inFlag = [inArguments objectAtIndex:8];
     NSString * popIndex = [inArguments objectAtIndex:9];
     NSString * extraInfoAll = @"";
+
     if ([inArguments count] >= 11) {
         extraInfoAll = [inArguments objectAtIndex:10];
     }
+     */
     int pageth = 0;
-    if ([popIndex isKindOfClass:[NSString class]] && [popIndex length] > 0) {
+    if (popIndex) {
         pageth = [popIndex intValue];
     }
     
-    int x=0,
-    y=0,
-    w=meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width,
-    h=meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height,
-    fontSize=0,
-    flag=0;
+    int x = 0,
+    y = 0,
+    w = meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width,
+    h = meBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height,
+    fontSize = 0,
+    flag = 0;
     if (!meBrwView) {
         return;
     }
     
-    x = KUEXIS_EMPTY(inX)? x : [inX intValue];
-    y = KUEXIS_EMPTY(inY)? y : [inY intValue];
-    w = KUEXIS_EMPTY(inW)? w : [inW intValue];
-    h = KUEXIS_EMPTY(inH)? h : [inH intValue];
+    x = inX ? [inX intValue] : x;
+    y = inY ? [inY intValue] : y;
+    w = inW ? [inW intValue] : w;
+    h = inH ? [inH intValue] : h;
 
-    fontSize = KUEXIS_EMPTY(inFontSize) ? 0 : [inFontSize intValue];
+    fontSize = inFontSize ? [inFontSize intValue] : 0;
     
     
     flag = [inFlag intValue];
@@ -4806,9 +4810,9 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     [eBrwWnd addSubview:multiPopover];
     
     //[extraInfoAll length] > 0
-    if (KUEXIS_NSString(extraInfoAll)) {
-        NSDictionary * extraAllDic = [extraInfoAll JSONValue];
-        NSDictionary * extraDic = [extraAllDic objectForKey:@"extraInfo"];
+    if (extraInfo) {
+        //NSDictionary * extraAllDic = [extraInfoAll JSONValue];
+        NSDictionary * extraDic = [extraInfo objectForKey:@"extraInfo"];
         [self setExtraInfo:extraDic toEBrowserView:multiPopover];
     }
     
@@ -5528,6 +5532,17 @@ NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     }
     return dict[inArguments[0]];
     
+}
+
+- (void)setIsSupportSwipeCallback:(NSMutableArray *)inArguments{
+    ACE_ArgsUnpack(NSDictionary *info) = inArguments;
+    if(info && info[@"isSupport"]){
+        self.meBrwView.meBrowserView.swipeCallbackEnabled = [info[@"isSupport"] boolValue];
+    }
+}
+
+- (NSString *)getWindowName:(NSMutableArray *)inArguments{
+    return self.meBrwView.meBrwWnd.meBrwView.muexObjName;
 }
 
 #pragma mark - share

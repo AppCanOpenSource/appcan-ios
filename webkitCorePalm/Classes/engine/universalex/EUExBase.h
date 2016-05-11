@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 The AppCan Open Source Project.
+ *  Copyright (C) 2016 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,6 +15,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#define ACE_JSFunctionRef id<ACEJSFunctionReference>
+
+@class JSValue;
+@protocol ACEJSFunctionReference <NSObject>
+
+@required
+/**
+ *  执行JSFunction
+ *
+ *  @param args 执行的参数,每一个参数都必须能够被转换成JSValue 详见https://developer.apple.com/library/ios/documentation/JavaScriptCore/Reference/JSValue_Ref/
+ *  @param completionHandler JS端的函数执行完毕时,会触发此block,此block有一个JSValue类型的参数，是JS端函数的返回值
+ */
+- (void)executeWithArguments:(NSArray *)args completionHandler:(void (^)(JSValue *returnValue))completionHandler;
+@end
+
+
+
 
 @class EBrowserView;
 @interface EUExBase :NSObject{

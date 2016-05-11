@@ -37,6 +37,7 @@
 #import "SFHFKeychainUtils.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "ACEUtils.h"
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
 
@@ -476,10 +477,9 @@
             
             launchImageName = [NSString stringWithFormat:@"%@-568h@2x",launchImagePrefixFile];
             
-            if (isSysVersionBelow7_0) {
-                
+            //if (isSysVersionBelow7_0) {
+            if (ACE_iOSVersion < 7.0) {
                 launchImageName = [NSString stringWithFormat:@"%@",launchImagePrefixFile];
-                
             }
             
         }
@@ -557,7 +557,7 @@
         
     }
     
-    if (isSysVersionBelow7_0){
+    if (ACE_iOSVersion < 7.0) {
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].applicationFrame.size.width, [UIScreen mainScreen].applicationFrame.size.height);
     }else{
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);

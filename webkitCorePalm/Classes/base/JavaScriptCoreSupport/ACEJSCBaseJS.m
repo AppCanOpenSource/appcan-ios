@@ -24,13 +24,20 @@
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
 #import "ACEJSCHandler.h"
+
 static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
+#define ACE_METHOD_SYNC          @(ACEPluginMethodExecuteModeSynchronous)
+#define ACE_METHOD_ASYNC         @(ACEPluginMethodExecuteModeAsynchronous)
+
+
+
+
+
+
+
+
 @implementation ACEJSCBaseJS
-
-
-
-
 
 + (void)generateBaseJS{
     ACEPluginParser *parser = [ACEPluginParser sharedParser];
@@ -54,8 +61,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     }
     NSMutableString *js =[NSMutableString stringWithFormat:@""];
     [js appendFormat:@"%@={};",plugin.uexName];
-    [plugin.methods enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [js appendString:[self javaScriptForMethod:key plugin:plugin.uexName asyncKey:obj]];
+    [plugin.methods enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+        [js appendString:[self javaScriptForMethod:key plugin:plugin.uexName execMode:obj]];
     }];
     [plugin.properties enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [js appendString:[self javaScriptForProperty:key plugin:plugin.uexName value:obj]];
@@ -63,12 +70,11 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     return js;
 }
 
-+ (NSString *)javaScriptForMethod:(NSString *)method plugin:(NSString *)plugin asyncKey:(NSString *)asyncKey{
-    //ACEJSCCommand.newCommand(pluginName,methodName,arguments,asynchronous)
++ (NSString *)javaScriptForMethod:(NSString *)method plugin:(NSString *)plugin execMode:(NSNumber *)execMode{
     if([[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]]){
         return [[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]];
     }
-    return [NSString stringWithFormat:@"%@.%@=function(){return uex.execute('%@','%@',arguments,'%@')};",plugin,method,plugin,method,asyncKey];
+    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;return uex.execute('%@','%@',arguments,argCount,%@)};",plugin,method,plugin,method,execMode];
 }
 + (NSString *)javaScriptForProperty:(NSString *)property plugin:(NSString *)plugin value:(NSString *)value{
     return [NSString stringWithFormat:@"%@.%@=%@;",plugin,property,value];
@@ -95,6 +101,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 }
 
 + (ACEPluginInfo *)uexWindowInfo{
+    
     ACEPluginInfo *uexWindowInfo = [[ACEPluginInfo alloc] initWithName:@"uexWindow"];
     uexWindowInfo.methods = [@{
                                @"forward":ACE_METHOD_ASYNC,
@@ -199,6 +206,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"putLocalData":ACE_METHOD_ASYNC,
                                @"getLocalData":ACE_METHOD_SYNC,
                                @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
+                               @"setIsSupportSwipeCallback":ACE_METHOD_ASYNC,
+                               @"getWindowName":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWindowInfo;
 }
@@ -241,7 +250,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                   @"getCurrentWidgetInfo":ACE_METHOD_ASYNC,
                                   @"getMainWidgetId":ACE_METHOD_ASYNC,
                                   @"setBadgeNumber":ACE_METHOD_ASYNC,
-
+                                  @"getEngineVersion":ACE_METHOD_SYNC,
+                                  @"getEngineVersionCode":ACE_METHOD_SYNC,
                                   } mutableCopy];
     uexWidgetOneInfo.properties = [@{@"platformName":@"'iOS'"} mutableCopy];
     return uexWidgetOneInfo;

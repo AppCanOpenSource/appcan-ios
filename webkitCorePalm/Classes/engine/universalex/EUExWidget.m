@@ -39,12 +39,12 @@
 #import <objc/message.h>
 #import "JSONKit.h"
 #import "EUtility.h"
-#import "ACEUtils.h"
+
 #import "DataAnalysisInfo.h"
 #import "ACEDrawerViewController.h"
-#import "EXTScope.h"
+#import "ACEEXTScope.h"
 #import <CommonCrypto/CommonCrypto.h>
-
+#import "ACEUtils.h"
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
@@ -1251,7 +1251,8 @@ result;\
     }
     
     if (isPush==1) {
-        if (isSysVersionAbove8_0) {
+        //if (isSysVersionAbove8_0) {
+        if (ACE_iOSVersion >= 8.0) {
 #ifdef __IPHONE_8_0
             UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
             //注册推送
@@ -1270,7 +1271,7 @@ result;\
     
     BOOL pushState = NO;
     
-    if (isSysVersionAbove8_0) {
+    if (ACE_iOSVersion >= 8.0) {
         
         pushState = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
     }

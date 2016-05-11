@@ -50,9 +50,10 @@
 #import "AllConfigParser.h"
 #import "SFHFKeychainUtils.h"
 #import "OpenUDID.h"
-#import "ACEUtils.h"
+
 #import "FileEncrypt.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "ACEUtils.h"
 
 
 
@@ -423,8 +424,8 @@ static NSString *clientCertificatePwd = nil;
     
     CGRect rect = CGRectMake(0, 0, appWidth, appHeight);
     
-    if (isSysVersionAbove7_0){
-        
+    //if (isSysVersionAbove7_0){
+    if (ACE_iOSVersion >= 7.0){
         appWidth = [UIScreen mainScreen].bounds.size.width;
         appHeight = [UIScreen mainScreen].bounds.size.height;
         

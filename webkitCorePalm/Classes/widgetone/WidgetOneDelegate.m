@@ -52,7 +52,7 @@
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
-
+#define ACE_USERAGENT @"AppCanUserAgent"
 
 
 @interface WidgetOneDelegate()<RESideMenuDelegate>
@@ -486,7 +486,7 @@ NSString *AppCanJS = nil;
     [window makeKeyAndVisible];
      [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
     if(theApp.usePushControl == YES) {
-        if (isSysVersionAbove8_0) {
+        if (ACE_iOSVersion >= 8.0)  {
             
 #ifdef __IPHONE_8_0
             

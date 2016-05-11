@@ -122,36 +122,16 @@
     if ([value respondsToSelector:@selector(isDate)] && [value isDate]) {
         return ACEJSValueTypeDate;
     }
-    JSContext *ctx = value.context;
-    NSString *tmp = nil;
-    NSString *type = nil;
-    @try {
-        do{
-            tmp = [self randomJSName];
-        }while (![ctx[tmp] isUndefined]);
-        [ctx evaluateScript:[NSString stringWithFormat:@"var %@ = function(x){return typeof(x);};",tmp]];
-        type = [ctx[tmp] callWithArguments:@[value]].toString;
-        ctx[tmp] = nil;
-
-    } @catch (...) {}
     
-    if ([type.lowercaseString isEqual:@"function"]) {
-        return ACEJSValueTypeFunction;
-    }
-    if ([type.lowercaseString isEqual:@"number"]) {
-        return ACEJSValueTypeNumber;
-    }
-    if ([type.lowercaseString isEqual:@"string"]) {
-        return ACEJSValueTypeString;
-    }
-    if ([type.lowercaseString isEqual:@"boolean"]) {
-        return ACEJSValueTypeBoolean;
-    }
-    if ([type.lowercaseString isEqual:@"object"]) {
-        return ACEJSValueTypeObject;
-    }
-    if ([type.lowercaseString isEqual:@"undefined"]) {
-        return ACEJSValueTypeUndefined;
+    JSValueRef valueRef = value.JSValueRef;
+    JSContextRef ctxRef = value.context.JSGlobalContextRef;
+    if (JSValueIsObject(ctxRef, valueRef)) {
+        JSObjectRef objRef = (JSObjectRef)valueRef;
+        if (JSObjectIsFunction(ctxRef, objRef)) {
+            return ACEJSValueTypeFunction;
+        }else{
+            return ACEJSValueTypeObject;
+        }
     }
     return ACEJSValueTypeUnknown;
 }
