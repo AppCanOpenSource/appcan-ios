@@ -126,12 +126,6 @@
 		424C9E4C1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		424C9E4D1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		424C9E4E1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
-		42749AFF1CE0352B008C0CF6 /* ACEArgsPacking.h in Headers */ = {isa = PBXBuildFile; fileRef = 42749AFD1CE0352B008C0CF6 /* ACEArgsPacking.h */; };
-		42749B001CE0352B008C0CF6 /* ACEArgsPacking.h in Headers */ = {isa = PBXBuildFile; fileRef = 42749AFD1CE0352B008C0CF6 /* ACEArgsPacking.h */; };
-		42749B011CE0352B008C0CF6 /* ACEArgsPacking.h in Headers */ = {isa = PBXBuildFile; fileRef = 42749AFD1CE0352B008C0CF6 /* ACEArgsPacking.h */; };
-		42749B021CE0352B008C0CF6 /* ACEArgsPacking.m in Sources */ = {isa = PBXBuildFile; fileRef = 42749AFE1CE0352B008C0CF6 /* ACEArgsPacking.m */; };
-		42749B031CE0352B008C0CF6 /* ACEArgsPacking.m in Sources */ = {isa = PBXBuildFile; fileRef = 42749AFE1CE0352B008C0CF6 /* ACEArgsPacking.m */; };
-		42749B041CE0352B008C0CF6 /* ACEArgsPacking.m in Sources */ = {isa = PBXBuildFile; fileRef = 42749AFE1CE0352B008C0CF6 /* ACEArgsPacking.m */; };
 		428628FB1C0708920078E783 /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 428628F91C0708920078E783 /* ACEPOPAnimation.h */; };
 		428628FC1C0708920078E783 /* ACEPOPAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 428628FA1C0708920078E783 /* ACEPOPAnimation.m */; };
 		428628FE1C0708E30078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FD1C0708E30078E783 /* pop.framework */; };
@@ -210,7 +204,6 @@
 		42CF1F111C19046700F539B4 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865B18B1B93D000D7600 /* AppCenter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F121C19046700F539B4 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862818B1B93D000D7600 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F131C19046700F539B4 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF1F141C19046700F539B4 /* ACEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F151C19046700F539B4 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F161C19046700F539B4 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887941A0B0984002776E4 /* CFilteringJSONSerializer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1F171C19046700F539B4 /* BStatusBarWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -334,7 +327,6 @@
 		42CF1F981C19046700F539B4 /* ASIProgressDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863518B1B93D000D7600 /* ASIProgressDelegate.h */; };
 		42CF1F991C19046700F539B4 /* BAnimationTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859318B1B93D000D7600 /* BAnimationTransform.h */; };
 		42CF1F9A1C19046700F539B4 /* EBrowserViewAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860018B1B93D000D7600 /* EBrowserViewAnimition.h */; };
-		42CF1F9B1C19046700F539B4 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */; };
 		42CF1F9C1C19046700F539B4 /* AppCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA865A18B1B93D000D7600 /* AppCenter.h */; };
 		42CF1F9D1C19046700F539B4 /* ACEWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFD1A42B9CA00F501B3 /* ACEWebViewController.h */; };
 		42CF1F9E1C19046700F539B4 /* NSData+ImageContentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C351B2A6D3500D5F279 /* NSData+ImageContentType.h */; };
@@ -501,7 +493,6 @@
 		42CF204C1C1904F100F539B4 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865B18B1B93D000D7600 /* AppCenter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF204D1C1904F100F539B4 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862818B1B93D000D7600 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF204E1C1904F100F539B4 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42CF204F1C1904F100F539B4 /* ACEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20501C1904F100F539B4 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20511C1904F100F539B4 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887941A0B0984002776E4 /* CFilteringJSONSerializer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20521C1904F100F539B4 /* BStatusBarWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -625,7 +616,6 @@
 		42CF20D31C1904F100F539B4 /* ASIProgressDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863518B1B93D000D7600 /* ASIProgressDelegate.h */; };
 		42CF20D41C1904F100F539B4 /* BAnimationTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859318B1B93D000D7600 /* BAnimationTransform.h */; };
 		42CF20D51C1904F100F539B4 /* EBrowserViewAnimition.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860018B1B93D000D7600 /* EBrowserViewAnimition.h */; };
-		42CF20D61C1904F100F539B4 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */; };
 		42CF20D71C1904F100F539B4 /* AppCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA865A18B1B93D000D7600 /* AppCenter.h */; };
 		42CF20D81C1904F100F539B4 /* ACEWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFD1A42B9CA00F501B3 /* ACEWebViewController.h */; };
 		42CF20D91C1904F100F539B4 /* NSData+ImageContentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C351B2A6D3500D5F279 /* NSData+ImageContentType.h */; };
@@ -752,24 +742,6 @@
 		42D9DEFA1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
 		42D9DEFB1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
 		42D9DEFC1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
-		42DFAA4C1CE0207000BF5B68 /* ACEMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA451CE0207000BF5B68 /* ACEMetamacros.h */; };
-		42DFAA4D1CE0207000BF5B68 /* ACEMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA451CE0207000BF5B68 /* ACEMetamacros.h */; };
-		42DFAA4E1CE0207000BF5B68 /* ACEMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA451CE0207000BF5B68 /* ACEMetamacros.h */; };
-		42DFAA591CE020AD00BF5B68 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA581CE020AD00BF5B68 /* ACEUtils.h */; };
-		42DFAA5A1CE020AD00BF5B68 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA581CE020AD00BF5B68 /* ACEUtils.h */; };
-		42DFAA5B1CE020AD00BF5B68 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA581CE020AD00BF5B68 /* ACEUtils.h */; };
-		42DFAA5E1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA5C1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h */; };
-		42DFAA5F1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA5C1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h */; };
-		42DFAA601CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA5C1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h */; };
-		42DFAA611CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DFAA5D1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m */; };
-		42DFAA621CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DFAA5D1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m */; };
-		42DFAA631CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DFAA5D1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m */; };
-		42DFAA6E1CE021AA00BF5B68 /* ACENil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA6C1CE021AA00BF5B68 /* ACENil.h */; };
-		42DFAA6F1CE021AA00BF5B68 /* ACENil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA6C1CE021AA00BF5B68 /* ACENil.h */; };
-		42DFAA701CE021AA00BF5B68 /* ACENil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DFAA6C1CE021AA00BF5B68 /* ACENil.h */; };
-		42DFAA711CE021AA00BF5B68 /* ACENil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DFAA6D1CE021AA00BF5B68 /* ACENil.m */; };
-		42DFAA721CE021AA00BF5B68 /* ACENil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DFAA6D1CE021AA00BF5B68 /* ACENil.m */; };
-		42DFAA731CE021AA00BF5B68 /* ACENil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DFAA6D1CE021AA00BF5B68 /* ACENil.m */; };
 		42E88C441CDB397C004EA405 /* ACEJSFunctionRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E88C421CDB397C004EA405 /* ACEJSFunctionRef.h */; };
 		42E88C451CDB397C004EA405 /* ACEJSFunctionRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E88C421CDB397C004EA405 /* ACEJSFunctionRef.h */; };
 		42E88C461CDB397C004EA405 /* ACEJSFunctionRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E88C421CDB397C004EA405 /* ACEJSFunctionRef.h */; };
@@ -779,12 +751,39 @@
 		42E88C4B1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E88C4A1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h */; };
 		42E88C4C1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E88C4A1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h */; };
 		42E88C4D1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E88C4A1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h */; };
-		42EDAA691CE1793A00E44551 /* ACEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA671CE1793A00E44551 /* ACEEXTScope.h */; };
-		42EDAA6A1CE1793A00E44551 /* ACEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA671CE1793A00E44551 /* ACEEXTScope.h */; };
-		42EDAA6B1CE1793A00E44551 /* ACEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA671CE1793A00E44551 /* ACEEXTScope.h */; };
-		42EDAA6C1CE1793A00E44551 /* ACEEXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA681CE1793A00E44551 /* ACEEXTScope.m */; };
-		42EDAA6D1CE1793A00E44551 /* ACEEXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA681CE1793A00E44551 /* ACEEXTScope.m */; };
-		42EDAA6E1CE1793A00E44551 /* ACEEXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA681CE1793A00E44551 /* ACEEXTScope.m */; };
+		42EDAA861CE18ABF00E44551 /* ACEArgsPacking.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA7C1CE18ABF00E44551 /* ACEArgsPacking.h */; };
+		42EDAA871CE18ABF00E44551 /* ACEArgsPacking.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA7C1CE18ABF00E44551 /* ACEArgsPacking.h */; };
+		42EDAA881CE18ABF00E44551 /* ACEArgsPacking.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA7C1CE18ABF00E44551 /* ACEArgsPacking.h */; };
+		42EDAA891CE18ABF00E44551 /* ACEArgsPacking.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA7D1CE18ABF00E44551 /* ACEArgsPacking.m */; };
+		42EDAA8A1CE18ABF00E44551 /* ACEArgsPacking.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA7D1CE18ABF00E44551 /* ACEArgsPacking.m */; };
+		42EDAA8B1CE18ABF00E44551 /* ACEArgsPacking.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA7D1CE18ABF00E44551 /* ACEArgsPacking.m */; };
+		42EDAA8C1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA7E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h */; };
+		42EDAA8D1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA7E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h */; };
+		42EDAA8E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA7E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h */; };
+		42EDAA8F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA7F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m */; };
+		42EDAA901CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA7F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m */; };
+		42EDAA911CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA7F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m */; };
+		42EDAA921CE18ABF00E44551 /* ACEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA801CE18ABF00E44551 /* ACEEXTScope.h */; };
+		42EDAA931CE18ABF00E44551 /* ACEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA801CE18ABF00E44551 /* ACEEXTScope.h */; };
+		42EDAA941CE18ABF00E44551 /* ACEEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA801CE18ABF00E44551 /* ACEEXTScope.h */; };
+		42EDAA981CE18ABF00E44551 /* ACEMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA821CE18ABF00E44551 /* ACEMetamacros.h */; };
+		42EDAA991CE18ABF00E44551 /* ACEMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA821CE18ABF00E44551 /* ACEMetamacros.h */; };
+		42EDAA9A1CE18ABF00E44551 /* ACEMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA821CE18ABF00E44551 /* ACEMetamacros.h */; };
+		42EDAA9B1CE18ABF00E44551 /* ACENil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA831CE18ABF00E44551 /* ACENil.h */; };
+		42EDAA9C1CE18ABF00E44551 /* ACENil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA831CE18ABF00E44551 /* ACENil.h */; };
+		42EDAA9D1CE18ABF00E44551 /* ACENil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA831CE18ABF00E44551 /* ACENil.h */; };
+		42EDAA9E1CE18ABF00E44551 /* ACENil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA841CE18ABF00E44551 /* ACENil.m */; };
+		42EDAA9F1CE18ABF00E44551 /* ACENil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA841CE18ABF00E44551 /* ACENil.m */; };
+		42EDAAA01CE18ABF00E44551 /* ACENil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAA841CE18ABF00E44551 /* ACENil.m */; };
+		42EDAAA11CE18ABF00E44551 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA851CE18ABF00E44551 /* ACEUtils.h */; };
+		42EDAAA21CE18ABF00E44551 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA851CE18ABF00E44551 /* ACEUtils.h */; };
+		42EDAAA31CE18ABF00E44551 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAA851CE18ABF00E44551 /* ACEUtils.h */; };
+		42EDAAA61CE18ADF00E44551 /* ACEAvailable.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAAA41CE18ADF00E44551 /* ACEAvailable.h */; };
+		42EDAAA71CE18ADF00E44551 /* ACEAvailable.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAAA41CE18ADF00E44551 /* ACEAvailable.h */; };
+		42EDAAA81CE18ADF00E44551 /* ACEAvailable.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EDAAA41CE18ADF00E44551 /* ACEAvailable.h */; };
+		42EDAAA91CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
+		42EDAAAA1CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
+		42EDAAAB1CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
 		42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
@@ -975,8 +974,6 @@
 		B2E52AFE15A6B2F1003E73EA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */; };
 		B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFC15A6B2F1003E73EA /* UIKit.framework */; };
 		DE1188321AA0782F009DF581 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1188311AA0782F009DF581 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		DE2C4FA51A2DA48B00D5B4F2 /* ACEUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */; };
-		DE2C4FA61A2DA48B00D5B4F2 /* ACEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DE81D4CD1A4D3D81005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CC1A4D3D81005D3153 /* libACEDes.a */; };
 		DE90F53A1904E6D00084EC10 /* OpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = DE90F5381904E6D00084EC10 /* OpenUDID.h */; };
 		DE90F53B1904E6D00084EC10 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = DE90F5391904E6D00084EC10 /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -1085,8 +1082,6 @@
 		4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMultiPopoverScrollView.m; sourceTree = "<group>"; };
 		424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCInvocation.h; sourceTree = "<group>"; };
 		424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCInvocation.m; sourceTree = "<group>"; };
-		42749AFD1CE0352B008C0CF6 /* ACEArgsPacking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEArgsPacking.h; sourceTree = "<group>"; };
-		42749AFE1CE0352B008C0CF6 /* ACEArgsPacking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEArgsPacking.m; sourceTree = "<group>"; };
 		427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildEngineForPluginDevelopment.sh; sourceTree = "<group>"; };
 		428628F91C0708920078E783 /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
 		428628FA1C0708920078E783 /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
@@ -1111,17 +1106,20 @@
 		42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCBaseJS.m; sourceTree = "<group>"; };
 		42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCHandler.h; sourceTree = "<group>"; };
 		42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCHandler.m; sourceTree = "<group>"; };
-		42DFAA451CE0207000BF5B68 /* ACEMetamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMetamacros.h; sourceTree = "<group>"; };
-		42DFAA581CE020AD00BF5B68 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
-		42DFAA5C1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEEXTRuntimeExtensions.h; sourceTree = "<group>"; };
-		42DFAA5D1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEEXTRuntimeExtensions.m; sourceTree = "<group>"; };
-		42DFAA6C1CE021AA00BF5B68 /* ACENil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACENil.h; sourceTree = "<group>"; };
-		42DFAA6D1CE021AA00BF5B68 /* ACENil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACENil.m; sourceTree = "<group>"; };
 		42E88C421CDB397C004EA405 /* ACEJSFunctionRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSFunctionRef.h; sourceTree = "<group>"; };
 		42E88C431CDB397C004EA405 /* ACEJSFunctionRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSFunctionRef.m; sourceTree = "<group>"; };
 		42E88C4A1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSFunctionRefPrivate.h; sourceTree = "<group>"; };
-		42EDAA671CE1793A00E44551 /* ACEEXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEEXTScope.h; sourceTree = "<group>"; };
-		42EDAA681CE1793A00E44551 /* ACEEXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEEXTScope.m; sourceTree = "<group>"; };
+		42EDAA7C1CE18ABF00E44551 /* ACEArgsPacking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEArgsPacking.h; sourceTree = "<group>"; };
+		42EDAA7D1CE18ABF00E44551 /* ACEArgsPacking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEArgsPacking.m; sourceTree = "<group>"; };
+		42EDAA7E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEEXTRuntimeExtensions.h; sourceTree = "<group>"; };
+		42EDAA7F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEEXTRuntimeExtensions.m; sourceTree = "<group>"; };
+		42EDAA801CE18ABF00E44551 /* ACEEXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEEXTScope.h; sourceTree = "<group>"; };
+		42EDAA821CE18ABF00E44551 /* ACEMetamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMetamacros.h; sourceTree = "<group>"; };
+		42EDAA831CE18ABF00E44551 /* ACENil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACENil.h; sourceTree = "<group>"; };
+		42EDAA841CE18ABF00E44551 /* ACENil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACENil.m; sourceTree = "<group>"; };
+		42EDAA851CE18ABF00E44551 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
+		42EDAAA41CE18ADF00E44551 /* ACEAvailable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEAvailable.h; sourceTree = "<group>"; };
+		42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEAvailable.m; sourceTree = "<group>"; };
 		42FFEF2B1C1FF1E600294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginParser.h; sourceTree = "<group>"; };
 		42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginParser.m; sourceTree = "<group>"; };
@@ -1308,8 +1306,6 @@
 		B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B2E52AFC15A6B2F1003E73EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DE1188311AA0782F009DF581 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
-		DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEUtils.m; sourceTree = "<group>"; };
 		DE81D4CC1A4D3D81005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F5381904E6D00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 		DE90F5391904E6D00084EC10 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
@@ -1608,23 +1604,6 @@
 			path = JavaScriptCoreSupport;
 			sourceTree = "<group>";
 		};
-		42DFAA431CE0207000BF5B68 /* ACEUtils */ = {
-			isa = PBXGroup;
-			children = (
-				42DFAA581CE020AD00BF5B68 /* ACEUtils.h */,
-				42DFAA451CE0207000BF5B68 /* ACEMetamacros.h */,
-				42EDAA671CE1793A00E44551 /* ACEEXTScope.h */,
-				42EDAA681CE1793A00E44551 /* ACEEXTScope.m */,
-				42DFAA5C1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h */,
-				42DFAA5D1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m */,
-				42DFAA6C1CE021AA00BF5B68 /* ACENil.h */,
-				42DFAA6D1CE021AA00BF5B68 /* ACENil.m */,
-				42749AFD1CE0352B008C0CF6 /* ACEArgsPacking.h */,
-				42749AFE1CE0352B008C0CF6 /* ACEArgsPacking.m */,
-			);
-			path = ACEUtils;
-			sourceTree = "<group>";
-		};
 		5AAA858D18B1B93D000D7600 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1646,7 +1625,6 @@
 		5AAA858E18B1B93D000D7600 /* base */ = {
 			isa = PBXGroup;
 			children = (
-				42DFAA431CE0207000BF5B68 /* ACEUtils */,
 				42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */,
 				42D0AF401BBB8641002249AE /* ACELocalization.h */,
 				42D0AF411BBB8641002249AE /* ACELocalization.m */,
@@ -2057,8 +2035,17 @@
 		DE2C4FA21A2DA48B00D5B4F2 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				DE2C4FA31A2DA48B00D5B4F2 /* ACEUtils.h */,
-				DE2C4FA41A2DA48B00D5B4F2 /* ACEUtils.m */,
+				42EDAA851CE18ABF00E44551 /* ACEUtils.h */,
+				42EDAA7C1CE18ABF00E44551 /* ACEArgsPacking.h */,
+				42EDAA7D1CE18ABF00E44551 /* ACEArgsPacking.m */,
+				42EDAA7E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h */,
+				42EDAA7F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m */,
+				42EDAA801CE18ABF00E44551 /* ACEEXTScope.h */,
+				42EDAA821CE18ABF00E44551 /* ACEMetamacros.h */,
+				42EDAA831CE18ABF00E44551 /* ACENil.h */,
+				42EDAA841CE18ABF00E44551 /* ACENil.m */,
+				42EDAAA41CE18ADF00E44551 /* ACEAvailable.h */,
+				42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -2080,6 +2067,7 @@
 				42CF1F731C19046700F539B4 /* SBJsonBase.h in Headers */,
 				42CF1F741C19046700F539B4 /* UIImage+MultiFormat.h in Headers */,
 				42CF1F761C19046700F539B4 /* CJSONDeserializer.h in Headers */,
+				42EDAA9C1CE18ABF00E44551 /* ACENil.h in Headers */,
 				42CF1F771C19046700F539B4 /* OpenUDID.h in Headers */,
 				42CF1F781C19046700F539B4 /* UIImage+GIF.h in Headers */,
 				42CF1F791C19046700F539B4 /* ASIHTTPRequestDelegate.h in Headers */,
@@ -2092,8 +2080,8 @@
 				42CF1F7F1C19046700F539B4 /* JSONParser.h in Headers */,
 				42CF1F801C19046700F539B4 /* ACEMultiPopoverScrollView.h in Headers */,
 				42CF1F811C19046700F539B4 /* RESideMenu.h in Headers */,
-				42DFAA6F1CE021AA00BF5B68 /* ACENil.h in Headers */,
 				42CF1F821C19046700F539B4 /* ASIHTTPRequest.h in Headers */,
+				42EDAA8D1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h in Headers */,
 				42CF1F831C19046700F539B4 /* CJSONSerialization.h in Headers */,
 				42CF1F841C19046700F539B4 /* ACEDes.h in Headers */,
 				42CF1F851C19046700F539B4 /* EBrowserWindow.h in Headers */,
@@ -2103,10 +2091,8 @@
 				42CF1F891C19046700F539B4 /* Reachability.h in Headers */,
 				42CF1F8A1C19046700F539B4 /* ACEPluginViewContainer.h in Headers */,
 				42CF1F8B1C19046700F539B4 /* SDImageCache.h in Headers */,
-				42DFAA5F1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h in Headers */,
 				42CF1F8C1C19046700F539B4 /* ACUtility.h in Headers */,
 				42CF1F8D1C19046700F539B4 /* SFHFKeychainUtils.h in Headers */,
-				42DFAA5A1CE020AD00BF5B68 /* ACEUtils.h in Headers */,
 				42CF1F8E1C19046700F539B4 /* EUExLog.h in Headers */,
 				42CF1F8F1C19046700F539B4 /* SpecConfigParser.h in Headers */,
 				42CF1F901C19046700F539B4 /* MKAnnotationView+WebCache.h in Headers */,
@@ -2117,16 +2103,16 @@
 				42CF1F951C19046700F539B4 /* CDataScanner_Extensions.h in Headers */,
 				42CF1F961C19046700F539B4 /* WWidgetMgr.h in Headers */,
 				42CF1F971C19046700F539B4 /* SDWebImageOperation.h in Headers */,
+				42EDAAA71CE18ADF00E44551 /* ACEAvailable.h in Headers */,
 				42CF1F981C19046700F539B4 /* ASIProgressDelegate.h in Headers */,
 				42CF1F991C19046700F539B4 /* BAnimationTransform.h in Headers */,
 				42CF1F9A1C19046700F539B4 /* EBrowserViewAnimition.h in Headers */,
-				42CF1F9B1C19046700F539B4 /* ACEUtils.h in Headers */,
 				42CF1F9C1C19046700F539B4 /* AppCenter.h in Headers */,
 				42CF1F9D1C19046700F539B4 /* ACEWebViewController.h in Headers */,
 				42CF1F9E1C19046700F539B4 /* NSData+ImageContentType.h in Headers */,
 				42CF1F9F1C19046700F539B4 /* BallView.h in Headers */,
 				42CF1FA01C19046700F539B4 /* EBrowserToolBar.h in Headers */,
-				42DFAA4D1CE0207000BF5B68 /* ACEMetamacros.h in Headers */,
+				42EDAA991CE18ABF00E44551 /* ACEMetamacros.h in Headers */,
 				42CF1FA11C19046700F539B4 /* UIButton+WebCache.h in Headers */,
 				42CF1FA21C19046700F539B4 /* FBEncryptorAES.h in Headers */,
 				42CF1FA31C19046700F539B4 /* ASICacheDelegate.h in Headers */,
@@ -2144,6 +2130,7 @@
 				42CF1FAF1C19046700F539B4 /* EBrowser.h in Headers */,
 				42CF1FB01C19046700F539B4 /* ASIDownloadCache.h in Headers */,
 				42CF1FB11C19046700F539B4 /* UIImageView+WebCache.h in Headers */,
+				42EDAA871CE18ABF00E44551 /* ACEArgsPacking.h in Headers */,
 				42CF1FB21C19046700F539B4 /* ASIHTTPRequestConfig.h in Headers */,
 				42CF1FB31C19046700F539B4 /* ACELocalization.h in Headers */,
 				42CF1FB41C19046700F539B4 /* NSDictionary_JSONExtensions.h in Headers */,
@@ -2156,6 +2143,7 @@
 				424C9E4A1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */,
 				42CF1FBB1C19046700F539B4 /* ACEDrawerViewController.h in Headers */,
 				42CF1FBC1C19046700F539B4 /* EBrowserController.h in Headers */,
+				42EDAA931CE18ABF00E44551 /* ACEEXTScope.h in Headers */,
 				42CF1FBD1C19046700F539B4 /* AsyncSocket.h in Headers */,
 				42CF1FBE1C19046700F539B4 /* FileEncrypt.h in Headers */,
 				42CF1FBF1C19046700F539B4 /* JSONRepresentation.h in Headers */,
@@ -2199,10 +2187,10 @@
 				42CF1FE61C19046700F539B4 /* CJSONSerializedData.h in Headers */,
 				42CF1FE71C19046700F539B4 /* zip.h in Headers */,
 				42CF1FE81C19046700F539B4 /* AllConfigParser.h in Headers */,
-				42EDAA6A1CE1793A00E44551 /* ACEEXTScope.h in Headers */,
 				42CF1FE91C19046700F539B4 /* MMExampleDrawerVisualStateManager.h in Headers */,
 				42CF1FEA1C19046700F539B4 /* CJSONScanner.h in Headers */,
 				42CF1FEB1C19046700F539B4 /* CDataScanner_Extensions.h in Headers */,
+				42EDAAA21CE18ABF00E44551 /* ACEUtils.h in Headers */,
 				42CF1FEC1C19046700F539B4 /* CJSONDeserializer.h in Headers */,
 				42A615541C40CB9A00883148 /* ACEPluginInfo.h in Headers */,
 				42CF1FED1C19046700F539B4 /* JSONKit.h in Headers */,
@@ -2227,7 +2215,6 @@
 				42CF1FFF1C19046700F539B4 /* BUIAlertView.h in Headers */,
 				42CF20001C19046700F539B4 /* CJSONScanner.h in Headers */,
 				42CF20011C19046700F539B4 /* ASINetworkQueue.h in Headers */,
-				42749B001CE0352B008C0CF6 /* ACEArgsPacking.h in Headers */,
 				42CF20021C19046700F539B4 /* WWidgetUpdate.h in Headers */,
 				42CF20031C19046700F539B4 /* SDWebImageManager.h in Headers */,
 				42CF20041C19046700F539B4 /* WidgetOnePseudoDelegate.h in Headers */,
@@ -2249,6 +2236,7 @@
 				42CF20AE1C1904F100F539B4 /* SBJsonBase.h in Headers */,
 				42CF20AF1C1904F100F539B4 /* UIImage+MultiFormat.h in Headers */,
 				42CF20B11C1904F100F539B4 /* CJSONDeserializer.h in Headers */,
+				42EDAA9D1CE18ABF00E44551 /* ACENil.h in Headers */,
 				42CF20B21C1904F100F539B4 /* OpenUDID.h in Headers */,
 				42CF20B31C1904F100F539B4 /* UIImage+GIF.h in Headers */,
 				42CF20B41C1904F100F539B4 /* ASIHTTPRequestDelegate.h in Headers */,
@@ -2261,8 +2249,8 @@
 				42CF20BA1C1904F100F539B4 /* JSONParser.h in Headers */,
 				42CF20BB1C1904F100F539B4 /* ACEMultiPopoverScrollView.h in Headers */,
 				42CF20BC1C1904F100F539B4 /* RESideMenu.h in Headers */,
-				42DFAA701CE021AA00BF5B68 /* ACENil.h in Headers */,
 				42CF20BD1C1904F100F539B4 /* ASIHTTPRequest.h in Headers */,
+				42EDAA8E1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h in Headers */,
 				42CF20BE1C1904F100F539B4 /* CJSONSerialization.h in Headers */,
 				42CF20BF1C1904F100F539B4 /* ACEDes.h in Headers */,
 				42CF20C01C1904F100F539B4 /* EBrowserWindow.h in Headers */,
@@ -2272,10 +2260,8 @@
 				42CF20C41C1904F100F539B4 /* Reachability.h in Headers */,
 				42CF20C51C1904F100F539B4 /* ACEPluginViewContainer.h in Headers */,
 				42CF20C61C1904F100F539B4 /* SDImageCache.h in Headers */,
-				42DFAA601CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h in Headers */,
 				42CF20C71C1904F100F539B4 /* ACUtility.h in Headers */,
 				42CF20C81C1904F100F539B4 /* SFHFKeychainUtils.h in Headers */,
-				42DFAA5B1CE020AD00BF5B68 /* ACEUtils.h in Headers */,
 				42CF20C91C1904F100F539B4 /* EUExLog.h in Headers */,
 				42CF20CA1C1904F100F539B4 /* SpecConfigParser.h in Headers */,
 				42CF20CB1C1904F100F539B4 /* MKAnnotationView+WebCache.h in Headers */,
@@ -2286,16 +2272,16 @@
 				42CF20D01C1904F100F539B4 /* CDataScanner_Extensions.h in Headers */,
 				42CF20D11C1904F100F539B4 /* WWidgetMgr.h in Headers */,
 				42CF20D21C1904F100F539B4 /* SDWebImageOperation.h in Headers */,
+				42EDAAA81CE18ADF00E44551 /* ACEAvailable.h in Headers */,
 				42CF20D31C1904F100F539B4 /* ASIProgressDelegate.h in Headers */,
 				42CF20D41C1904F100F539B4 /* BAnimationTransform.h in Headers */,
 				42CF20D51C1904F100F539B4 /* EBrowserViewAnimition.h in Headers */,
-				42CF20D61C1904F100F539B4 /* ACEUtils.h in Headers */,
 				42CF20D71C1904F100F539B4 /* AppCenter.h in Headers */,
 				42CF20D81C1904F100F539B4 /* ACEWebViewController.h in Headers */,
 				42CF20D91C1904F100F539B4 /* NSData+ImageContentType.h in Headers */,
 				42CF20DA1C1904F100F539B4 /* BallView.h in Headers */,
 				42CF20DB1C1904F100F539B4 /* EBrowserToolBar.h in Headers */,
-				42DFAA4E1CE0207000BF5B68 /* ACEMetamacros.h in Headers */,
+				42EDAA9A1CE18ABF00E44551 /* ACEMetamacros.h in Headers */,
 				42CF20DC1C1904F100F539B4 /* UIButton+WebCache.h in Headers */,
 				42CF20DD1C1904F100F539B4 /* FBEncryptorAES.h in Headers */,
 				42CF20DE1C1904F100F539B4 /* ASICacheDelegate.h in Headers */,
@@ -2313,6 +2299,7 @@
 				42CF20EA1C1904F100F539B4 /* EBrowser.h in Headers */,
 				42CF20EB1C1904F100F539B4 /* ASIDownloadCache.h in Headers */,
 				42CF20EC1C1904F100F539B4 /* UIImageView+WebCache.h in Headers */,
+				42EDAA881CE18ABF00E44551 /* ACEArgsPacking.h in Headers */,
 				42CF20ED1C1904F100F539B4 /* ASIHTTPRequestConfig.h in Headers */,
 				42CF20EE1C1904F100F539B4 /* ACELocalization.h in Headers */,
 				42CF20EF1C1904F100F539B4 /* NSDictionary_JSONExtensions.h in Headers */,
@@ -2325,6 +2312,7 @@
 				424C9E4B1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */,
 				42CF20F61C1904F100F539B4 /* ACEDrawerViewController.h in Headers */,
 				42CF20F71C1904F100F539B4 /* EBrowserController.h in Headers */,
+				42EDAA941CE18ABF00E44551 /* ACEEXTScope.h in Headers */,
 				42CF20F81C1904F100F539B4 /* AsyncSocket.h in Headers */,
 				42CF20F91C1904F100F539B4 /* FileEncrypt.h in Headers */,
 				42CF20FA1C1904F100F539B4 /* JSONRepresentation.h in Headers */,
@@ -2368,10 +2356,10 @@
 				42CF21211C1904F100F539B4 /* CJSONSerializedData.h in Headers */,
 				42CF21221C1904F100F539B4 /* zip.h in Headers */,
 				42CF21231C1904F100F539B4 /* AllConfigParser.h in Headers */,
-				42EDAA6B1CE1793A00E44551 /* ACEEXTScope.h in Headers */,
 				42CF21241C1904F100F539B4 /* MMExampleDrawerVisualStateManager.h in Headers */,
 				42CF21251C1904F100F539B4 /* CJSONScanner.h in Headers */,
 				42CF21261C1904F100F539B4 /* CDataScanner_Extensions.h in Headers */,
+				42EDAAA31CE18ABF00E44551 /* ACEUtils.h in Headers */,
 				42CF21271C1904F100F539B4 /* CJSONDeserializer.h in Headers */,
 				42A615551C40CB9A00883148 /* ACEPluginInfo.h in Headers */,
 				42CF21281C1904F100F539B4 /* JSONKit.h in Headers */,
@@ -2396,7 +2384,6 @@
 				42CF213A1C1904F100F539B4 /* BUIAlertView.h in Headers */,
 				42CF213B1C1904F100F539B4 /* CJSONScanner.h in Headers */,
 				42CF213C1C1904F100F539B4 /* ASINetworkQueue.h in Headers */,
-				42749B011CE0352B008C0CF6 /* ACEArgsPacking.h in Headers */,
 				42CF213D1C1904F100F539B4 /* WWidgetUpdate.h in Headers */,
 				42CF213E1C1904F100F539B4 /* SDWebImageManager.h in Headers */,
 				42CF213F1C1904F100F539B4 /* WidgetOnePseudoDelegate.h in Headers */,
@@ -2418,6 +2405,7 @@
 				5AAA86A118B1B93D000D7600 /* SBJsonBase.h in Headers */,
 				33774C6B1B2A6D3500D5F279 /* UIImage+MultiFormat.h in Headers */,
 				3C2887B61A0B0984002776E4 /* CJSONDeserializer.h in Headers */,
+				42EDAA9B1CE18ABF00E44551 /* ACENil.h in Headers */,
 				DE90F53A1904E6D00084EC10 /* OpenUDID.h in Headers */,
 				33774C691B2A6D3500D5F279 /* UIImage+GIF.h in Headers */,
 				5AAA871518B1B93D000D7600 /* ASIHTTPRequestDelegate.h in Headers */,
@@ -2430,8 +2418,8 @@
 				5AAA869918B1B93D000D7600 /* JSONParser.h in Headers */,
 				4214B40D1BE753300088E31B /* ACEMultiPopoverScrollView.h in Headers */,
 				33C8E2F61B1EE7E300C33492 /* RESideMenu.h in Headers */,
-				42DFAA6E1CE021AA00BF5B68 /* ACENil.h in Headers */,
 				5AAA871218B1B93D000D7600 /* ASIHTTPRequest.h in Headers */,
+				42EDAA8C1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.h in Headers */,
 				3C2887AE1A0B0984002776E4 /* CJSONSerialization.h in Headers */,
 				33859D2E1A70CB2F000B05B8 /* ACEDes.h in Headers */,
 				5AAA86EE18B1B93D000D7600 /* EBrowserWindow.h in Headers */,
@@ -2441,10 +2429,8 @@
 				5AAA871B18B1B93D000D7600 /* Reachability.h in Headers */,
 				464272DE1BCE562E00F4BE36 /* ACEPluginViewContainer.h in Headers */,
 				33774C581B2A6D3500D5F279 /* SDImageCache.h in Headers */,
-				42DFAA5E1CE020E200BF5B68 /* ACEEXTRuntimeExtensions.h in Headers */,
 				5AAA873A18B1B93D000D7600 /* ACUtility.h in Headers */,
 				5AAA873118B1B93D000D7600 /* SFHFKeychainUtils.h in Headers */,
-				42DFAA591CE020AD00BF5B68 /* ACEUtils.h in Headers */,
 				5AAA86FC18B1B93D000D7600 /* EUExLog.h in Headers */,
 				5AAA86AD18B1B93D000D7600 /* SpecConfigParser.h in Headers */,
 				33774C541B2A6D3500D5F279 /* MKAnnotationView+WebCache.h in Headers */,
@@ -2455,16 +2441,16 @@
 				3C2887D11A0B099B002776E4 /* CDataScanner_Extensions.h in Headers */,
 				5AAA875E18B1B93D000D7600 /* WWidgetMgr.h in Headers */,
 				33774C641B2A6D3500D5F279 /* SDWebImageOperation.h in Headers */,
+				42EDAAA61CE18ADF00E44551 /* ACEAvailable.h in Headers */,
 				5AAA871A18B1B93D000D7600 /* ASIProgressDelegate.h in Headers */,
 				5AAA868818B1B93D000D7600 /* BAnimationTransform.h in Headers */,
 				5AAA86E818B1B93D000D7600 /* EBrowserViewAnimition.h in Headers */,
-				DE2C4FA51A2DA48B00D5B4F2 /* ACEUtils.h in Headers */,
 				5AAA873C18B1B93D000D7600 /* AppCenter.h in Headers */,
 				333D00081A42B9CA00F501B3 /* ACEWebViewController.h in Headers */,
 				33774C561B2A6D3500D5F279 /* NSData+ImageContentType.h in Headers */,
 				5AAA874018B1B93D000D7600 /* BallView.h in Headers */,
 				5AAA86E418B1B93D000D7600 /* EBrowserToolBar.h in Headers */,
-				42DFAA4C1CE0207000BF5B68 /* ACEMetamacros.h in Headers */,
+				42EDAA981CE18ABF00E44551 /* ACEMetamacros.h in Headers */,
 				33774C671B2A6D3500D5F279 /* UIButton+WebCache.h in Headers */,
 				5AAA869618B1B93D000D7600 /* FBEncryptorAES.h in Headers */,
 				5AAA870918B1B93D000D7600 /* ASICacheDelegate.h in Headers */,
@@ -2482,6 +2468,7 @@
 				5AAA86DA18B1B93D000D7600 /* EBrowser.h in Headers */,
 				5AAA870E18B1B93D000D7600 /* ASIDownloadCache.h in Headers */,
 				33774C711B2A6D3500D5F279 /* UIImageView+WebCache.h in Headers */,
+				42EDAA861CE18ABF00E44551 /* ACEArgsPacking.h in Headers */,
 				5AAA871418B1B93D000D7600 /* ASIHTTPRequestConfig.h in Headers */,
 				42D0AF421BBB8641002249AE /* ACELocalization.h in Headers */,
 				3C2887D21A0B099B002776E4 /* NSDictionary_JSONExtensions.h in Headers */,
@@ -2494,6 +2481,7 @@
 				424C9E491CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */,
 				334D18051A47A9B70050DD13 /* ACEDrawerViewController.h in Headers */,
 				5AAA86DC18B1B93D000D7600 /* EBrowserController.h in Headers */,
+				42EDAA921CE18ABF00E44551 /* ACEEXTScope.h in Headers */,
 				5AAA871D18B1B93D000D7600 /* AsyncSocket.h in Headers */,
 				3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */,
 				3C2887BC1A0B0984002776E4 /* JSONRepresentation.h in Headers */,
@@ -2537,10 +2525,10 @@
 				3C2887B01A0B0984002776E4 /* CJSONSerializedData.h in Headers */,
 				5AAA873018B1B93D000D7600 /* zip.h in Headers */,
 				5AAA868418B1B93D000D7600 /* AllConfigParser.h in Headers */,
-				42EDAA691CE1793A00E44551 /* ACEEXTScope.h in Headers */,
 				33AF6EC71A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.h in Headers */,
 				3C2887D41A0B099B002776E4 /* CJSONScanner.h in Headers */,
 				3C2887B21A0B0984002776E4 /* CDataScanner_Extensions.h in Headers */,
+				42EDAAA11CE18ABF00E44551 /* ACEUtils.h in Headers */,
 				3C2887D31A0B099B002776E4 /* CJSONDeserializer.h in Headers */,
 				42A615531C40CB9A00883148 /* ACEPluginInfo.h in Headers */,
 				5AAA86CB18B1B93D000D7600 /* JSONKit.h in Headers */,
@@ -2565,7 +2553,6 @@
 				5AAA869018B1B93D000D7600 /* BUIAlertView.h in Headers */,
 				3C2887B81A0B0984002776E4 /* CJSONScanner.h in Headers */,
 				5AAA871818B1B93D000D7600 /* ASINetworkQueue.h in Headers */,
-				42749AFF1CE0352B008C0CF6 /* ACEArgsPacking.h in Headers */,
 				5AAA876018B1B93D000D7600 /* WWidgetUpdate.h in Headers */,
 				33774C621B2A6D3500D5F279 /* SDWebImageManager.h in Headers */,
 				5AAA876218B1B93D000D7600 /* WidgetOnePseudoDelegate.h in Headers */,
@@ -2709,6 +2696,7 @@
 				42CF1EDF1C19046700F539B4 /* UpdateParser.m in Sources */,
 				42CF1EE01C19046700F539B4 /* ASIHTTPRequest.m in Sources */,
 				42CF1EE11C19046700F539B4 /* WidgetOneDelegate.m in Sources */,
+				42EDAAAA1CE18ADF00E44551 /* ACEAvailable.m in Sources */,
 				42CF1EE21C19046700F539B4 /* UIImageView+WebCache.m in Sources */,
 				42CF1EE31C19046700F539B4 /* MySpaceView.m in Sources */,
 				42CF1EE41C19046700F539B4 /* SBJsonBase.m in Sources */,
@@ -2739,16 +2727,15 @@
 				42CF1EFE1C19046700F539B4 /* BallView.m in Sources */,
 				42FFEF371C1FF2C500294DE1 /* ACEPluginParser.m in Sources */,
 				42CF1EFF1C19046700F539B4 /* ioapi.c in Sources */,
-				42DFAA621CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m in Sources */,
 				42CF1F001C19046700F539B4 /* NSDictionary_JSONExtensions.m in Sources */,
 				42CF1F011C19046700F539B4 /* ASIDownloadCache.m in Sources */,
 				42CF1F021C19046700F539B4 /* WWidgetMgr.m in Sources */,
+				42EDAA8A1CE18ABF00E44551 /* ACEArgsPacking.m in Sources */,
 				42CF1F031C19046700F539B4 /* EBrowser.m in Sources */,
 				42CF1F041C19046700F539B4 /* BAnimationTransform.m in Sources */,
 				42CF1F051C19046700F539B4 /* UIView+WebCacheOperation.m in Sources */,
 				42CF1F061C19046700F539B4 /* NSData+ImageContentType.m in Sources */,
 				42CF1F071C19046700F539B4 /* MBProgressHUD.m in Sources */,
-				42DFAA721CE021AA00BF5B68 /* ACENil.m in Sources */,
 				42CF1F081C19046700F539B4 /* BUIAlertView.m in Sources */,
 				42CF1F091C19046700F539B4 /* ASINetworkQueue.m in Sources */,
 				42CF1F0A1C19046700F539B4 /* SDWebImagePrefetcher.m in Sources */,
@@ -2762,7 +2749,6 @@
 				42CF1F111C19046700F539B4 /* AppCenter.m in Sources */,
 				42CF1F121C19046700F539B4 /* ASIDataDecompressor.m in Sources */,
 				42CF1F131C19046700F539B4 /* SpecConfigParser.m in Sources */,
-				42CF1F141C19046700F539B4 /* ACEUtils.m in Sources */,
 				42CF1F151C19046700F539B4 /* ACEPluginViewContainer.m in Sources */,
 				42CF1F161C19046700F539B4 /* CFilteringJSONSerializer.m in Sources */,
 				42CF1F171C19046700F539B4 /* BStatusBarWindow.m in Sources */,
@@ -2772,12 +2758,12 @@
 				42CF1F1B1C19046700F539B4 /* AsyncSocket.m in Sources */,
 				42CF1F1C1C19046700F539B4 /* ACELocalization.m in Sources */,
 				42CF1F1D1C19046700F539B4 /* SBJsonParser.m in Sources */,
-				42EDAA6D1CE1793A00E44551 /* ACEEXTScope.m in Sources */,
 				42CF1F1E1C19046700F539B4 /* CJSONSerialization.m in Sources */,
 				42CF1F1F1C19046700F539B4 /* EUExWindow.m in Sources */,
 				42CF1F201C19046700F539B4 /* SDWebImageDownloader.m in Sources */,
 				42CF1F211C19046700F539B4 /* ACEBrowserView.m in Sources */,
 				42CF1F221C19046700F539B4 /* SDWebImageManager.m in Sources */,
+				42EDAA901CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m in Sources */,
 				42CF1F231C19046700F539B4 /* ACEPluginModel.m in Sources */,
 				42CF1F241C19046700F539B4 /* EUExAppCenter.m in Sources */,
 				42CF1F251C19046700F539B4 /* CJSONScanner.m in Sources */,
@@ -2792,7 +2778,6 @@
 				42CF1F2C1C19046700F539B4 /* EBrowserViewBounceView.m in Sources */,
 				42CF1F2D1C19046700F539B4 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
 				42CF1F2E1C19046700F539B4 /* EBrowserToolBar.m in Sources */,
-				42749B031CE0352B008C0CF6 /* ACEArgsPacking.m in Sources */,
 				42CF1F2F1C19046700F539B4 /* CJSONDeserializer.m in Sources */,
 				42CF1F301C19046700F539B4 /* SBJSON.m in Sources */,
 				42CF1F311C19046700F539B4 /* WWidgetUpdate.m in Sources */,
@@ -2802,6 +2787,7 @@
 				42CF1F351C19046700F539B4 /* BUtility.m in Sources */,
 				42CF1F361C19046700F539B4 /* UIViewController+RESideMenu.m in Sources */,
 				42CF1F371C19046700F539B4 /* NSObject+SBJSON.m in Sources */,
+				42EDAA9F1CE18ABF00E44551 /* ACENil.m in Sources */,
 				42CF1F381C19046700F539B4 /* EUExWidgetOne.m in Sources */,
 				42A615571C40CB9A00883148 /* ACEPluginInfo.m in Sources */,
 				42D9DEFB1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */,
@@ -2849,6 +2835,7 @@
 				42CF20191C1904F100F539B4 /* EUExBase+Bundle.m in Sources */,
 				42CF201A1C1904F100F539B4 /* UpdateParser.m in Sources */,
 				42CF201B1C1904F100F539B4 /* ASIHTTPRequest.m in Sources */,
+				42EDAAAB1CE18ADF00E44551 /* ACEAvailable.m in Sources */,
 				42CF201C1C1904F100F539B4 /* WidgetOneDelegate.m in Sources */,
 				42CF201D1C1904F100F539B4 /* UIImageView+WebCache.m in Sources */,
 				42CF201E1C1904F100F539B4 /* MySpaceView.m in Sources */,
@@ -2879,16 +2866,15 @@
 				42CF20391C1904F100F539B4 /* BallView.m in Sources */,
 				42FFEF381C1FF2C500294DE1 /* ACEPluginParser.m in Sources */,
 				42CF203A1C1904F100F539B4 /* ioapi.c in Sources */,
-				42DFAA631CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m in Sources */,
 				42CF203B1C1904F100F539B4 /* NSDictionary_JSONExtensions.m in Sources */,
 				42CF203C1C1904F100F539B4 /* ASIDownloadCache.m in Sources */,
 				42CF203D1C1904F100F539B4 /* WWidgetMgr.m in Sources */,
+				42EDAA8B1CE18ABF00E44551 /* ACEArgsPacking.m in Sources */,
 				42CF203E1C1904F100F539B4 /* EBrowser.m in Sources */,
 				42CF203F1C1904F100F539B4 /* BAnimationTransform.m in Sources */,
 				42CF20401C1904F100F539B4 /* UIView+WebCacheOperation.m in Sources */,
 				42CF20411C1904F100F539B4 /* NSData+ImageContentType.m in Sources */,
 				42CF20421C1904F100F539B4 /* MBProgressHUD.m in Sources */,
-				42DFAA731CE021AA00BF5B68 /* ACENil.m in Sources */,
 				42CF20431C1904F100F539B4 /* BUIAlertView.m in Sources */,
 				42CF20441C1904F100F539B4 /* ASINetworkQueue.m in Sources */,
 				42CF20451C1904F100F539B4 /* SDWebImagePrefetcher.m in Sources */,
@@ -2902,7 +2888,6 @@
 				42CF204C1C1904F100F539B4 /* AppCenter.m in Sources */,
 				42CF204D1C1904F100F539B4 /* ASIDataDecompressor.m in Sources */,
 				42CF204E1C1904F100F539B4 /* SpecConfigParser.m in Sources */,
-				42CF204F1C1904F100F539B4 /* ACEUtils.m in Sources */,
 				42CF20501C1904F100F539B4 /* ACEPluginViewContainer.m in Sources */,
 				42CF20511C1904F100F539B4 /* CFilteringJSONSerializer.m in Sources */,
 				42CF20521C1904F100F539B4 /* BStatusBarWindow.m in Sources */,
@@ -2912,12 +2897,12 @@
 				42CF20561C1904F100F539B4 /* AsyncSocket.m in Sources */,
 				42CF20571C1904F100F539B4 /* ACELocalization.m in Sources */,
 				42CF20581C1904F100F539B4 /* SBJsonParser.m in Sources */,
-				42EDAA6E1CE1793A00E44551 /* ACEEXTScope.m in Sources */,
 				42CF20591C1904F100F539B4 /* CJSONSerialization.m in Sources */,
 				42CF205A1C1904F100F539B4 /* EUExWindow.m in Sources */,
 				42CF205B1C1904F100F539B4 /* SDWebImageDownloader.m in Sources */,
 				42CF205C1C1904F100F539B4 /* ACEBrowserView.m in Sources */,
 				42CF205D1C1904F100F539B4 /* SDWebImageManager.m in Sources */,
+				42EDAA911CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m in Sources */,
 				42CF205E1C1904F100F539B4 /* ACEPluginModel.m in Sources */,
 				42CF205F1C1904F100F539B4 /* EUExAppCenter.m in Sources */,
 				42CF20601C1904F100F539B4 /* CJSONScanner.m in Sources */,
@@ -2932,7 +2917,6 @@
 				42CF20671C1904F100F539B4 /* EBrowserViewBounceView.m in Sources */,
 				42CF20681C1904F100F539B4 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
 				42CF20691C1904F100F539B4 /* EBrowserToolBar.m in Sources */,
-				42749B041CE0352B008C0CF6 /* ACEArgsPacking.m in Sources */,
 				42CF206A1C1904F100F539B4 /* CJSONDeserializer.m in Sources */,
 				42CF206B1C1904F100F539B4 /* SBJSON.m in Sources */,
 				42CF206C1C1904F100F539B4 /* WWidgetUpdate.m in Sources */,
@@ -2942,6 +2926,7 @@
 				42CF20701C1904F100F539B4 /* BUtility.m in Sources */,
 				42CF20711C1904F100F539B4 /* UIViewController+RESideMenu.m in Sources */,
 				42CF20721C1904F100F539B4 /* NSObject+SBJSON.m in Sources */,
+				42EDAAA01CE18ABF00E44551 /* ACENil.m in Sources */,
 				42CF20731C1904F100F539B4 /* EUExWidgetOne.m in Sources */,
 				42A615581C40CB9A00883148 /* ACEPluginInfo.m in Sources */,
 				42D9DEFC1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */,
@@ -2989,6 +2974,7 @@
 				5AAA86B018B1B93D000D7600 /* UpdateParser.m in Sources */,
 				5AAA871318B1B93D000D7600 /* ASIHTTPRequest.m in Sources */,
 				5AAA875B18B1B93D000D7600 /* WidgetOneDelegate.m in Sources */,
+				42EDAAA91CE18ADF00E44551 /* ACEAvailable.m in Sources */,
 				33774C721B2A6D3500D5F279 /* UIImageView+WebCache.m in Sources */,
 				5AAA874318B1B93D000D7600 /* MySpaceView.m in Sources */,
 				5AAA86A218B1B93D000D7600 /* SBJsonBase.m in Sources */,
@@ -3019,16 +3005,15 @@
 				5AAA874118B1B93D000D7600 /* BallView.m in Sources */,
 				42FFEF361C1FF2C500294DE1 /* ACEPluginParser.m in Sources */,
 				5AAA872918B1B93D000D7600 /* ioapi.c in Sources */,
-				42DFAA611CE020E200BF5B68 /* ACEEXTRuntimeExtensions.m in Sources */,
 				3C2887B51A0B0984002776E4 /* NSDictionary_JSONExtensions.m in Sources */,
 				5AAA870F18B1B93D000D7600 /* ASIDownloadCache.m in Sources */,
 				5AAA875F18B1B93D000D7600 /* WWidgetMgr.m in Sources */,
+				42EDAA891CE18ABF00E44551 /* ACEArgsPacking.m in Sources */,
 				5AAA86DB18B1B93D000D7600 /* EBrowser.m in Sources */,
 				5AAA868918B1B93D000D7600 /* BAnimationTransform.m in Sources */,
 				33774C741B2A6D3500D5F279 /* UIView+WebCacheOperation.m in Sources */,
 				33774C571B2A6D3500D5F279 /* NSData+ImageContentType.m in Sources */,
 				5AAA86A818B1B93D000D7600 /* MBProgressHUD.m in Sources */,
-				42DFAA711CE021AA00BF5B68 /* ACENil.m in Sources */,
 				5AAA869118B1B93D000D7600 /* BUIAlertView.m in Sources */,
 				5AAA871918B1B93D000D7600 /* ASINetworkQueue.m in Sources */,
 				33774C661B2A6D3500D5F279 /* SDWebImagePrefetcher.m in Sources */,
@@ -3042,7 +3027,6 @@
 				5AAA873D18B1B93D000D7600 /* AppCenter.m in Sources */,
 				5AAA870D18B1B93D000D7600 /* ASIDataDecompressor.m in Sources */,
 				5AAA86AE18B1B93D000D7600 /* SpecConfigParser.m in Sources */,
-				DE2C4FA61A2DA48B00D5B4F2 /* ACEUtils.m in Sources */,
 				464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */,
 				3C2887AB1A0B0984002776E4 /* CFilteringJSONSerializer.m in Sources */,
 				5AAA868D18B1B93D000D7600 /* BStatusBarWindow.m in Sources */,
@@ -3052,12 +3036,12 @@
 				5AAA871E18B1B93D000D7600 /* AsyncSocket.m in Sources */,
 				42D0AF431BBB8641002249AE /* ACELocalization.m in Sources */,
 				5AAA86A418B1B93D000D7600 /* SBJsonParser.m in Sources */,
-				42EDAA6C1CE1793A00E44551 /* ACEEXTScope.m in Sources */,
 				3C2887AF1A0B0984002776E4 /* CJSONSerialization.m in Sources */,
 				5AAA870618B1B93D000D7600 /* EUExWindow.m in Sources */,
 				33774C5F1B2A6D3500D5F279 /* SDWebImageDownloader.m in Sources */,
 				3C5532F51AB83BF9001ACC5E /* ACEBrowserView.m in Sources */,
 				33774C631B2A6D3500D5F279 /* SDWebImageManager.m in Sources */,
+				42EDAA8F1CE18ABF00E44551 /* ACEEXTRuntimeExtensions.m in Sources */,
 				331573FF1A5AAEB70036A2A2 /* ACEPluginModel.m in Sources */,
 				5AAA86F518B1B93D000D7600 /* EUExAppCenter.m in Sources */,
 				3C2887B91A0B0984002776E4 /* CJSONScanner.m in Sources */,
@@ -3072,7 +3056,6 @@
 				5AAA86EB18B1B93D000D7600 /* EBrowserViewBounceView.m in Sources */,
 				3C2887AD1A0B0984002776E4 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
 				5AAA86E518B1B93D000D7600 /* EBrowserToolBar.m in Sources */,
-				42749B021CE0352B008C0CF6 /* ACEArgsPacking.m in Sources */,
 				3C2887B71A0B0984002776E4 /* CJSONDeserializer.m in Sources */,
 				5AAA86A018B1B93D000D7600 /* SBJSON.m in Sources */,
 				5AAA876118B1B93D000D7600 /* WWidgetUpdate.m in Sources */,
@@ -3082,6 +3065,7 @@
 				5AAA869318B1B93D000D7600 /* BUtility.m in Sources */,
 				33C8E2F91B1EE7E300C33492 /* UIViewController+RESideMenu.m in Sources */,
 				5AAA869C18B1B93D000D7600 /* NSObject+SBJSON.m in Sources */,
+				42EDAA9E1CE18ABF00E44551 /* ACENil.m in Sources */,
 				5AAA870418B1B93D000D7600 /* EUExWidgetOne.m in Sources */,
 				42A615561C40CB9A00883148 /* ACEPluginInfo.m in Sources */,
 				42D9DEFA1C40B0B50039E6E2 /* ACEJSCHandler.m in Sources */,
@@ -3355,7 +3339,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../webkitCorePalm/Classes/Plugin/**",
+					"$(SRCROOT)/../webkitCorePalm/Classes/Base/ACEUtils/**",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
 					"$(SRCROOT)/../webkitCorePalm/Classes/des",
@@ -3383,7 +3370,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../webkitCorePalm/Classes/Plugin/**",
+					"$(SRCROOT)/../webkitCorePalm/Classes/Base/ACEUtils/**",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
 					"$(SRCROOT)/../webkitCorePalm/Classes/des",

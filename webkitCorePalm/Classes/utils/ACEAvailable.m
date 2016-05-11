@@ -1,10 +1,10 @@
 /**
  *
- *	@file   	: ACEJSFunctionRef.h  in AppCanEngine
+ *	@file   	: ACEAvailable.m  in AppCanEngine
  *
  *	@author 	: CeriNo 
  * 
- *	@date   	: Created on 16/5/5.
+ *	@date   	: Created on 16/5/10.
  *
  *	@copyright 	: 2016 The AppCan Open Source Project.
  *
@@ -21,14 +21,33 @@
  *
  */
 
-
-#import <Foundation/Foundation.h>
-#import "EUExBase.h"
-@class JSValue;
-@interface ACEJSFunctionRef : NSObject<ACEJSFunctionReference>
+#import "ACEAvailable.h"
+#import "ACEUtils.h"
 
 
 
 
+static NSString *const kAppCanEngineVersion = @"3.4.0";
+
+
+@interface ACEAvailability : NSObject<ACEAvailability>
+@end
+@implementation ACEAvailability
+
+
+
+
++ (NSString *)engineVersion{
+    return kAppCanEngineVersion;
+}
+
++ (NSInteger)engineVersionCode{
+    ACE_ArgsUnpack(NSNumber *ver1,NSNumber *ver2,NSNumber *ver3) = [kAppCanEngineVersion componentsSeparatedByString:@"."];
+    return ver1.integerValue * 10000 + ver2.integerValue * 100 + ver3.integerValue;
+}
+
++ (NSComparisonResult)compareWithVersion:(NSString *)ver{
+    return [[self engineVersion]compare:ver options:NSNumericSearch];
+}
 
 @end

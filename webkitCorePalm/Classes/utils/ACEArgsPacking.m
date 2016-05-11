@@ -39,6 +39,19 @@ typedef NS_ENUM(NSInteger,ACEArgsUnpackingArgType){
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+@interface ACEArgsPackingHelper: NSObject
+
++ (instancetype)trampoline;
++ (id)objectOrNil:(nullable id)obj;
++ (nullable id)unpackedObjectFromObject:(nullable id)obj definitionString:(NSString *)defStr;
+- (void)setObject:(NSArray *)args forKeyedSubscript:(NSArray<NSValue *> *)variables;
+
+@end
+
+NS_ASSUME_NONNULL_END
+
 #define ACE_HasClassNamePrefix(cls) hasPrefix:NSStringFromClass([cls class])
 
 @implementation ACEArgsPackingHelper
@@ -197,7 +210,7 @@ typedef NS_ENUM(NSInteger,ACEArgsUnpackingArgType){
     if ([trimmedStr ACE_HasClassNamePrefix(NSNumber)]) {
         return ACEArgsUnpackingArgTypeNSNumber;
     }
-    if ([trimmedStr ACE_HasClassNamePrefix(ACEJSFunctionRef)]) {
+    if ([trimmedStr rangeOfString:@"<ACEJSFunctionReference>"].length > 0) {
         return ACEArgsUnpackingArgTypeJSFunction;
     }
     return ACEArgsUnpackingArgTypeOther;

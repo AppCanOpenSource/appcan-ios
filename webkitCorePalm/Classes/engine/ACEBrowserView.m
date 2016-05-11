@@ -49,6 +49,7 @@
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEJSCHandler.h"
 #import "ACEJSCBaseJS.h"
+#import "ACEUtils.h"
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -700,7 +701,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 -(void)didSwipeRight:(id)sender
 {
-    if (!isSwiped)
+    if (!isSwiped && self.swipeCallbackEnabled)
     {
         UISwipeGestureRecognizer * gesture = (UISwipeGestureRecognizer*)sender;
         if (gesture.direction==UISwipeGestureRecognizerDirectionRight )
@@ -728,7 +729,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 -(void)didSwipeLeft:(id)sender
 {
-    if (!isSwiped)
+    if (!isSwiped && self.swipeCallbackEnabled)
     {
         UISwipeGestureRecognizer * gesture = (UISwipeGestureRecognizer*)sender;
         if (gesture.direction==UISwipeGestureRecognizerDirectionLeft)
@@ -807,7 +808,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     int iOS7Style = 0;
     
     
-    if (isSysVersionAbove7_0) {
+    if (ACE_iOSVersion >= 7.0) {
         
         NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
         

@@ -206,6 +206,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"putLocalData":ACE_METHOD_ASYNC,
                                @"getLocalData":ACE_METHOD_SYNC,
                                @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
+                               @"setIsSupportSwipeCallback":ACE_METHOD_ASYNC,
+                               @"getWindowName":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWindowInfo;
 }
@@ -248,7 +250,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                   @"getCurrentWidgetInfo":ACE_METHOD_ASYNC,
                                   @"getMainWidgetId":ACE_METHOD_ASYNC,
                                   @"setBadgeNumber":ACE_METHOD_ASYNC,
-
+                                  @"getEngineVersion":ACE_METHOD_SYNC,
+                                  @"getEngineVersionCode":ACE_METHOD_SYNC,
                                   } mutableCopy];
     uexWidgetOneInfo.properties = [@{@"platformName":@"'iOS'"} mutableCopy];
     return uexWidgetOneInfo;

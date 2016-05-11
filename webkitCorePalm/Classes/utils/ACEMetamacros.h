@@ -726,3 +726,14 @@ metamacro_if_eq(0, 1)(true)(false)
 #define metamacro_drop20(...) metamacro_drop19(metamacro_tail(__VA_ARGS__))
 
 #endif
+
+
+#pragma mark - PRIVATE UTILS
+
+
+
+#define _ACE_ClassFromName(name) NSClassFromString(@metamacro_stringify(name))
+#define _ACE_AssertClassExist(clsName,msg,ver) NSCAssert((_ACE_ClassFromName(clsName) != nil),(_ACE_ErrorMsg_RequireEngineVersion(msg,ver)))
+#define _ACE_ErrorMsg_RequireEngineVersion(msg,ver) ([NSString stringWithFormat:@"%@ 需要引擎版本至少为:%@",@metamacro_stringify(msg),@metamacro_stringify(ver)])
+
+

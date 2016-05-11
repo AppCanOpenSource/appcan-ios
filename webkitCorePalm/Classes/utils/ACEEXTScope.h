@@ -33,11 +33,11 @@
  * (like a one line \c if). In practice, this is not an issue, since \@onExit is
  * a useless construct in such a case anyways.
  */
-#ifndef onExit
-#define onExit \
+
+#define _onExit \
     ace_keywordify \
     __strong ace_cleanupBlock_t metamacro_concat(ace_exitBlock_, __LINE__) __attribute__((cleanup(ace_executeCleanupBlock), unused)) = ^
-#endif
+
 /**
  * Creates \c __weak shadow variables for each of the variables provided as
  * arguments, which can later be made strong again with #strongify.
@@ -48,20 +48,20 @@
  *
  * See #strongify for an example of usage.
  */
-#ifndef weakify(...)
-#define weakify(...) \
+
+#define _weakify(...) \
     ace_keywordify \
     metamacro_foreach_cxt(ace_weakify_,, __weak, __VA_ARGS__)
-#endif
+
 /**
  * Like #weakify, but uses \c __unsafe_unretained instead, for targets or
  * classes that do not support weak references.
  */
-#ifndef unsafeify(...)
-#define unsafeify(...) \
+
+#define _unsafeify(...) \
     ace_keywordify \
     metamacro_foreach_cxt(ace_weakify_,, __unsafe_unretained, __VA_ARGS__)
-#endif
+
 /**
  * Strongly references each of the variables provided as arguments, which must
  * have previously been passed to #weakify.
@@ -88,20 +88,22 @@
  
  * @endcode
  */
-#ifndef strongify(...)
-#define strongify(...) \
+
+#define _strongify(...) \
     ace_keywordify \
     _Pragma("clang diagnostic push") \
     _Pragma("clang diagnostic ignored \"-Wshadow\"") \
     metamacro_foreach(ace_strongify_,, __VA_ARGS__) \
     _Pragma("clang diagnostic pop")
-#endif
+
 
 
 /*** implementation details follow ***/
 typedef void (^ace_cleanupBlock_t)();
 
-void ace_executeCleanupBlock (__strong ace_cleanupBlock_t *block);
+static inline void ace_executeCleanupBlock (__strong ace_cleanupBlock_t *block){
+    (*block)();
+}
 
 #define ace_weakify_(INDEX, CONTEXT, VAR) \
     CONTEXT __typeof__(VAR) metamacro_concat(VAR, _weak_) = (VAR);

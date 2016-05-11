@@ -97,6 +97,7 @@
 
 @property (nonatomic,assign) EBrowserView * superDelegate;
 @property (nonatomic,weak,readonly)JSContext *JSContext;
+@property (nonatomic,assign)BOOL swipeCallbackEnabled;
 
 
 - (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
