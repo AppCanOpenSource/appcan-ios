@@ -830,7 +830,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
             
             
             if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrowserView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
-                [self stringByEvaluatingJavaScriptFromString:@"window.uexStart();"];
+                [self stringByEvaluatingJavaScriptFromString:@"if(window.uexStart){window.uexStart();}"];
                 meBrwCtrler.mFlag |= F_NEED_REPORT_APP_START;
             }
 			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];

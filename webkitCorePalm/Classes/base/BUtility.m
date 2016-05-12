@@ -1253,7 +1253,7 @@ static NSString *clientCertificatePwd = nil;
 	
 }
 
-+ (NSString *)bundleIdentifier{
++ (NSString *)bundleIdentifier {
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wundeclared-selector"
@@ -1273,7 +1273,6 @@ static NSString *clientCertificatePwd = nil;
     return @"com.zywx.appcan";
 #pragma clang diagnostic pop
 
-    
 }
 
 +(NSString*)appKey{
@@ -1294,7 +1293,7 @@ static NSString *clientCertificatePwd = nil;
         }
     }
 #pragma clang diagnostic pop
-
+    
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
     if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
