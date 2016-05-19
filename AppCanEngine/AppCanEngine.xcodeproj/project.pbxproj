@@ -126,6 +126,15 @@
 		424C9E4C1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		424C9E4D1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		424C9E4E1CC8CBFC0014E07E /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
+		4263D7031CED5435000C6E3E /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4263D7021CED5435000C6E3E /* Ono.framework */; };
+		4263D7041CED5435000C6E3E /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4263D7021CED5435000C6E3E /* Ono.framework */; };
+		4263D7051CED5435000C6E3E /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4263D7021CED5435000C6E3E /* Ono.framework */; };
+		4263D7111CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 4263D70F1CED5D0B000C6E3E /* ONOXMLElement+ACEConfigXML.h */; };
+		4263D7121CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 4263D70F1CED5D0B000C6E3E /* ONOXMLElement+ACEConfigXML.h */; };
+		4263D7131CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 4263D70F1CED5D0B000C6E3E /* ONOXMLElement+ACEConfigXML.h */; };
+		4263D7141CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */; };
+		4263D7151CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */; };
+		4263D7161CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */; };
 		428628FB1C0708920078E783 /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 428628F91C0708920078E783 /* ACEPOPAnimation.h */; };
 		428628FC1C0708920078E783 /* ACEPOPAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 428628FA1C0708920078E783 /* ACEPOPAnimation.m */; };
 		428628FE1C0708E30078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FD1C0708E30078E783 /* pop.framework */; };
@@ -146,7 +155,7 @@
 		42CF1ED61C19046700F539B4 /* ACUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865918B1B93D000D7600 /* ACUtility.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1ED71C19046700F539B4 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C491B2A6D3500D5F279 /* UIImage+GIF.m */; };
 		42CF1ED81C19046700F539B4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864918B1B93D000D7600 /* unzip.c */; };
-		42CF1ED91C19046700F539B4 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF1ED91C19046700F539B4 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; };
 		42CF1EDA1C19046700F539B4 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		42CF1EDB1C19046700F539B4 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF1EDC1C19046700F539B4 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18091A47B4200050DD13 /* MMNavigationController.m */; };
@@ -436,7 +445,7 @@
 		42CF20111C1904F100F539B4 /* ACUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865918B1B93D000D7600 /* ACUtility.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20121C1904F100F539B4 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C491B2A6D3500D5F279 /* UIImage+GIF.m */; };
 		42CF20131C1904F100F539B4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864918B1B93D000D7600 /* unzip.c */; };
-		42CF20141C1904F100F539B4 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42CF20141C1904F100F539B4 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; };
 		42CF20151C1904F100F539B4 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		42CF20161C1904F100F539B4 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42CF20171C1904F100F539B4 /* MMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18091A47B4200050DD13 /* MMNavigationController.m */; };
@@ -784,9 +793,6 @@
 		42EDAAA91CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
 		42EDAAAA1CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
 		42EDAAAB1CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
-		42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
-		42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
-		42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF2B1C1FF1E600294DE1 /* Ono.framework */; };
 		42FFEF331C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
 		42FFEF341C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
 		42FFEF351C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
@@ -846,7 +852,7 @@
 		5AAA86D618B1B93D000D7600 /* CBrowserMainFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */; };
 		5AAA86D718B1B93D000D7600 /* CBrowserMainFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85EF18B1B93D000D7600 /* CBrowserMainFrame.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86D818B1B93D000D7600 /* CBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */; };
-		5AAA86D918B1B93D000D7600 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5AAA86D918B1B93D000D7600 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; };
 		5AAA86DA18B1B93D000D7600 /* EBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F218B1B93D000D7600 /* EBrowser.h */; };
 		5AAA86DB18B1B93D000D7600 /* EBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F318B1B93D000D7600 /* EBrowser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86DC18B1B93D000D7600 /* EBrowserController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F418B1B93D000D7600 /* EBrowserController.h */; };
@@ -1082,6 +1088,9 @@
 		4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMultiPopoverScrollView.m; sourceTree = "<group>"; };
 		424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCInvocation.h; sourceTree = "<group>"; };
 		424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCInvocation.m; sourceTree = "<group>"; };
+		4263D7021CED5435000C6E3E /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
+		4263D70F1CED5D0B000C6E3E /* ONOXMLElement+ACEConfigXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ONOXMLElement+ACEConfigXML.h"; sourceTree = "<group>"; };
+		4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ONOXMLElement+ACEConfigXML.m"; sourceTree = "<group>"; };
 		427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildEngineForPluginDevelopment.sh; sourceTree = "<group>"; };
 		428628F91C0708920078E783 /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
 		428628FA1C0708920078E783 /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
@@ -1120,7 +1129,6 @@
 		42EDAA851CE18ABF00E44551 /* ACEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUtils.h; sourceTree = "<group>"; };
 		42EDAAA41CE18ADF00E44551 /* ACEAvailable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEAvailable.h; sourceTree = "<group>"; };
 		42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEAvailable.m; sourceTree = "<group>"; };
-		42FFEF2B1C1FF1E600294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginParser.h; sourceTree = "<group>"; };
 		42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginParser.m; sourceTree = "<group>"; };
 		42FFEF391C1FF86200294DE1 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -1338,7 +1346,7 @@
 				42CF1F681C19046700F539B4 /* SystemConfiguration.framework in Frameworks */,
 				42CF1F691C19046700F539B4 /* UIKit.framework in Frameworks */,
 				42CF1F6A1C19046700F539B4 /* CoreGraphics.framework in Frameworks */,
-				42FFEF2D1C1FF1E600294DE1 /* Ono.framework in Frameworks */,
+				4263D7041CED5435000C6E3E /* Ono.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1363,8 +1371,8 @@
 				42CF20971C1904F100F539B4 /* CoreLocation.framework in Frameworks */,
 				42CF209A1C1904F100F539B4 /* CoreTelephony.framework in Frameworks */,
 				42CF209B1C1904F100F539B4 /* CoreVideo.framework in Frameworks */,
+				4263D7051CED5435000C6E3E /* Ono.framework in Frameworks */,
 				42CF209C1C1904F100F539B4 /* MobileCoreServices.framework in Frameworks */,
-				42FFEF2E1C1FF1E600294DE1 /* Ono.framework in Frameworks */,
 				42CF209D1C1904F100F539B4 /* libACEDes.a in Frameworks */,
 				42CF209E1C1904F100F539B4 /* OpenAL.framework in Frameworks */,
 				42CF209F1C1904F100F539B4 /* IOKit.framework in Frameworks */,
@@ -1403,7 +1411,7 @@
 				B2E52AFE15A6B2F1003E73EA /* SystemConfiguration.framework in Frameworks */,
 				B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */,
 				B29DAE4F15AD1737004FBB57 /* CoreGraphics.framework in Frameworks */,
-				42FFEF2C1C1FF1E600294DE1 /* Ono.framework in Frameworks */,
+				4263D7031CED5435000C6E3E /* Ono.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1659,6 +1667,8 @@
 				42A615521C40CB9A00883148 /* ACEPluginInfo.m */,
 				42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */,
 				42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */,
+				4263D70F1CED5D0B000C6E3E /* ONOXMLElement+ACEConfigXML.h */,
+				4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */,
 				5AAA85B918B1B93D000D7600 /* SpecConfigParser.h */,
 				5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */,
 				5AAA85BB18B1B93D000D7600 /* UpdateParser.h */,
@@ -1885,7 +1895,7 @@
 		5AAA865718B1B93D000D7600 /* plugin */ = {
 			isa = PBXGroup;
 			children = (
-				42FFEF2B1C1FF1E600294DE1 /* Ono.framework */,
+				4263D7021CED5435000C6E3E /* Ono.framework */,
 				428628FD1C0708E30078E783 /* pop.framework */,
 				76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */,
 				76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */,
@@ -2160,6 +2170,7 @@
 				42CF1FCC1C19046700F539B4 /* SDWebImageDownloader.h in Headers */,
 				42E88C4C1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h in Headers */,
 				42CF1FCD1C19046700F539B4 /* ACEUINavigationController.h in Headers */,
+				4263D7121CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.h in Headers */,
 				42CF1FCE1C19046700F539B4 /* sha1.h in Headers */,
 				42CF1FCF1C19046700F539B4 /* EBrowserMainFrame.h in Headers */,
 				42CF1FD01C19046700F539B4 /* EUExWindow.h in Headers */,
@@ -2329,6 +2340,7 @@
 				42CF21071C1904F100F539B4 /* SDWebImageDownloader.h in Headers */,
 				42E88C4D1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h in Headers */,
 				42CF21081C1904F100F539B4 /* ACEUINavigationController.h in Headers */,
+				4263D7131CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.h in Headers */,
 				42CF21091C1904F100F539B4 /* sha1.h in Headers */,
 				42CF210A1C1904F100F539B4 /* EBrowserMainFrame.h in Headers */,
 				42CF210B1C1904F100F539B4 /* EUExWindow.h in Headers */,
@@ -2498,6 +2510,7 @@
 				33774C5E1B2A6D3500D5F279 /* SDWebImageDownloader.h in Headers */,
 				42E88C4B1CDB3D73004EA405 /* ACEJSFunctionRefPrivate.h in Headers */,
 				333D00061A42B9CA00F501B3 /* ACEUINavigationController.h in Headers */,
+				4263D7111CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.h in Headers */,
 				5AAA873418B1B93D000D7600 /* sha1.h in Headers */,
 				5AAA86E218B1B93D000D7600 /* EBrowserMainFrame.h in Headers */,
 				5AAA870518B1B93D000D7600 /* EUExWindow.h in Headers */,
@@ -2770,6 +2783,7 @@
 				42CF1F261C19046700F539B4 /* EUExAction.m in Sources */,
 				42CF1F271C19046700F539B4 /* ACEDrawerViewController.m in Sources */,
 				42CF1F281C19046700F539B4 /* UIImageView+HighlightedWebCache.m in Sources */,
+				4263D7151CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m in Sources */,
 				42CF1F291C19046700F539B4 /* EBrowserViewAnimition.m in Sources */,
 				42D9DEEF1C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */,
 				42E88C481CDB397C004EA405 /* ACEJSFunctionRef.m in Sources */,
@@ -2909,6 +2923,7 @@
 				42CF20611C1904F100F539B4 /* EUExAction.m in Sources */,
 				42CF20621C1904F100F539B4 /* ACEDrawerViewController.m in Sources */,
 				42CF20631C1904F100F539B4 /* UIImageView+HighlightedWebCache.m in Sources */,
+				4263D7161CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m in Sources */,
 				42CF20641C1904F100F539B4 /* EBrowserViewAnimition.m in Sources */,
 				42D9DEF01C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */,
 				42E88C491CDB397C004EA405 /* ACEJSFunctionRef.m in Sources */,
@@ -3048,6 +3063,7 @@
 				5AAA86F318B1B93D000D7600 /* EUExAction.m in Sources */,
 				334D18061A47A9B70050DD13 /* ACEDrawerViewController.m in Sources */,
 				33774C701B2A6D3500D5F279 /* UIImageView+HighlightedWebCache.m in Sources */,
+				4263D7141CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m in Sources */,
 				5AAA86E918B1B93D000D7600 /* EBrowserViewAnimition.m in Sources */,
 				42D9DEEE1C40B0B50039E6E2 /* ACEJSCBaseJS.m in Sources */,
 				42E88C471CDB397C004EA405 /* ACEJSFunctionRef.m in Sources */,

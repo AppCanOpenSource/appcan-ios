@@ -38,15 +38,20 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "ACEUtils.h"
+
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
+
+
+NSString *const kACECustomLoadingImagePathKey = @"AppCanCustomLaunchImage";
+NSString *const kACECustomLoadingImageTimeKey = @"AppCanCustomLaunchTime";
+static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 
 @implementation EBrowserController
 @synthesize mStartView;
 @synthesize meBrwMainFrm;
 @synthesize meBrw;
 @synthesize mwWgtMgr;
-@synthesize mSplashFired;
 @synthesize mFlag;
 @synthesize ballHasShow;
 @synthesize forebidPluginsList;
@@ -85,7 +90,6 @@
 			}
 		}
 	}
-    
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"componentStatusUpdate" object:nil];
 }
 - (id)init {
@@ -99,7 +103,6 @@
         }
         mwWgtUpdate = [[WWidgetUpdate alloc] init];
 	}
-    
 	return self;
 }
 
@@ -151,22 +154,16 @@
 	return self.meBrwMainFrm.meBrwWgtContainer;
 }
 
-- (BOOL) canBecomeFirstResponder
-{
+- (BOOL) canBecomeFirstResponder{
     return YES;
 }
 
-- (void) viewDidAppear:(BOOL)animated
-
-{
+- (void) viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-	
     [self becomeFirstResponder];
 }
 
-- (void) viewWillDisappear:(BOOL)animated
-
-{
+- (void) viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self resignFirstResponder];
 }
@@ -223,7 +220,7 @@
 		//[self.mStartView setFrame:CGRectMake(0, 0, 320, 460)];
 	}
 }
-
+/*
 - (void)hideSplashScreen:(id)sender
 {
 	[mSplashLock lock];
@@ -238,15 +235,13 @@
     
     
 }
-
+*/
 #pragma mark - UPdateWgtHtml
 
 - (void)doUpdateWgt {
     
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    
     BOOL isNeedCopy = [mwWgtMgr isNeetUpdateWgt];
-    
     BOOL isCopyFinish = [[ud objectForKey:F_UD_WgtCopyFinish] boolValue];
     
     /* 
@@ -255,55 +250,34 @@
      */
     
     BOOL appCanDevMode = [BUtility getAppCanDevMode];
-    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *configPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     
     BOOL isExists = [fileManager fileExistsAtPath:configPath];
-    
     if (appCanDevMode && isExists) {
-        
         [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
         isCopyFinish = YES;
         isNeedCopy = NO;
-        
     } else {
-        
         //
     }
-    
     if (isNeedCopy || !isCopyFinish) {
-        
         isCopyFinish = NO;
-        
         [ud setObject:@"NO" forKey:F_UD_WgtCopyFinish];
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
             NSAutoreleasePool * autoReleasePool = [[NSAutoreleasePool alloc]init];
-            
             BOOL isCopyFinishAndSuccess = [self copyWgtToDocument];
-            
             [autoReleasePool drain];
-            
             dispatch_async(dispatch_get_main_queue(), ^{
-                
                 if (isCopyFinishAndSuccess) {
-                    
                     [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
                     
-                } else {
-                    
-                    
                 }
-                
             });
-            
         });
-        
     }
-    
+
     //升级解压
     NSString *updateWgtID = [ud objectForKey:F_UD_UpdateWgtID];
     if (updateWgtID && isCopyFinish) {
@@ -332,112 +306,64 @@
 - (BOOL)copyWgtToDocument {
     
     NSError * error;
-    
     NSFileManager * fileMgr = [NSFileManager defaultManager];
-    
 	NSString * wgtOldPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"widget"];
-    
     NSString * wgtNewPath = nil;
     
     if ([BUtility getSDKVersion] < 5.0) {
-        
         wgtNewPath = [BUtility getCachePath:@"widget"];
-        
     } else {
-        
         wgtNewPath =[BUtility getDocumentsPath:@"widget"];
-        
     }
-    
     BOOL folderFlag = YES;
     
     if (![fileMgr fileExistsAtPath:wgtNewPath isDirectory:&folderFlag]) {
-        
         BOOL result = [fileMgr createDirectoryAtPath:wgtNewPath withIntermediateDirectories:NO attributes:nil error:&error];
-        
         [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtNewPath]];
-        
         if (!result && error) {
-            
             return NO;
-            
         }
-        
     }
     
     if ([fileMgr fileExistsAtPath:wgtOldPath]) {
-        
         NSError * error;
-        
         NSDirectoryEnumerator * oldWgtEnumerator = [fileMgr enumeratorAtPath:wgtOldPath];
-        
         NSString * fileName = nil;
-        
         BOOL result;
-        
         while ((fileName = [oldWgtEnumerator nextObject])) {
-            
             NSString * oldFilePath = [wgtOldPath stringByAppendingPathComponent:fileName];
-            
             NSString * newFilePath = [wgtNewPath stringByAppendingPathComponent:fileName];
-            
             BOOL flag = YES;
-            
             if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
-                
                 if (!flag) {
-                    
                     if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
-                        
                         if ([fileMgr fileExistsAtPath:newFilePath]) {
-                            
                             result = [fileMgr removeItemAtPath:newFilePath error:&error];
-                            
                             if (!result && error) {
-                                
                                 return NO;
-                                
                             }
-                            
                         }
-                        
                         result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
-                        
                         if (!result && error) {
-                            
                             return NO;
-                            
                         }
-                        
                     }
-                    
                 } else {
-                    
                     result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
-                    
                     if (!result && error) {
-                        
                         return NO;
-                        
                     }
-                    
                 }
-                
             }
-            
         }
-        
     } else {
-        
         [BUtility exitWithClearData];
-        
         return NO;
-        
     }
-    
     return YES;
-    
 }
+
+static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)loadView {
 	[super loadView];
@@ -448,121 +374,78 @@
 	if (F_DEVELOPMENT_USE) {
 		[BUtility setAppCanDevMode:@"YES"];
 	}
-    
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
-    
     NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
-    
     NSString * launchImageName = nil;
-    
     UIImage * launchImage = nil;
+    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
+    NSString *userCustomLoadingImagePath = [df objectForKey:kACECustomLoadingImagePathKey];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (userCustomLoadingImagePath && userCustomLoadingImagePath.length > 0) {
         
-        if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] || [oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]) {
-            
-            launchImageName = [NSString stringWithFormat:@"%@-700-Landscape~ipad",launchImagePrefixFile];
-            
-        } else {
-            
-            launchImageName = [NSString stringWithFormat:@"%@-700-Portrait~ipad",launchImagePrefixFile];
-            
-            
-        }
-        
-        launchImage = [UIImage imageNamed:launchImageName];
-        
-        if (launchImage == nil) { //iPhone包在ipad显示
-            
-            
-            launchImageName = [NSString stringWithFormat:@"%@-568h@2x",launchImagePrefixFile];
-            
-            //if (isSysVersionBelow7_0) {
-            if (ACE_iOSVersion < 7.0) {
-                launchImageName = [NSString stringWithFormat:@"%@",launchImagePrefixFile];
+        if ([userCustomLoadingImagePath hasPrefix:F_RES_PATH]) {
+            userCustomLoadingImagePath = [userCustomLoadingImagePath substringFromIndex:F_RES_PATH.length];
+            BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+            if (theApp.useUpdateWgtHtmlControl && isCopyFinish){
+                userCustomLoadingImagePath = [[BUtility getDocumentsPath:@"widget/wgtRes"] stringByAppendingPathComponent:userCustomLoadingImagePath];
+            }else{
+                userCustomLoadingImagePath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,@"widget/wgtRes",userCustomLoadingImagePath]];
             }
-            
         }
-        
-        launchImage = [UIImage imageNamed:launchImageName];
-        
-        NSString * customLaunchImagePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppCanLaunchImage"];
-        
-        if (customLaunchImagePath && [customLaunchImagePath length] > 0) {
-            
-            NSData * tmpData = [NSData dataWithContentsOfFile:customLaunchImagePath];
-            
-            if (tmpData) {
-                
-                UIImage * customImage = [UIImage imageWithData:tmpData];
-                
-                if (customImage) {
-                    
-                    launchImage = customImage;
-                    
-                }
-                
-            }
-            
+        if ([userCustomLoadingImagePath hasPrefix:F_APP_PATH]) {
+            userCustomLoadingImagePath = [userCustomLoadingImagePath substringFromIndex:F_APP_PATH.length];
+            userCustomLoadingImagePath = [[BUtility getDocumentsPath:@"widget"] stringByAppendingPathComponent:userCustomLoadingImagePath];
         }
-        
-        mStartView = [[UIImageView alloc]initWithImage:launchImage];
-       
-        
-    } else {
-        
-        if (iPhone5) {
-            
-            launchImageName = [NSString stringWithFormat:@"%@-568h@2x", launchImagePrefixFile];
-            
-            
-        } else if (iPhone6) {
-            
-            launchImageName = [NSString stringWithFormat:@"%@-800-667h@2x", launchImagePrefixFile];
-
-            
-        } else if (iPhone6Plus) {
-            
-            launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-736h@3x", launchImagePrefixFile];
-            
-        } else {
-            
-            launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
-            
-        }
-        
-        launchImage = [UIImage imageNamed:launchImageName];
-        
-        NSString * customLaunchImagePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppCanLaunchImage"];
-        
-        if (customLaunchImagePath && [customLaunchImagePath length] > 0) {
-            
-            NSData * tmpData = [NSData dataWithContentsOfFile:customLaunchImagePath];
-            
-            if (tmpData) {
-                
-                UIImage * customImage = [UIImage imageWithData:tmpData];
-                
-                if (customImage) {
-                    
-                    launchImage = customImage;
-                    
-                }
-                
-            }
-            
-        }
-        
-        mStartView = [[UIImageView alloc] initWithImage:launchImage];
-        
+        userCustomLoadingImageEnabled = [[NSFileManager defaultManager]fileExistsAtPath:userCustomLoadingImagePath];
+    }
+    UIImage *customImage = nil;
+    if (userCustomLoadingImageEnabled) {
+        customImage = [UIImage imageWithContentsOfFile:userCustomLoadingImagePath];
+    }
+    if (!customImage) {
+        customImage = [UIImage imageWithContentsOfFile:[df objectForKey:kACEDefaultLoadingImagePathKey]];
+    }
+    if (customImage) {
+        mStartView = [[UIImageView alloc] initWithImage:customImage];
     }
     
+    if (!mStartView) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] || [oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]) {
+                launchImageName = [NSString stringWithFormat:@"%@-700-Landscape~ipad",launchImagePrefixFile];
+            } else {
+                launchImageName = [NSString stringWithFormat:@"%@-700-Portrait~ipad",launchImagePrefixFile];
+            }
+            launchImage = [UIImage imageNamed:launchImageName];
+            if (launchImage == nil) { //iPhone包在ipad显示
+                launchImageName = [NSString stringWithFormat:@"%@-568h@2x",launchImagePrefixFile];
+                if (ACE_iOSVersion < 7.0) {
+                    launchImageName = [NSString stringWithFormat:@"%@",launchImagePrefixFile];
+                }
+            }
+            launchImage = [UIImage imageNamed:launchImageName];
+            mStartView = [[UIImageView alloc]initWithImage:launchImage];
+        } else {
+            if (iPhone5) {
+                launchImageName = [NSString stringWithFormat:@"%@-568h@2x", launchImagePrefixFile];
+            } else if (iPhone6) {
+                launchImageName = [NSString stringWithFormat:@"%@-800-667h@2x", launchImagePrefixFile];
+            } else if (iPhone6Plus) {
+                launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-736h@3x", launchImagePrefixFile];
+            } else {
+                launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
+            }
+            launchImage = [UIImage imageNamed:launchImageName];
+            mStartView = [[UIImageView alloc] initWithImage:launchImage];
+        }
+    }
+    
+
     if (ACE_iOSVersion < 7.0) {
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].applicationFrame.size.width, [UIScreen mainScreen].applicationFrame.size.height);
     }else{
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     }
-    
 	mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
 	if ([BUtility getAppCanDevMode]) {
@@ -570,13 +453,12 @@
 		devMark.backgroundColor =[UIColor clearColor];
 		devMark.text =ACELocalized(@"测试版本仅用于开发测试");
 		devMark.textColor = [UIColor redColor];
-		devMark.textAlignment = UITextAlignmentLeft;
+		devMark.textAlignment = NSTextAlignmentLeft;
 		devMark.font = [UIFont boldSystemFontOfSize:24];
 		[mStartView addSubview:devMark];
 		[devMark release];
 	}
 	[self.view addSubview:mStartView];
-    mSplashFired = NO;
     //配置是否支持增量升级
     if (theApp.useUpdateWgtHtmlControl) {
         [self doUpdateWgt];
@@ -587,13 +469,82 @@
     meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[BUtility getApplicationInitFrame] BrwCtrler:self];
 	[self.view addSubview:meBrwMainFrm];
 	meBrwMainFrm.hidden = YES;
-	[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(hideSplashScreen:) userInfo:nil repeats:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
+    });
+    if (userCustomLoadingImageEnabled) {
+        NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
+        if (launchTime && launchTime.integerValue > 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(launchTime.integerValue * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventCustomLoadingTimeout];
+            });
+        }
+    }
+	//[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(hideSplashScreen:) userInfo:nil repeats:NO];
     
     [meBrw start:mwWgtMgr.wMainWgt];
         //NSString *clientPWd =[BUtility RC4DecryptWithInput:theApp.useCertificatePassWord key:mwWgtMgr.mainWidget.appId];
     //[BUtility setClientCertificatePwd:clientPWd];
     
 }
+
+
+- (void)handleLoadingImageCloseEvent:(ACELoadingImageCloseEvent)event{
+    static BOOL loadingImageClosed = NO;
+    static BOOL webViewCloseEventHandled = NO;
+    static BOOL webViewCloseEventDisabled = NO;
+    static BOOL appCloseEventHandled = NO;
+
+    if (loadingImageClosed) {
+        return;
+    }
+    switch (event) {
+        case ACELoadingImageCloseEventWebViewFinishLoading: {
+            if (webViewCloseEventHandled) {
+                break;
+            }
+            webViewCloseEventHandled = YES;
+            if (!userCustomLoadingImageEnabled){
+                [self closeLoadingImage];
+                loadingImageClosed = YES;
+            }
+            
+            break;
+        }
+        case ACELoadingImageCloseEventCustomLoadingTimeout: {
+            if (!userCustomLoadingImageEnabled) {
+                break;
+            }
+            userCustomLoadingImageEnabled = NO;
+            if ((webViewCloseEventDisabled && appCloseEventHandled)  || (!webViewCloseEventDisabled && webViewCloseEventHandled)) {
+                [self closeLoadingImage];
+                loadingImageClosed = YES;
+            }
+            break;
+        }
+        case ACELoadingImageCloseEventAppLoadingTimeout: {
+            webViewCloseEventDisabled = YES;
+            appCloseEventHandled = YES;
+            if (!userCustomLoadingImageEnabled) {
+                [self closeLoadingImage];
+                loadingImageClosed = YES;
+            }
+            break;
+        }
+    }
+}
+
+- (void)closeLoadingImage{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [mStartView removeFromSuperview];
+        mStartView = nil;
+        [mStartView release];
+        meBrwMainFrm.hidden = NO;
+        self.wgtOrientation= [[BUtility getMainWidgetConfigInterface]intValue];
+    });
+
+}
+
 
 -(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
     NSRange range = [inSouceString rangeOfString:inSubSting];
@@ -605,143 +556,74 @@
 }
 
 -(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(UIImageView *)inBrwView{
-    
     if ([extraDic objectForKey:@"opaque"]) {
-        
-        BOOL * opaque = [[extraDic objectForKey:@"opaque"] boolValue];
-        
+        BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
         if (opaque) {
-            
             if ([extraDic objectForKey:@"bgColor"]) {
-                
                 NSString * bgColorStr = [extraDic objectForKey:@"bgColor"];
                 if ([self isHaveString:bgColorStr subSting:@"://"]) {
                     
                     inBrwView.backgroundColor = [UIColor clearColor];
                     NSString * imgPath = [BUtility getAbsPath:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView path:bgColorStr];
                     inBrwView.image = [UIImage imageWithContentsOfFile:imgPath];
-                    
                 } else {
-                    
                     inBrwView.image = nil;
                     UIColor *color = [EUtility colorFromHTMLString:bgColorStr];
                     inBrwView.backgroundColor = color;
-                    
                 }
-                
             }
-            
         } else {
-            
             inBrwView.image = nil;
             inBrwView.backgroundColor = [UIColor clearColor];
-            
         }
-        
     }
 }
 
 - (void)viewDidLoad {
-    
 	[super viewDidLoad];
-    
     NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
-    
     [self setExtraInfo:extraDic toEBrowserView:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView];
     
     if ([BUtility getAppCanDevMode]) {
-        
         Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-        
         if (!analysisClass) {
-            
             analysisClass = NSClassFromString(@"AppCanAnalysis");
-            
             if (!analysisClass) {
-                
                 return;
-                
             }
         }
-        
-            id analysisObject = class_createInstance(analysisClass,0);
-            
-            ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
-        
+        id analysisObject = class_createInstance(analysisClass,0);
+        ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
     }
-    
-    
     NSString * inKey = [BUtility appKey];
-    
     if (theApp.userStartReport) {
-        
         Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
-        
         if (analysisClass) {
-            
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
-            
             id analysisObject = class_createInstance(analysisClass,0);
-            
             ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
-            
         }
     }
-    
     if (theApp.userStartReport) {
-        
         Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
-        
         if (analysisClass) {
-            
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
-            
             id analysisObject = class_createInstance(analysisClass,0);
-            
             ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
-            
         }
     }
-
-    
     if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
-        
         NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:mwWgtMgr.wMainWgt.appId,inKey,mwWgtMgr.wMainWgt.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
-        
         Class  updateClass = NSClassFromString(@"EUExUpdate");
-        
         if (!updateClass) {
-            
             return;
-            
         }
-        
         id analysisObject = class_createInstance(updateClass,0);
-        
         ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
-        
     }
-    
 }
 
-- (void)viewDidUnload {
-    
 
-    //    if (self.meBrw) {
-    //        self.meBrw = nil;
-    //    }
-    //    if (self.meBrwMainFrm) {
-    //        self.meBrwMainFrm = nil;
-    //    }
-    //    if (self.mStartView) {
-    //        self.mStartView = nil;
-    //    }
-    //    if (self.mwWgtMgr) {
-    //        self.mwWgtMgr = nil;
-    //    }
-    //	[BUtility writeLog:@"Ebrowser controller viewDidUnload"];
-	[super viewDidUnload];
-}
 /*
  -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
  //    if (!meBrwMainFrm || meBrwMainFrm.isHidden) {

@@ -4629,18 +4629,27 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         
     }
 }
-#pragma mark
+#pragma mark - loading image
 -(void)setLoadingImagePath:(NSArray *)inArgument {
-    
-    if ([inArgument count] < 1) {
-        
+    ACE_ArgsUnpack(NSDictionary *info) = inArgument;
+    if (!info || !info[@"loadingImagePath"] || !info[@"loadingImageTime"]) {
         return;
-        
     }
-    
-    NSString * launchImagePath = [self absPath:[inArgument objectAtIndex:0]];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:launchImagePath forKey:@"AppCanLaunchImage"];
+    NSString *imagePath = info[@"loadingImagePath"];
+    NSInteger AppCanLaunchTime = [info[@"loadingImageTime"] integerValue];
+    if (!imagePath || ![imagePath isKindOfClass:[NSString class]]) {
+        return;
+    }
+    if (imagePath.length == 0) {
+        //取消自定义启动图
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:kACECustomLoadingImagePathKey];
+        return;
+    }
+    if (AppCanLaunchTime <= 0) {
+        return;
+    }
+    [[NSUserDefaults standardUserDefaults] setValue:imagePath forKey:kACECustomLoadingImagePathKey];
+    [[NSUserDefaults standardUserDefaults] setValue:@(AppCanLaunchTime) forKey:kACECustomLoadingImageTimeKey];
     
 }
 
@@ -5577,7 +5586,5 @@ NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     UIActivityViewController * shareVC = [[UIActivityViewController alloc]initWithActivityItems:shareItems applicationActivities:nil];
     [EUtility brwView:self.meBrwView presentModalViewController:shareVC animated:YES];
 }
-
-
 
 @end

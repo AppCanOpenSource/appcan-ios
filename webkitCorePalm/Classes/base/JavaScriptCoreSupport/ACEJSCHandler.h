@@ -36,7 +36,7 @@
 JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode);
 
 
-
+- (void)log:(JSValue *)value,...;
 
 @end
 
@@ -51,7 +51,6 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 @interface ACEJSCHandler : NSObject<ACEJSCHandler>
 @property (nonatomic,strong)NSMutableDictionary *pluginDict;
 @property (nonatomic,weak)EBrowserView *eBrowserView;
-@property (nonatomic,strong)JSValue *managedValue;
 @property (nonatomic,weak)JSContext *ctx;
 
 /**

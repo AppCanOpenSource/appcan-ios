@@ -45,6 +45,7 @@
 #import "ACEEXTScope.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "ACEUtils.h"
+#import "ONOXMLElement+ACEConfigXML.h"
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
@@ -1328,5 +1329,18 @@ result;\
     return @(NO);
 }
 
+#pragma mark - closeLoading
+
+- (void)closeLoading:(NSMutableArray *)inArguments{
+    BOOL userCloseLoading = NO;
+    ONOXMLElement *config = [ONOXMLElement ACEOriginConfigXML];
+    ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
+    if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
+        userCloseLoading = YES;
+    }
+    if (userCloseLoading) {
+        [self.meBrwView.meBrwCtrler handleLoadingImageCloseEvent:ACELoadingImageCloseEventWebViewFinishLoading];
+    }
+}
 
 @end

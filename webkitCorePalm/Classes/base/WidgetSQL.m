@@ -184,12 +184,12 @@
                     }
 					wgtObj.widgetPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtObj.widgetPath];	
 					if ([BUtility isSimulator]==YES) {
-						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtObj.indexUrl hasPrefix:F_HTTPS_PATH]) {
 							wgtObj.indexUrl =[NSString stringWithFormat:@"%@/%@",resPath,wgtObj.indexUrl];
 						}
 						wgtObj.iconPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtObj.iconPath];
 					}else{
-						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH]){
+						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtObj.indexUrl hasPrefix:F_HTTPS_PATH]){
 							wgtObj.indexUrl =[NSString stringWithFormat:@"file://%@/%@",resPath,wgtObj.indexUrl];
 						}
 						wgtObj.iconPath = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtObj.iconPath];
@@ -202,12 +202,12 @@
 					NSString *DocPath = [BUtility getDocumentsPath:@""];
 					wgtObj.widgetPath = [NSString stringWithFormat:@"%@/%@",DocPath,wgtObj.widgetPath];	
 					if ([BUtility isSimulator]==YES) {
-						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH]){
+						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtObj.indexUrl hasPrefix:F_HTTPS_PATH]){
 							wgtObj.indexUrl =[NSString stringWithFormat:@"%@/%@",DocPath,wgtObj.indexUrl];
 						}
 						wgtObj.iconPath = [NSString stringWithFormat:@"%@/%@",DocPath,wgtObj.iconPath];
 					}else{
-						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH]){
+						if (![wgtObj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtObj.indexUrl hasPrefix:F_HTTPS_PATH]){
 							wgtObj.indexUrl =[NSString stringWithFormat:@"file://%@/%@",DocPath,wgtObj.indexUrl];
 						}	
 						wgtObj.iconPath = [NSString stringWithFormat:@"file://%@/%@",DocPath,wgtObj.iconPath];

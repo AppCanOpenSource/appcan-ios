@@ -29,13 +29,14 @@
 #import "WidgetOneDelegate.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "ONOXMLElement+ACEConfigXML.h"
 
 @implementation EBrowserMainFrame
 @synthesize meBrwCtrler;
 @synthesize meBrwWgtContainer;
 @synthesize meBrwToolBar;
 @synthesize mAppCenter;
-@synthesize mLoadDone;
+
 @synthesize meAdBrwView;
 @synthesize mAdDisplayTimer;
 @synthesize mAdIntervalTimer;
@@ -74,7 +75,7 @@
 			meBrwToolBar =[[EBrowserToolBar alloc] initWithFrame:CGRectMake(BOTTOM_LOCATION_VERTICAL_X,BOTTOM_LOCATION_VERTICAL_Y, BOTTOM_VIEW_WIDTH,BOTTOM_VIEW_HEIGHT) BrwCtrler:eInBrwCtrler];
 			[self addSubview:meBrwToolBar];
 		}
-		mLoadDone = NO;
+
 		mNotifyArray = [[NSMutableArray alloc] initWithCapacity:1];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAdStatus:) name:@"adStatusUpdate" object:nil];
 	}
@@ -218,7 +219,7 @@
 			break;
 		case F_EBRW_VIEW_TYPE_MAIN:
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            
+            /*
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
                 
                 if (meBrwCtrler.mStartView) {
@@ -229,8 +230,10 @@
                 }
                 
             });
+            */
             
-			mLoadDone = YES;
+            [self notifyLoadingImageShouldClose];
+			
 			if ((eInBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
 				eInBrwView.meBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
 				eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
@@ -250,18 +253,20 @@
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView {
 	switch (eInBrwView.mType) {
 		case F_EBRW_VIEW_TYPE_MAIN:
-			if (meBrwCtrler.mStartView && meBrwCtrler.mSplashFired) {
-                /*[[UIApplication sharedApplication] setStatusBarHidden:theApp.useIsHiddenStatusBarControl];
-                if (!theApp.useIsHiddenStatusBarControl) {
-                     meBrwCtrler.view.frame =  CGRectMake(0, 20, [BUtility getScreenWidth], [BUtility getScreenHeight]);
-                }
-                
-                sleep(1);*/
-                [meBrwCtrler.mStartView removeFromSuperview];
-				meBrwCtrler.mStartView = nil;
-                self.hidden = NO;
-			}
-			mLoadDone = YES;
+            [self notifyLoadingImageShouldClose];
+//			if (meBrwCtrler.mStartView && meBrwCtrler.mSplashFired) {
+//                /*[[UIApplication sharedApplication] setStatusBarHidden:theApp.useIsHiddenStatusBarControl];
+//                if (!theApp.useIsHiddenStatusBarControl) {
+//                     meBrwCtrler.view.frame =  CGRectMake(0, 20, [BUtility getScreenWidth], [BUtility getScreenHeight]);
+//                }
+//                
+//                sleep(1);*/
+//                
+//                [meBrwCtrler.mStartView removeFromSuperview];
+//				meBrwCtrler.mStartView = nil;
+//                self.hidden = NO;
+//			}
+
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 			[meBrwWgtContainer notifyLoadPageErrorOfBrwView:eInBrwView];
 			break;
@@ -269,6 +274,24 @@
 			break;
 	}
 }
+
+- (void)notifyLoadingImageShouldClose{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BOOL userCloseLoading = NO;
+        ONOXMLElement *config = [ONOXMLElement ACEOriginConfigXML];
+        ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
+        if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
+            userCloseLoading = YES;
+        }
+        if (!userCloseLoading) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                [meBrwCtrler handleLoadingImageCloseEvent:ACELoadingImageCloseEventWebViewFinishLoading];
+            });
+        }
+    });
+}
+
 
 - (void)setVerticalFrame{
 	if (meBrwToolBar) {

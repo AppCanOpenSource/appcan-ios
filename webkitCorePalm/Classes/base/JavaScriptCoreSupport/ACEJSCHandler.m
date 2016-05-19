@@ -74,16 +74,6 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
 - (void)initializeWithJSContext:(JSContext *)context{
     context[@"uex"] = self;
-    JSValue *selfJS = context[@"uex"];
-    selfJS[@"log"] = ^(){
-        NSArray *args = [JSContext currentArguments];
-        NSMutableString *log = [NSMutableString string];
-        for (int i = 0; i < args.count; i++) {
-            [log appendFormat:@"%@",args[i]];
-        }
-        NSLog(@"%@",log);
-    };
-    self.managedValue = [JSValue valueWithNewObjectInContext:context];
 
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
@@ -94,7 +84,14 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     self.ctx = context;
 }
 
-
+- (void)log:(JSValue *)value, ...{
+    NSArray *args = [JSContext currentArguments];
+    NSMutableString *log = [NSMutableString string];
+    for (int i = 0; i < args.count; i++) {
+        [log appendFormat:@"%@",args[i]];
+    }
+    NSLog(@"%@",log);
+}
 
 
 - (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode{
@@ -268,7 +265,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     }
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
-    self.managedValue = nil;
+
 }
 
 - (void)dealloc{
