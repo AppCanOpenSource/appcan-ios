@@ -787,16 +787,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)notifyPageFinish {
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-        
-        if (meBrwCtrler.mStartView) {
-            meBrwCtrler.meBrwMainFrm.hidden = NO;
-            [meBrwCtrler.mStartView removeFromSuperview];
-            meBrwCtrler.mStartView = nil;
-            
-        }
-        
-    });
+
+    
     UIScrollView * subScrollView = NULL;
 	NSString * initStr = NULL;
     
