@@ -128,6 +128,9 @@ const float AppCanFinalProgressValue = 0.9f;
 		[((ACEBrowserView *)webView) notifyPageError];
         [((ACEBrowserView *)webView) continueMultiPopoverLoading];
         
+        NSString *errorPath = [self errorHTMLPath];
+        NSURL *errorURL = [BUtility stringToUrl:errorPath];
+        [((ACEBrowserView *)webView) loadWithUrl:errorURL];
         [self webView:webView didFailLoadWithErrorOption:error];
         
 	}
@@ -152,20 +155,28 @@ const float AppCanFinalProgressValue = 0.9f;
 		BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
 		if (!isFrame) {
 			//[self flushCommandQueue:eBrwView];
+            void (^showErrorPage)(void) = ^{
+                NSString *errorPath = [self errorHTMLPath];
+                NSURL *errorURL = [BUtility stringToUrl:errorPath];
+                [eBrwView loadWithUrl:errorURL];
+                [self completeProgress];
+            };
+            if ([requestURL isFileURL] && ![[NSFileManager defaultManager]fileExistsAtPath:requestURL.path]) {
+                showErrorPage();
+                return NO;
+            }
+            if ([[requestURL scheme].lowercaseString isEqualToString: @"http"] || [[requestURL scheme].lowercaseString isEqualToString: @"https"]) {
+                if (![BUtility isConnected]) {
+                    showErrorPage();
+                    return NO;
+                }
+            }
 			if (eBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
 				//[eBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
-				if ([[requestURL scheme].lowercaseString isEqualToString: @"http"] || [[requestURL scheme].lowercaseString isEqualToString: @"https"]) {
-					if (![BUtility isConnected]) {
-						NSString *errorPath = [self errorHTMLPath];
-                        
-						NSURL *errorURL = [BUtility stringToUrl:errorPath];
-						[eBrwView loadWithUrl:errorURL];
-                        
-                        [self completeProgress];
-                        
-						return NO;
-					}
-				}
+                
+
+
+
 				WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
 				//EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwView.meBrwWnd.superview;
                 
