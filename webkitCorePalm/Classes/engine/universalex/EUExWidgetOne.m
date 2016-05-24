@@ -25,7 +25,7 @@
 #import "EBrowser.h"
 #import "JSON.h"
 #import "EUExBaseDefine.h"
-
+#import "ACEUtils.h"
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
@@ -234,4 +234,13 @@
     [ud setObject:[NSNumber numberWithInt:number] forKey:F_UD_BadgeNumber];
     [ud synchronize];
 }
+
+- (NSNumber *)getEngineVersionCode:(NSMutableArray*)inArguments{
+    return @(ACE_VersionCode());
+}
+
+- (NSString *)getEngineVersion:(NSMutableArray*)inArguments{
+    return ACE_Version();
+}
+
 @end

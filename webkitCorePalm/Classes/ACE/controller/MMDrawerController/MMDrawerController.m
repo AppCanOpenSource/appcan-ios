@@ -23,6 +23,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "BUtility.h"
 #import <QuartzCore/QuartzCore.h>
+#import "EUtility.h"
 
 CGFloat const MMDrawerDefaultWidth = 280.0f;
 CGFloat const MMDrawerDefaultAnimationVelocity = 840.0f;
@@ -702,10 +703,29 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
     [self updateShadowForCenterView];
 }
 
+
+
 -(void)setOpenSide:(MMDrawerSide)openSide{
     NSLog(@"openside==%ld",(long)openSide);
     if(_openSide != openSide){
         _openSide = openSide;
+        
+        NSInteger side = 0;
+        switch (openSide) {
+            case MMDrawerSideNone:
+                side = 1;
+                break;
+            case MMDrawerSideLeft:
+                side = 0;
+                break;
+            case MMDrawerSideRight:
+                side = 2;
+                break;
+        }
+        
+        NSString * jsStr = [NSString stringWithFormat:@"if(uexWindow.onSlidingWindowStateChanged){uexWindow.onSlidingWindowStateChanged(%ld)};",(long)side];
+        [EUtility evaluatingJavaScriptInRootWnd:jsStr];
+        
         [self.centerContainerView setOpenSide:openSide];
         if(openSide == MMDrawerSideNone){
             [self.leftDrawerViewController.view setHidden:YES];
