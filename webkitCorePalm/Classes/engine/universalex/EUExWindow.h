@@ -79,21 +79,13 @@
 
 
 
-@interface EUExWindow : EUExBase<UIActionSheetDelegate,UIScrollViewDelegate>{
-	UIActionSheet *mActionSheet;
-	BUIAlertView *mbAlertView;
-	BToastView *mToastView;
-	NSTimer *mToastTimer;
-	EBrowserViewAnimition *meBrwAnimi;
-    NSMutableDictionary *bounceParams;
-}
-
-@property(nonatomic,retain)UIActionSheet *mActionSheet;
-@property(nonatomic,retain)BUIAlertView *mbAlertView;
-@property(nonatomic,retain)BToastView *mToastView;
-@property(nonatomic,retain)NSTimer *mToastTimer;
-@property(nonatomic,assign)EBrowserViewAnimition *meBrwAnimi;
-@property(nonatomic,retain)NSMutableDictionary *notificationDic;
+@interface EUExWindow : EUExBase<UIActionSheetDelegate,UIScrollViewDelegate>
+@property(nonatomic,strong)UIActionSheet *mActionSheet;
+@property(nonatomic,strong)BUIAlertView *mbAlertView;
+@property(nonatomic,strong)BToastView *mToastView;
+@property(nonatomic,strong)NSTimer *mToastTimer;
+@property(nonatomic,strong)EBrowserViewAnimition *meBrwAnimi;
+@property(nonatomic,strong)NSMutableDictionary *notificationDic;
 
 - (void)closeSlibing:(NSMutableArray *)inArguments;
 @end
@@ -102,7 +94,7 @@
     
 }
 
-@property (nonatomic, retain) NSString *mainPopName;
-@property (nonatomic, retain) UIScrollView * scrollView;
+@property (nonatomic, strong) NSString *mainPopName;
+@property (nonatomic, strong) UIScrollView * scrollView;
 
 @end

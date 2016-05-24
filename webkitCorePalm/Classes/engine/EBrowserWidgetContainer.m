@@ -48,7 +48,7 @@
 		mBrwWndContainerDict = [[NSMutableDictionary alloc]initWithCapacity:F_BRW_WGT_CONTAINER_DICT_SIZE];
         NSMutableDictionary *tempmWWigets = [[NSMutableDictionary alloc]initWithCapacity:1];
         self.mWWigets = tempmWWigets;
-        [tempmWWigets release];
+
         
 		meBrwCtrler = eInBrwCtrler;
 		self.autoresizesSubviews = YES;
@@ -63,10 +63,10 @@
 }
 
 - (void)dealloc {
-	ACENSLog(@"EBrowserWidgetContainer retain count is %d",[self retainCount]);
+
 	ACENSLog(@"EBrowserWidgetContainer dealloc is %x", self);
 	if (meRootBrwWndContainer) {
-		[meRootBrwWndContainer release];
+
 		meRootBrwWndContainer = nil;
 	}
     if (mWWigets) {
@@ -78,10 +78,10 @@
 			if (wndContainer.superview) {
 				[wndContainer removeFromSuperview];
 			}
-			[wndContainer release];
+
 		}
 		[mBrwWndContainerDict removeAllObjects];
-		[mBrwWndContainerDict release];
+
 		mBrwWndContainerDict = nil;
 	}
 	if (mReUseBrwViewArray) {
@@ -89,13 +89,13 @@
 			if (eBrwView.superview) {
 				[eBrwView removeFromSuperview];
 			}
-			[eBrwView release];
+
 		}
 		[mReUseBrwViewArray removeAllObjects];
-		[mReUseBrwViewArray release];
+
 		mReUseBrwViewArray = NULL;
 	}
-    [super dealloc];
+
 }
 
 - (void)removeAllUnActiveBrwWndContainer {
@@ -113,19 +113,23 @@
             if (brwWndContainer.superview) {
                 [brwWndContainer removeFromSuperview];
                 [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict removeObjectForKey:brwWndContainer.mwWgt.appId];
-                [brwWndContainer release];
+
             }
         }
     }
 }
 
 - (EBrowserView*)popReuseBrwView {
+    [mReUseBrwViewArray removeAllObjects];
+    return nil;
+    /*
 	if (mReUseBrwViewArray.count == 0) {
-		return NULL;
+		return nil;
 	}
 	EBrowserView *eBrwView = [[mReUseBrwViewArray objectAtIndex:0] retain];
 	[mReUseBrwViewArray removeObject:eBrwView];
 	return eBrwView;
+     */
 }
 
 - (void)pushReuseBrwView:(EBrowserView*)inBrwView {
@@ -134,12 +138,16 @@
 //        
 //        return;
 //    }
-//    
+//
+    /*
 	[inBrwView reset];
 	if (mReUseBrwViewArray.count >= F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE) {
 		return;
 	}
-	[mReUseBrwViewArray addObject:inBrwView];
+     [mReUseBrwViewArray addObject:inBrwView];
+     */
+	
+    
 }
 
 - (void)layoutSubviews {

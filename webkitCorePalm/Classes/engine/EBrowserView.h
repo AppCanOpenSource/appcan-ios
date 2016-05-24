@@ -43,7 +43,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class EUExManager;
+
 @class EBrowserController;
 @class CBrowserMainFrame;
 @class CBrowserWindow;
@@ -55,61 +55,40 @@
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
 @class ACEBrowserView;
+@class JSValue;
 
-@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate>{
-    EBrowserController *meBrwCtrler;
-    EUExManager *meUExManager;
-    CBrowserWindow *mcBrwWnd;
-    EBrowserWindow *meBrwWnd;
-    WWidget *mwWgt;
-//    NSString *muexObjName;
-    NSMutableDictionary *mPageInfoDict;
-    EBrowserViewBounceView *mTopBounceView;
-    EBrowserViewBounceView *mBottomBounceView;
-    UIScrollView *mScrollView;
-    int mType;
-    int mFlag;
-    int mTopBounceState;
-    int mBottomBounceState;
-    int mAdType;
-    int mAdDisplayTime;
-    int mAdIntervalTime;
-    int mAdFlag;
-    int mAnalysis;
-    
-    BOOL isSwiped;
-}
+@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate>
 
 @property (nonatomic,assign) NSString *muexObjName;
 
 
 
-@property (nonatomic,assign) EUExManager *meUExManager;
-@property (nonatomic,assign) EBrowserController *meBrwCtrler;
-@property (nonatomic,assign) CBrowserWindow *mcBrwWnd;
-@property (nonatomic,assign) EBrowserWindow *meBrwWnd;
-@property (nonatomic,assign) WWidget *mwWgt;
 
-@property (nonatomic,assign) NSMutableDictionary *mPageInfoDict;
-@property (nonatomic,assign) EBrowserViewBounceView *mTopBounceView;
-@property (nonatomic,assign) EBrowserViewBounceView *mBottomBounceView;
-@property (nonatomic,assign) UIScrollView *mScrollView;
-@property (nonatomic) float lastScrollPointY;
-@property (nonatomic) float nowScrollPointY;
+@property (nonatomic,weak) EBrowserController *meBrwCtrler;
+@property (nonatomic,weak) CBrowserWindow *mcBrwWnd;
+@property (nonatomic,weak) EBrowserWindow *meBrwWnd;
+@property (nonatomic,weak) WWidget *mwWgt;
+
+@property (nonatomic,weak) NSMutableDictionary *mPageInfoDict;
+@property (nonatomic,weak) EBrowserViewBounceView *mTopBounceView;
+@property (nonatomic,weak) EBrowserViewBounceView *mBottomBounceView;
+@property (nonatomic,weak) UIScrollView *mScrollView;
+@property (nonatomic,assign) float lastScrollPointY;
+@property (nonatomic,assign) float nowScrollPointY;
 @property (nonatomic,assign) float bottom;
 
-@property int mType;
-@property int mFlag;
-@property int mTopBounceState;
-@property int mBottomBounceState;
-@property int mAdType;
-@property int mAdDisplayTime;
-@property int mAdIntervalTime;
-@property int mAdFlag;
-@property (nonatomic,assign)NSURL *currentUrl;
-@property (nonatomic)BOOL isMuiltPopover;
-
-@property (nonatomic,retain) ACEBrowserView * meBrowserView;
+@property (nonatomic,assign)int mType;
+@property (nonatomic,assign)int mFlag;
+@property (nonatomic,assign)int mTopBounceState;
+@property (nonatomic,assign)int mBottomBounceState;
+@property (nonatomic,assign)int mAdType;
+@property (nonatomic,assign)int mAdDisplayTime;
+@property (nonatomic,assign)int mAdIntervalTime;
+@property (nonatomic,assign)int mAdFlag;
+@property (nonatomic,strong)NSURL *currentUrl;
+@property (nonatomic,assign)BOOL isMuiltPopover;
+@property (nonatomic,assign)BOOL isSwiped;
+@property (nonatomic,strong) ACEBrowserView * meBrowserView;
 
 /**
  **UIWebView的方法和属性**************************************

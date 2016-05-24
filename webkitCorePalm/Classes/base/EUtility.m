@@ -30,10 +30,9 @@
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 #import "ACEPluginViewContainer.h"
-
-
-NSString * const cUexPluginCallbackInRootWindow = @"uexPluginCallbackInRootWindow";
-NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWindow";
+#import "ACEBrowserView.h"
+#import "EXTScope.h"
+#import "ACEJSCInvocation.h"
 
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
@@ -46,59 +45,85 @@ void PluginLog (NSString *format, ...) {
     #endif
 }
 
+
+
+
 @implementation EUtility
 
++ (void)browserView:(EBrowserView *)brwView
+callbackWithFunctionKeyPath:(NSString *)JSKeyPath
+          arguments:(NSArray *)arguments
+         completion:(void (^)(JSValue *))completion{
+    __block BOOL errorOccured = YES;
+    @onExit{
+        if(errorOccured && completion){
+            completion(nil);
+        }
+    };
+    if (!brwView || !JSKeyPath) {
+        return;
+    }
+    JSContext *ctx = brwView.meBrowserView.JSContext;
+    if (!ctx || ![ctx isKindOfClass:[JSContext class]]) {
+        return;
+    }
+    JSValue *func = nil;
+    NSArray<NSString *> *components = [JSKeyPath componentsSeparatedByString:@"."];
+    for ( int i = 0; i < components.count; i++) {
+        if (!func) {
+            func = [ctx objectForKeyedSubscript:components[i]];
+        }else{
+            func = [func objectForKeyedSubscript:components[i]];
+        }
+    }
+    if (!func || [ACEJSCInvocation JSTypeOf:func] != ACEJSValueTypeFunction) {
+        return;
+    }
+    errorOccured = NO;
+    ACEJSCInvocation *invocation = [ACEJSCInvocation invocationWithFunction:func
+                                                                  arguments:arguments
+                                                          completionHandler:completion];
+    [invocation invokeOnMainThread];
+}
 
 
 //2015-09-23 by lkl
 + (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target{
     
+    BOOL isObject = [obj isKindOfClass:[NSDictionary class]] || [obj isKindOfClass:[NSArray class]];
     NSString * result=[obj JSONFragment];
-    NSString * callbackString;
-    switch (type) {
-        case uexPluginCallbackWithJsonString: {
-            callbackString = [NSString stringWithFormat:@"if(%@.%@ != null){%@.%@('%@');}",pluginName,functionName,pluginName,functionName,result];
-            break;
-        }
-        case uexPluginCallbackWithJsonObject: {
-            callbackString = [NSString stringWithFormat:@"if(%@.%@ != null){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
-            break;
-        }
-
+    
+    if (type == uexPluginCallbackWithJsonString && isObject) {
+        result = [result JSONFragment];
+    }
+    if (!obj || [obj isEqual:[NSNull null]]) {
+        result = @"(undefined)";
     }
     
-    if(target == cUexPluginCallbackInRootWindow){
+    NSString * callbackString = [NSString stringWithFormat:@"if(%@.%@){%@.%@(%@);}",pluginName,functionName,pluginName,functionName,result];
+    
+    if([target isEqual:cUexPluginCallbackInRootWindow]){
         [self evaluatingJavaScriptInRootWnd:callbackString];
-    }else if(target == cUexPluginCallbackInFrontWindow){
+    }else if([target isEqual:cUexPluginCallbackInFrontWindow]){
         [self evaluatingJavaScriptInFrontWnd:callbackString];
     }else if(target && [target isKindOfClass:[EBrowserView class]]){
         EBrowserView * inBrwView=(EBrowserView *)target;
         [self brwView:inBrwView evaluateScript:callbackString];
     }
-    
 }
 
 
 +(NSBundle *)bundleForPlugin:(NSString *)pluginName{
-
-
     NSString *bundleName = [NSString stringWithFormat:@"%@.bundle",pluginName];
-    
     //检测是否加载了动态库插件
     NSString *dynamicFrameworkPath=[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework",pluginName]];
     NSBundle *dynamicFramework=[NSBundle bundleWithPath:dynamicFrameworkPath];
-    
-    
-    
     //测试用,检测res://目录下的framework
-#if DEBUG
     if(!dynamicFramework){
-
         dynamicFrameworkPath=[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@.framework",pluginName]];
         dynamicFramework=[NSBundle bundleWithPath:dynamicFrameworkPath];
     }
-#endif
-    
+
     if(dynamicFramework && [dynamicFramework isLoaded]){
         //如果有动态库插件，优先查看动态库中是否有bundle
         NSBundle *dynamicBundle=[NSBundle bundleWithPath:[dynamicFramework pathForResource:pluginName ofType:@"bundle"]];
@@ -108,21 +133,12 @@ void PluginLog (NSString *format, ...) {
         }
     }
     //返回静态库的bundle
-
     NSString *bundlePath = [[[NSBundle mainBundle]resourcePath] stringByAppendingPathComponent:bundleName];
     return [NSBundle bundleWithPath:bundlePath];
     
 }
 
-+ (NSBundle *)languageBundleForPlugin:(NSString *)pluginName{
-    if ([EUtility isUseSystemLanguage]){
-        return [self bundleForPlugin:pluginName];
-    }else{
-        NSString * userLanguage = [EUtility getAppCanUserLanguage];
-        
-        return [NSBundle bundleWithPath:[[self bundleForPlugin:pluginName] pathForResource:userLanguage ofType:@"lproj"]];
-    }
-}
+
 
 +(NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...{
     
@@ -142,31 +158,6 @@ void PluginLog (NSString *format, ...) {
     return [pluginBundle localizedStringForKey:key value:defaultValue table:nil];
 }
 
-+ (BOOL)isUseSystemLanguage {
-    
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    
-    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
-    
-    if (!userLanguag || userLanguag == nil || userLanguag.length == 0) {
-        
-        return YES;
-        
-    }
-    
-    return NO;
-    
-}
-
-+ (NSString *)getAppCanUserLanguage {
-    
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    
-    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
-    
-    return userLanguag;
-    
-}
 
 + (UIColor *)colorFromHTMLString:(NSString *)HTMLColor{
         NSString *colorString=[[HTMLColor stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString];
@@ -274,73 +265,14 @@ void PluginLog (NSString *format, ...) {
     return value/255.0;
 }
 
-+(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl {
-	return [BUtility makeUrl:inBaseStr url:inUrl];
-}
 
-+(NSURL*)stringToUrl:(NSString*)inString {
-	return [BUtility stringToUrl:inString];
-}
 
-+(BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation {
-	return [BUtility isValidateOrientation:inOrientation];
-}
-
-+ (void)setBrwView:(EBrowserView*)inBrwView hidden:(BOOL)isHidden {
-	inBrwView.hidden = isHidden;
-}
-
-+ (CGRect)brwWndFrame:(EBrowserView*)inBrwView {
-	return inBrwView.meBrwWnd.frame;
-}
-
-+ (CGRect)brwViewFrame:(EBrowserView*)inBrwView {
-	return inBrwView.frame;
-}
 
 + (NSURL*)brwViewUrl:(EBrowserView*)inBrwView {
 	return [inBrwView.request URL];
 }
 
-+ (void)brwView:(EBrowserView *)inBrwView addSubviewToContainer:(UIView *)inSubView WithIndex:(NSInteger)index andIndentifier:(NSString *)identifier {
-    
-    for (UIView * subView in [inBrwView.meBrwWnd subviews]) {
-        
-        if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
-            
-            ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
-            
-            if ([container.containerIdentifier isEqualToString:identifier]) {
-                
-                CGRect tmpRect = inSubView.frame;
-                
-                tmpRect.origin.y = 0;
-                
-                tmpRect.origin.x = index*tmpRect.size.width;
-                
-                inSubView.frame = tmpRect;
-                
-                [container addSubview:inSubView];
-                
-                if (container.maxIndex < index) {
-                    
-                    container.maxIndex = index;
-                    
-                    [container setContentSize:CGSizeMake(container.frame.size.width * (index + 1), container.frame.size.height)];
-                    
-                }
-                
-                return;
-                
-            }
-            
-        }
-        
-    }
-    
-    [inBrwView.meBrwWnd addSubview:inSubView];
-    
-}
+
 
 + (void)brwView:(EBrowserView*)inBrwView addSubview:(UIView*)inSubView {
 	[inBrwView.meBrwWnd addSubview:inSubView];
@@ -348,6 +280,10 @@ void PluginLog (NSString *format, ...) {
 + (void)brwView:(EBrowserView*)inBrwView addSubviewToScrollView:(UIView*)inSubView{
     [inBrwView.mScrollView addSubview:inSubView];
 }
++ (void)brwView:(EBrowserView *)inBrwView presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion{
+    [inBrwView.meBrwCtrler presentViewController:viewControllerToPresent animated:flag completion:completion];
+}
+
 +(void)doJsCB:(NSDictionary*)dict{
     EBrowserView *brwView =(EBrowserView*)[dict objectForKey:@"Brw"];
     NSString *inScript =[dict objectForKey:@"CBStr"];
@@ -358,21 +294,13 @@ void PluginLog (NSString *format, ...) {
     [self performSelectorOnMainThread:@selector(doJsCB:) withObject:dict waitUntilDone:NO];
 }
 
-+ (void)brwView:(EBrowserView*)inBrwView presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
-	[inBrwView.meBrwCtrler presentModalViewController:modalViewController animated:animated];
-}
 
-+ (void)brwView:(EBrowserView*)inBrwView navigationPresentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
-	[inBrwView.meBrwCtrler.navigationController presentModalViewController:modalViewController animated:animated];
-}
 
 + (BOOL)isIpad {
 	return [BUtility isIpad];
 }
 
-+ (NSString*)documentPath:(NSString*)inFileName {
-	return [BUtility getDocumentsPath:inFileName];
-}
+
 
 + (NSString*)brwViewWidgetId:(EBrowserView*)inBrwView {
 	return inBrwView.mwWgt.appId;
@@ -382,31 +310,143 @@ void PluginLog (NSString *format, ...) {
 	[popViewControler presentPopoverFromRect:inRect inView:inBrwView permittedArrowDirections:inDir animated:inAnimated];
 }
 
-+ (NSString *)transferredString:(NSData *)inData {
-	return [BUtility getTransferredString:inData];
-}
 
-+ (int)screenWidth {
-	return [BUtility getScreenWidth];
-}
-
-+ (int)screenHeight {
-	return [BUtility getScreenHeight];
-}
 + (UIViewController*)brwCtrl:(EBrowserView*)inBrwView {
 	return inBrwView.meBrwCtrler;
 }
 
+
++(NSString*)getAbsPath:(EBrowserView*)meBrwView path:(NSString*)inPath{
+    return [BUtility getAbsPath:meBrwView path:inPath];
+}
+
++(BOOL)appCanDev{
+    return [BUtility getAppCanDevMode];
+}
++ (EBrowserView *)rootBrwoserView{
+    return theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
+}
+
++ (EBrowserView *)topBrowserView{
+    return [theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView;
+}
+
++(void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
+	[BUtility evaluatingJavaScriptInRootWnd:script_];
+}
+
++(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_{
+	[BUtility evaluatingJavaScriptInFrontWnd:script_];
+}
+
+
+@end
+
+
+@implementation EUtility (Private)
++ (NSBundle *)languageBundleForPlugin:(NSString *)pluginName{
+    if ([EUtility isUseSystemLanguage]){
+        return [self bundleForPlugin:pluginName];
+    }else{
+        NSString * userLanguage = [EUtility getAppCanUserLanguage];
+        
+        return [NSBundle bundleWithPath:[[self bundleForPlugin:pluginName] pathForResource:userLanguage ofType:@"lproj"]];
+    }
+}
++(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl {
+    return [BUtility makeUrl:inBaseStr url:inUrl];
+}
+
+
+
++(BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation {
+    return [BUtility isValidateOrientation:inOrientation];
+}
+
++ (NSString*)documentPath:(NSString*)inFileName {
+    return [BUtility getDocumentsPath:inFileName];
+}
++(NSURL*)stringToUrl:(NSString*)inString {
+    return [BUtility stringToUrl:inString];
+}
++ (void)brwView:(EBrowserView *)inBrwView addSubviewToContainer:(UIView *)inSubView WithIndex:(NSInteger)index andIndentifier:(NSString *)identifier {
+    for (UIView * subView in [inBrwView.meBrwWnd subviews]) {
+        if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
+            ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            if ([container.containerIdentifier isEqualToString:identifier]) {
+                CGRect tmpRect = inSubView.frame;
+                tmpRect.origin.y = 0;
+                tmpRect.origin.x = index*tmpRect.size.width;
+                inSubView.frame = tmpRect;
+                [container addSubview:inSubView];
+                if (container.maxIndex < index) {
+                    container.maxIndex = index;
+                    [container setContentSize:CGSizeMake(container.frame.size.width * (index + 1), container.frame.size.height)];
+                }
+                return;
+            }
+        }
+    }
+    [inBrwView.meBrwWnd addSubview:inSubView];
+}
++ (BOOL)isUseSystemLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    
+    if (!userLanguag || userLanguag == nil || userLanguag.length == 0) {
+        
+        return YES;
+        
+    }
+    
+    return NO;
+    
+}
+
++ (NSString *)getAppCanUserLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    
+    return userLanguag;
+    
+}
++ (void)setBrwView:(EBrowserView*)inBrwView hidden:(BOOL)isHidden {
+    inBrwView.hidden = isHidden;
+}
+
++ (CGRect)brwWndFrame:(EBrowserView*)inBrwView {
+    return inBrwView.meBrwWnd.frame;
+}
+
++ (CGRect)brwViewFrame:(EBrowserView*)inBrwView {
+    return inBrwView.frame;
+}
++ (NSString *)transferredString:(NSData *)inData {
+    return [BUtility getTransferredString:inData];
+}
+
+
++ (int)screenWidth {
+    return [BUtility getScreenWidth];
+}
+
++ (int)screenHeight {
+    return [BUtility getScreenHeight];
+}
 + (NSString *)getResPath:(NSString *)fileName {
-	return [BUtility getResPath:fileName];
+    return [BUtility getResPath:fileName];
 }
 
 + (void)brwView:(EBrowserView*)inBrwView forbidRotate:(BOOL)inForbid {
-	if (inForbid == YES) {
-		inBrwView.meBrwCtrler.mFlag |= F_EBRW_CTRL_FLAG_FORBID_ROTATE;
-	} else {
-		inBrwView.meBrwCtrler.mFlag &= ~F_EBRW_CTRL_FLAG_FORBID_ROTATE;
-	}
+    if (inForbid == YES) {
+        inBrwView.meBrwCtrler.mFlag |= F_EBRW_CTRL_FLAG_FORBID_ROTATE;
+    } else {
+        inBrwView.meBrwCtrler.mFlag &= ~F_EBRW_CTRL_FLAG_FORBID_ROTATE;
+    }
 }
 
 + (void)brwView:(EBrowserView*)inBrwView insertSubView:(UIView*)inView aboveSubView:(UIView*)inSiblingSubview {
@@ -444,10 +484,10 @@ void PluginLog (NSString *format, ...) {
     return  [BUtility platform];
 }
 +(NSString *)deviceIdentifyNo{
-return [BUtility getDeviceIdentifyNo];
+    return [BUtility getDeviceIdentifyNo];
 }
 +(BOOL)isNetConnected{
-return [BUtility isConnected];
+    return [BUtility isConnected];
 }
 +(UIImage *)imageByScalingAndCroppingForSize:(UIImage *)image{
     return [BUtility imageByScalingAndCroppingForSize:image];
@@ -455,104 +495,7 @@ return [BUtility isConnected];
 +(NSString*)LogServerIp:(EBrowserView*)inBrwView{
     return inBrwView.mwWgt.logServerIp;
 }
-+(NSString*)macAddress{
-    return [BUtility macAddress];
-}
-+(UIColor*)ColorFromString:(NSString*)inColor{
-    UIColor *color =[UIColor blackColor];
-    if (inColor && inColor.length != 0) {
-		BGColor bgColor = [BUtility bgColorFromNSString:inColor];
-		color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
-	}
-    return color;
-}
-+(NSString*)getAbsPath:(EBrowserView*)meBrwView path:(NSString*)inPath{
-    return [BUtility getAbsPath:meBrwView path:inPath];
-}
-+(NSInteger)supportedInterfaceOrientations:(EBrowserView*)meBrwView{
-    int orientation = 0;
-    EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-	if (aboveWndContainer) {
-		if ((meBrwView.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
-			orientation |= UIInterfaceOrientationMaskPortrait;
-		}
-		if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-			orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
-		}
-		if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
-			orientation |= UIInterfaceOrientationMaskLandscapeLeft;
-		}
-		if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-			orientation |= UIInterfaceOrientationMaskLandscapeRight;
-		}
-	}
-    return orientation;
-}
-+(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView{
-    EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-	if (aboveWndContainer) {
-		EBrowserWindow *eBrwWnd = [aboveWndContainer aboveWindow];
-		if (eBrwWnd && eBrwWnd.meBottomSlibingBrwView && ((eBrwWnd.meBottomSlibingBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_ROTATE) == F_EBRW_VIEW_FLAG_FORBID_ROTATE)) {
-			return NO;
-		}
-		if ((meBrwView.meBrwCtrler.mFlag & F_EBRW_CTRL_FLAG_FORBID_ROTATE) == F_EBRW_CTRL_FLAG_FORBID_ROTATE) {
-			return NO;
-		}
-		if (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd && (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd.hidden == NO)) {
-			return NO;
-		}
-		switch (toInterfaceOrientation) {
-			case UIInterfaceOrientationPortrait:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
-					return YES;
-				}
-				break;
-			case UIInterfaceOrientationPortraitUpsideDown:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-					return YES;
-				}
-				break;
-			case UIInterfaceOrientationLandscapeLeft:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
-					return YES;
-				}
-				break;
-			case UIInterfaceOrientationLandscapeRight:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-					return YES;
-				}
-				break;
-			default:
-				break;
-		}
-	}
-    NSString *oritent =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
-    if ([oritent isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]) {
-        return (toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown);
-    }else if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"]) {
-        return (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft);
-    }if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]) {
-        return (toInterfaceOrientation == UIInterfaceOrientationLandscapeRight);
-    }
-	return (toInterfaceOrientation == UIInterfaceOrientationMaskPortrait);
-}
-+(BOOL)appCanDev{
-    return [BUtility getAppCanDevMode];
-}
 
-+(void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
-	[BUtility evaluatingJavaScriptInRootWnd:script_];
-}
-
-+(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_{
-	[BUtility evaluatingJavaScriptInFrontWnd:script_];
-}
-+(NSString*)getCachePath:(NSString*)fileName{
-    return [BUtility getCachePath:fileName];
-}
-+(void)writeLog:(NSString*)inLog{
-    return [BUtility writeLog:inLog];
-}
 //20140616 softToken
 +(NSString*)md5SoftToken{
     NSData *mac = [[EUtility macAddress] dataUsingEncoding:NSUTF8StringEncoding];
@@ -584,19 +527,121 @@ return [BUtility isConnected];
     
     NSString * softToken = [[NSString alloc] initWithString:[md5Str lowercaseString]];
     
-	return softToken;
+    return softToken;
+}
++(NSString*)getCachePath:(NSString*)fileName{
+    return [BUtility getCachePath:fileName];
 }
 
+@end
+
+
+
+
+
+@implementation EUtility (Deprecated)
+
+NSString * const cUexPluginCallbackInRootWindow = @"uexPluginCallbackInRootWindow";
+NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWindow";
+
++(UIColor*)ColorFromString:(NSString*)inColor{
+    UIColor *color =[UIColor blackColor];
+    if (inColor && inColor.length != 0) {
+        BGColor bgColor = [BUtility bgColorFromNSString:inColor];
+        color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+    }
+    return color;
+}
 +(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
 {
-//    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-//    
-//    app.drawerController.isGestureRecognizer = isEnable;
+
+}
++(void)writeLog:(NSString*)inLog{
+    return [BUtility writeLog:inLog];
 }
 
++(NSInteger)supportedInterfaceOrientations:(EBrowserView*)meBrwView{
+    int orientation = 0;
+    EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+    if (aboveWndContainer) {
+        if ((meBrwView.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
+            orientation |= UIInterfaceOrientationMaskPortrait;
+        }
+        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
+            orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
+        }
+        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
+            orientation |= UIInterfaceOrientationMaskLandscapeLeft;
+        }
+        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
+            orientation |= UIInterfaceOrientationMaskLandscapeRight;
+        }
+    }
+    return orientation;
+}
 
++(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView{
+    EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+    if (aboveWndContainer) {
+        EBrowserWindow *eBrwWnd = [aboveWndContainer aboveWindow];
+        if (eBrwWnd && eBrwWnd.meBottomSlibingBrwView && ((eBrwWnd.meBottomSlibingBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_ROTATE) == F_EBRW_VIEW_FLAG_FORBID_ROTATE)) {
+            return NO;
+        }
+        if ((meBrwView.meBrwCtrler.mFlag & F_EBRW_CTRL_FLAG_FORBID_ROTATE) == F_EBRW_CTRL_FLAG_FORBID_ROTATE) {
+            return NO;
+        }
+        if (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd && (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd.hidden == NO)) {
+            return NO;
+        }
+        switch (toInterfaceOrientation) {
+            case UIInterfaceOrientationPortrait:
+                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
+                    return YES;
+                }
+                break;
+            case UIInterfaceOrientationPortraitUpsideDown:
+                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
+                    return YES;
+                }
+                break;
+            case UIInterfaceOrientationLandscapeLeft:
+                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
+                    return YES;
+                }
+                break;
+            case UIInterfaceOrientationLandscapeRight:
+                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
+                    return YES;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    NSString *oritent =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
+    if ([oritent isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"]) {
+        return (toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown);
+    }else if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"]) {
+        return (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    }if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]) {
+        return (toInterfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    }
+    return (toInterfaceOrientation == UIInterfaceOrientationMaskPortrait);
+}
++(NSString*)macAddress{
+    return [BUtility macAddress];
+}
 
++ (void)brwView:(EBrowserView*)inBrwView presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
+    [inBrwView.meBrwCtrler presentModalViewController:modalViewController animated:animated];
+
+}
+
++ (void)brwView:(EBrowserView*)inBrwView navigationPresentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
+    [inBrwView.meBrwCtrler.navigationController presentModalViewController:modalViewController animated:animated];
+}
 
 
 
 @end
+

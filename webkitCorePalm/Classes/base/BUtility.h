@@ -125,7 +125,8 @@ typedef union _BGColor {
 
 }
 //base js
-+(NSString*)getBaseJSKey;
+
+//+(NSString*)getBaseJSKey;
 //rc4 js
 +(NSString*)getRC4LocalStoreJSKey;
 //doc path
@@ -210,7 +211,10 @@ typedef union _BGColor {
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
 + (NSString *)bundleIdentifier;
 
++ (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
 
+
++ (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
 #pragma mark - IDE
 
 + (NSString *)dynamicPluginFrameworkFolderPath;

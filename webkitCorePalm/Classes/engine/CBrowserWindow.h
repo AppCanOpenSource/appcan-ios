@@ -16,7 +16,7 @@
  *
  */
 
-@class EUExManager;
+
 @class EBrowserWindow;
 
 @interface CBrowserWindow : UIWebView<UIWebViewDelegate> {

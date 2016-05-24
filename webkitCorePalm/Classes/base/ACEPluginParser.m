@@ -28,51 +28,24 @@
 #import "WidgetOneDelegate.h"
 
 
-@interface ACEPluginInfo()
-@property (nonatomic,strong)NSString *uexName;
-@property (nonatomic,strong)NSMutableDictionary<NSString *,NSString *> *methods;
-@property (nonatomic,strong)NSMutableDictionary<NSString *,NSString *> *properties;
-@end
-@implementation ACEPluginInfo
 
-- (instancetype)initWithName:(NSString *)uexName;
-{
-    self = [super init];
-    if (self) {
-        _uexName=uexName;
-        //methods 不用array 是为了避免判断重复添加
-        _methods=[NSMutableDictionary dictionary];
-        _properties=[NSMutableDictionary dictionary];
-    }
-    return self;
-}
--(void)updateWithXMLElement:(ONOXMLElement *)XMLElement{
-    NSArray *newMethods=[XMLElement childrenWithTag:@"method"];
-    for (ONOXMLElement *aMethod in newMethods) {
-        NSString *methodName=aMethod[@"name"];
-        if(methodName && methodName.length >0){
-            [self.methods setValue:@"" forKey:methodName];
-        }
-    }
-    NSArray *newProperties=[XMLElement childrenWithTag:@"property"];
-    for (ONOXMLElement *aProperty in newProperties) {
-        NSString *propertyName=aProperty[@"property"];
-        if(propertyName && propertyName.length >0 && aProperty.stringValue){
-            [self.methods setValue:aProperty.stringValue forKey:propertyName];
-        }
-    }
-}
-@end
 
 
 
 
 @interface ACEPluginParser ()
-@property NSMutableDictionary<NSString *,ACEPluginInfo *> *pluginDict;
+
 @end
 @implementation ACEPluginParser
 
-
++ (instancetype)sharedParser{
+    static ACEPluginParser *parser = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        parser = [[self alloc] init];
+    });
+    return parser;
+}
 
 
 
@@ -80,7 +53,8 @@
 {
     self = [super init];
     if (self) {
-        _pluginDict=[NSMutableDictionary dictionary];
+        _pluginDict = [NSMutableDictionary dictionary];
+        _globalPluginDict = [NSMutableDictionary dictionary];
         for (NSString *xmlPath in [self XMLPaths]) {
             [self parsePluginXMLByPath:xmlPath];
         }
@@ -115,10 +89,10 @@
     NSString *dynamicXML=[[BUtility dynamicPluginFrameworkFolderPath]stringByAppendingPathComponent:@"plugin.xml"];
     [paths addObject:dynamicXML];
     
-#ifdef DEBUG
+
     NSString *debugPath=[BUtility wgtResPath:@"res://plugin.xml"];
     [paths addObject:debugPath];
-#endif
+
     return paths;
 }
 
@@ -160,9 +134,10 @@
 
 - (void)addPluginToGlobal:(NSString *)name
 {
-    if (name == nil) {
+    if (name == nil || ![name hasPrefix:@"uex"]) {
         return;
     }
+    [self.globalPluginDict setValue:[NSNull null] forKey:[@"EUEx" stringByAppendingString:[name substringFromIndex:3]]];
     ACEPluginModel *model = [[ACEPluginModel alloc] init];
     
     model.pluginName = name;
@@ -183,7 +158,7 @@
     [pluginInfo.methods enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *methodJS=[NSString stringWithFormat:@"%@.%@=function(){uex.exec('%@.%@/'+uexJoin(arguments));};\n",pluginInfo.uexName,key,pluginInfo.uexName,key];;
         //uexDataBaseMgr的特例情况
-        if ([pluginInfo.uexName isEqualToString:@"uexDataBaseMgr"] && [key isEqualToString:@"transaction"]) {
+        if ([pluginInfo.uexName isEqual:@"uexDataBaseMgr"] && [key isEqual:@"transaction"]) {
             methodJS = @"uexDataBaseMgr.transaction=function(inDBName,inOpId,inFunc){var temp = encodeURIComponent(inDBName)+uex_s_uex+encodeURIComponent(inOpId);uex.exec('uexDataBaseMgr.beginTransaction/?'+temp); inFunc();uex.exec('uexDataBaseMgr.endTransaction/?'+temp);\n};";
         }
         [JS appendString:methodJS];

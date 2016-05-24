@@ -25,7 +25,7 @@
 #import "EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "EBrowser.h"
-#import "EUExManager.h"
+
 #import "WWidgetMgr.h"
 #import "BUtility.h"
 #import <sys/utsname.h>
@@ -47,7 +47,8 @@
 #import "DataAnalysisInfo.h"
 #import "EUtility.h"
 #import "ACEPluginParser.h"
-
+#import "ACEJSCHandler.h"
+#import "ACEBrowserView.h"
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
@@ -98,7 +99,13 @@
 @synthesize useAppCanTaskSubmitHost = _useAppCanTaskSubmitHost;
 @synthesize validatesSecureCertificate = _validatesSecureCertificate;
 
+/*
+
+
+
+
 NSString *AppCanJS = nil;
+
 
 
 -(void)readAppCanJS {
@@ -129,17 +136,14 @@ NSString *AppCanJS = nil;
 	}
     
 }
-
+*/
 - (void)parseURL:(NSURL *)url application:(UIApplication *)application {
-    //调用支付对象解析url，传递值给js
-    //    EUExManager *manager = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.meUExManager;
-    
-    //取window的最上层ebrview
-    //    EUExManager *manager = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow] theFrontView].meUExManager;
+
     EBrowserWindow * ebv = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
     EBrowserView * ebview = [ebv theFrontView];
-    EUExManager * manager = ebview.meUExManager;
-    NSMutableDictionary *objDict = manager.uexObjDict;
+    ACEJSCHandler *handler = ebview.meBrowserView.JSCHandler;
+
+    NSMutableDictionary *objDict = handler.pluginDict;
     //get the plist file from bundle
     NSString * plistPath = [[NSBundle mainBundle] pathForResource:@"CBSchemesList" ofType:@"plist"];
     
@@ -149,8 +153,11 @@ NSString *AppCanJS = nil;
         NSMutableArray *anArray = [NSMutableArray arrayWithArray:[pDataDict objectForKey:@"UexObjName"]];
         
         for (NSString * uexNameStr in anArray) {
-            
-            EUExBase * payObj = [objDict objectForKey:uexNameStr];
+            if(![uexNameStr hasPrefix:@"uex"]){
+                continue;
+            }
+            NSString *EUExName = [@"EUEx" stringByAppendingString:[uexNameStr substringFromIndex:3]];
+            __kindof EUExBase * payObj = [objDict objectForKey:EUExName];
             if (payObj) {
                 
                 [payObj performSelector:@selector(parseURL:application:) withObject:url withObject:application];
@@ -346,8 +353,9 @@ NSString *AppCanJS = nil;
     }
     
     [ACEDes enable];
+    [BUtility setAppCanDocument];
     _globalPluginDict = [[NSMutableDictionary alloc] init];
-    
+    pluginObj = [ACEPluginParser sharedParser];
     if (_useCloseAppWithJaibroken) {
         
         BOOL isjab = [BUtility isJailbroken];
@@ -372,6 +380,8 @@ NSString *AppCanJS = nil;
         
         if (dict) {
             [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"appStateOfGetPushData"];
+
         }
         
         if (userData != nil) {
@@ -390,9 +400,9 @@ NSString *AppCanJS = nil;
         
     }
     
-    [BUtility setAppCanDocument];
     
-    Class analysisClass = NSClassFromString(@"AppCanAnalysis");
+    
+    Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     
     if (analysisClass) {
         
@@ -401,6 +411,19 @@ NSString *AppCanJS = nil;
 #pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
 #pragma clang diagnostic pop
+    }else{
+        
+        analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (analysisClass) {
+            id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+            ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
+#pragma clang diagnostic pop
+            
+        }
+        
     }
 
     ACEUINavigationController *meNav = nil;
@@ -430,7 +453,7 @@ NSString *AppCanJS = nil;
     
     mwWgtMgr = [[WWidgetMgr alloc]init];
 	meBrwCtrler.mwWgtMgr = mwWgtMgr;
-	[self readAppCanJS];
+	//[self readAppCanJS];
     
     
 	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -530,18 +553,32 @@ NSString *AppCanJS = nil;
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
+    
+    NSUserDefaults *appStateUD = [NSUserDefaults standardUserDefaults];
+    
     NSString *userData = [userInfo objectForKey:@"userInfo"];
     if (userInfo) {
-        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
+        
+        [appStateUD setObject:userInfo forKey:@"allPushData"];
     }
     if (userData != nil || userInfo) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
+        [appStateUD setObject:userData forKey:@"pushData"];
         
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
         
         if (aboveWindowContainer && application.applicationState != UIApplicationStateBackground) {
             
+            if (application.applicationState == UIApplicationStateActive) {
+                
+                [appStateUD setObject:@"2" forKey:@"appStateOfGetPushData"];
+                
+            } else {
+                
+                [appStateUD setObject:@"1" forKey:@"appStateOfGetPushData"];
+                
+            }
+            [appStateUD synchronize];
             [aboveWindowContainer pushNotify];
             
         }
@@ -719,7 +756,7 @@ NSString *AppCanJS = nil;
 
 - (void)delayLoadByOtherAppWithParam:(NSString *)param {
     
-    NSString * jsSuccessCB = [NSString stringWithFormat:@"uexWidget.onLoadByOtherApp(\'%@\');",param];
+    NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",param];
     
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
     
@@ -728,7 +765,7 @@ NSString *AppCanJS = nil;
 - (void)delayLoadByOtherApp {
     
     NSString * josnStr = [_thirdInfoDict JSONFragment];
-    NSString * jsSuccessCB = [NSString stringWithFormat:@"uexWidget.onLoadByOtherApp(\'%@\');",josnStr];
+    NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",josnStr];
     
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
     
@@ -742,7 +779,7 @@ NSString *AppCanJS = nil;
     
 	[UIApplication sharedApplication].applicationIconBadgeNumber = -1;
     //	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
-	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
+	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSuspend){uexWidget.onSuspend();}"];
     
     [self invokeAppDelegateMethodApplicationWillResignActive:application];
     
@@ -751,7 +788,7 @@ NSString *AppCanJS = nil;
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
     //data analysis
-    Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
+    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
         id analysisObject = class_createInstance(analysisClass,0);
 #pragma clang diagnostic push
@@ -760,6 +797,21 @@ NSString *AppCanJS = nil;
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
 #pragma clang diagnostic pop
         //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
+    }else{
+        
+    analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (analysisClass) {
+            
+            id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+            
+            ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
+#pragma clang diagnostic pop
+            //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
+        }
+    
     }
     
     [self performSelector:@selector(onResume) withObject:self afterDelay:1.0];
@@ -777,13 +829,13 @@ NSString *AppCanJS = nil;
 
 -(void)onResume{
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onResume();"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onResume){uexWidget.onResume();}"];
     
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterBackground();"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterBackground){uexWidget.onEnterBackground();}"];
     
     id number = [[NSUserDefaults standardUserDefaults] objectForKey:F_UD_BadgeNumber];
     if (number) {
@@ -815,7 +867,7 @@ NSString *AppCanJS = nil;
         
     }
     
-    Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
+    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
@@ -823,8 +875,24 @@ NSString *AppCanJS = nil;
 #pragma clang diagnostic ignored "-Wundeclared-selector"
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
 #pragma clang diagnostic pop
-
+        
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
+        
+    }else{
+        
+        analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (analysisClass) {
+            
+            id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+            ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
+#pragma clang diagnostic pop
+            
+            //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
+            
+        }
         
     }
     
@@ -834,7 +902,7 @@ NSString *AppCanJS = nil;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onEnterForeground();"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterForeground){uexWidget.onEnterForeground();}"];
     
     [self invokeAppDelegateMethodApplicationWillEnterForeground:application];
 	//[self startAllNetService];
@@ -871,7 +939,7 @@ NSString *AppCanJS = nil;
     [self invokeAppDelegateMethodApplicationWillTerminate:application];
     
     //data analysis
-    Class  analysisClass = NSClassFromString(@"AppCanAnalysis");
+    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     
     if (analysisClass) {//类不存在直接返回
         
@@ -881,6 +949,20 @@ NSString *AppCanJS = nil;
         ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
 #pragma clang diagnostic pop
+    }else{
+    
+        analysisClass = NSClassFromString(@"AppCanAnalysis");
+        
+        if (analysisClass) {
+            id analysisObject = class_createInstance(analysisClass,0);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+            ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
+            //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
+#pragma clang diagnostic pop
+
+        }
+        
     }
     
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
@@ -957,9 +1039,7 @@ NSString *AppCanJS = nil;
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
 
     [self invokeAppDelegateMethodApplication:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
-    if(completionHandler){
-        completionHandler(YES);
-    }
+
 }
 
 
@@ -982,6 +1062,30 @@ NSString *AppCanJS = nil;
         }
     }
 }
+
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    [self invokeAppDelegateMethodApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+}
+
+-(void)invokeAppDelegateMethodApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
+        
+        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
+        
+        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        
+        Class acecls = NSClassFromString(fullClassName);
+        
+        Method delegateMethod = class_getClassMethod(acecls, @selector(application:handleEventsForBackgroundURLSession:completionHandler:));
+        
+        if (delegateMethod) {
+            [acecls application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+            
+        }
+    }
+}
+
 
 #pragma mark - root page finish loading invokation
 
@@ -1030,10 +1134,7 @@ NSString *AppCanJS = nil;
 		pluginObj = nil;
 	}
 	
-	if (AppCanJS) {
-		[AppCanJS release];
-		AppCanJS = nil;
-	}
+
 	if (window) {
 		[window release];
 		window = nil;

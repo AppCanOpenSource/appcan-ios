@@ -22,6 +22,7 @@
 		428629001C0709BF0078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FF1C0709BF0078E783 /* pop.framework */; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
 		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; };
+		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		42FFEF421C200F9400294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF411C200F9400294DE1 /* Ono.framework */; };
 		46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6D7B316F1CB3800D8E883 /* StoreKit.framework */; };
@@ -95,6 +96,7 @@
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
 		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
+		42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
 		42FFEF411C200F9400294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */,
 				420041951BABCD80000A57F5 /* libz.tbd in Frameworks */,
 				420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */,
 				420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */,
@@ -283,6 +286,7 @@
 		6CC60334157DCC0F00A3E13E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */,
 				420041941BABCD80000A57F5 /* libz.tbd */,
 				420041921BABCD79000A57F5 /* libxml2.tbd */,
 				420041901BABCD6F000A57F5 /* libstdc++.tbd */,
@@ -532,7 +536,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64";
@@ -551,7 +555,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -580,7 +584,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -616,7 +620,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -644,7 +648,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -674,7 +678,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",

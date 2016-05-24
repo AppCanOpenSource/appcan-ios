@@ -23,6 +23,7 @@
 #import "EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "EBrowser.h"
+#import "EUtility.h"
 #import "BUtility.h"
 #import "WWidgetMgr.h"
 #import "WWidget.h"
@@ -623,8 +624,7 @@
                 } else {
                     
                     inBrwView.image = nil;
-                    BGColor bgColor = [BUtility bgColorFromNSString:bgColorStr];
-                    UIColor *color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+                    UIColor *color = [EUtility colorFromHTMLString:bgColorStr];
                     inBrwView.backgroundColor = color;
                     
                 }
@@ -651,16 +651,25 @@
     
     if ([BUtility getAppCanDevMode]) {
         
-        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
+        Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
         
-        if (analysisClass) {
+        if (!analysisClass) {
             
+            analysisClass = NSClassFromString(@"AppCanAnalysis");
+            
+            if (!analysisClass) {
+                
+                return;
+                
+            }
+        }
+        
             id analysisObject = class_createInstance(analysisClass,0);
             
             ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
-            
-        }
+        
     }
+    
     
     NSString * inKey = [BUtility appKey];
     
@@ -677,8 +686,23 @@
             ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
             
         }
-        
     }
+    
+    if (theApp.userStartReport) {
+        
+        Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
+        
+        if (analysisClass) {
+            
+            NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
+            
+            id analysisObject = class_createInstance(analysisClass,0);
+            
+            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            
+        }
+    }
+
     
     if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
         

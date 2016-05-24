@@ -23,16 +23,19 @@
 
 
 #import <Foundation/Foundation.h>
+#import "ACEPluginInfo.h"
 
-
-
-@interface ACEPluginInfo : NSObject
-@end
 @interface ACEPluginParser : NSObject
-
-
+/**
+ *  pluginDict = {uexXXX:info}
+ */
+@property (nonatomic,strong)NSMutableDictionary<NSString *,ACEPluginInfo *> *pluginDict;
+/**
+ *  globalPluginDict = {EUExXXX:NSNull}
+ */
+@property (nonatomic,strong)NSMutableDictionary<NSString *,id> *globalPluginDict;
 - (NSArray *)classNameArray;
 - (NSString *)pluginBaseJS;
 
-
++ (instancetype)sharedParser;
 @end

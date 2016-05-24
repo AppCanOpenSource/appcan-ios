@@ -22,18 +22,12 @@
 @class EBrowserWindowContainer;
 @class EBrowserView;
 
-@interface EBrowserWidgetContainer : UIView {
-	EBrowserController *meBrwCtrler;
-	EBrowserWindowContainer *meRootBrwWndContainer;
-	NSMutableDictionary *mBrwWndContainerDict;
-	NSMutableArray *mReUseBrwViewArray;
-}
-
-@property (nonatomic, assign) EBrowserController *meBrwCtrler;
-@property (nonatomic, assign) EBrowserWindowContainer *meRootBrwWndContainer;
-@property (nonatomic, assign) NSMutableDictionary *mBrwWndContainerDict;
-@property (nonatomic, assign) NSMutableArray *mReUseBrwViewArray;
-@property (nonatomic, retain) NSMutableDictionary *mWWigets;
+@interface EBrowserWidgetContainer : UIView 
+@property (nonatomic, weak) EBrowserController *meBrwCtrler;
+@property (nonatomic, strong) EBrowserWindowContainer *meRootBrwWndContainer;
+@property (nonatomic, strong) NSMutableDictionary *mBrwWndContainerDict;
+@property (nonatomic, strong) NSMutableArray *mReUseBrwViewArray;
+@property (nonatomic, strong) NSMutableDictionary *mWWigets;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;

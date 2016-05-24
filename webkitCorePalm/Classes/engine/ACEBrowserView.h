@@ -42,7 +42,8 @@
 #define WIDGETREPORT_WIDGETSTATUS_CLOSE		@"000"
 
 #import <UIKit/UIKit.h>
-@class EUExManager;
+#import <JavaScriptCore/JavaScriptCore.h>
+
 @class EBrowserController;
 @class CBrowserMainFrame;
 @class CBrowserWindow;
@@ -53,18 +54,9 @@
 @class EBrowserView;
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
-
+@class ACEJSCHandler;
 @interface ACEBrowserView : UIWebView <UIGestureRecognizerDelegate>{
-	EBrowserController *meBrwCtrler;
-	EUExManager *meUExManager;
-	CBrowserWindow *mcBrwWnd;
-	EBrowserWindow *meBrwWnd;
-	WWidget *mwWgt;
-	NSString *muexObjName;
-	NSMutableDictionary *mPageInfoDict;
-	EBrowserViewBounceView *mTopBounceView;
-	EBrowserViewBounceView *mBottomBounceView;
-	UIScrollView *mScrollView;
+
 	int mType;
 	int mFlag;
 	int mTopBounceState;
@@ -77,21 +69,21 @@
     
     BOOL isSwiped;
 }
-@property (nonatomic,retain) UIActivityIndicatorView * indicatorView;
-@property (nonatomic,assign) EUExManager *meUExManager;
-@property (nonatomic,assign) EBrowserController *meBrwCtrler;
-@property (nonatomic,assign) CBrowserWindow *mcBrwWnd;
-@property (nonatomic,assign) EBrowserWindow *meBrwWnd;
-@property (nonatomic,assign) WWidget *mwWgt;
+@property (nonatomic,strong) UIActivityIndicatorView * indicatorView;
+@property (nonatomic,weak) EBrowserController *meBrwCtrler;
+@property (nonatomic,strong) CBrowserWindow *mcBrwWnd;
+@property (nonatomic,weak) EBrowserWindow *meBrwWnd;
+@property (nonatomic,weak) WWidget *mwWgt;
 @property (nonatomic,copy) NSString *muexObjName;
-@property (nonatomic,assign) NSMutableDictionary *mPageInfoDict;
-@property (nonatomic,assign) EBrowserViewBounceView *mTopBounceView;
-@property (nonatomic,assign) EBrowserViewBounceView *mBottomBounceView;
-@property (nonatomic,assign) UIScrollView *mScrollView;
-@property (nonatomic) float lastScrollPointY;
-@property (nonatomic) float nowScrollPointY;
+@property (nonatomic,strong) NSMutableDictionary *mPageInfoDict;
+@property (nonatomic,strong) EBrowserViewBounceView *mTopBounceView;
+@property (nonatomic,strong) EBrowserViewBounceView *mBottomBounceView;
+@property (nonatomic,weak) UIScrollView *mScrollView;
+@property (nonatomic,assign) float lastScrollPointY;
+@property (nonatomic,assign) float nowScrollPointY;
 @property (nonatomic,assign) float bottom;
 
+@property (nonatomic,strong)ACEJSCHandler *JSCHandler;
 @property int mType;
 @property int mFlag;
 @property int mTopBounceState;
@@ -104,6 +96,8 @@
 @property (nonatomic) BOOL isMuiltPopover;
 
 @property (nonatomic,assign) EBrowserView * superDelegate;
+@property (nonatomic,weak,readonly)JSContext *JSContext;
+
 
 - (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
