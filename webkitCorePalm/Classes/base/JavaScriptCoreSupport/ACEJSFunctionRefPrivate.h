@@ -1,12 +1,12 @@
 /**
  *
- *	@file   	: ACEPluginParser.h  in AppCanEngine Project
+ *	@file   	: ACEJSFunctionRefPrivate.h  in AppCanEngine
  *
  *	@author 	: CeriNo
  *
- *	@date   	: Created on 15/12/15
+ *	@date   	: Created on 16/5/5.
  *
- *	@copyright 	: 2015 The AppCan Open Source Project.
+ *	@copyright 	: 2016 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,21 +21,26 @@
  *
  */
 
+#ifndef ACEJSFunctionRefPrivate_h
+#define ACEJSFunctionRefPrivate_h
+#import "ACEJSFunctionRef.h"
 
-#import <Foundation/Foundation.h>
-#import "ACEPluginInfo.h"
 
-@interface ACEPluginParser : NSObject
-/**
- *  pluginDict = {uexXXX:info}
- */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,ACEPluginInfo *> *pluginDict;
-/**
- *  globalPluginDict = {EUExXXX:NSNull}
- */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,id> *globalPluginDict;
-- (NSArray *)classNameArray;
-//- (NSString *)pluginBaseJS;
+@class ACEJSCHandler;
+@class JSManagedValue;
 
-+ (instancetype)sharedParser;
+
+
+
+@interface ACEJSFunctionRef()
+@property (nonatomic,weak)ACEJSCHandler *handler;
+@property (nonatomic,strong)JSManagedValue *managedFunc;
+
+@property (nonatomic,strong)NSString *uuid;
+
+
+- (instancetype)initWithJSCHandler:(ACEJSCHandler *)handler function:(JSValue *)function;
+
+
 @end
+#endif /* ACEJSFunctionRefPrivate_h */

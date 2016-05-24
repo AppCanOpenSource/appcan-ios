@@ -33,6 +33,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "ACEBrowserView.h"
+#import "ONOXMLElement+ACEConfigXML.h"
 
 extern NSString * webappShowAactivety;
 
@@ -45,7 +46,7 @@ const float AppCanFinalProgressValue = 0.9f;
 @property (nonatomic, assign) NSUInteger loadingCount;
 @property (nonatomic, assign) NSUInteger maxLoadCount;
 @property (nonatomic, assign) BOOL interactive;
-@property (nonatomic, retain) NSURL * currentURL;
+@property (nonatomic, strong) NSURL * currentURL;
 @property (nonatomic, assign) float progress;
 //@property (nonatomic, retain) NSMutableArray * historyURLs;
 
@@ -54,16 +55,12 @@ const float AppCanFinalProgressValue = 0.9f;
 @implementation CBrowserWindow
 
 - (instancetype)init {
-    
     if (self = [super init]) {
-        
         _loadingCount = 0;
         _maxLoadCount = 0;
         _interactive = NO;
 //        _historyURLs = [[NSMutableArray alloc]init];
-        
     }
-    
     return self;
     
 }
@@ -80,16 +77,11 @@ const float AppCanFinalProgressValue = 0.9f;
 		ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
 		ACENSLog(@"webViewDidStartLoad url is %@", [webView.request URL]);
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
-        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] )
-        {
+        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
             [eBrwView.indicatorView startAnimating];
         }
-        
-
 		[eBrwView notifyPageStart];
-        
         [self webViewDidStartLoadOption:webView];
-        
 	}
     
 }
@@ -109,8 +101,7 @@ const float AppCanFinalProgressValue = 0.9f;
 	if (webView != NULL) {
 		ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
-        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] )
-        {
+        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
             [eBrwView.indicatorView stopAnimating];
         }
         
@@ -122,11 +113,8 @@ const float AppCanFinalProgressValue = 0.9f;
             NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
             [eBrwView stringByEvaluatingJavaScriptFromString:script];
         }
-
 		[eBrwView notifyPageFinish];
- 
         [eBrwView continueMultiPopoverLoading];
-        
         [self webViewDidFinishLoadOption:webView];
         
 	}
@@ -140,6 +128,9 @@ const float AppCanFinalProgressValue = 0.9f;
 		[((ACEBrowserView *)webView) notifyPageError];
         [((ACEBrowserView *)webView) continueMultiPopoverLoading];
         
+        NSString *errorPath = [self errorHTMLPath];
+        NSURL *errorURL = [BUtility stringToUrl:errorPath];
+        [((ACEBrowserView *)webView) loadWithUrl:errorURL];
         [self webView:webView didFailLoadWithErrorOption:error];
         
 	}
@@ -164,19 +155,28 @@ const float AppCanFinalProgressValue = 0.9f;
 		BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
 		if (!isFrame) {
 			//[self flushCommandQueue:eBrwView];
+            void (^showErrorPage)(void) = ^{
+                NSString *errorPath = [self errorHTMLPath];
+                NSURL *errorURL = [BUtility stringToUrl:errorPath];
+                [eBrwView loadWithUrl:errorURL];
+                [self completeProgress];
+            };
+            if ([requestURL isFileURL] && ![[NSFileManager defaultManager]fileExistsAtPath:requestURL.path]) {
+                showErrorPage();
+                return NO;
+            }
+            if ([[requestURL scheme].lowercaseString isEqualToString: @"http"] || [[requestURL scheme].lowercaseString isEqualToString: @"https"]) {
+                if (![BUtility isConnected]) {
+                    showErrorPage();
+                    return NO;
+                }
+            }
 			if (eBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
-				[eBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
-				if ([[requestURL scheme] isEqualToString: @"http"]) {
-					if (![BUtility isConnected]) {
-						NSString *errorPath = [BUtility getResPath:@"error/error.html"];
-						NSURL *errorURL = [BUtility stringToUrl:errorPath];
-						[eBrwView loadWithUrl:errorURL];
-                        
-                        [self completeProgress];
-                        
-						return NO;
-					}
-				}
+				//[eBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
+                
+
+
+
 				WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
 				//EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwView.meBrwWnd.superview;
                 
@@ -195,8 +195,6 @@ const float AppCanFinalProgressValue = 0.9f;
 						if (![eHisEntry.mUrl isEqual:requestURL]) {
 							eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:requestURL obfValue:NO];
 							[eBrwWnd addHisEntry:eHisEntry];
-							//YFMOD
-							[eHisEntry release];
 						}
 					}
 				}
@@ -253,7 +251,6 @@ const float AppCanFinalProgressValue = 0.9f;
 -(void)alertForbidView:(NSString*)uexPluginName{
     UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:[NSString stringWithFormat:@"%@%@",uexPluginName,ACELocalized(@"对象被禁止使用，请联系管理员")] delegate:nil cancelButtonTitle:nil otherButtonTitles:ACELocalized(@"确定"), nil];
     [alertView show];
-    [alertView release];
 }
 
 - (void)dealloc {
@@ -264,35 +261,31 @@ const float AppCanFinalProgressValue = 0.9f;
 //        _historyURLs = nil;
 //    }
     
-    [super dealloc];
 }
 
 #pragma mark - progressMethod
 
 - (void)webViewDidStartLoadOption:(UIWebView *)webView {
-    
-    _loadingCount++;
-    
-    _maxLoadCount = MAX(_maxLoadCount, _loadingCount);
-    
+    self.loadingCount++;
+    self.maxLoadCount = MAX(self.maxLoadCount, self.loadingCount);
     [self startProgress];
     
 }
 
 - (void)webViewDidFinishLoadOption:(UIWebView *)webView {
-    _loadingCount--;
+    self.loadingCount--;
     [self incrementProgress];
     
     NSString * readyState = [webView stringByEvaluatingJavaScriptFromString:@"document.readyState"];
     
     BOOL interactive = [readyState isEqualToString:@"interactive"];
     if (interactive) {
-        _interactive = YES;
+        self.interactive = YES;
         //                NSString *waitForCompleteJS = [NSString stringWithFormat:@"window.addEventListener('load',function() { var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = '%@://%@%@'; document.body.appendChild(iframe);  }, false);", webView.request.mainDocumentURL.scheme, webView.request.mainDocumentURL.host, completeRPCURLPath];
         //                [webView stringByEvaluatingJavaScriptFromString:waitForCompleteJS];
     }
     
-    BOOL isNotRedirect = _currentURL && [_currentURL isEqual:webView.request.mainDocumentURL];
+    BOOL isNotRedirect = self.currentURL && [self.currentURL isEqual:webView.request.mainDocumentURL];
     BOOL complete = [readyState isEqualToString:@"complete"];
     if (complete && isNotRedirect) {
         [self completeProgress];
@@ -301,19 +294,19 @@ const float AppCanFinalProgressValue = 0.9f;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithErrorOption:(NSError *)error {
-    _loadingCount--;
+    self.loadingCount--;
     [self incrementProgress];
     
     NSString *readyState = [webView stringByEvaluatingJavaScriptFromString:@"document.readyState"];
     
     BOOL interactive = [readyState isEqualToString:@"interactive"];
     if (interactive) {
-        _interactive = YES;
+        self.interactive = YES;
         //                NSString *waitForCompleteJS = [NSString stringWithFormat:@"window.addEventListener('load',function() { var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = '%@://%@%@'; document.body.appendChild(iframe);  }, false);", webView.request.mainDocumentURL.scheme, webView.request.mainDocumentURL.host, completeRPCURLPath];
         //                [webView stringByEvaluatingJavaScriptFromString:waitForCompleteJS];
     }
     
-    BOOL isNotRedirect = _currentURL && [_currentURL isEqual:webView.request.mainDocumentURL];
+    BOOL isNotRedirect = self.currentURL && [self.currentURL isEqual:webView.request.mainDocumentURL];
     BOOL complete = [readyState isEqualToString:@"complete"];
     if ((complete && isNotRedirect) || error) {
         [self completeProgress];
@@ -336,7 +329,7 @@ const float AppCanFinalProgressValue = 0.9f;
     BOOL isHTTPOrLocalFile = [request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"] || [request.URL.scheme isEqualToString:@"file"];
     if (!isFragmentJump && isHTTPOrLocalFile && isTopLevelNavigation) {
         
-        _currentURL = request.URL;
+        self.currentURL = request.URL;
         
 //        [_historyURLs addObject:request.URL];
         
@@ -360,8 +353,8 @@ const float AppCanFinalProgressValue = 0.9f;
 - (void)incrementProgress {
     
     float progress = self.progress;
-    float maxProgress = _interactive ? AppCanFinalProgressValue : AppCanInteractiveProgressValue;
-    float remainPercent = (float)_loadingCount / (float)_maxLoadCount;
+    float maxProgress = self.interactive ? AppCanFinalProgressValue : AppCanInteractiveProgressValue;
+    float remainPercent = (float)self.loadingCount / (float)self.maxLoadCount;
     float increment = (maxProgress - progress) * remainPercent;
     progress += increment;
     progress = fmin(progress, maxProgress);
@@ -378,27 +371,36 @@ const float AppCanFinalProgressValue = 0.9f;
 - (void)setProgress:(float)progress {
     
     if (progress > _progress || progress == 0) {
-        
         _progress = progress;
-        
         //NSLog(@"AppCan==setProgress==%f",progress);
-        
         NSString * onProgressChangeJS = [NSString stringWithFormat:@"if(window.onProgressChanged){window.onProgressChanged(%lu)}",(unsigned long)(progress * 100)];
-        
         [self stringByEvaluatingJavaScriptFromString:onProgressChangeJS];
         
     }
 }
 
 - (void)resetProgress {
-    
-    _maxLoadCount = 0;
-    _loadingCount = 0;
-    _interactive = NO;
+    self.maxLoadCount = 0;
+    self.loadingCount = 0;
+    self.interactive = NO;
     [self setProgress:0.0];
     
 }
 
-#pragma mark -
+#pragma mark - error page path
+
+- (NSString *)errorHTMLPath{
+    static NSString *errorHTMLPath = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        errorHTMLPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"error/error.html"];
+        ONOXMLElement *configXML = [ONOXMLElement ACEOriginConfigXML];
+        ONOXMLElement *errorXML = [configXML firstChildWithTag:@"error"];
+        if (errorXML && errorXML[@"src"]) {
+            errorHTMLPath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,@"widget",errorXML[@"src"]]];
+        }
+    });
+    return errorHTMLPath;
+}
 
 @end

@@ -23,15 +23,24 @@
  
 #import <Foundation/Foundation.h>
 
-#define ACE_METHOD_ASYNC @"AsyncMethod"
-#define ACE_METHOD_SYNC @"SyncMethod"
+//#define ACE_METHOD_ASYNC @"AsyncMethod"
+//#define ACE_METHOD_SYNC @"SyncMethod"
+
 @class ONOXMLElement;
+
+typedef NS_ENUM(NSInteger,ACEPluginMethodExecuteMode){
+    ACEPluginMethodExecuteModeAsynchronous = 0,
+    ACEPluginMethodExecuteModeSynchronous
+};
+
+
+
 @interface ACEPluginInfo : NSObject
 @property (nonatomic,strong)NSString *uexName;
 /**
- *  methods = {方法名:isAsync}
+ *  methods = {方法名:@(executeMode)}
  */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,NSString *> *methods;
+@property (nonatomic,strong)NSMutableDictionary<NSString *,NSNumber *> *methods;
 /**
  *  properties = {属性名:值}
  */

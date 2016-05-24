@@ -17,7 +17,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "ACEUtils.h"
+
 
 
 @class EBrowser;
@@ -33,6 +33,13 @@
 #define F_EBRW_WND_FLAG_IN_OPENING		0x2
 #define F_EBRW_WND_FLAG_HAS_PREOPEN		0x4
 #define F_EBRW_WND_FLAG_FINISH_PREOPEN	0x8
+
+typedef NS_ENUM(NSInteger, ACEWebWindowType) {
+    ACEWebWindowTypeNormal, //普通类型
+    ACEWebWindowTypeNavigation, //具有手势导航功能
+    ACEWebWindowTypePresent, //present
+    ACEWebWindowTypeOther
+};
 
 @interface EBrowserWindow : UIView {
 

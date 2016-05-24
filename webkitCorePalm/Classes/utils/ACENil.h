@@ -1,12 +1,12 @@
 /**
  *
- *	@file   	: ACEPluginParser.h  in AppCanEngine Project
+ *	@file   	: ACENil.h  in AppCanEngine
  *
  *	@author 	: CeriNo
  *
- *	@date   	: Created on 15/12/15
+ *	@date   	: Created on 16/5/9.
  *
- *	@copyright 	: 2015 The AppCan Open Source Project.
+ *	@copyright 	: 2016 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,21 +21,14 @@
  *
  */
 
-
 #import <Foundation/Foundation.h>
-#import "ACEPluginInfo.h"
 
-@interface ACEPluginParser : NSObject
 /**
- *  pluginDict = {uexXXX:info}
+ *  替代NSNull
  */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,ACEPluginInfo *> *pluginDict;
-/**
- *  globalPluginDict = {EUExXXX:NSNull}
- */
-@property (nonatomic,strong)NSMutableDictionary<NSString *,id> *globalPluginDict;
-- (NSArray *)classNameArray;
-//- (NSString *)pluginBaseJS;
+@interface ACENil : NSProxy
 
-+ (instancetype)sharedParser;
+
++ (instancetype)null;
+
 @end

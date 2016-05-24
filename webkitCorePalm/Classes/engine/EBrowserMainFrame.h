@@ -40,7 +40,6 @@
 	EBrowserToolBar *meBrwToolBar;
 	EBrowserView *meAdBrwView;
 	AppCenter *mAppCenter;
-	BOOL mLoadDone;
 	NSTimer *mAdDisplayTimer;
 	NSTimer *mAdIntervalTimer;
 	int mAdDisplayTime;
@@ -61,7 +60,7 @@
 @property (nonatomic, assign)BStatusBarWindow *mSBWnd;
 @property (nonatomic, assign)NSTimer *mSBWndTimer;
 @property (nonatomic, assign)NSMutableArray *mNotifyArray;
-@property BOOL mLoadDone;
+
 @property int mAdDisplayTime;
 @property int mAdIntervalTime;
 @property int mAdType;

@@ -63,6 +63,7 @@
 }
 
 #pragma mark - Interface
+/*
 - (NSString *)pluginBaseJS{
     __block NSMutableString *baseJS=[NSMutableString stringWithFormat:@"\n"];
     [self.pluginDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, ACEPluginInfo * _Nonnull obj, BOOL * _Nonnull stop) {
@@ -70,6 +71,7 @@
     }];
     return baseJS;
 }
+ */
 - (NSArray *)classNameArray{
     if(!self.pluginDict){
         return @[];
@@ -148,7 +150,7 @@
     [app.globalPluginDict setObject:model forKey:name];
     
 }
-
+/*
 - (NSString *)JSForPlugin:(ACEPluginInfo *)pluginInfo{
     __block NSMutableString *JS=[NSMutableString stringWithFormat:@"\n"];
     [JS appendFormat:@"window.%@={}\n",pluginInfo.uexName];
@@ -165,5 +167,5 @@
     }];
     return JS;
 }
-
+*/
 @end

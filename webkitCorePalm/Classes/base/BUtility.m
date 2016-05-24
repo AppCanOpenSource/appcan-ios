@@ -50,9 +50,10 @@
 #import "AllConfigParser.h"
 #import "SFHFKeychainUtils.h"
 #import "OpenUDID.h"
-#import "ACEUtils.h"
+
 #import "FileEncrypt.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "ACEUtils.h"
 
 
 
@@ -423,8 +424,8 @@ static NSString *clientCertificatePwd = nil;
     
     CGRect rect = CGRectMake(0, 0, appWidth, appHeight);
     
-    if (isSysVersionAbove7_0){
-        
+    //if (isSysVersionAbove7_0){
+    if (ACE_iOSVersion >= 7.0){
         appWidth = [UIScreen mainScreen].bounds.size.width;
         appHeight = [UIScreen mainScreen].bounds.size.height;
         
@@ -1253,7 +1254,7 @@ static NSString *clientCertificatePwd = nil;
 	
 }
 
-+ (NSString *)bundleIdentifier{
++ (NSString *)bundleIdentifier {
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wundeclared-selector"
@@ -1273,7 +1274,6 @@ static NSString *clientCertificatePwd = nil;
     return @"com.zywx.appcan";
 #pragma clang diagnostic pop
 
-    
 }
 
 +(NSString*)appKey{
@@ -1294,7 +1294,7 @@ static NSString *clientCertificatePwd = nil;
         }
     }
 #pragma clang diagnostic pop
-
+    
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
     if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
