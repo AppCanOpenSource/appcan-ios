@@ -127,10 +127,19 @@ const float AppCanFinalProgressValue = 0.9f;
 		ACENSLog(@"page loaded failed! Error - %@ %@",[error localizedDescription],[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 		[((ACEBrowserView *)webView) notifyPageError];
         [((ACEBrowserView *)webView) continueMultiPopoverLoading];
+        NSURLRequest *request = webView.request;
         
-        NSString *errorPath = [self errorHTMLPath];
-        NSURL *errorURL = [BUtility stringToUrl:errorPath];
-        [((ACEBrowserView *)webView) loadWithUrl:errorURL];
+        BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
+        if (!isFrame) {
+            NSString *errorPath = [self errorHTMLPath];
+            NSURL *errorURL = [BUtility stringToUrl:errorPath];
+            if(![webView.request.URL.path isEqual:errorPath]){
+                [((ACEBrowserView *)webView) loadWithUrl:errorURL];
+            }
+        }
+        
+
+        
         [self webView:webView didFailLoadWithErrorOption:error];
         
 	}
