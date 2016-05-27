@@ -350,8 +350,17 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 - (void)reload:(NSMutableArray *)inArguments {
-    if (meBrwView) {
-        [meBrwView reload];
+    BOOL reloaded = NO;
+    if (self.meBrwView.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+        FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+        NSString *data = [encryptObj decryptWithPath:self.meBrwView.curUrl appendData:nil];
+        if (data) {
+            [self.meBrwView loadWithData:data baseUrl:self.meBrwView.curUrl];
+            reloaded = YES;
+        }
+    }
+    if (!reloaded) {
+        [self.meBrwView reload];
     }
 }
 
