@@ -17,7 +17,7 @@
  */
 
 #import "ACEBaseViewController.h"
-#import "ACEUtils.h"
+
 @class EBrowserMainFrame;
 @class EBrowserWidgetContainer;
 @class EBrowser;
@@ -41,8 +41,8 @@
 #define F_ForbidWindows    @"AppCanWindowsKey"
 #define F_AuthType         @"AppCanAuthType"
 
-ACE_EXTERN NSString *const kACECustomLoadingImagePathKey;
-ACE_EXTERN NSString *const kACECustomLoadingImageTimeKey;
+APPCAN_EXPORT NSString *const kACECustomLoadingImagePathKey;
+APPCAN_EXPORT NSString *const kACECustomLoadingImageTimeKey;
 
 typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
     ACELoadingImageCloseEventWebViewFinishLoading,//网页加载完成的事件(用户手动closeLoading或者网页加载完成后0.5s)

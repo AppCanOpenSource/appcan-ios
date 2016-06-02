@@ -36,7 +36,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "SFHFKeychainUtils.h"
-#import "EUExBase.h"
+
 //mac begin
 #include <sys/socket.h> // Per msqr 
 #include <sys/sysctl.h> 
@@ -53,7 +53,6 @@
 
 #import "FileEncrypt.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "ACEUtils.h"
 
 
 
@@ -425,7 +424,7 @@ static NSString *clientCertificatePwd = nil;
     CGRect rect = CGRectMake(0, 0, appWidth, appHeight);
     
     //if (isSysVersionAbove7_0){
-    if (ACE_iOSVersion >= 7.0){
+    if (ACSystemVersion() >= 7.0){
         appWidth = [UIScreen mainScreen].bounds.size.width;
         appHeight = [UIScreen mainScreen].bounds.size.height;
         

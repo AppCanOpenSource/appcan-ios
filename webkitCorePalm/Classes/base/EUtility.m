@@ -32,7 +32,6 @@
 #import "ACEPluginViewContainer.h"
 #import "ACEBrowserView.h"
 #import "ACEJSCInvocation.h"
-#import "ACEUtils.h"
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
 	va_list args;

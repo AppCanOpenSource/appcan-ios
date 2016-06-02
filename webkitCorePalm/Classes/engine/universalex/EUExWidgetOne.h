@@ -17,7 +17,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "EUExBase.h"
+
 
 #define F_WIDGETONE_PLATFORM_IOS		0
 #define F_WIDGETONE_PLATFORM_ANDROID	1

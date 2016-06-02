@@ -37,7 +37,7 @@
 #import "SFHFKeychainUtils.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "ACEUtils.h"
+
 
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
@@ -419,7 +419,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             launchImage = [UIImage imageNamed:launchImageName];
             if (launchImage == nil) { //iPhone包在ipad显示
                 launchImageName = [NSString stringWithFormat:@"%@-568h@2x",launchImagePrefixFile];
-                if (ACE_iOSVersion < 7.0) {
+                if (ACSystemVersion() < 7.0) {
                     launchImageName = [NSString stringWithFormat:@"%@",launchImagePrefixFile];
                 }
             }
@@ -441,7 +441,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
     
 
-    if (ACE_iOSVersion < 7.0) {
+    if (ACSystemVersion() < 7.0) {
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].applicationFrame.size.width, [UIScreen mainScreen].applicationFrame.size.height);
     }else{
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);

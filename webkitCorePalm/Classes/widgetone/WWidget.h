@@ -34,7 +34,7 @@
 #define WIDGETREPORT_SPACESTATUS_OPEN				0x1
 #define WIDGETREPORT_SPACESTATUS_EXTEN_OPEN			0X2
 
-@interface WWidget : NSObject {
+@interface WWidget : NSObject<AppCanWidgetObject> {
 	// 数据库中的主键id
 	int wId;
 	// 手机端WidgetOne系统的唯一标识

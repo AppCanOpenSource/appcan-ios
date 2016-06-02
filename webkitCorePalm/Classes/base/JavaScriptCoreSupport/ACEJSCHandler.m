@@ -22,14 +22,14 @@
  */
 
 #import "ACEJSCHandler.h"
-#import "EUExBase.h"
 #import "BUtility.h"
 #import <objc/message.h>
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
-#import "ACEJSFunctionRefPrivate.h"
+#import <AppCanKit/ACJSValueSupport.h>
+#import <AppCanKit/ACJSFunctionRefInternal.h>
 #import "ACEJSCInvocation.h"
-#import "ACENil.h"
+
 static NSMutableDictionary *ACEJSCGlobalPlugins;
 @interface ACEJSCHandler()
 
@@ -136,17 +136,17 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     NSMutableArray *array = [NSMutableArray array];
     for (int i = 0; i < argCount; i++) {
         JSValue *value = arguments[i];
-        if ([ACEJSCInvocation JSTypeOf:value] != ACEJSValueTypeFunction) {
+        if (value.ac_type != ACJSValueTypeFunction) {
             id obj = [value toObject];
             if (!obj || [obj isKindOfClass:[NSNull class]]) {
-                obj = [ACENil null];
+                obj = [ACNil null];
             }
             [array addObject:obj];
             continue;
         }
-        id ref = [[ACEJSFunctionRef alloc]initWithJSCHandler:self function:value];
+        id ref = [ACJSFunctionRef functionRefFromJSValue: value];
         if (!ref) {
-            ref = [ACENil null];
+            ref = [ACNil null];
         }
         [array addObject:ref];
     }

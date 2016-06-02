@@ -24,7 +24,6 @@
 #import "ACEPluginParser.h"
 #import <Ono/Ono.h>
 #import "BUtility.h"
-#import "ACEPluginModel.h"
 #import "WidgetOneDelegate.h"
 
 
@@ -140,15 +139,6 @@
         return;
     }
     [self.globalPluginDict setValue:[NSNull null] forKey:[@"EUEx" stringByAppendingString:[name substringFromIndex:3]]];
-    ACEPluginModel *model = [[ACEPluginModel alloc] init];
-    
-    model.pluginName = name;
-    model.pluginObj = nil;
-    
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    
-    [app.globalPluginDict setObject:model forKey:name];
-    
 }
 /*
 - (NSString *)JSForPlugin:(ACEPluginInfo *)pluginInfo{

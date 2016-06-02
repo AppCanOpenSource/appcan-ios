@@ -18,7 +18,7 @@
 
 #import "WWidget.h"
 #import "BUtility.h"
-
+#import "WidgetOneDelegate.h"
 @implementation WWidget
 
 @synthesize wId;
@@ -96,4 +96,37 @@
 	}
 	return NO;
 }
+
+- (NSString *)absWidgetPath{
+    NSString *absPath = [BUtility getDocumentsPath:@""];
+    NSString *wgtPath = nil;
+    if (self.wgtType==F_WWIDGET_MAINWIDGET) {
+        wgtPath = [NSString stringWithFormat:@"%@/apps/%@",absPath,self.appId];
+    } else {
+        wgtPath = self.widgetPath;
+        NSString *wgtPathString = self.indexUrl;
+        NSRange range = [self.indexUrl rangeOfString:@"widget/plugin/"];
+        if (range.location != NSNotFound) {
+            wgtPath = [wgtPathString substringToIndex:range.location+range.length];
+            NSRange range1 = [wgtPath rangeOfString:@"file://"];
+            wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
+            wgtPath = [wgtPath stringByAppendingString:self.appId];
+        }
+    }
+    return wgtPath;
+}
+
+- (NSString *)absResourcePath{
+    if (self.wgtType==F_WWIDGET_MAINWIDGET) {
+        BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
+        if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
+            return  [BUtility getDocumentsPath:@"widget/wgtRes"];
+        }else {
+            return [BUtility getResPath:@"widget/wgtRes"];
+        }
+    }else {
+        return [NSString stringWithFormat:@"%@/wgtRes",[self absWidgetPath]];
+    }
+}
+
 @end

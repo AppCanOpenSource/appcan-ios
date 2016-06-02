@@ -17,7 +17,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "EUExBase.h"
+
 @class BToastView;
 
 @class EBrowserMainFrame;

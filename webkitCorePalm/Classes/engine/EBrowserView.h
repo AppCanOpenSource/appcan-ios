@@ -57,7 +57,7 @@
 @class ACEBrowserView;
 @class JSValue;
 
-@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate>
+@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate,AppCanWebViewEngineObject>
 
 @property (nonatomic,assign) NSString *muexObjName;
 

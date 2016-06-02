@@ -27,16 +27,13 @@ DerivedData
 
 AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a
 
-AppCanEngine/AppCanEngineDebug/.DS_Store
 
-AppCanEngine/AppCanEngineDebug/.DS_Store
-
-AppCanEngine/AppCanEngine.framework/_CodeSignature/CodeResources
-
-AppCanEngine/AppCanEngine.framework/AppCanEngine
-
-AppCanEngine/AppCanEngine.framework/embedded.mobileprovision
-
-AppCanEngine/AppCanEngine.framework/Info.plist
+AppCanEngine/AppCanEngine.framework/*
 
 AppCanEngine/libAppCanEngine.a
+
+
+#AppCanKit
+AppCanKit/Carthage/*
+AppCanKit/Cartfile.private
+AppCanEngine/AppCankit.framework/*

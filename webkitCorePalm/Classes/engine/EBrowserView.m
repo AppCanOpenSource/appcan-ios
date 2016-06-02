@@ -41,8 +41,8 @@
 #import "EBrowserHistory.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "ACEUtils.h"
 
+#import <AppCanKit/ACJSValueSupport.h>
 
 
 @implementation EBrowserView{
@@ -593,7 +593,7 @@
     CGFloat hOffset = endKeyboardRect.origin.y - self.frame.origin.y - self.bottom;
     
     //if (isSysVersionBelow7_0)
-    if (ACE_iOSVersion < 7.0)
+    if (ACSystemVersion() < 7.0)
     {
         hOffset -= 20;
     }
@@ -630,7 +630,50 @@
     
 }
 
+#pragma mark - AppCanWebViewEngineObject
 
+- (__kindof UIView*)webView{
+    return self.meBrowserView;
+}
+
+
+- (__kindof UIScrollView *)webScrollView{
+    return self.scrollView;
+}
+
+- (__kindof UIViewController *)viewController{
+    return self.meBrwCtrler;
+}
+
+- (id<AppCanWidgetObject>)widget{
+    return self.mwWgt;
+}
+
+- (NSURL *)currentURL{
+    return self.meBrowserView.currentUrl;
+}
+
+- (void)evaluateScript:(NSString *)jsScript{
+    [self performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:jsScript waitUntilDone:NO];
+}
+
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue * ))completion{
+    
+    JSValue *func = nil;
+    NSArray<NSString *> *components = [JSKeyPath componentsSeparatedByString:@"."];
+    for ( int i = 0; i < components.count; i++) {
+        if (!func) {
+            func = [self.meBrowserView.JSContext objectForKeyedSubscript:components[i]];
+        }else{
+            func = [func objectForKeyedSubscript:components[i]];
+        }
+    }
+    [func ac_callWithArguments:arguments completionHandler:completion];
+}
+
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments{
+    [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

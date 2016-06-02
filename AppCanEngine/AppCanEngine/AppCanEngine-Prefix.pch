@@ -5,6 +5,7 @@
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
+    #import <AppCanKit/AppCanKit.h>
     #import "ACELocalization.h"
 #endif
 //#define NSLog 

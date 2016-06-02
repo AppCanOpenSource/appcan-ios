@@ -22,6 +22,7 @@
 		428629001C0709BF0078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FF1C0709BF0078E783 /* pop.framework */; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
 		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; };
+		42D7F7351CFFCA9600447B4C /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D7F7341CFFCA9600447B4C /* AppCanKit.framework */; };
 		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		42FFEF421C200F9400294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF411C200F9400294DE1 /* Ono.framework */; };
@@ -96,6 +97,7 @@
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
 		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
+		42D7F7341CFFCA9600447B4C /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKit.framework; sourceTree = "<group>"; };
 		42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */,
 				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */,
+				42D7F7351CFFCA9600447B4C /* AppCanKit.framework in Frameworks */,
 				420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
 				DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */,
@@ -372,6 +375,7 @@
 		6CC60388157DCD0B00A3E13E /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				42D7F7341CFFCA9600447B4C /* AppCanKit.framework */,
 				42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */,
 				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
 				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
@@ -431,7 +435,7 @@
 		6CC60328157DCC0F00A3E13E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = zywx;
 			};
 			buildConfigurationList = 6CC6032B157DCC0F00A3E13E /* Build configuration list for PBXProject "AppCanPlugin" */;

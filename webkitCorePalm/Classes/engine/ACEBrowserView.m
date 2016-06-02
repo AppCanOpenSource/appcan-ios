@@ -49,7 +49,7 @@
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEJSCHandler.h"
 #import "ACEJSCBaseJS.h"
-#import "ACEUtils.h"
+
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -800,7 +800,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     int iOS7Style = 0;
     
     
-    if (ACE_iOSVersion >= 7.0) {
+    if (ACSystemVersion() >= 7.0) {
         
         NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
         

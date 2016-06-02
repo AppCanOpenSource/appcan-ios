@@ -33,11 +33,11 @@
 #import "FileEncrypt.h"
 //#import "PluginParser.h"
 #import "JSON.h"
-#import "EUExBase.h"
+
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "EUExBaseDefine.h"
-#import "ACEUtils.h"
+
 #import "ACEUINavigationController.h"
 #import "ACEDrawerViewController.h"
 #import "MMExampleDrawerVisualStateManager.h"
@@ -49,13 +49,15 @@
 #import "ACEPluginParser.h"
 #import "ACEJSCHandler.h"
 #import "ACEBrowserView.h"
+#import <AppCanKit/AppCanGlobalObjectGetter.h>
+
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
 #define ACE_USERAGENT @"AppCanUserAgent"
 
 
-@interface WidgetOneDelegate()<RESideMenuDelegate>
+@interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter>
 
 @end
 
@@ -99,7 +101,12 @@
 @synthesize useAppCanTaskSubmitHost = _useAppCanTaskSubmitHost;
 @synthesize validatesSecureCertificate = _validatesSecureCertificate;
 
+
+
+
 /*
+ 
+
 
 
 
@@ -354,7 +361,6 @@ NSString *AppCanJS = nil;
     
     [ACEDes enable];
     [BUtility setAppCanDocument];
-    _globalPluginDict = [[NSMutableDictionary alloc] init];
     pluginObj = [ACEPluginParser sharedParser];
     if (_useCloseAppWithJaibroken) {
         
@@ -486,7 +492,7 @@ NSString *AppCanJS = nil;
     [window makeKeyAndVisible];
      [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
     if(theApp.usePushControl == YES) {
-        if (ACE_iOSVersion >= 8.0)  {
+        if ( ACSystemVersion() >= 8.0)  {
             
 #ifdef __IPHONE_8_0
             
@@ -1169,7 +1175,6 @@ NSString *AppCanJS = nil;
     [_leftWebController release];
     [_rightWebController release];
     [_drawerController release];
-    [_globalPluginDict release];
 	[super dealloc];
 }
 
@@ -1471,5 +1476,15 @@ NSString *AppCanJS = nil;
             
         }
     }
+}
+
+#pragma mark - AppCanGlobalObjectGetter
+
+- (id<AppCanWebViewEngineObject>)getAppCanRootWebViewEngine{
+    return self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
+}
+
+- (id<AppCanWidgetObject>)getAppCanMainWidget{
+    return self.meBrwCtrler.mwWgtMgr.mainWidget;
 }
 @end

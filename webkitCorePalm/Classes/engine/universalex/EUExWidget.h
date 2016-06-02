@@ -17,7 +17,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "EUExBase.h"
+
 
 #define UEX_JVUpdate		0
 #define UEX_JVNoUpdate		1

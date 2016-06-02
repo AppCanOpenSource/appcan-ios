@@ -19,7 +19,7 @@
 #import "ACEBaseViewController.h"
 
 #import "BUtility.h"
-#import "ACEUtils.h"
+
 @interface ACEBaseViewController ()
 
 @end
@@ -37,7 +37,7 @@
     _isStatusBarHidden = [[infoDict objectForKey:@"UIStatusBarHidden"] boolValue];
     
     //if (isSysVersionAbove7_0) {
-    if (ACE_iOSVersion >= 7.0) {
+    if (ACSystemVersion() >= 7.0) {
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     

@@ -1,0 +1,6 @@
+framework module AppCanKit {
+  umbrella header "AppCanKit.h"
+
+  export *
+  module * { export * }
+}
