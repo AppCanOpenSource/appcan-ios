@@ -24,6 +24,7 @@
 #import "ACEJSCHandler.h"
 #import "BUtility.h"
 #import <objc/message.h>
+#import <objc/runtime.h>
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
 #import <AppCanKit/ACJSValueSupport.h>
@@ -114,9 +115,22 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(![pluginInstance respondsToSelector:method]){
         return nil;
     }
+    
+    
     NSMutableArray *args = [self arrayFromArguments:arguments count:argCount];
+    BOOL isAsync = [self selector:method isAsynchronousMethodInClass:[pluginInstance class]];
+    
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    if (isAsync) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [pluginInstance performSelector:method withObject:args];
+        });
+        return nil;
+    }else{
+        return [pluginInstance performSelector:method withObject:args];
+    }
+    /*
     switch (mode) {
         case ACEPluginMethodExecuteModeAsynchronous: {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -128,8 +142,37 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
             return [pluginInstance performSelector:method withObject:args];
         }
     }
+     */
 #pragma clang diagnostic pop
 }
+
+- (BOOL)selector:(SEL)sel isAsynchronousMethodInClass:(Class)cls{
+    NSParameterAssert(sel != nil);
+    NSParameterAssert(cls != nil);
+    
+    static NSMutableDictionary<NSString *,NSNumber *> *selCache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        selCache = [NSMutableDictionary dictionary];
+    });
+    NSString *identifier = [NSStringFromClass(cls) stringByAppendingString:NSStringFromSelector(sel)];
+    if ([selCache objectForKey:identifier]) {
+        return selCache[identifier].boolValue;
+    }
+    
+    Method method = class_getInstanceMethod(cls, sel);
+    NSParameterAssert(method != NULL);
+    
+    NSString *type = [NSString stringWithCString:method_getTypeEncoding(method) encoding:NSUTF8StringEncoding];
+    BOOL isAsync = YES;
+    if ([type hasPrefix:@"@"]) {
+        isAsync = NO;
+    }
+    [selCache setValue:@(isAsync) forKey:identifier];
+    return isAsync;
+}
+
+
 
 
 - (NSMutableArray *)arrayFromArguments:(JSValue *)arguments count:(NSInteger)argCount{
