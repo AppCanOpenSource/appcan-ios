@@ -30,6 +30,10 @@
 		426DF1A91CFD7DC600F4C53E /* ACAvailability.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DF1A71CFD7DC600F4C53E /* ACAvailability.m */; };
 		4292795D1CF8465900665594 /* EUExBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 4292795B1CF8465900665594 /* EUExBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4292795E1CF8465900665594 /* EUExBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4292795C1CF8465900665594 /* EUExBase.m */; };
+		42961AA31D0E4FBA00005263 /* ACLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 42961AA11D0E4FBA00005263 /* ACLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42961AA41D0E4FBA00005263 /* ACLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42961AA21D0E4FBA00005263 /* ACLog.m */; };
+		42961AD91D0EAD4500005263 /* ACLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 42961AD71D0EAD4500005263 /* ACLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		42961ADA1D0EAD4500005263 /* ACLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 42961AD81D0EAD4500005263 /* ACLogger.m */; };
 		429ADD651CFD62F600FA43DB /* UIColor+ACHTMLColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 429ADD631CFD62F600FA43DB /* UIColor+ACHTMLColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		429ADD661CFD62F600FA43DB /* UIColor+ACHTMLColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 429ADD641CFD62F600FA43DB /* UIColor+ACHTMLColor.m */; };
 		42A9F63D1CFD3836002710FC /* AppCanObjectProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A9F63B1CFD3836002710FC /* AppCanObjectProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -96,6 +100,10 @@
 		426DF1A71CFD7DC600F4C53E /* ACAvailability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACAvailability.m; sourceTree = "<group>"; };
 		4292795B1CF8465900665594 /* EUExBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExBase.h; sourceTree = "<group>"; };
 		4292795C1CF8465900665594 /* EUExBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUExBase.m; sourceTree = "<group>"; };
+		42961AA11D0E4FBA00005263 /* ACLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACLog.h; sourceTree = "<group>"; };
+		42961AA21D0E4FBA00005263 /* ACLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACLog.m; sourceTree = "<group>"; };
+		42961AD71D0EAD4500005263 /* ACLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACLogger.h; sourceTree = "<group>"; };
+		42961AD81D0EAD4500005263 /* ACLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACLogger.m; sourceTree = "<group>"; };
 		429ADD631CFD62F600FA43DB /* UIColor+ACHTMLColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ACHTMLColor.h"; sourceTree = "<group>"; };
 		429ADD641CFD62F600FA43DB /* UIColor+ACHTMLColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ACHTMLColor.m"; sourceTree = "<group>"; };
 		42A9F63B1CFD3836002710FC /* AppCanObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanObjectProtocol.h; sourceTree = "<group>"; };
@@ -181,6 +189,10 @@
 				426DF1A31CFD757300F4C53E /* ACPluginBundle.m */,
 				426DF1A61CFD7DC600F4C53E /* ACAvailability.h */,
 				426DF1A71CFD7DC600F4C53E /* ACAvailability.m */,
+				42961AA11D0E4FBA00005263 /* ACLog.h */,
+				42961AA21D0E4FBA00005263 /* ACLog.m */,
+				42961AD71D0EAD4500005263 /* ACLogger.h */,
+				42961AD81D0EAD4500005263 /* ACLogger.m */,
 			);
 			path = AppCanKit;
 			sourceTree = "<group>";
@@ -226,11 +238,13 @@
 				42A9F63D1CFD3836002710FC /* AppCanObjectProtocol.h in Headers */,
 				429ADD651CFD62F600FA43DB /* UIColor+ACHTMLColor.h in Headers */,
 				426DF1A41CFD757300F4C53E /* ACPluginBundle.h in Headers */,
+				42961AA31D0E4FBA00005263 /* ACLog.h in Headers */,
 				426DF1A81CFD7DC600F4C53E /* ACAvailability.h in Headers */,
 				42ED03FC1CFC3783009134BE /* ACJSValueSupport.h in Headers */,
 				421AE57C1CF58347001A5053 /* ACEXTRuntimeExtensions.h in Headers */,
 				42A9F6411CFD39D9002710FC /* AppCanGlobalObjectGetter.h in Headers */,
 				42ED03FF1CFC3D9E009134BE /* ACJSFunctionRefInternal.h in Headers */,
+				42961AD91D0EAD4500005263 /* ACLogger.h in Headers */,
 				421AE5271CF57181001A5053 /* AppCanKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,6 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42961AA41D0E4FBA00005263 /* ACLog.m in Sources */,
 				429ADD661CFD62F600FA43DB /* UIColor+ACHTMLColor.m in Sources */,
 				4292795E1CF8465900665594 /* EUExBase.m in Sources */,
 				426DF1A51CFD757300F4C53E /* ACPluginBundle.m in Sources */,
@@ -342,6 +357,7 @@
 				42ED03FD1CFC3783009134BE /* ACJSValueSupport.m in Sources */,
 				421AE57D1CF58347001A5053 /* ACEXTRuntimeExtensions.m in Sources */,
 				42ED03F91CFC34E1009134BE /* ACJSFunctionRef.m in Sources */,
+				42961ADA1D0EAD4500005263 /* ACLogger.m in Sources */,
 				426DF1A91CFD7DC600F4C53E /* ACAvailability.m in Sources */,
 				421AE5811CF58393001A5053 /* ACNil.m in Sources */,
 			);

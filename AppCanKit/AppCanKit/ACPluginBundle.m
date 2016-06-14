@@ -23,6 +23,7 @@
 
 #import "ACPluginBundle.h"
 #import "EUExBase.h"
+#import "ACLog.h"
 @implementation NSBundle (ACPluginBundle)
 
 
@@ -40,7 +41,7 @@
         if(![fm fileExistsAtPath:dynamicPluginFrameworkFolderPath isDirectory:&isFolder] || !isFolder){// 如果目录不存在，或者目录不是文件夹，就创建一个
             [fm createDirectoryAtPath:dynamicPluginFrameworkFolderPath withIntermediateDirectories:NO attributes:nil error:&error];
             if(error){
-                NSLog(@"%@",[error localizedDescription]);
+                ACLogWarning(@"%@",[error localizedDescription]);
             }
         }
     });

@@ -24,6 +24,10 @@
 		<data>
 		8y+pSLtMFUC3VAfawpFh3KckxjA=
 		</data>
+		<key>Headers/ACLog.h</key>
+		<data>
+		mXRIdwuEnuhuR9xO8WEwDvze77g=
+		</data>
 		<key>Headers/ACMetamacros.h</key>
 		<data>
 		B/X5x2FpvsrW8I0qfksmRrFGRRo=
@@ -38,7 +42,7 @@
 		</data>
 		<key>Headers/AppCanKit.h</key>
 		<data>
-		qk9ofD14aZNcKtgZs0+wRMMrdvU=
+		wvS5pQAN196k2UO2Mnj9ddNJQmA=
 		</data>
 		<key>Headers/AppCanObjectProtocol.h</key>
 		<data>
@@ -54,7 +58,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		GMS9g31so4PLVPyvCaQY3GvOPWo=
+		GRbRr5u8F6WHS9OeIicrMhsS2zc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -66,11 +70,15 @@
 		</data>
 		<key>PrivateHeaders/ACJSFunctionRefInternal.h</key>
 		<data>
-		Lu6eI1G6zX43PJDbgf7mFcS9c+Y=
+		KhoFtR8IPzyfovKQ1hEyp5yrvlQ=
 		</data>
 		<key>PrivateHeaders/ACJSValueSupport.h</key>
 		<data>
 		eHCeiaUy7jQ55mWOA6qHom2SiOs=
+		</data>
+		<key>PrivateHeaders/ACLogger.h</key>
+		<data>
+		NeIpR/TMNhFn/F1vDCsQGc6BGVU=
 		</data>
 		<key>PrivateHeaders/AppCanGlobalObjectGetter.h</key>
 		<data>
@@ -134,6 +142,17 @@
 			m/3V1Jp6kWKekDqBnWBbylpd0sbvuVRs33TWRDiqXc8=
 			</data>
 		</dict>
+		<key>Headers/ACLog.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			mXRIdwuEnuhuR9xO8WEwDvze77g=
+			</data>
+			<key>hash2</key>
+			<data>
+			UWZ0Lfjxv7uMmLquISclIxBIUiOyY9ADtfRW8f7HCVk=
+			</data>
+		</dict>
 		<key>Headers/ACMetamacros.h</key>
 		<dict>
 			<key>hash</key>
@@ -171,11 +190,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			qk9ofD14aZNcKtgZs0+wRMMrdvU=
+			wvS5pQAN196k2UO2Mnj9ddNJQmA=
 			</data>
 			<key>hash2</key>
 			<data>
-			bSABo/XEpcBILAmULK4WGifpkXFxv5sdAcwjN0dfk/Q=
+			mrpr8fjJNOqhdP0e36hlCnz+WnbajjkGQxmoB73ZAkY=
 			</data>
 		</dict>
 		<key>Headers/AppCanObjectProtocol.h</key>
@@ -237,11 +256,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Lu6eI1G6zX43PJDbgf7mFcS9c+Y=
+			KhoFtR8IPzyfovKQ1hEyp5yrvlQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			rbGxhNB6vuDgEePe461n04OjeQSMHVbCvypveKj8XIg=
+			Fj69kmKVJSpLqJtNt1G0MEnXQ3IHGiS5ttIOJLl4+6U=
 			</data>
 		</dict>
 		<key>PrivateHeaders/ACJSValueSupport.h</key>
@@ -253,6 +272,17 @@
 			<key>hash2</key>
 			<data>
 			Trq5RULGQ5c3fKW0GyDEpKPXfaDuBoKdNOeUyF1UA38=
+			</data>
+		</dict>
+		<key>PrivateHeaders/ACLogger.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			NeIpR/TMNhFn/F1vDCsQGc6BGVU=
+			</data>
+			<key>hash2</key>
+			<data>
+			vSJdYvmuNJ3cQWJdIpPy8GXDc82u6Dkq9pIT8HCZV3s=
 			</data>
 		</dict>
 		<key>PrivateHeaders/AppCanGlobalObjectGetter.h</key>

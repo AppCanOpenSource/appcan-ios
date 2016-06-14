@@ -24,7 +24,7 @@
 #import "ACJSFunctionRef.h"
 #import "ACJSValueSupport.h"
 #import "ACJSFunctionRefInternal.h"
-
+#import "ACLog.h"
 
 
 
@@ -38,10 +38,22 @@
     
     ACJSFunctionRef *funcRef = [[self alloc]init];
     if (funcRef) {
+        JSContext *ctx = value.context;
+        
+
+        funcRef.ctx = ctx;
         funcRef.identifier = [NSUUID UUID].UUIDString;
-        funcRef.managedFunction = [JSManagedValue managedValueWithValue:value];
+        funcRef.managedFunction = [[JSManagedValue alloc]initWithValue:value];
         funcRef.machine = value.context.virtualMachine;
-        [funcRef.machine addManagedReference:funcRef.managedFunction withOwner:funcRef];
+        [funcRef.machine addManagedReference:funcRef.managedFunction withOwner:self];
+        
+        JSValue *intenal = ctx[@"_ACJSFunctionRefIntenal"];
+        if ([intenal isUndefined]) {
+            intenal = [JSValue valueWithObject:@{} inContext:ctx];
+        }
+        ctx[@"_ACJSFunctionRefIntenal"] = intenal;
+        intenal[funcRef.identifier] = value;
+        
     }
     return funcRef;
 
@@ -52,7 +64,10 @@
 
 
 - (void)executeWithArguments:(NSArray *)args completionHandler:(void (^)(JSValue *returnValue))completionHandler{
-    JSValue *value = [self.managedFunction value];
+    JSValue *value = self.managedFunction.value;
+    if (!value) {
+        value = self.ctx[@"_ACJSFunctionRefIntenal"][self.identifier];
+    }
     if (value) {
         [value ac_callWithArguments:args completionHandler:completionHandler];
     }else{
@@ -67,8 +82,9 @@
 }
 
 - (void)dealloc{
+    self.ctx[@"_ACJSFunctionRefIntenal"][self.identifier] = nil;
     [self.machine removeManagedReference:self.managedFunction withOwner:self];
-    NSLog(@"js func dealloc");
+    ACLogVerbose(@"js func dealloc");
 }
 
 

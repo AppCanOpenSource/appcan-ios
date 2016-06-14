@@ -121,7 +121,7 @@
     if (!saveWgtPath) {
         saveWgtPath = [[NSString alloc] initWithFormat:@"%@/%@.zip",folderPath,[self md5:self.downLoadURL]];
     }
-    NSLog(@"savePath=%@",saveWgtPath);
+    ACLogInfo(@"savePath=%@",saveWgtPath);
     NSString *tempPath = [NSString stringWithFormat:@"%@/%@.temp",folderPath,[self md5:self.downLoadURL]];
     ACENSLog(@"savePath=%@",tempPath);
     //

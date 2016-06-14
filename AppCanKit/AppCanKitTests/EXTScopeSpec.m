@@ -7,7 +7,7 @@
 @end
 @implementation EXTScopeTestObject
 - (void)dealloc{
-    NSLog(@"DEALLOC!");
+    ACLogInfo(@"DEALLOC!");
 }
 @end
 
@@ -56,7 +56,7 @@ describe(@"weakifyTest", ^{
         @weakify(obj);
         obj.myBlock = ^{
             @strongify(obj);
-            NSLog(@"%@",obj.description);
+            ACLogInfo(@"%@",obj.description);
         };
         obj.myBlock();
         obj = nil;

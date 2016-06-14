@@ -79,7 +79,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
     [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
-        NSLog(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
+        ACLogWarning(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
         ctx.exception = exception;
     }];
     self.ctx = context;
@@ -91,7 +91,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     for (int i = 0; i < args.count; i++) {
         [log appendFormat:@"%@",args[i]];
     }
-    NSLog(@"%@",log);
+    ACLogInfo(@"%@",log);
 }
 
 
@@ -258,7 +258,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
             return;
         }
         if([dynamicBundle load]){
-            NSLog(@"load dynamic framework for plugin:%@",pluginName);
+            ACLogInfo(@"load dynamic framework for plugin:%@",pluginName);
             return;
         }
     }
@@ -272,7 +272,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
             return;
         }
         if([dynamicBundle load]){
-            NSLog(@"load dynamic framework for plugin:%@",pluginName);
+            ACLogInfo(@"load dynamic framework for plugin:%@",pluginName);
             return;
         }
     }

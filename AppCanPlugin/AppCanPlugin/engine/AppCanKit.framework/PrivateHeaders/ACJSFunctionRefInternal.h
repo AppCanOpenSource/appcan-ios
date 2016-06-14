@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong)JSManagedValue *managedFunction;
 @property (nonatomic,strong)NSString *identifier;
 @property (nonatomic,weak)JSVirtualMachine *machine;
+@property (nonatomic,weak)JSContext *ctx;
+
 /**
  *  根据JSValue获得一个ACJSFunctionRef
  *  @brief 在此对象被释放前,只要JS上下文没有被销毁,此对象会保证其对应的JS函数不被GC机制回收

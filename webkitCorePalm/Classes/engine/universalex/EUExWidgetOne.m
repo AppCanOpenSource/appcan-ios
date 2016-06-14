@@ -52,7 +52,7 @@
 			ACENSLog(@"+++++Broad+++++: %@",filePath);
 			result = [fileMgr removeItemAtPath:filePath error:&err];
 			if (!result && err) {
-				NSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
+				ACLogWarning(@"Failed to delete: %@ (error: %@)", filePath, err);
 			}
 		}    
 		[fileMgr release];
@@ -114,7 +114,7 @@
                 ACENSLog(@"+++++Broad+++++: %@",filePath);
                 result = [fileMgr removeItemAtPath:filePath error:&err];
                 if (!result && err) {
-                    NSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
+                    ACLogWarning(@"Failed to delete: %@ (error: %@)", filePath, err);
                 }
             }    
             [fileMgr release];

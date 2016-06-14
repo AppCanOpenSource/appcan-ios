@@ -22,14 +22,14 @@
  */
 
 #import "ACJSON.h"
-
+#import "ACLog.h"
 @implementation  NSString (ACJSON)
 
 - (id)ac_JSONValue{
     NSError *error = nil;
     id obj = [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&error];
     if (error) {
-        NSLog(@"JSON parse error:%@",error.localizedDescription);
+        ACLogWarning(@"JSON parse error:%@",error.localizedDescription);
     }
     return obj;
 }
@@ -43,14 +43,13 @@
         NSError *error = nil;
         NSData *stringData = [NSJSONSerialization dataWithJSONObject:self options:0 error:&error];
         if (error) {
-            NSLog(@"JSON stringify error:%@",error.localizedDescription);
+            ACLogWarning(@"JSON stringify error:%@",error.localizedDescription);
         }
         return [[NSString alloc]initWithData:stringData encoding:NSUTF8StringEncoding];
     }
     if ([self isKindOfClass:[NSString class]]) {
 
         NSString *arrStr = [@[self] ac_JSONFragment];
-        NSLog(@"%@",arrStr);
         NSString *result = [arrStr substringWithRange:NSMakeRange(1, arrStr.length -2)];
         return result;
         

@@ -382,7 +382,7 @@ NSString *AppCanJS = nil;
         self.launchedByRemoteNotification=YES;
         NSDictionary *dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         NSString *userData = [dict objectForKey:@"userInfo"];
-         NSLog(@"appcan--widgetOneDelegate.m--didFinishLaunchingWithOptions--dict == %@",dict);
+        ACLogDebug(@"appcan--widgetOneDelegate.m--didFinishLaunchingWithOptions--dict == %@",dict);
         
         if (dict) {
             [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
@@ -600,7 +600,7 @@ NSString *AppCanJS = nil;
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     {
-        NSLog(@"appcan--widgetOneDelegate.m--didReceiveRemoteNotification--userInfo == %@",userInfo);
+        ACLogDebug(@"appcan--widgetOneDelegate.m--didReceiveRemoteNotification--userInfo == %@",userInfo);
         NSString *userinfoJson=[userInfo JSONFragment];
         NSString *Json=[NSString stringWithFormat:@"uexWidget.onRemoteNotification(\'%@\');",userinfoJson];
         [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];

@@ -915,7 +915,7 @@ result;\
         } else {
             //ACENSLog(@"pushstr is NSString");
             NSString *str =[NSString stringWithFormat:@"%@",pushStr];
-            NSLog(@"appcan--EUExWidget--getPushInfo--allPushStr(NSString) == %@",str);
+            ACLogDebug(@"appcan--EUExWidget--getPushInfo--allPushStr(NSString) == %@",str);
             if (KUEX_ISNSString(str)) {
                 [self jsSuccessWithName:@"uexWidget.cbGetPushInfo" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:str];
                 [defaults removeObjectForKey:@"allPushData"];
@@ -1055,7 +1055,7 @@ result;\
                 @strongify(request);
                 if (200 == request.responseStatusCode) {
                     
-                    NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseString is %@",request.responseString);
+                    ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseString is %@",request.responseString);
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                     //清除push消息
                     [defaults removeObjectForKey:@"pushData"];
@@ -1064,7 +1064,7 @@ result;\
                     
                 } else {
                     
-                    NSLog(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
+                    ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
                     
                 }
             }];

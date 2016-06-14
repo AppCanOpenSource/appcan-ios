@@ -40,3 +40,4 @@ FOUNDATION_EXPORT const unsigned char AppCanKitVersionString[];
 #import <AppCanKit/ACAvailability.h>
 #import <AppCanKit/EUExBase.h>
 #import <AppCanKit/ACPluginBundle.h>
+#import <AppCanKit/ACLog.h>

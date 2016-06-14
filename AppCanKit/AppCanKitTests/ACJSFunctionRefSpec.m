@@ -17,7 +17,7 @@ describe(@"ACJSFunctionRef Test", ^{
         ctx = [[JSContext alloc]init];
         executed = NO;
         exec = ^{
-            NSLog(@"function executed!");
+            ACLogInfo(@"function executed!");
             executed = YES;
         };
         func = [JSValue valueWithObject:exec inContext:ctx];

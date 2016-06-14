@@ -59,7 +59,7 @@ NSString *const kAppCanRemoteURLPrefixHTTPS = @"https://";
     self = [super init];
     if (self) {
         _prefix = prefix;
-        _basicPath = basicPath;
+        _basicPath = basicPath; 
     }
     return self;
 }

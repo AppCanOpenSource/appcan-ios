@@ -1862,7 +1862,6 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             //8.7 数据统计
             int type = eCurBrwWnd.self.meBrwView.mwWgt.wgtType;
             NSString *viewName =[eCurBrwWnd.self.meBrwView.curUrl absoluteString];
-            NSLog(@" eCurBrwWnd viewName=%@",viewName);
             NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eCurBrwWnd.self.meBrwView.mwWgt];
             [BUtility setAppCanViewBackground:type name:viewName closeReason:1 appInfo:appInfo];
             if (self.meBrwView.meBrwWnd.mPopoverBrwViewDict) {
@@ -3080,7 +3079,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     @catch (NSException *exception) {
         
-        NSLog(@"AppCan-->EUExWindow-->setBounceParams-->%@",[exception description]);
+        ACLogWarning(@"AppCan-->EUExWindow-->setBounceParams-->%@",[exception description]);
         
     }
     @finally {
@@ -5397,7 +5396,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
             ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
             
             if ([container.containerIdentifier isEqualToString:identifier]) {
-                NSLog(@"关闭id为%@的容器",identifier);
+                ACLogDebug(@"关闭id为%@的容器",identifier);
                 [container removeFromSuperview];
             }
         }
@@ -5519,7 +5518,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     if([inArguments count] < 1){
         return @0;
     }
-    NSLog(@"%@",inArguments[0]);
+    ACLogInfo(@"%@",inArguments[0]);
     return @1;
 }
 

@@ -1263,8 +1263,8 @@ static NSString *clientCertificatePwd = nil;
             return objc_msgSend(packageInfo,@selector(getBundleIdentifier));
         }
         @catch (NSException *exception) {
-            NSLog(@"ERROR!!packageInfo不存在!");
-            NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
+            ACLogError(@"ERROR!!packageInfo不存在!");
+            ACLogError(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
         }
         @finally {
         }
@@ -1285,8 +1285,8 @@ static NSString *clientCertificatePwd = nil;
                 return objc_msgSend(Beqtucontent,@selector(getContentPath));
             }
             @catch (NSException *exception) {
-                NSLog(@"ERROR!!Beqtucontent不存在");
-                NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
+                ACLogError(@"ERROR!!Beqtucontent不存在");
+                ACLogError(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
             }
             @finally {
             }
@@ -1812,12 +1812,12 @@ static NSString *clientCertificatePwd = nil;
 }
 
 +(void)evaluatingJavaScriptInRootWnd:(NSString*)script_ {
-	NSLog(@"exe script is %@", script_);
+	ACLogVerbose(@"exe script is %@", script_);
 	[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 
 +(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_ {
-	NSLog(@"exe script is %@", script_);
+	ACLogVerbose(@"exe script is %@", script_);
 	[[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 // 获取config里设置的屏幕方向
@@ -2044,7 +2044,7 @@ static NSString *clientCertificatePwd = nil;
         
         [fm createDirectoryAtPath:dynamicPluginFrameworkFolderPath withIntermediateDirectories:NO attributes:nil error:&error];
         if(error){
-            NSLog(@"%@",[error localizedDescription]);
+            ACLogWarning(@"%@",[error localizedDescription]);
         }
     }
 
