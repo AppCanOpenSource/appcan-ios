@@ -688,6 +688,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     [self addGestureRecognizer:singleTap];
     singleTap.delegate = self;
+    
+    self.keyboardDisplayRequiresUserAction = NO;
 
 }
 
