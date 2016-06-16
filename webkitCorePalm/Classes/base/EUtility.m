@@ -27,6 +27,7 @@
 #import "EBrowserMainFrame.h"
 #import "BStatusBarWindow.h"
 #import <CommonCrypto/CommonDigest.h>
+#import <AppCanKit/ACEXTScope.h>
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 #import "ACEPluginViewContainer.h"

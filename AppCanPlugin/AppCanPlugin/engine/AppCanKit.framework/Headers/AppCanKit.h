@@ -31,7 +31,6 @@ FOUNDATION_EXPORT const unsigned char AppCanKitVersionString[];
 
 
 #import <AppCanKit/ACMetaMacros.h>
-#import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACNil.h>
 #import <AppCanKit/ACJSFunctionRef.h>
 #import <AppCanKit/ACJSON.h>

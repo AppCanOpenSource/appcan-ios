@@ -52,7 +52,7 @@
 #import "DataAnalysisInfo.h"
 #import "ACEBrowserView.h"
 
-
+#import <AppCanKit/ACEXTScope.h>
 
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPOPAnimation.h"
@@ -4859,7 +4859,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
         //    return;
         //}
         int bottom=0;
-        @unsafeify(scrollView);
+        @weakify(scrollView);
         [scrollView addLoadingBlock:^{
             @strongify(scrollView);
             [self openMuilPopwith:eBrwWnd and:ePopBrwView and:eBrwWndContainer and:inPopName and:inDataType and:inUrl and:inData and:baseUrl and:x and:y and:w and:h and:fontSize and:flag and:bottom and:scrollView andIsMuiltPop:YES andExtraInfo:extraDic];

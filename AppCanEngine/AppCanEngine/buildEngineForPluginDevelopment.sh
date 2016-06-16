@@ -13,6 +13,8 @@
 #新建一个临时文件夹
 rm -rf ./temp
 mkdir ./temp
+rm -rf ../AppCanPlugin/AppCanPlugin/engine/AppCanKit.framework
+rm -rf ../AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a
 
 #clean工程
 xcodebuild -project AppCanEngine.xcodeproj -scheme AppCanEngine clean
@@ -41,6 +43,7 @@ lipo -info libAppCanEngine.a
 
 lipo -info ./temp/AppCanKit_Device
 lipo -info ./temp/AppCanKit_Simulator
+rm -rf ./AppCanKit.framework
 cp -rf ../AppCanPlugin/AppCanPlugin/engine/AppCanKit.framework ./
 lipo -create ./temp/AppCanKit_Device ./temp/AppCanKit_Simulator -output ./AppCanKit.framework/AppCanKit
 lipo -info ./AppCanKit.framework/AppCanKit

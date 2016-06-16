@@ -201,6 +201,8 @@ APPCAN_EXPORT BOOL ACLogAsyncLogEnabled;
 
 
 
+
+
 @protocol ACLogger;
 NS_ASSUME_NONNULL_BEGIN
 @interface ACLog : NSObject

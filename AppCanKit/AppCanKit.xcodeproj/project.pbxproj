@@ -15,7 +15,7 @@
 		421AE5801CF58393001A5053 /* ACNil.h in Headers */ = {isa = PBXBuildFile; fileRef = 421AE57E1CF58393001A5053 /* ACNil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		421AE5811CF58393001A5053 /* ACNil.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE57F1CF58393001A5053 /* ACNil.m */; };
 		421AE5831CF58442001A5053 /* ACNilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE5821CF58442001A5053 /* ACNilSpec.m */; };
-		421AE5851CF5906E001A5053 /* ACEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 421AE5841CF5906E001A5053 /* ACEXTScope.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		421AE5851CF5906E001A5053 /* ACEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 421AE5841CF5906E001A5053 /* ACEXTScope.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		421AE5871CF5911F001A5053 /* EXTScopeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE5861CF5911E001A5053 /* EXTScopeSpec.m */; };
 		421AE58A1CF59DCC001A5053 /* ACArguments.h in Headers */ = {isa = PBXBuildFile; fileRef = 421AE5881CF59DCC001A5053 /* ACArguments.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		421AE58B1CF59DCC001A5053 /* ACArguments.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE5891CF59DCC001A5053 /* ACArguments.m */; };
@@ -229,7 +229,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				421AE5801CF58393001A5053 /* ACNil.h in Headers */,
-				421AE5851CF5906E001A5053 /* ACEXTScope.h in Headers */,
 				421AE5751CF5825C001A5053 /* ACMetamacros.h in Headers */,
 				421AE58A1CF59DCC001A5053 /* ACArguments.h in Headers */,
 				421AE5941CF5AE68001A5053 /* ACJSON.h in Headers */,
@@ -241,6 +240,7 @@
 				42961AA31D0E4FBA00005263 /* ACLog.h in Headers */,
 				426DF1A81CFD7DC600F4C53E /* ACAvailability.h in Headers */,
 				42ED03FC1CFC3783009134BE /* ACJSValueSupport.h in Headers */,
+				421AE5851CF5906E001A5053 /* ACEXTScope.h in Headers */,
 				421AE57C1CF58347001A5053 /* ACEXTRuntimeExtensions.h in Headers */,
 				42A9F6411CFD39D9002710FC /* AppCanGlobalObjectGetter.h in Headers */,
 				42ED03FF1CFC3D9E009134BE /* ACJSFunctionRefInternal.h in Headers */,

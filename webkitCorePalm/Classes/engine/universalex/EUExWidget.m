@@ -44,7 +44,7 @@
 #import "ACEDrawerViewController.h"
 
 #import <CommonCrypto/CommonCrypto.h>
-
+#import <AppCanKit/ACEXTScope.h>
 #import "ONOXMLElement+ACEConfigXML.h"
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"

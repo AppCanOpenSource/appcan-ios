@@ -22,8 +22,43 @@
  */
 
 #import "ACLog.h"
-
 #import "ACLogger.h"
+
+#import <sys/ioctl.h>
+#import <sys/param.h>
+
+#if TARGET_IPHONE_SIMULATOR
+    #import <sys/conf.h>
+#else
+    #if ! defined(D_DISK)
+        #define D_DISK  2
+    #endif
+#endif
+
+static BOOL isDebug(void){
+    int fd = STDERR_FILENO;
+    if (fcntl(fd, F_GETFD, 0) < 0) {
+        return NO;
+    }
+    char buf[MAXPATHLEN + 1];
+    if (fcntl(fd, F_GETPATH, buf ) >= 0) {
+        if (strcmp(buf, "/dev/null") == 0)
+            return NO;
+        if (strncmp(buf, "/dev/tty", 8) == 0)
+            return YES;
+    }
+    int type;
+    if (ioctl(fd, FIODTYPE, &type) < 0) {
+        return NO;
+    }
+    return type != D_DISK;
+}
+
+
+
+
+
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -85,11 +120,11 @@ static dispatch_semaphore_t ACLogDispatchMessageSemaphore;
 
 
 + (void)load{
-#if DEBUG
-    ACLogGlobalLogMode = ACLogModeDebug;
-#else
-    ACLogGlobalLogMode = ACLogModeInfo;
-#endif
+    if (isDebug()) {
+        ACLogGlobalLogMode = ACLogModeDebug;
+    }else{
+        ACLogGlobalLogMode = ACLogModeInfo;
+    }
     ACLogFileLogModes = [NSMutableDictionary dictionary];
     ACLogDispatchMessageQueue = dispatch_queue_create("com.AppCan.AppCanKit.ACLog.dispatchQueue",DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(ACLogDispatchMessageQueue, ACLogDispatchMessageQueueIdentity, ACLogDispatchMessageQueueIdentity, NULL);
