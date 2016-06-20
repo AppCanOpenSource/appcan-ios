@@ -205,36 +205,51 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 }
 
 - (void)loadDynamicPlugins:(NSString *)pluginName{
-    NSString *frameworkName=[NSString stringWithFormat:@"%@.framework",pluginName];
+    static NSMutableArray *loadedPlugins;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loadedPlugins = [NSMutableArray array];
+    });
+    if ([loadedPlugins containsObject:pluginName]) {
+        return;
+    }
+    [loadedPlugins addObject:pluginName];
+    
+    NSString *frameworkName = [NSString stringWithFormat:@"%@.framework",pluginName];
     
     //载入指定document子目录下的framework
-    NSBundle *dynamicBundle=[NSBundle bundleWithPath:[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:frameworkName]];
+    NSBundle *dynamicBundle = [NSBundle bundleWithPath:[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:frameworkName]];
     
-    if(dynamicBundle){
-        if([dynamicBundle isLoaded]){
-            return;
-        }
-        if([dynamicBundle load]){
-            NSLog(@"load dynamic framework for plugin:%@",pluginName);
-            return;
-        }
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+        return;
     }
     
     //载入res目录下的framework
     //测试用
 
-    dynamicBundle=[NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
-    if(dynamicBundle){
-        if([dynamicBundle isLoaded]){
-            return;
-        }
-        if([dynamicBundle load]){
-            NSLog(@"load dynamic framework for plugin:%@",pluginName);
-            return;
-        }
+    dynamicBundle = [NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework in res for plugin:%@",pluginName);
+        return;
+
+    }
+    //载入dyFiles目录下的framework
+    //本地打包用
+    
+    dynamicBundle = [NSBundle bundleWithPath:[NSString pathWithComponents:@[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,@"dyFiles",frameworkName]]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework in dyFiles for plugin:%@",pluginName);
+        return;
     }
 
 }
+
+
+
+
+
+
 
 - (BOOL)isPluginInstanceValid:(id)pluginInstance{
     if(!pluginInstance){

@@ -81,7 +81,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 }
 
 + (NSDictionary *)exceptions{
-    return @{@"uexDataBaseMgr.transaction":@"uexDataBaseMgr.transaction=function(inDBName,inOpId,inFunc){var temp = encodeURIComponent(inDBName)+'&'+encodeURIComponent(inOpId);uex.execute('uexDataBaseMgr','beginTransaction',[temp]); inFunc();uex.execute('uexDataBaseMgr','endTransaction',[temp]);};"};
+    return @{@"uexDataBaseMgr.transaction":@"uexDataBaseMgr.transaction=function(inDBName,inOpId,inFunc){var temp = [inDBName,inOpId];uex.execute('uexDataBaseMgr','beginTransaction',temp,2,1); inFunc();uex.execute('uexDataBaseMgr','endTransaction',temp,2,1);};"};
 }
 
 

@@ -793,6 +793,7 @@
 		42EDAAA91CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
 		42EDAAAA1CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
 		42EDAAAB1CE18ADF00E44551 /* ACEAvailable.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAAA51CE18ADF00E44551 /* ACEAvailable.m */; };
+		42FF2D621D179097003994A5 /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 		42FFEF331C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
 		42FFEF341C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
 		42FFEF351C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
@@ -2840,6 +2841,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42FF2D621D179097003994A5 /* ACEKeychainItemWrapper.m in Sources */,
 				42BCF3CD1CD04DBE00F4677B /* EBrowserHistory.m in Sources */,
 				42CF200C1C1904F100F539B4 /* AppItemView.m in Sources */,
 				42CF200D1C1904F100F539B4 /* MMExampleDrawerVisualStateManager.m in Sources */,
@@ -3202,7 +3204,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3228,10 +3230,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide.engine;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -3244,7 +3246,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3270,10 +3272,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide.engine;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
