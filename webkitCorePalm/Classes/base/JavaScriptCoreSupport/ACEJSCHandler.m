@@ -28,8 +28,19 @@
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
 #import <AppCanKit/ACJSValueSupport.h>
+#import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACJSFunctionRefInternal.h>
 #import "ACEJSCInvocation.h"
+#import "EBrowserView.h"
+
+
+#define ACE_LOG_TRACE(cmd)\
+    _Pragma("clang diagnostic push")\
+    _Pragma("clang diagnostic ignored \"-Wformat\"")\
+    if(ACLogGlobalLogMode & ACLogLevelVerbose)\
+        cmd;\
+    _Pragma("clang diagnostic pop")
+
 
 static NSMutableDictionary *ACEJSCGlobalPlugins;
 @interface ACEJSCHandler()
@@ -95,7 +106,12 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 }
 
 
-- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode{
+
+
+
+
+
+- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execOpt:(ACEPluginMethodExecuteOption)option{
     if(!ACEJSCGlobalPlugins){
         [self.class initializeGlobalPlugins];
     }
@@ -120,14 +136,27 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     NSMutableArray *args = [self arrayFromArguments:arguments count:argCount];
     BOOL isAsync = [self selector:method isAsynchronousMethodInClass:[pluginInstance class]];
     
+    
+
+    //log trace
+    ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@ method:%@.%@ args:%@ async:%@",args,self.eBrowserView.muexObjName,pluginName,methodName,args,isAsync?@"YES":@"NO"))
+    
+        
+
+
+
+
+    
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     if (isAsync) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
             [pluginInstance performSelector:method withObject:args];
         });
         return nil;
     }else{
+        ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
         return [pluginInstance performSelector:method withObject:args];
     }
     /*

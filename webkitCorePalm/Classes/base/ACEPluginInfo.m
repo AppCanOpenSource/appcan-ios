@@ -42,14 +42,11 @@
     NSArray *newMethods = [XMLElement childrenWithTag:@"method"];
     for (ONOXMLElement *aMethod in newMethods) {
         NSString *methodName = aMethod[@"name"];
-        NSNumber *mode = @(ACEPluginMethodExecuteModeAsynchronous);
+        NSNumber *option = @(ACEPluginMethodExecuteOptionDefault);
 
-        NSString *isSync = aMethod[@"sync"];
-        if(isSync && [isSync.lowercaseString isEqual:@"true"]){
-            mode = @(ACEPluginMethodExecuteModeSynchronous);
-        }
+
         if(methodName && methodName.length >0){
-            [self.methods setValue:mode forKey:methodName];
+            [self.methods setValue:option forKey:methodName];
         }
     }
     NSArray *newProperties = [XMLElement childrenWithTag:@"property"];

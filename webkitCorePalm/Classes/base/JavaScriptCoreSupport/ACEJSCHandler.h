@@ -33,7 +33,7 @@
 
 
 
-JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode);
+JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execOpt:(ACEPluginMethodExecuteOption)option);
 
 
 - (void)log:(JSValue *)value,...;

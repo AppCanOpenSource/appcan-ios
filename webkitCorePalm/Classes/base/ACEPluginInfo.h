@@ -28,9 +28,8 @@
 
 @class ONOXMLElement;
 
-typedef NS_ENUM(NSInteger,ACEPluginMethodExecuteMode){
-    ACEPluginMethodExecuteModeAsynchronous = 0,
-    ACEPluginMethodExecuteModeSynchronous
+typedef NS_ENUM(NSInteger,ACEPluginMethodExecuteOption){
+    ACEPluginMethodExecuteOptionDefault = 0x0,
 };
 
 
@@ -38,7 +37,7 @@ typedef NS_ENUM(NSInteger,ACEPluginMethodExecuteMode){
 @interface ACEPluginInfo : NSObject
 @property (nonatomic,strong)NSString *uexName;
 /**
- *  methods = {方法名:@(executeMode)}
+ *  methods = {方法名:@(executeOption)}
  */
 @property (nonatomic,strong)NSMutableDictionary<NSString *,NSNumber *> *methods;
 /**

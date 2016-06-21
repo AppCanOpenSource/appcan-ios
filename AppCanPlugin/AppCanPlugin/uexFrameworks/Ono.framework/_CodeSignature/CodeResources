@@ -14,7 +14,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		70+OZfT++cXJr4ZINrZE9OovW3o=
+		YHCiFOuiVYQGASkGTC/KY1ma/Gg=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -24,17 +24,38 @@
 	<key>files2</key>
 	<dict>
 		<key>Headers/ONOXMLDocument.h</key>
-		<data>
-		GXUr4kRdin1AYrj365fK0zxMW8Q=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			GXUr4kRdin1AYrj365fK0zxMW8Q=
+			</data>
+			<key>hash2</key>
+			<data>
+			qlh2CRPNiG+zrl0ARpllFFkoDk/nL0A+fUxQjzJ7WEg=
+			</data>
+		</dict>
 		<key>Headers/Ono.h</key>
-		<data>
-		d9UjOsa/Yh2JbJoI1jkU4CCjBIs=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			d9UjOsa/Yh2JbJoI1jkU4CCjBIs=
+			</data>
+			<key>hash2</key>
+			<data>
+			8Yh//Q9rbDt6uk6AoJ1baJO4wBBvRb3afRF/qdSIOnM=
+			</data>
+		</dict>
 		<key>Modules/module.modulemap</key>
-		<data>
-		V9SDPD/DU3UwnWT70sRjSJuRpfM=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			V9SDPD/DU3UwnWT70sRjSJuRpfM=
+			</data>
+			<key>hash2</key>
+			<data>
+			fiqdSmgZBnhGTvnmOJB0IUXFd5Jr86ofKJ61BafF+tY=
+			</data>
+		</dict>
 	</dict>
 	<key>rules</key>
 	<dict>
