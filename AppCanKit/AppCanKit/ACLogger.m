@@ -262,8 +262,8 @@ _ACLogRegisterLogger(ACSTDERRLogger);
 - (instancetype)init{
     self = [super init];
     if (self) {
-//XcodeColor仅在debug模式有效
-#ifdef DEBUG
+        //XcodeColor仅在debug模式有效
+    
         _colorInfo = [NSMutableDictionary dictionary];
         UIColor *defaultBGColor = RGBColor(35, 35, 35);
         [_colorInfo setObject:[[ACSTDERRLoggerColorInfo alloc] initWithBackgroundColor:defaultBGColor foregroundColor:RGBColor(204,51,26)] forKey:@(ACLogLevelError)];
@@ -271,7 +271,7 @@ _ACLogRegisterLogger(ACSTDERRLogger);
         [_colorInfo setObject:[[ACSTDERRLoggerColorInfo alloc] initWithBackgroundColor:defaultBGColor foregroundColor:RGBColor(128,178,178)] forKey:@(ACLogLevelInfo)];
         [_colorInfo setObject:[[ACSTDERRLoggerColorInfo alloc] initWithBackgroundColor:defaultBGColor foregroundColor:[UIColor lightGrayColor]] forKey:@(ACLogLevelDebug)];
         [_colorInfo setObject:[[ACSTDERRLoggerColorInfo alloc] initWithBackgroundColor:defaultBGColor foregroundColor:[UIColor darkGrayColor]] forKey:@(ACLogLevelVerbose)];
-#endif
+
     }
     return self;
 }

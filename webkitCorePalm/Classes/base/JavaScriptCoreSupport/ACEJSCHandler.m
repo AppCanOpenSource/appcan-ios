@@ -66,6 +66,26 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
 }
 
+
+- (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView{
+    return [self initWithWebViewEngine:eBrowserView];
+}
+
+- (instancetype)initWithWebViewEngine:(id<AppCanWebViewEngineObject>)engine{
+    if (!engine || ![engine conformsToProtocol:@protocol(AppCanWebViewEngineObject)]) {
+        return nil;
+    }
+    self = [super init];
+    if (self) {
+        _pluginDict = [NSMutableDictionary dictionary];
+        _engine = engine;
+        if ([engine isKindOfClass:[EBrowserView class]]) {
+            _eBrowserView = (EBrowserView *)engine;
+        }
+    }
+    return self;
+}
+
 - (instancetype)init{
     self = [super init];
     if (self) {
@@ -74,14 +94,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     return self;
 }
 
-+ (instancetype)currentHandler{
-    JSContext *ctx = [JSContext currentContext];
-    id handler = ctx[@"uex"];
-    if (handler && [handler isKindOfClass:[self class]]) {
-        return handler;
-    }
-    return nil;
-}
+
 
 
 - (void)initializeWithJSContext:(JSContext *)context{
@@ -140,12 +153,6 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
     //log trace
     ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@ method:%@.%@ args:%@ async:%@",args,self.eBrowserView.muexObjName,pluginName,methodName,args,isAsync?@"YES":@"NO"))
-    
-        
-
-
-
-
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -242,7 +249,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithBrwView:self.eBrowserView];
+    instance = [[instanceClass alloc] initWithWebViewEngine:self.eBrowserView];
     if(!instance){
         return nil;
     }
@@ -268,7 +275,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithBrwView:self.eBrowserView];
+    instance = [[instanceClass alloc] initWithWebViewEngine:self.eBrowserView];
     if(!instance){
         return nil;
     }
@@ -277,33 +284,42 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 }
 
 - (void)loadDynamicPlugins:(NSString *)pluginName{
-    NSString *frameworkName=[NSString stringWithFormat:@"%@.framework",pluginName];
+    static NSMutableArray *loadedPlugins;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loadedPlugins = [NSMutableArray array];
+    });
+    if ([loadedPlugins containsObject:pluginName]) {
+        return;
+    }
+    [loadedPlugins addObject:pluginName];
+    
+    NSString *frameworkName = [NSString stringWithFormat:@"%@.framework",pluginName];
     
     //载入指定document子目录下的framework
-    NSBundle *dynamicBundle=[NSBundle bundleWithPath:[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:frameworkName]];
+    NSBundle *dynamicBundle = [NSBundle bundleWithPath:[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:frameworkName]];
     
-    if(dynamicBundle){
-        if([dynamicBundle isLoaded]){
-            return;
-        }
-        if([dynamicBundle load]){
-            ACLogInfo(@"load dynamic framework for plugin:%@",pluginName);
-            return;
-        }
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+        return;
     }
     
     //载入res目录下的framework
     //测试用
-
-    dynamicBundle=[NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
-    if(dynamicBundle){
-        if([dynamicBundle isLoaded]){
-            return;
-        }
-        if([dynamicBundle load]){
-            ACLogInfo(@"load dynamic framework for plugin:%@",pluginName);
-            return;
-        }
+    
+    dynamicBundle = [NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework in res for plugin:%@",pluginName);
+        return;
+        
+    }
+    //载入dyFiles目录下的framework
+    //本地打包用
+    
+    dynamicBundle = [NSBundle bundleWithPath:[NSString pathWithComponents:@[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,@"dyFiles",frameworkName]]];
+    if(dynamicBundle && [dynamicBundle load]){
+        NSLog(@"load dynamic framework in dyFiles for plugin:%@",pluginName);
+        return;
     }
 
 }
@@ -318,18 +334,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     return YES;
 }
 
-- (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView{
-    if(!eBrowserView){
-        return nil;
-    }
-    
-    self = [super init];
-    if (self) {
-        _pluginDict = [NSMutableDictionary dictionary];
-        _eBrowserView = eBrowserView;
-    }
-    return self;
-}
+
 
 - (void)clean{
     for(__kindof EUExBase *plugin in self.pluginDict.allValues){

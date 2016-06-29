@@ -138,6 +138,14 @@ id<AppCanWidgetObject> AppCanMainWidget(void){
     self = [super init];
     if (self) {
         _webViewEngine = engine;
+        
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+        if ([engine isKindOfClass:NSClassFromString(@"EBrowserView")]) {
+            meBrwView = (EBrowserView *)engine;
+        }
+#pragma clang diagnostic pop
     }
     return self;
 }
@@ -189,10 +197,7 @@ id<AppCanWidgetObject> AppCanMainWidget(void){
 }
 
 - (instancetype)initWithBrwView:(id<AppCanWebViewEngineObject>)eInBrwView{
-    if ([self initWithWebViewEngine:eInBrwView]) {
-        meBrwView = (EBrowserView *)eInBrwView;
-    }
-    return self;
+    return [self initWithWebViewEngine:eInBrwView];
 }
 
 @end

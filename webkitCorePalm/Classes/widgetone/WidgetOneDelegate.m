@@ -155,7 +155,6 @@ NSString *AppCanJS = nil;
     NSString * plistPath = [[NSBundle mainBundle] pathForResource:@"CBSchemesList" ofType:@"plist"];
     
     if (plistPath) {
-        
         NSDictionary *pDataDict = [NSDictionary dictionaryWithContentsOfFile:plistPath];
         NSMutableArray *anArray = [NSMutableArray arrayWithArray:[pDataDict objectForKey:@"UexObjName"]];
         
@@ -165,16 +164,11 @@ NSString *AppCanJS = nil;
             }
             NSString *EUExName = [@"EUEx" stringByAppendingString:[uexNameStr substringFromIndex:3]];
             __kindof EUExBase * payObj = [objDict objectForKey:EUExName];
-            if (payObj) {
-                
+            if (payObj && [payObj respondsToSelector:@selector(parseURL:application:)]) {
                 [payObj performSelector:@selector(parseURL:application:) withObject:url withObject:application];
-                
             }
-            
         }
-        
     }
-    
 }
 - (BOOL)isSingleTask {
     

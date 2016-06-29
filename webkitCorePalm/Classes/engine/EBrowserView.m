@@ -45,6 +45,10 @@
 #import <AppCanKit/ACJSValueSupport.h>
 
 
+@interface EBrowserView ()
+@property (nonatomic,assign)BOOL initialized;
+@end
+
 @implementation EBrowserView{
     float version;
     
@@ -204,6 +208,7 @@
 -(id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController *)eInBrwCtrler Wgt:(WWidget *)inWgt BrwWnd:(EBrowserWindow *)eInBrwWnd UExObjName:(NSString *)inUExObjName Type:(int)inWndType
 {
     if (self = [super initWithFrame:frame]) {
+        _initialized = NO;
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
         _meBrowserView = [[ACEBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType BrwView:(EBrowserView *)self];
@@ -211,10 +216,12 @@
         _meBrowserView.superDelegate = self;
         
         [self addSubview:_meBrowserView];
-        
+        _initialized = YES;
     }
     return self;
 }
+
+
 
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
@@ -631,6 +638,16 @@
 }
 
 #pragma mark - AppCanWebViewEngineObject
+
+
+- (void)addSubview:(UIView *)view{
+    
+    if (_initialized) {
+        [self.meBrwWnd addSubview:view];
+    }else{
+        [super addSubview:view];
+    }
+}
 
 - (__kindof UIView*)webView{
     return self.meBrowserView;
