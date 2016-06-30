@@ -650,7 +650,7 @@
 }
 
 - (__kindof UIView*)webView{
-    return self.meBrowserView;
+    return self;
 }
 
 
