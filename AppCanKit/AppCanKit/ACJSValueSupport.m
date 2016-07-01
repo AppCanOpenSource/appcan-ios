@@ -98,14 +98,35 @@
             return;
         }
         JSValue *setTimeout = self.context[@"setTimeout"];
-        if (setTimeout.ac_type != ACJSValueTypeFunction) {
+        ACJSValueType type = setTimeout.ac_type;
+        
+        if (type == ACJSValueTypeFunction) {
+            [setTimeout callWithArguments:@[exec,@0]];
+        }else{
             //当前JSContext没有setTimeout方法。可能是自定义的JSContext,而非来自webView
             exec();
         }
-        [setTimeout callWithArguments:@[exec,@0]];
+        
     });
 }
 
+@end
 
+@implementation JSContext(AppCanKit)
+
+- (JSValue *)ac_JSValueForKeyPath:(NSString *)keyPath{
+    JSValue *value = nil;
+    NSArray<NSString *> *components = [keyPath componentsSeparatedByString:@"."];
+    for (int i = 0; i < components.count; i++) {
+        if (!value) {
+            value = [self objectForKeyedSubscript:components[i]];
+        }else{
+            value = [value objectForKeyedSubscript:components[i]];
+        }
+    }
+    return value;
+}
 
 @end
+
+

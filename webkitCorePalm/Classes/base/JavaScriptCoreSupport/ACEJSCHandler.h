@@ -23,22 +23,10 @@
  
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "ACEPluginInfo.h"
+
 @class EBrowserView;
 
 
-
-
-@protocol ACEJSCHandler <JSExport>
-
-
-
-JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execOpt:(ACEPluginMethodExecuteOption)option);
-
-
-- (void)log:(JSValue *)value,...;
-
-@end
 
 
 
@@ -48,7 +36,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 /**
  *  基于JavaScriptCore的插件调用管理
  */
-@interface ACEJSCHandler : NSObject<ACEJSCHandler>
+@interface ACEJSCHandler : NSObject
 @property (nonatomic,strong)NSMutableDictionary *pluginDict;
 @property (nonatomic,weak)id<AppCanWebViewEngineObject> engine;
 @property (nonatomic,weak)JSContext *ctx;

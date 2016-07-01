@@ -67,10 +67,21 @@ typedef NS_ENUM(NSInteger,ACJSValueType){
  */
 - (void)ac_callWithArguments:(NSArray *)arguments
            completionHandler:(void (^)(JSValue * returnValue))completionHandler;
-
 /**
  *  不需要返回值时,可以直接使用此方法
  */
 - (void)ac_callWithArguments:(NSArray *)arguments;
-
 @end
+
+@interface JSContext(AppCanKit)
+
+/**
+ *  根据keyPath获得对应的JSValue
+ *  @example [ctx ac_JSValueForKeyPath:@"a.b.c"] 相当于 ctx[@"a"][@"b"][@"c"]
+ *
+ *  @return keyPath对应的JSValue
+ */
+- (JSValue *)ac_JSValueForKeyPath:(NSString *)keyPath;
+@end
+
+

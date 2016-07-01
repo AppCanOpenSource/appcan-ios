@@ -32,7 +32,7 @@
 #import <AppCanKit/ACJSFunctionRefInternal.h>
 #import "ACEJSCInvocation.h"
 #import "EBrowserView.h"
-
+#import "ACEPluginInfo.h"
 
 #define ACE_LOG_TRACE(cmd)\
     _Pragma("clang diagnostic push")\
@@ -43,7 +43,24 @@
 
 
 static NSMutableDictionary *ACEJSCGlobalPlugins;
-@interface ACEJSCHandler()
+
+
+
+@protocol ACEJSCHandler <JSExport>
+
+
+
+JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execOpt:(ACEPluginMethodExecuteOption)option);
+
+
+- (void)log:(JSValue *)value,...;
+
+@end
+
+
+
+
+@interface ACEJSCHandler()<ACEJSCHandler>
 
 @end
 
@@ -249,7 +266,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithWebViewEngine:self.eBrowserView];
+    instance = [[instanceClass alloc] initWithWebViewEngine:self.engine];
     if(!instance){
         return nil;
     }
@@ -275,7 +292,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithWebViewEngine:self.eBrowserView];
+    instance = [[instanceClass alloc] initWithWebViewEngine:self.engine];
     if(!instance){
         return nil;
     }
@@ -342,6 +359,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     }
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
+    self.engine = nil;
 
 }
 

@@ -675,16 +675,7 @@
 }
 
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue * ))completion{
-    
-    JSValue *func = nil;
-    NSArray<NSString *> *components = [JSKeyPath componentsSeparatedByString:@"."];
-    for ( int i = 0; i < components.count; i++) {
-        if (!func) {
-            func = [self.meBrowserView.JSContext objectForKeyedSubscript:components[i]];
-        }else{
-            func = [func objectForKeyedSubscript:components[i]];
-        }
-    }
+    JSValue *func = [self.meBrowserView.JSContext ac_JSValueForKeyPath:JSKeyPath];
     [func ac_callWithArguments:arguments completionHandler:completion];
 }
 
