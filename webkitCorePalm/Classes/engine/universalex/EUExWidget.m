@@ -1343,4 +1343,12 @@ result;\
     }
 }
 
+-(void)getMBaaSHost:(NSMutableArray *)inArguments{
+    
+    NSString *useAppCanMBaaSHost = theApp.useAppCanMBaaSHost;
+
+    [self jsSuccessWithName:@"uexWidget.cbMBaaSHost" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:useAppCanMBaaSHost];
+    
+}
+
 @end

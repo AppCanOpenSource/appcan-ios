@@ -86,6 +86,7 @@
 @property(nonatomic,strong)NSTimer *mToastTimer;
 @property(nonatomic,strong)EBrowserViewAnimition *meBrwAnimi;
 @property(nonatomic,strong)NSMutableDictionary *notificationDic;
+@property(nonatomic,assign)NSInteger isFristSetPopoverFrame;
 
 - (void)closeSlibing:(NSMutableArray *)inArguments;
 @end

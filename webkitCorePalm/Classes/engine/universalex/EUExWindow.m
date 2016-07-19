@@ -51,7 +51,7 @@
 #import "EUtility.h"
 #import "DataAnalysisInfo.h"
 #import "ACEBrowserView.h"
-
+#import "ACESubMultiPopScrollView.h"
 
 #import "ACEUtils.h"
 #import "ACEMultiPopoverScrollView.h"
@@ -3249,19 +3249,58 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     EScrollView * muiltPopover = [eBrwWnd.mMuiltPopoverDict objectForKey:popoverName];
     
     if (muiltPopover) {
-        
         muiltPopover.frame = CGRectMake(x, y, w, h);
-        muiltPopover.scrollView.frame = CGRectMake(0, 0, w, h);
-        for(UIView *view in muiltPopover.scrollView.subviews){
-            if (![view isKindOfClass:[EBrowserView class]]) {
-                continue;
-            }
-            CGRect newFrame = view.frame;
-            newFrame.size.height = h;
-            newFrame.size.width = w;
-            view.frame = newFrame;
-        }
+        NSLog(@"muiltPopover.scrollView=%@",muiltPopover.scrollView);
+        float height = 0;
+        float popViewX = 0;
+        float popViewY = 0;
         
+        NSMutableDictionary *viewDict = [[NSMutableDictionary alloc] init];
+        if (self.isFristSetPopoverFrame == 1) {
+            
+            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+            
+            NSString *position = [ud valueForKey:@"addViewToCurrentMultiPop_position"];
+            
+            float superViewH = muiltPopover.scrollView.frame.size.height;
+            
+            for (UIView *view in muiltPopover.scrollView.subviews) {
+                NSLog(@"muiltPopover.scrollView.subviews-------->>>>>%@",muiltPopover.scrollView.subviews);
+                
+                if([view isKindOfClass:[EBrowserView class]]){
+                    int index = view.frame.origin.x / view.frame.size.width;
+                    EBrowserView *ePopView = (EBrowserView*)view;
+                    popViewX = index * w;
+                    popViewY = ePopView.frame.origin.y;
+                    height = ePopView.frame.size.height;
+                    float dh = superViewH - height;
+                    ePopView.frame = CGRectMake(popViewX, popViewY, w, h - dh);
+                    NSLog(@"ePopView%d=%@;ePopView.scrollView=%@",index,ePopView,ePopView.scrollView);
+                    [viewDict setObject:view forKey:[NSString stringWithFormat:@"%lf",view.frame.origin.x]];
+                }
+                
+                if([view isKindOfClass:[ACESubMultiPopScrollView class]]){
+
+                    CGRect subPopViewFrame = view.frame;
+                    subPopViewFrame.size.width = w;
+                    if ([position isEqualToString:@"1"]) {
+                        subPopViewFrame.origin.y = h + 2 - subPopViewFrame.size.height;
+                    }
+                    view.frame = subPopViewFrame;
+                }
+            }
+            
+            NSInteger index = muiltPopover.scrollView.contentOffset.x / (h + y);
+            muiltPopover.scrollView.frame = CGRectMake(0, 0, w, h);
+            muiltPopover.scrollView.contentSize = CGSizeMake(viewDict.count * w, h);
+            CGPoint point = muiltPopover.scrollView.contentOffset;
+            point.x = w * index;
+            muiltPopover.scrollView.contentOffset = point;
+            self.isFristSetPopoverFrame = 0;
+        }else{
+            self.isFristSetPopoverFrame++;
+        }
+        NSLog(@"muiltPopover.scrollView=%@",muiltPopover.scrollView);
     }
     
 }
