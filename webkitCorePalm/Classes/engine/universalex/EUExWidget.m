@@ -1316,15 +1316,15 @@ result;\
     if([appData isKindOfClass:[NSDictionary class]]&&[appData objectForKey:@"appData"]&&[[appData objectForKey:@"appData"] isKindOfClass:[NSString class]]){
         NSString *urlScheme =[appData objectForKey:@"appData"];
         BOOL isInstalled=[[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlScheme]];
-        NSNumber *result = @(NO);
+        NSNumber *result = @(1);
 
         if(isInstalled){
-            result = @(YES);
+            result = @(0);
         }
         NSDictionary *dict=[NSDictionary dictionaryWithObject:result forKey:@"installed"];
         NSString* jsStr=[NSString stringWithFormat:@"if(uexWidget.cbIsAppInstalled != null){uexWidget.cbIsAppInstalled('%@');}",[dict JSONFragment]];
         [EUtility brwView:self.meBrwView evaluateScript:jsStr];
-        return result;
+        return @(isInstalled);
     }
     return @(NO);
 }
