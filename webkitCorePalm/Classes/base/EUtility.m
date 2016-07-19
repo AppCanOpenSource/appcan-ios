@@ -33,6 +33,8 @@
 #import "ACEBrowserView.h"
 #import "ACEJSCInvocation.h"
 #import "ACEUtils.h"
+#import "ACESubMultiPopScrollView.h"
+
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
 	va_list args;
@@ -271,6 +273,55 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 	return [inBrwView.request URL];
 }
 
++ (void)brwView:(EBrowserView*)inBrwView addViewToCurrentMultiPop:(UIView*)inSubView WithPosition:(NSInteger)position{
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    
+    [ud setValue:[NSString stringWithFormat:@"%ld",(long)position]forKey:@"addViewToCurrentMultiPop_position"];
+    
+    NSLog(@"addViewToCurrentMultiPop==>>inSubView=%@",inSubView);
+    
+    ACESubMultiPopScrollView *subMultiPopView = [[ACESubMultiPopScrollView alloc] initWithFrame:inSubView.frame];
+    
+    [subMultiPopView addSubview:inSubView];
+    
+    NSLog(@"addViewToCurrentMultiPop==>>subMultiPopView=%@",subMultiPopView);
+    
+    [inBrwView.superview addSubview:subMultiPopView];
+    
+    CGRect multiPopFrame = inBrwView.frame;
+    
+    CGRect subViewFrame = subMultiPopView.frame;
+    
+    subViewFrame.origin.x = multiPopFrame.origin.x;
+    
+    if (position == 0) {
+        
+        multiPopFrame.origin.y = CGRectGetMaxY(subViewFrame) + 2;
+        
+        multiPopFrame.size.height = multiPopFrame.size.height - multiPopFrame.origin.y;
+        
+        subMultiPopView.frame = subViewFrame;
+        
+        NSLog(@"addViewToCurrentMultiPop==>>subMultiPopView添加到头部时=%@",subMultiPopView);
+        
+    }else{
+        
+        subViewFrame.origin.y  = CGRectGetMaxY(multiPopFrame) - subMultiPopView.frame.size.height;
+        
+        subMultiPopView.frame = subViewFrame;
+        
+        multiPopFrame.size.height = subMultiPopView.frame.origin.y - 2;
+        
+        NSLog(@"addViewToCurrentMultiPop==>>subMultiPopView添加到底部时=%@",subMultiPopView);
+        
+    }
+    
+    inBrwView.frame = multiPopFrame;
+    
+    NSLog(@"addViewToCurrentMultiPop==>>inBrwView.frame=%@",inBrwView);
+    
+}
 
 
 + (void)brwView:(EBrowserView*)inBrwView addSubview:(UIView*)inSubView {
