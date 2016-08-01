@@ -207,6 +207,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getLocalData":ACE_METHOD_SYNC,
                                @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
                                @"setIsSupportSwipeCallback":ACE_METHOD_ASYNC,
+                               @"share":ACE_METHOD_ASYNC,
                                @"getWindowName":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWindowInfo;
