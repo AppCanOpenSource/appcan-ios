@@ -1,7 +1,7 @@
 @import Quick;
 @import Nimble;
 #import <AppCanKit/AppCanKit.h>
-
+#import <AppCanKit/ACEXTScope.h>
 @interface EXTScopeTestObject : NSObject
 @property (nonatomic,strong)dispatch_block_t myBlock;
 @end

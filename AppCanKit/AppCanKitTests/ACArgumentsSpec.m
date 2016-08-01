@@ -135,7 +135,6 @@ describe(@"ACArgsUnpack Test", ^{
         expect(obj1).to(equal(@1));
     });
     it(@"should auto translate NSString NSNumber NSArray NSDictionary",^{
-
         ACArgsUnpack(NSNumber *num1,NSString *str1,NSArray *array1,NSDictionary *dict1) = @[stringArg(num),numberArg(str),array.ac_JSONFragment,dict.ac_JSONFragment];
         expect(num1).to(equal(num));
         expect(str1).to(equal(str));

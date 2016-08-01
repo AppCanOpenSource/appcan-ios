@@ -26,14 +26,14 @@ DerivedData
 # Pods/
 
 AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a
-
-
 AppCanEngine/AppCanEngine.framework/*
-
 AppCanEngine/libAppCanEngine.a
 
 
 #AppCanKit
 AppCanKit/Carthage/*
 AppCanKit/Cartfile.private
-AppCanEngine/AppCankit.framework/*
+AppCanEngine/AppCanKit.framework/*
+AppCanPlugin/AppCanPlugin/engine/AppCanKit.framework/*
+
+
