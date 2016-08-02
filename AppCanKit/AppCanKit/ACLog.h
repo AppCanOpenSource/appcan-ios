@@ -174,7 +174,7 @@ APPCAN_EXPORT BOOL ACLogAsyncLogEnabled;
               file: __FILE__                    \
           function: func                        \
               line: __LINE__                    \
-            format: (fmt),## __VA_ARGS__];       \
+            format: (fmt),## __VA_ARGS__];      \
     }while(0)
 
 

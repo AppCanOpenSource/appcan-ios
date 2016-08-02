@@ -77,7 +77,7 @@ NSArray* _Nullable ac_arrayArg(id _Nullable arg){
     if ([arg isKindOfClass:[NSString class]]) {
         arg = [arg ac_JSONValue];
         //兼容JS SDK的URL转码得到的string
-        arrayStr = arg;
+        arrayStr = [arg isKindOfClass:[NSString class]]? arg : nil;
     }
     if ([arg isKindOfClass:[NSArray class]]) {
         return arg;

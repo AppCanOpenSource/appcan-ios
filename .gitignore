@@ -31,9 +31,7 @@ AppCanEngine/libAppCanEngine.a
 
 
 #AppCanKit
-AppCanKit/Carthage/*
-AppCanKit/Cartfile.private
-AppCanEngine/AppCanKit.framework/*
-AppCanPlugin/AppCanPlugin/engine/AppCanKit.framework/*
+/**/AppCanKit.framework/*
+/**/AppCanKit.framework/**
 
 
