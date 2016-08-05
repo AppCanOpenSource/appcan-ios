@@ -33,6 +33,7 @@
 #import "ACEPluginViewContainer.h"
 #import "ACEBrowserView.h"
 #import "ACEJSCInvocation.h"
+#import "ACEBaseDefine.h"
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
 	va_list args;
@@ -283,7 +284,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     [inBrwView.meBrwCtrler presentViewController:viewControllerToPresent animated:flag completion:completion];
 }
 
-+(void)doJsCB:(NSDictionary*)dict{
++ (void)doJsCB:(NSDictionary*)dict{
     EBrowserView *brwView =(EBrowserView*)[dict objectForKey:@"Brw"];
     NSString *inScript =[dict objectForKey:@"CBStr"];
     [brwView stringByEvaluatingJavaScriptFromString:inScript];
@@ -319,7 +320,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     return [BUtility getAbsPath:meBrwView path:inPath];
 }
 
-+(BOOL)appCanDev{
++ (BOOL)appCanDev{
     return [BUtility getAppCanDevMode];
 }
 + (EBrowserView *)rootBrwoserView{
@@ -330,11 +331,11 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     return [theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView;
 }
 
-+(void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
++ (void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
 	[BUtility evaluatingJavaScriptInRootWnd:script_];
 }
 
-+(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_{
++ (void)evaluatingJavaScriptInFrontWnd:(NSString*)script_{
 	[BUtility evaluatingJavaScriptInFrontWnd:script_];
 }
 
@@ -358,7 +359,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 
 
 
-+(BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation {
++ (BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation {
     return [BUtility isValidateOrientation:inOrientation];
 }
 
@@ -485,7 +486,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 +(NSString *)deviceIdentifyNo{
     return [BUtility getDeviceIdentifyNo];
 }
-+(BOOL)isNetConnected{
++ (BOOL)isNetConnected{
     return [BUtility isConnected];
 }
 +(UIImage *)imageByScalingAndCroppingForSize:(UIImage *)image{
@@ -551,35 +552,36 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
     }
     return color;
 }
-+(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
++ (void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
 {
 
 }
-+(void)writeLog:(NSString*)inLog{
++ (void)writeLog:(NSString*)inLog{
     return [BUtility writeLog:inLog];
 }
 
-+(NSInteger)supportedInterfaceOrientations:(EBrowserView*)meBrwView{
-    int orientation = 0;
++ (UIInterfaceOrientationMask)supportedInterfaceOrientations:(EBrowserView*)meBrwView{
+
+    UIInterfaceOrientationMask orientation = 0;
     EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
     if (aboveWndContainer) {
-        if ((meBrwView.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationProtrait) {
             orientation |= UIInterfaceOrientationMaskPortrait;
         }
-        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationProtraitUpsideDown) {
             orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
         }
-        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationLandscapeLeft) {
             orientation |= UIInterfaceOrientationMaskLandscapeLeft;
         }
-        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationLandscapeRight) {
             orientation |= UIInterfaceOrientationMaskLandscapeRight;
         }
     }
     return orientation;
 }
 
-+(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView{
++ (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView{
     EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
     if (aboveWndContainer) {
         EBrowserWindow *eBrwWnd = [aboveWndContainer aboveWindow];
@@ -592,29 +594,9 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
         if (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd && (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd.hidden == NO)) {
             return NO;
         }
-        switch (toInterfaceOrientation) {
-            case UIInterfaceOrientationPortrait:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
-                    return YES;
-                }
-                break;
-            case UIInterfaceOrientationPortraitUpsideDown:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-                    return YES;
-                }
-                break;
-            case UIInterfaceOrientationLandscapeLeft:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
-                    return YES;
-                }
-                break;
-            case UIInterfaceOrientationLandscapeRight:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-                    return YES;
-                }
-                break;
-            default:
-                break;
+        
+        if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
+            return YES;
         }
     }
     NSString *oritent =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;

@@ -22,11 +22,11 @@
 #define F_SBWND_FONT_SIZE_PHONE		12
 
 @interface BStatusBarWindow : UIWindow {
-	UIDeviceOrientation mInitOrientation;
+
 	UILabel *mTextView;
 	SystemSoundID mAlertSoundID;
 }
-@property UIDeviceOrientation mInitOrientation;
+@property UIInterfaceOrientation  mInitOrientation;
 @property (nonatomic,assign)SystemSoundID mAlertSoundID;
 
 - (id)initWithFrame:(CGRect)frame andNotifyText:(NSString*)notifyText;

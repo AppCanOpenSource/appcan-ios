@@ -372,30 +372,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 }
 
 
-+ (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView
-{
-    EBrowserWindowContainer *eBrwWndContainer = nil;
-    EBrowserWindow *eBrwWnd = browserView.meBrwWnd;
-    
-    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
-        
-        
-        if (eBrwWnd.superview != nil && [eBrwWnd.superview isKindOfClass:[EBrowserWindowContainer class]]) {
-            eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
-            
-            eBrwWnd.winContainer = eBrwWndContainer;
-            
-        } else {
-            
-            eBrwWndContainer = eBrwWnd.winContainer;
-        }
-        
-        
-    } else {
-        eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
-    }
-    
-    return eBrwWndContainer;
++ (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView{
+    return browserView.meBrwWnd.winContainer;
 }
 @end

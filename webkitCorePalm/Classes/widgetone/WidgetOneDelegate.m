@@ -818,12 +818,7 @@ NSString *AppCanJS = nil;
     
     [self invokeAppDelegateMethodApplicationDidBecomeActive:application];
     
-    /*
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [EBrowserWindow postWindowSequenceChange];
-    });
-     */
+
 }
 
 

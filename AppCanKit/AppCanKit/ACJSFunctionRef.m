@@ -50,10 +50,11 @@
         JSValue *intenal = ctx[@"_ACJSFunctionRefIntenal"];
         if ([intenal isUndefined]) {
             intenal = [JSValue valueWithObject:@{} inContext:ctx];
+            ctx[@"_ACJSFunctionRefIntenal"] = intenal;
         }
-        ctx[@"_ACJSFunctionRefIntenal"] = intenal;
-        intenal[funcRef.identifier] = value;
         
+        intenal[funcRef.identifier] = value;
+        ACLogVerbose(@"js funcRef <%@> init",funcRef.identifier);
     }
     return funcRef;
 
@@ -84,7 +85,7 @@
 - (void)dealloc{
     self.ctx[@"_ACJSFunctionRefIntenal"][self.identifier] = nil;
     [self.machine removeManagedReference:self.managedFunction withOwner:self];
-    ACLogVerbose(@"js func dealloc");
+    ACLogVerbose(@"js funcRef <%@> dealloc",self.identifier);
 }
 
 

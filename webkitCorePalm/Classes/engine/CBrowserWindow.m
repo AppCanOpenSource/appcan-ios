@@ -180,77 +180,23 @@ const float AppCanFinalProgressValue = 0.9f;
                     return NO;
                 }
             }
-			if (eBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
-				//[eBrwView stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
-                
-
-
-
-				WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
-				//EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)eBrwView.meBrwWnd.superview;
-                
+            if (eBrwView.mType == ACEEBrowserViewTypeMain) {
+                WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
                 EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eBrwView.superDelegate];
-                
-                
-				if (eBrwWndContainer) {
-					wWgt = eBrwWndContainer.mwWgt;
-				}
-				if (wWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
-					if (eBrwView.mType == F_EBRW_VIEW_TYPE_MAIN) {
-						EBrowserWindow *eBrwWnd = (EBrowserWindow*)eBrwView.meBrwWnd;
-						EBrowserHistoryEntry *eHisEntry = [eBrwWnd curHisEntry];
-						ACENSLog(@"his: %@", [eHisEntry.mUrl absoluteString]);
-						ACENSLog(@"req: %@", [requestURL absoluteString]);
-						if (![eHisEntry.mUrl isEqual:requestURL]) {
-							eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:requestURL obfValue:NO];
-							[eBrwWnd addHisEntry:eHisEntry];
-						}
-					}
-				}
-			}
-		}
-        //URL
-		/*ACENSLog(@"URL: %@", [request URL]);
-		// NSURLRequest:
-		//allHTTPHeaderFields
-		ACENSLog(@"allHTTPHeaderFields: %@", [request allHTTPHeaderFields]);
-		//cachePolicy
-		ACENSLog(@"catch policy is %d", [request cachePolicy]);
-        NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-        for (NSHTTPCookie* cookie in [cookieStorage cookies]) {
-            ACENSLog(@"cookie name is %d", cookie.name);
-            ACENSLog(@"cookie domain is %@", cookie.domain);
-            ACENSLog(@"cookie path is %d", cookie.path);
-            ACENSLog(@"cookie portList is %@", cookie.portList);
-            ACENSLog(@"cookie value is %@", cookie.value);
-            ACENSLog(@"cookie expiresDate is %@", cookie.expiresDate);
-            ACENSLog(@"cookie comment is %@", cookie.comment);
-            ACENSLog(@"cookie commentURL is %@", cookie.commentURL);
-            ACENSLog(@"cookie version is %d", cookie.version);
-            ACENSLog(@"cookie isHTTPOnly is %d", cookie.isHTTPOnly);
-            ACENSLog(@"cookie isSecure is %d", cookie.isSecure);
-            ACENSLog(@"cookie isSessionOnly is %d", cookie.isSessionOnly);
-            ACENSLog(@"cookie properties is %@", cookie.properties);
-            ACENSLog(@"##################################################");
+                if (eBrwWndContainer) {
+                    wWgt = eBrwWndContainer.mwWgt;
+                }
+                if (wWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+                    EBrowserWindow *eBrwWnd = (EBrowserWindow*)eBrwView.meBrwWnd;
+                    EBrowserHistoryEntry *eHisEntry = [eBrwWnd curHisEntry];
+                    if (![eHisEntry.mUrl isEqual:requestURL]) {
+                        eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:requestURL obfValue:NO];
+                        [eBrwWnd addHisEntry:eHisEntry];
+                    }
+                }
+            }
         }
-        ACENSLog(@"cookie for http header is %@", [NSHTTPCookie requestHeaderFieldsWithCookies:[cookieStorage cookies]]);
-		//HTTPBody
-		ACENSLog(@"HTTPBody: %@", [request HTTPBody]);
-		//HTTPBodyStream
-		ACENSLog(@"HTTPBodyStream: %@", [request HTTPBodyStream]);
-		//HTTPMethod
-		ACENSLog(@"HTTPMethod: %@", [request HTTPMethod]);
-		//HTTPShouldHandleCookies
-		ACENSLog(@"HTTPShouldHandleCookies: %d", [request HTTPShouldHandleCookies]);
-		//HTTPShouldUsePipelining
-		ACENSLog(@"HTTPShouldUsePipelining: %d", [request HTTPShouldUsePipelining]);
-		//mainDocumentURL
-		ACENSLog(@"mainDocumentURL: %@", [request mainDocumentURL]);
-		//networkServiceType
-		ACENSLog(@"networkServiceType: %d", [request networkServiceType]);
-		//timeoutInterval
-		ACENSLog(@"timeoutInterval: %f", [request timeoutInterval]);*/
-	}
+    }
     
     [self webView:webView shouldStartLoadWithRequestOption:request navigationType:navigationType];
 	

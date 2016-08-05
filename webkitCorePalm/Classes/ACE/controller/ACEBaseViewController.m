@@ -163,16 +163,11 @@
 }
 
 - (BOOL)shouldAutorotate {
-    
     if (_canRotate) {
-        
         _canRotate = NO;
-        
         return YES;
-        
     }
-    
-    return _canAutorotate;
+    return NO;
     
 }
 

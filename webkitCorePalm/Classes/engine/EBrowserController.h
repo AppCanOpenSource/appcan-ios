@@ -32,10 +32,8 @@
 #define F_EBRW_CTRL_FLAG_AUTH_SUCCESSED     0x4
 
 
-#define F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT				1
-#define F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT			2
-#define F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN	4
-#define F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT		8
+
+
 //4.8
 #define F_ForbidPlugins    @"AppCanPluginsKey"
 #define F_ForbidWindows    @"AppCanWindowsKey"
@@ -70,9 +68,7 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, retain) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, assign) BOOL ballHasShow;
 @property (nonatomic, assign) int mFlag;
-@property (nonatomic,retain)NSMutableArray *forebidPluginsList;
-@property (nonatomic,retain)NSMutableArray *forebidWinsList;
-@property (nonatomic,retain)NSMutableArray *forebidPopWinsList;
+
 @property(nonatomic,assign)int wgtOrientation;
 - (EBrowserWidgetContainer*)brwWidgetContainer;
 

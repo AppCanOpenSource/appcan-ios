@@ -39,7 +39,7 @@
 @synthesize updateUrl;
 @synthesize showMySpace;
 @synthesize author;
-@synthesize description;
+@synthesize desc;
 @synthesize email;
 @synthesize license;
 @synthesize orientation;
@@ -75,8 +75,8 @@
 	updateUrl = nil;
 	[email release];
 	email = nil;
-	[description release];
-	description = nil;
+	[desc release];
+	desc = nil;
 	[author release];
 	author = nil;
 	[license release];

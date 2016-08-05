@@ -254,7 +254,7 @@ NSString * webappShowAactivety;
 	if([arr count]>0 && [arr objectAtIndex:0]!=nil){
 		WWidget *tmpWidget = (WWidget*)[arr objectAtIndex:0];
 		NSString *updateSQL = [NSString stringWithFormat:@"UPDATE %@ SET widgetOneId='%@',ver='%@',channelCode='%@',imei='%@',widgetName='%@',iconPath='%@',widgetPath='%@',indexUrl='%@',obfuscation=%d, logServerIp='%@',updateUrl='%@',showMySpace=%d,description='%@',author='%@',email='%@',license='%@',orientation=%d,preload=%d, WHERE id=%d",SQL_WGTS_TABLE,
-							   @"",wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.description,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload, tmpWidget.wId];
+							   @"",wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload, tmpWidget.wId];
 		[widgetSql updateSql:[updateSQL UTF8String]];
 		
 	}else{
@@ -265,7 +265,7 @@ NSString * webappShowAactivety;
 		}
 		//插入语句
 		NSString *insertStrSQL = [NSString stringWithFormat:@"INSERT INTO %@(widgetOneId,appId,ver,channelCode,imei,widgetName,iconPath,widgetPath,indexUrl,obfuscation,wgtType,logServerIp,updateUrl,showMySpace,description,author,email,license,orientation,preload) VALUES('%@','%@','%@','%@','%@','%@','%@','%@','%@',%d,%d,'%@','%@',%d,'%@','%@','%@','%@',%d,%d)",SQL_WGTS_TABLE,
-								  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.wgtType,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.description,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload];
+								  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.wgtType,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload];
 		
 		[widgetSql insertSql:[insertStrSQL UTF8String]];
 	}
@@ -614,7 +614,7 @@ NSString * webappShowAactivety;
 	//17.description
 	NSString *desStr = [tmpDict objectForKey:CONFIG_TAG_DESCRIPTION];
 	if (desStr) {
-		tmpWgt.description = desStr;
+		tmpWgt.desc = desStr;
 	}
 	//author 18,19
 	NSString *authorStr = [[tmpDict objectForKey:CONFIG_TAG_AUTHOR] objectForKey:CONFIG_TAG_NAME];
@@ -771,7 +771,7 @@ NSString * webappShowAactivety;
 				//NSString *tmpInsert = [NSString stringWithFormat:@"INSERT INTO %@(widgetOneId,appId,ver,channelCode,imei,widgetName,iconPath,widgetPath,indexUrl,obfuscation,wgtType,logServerIp,updateUrl) VALUES('%@','%@','%@','%@','%@','%@','%@','%@','%@',%d,%d,'%@','%@');",SQL_WGTS_TABLE, 
 //									   wgtObj.widgetOneId,wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,F_WWIDGET_TMPWIDGET,wgtObj.logServerIp,wgtObj.updateUrl];
 				NSString *tmpInsert = [NSString stringWithFormat:@"INSERT INTO %@(widgetOneId,appId,ver,channelCode,imei,widgetName,iconPath,widgetPath,indexUrl,obfuscation,wgtType,logServerIp,updateUrl,showMySpace,description,author,email,license,orientation) VALUES('%@','%@','%@','%@','%@','%@','%@','%@','%@',%d,%d,'%@','%@',%d,'%@','%@','%@','%@',%d);",SQL_WGTS_TABLE,
-										  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,F_WWIDGET_TMPWIDGET,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.description,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation];
+										  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,F_WWIDGET_TMPWIDGET,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation];
 				
 				[insertStrSQL appendString:tmpInsert];
 			}

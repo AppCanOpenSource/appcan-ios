@@ -154,7 +154,7 @@
 				wgtObj.updateUrl = [NSString stringWithUTF8String:wUpdateUrl];
 			}
 			if (wDescription && !(strcmp(wDescription, "(null)")==0)) {
-				wgtObj.description = [NSString stringWithUTF8String:wDescription];
+				wgtObj.desc = [NSString stringWithUTF8String:wDescription];
 			}
 			if (wAuthor && !(strcmp(wAuthor, "(null)")==0)) {
 				wgtObj.author = [NSString stringWithUTF8String:wAuthor];

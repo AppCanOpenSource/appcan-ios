@@ -120,7 +120,7 @@ typedef NS_ENUM(NSInteger,ACArgumentsHelperParseOption){
     static NSArray * modifiers = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        modifiers = @[@"__weak",@"__block",@"__strong",@"__autoreleasing",@"__unsafe_unretained"];
+        modifiers = @[@"__weak",@"__block",@"__strong",@"__autoreleasing",@"__unsafe_unretained",@"__unused",@"__nullable",@"__nonnull"];
     });
     while (1) {
         BOOL changed = NO;

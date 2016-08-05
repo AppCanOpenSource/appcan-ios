@@ -37,7 +37,7 @@
 #import "SFHFKeychainUtils.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-
+#import "ACEBaseDefine.h"
 
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
@@ -54,9 +54,8 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 @synthesize mwWgtMgr;
 @synthesize mFlag;
 @synthesize ballHasShow;
-@synthesize forebidPluginsList;
-@synthesize forebidWinsList;
-@synthesize forebidPopWinsList;
+
+
 @synthesize wgtOrientation;
 -(void)getHideEnterStatus:(NSNotification *)inNotification{
 	if ([BUtility getAppCanDevMode]) {
@@ -135,18 +134,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
     }
     [mwWgtUpdate release];
     mwWgtUpdate = nil;
-    if (forebidPluginsList) {
-        [forebidPluginsList release];
-        forebidPluginsList = nil;
-    }
-    if (forebidWinsList) {
-        [forebidWinsList release];
-        forebidWinsList = nil;
-    }
-    if (forebidPopWinsList) {
-        [forebidPopWinsList release];
-        forebidPopWinsList = nil;
-    }
+
 	[super dealloc];
 }
 
@@ -720,64 +708,36 @@ static BOOL userCustomLoadingImageEnabled = NO;
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
 	if (aboveWndContainer) {
+
+        
+        
 		switch (toInterfaceOrientation) {
 			case UIInterfaceOrientationPortrait:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
+            case UIInterfaceOrientationPortraitUpsideDown:{
+				if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
 					[meBrwMainFrm setVerticalFrame];
 				}
 				break;
-			case UIInterfaceOrientationPortraitUpsideDown:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-					[meBrwMainFrm setVerticalFrame];
-				}
-				break;
+            }
 			case UIInterfaceOrientationLandscapeLeft:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
+            case UIInterfaceOrientationLandscapeRight:{
+				if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
 					[meBrwMainFrm setHorizontalFrame];
 				}
 				break;
-			case UIInterfaceOrientationLandscapeRight:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-					[meBrwMainFrm setHorizontalFrame];
-				}
-				break;
+            }
 			default:
 				break;
 		}
 	}
 }
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-	NSString *jsStr = nil;
 	EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
 	UIInterfaceOrientation nowOrientation = (UIInterfaceOrientation)[[UIDevice currentDevice] orientation];
-	if (aboveWndContainer) {
-		switch (nowOrientation) {
-			case UIInterfaceOrientationPortrait:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT];
-				}
-				break;
-			case UIInterfaceOrientationPortraitUpsideDown:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN];
-				}
-				break;
-			case UIInterfaceOrientationLandscapeLeft:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT];
-				}
-				break;
-			case UIInterfaceOrientationLandscapeRight:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT];
-				}
-				break;
-			default:
-				break;
-		}
-		if ([[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow] isKindOfClass:[EBrowserWindow class]]) {
-			[[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:jsStr];
-		}
+    
+	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(nowOrientation))) {
+        [[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation))];
+
 	}
 }
 

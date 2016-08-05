@@ -16,11 +16,11 @@
  *
  */
 
-#define F_EBRW_VIEW_TYPE_MAIN				0
-#define F_EBRW_VIEW_TYPE_SLIBING_TOP		1
-#define F_EBRW_VIEW_TYPE_SLIBING_BOTTOM		2
-#define F_EBRW_VIEW_TYPE_POPOVER			3
-#define F_EBRW_VIEW_TYPE_AD					4
+//#define F_EBRW_VIEW_TYPE_MAIN				0
+//#define F_EBRW_VIEW_TYPE_SLIBING_TOP		1
+//#define F_EBRW_VIEW_TYPE_SLIBING_BOTTOM		2
+//#define F_EBRW_VIEW_TYPE_POPOVER			3
+//#define F_EBRW_VIEW_TYPE_AD					4
 
 #define F_PAGEINFO_DICT_SIZE				1
 
@@ -43,7 +43,7 @@
 
 #import <UIKit/UIKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
-
+#import "EBrowserView.h"
 @class EBrowserController;
 @class CBrowserMainFrame;
 @class CBrowserWindow;
@@ -56,8 +56,6 @@
 @class EBrowserHistoryEntry;
 @class ACEJSCHandler;
 @interface ACEBrowserView : UIWebView <UIGestureRecognizerDelegate>{
-
-	int mType;
 	int mFlag;
 	int mTopBounceState;
 	int mBottomBounceState;
@@ -84,7 +82,7 @@
 @property (nonatomic,assign) float bottom;
 
 @property (nonatomic,strong)ACEJSCHandler *JSCHandler;
-@property int mType;
+@property (nonatomic,assign)ACEEBrowserViewType mType;
 @property int mFlag;
 @property int mTopBounceState;
 @property int mBottomBounceState;
@@ -100,8 +98,8 @@
 @property (nonatomic,assign)BOOL swipeCallbackEnabled;
 
 
-- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType BrwView:(EBrowserView *)BrwView;
+- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(ACEEBrowserViewType)inWndType BrwView:(EBrowserView *)BrwView;
+- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(ACEEBrowserViewType)inWndType BrwView:(EBrowserView *)BrwView;
 - (void)reset;
 - (void)notifyPageStart;
 - (void)notifyPageFinish;

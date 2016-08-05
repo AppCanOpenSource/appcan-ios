@@ -21,8 +21,7 @@
 #import "BUtility.h"
 
 @implementation BStatusBarWindow
-@synthesize mInitOrientation;
-@synthesize mAlertSoundID;
+
 
 - (void)dealloc {
 	if (mTextView.superview) {
@@ -35,11 +34,11 @@
 - (id)initWithFrame:(CGRect)frame andNotifyText:(NSString*)notifyText {
     self = [super initWithFrame:frame];
     if (self) {
-		UIDeviceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+		UIInterfaceOrientation  orientation = [[UIApplication sharedApplication] statusBarOrientation];
 		self.windowLevel = UIWindowLevelStatusBar + 1.0f;
 		self.backgroundColor = [UIColor redColor];
 		self.opaque = YES;
-		mInitOrientation = orientation;
+		self.mInitOrientation = orientation;
 		mTextView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 20)];
 		mTextView.backgroundColor = [UIColor clearColor];
         if (__IPHONE_OS_VERSION_MAX_ALLOWED>__IPHONE_6_0) {
@@ -85,7 +84,7 @@
 			mTextView.font = [UIFont systemFontOfSize:F_SBWND_FONT_SIZE_PHONE];
 		}
 		NSURL* alert_sound_url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"sound/collision" ofType:@"wav"]];
-		AudioServicesCreateSystemSoundID((CFURLRef)alert_sound_url, &mAlertSoundID);
+		AudioServicesCreateSystemSoundID((CFURLRef)alert_sound_url, &_mAlertSoundID);
 		[self addSubview:mTextView];
 		[mTextView release];
     }
