@@ -980,6 +980,8 @@
 		B2E52AFD15A6B2F1003E73EA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFA15A6B2F1003E73EA /* Security.framework */; };
 		B2E52AFE15A6B2F1003E73EA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */; };
 		B2E52AFF15A6B2F1003E73EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AFC15A6B2F1003E73EA /* UIKit.framework */; };
+		D7FEEDAD1D3E16E400874038 /* ACESubMultiPopScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = D7FEEDAB1D3E16E400874038 /* ACESubMultiPopScrollView.h */; };
+		D7FEEDAE1D3E16E400874038 /* ACESubMultiPopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D7FEEDAC1D3E16E400874038 /* ACESubMultiPopScrollView.m */; };
 		DE1188321AA0782F009DF581 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = DE1188311AA0782F009DF581 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DE81D4CD1A4D3D81005D3153 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CC1A4D3D81005D3153 /* libACEDes.a */; };
 		DE90F53A1904E6D00084EC10 /* OpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = DE90F5381904E6D00084EC10 /* OpenUDID.h */; };
@@ -1316,6 +1318,8 @@
 		B2E52AFA15A6B2F1003E73EA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B2E52AFC15A6B2F1003E73EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		D7FEEDAB1D3E16E400874038 /* ACESubMultiPopScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACESubMultiPopScrollView.h; sourceTree = "<group>"; };
+		D7FEEDAC1D3E16E400874038 /* ACESubMultiPopScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACESubMultiPopScrollView.m; sourceTree = "<group>"; };
 		DE1188311AA0782F009DF581 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		DE81D4CC1A4D3D81005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F5381904E6D00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
@@ -1793,6 +1797,8 @@
 				5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */,
 				464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */,
 				464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */,
+				D7FEEDAB1D3E16E400874038 /* ACESubMultiPopScrollView.h */,
+				D7FEEDAC1D3E16E400874038 /* ACESubMultiPopScrollView.m */,
 				5AAA860A18B1B93D000D7600 /* universalex */,
 			);
 			path = engine;
@@ -2485,6 +2491,7 @@
 				33C8E2F81B1EE7E300C33492 /* UIViewController+RESideMenu.h in Headers */,
 				5AAA86A318B1B93D000D7600 /* SBJsonParser.h in Headers */,
 				5AAA869B18B1B93D000D7600 /* NSObject+SBJSON.h in Headers */,
+				D7FEEDAD1D3E16E400874038 /* ACESubMultiPopScrollView.h in Headers */,
 				5AAA86DA18B1B93D000D7600 /* EBrowser.h in Headers */,
 				5AAA870E18B1B93D000D7600 /* ASIDownloadCache.h in Headers */,
 				33774C711B2A6D3500D5F279 /* UIImageView+WebCache.h in Headers */,
@@ -3018,6 +3025,7 @@
 				5AAA86E318B1B93D000D7600 /* EBrowserMainFrame.m in Sources */,
 				3C2887B31A0B0984002776E4 /* CDataScanner_Extensions.m in Sources */,
 				5AAA869A18B1B93D000D7600 /* JSONParser.m in Sources */,
+				D7FEEDAE1D3E16E400874038 /* ACESubMultiPopScrollView.m in Sources */,
 				5AAA871118B1B93D000D7600 /* ASIFormDataRequest.m in Sources */,
 				5AAA873318B1B93D000D7600 /* sha1.c in Sources */,
 				5AAA869518B1B93D000D7600 /* EUtility.m in Sources */,
