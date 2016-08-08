@@ -22,9 +22,8 @@
  */
 
 #import "ACAvailability.h"
-#import <objc/message.h>
 #import "ACArguments.h"
-
+#import "ACInvoker.h"
 static NSString *kAppCanEngineVersion = @"";
 static NSInteger kAppCanEngineVersionCode = 0;
 
@@ -34,20 +33,24 @@ static NSInteger versionCodeFromVersion(NSString * version){
     return ver1.integerValue * 10000 + ver2.integerValue * 100 + ver3.integerValue;
 }
 
-__attribute__((constructor)) static void getVersion (void){
-    Class aceVersion = NSClassFromString(@"ACEVersion");
-    if (aceVersion && [aceVersion respondsToSelector:@selector(version)]) {
-        kAppCanEngineVersion = ((NSString * (*)(id, SEL))objc_msgSend)((id)aceVersion, @selector(version));
-    }
-    if (kAppCanEngineVersion.length > 0) {
-        kAppCanEngineVersionCode = versionCodeFromVersion(kAppCanEngineVersion);
-    }
-}
-
 
 
 
 @implementation ACAvailability
+
++ (void)initialize{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Class aceVersion = NSClassFromString(@"ACEVersion");
+        if (aceVersion && [aceVersion respondsToSelector:@selector(version)]) {
+            kAppCanEngineVersion = [aceVersion ac_invoke:@"version"];
+        }
+        if (kAppCanEngineVersion.length > 0) {
+            kAppCanEngineVersionCode = versionCodeFromVersion(kAppCanEngineVersion);
+        }
+    });
+}
+
 
 + (NSString *)engineVersion{
     return kAppCanEngineVersion;

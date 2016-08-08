@@ -68,7 +68,7 @@ describe(@"ACJSONTest", ^{
         expect(newDict).to(equal(dict));
     });
 
-    it(@"should work togather with JavaScrpt Function JSON.parse & JSON.stringify",^{
+    it(@"should work together with JavaScrpt Function JSON.parse & JSON.stringify",^{
         id newStr1 = [ACJSONTestHelper JS_JSON_Parse:str.ac_JSONFragment];
         expect(newStr1).to(equal(str));
         id newArr1 = [ACJSONTestHelper JS_JSON_Parse:arr.ac_JSONFragment];

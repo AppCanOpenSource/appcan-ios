@@ -11,12 +11,9 @@
 
 @interface ACEPluginViewContainer : UIScrollView <UIScrollViewDelegate>
 
-@property (nonatomic, copy) NSString * containerIdentifier;
-
+@property (nonatomic, strong) NSString * containerIdentifier;
 @property (nonatomic, assign) NSInteger maxIndex;
-
-@property (nonatomic, assign) EUExWindow * uexObj;
-
+@property (nonatomic, weak) EUExWindow * uexObj;
 @property (nonatomic, assign) NSInteger lastIndex;
 
 @end

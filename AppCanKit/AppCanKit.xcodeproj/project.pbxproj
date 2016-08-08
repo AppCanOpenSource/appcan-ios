@@ -42,6 +42,8 @@
 		42D7F6FB1CFFBD7300447B4C /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D7F6F91CFFBD7300447B4C /* Quick.framework */; };
 		42D7F6FD1CFFBEA800447B4C /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42D7F6F81CFFBD7300447B4C /* Nimble.framework */; };
 		42D7F6FE1CFFBEAC00447B4C /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42D7F6F91CFFBD7300447B4C /* Quick.framework */; };
+		42DB71B01D54887700E61C19 /* ACInvoker.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DB71AE1D54887700E61C19 /* ACInvoker.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		42DB71B11D54887700E61C19 /* ACInvoker.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DB71AF1D54887700E61C19 /* ACInvoker.m */; };
 		42ED03F81CFC34E1009134BE /* ACJSFunctionRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 42ED03F61CFC34E1009134BE /* ACJSFunctionRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42ED03F91CFC34E1009134BE /* ACJSFunctionRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ED03F71CFC34E1009134BE /* ACJSFunctionRef.m */; };
 		42ED03FC1CFC3783009134BE /* ACJSValueSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 42ED03FA1CFC3783009134BE /* ACJSValueSupport.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -110,6 +112,8 @@
 		42A9F63F1CFD39D9002710FC /* AppCanGlobalObjectGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanGlobalObjectGetter.h; sourceTree = "<group>"; };
 		42D7F6F81CFFBD7300447B4C /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = "<group>"; };
 		42D7F6F91CFFBD7300447B4C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = "<group>"; };
+		42DB71AE1D54887700E61C19 /* ACInvoker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACInvoker.h; sourceTree = "<group>"; };
+		42DB71AF1D54887700E61C19 /* ACInvoker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACInvoker.m; sourceTree = "<group>"; };
 		42ED03F61CFC34E1009134BE /* ACJSFunctionRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACJSFunctionRef.h; sourceTree = "<group>"; };
 		42ED03F71CFC34E1009134BE /* ACJSFunctionRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSFunctionRef.m; sourceTree = "<group>"; };
 		42ED03FA1CFC3783009134BE /* ACJSValueSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACJSValueSupport.h; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 				421AE5841CF5906E001A5053 /* ACEXTScope.h */,
 				421AE57E1CF58393001A5053 /* ACNil.h */,
 				421AE57F1CF58393001A5053 /* ACNil.m */,
+				42DB71AE1D54887700E61C19 /* ACInvoker.h */,
+				42DB71AF1D54887700E61C19 /* ACInvoker.m */,
 				421AE5881CF59DCC001A5053 /* ACArguments.h */,
 				421AE5891CF59DCC001A5053 /* ACArguments.m */,
 				421AE5921CF5AE68001A5053 /* ACJSON.h */,
@@ -239,6 +245,7 @@
 				426DF1A41CFD757300F4C53E /* ACPluginBundle.h in Headers */,
 				42961AA31D0E4FBA00005263 /* ACLog.h in Headers */,
 				426DF1A81CFD7DC600F4C53E /* ACAvailability.h in Headers */,
+				42DB71B01D54887700E61C19 /* ACInvoker.h in Headers */,
 				42ED03FC1CFC3783009134BE /* ACJSValueSupport.h in Headers */,
 				421AE5851CF5906E001A5053 /* ACEXTScope.h in Headers */,
 				421AE57C1CF58347001A5053 /* ACEXTRuntimeExtensions.h in Headers */,
@@ -348,6 +355,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42DB71B11D54887700E61C19 /* ACInvoker.m in Sources */,
 				42961AA41D0E4FBA00005263 /* ACLog.m in Sources */,
 				429ADD661CFD62F600FA43DB /* UIColor+ACHTMLColor.m in Sources */,
 				4292795E1CF8465900665594 /* EUExBase.m in Sources */,

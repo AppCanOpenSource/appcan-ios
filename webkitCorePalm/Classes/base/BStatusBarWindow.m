@@ -24,11 +24,10 @@
 
 
 - (void)dealloc {
-	if (mTextView.superview) {
-		[mTextView removeFromSuperview];
-	}
-	AudioServicesDisposeSystemSoundID(mAlertSoundID);
-    [super dealloc];
+
+    [_mTextView removeFromSuperview];
+	AudioServicesDisposeSystemSoundID(self.mAlertSoundID);
+
 }
 
 - (id)initWithFrame:(CGRect)frame andNotifyText:(NSString*)notifyText {
@@ -39,60 +38,58 @@
 		self.backgroundColor = [UIColor redColor];
 		self.opaque = YES;
 		self.mInitOrientation = orientation;
-		mTextView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 20)];
-		mTextView.backgroundColor = [UIColor clearColor];
-        if (__IPHONE_OS_VERSION_MAX_ALLOWED>__IPHONE_6_0) {
-            mTextView.textAlignment = NSTextAlignmentCenter;
-        }else{
-            mTextView.textAlignment = NSTextAlignmentCenter;
-        }
-		mTextView.numberOfLines = 1;
-		mTextView.textColor = [UIColor whiteColor];
-		mTextView.text = notifyText;
-		[mTextView setCenter:CGPointMake(frame.size.width/2, frame.size.height/2)];
+		self.mTextView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 20)];
+		self.mTextView.backgroundColor = [UIColor clearColor];
+
+        self.mTextView.textAlignment = NSTextAlignmentCenter;
+        
+		self.mTextView.numberOfLines = 1;
+		self.mTextView.textColor = [UIColor whiteColor];
+		self.mTextView.text = notifyText;
+		[self.mTextView setCenter:CGPointMake(frame.size.width/2, frame.size.height/2)];
 		switch (orientation) {
 			case UIInterfaceOrientationPortrait:
 				[UIView beginAnimations:nil context:NULL];
 				[UIView setAnimationDuration:0.01f];
-				[mTextView layer].transform = CATransform3DMakeRotation(0, 0.0f, 0.0f, 1.0f);
+				[self.mTextView layer].transform = CATransform3DMakeRotation(0, 0.0f, 0.0f, 1.0f);
 				[UIView commitAnimations];
 				break;
 			case UIInterfaceOrientationPortraitUpsideDown:
 				[UIView beginAnimations:nil context:NULL];
 				[UIView setAnimationDuration:0.01f];
-				[mTextView layer].transform = CATransform3DMakeRotation(M_PI, 0.0f, 0.0f, 1.0f);
+				[self.mTextView layer].transform = CATransform3DMakeRotation(M_PI, 0.0f, 0.0f, 1.0f);
 				[UIView commitAnimations];
 				break;
 			case UIInterfaceOrientationLandscapeLeft:
 				[UIView beginAnimations:nil context:NULL];
 				[UIView setAnimationDuration:0.01f];
-				[mTextView layer].transform = CATransform3DMakeRotation(-M_PI/2, 0.0f, 0.0f, 1.0f);
+				[self.mTextView layer].transform = CATransform3DMakeRotation(-M_PI/2, 0.0f, 0.0f, 1.0f);
 				[UIView commitAnimations];
 				break;
 			case UIInterfaceOrientationLandscapeRight:
 				[UIView beginAnimations:nil context:NULL];
 				[UIView setAnimationDuration:0.01f];
-				[mTextView layer].transform = CATransform3DMakeRotation(M_PI/2, 0.0f, 0.0f, 1.0f);
+				[self.mTextView layer].transform = CATransform3DMakeRotation(M_PI/2, 0.0f, 0.0f, 1.0f);
 				[UIView commitAnimations];
 				break;
 			default:
 				break;
 		}
 		if ([BUtility isIpad]) {
-			mTextView.font = [UIFont systemFontOfSize:F_SBWND_FONT_SIZE_PAD];
+			self.mTextView.font = [UIFont systemFontOfSize:F_SBWND_FONT_SIZE_PAD];
 		} else {
-			mTextView.font = [UIFont systemFontOfSize:F_SBWND_FONT_SIZE_PHONE];
+			self.mTextView.font = [UIFont systemFontOfSize:F_SBWND_FONT_SIZE_PHONE];
 		}
 		NSURL* alert_sound_url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"sound/collision" ofType:@"wav"]];
-		AudioServicesCreateSystemSoundID((CFURLRef)alert_sound_url, &_mAlertSoundID);
-		[self addSubview:mTextView];
-		[mTextView release];
+		AudioServicesCreateSystemSoundID((__bridge CFURLRef)alert_sound_url, &_mAlertSoundID);
+		[self addSubview:self.mTextView];
+
     }
     return self;
 }
 
 - (void)setNotifyText:(NSString*)inNotifyText {
-	[mTextView setText:inNotifyText];
+	[self.mTextView setText:inNotifyText];
 }
 
 @end

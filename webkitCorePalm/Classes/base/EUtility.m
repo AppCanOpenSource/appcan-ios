@@ -507,13 +507,13 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     CC_MD5_CTX md5;
     CC_MD5_Init(&md5);
     
-    CC_MD5_Update(&md5, [mac bytes], [mac length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [uuid bytes], [uuid length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [appkeyData bytes], [appkeyData length]);
+    CC_MD5_Update(&md5, [mac bytes], (CC_LONG)[mac length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [uuid bytes], (CC_LONG)[uuid length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [appkeyData bytes], (CC_LONG)[appkeyData length]);
     
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
     CC_MD5_Final(digest, &md5);
@@ -614,12 +614,11 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
 }
 
 + (void)brwView:(EBrowserView*)inBrwView presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
-    [inBrwView.meBrwCtrler presentModalViewController:modalViewController animated:animated];
-
+    [inBrwView.meBrwCtrler presentViewController:modalViewController animated:animated completion:nil];
 }
 
 + (void)brwView:(EBrowserView*)inBrwView navigationPresentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
-    [inBrwView.meBrwCtrler.navigationController presentModalViewController:modalViewController animated:animated];
+    [inBrwView.meBrwCtrler.navigationController presentViewController:modalViewController animated:animated completion:nil];
 }
 
 

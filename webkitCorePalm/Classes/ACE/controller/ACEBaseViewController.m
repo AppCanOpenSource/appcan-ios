@@ -171,7 +171,7 @@
     
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     
     switch (self.wgtOrientation) {
             

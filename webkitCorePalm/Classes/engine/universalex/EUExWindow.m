@@ -158,7 +158,7 @@ return returnValue;                                                     \
 @interface EUExWindow()
 @property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
 @property (nonatomic,strong)NSMutableDictionary *bounceParams;
-@property (nonatomic,weak,readonly)EBrowserView *EBrwView;
+@property (nonatomic,readonly)EBrowserView *EBrwView;
 
 @property (nonatomic,strong)ACJSFunctionRef *confirmCB;
 @property (nonatomic,strong)ACJSFunctionRef *promptCB;
@@ -560,7 +560,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 
-#warning Animation
+#warning Animation 
 
 - (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd withAnimationId:(NSInteger)animationID animationDuration:(NSTimeInterval)animationDuration{
     EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
@@ -872,8 +872,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             }else if(animiId>=13 && animiId<=16) {
                 [self moveeBrwWnd:eBrwWnd andTime:(float)aniDuration andAnimiId:(int)animiId];
             }else {
-                if ([BAnimation isPush:animiId]) {
-                    [BAnimation doPushCloseAnimition:eBrwWnd animiId:animiId animiTime:aniDuration completion:^(BOOL finished) {
+                if ([BAnimation isPush:(int)animiId]) {
+                    [BAnimation doPushCloseAnimition:eBrwWnd animiId:(int)animiId animiTime:aniDuration completion:^(BOOL finished) {
                         [eBrwWnd clean];
                         if (eBrwWnd.superview) {
                             [eBrwWnd removeFromSuperview];
@@ -882,7 +882,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                         
                     }];
                 }else {
-                    [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:animiId AnimiTime:aniDuration];
+                    [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:(int)animiId AnimiTime:aniDuration];
                     [eBrwWnd clean];
                     if (eBrwWnd.superview) {
                         [eBrwWnd removeFromSuperview];
@@ -2247,8 +2247,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     
     
-#warning 企业版的设置?
+
     NSString *imageInPath = nil;
+//#warning 企业版的设置?
     if ([inArguments count] ==3){
         NSString * pjID=[inArguments objectAtIndex:2];
         if ([pjID isEqualToString:@"donghang"]){

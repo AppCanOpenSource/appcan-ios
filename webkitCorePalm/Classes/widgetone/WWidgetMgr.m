@@ -45,7 +45,7 @@ NSString * webappShowAactivety;
 }
 #pragma mark mainWidget
 //得到主widget
--(WWidget*)mainWidget{
+- (WWidget *)mainWidget{
 	return wMainWgt;
 }
 //get wgtPath by wgtObj
@@ -326,14 +326,14 @@ NSString * webappShowAactivety;
 }
 
 
--(NSMutableDictionary*)wgtUpdate:(WWidget*)inWgt{
+- (NSMutableDictionary*)wgtUpdate:(WWidget*)inWgt{
 	if (inWgt!=nil&&inWgt.appId!=nil && inWgt.ver!=nil && inWgt.updateUrl!=nil) {
 		NSString *urlStr = inWgt.updateUrl;
 		NSString *requestUrl = nil;
 		if ([urlStr rangeOfString:@"?"].location!=NSNotFound) {
-			requestUrl = [NSString stringWithFormat:@"%@&appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,F_WIDGETONE_PLATFORM_IOS];
+			requestUrl = [NSString stringWithFormat:@"%@&appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,0];
 		}else {
-			requestUrl = [NSString stringWithFormat:@"%@?appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,F_WIDGETONE_PLATFORM_IOS];
+			requestUrl = [NSString stringWithFormat:@"%@?appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,0];
 		}
 		ACENSLog(@"requestUrl=%@",requestUrl);
 		wgtUpParser =[[UpdateParser alloc]init];
@@ -344,7 +344,7 @@ NSString * webappShowAactivety;
 	}
 	return nil;
 }
--(void)initLoginAndMoreWidget{
+- (void)initLoginAndMoreWidget{
 	WWidget *loginWgt = [[WWidget alloc] init];
 	loginWgt.indexUrl = F_WIDGET_LOGIN_URL;
 	loginWgt.appId = @"9999998";
@@ -364,7 +364,7 @@ NSString * webappShowAactivety;
 }
 #pragma mark commonWidget
 
--(WWidget*)wgtDataByAppId:(NSString*)inAppId{
+- (WWidget *)wgtDataByAppId:(NSString*)inAppId{
     
     NSString *tmpAppId = [NSString stringWithString:inAppId];
     
@@ -441,7 +441,7 @@ NSString * webappShowAactivety;
     return wgtObj;
 }
 //plugin widget
--(WWidget*)wgtPluginDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt{
+- (WWidget *)wgtPluginDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt{
 	
 	NSString *pluginId = [NSString stringWithString:inWgtId];
 	WWidget *pluginWgtObj = nil;
@@ -527,7 +527,7 @@ NSString * webappShowAactivety;
 	return deleteWgt;
 }
 #pragma mark util
--(WWidget*)dictToWgt:(NSMutableDictionary*)inDict{
+- (WWidget *)dictToWgt:(NSMutableDictionary*)inDict{
 	NSMutableDictionary *tmpDict =[NSMutableDictionary dictionaryWithDictionary:inDict];
 	
 	WWidget *tmpWgt = [[WWidget alloc]init];
@@ -795,9 +795,9 @@ NSString * webappShowAactivety;
 	[widgetObj close_database];
 	[widgetObj release];
 	[tmpArr removeAllObjects];
-	return wgtsNum;
+	return (int)wgtsNum;
 }
--(WWidget*)wgtDataByID:(int)inIndex{
+- (WWidget *)wgtDataByID:(int)inIndex{
 	if (inIndex<[wgtArr count]) {
 		WWidget *wgtObj = [wgtArr objectAtIndex:inIndex];
 		return wgtObj;

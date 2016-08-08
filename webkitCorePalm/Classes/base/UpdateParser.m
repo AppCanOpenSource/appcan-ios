@@ -32,7 +32,7 @@
  			//NSLog(@"error=%@",error);
 			if (!error) {
 				//NSLog(@"response=%d",[req responseStatusCode]);
-				[queryDict setObject:[NSNumber numberWithInt:[response statusCode]] forKey:@"statusCode"];
+				[queryDict setObject:@([response statusCode]) forKey:@"statusCode"];
 				xmlData = responseData;
 			}
 		}	
@@ -57,8 +57,11 @@
 	return queryDict;
 }
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
-{ 
+- (void)parser:(NSXMLParser *)parser
+didStartElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI
+ qualifiedName:(NSString *)qName
+    attributes:(NSDictionary *)attributeDict{
 	[queryDict addEntriesFromDictionary:attributeDict];
 	element = @"";
 }
@@ -68,7 +71,10 @@
 	}
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
+- (void)parser:(NSXMLParser *)parser
+ didEndElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI
+ qualifiedName:(NSString *)qName{
 	[queryDict setObject:element forKey:elementName];
 }
 

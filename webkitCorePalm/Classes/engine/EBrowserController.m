@@ -39,6 +39,7 @@
 #import <objc/message.h>
 #import "ACEBaseDefine.h"
 
+#import <AppCanKit/ACInvoker.h>
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
 
@@ -581,7 +582,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             }
         }
         id analysisObject = class_createInstance(analysisClass,0);
-        ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
+        [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
     }
     NSString * inKey = [BUtility appKey];
     if (theApp.userStartReport) {
@@ -589,7 +590,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
         if (analysisClass) {
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
             id analysisObject = class_createInstance(analysisClass,0);
-            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+
         }
     }
     if (theApp.userStartReport) {
@@ -597,7 +599,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
         if (analysisClass) {
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
             id analysisObject = class_createInstance(analysisClass,0);
-            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
         }
     }
     if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
@@ -607,7 +609,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             return;
         }
         id analysisObject = class_createInstance(updateClass,0);
-        ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
+        [analysisObject ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
     }
 }
 

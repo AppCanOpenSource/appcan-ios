@@ -108,7 +108,7 @@
 }
 -(void)iconLongPress:(UILongPressGestureRecognizer *)sender{
 	
-	NSString *appid = [NSString stringWithFormat:@"%ld",sender.view.tag];
+	NSString *appid = [NSString stringWithFormat:@"%d",sender.view.tag];
 	if ([_delegate respondsToSelector:@selector(sendAppIdForLongPress:)]) {
 		[_delegate sendAppIdForLongPress:appid];
 	}

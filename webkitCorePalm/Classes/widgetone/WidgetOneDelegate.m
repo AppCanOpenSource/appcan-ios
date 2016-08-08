@@ -50,7 +50,7 @@
 #import "ACEJSCHandler.h"
 #import "ACEBrowserView.h"
 #import <AppCanKit/AppCanGlobalObjectGetter.h>
-
+#import <AppCanKit/ACInvoker.h>
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
@@ -395,32 +395,25 @@ NSString *AppCanJS = nil;
     }
 	//应用从未启动到启动，获取本地通知信息
     if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey] ) {
-        
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-        
     }
     
     
     
     Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-    
+
     if (analysisClass) {
         
         id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-        ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
-#pragma clang diagnostic pop
+        [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
+
     }else{
         
         analysisClass = NSClassFromString(@"AppCanAnalysis");
         
         if (analysisClass) {
             id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-            ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:), YES);
-#pragma clang diagnostic pop
+            [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
             
         }
         
@@ -521,7 +514,6 @@ NSString *AppCanJS = nil;
     
     [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
 
-
     return YES;
     
 }
@@ -606,75 +598,24 @@ NSString *AppCanJS = nil;
         [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
     }
     if (userData != nil || userInfo) {
-        
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-        
         if (aboveWindowContainer) {
-            
             [aboveWindowContainer pushNotify];
-            
         }
-        
-        //		if (meBrwCtrler) {
-        //			if (meBrwCtrler.meBrwMainFrm) {
-        //				if (meBrwCtrler.meBrwMainFrm.meBrwWgtContainer) {
-        //					if ([meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer]) {
-        //						[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] pushNotify];
-        //					}
-        //				}
-        //			}
-        //		}
-        
     }
-    
     [self invokeAppDelegateMethod:application didReceiveRemoteNotification:userInfo];
     
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-   /*
-	UIApplicationState state = [application applicationState];
-    
-	if (state == UIApplicationStateActive) {
-        
-        //		NSString *notID = [notification.userInfo objectForKey:@"notificationId"];
-		NSString * msg = [notification.userInfo objectForKey:@"msg"];
-        //		NSString * jsStr = [NSString stringWithFormat:@"uexLocalNotification.onActive(\'%@\', \'%@\')", notID, msg];
-        //		EBrowserView *brwView = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer].meRootBrwWnd.meBrwView;
-        //		if (brwView) {
-        //			[brwView  stringByEvaluatingJavaScriptFromString:jsStr];
-        //		}
-		application.applicationIconBadgeNumber = 0;
-		UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:msg delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
-		alertView.tag = kViewTagLocalNotification;
-		[alertView show];
-		[alertView release];
-        
-	} else {
-        
-		NSString * notID = [notification.userInfo objectForKey:@"notificationId"];
-		NSString * jsStr = [NSString stringWithFormat:@"uexLocalNotification.onActive(\'%@\')", notID];
-		EBrowserView *brwView = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer].meRootBrwWnd.meBrwView;
-		if (brwView) {
-            
-			[brwView  stringByEvaluatingJavaScriptFromString:jsStr];
-            
-		}
-		application.applicationIconBadgeNumber = 0;
-        
-	}
-    */
     [self invokeAppDelegateMethod:application didReceiveLocalNotification:notification];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    
 	//支付完成后返回当前应用shi调用
 	[self parseURL:url application:application];
-    
     [self invokeAppDelegateMethod:application handleOpenURL:url];
-    
 	return YES;
     
 }
@@ -682,93 +623,55 @@ NSString *AppCanJS = nil;
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     
     if (url != NULL) {
-        
         NSString * strUrl = [url resourceSpecifier];
         NSArray * paramUrlArray = [strUrl componentsSeparatedByString:@"?"];
-        
         if (paramUrlArray != NULL && paramUrlArray.count > 1) {
-            
             NSString * paramUrl = [paramUrlArray objectAtIndex:1];
-            
             if (paramUrl != NULL) {
-                
                 NSArray * paramUrlArray1 = [paramUrl componentsSeparatedByString:@"&"];
-                
                 if (paramUrlArray1 != NULL && paramUrlArray1.count > 0) {
-                    
                     for (NSInteger i = 0; i < paramUrlArray1.count; i++) {
-                        
                         NSString * parmStr = [paramUrlArray1 objectAtIndex:i];
                         NSArray * parmStrArray = [parmStr componentsSeparatedByString:@"="];
-                        
                         if (paramUrlArray1 != NULL && parmStrArray.count == 2) {
-                            
                             NSString *paramKey = [parmStrArray objectAtIndex:0];
                             NSString *paramValue = [parmStrArray objectAtIndex:1];
-                            
                             if (paramValue && paramKey) {
-                                
                                 if (_thirdInfoDict == nil) {
-                                    
                                     _thirdInfoDict = [[NSMutableDictionary dictionary] retain];
-                                    
                                 }
-                                
                                 [_thirdInfoDict setValue:paramValue forKey:paramKey];
-                                
                             }
-                            
                         } else if (paramUrlArray1 != NULL && parmStrArray.count == 1) {
-                            
                             NSString * paramValue = [parmStrArray objectAtIndex:0];
-                            
                             if (paramValue) {
-                                
                                 [self performSelector:@selector(delayLoadByOtherAppWithParam:) withObject:paramValue afterDelay:1.0];
-                                
                             }
-                            
                         }
-                        
                     }
-                    
                     if (_thirdInfoDict.count != 0) {
-                        
                         [self performSelector:@selector(delayLoadByOtherApp) withObject:self afterDelay:1.0];
-                        
                     }
-                    
                 }
-                
             }
-            
-            
         }
-        
     }
     //支付完成后返回当前应用shi调用
 	[self parseURL:url application:application];
-    
     [self invokeAppDelegateMethod:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-    
 	return YES;
 }
 
 - (void)delayLoadByOtherAppWithParam:(NSString *)param {
-    
     NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",param];
-    
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
     
 }
 
 - (void)delayLoadByOtherApp {
-    
     NSString * josnStr = [_thirdInfoDict JSONFragment];
     NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",josnStr];
-    
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
-    
     self.thirdInfoDict = nil;
     
 }
@@ -776,7 +679,6 @@ NSString *AppCanJS = nil;
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    
 	[UIApplication sharedApplication].applicationIconBadgeNumber = -1;
     //	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
 	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSuspend){uexWidget.onSuspend();}"];
@@ -791,12 +693,7 @@ NSString *AppCanJS = nil;
     Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
         id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-
-        ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
-#pragma clang diagnostic pop
-        //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
+        [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
     }else{
         
     analysisClass = NSClassFromString(@"AppCanAnalysis");
@@ -804,12 +701,7 @@ NSString *AppCanJS = nil;
         if (analysisClass) {
             
             id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-            
-            ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeActive));
-#pragma clang diagnostic pop
-            //objc_msgSend(analysisObject, @selector(setAppBecomeActive),nil);
+            [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
         }
     
     }
@@ -866,11 +758,7 @@ NSString *AppCanJS = nil;
     if (analysisClass) {//类不存在直接返回
         
         id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-        ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
-#pragma clang diagnostic pop
-        
+        [analysisObject ac_invoke:@"setAppBecomeBackground"];
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
         
     }else{
@@ -880,11 +768,7 @@ NSString *AppCanJS = nil;
         if (analysisClass) {
             
             id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-            ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
-#pragma clang diagnostic pop
-            
+            [analysisObject ac_invoke:@"setAppBecomeBackground"];
             //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
             
         }
@@ -935,27 +819,16 @@ NSString *AppCanJS = nil;
     
     //data analysis
     Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-    
     if (analysisClass) {//类不存在直接返回
-        
         id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-        ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
-        //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
-#pragma clang diagnostic pop
+        [analysisObject ac_invoke:@"setAppBecomeBackground"];
+        //((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
     }else{
-    
         analysisClass = NSClassFromString(@"AppCanAnalysis");
-        
         if (analysisClass) {
             id analysisObject = class_createInstance(analysisClass,0);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-            ((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
-            //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
-#pragma clang diagnostic pop
-
+            [analysisObject ac_invoke:@"setAppBecomeBackground"];
+            //((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
         }
         
     }
@@ -982,24 +855,7 @@ NSString *AppCanJS = nil;
     
 	[UIApplication sharedApplication].applicationIconBadgeNumber = -1;
 	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onTerminate();"];
-    // empty the tmp directory
-    //    NSFileManager* fileMgr = [[NSFileManager alloc] init];
-    //    NSError* err = nil;
-    //
-    //    // clear contents of NSTemporaryDirectory
-    //    NSString* tempDirectoryPath = NSTemporaryDirectory();
-    //    NSDirectoryEnumerator* directoryEnumerator = [fileMgr enumeratorAtPath:tempDirectoryPath];
-    //    NSString* fileName = nil;
-    //    BOOL result;
-    //
-    //    while ((fileName = [directoryEnumerator nextObject])) {
-    //        NSString* filePath = [tempDirectoryPath stringByAppendingPathComponent:fileName];
-    //        result = [fileMgr removeItemAtPath:filePath error:&err];
-    //        if (!result && err) {
-    //            ACENSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
-    //        }
-    //    }
-    //    [fileMgr release];
+
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {

@@ -68,6 +68,10 @@
 		<data>
 		hjB8ShzT1Q5RIn+MR/kg4ioYKl8=
 		</data>
+		<key>PrivateHeaders/ACInvoker.h</key>
+		<data>
+		9NY3gYHOSUSwPZ3g2c3KW7uY2YU=
+		</data>
 		<key>PrivateHeaders/ACJSFunctionRefInternal.h</key>
 		<data>
 		KhoFtR8IPzyfovKQ1hEyp5yrvlQ=
@@ -250,6 +254,17 @@
 			<key>hash2</key>
 			<data>
 			865Bb3YFoF2L1JNcwNEvWBERURBLVkZXOnvh6noGu08=
+			</data>
+		</dict>
+		<key>PrivateHeaders/ACInvoker.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			9NY3gYHOSUSwPZ3g2c3KW7uY2YU=
+			</data>
+			<key>hash2</key>
+			<data>
+			CB2WZJLXXheFZmu6ciUgwVHgGy14ZtTZIBQ1WI39/x8=
 			</data>
 		</dict>
 		<key>PrivateHeaders/ACJSFunctionRefInternal.h</key>
