@@ -38,5 +38,6 @@ FOUNDATION_EXPORT const unsigned char AppCanKitVersionString[];
 #import <AppCanKit/UIColor+ACHTMLColor.h>
 #import <AppCanKit/ACAvailability.h>
 #import <AppCanKit/EUExBase.h>
+#import <AppCanKit/EUExBaseDefine.h>
 #import <AppCanKit/ACPluginBundle.h>
 #import <AppCanKit/ACLog.h>

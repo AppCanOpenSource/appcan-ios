@@ -22,7 +22,7 @@
 		</data>
 		<key>Headers/ACLog.h</key>
 		<data>
-		yWTVdLwZR/wUt0ojLwITUQd+BiY=
+		eoCfg+v+Ca65xnGILJ+TeXoyss8=
 		</data>
 		<key>Headers/ACMetamacros.h</key>
 		<data>
@@ -38,7 +38,7 @@
 		</data>
 		<key>Headers/AppCanKit.h</key>
 		<data>
-		XRmA8hd96UH0qXXsr9A8dH88EKg=
+		9x8i7fDXyu32824HPPHUjc3KDV4=
 		</data>
 		<key>Headers/AppCanObjectProtocol.h</key>
 		<data>
@@ -47,6 +47,10 @@
 		<key>Headers/EUExBase.h</key>
 		<data>
 		60Xn+Ubg8kJT6P+YfqLgCIy6RQw=
+		</data>
+		<key>Headers/EUExBaseDefine.h</key>
+		<data>
+		XX5H8mm5xhA7MxjLDZcWBYmRELE=
 		</data>
 		<key>Headers/UIColor+ACHTMLColor.h</key>
 		<data>
@@ -139,11 +143,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			yWTVdLwZR/wUt0ojLwITUQd+BiY=
+			eoCfg+v+Ca65xnGILJ+TeXoyss8=
 			</data>
 			<key>hash2</key>
 			<data>
-			AdFmhBXp6j4qiSwtuaGg0glgUPQ9275EBIM5Vx6oAGY=
+			AaY9nzB0Tm5q3gDqoeN7p7amimIdvz+CfPzWGYa4qo8=
 			</data>
 		</dict>
 		<key>Headers/ACMetamacros.h</key>
@@ -183,11 +187,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XRmA8hd96UH0qXXsr9A8dH88EKg=
+			9x8i7fDXyu32824HPPHUjc3KDV4=
 			</data>
 			<key>hash2</key>
 			<data>
-			T5Yj7H3O4+OBGUXkcLtn8/CGJZXuMu+Mcj4EtOuXJ0Q=
+			UhFVQkmU10TZIrbWlwjnkwmN4Fj/I4losm/jAYTllsI=
 			</data>
 		</dict>
 		<key>Headers/AppCanObjectProtocol.h</key>
@@ -210,6 +214,17 @@
 			<key>hash2</key>
 			<data>
 			nb6b7Z20++ABedKUeo3ZD2PQfIpHCORZn+Xok9F0+oA=
+			</data>
+		</dict>
+		<key>Headers/EUExBaseDefine.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			XX5H8mm5xhA7MxjLDZcWBYmRELE=
+			</data>
+			<key>hash2</key>
+			<data>
+			rL7EM0rCNHdAsqQqQL7tAecuCQjO1VmK4d6h/YOaNQs=
 			</data>
 		</dict>
 		<key>Headers/UIColor+ACHTMLColor.h</key>

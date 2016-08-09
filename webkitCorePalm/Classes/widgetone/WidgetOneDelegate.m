@@ -51,6 +51,8 @@
 #import "ACEBrowserView.h"
 #import <AppCanKit/AppCanGlobalObjectGetter.h>
 #import <AppCanKit/ACInvoker.h>
+#import "ONOXMLElement+ACEConfigXML.h"
+
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
 
@@ -393,6 +395,18 @@ NSString *AppCanJS = nil;
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         
     }
+    //设置Debug日志
+    ONOXMLElement *debug = [[ONOXMLElement ACENewestConfigXML] firstChildWithTag:@"debug"];
+    NSString *debugEnable = debug[@"enable"];
+    NSString *debugVerbose = debug[@"verbose"];
+    if (debugEnable.boolValue) {
+        if (debugVerbose.boolValue) {
+            ACLogSetGlobalLogMode(ACLogModeVerbose);
+        }else{
+            ACLogSetGlobalLogMode(ACLogModeDebug);
+        }
+    }
+    
 	//应用从未启动到启动，获取本地通知信息
     if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey] ) {
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;

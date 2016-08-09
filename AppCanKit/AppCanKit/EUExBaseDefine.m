@@ -1,10 +1,10 @@
 /**
  *
- *	@file   	: ACEBaseDefine.h  in AppCanEngine
+ *	@file   	: EUExBaseDefine.m  in AppCanKit
  *
  *	@author 	: CeriNo
  * 
- *	@date   	: 16/8/2
+ *	@date   	: 16/8/9
  *
  *	@copyright 	: 2016 The AppCan Open Source Project.
  *
@@ -22,27 +22,33 @@
  */
 
 
-#import <Foundation/Foundation.h>
+#import "EUExBaseDefine.h"
+#import "ACLog.h"
+
+UEX_BOOL UEX_TRUE;
+UEX_BOOL UEX_FALSE;
+UEX_ERROR kUexNoError;
 
 
 
+__attribute__((constructor)) static void initBaseDefine(){
+    UEX_TRUE    = @(YES);
+    UEX_FALSE   = @(NO);
+    kUexNoError = @0;
+}
 
 
-typedef NS_OPTIONS(NSInteger, ACEInterfaceOrientation){
-    ACEInterfaceOrientationUnknown = 0,
-    ACEInterfaceOrientationProtrait = 1 << 0,
-    ACEInterfaceOrientationLandscapeLeft = 1 << 1,
-    ACEInterfaceOrientationProtraitUpsideDown = 1 << 2,
-    ACEInterfaceOrientationLandscapeRight = 1 << 3
-};
-
-APPCAN_EXPORT ACEInterfaceOrientation ace_interfaceOrientationFromUIDeviceOrientation(UIDeviceOrientation orientation);
-APPCAN_EXPORT ACEInterfaceOrientation ace_interfaceOrientationFromUIInterfaceOrientation(UIInterfaceOrientation orientation);
-
-
-
-
-
-
-
+APPCAN_EXPORT UEX_ERROR _uex_ErrorMake(NSInteger code,NSString * _Nullable description,NSDictionary * _Nullable info,const char * func){
+    NSMutableString *log = nil;
+    if (description) {
+        log = [NSMutableString stringWithFormat:@"%s -> an error(code: %ld) happend: %@",func,(long)code,description];
+    }
+    if (info) {
+        [log appendFormat:@", errInfo: %@",info];
+    }
+    if (log) {
+        ACLogDebug(@"%@.",log);
+    }
+    return @(code);
+}
 

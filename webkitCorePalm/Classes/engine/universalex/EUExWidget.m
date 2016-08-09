@@ -558,18 +558,20 @@
     }
 
 }
-- (void)getOpenerInfo:(NSMutableArray *)inArguments {
+- (NSString *)getOpenerInfo:(NSMutableArray *)inArguments {
     EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.EBrwView];
-    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetOpenerInfo" arguments:ACArgsPack(@0,@0,eBrwWndContainer.mOpenerInfo)];
+    NSString *info = eBrwWndContainer.mOpenerInfo;
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetOpenerInfo" arguments:ACArgsPack(@0,@0,info)];
+    return info;
 }
 
 - (void)setMySpaceInfoWithAnimiId:(NSString*)inAnimiId ForRet:(NSString*)inForRet OpenerInfo:(NSString*)inOpenerInfo {
 
 }
 
-- (void)loadApp:(NSMutableArray *)inArguments{
+- (UEX_BOOL)loadApp:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSString *inURL,NSString *anotherURL) = inArguments;
-    UEX_PARAM_GUARD_NOT_NIL(inURL);
+    UEX_PARAM_GUARD_NOT_NIL(inURL,UEX_FALSE);
 
     NSURL *url = [NSURL URLWithString:inURL];
     BOOL openURL = [[UIApplication sharedApplication] openURL:url];
@@ -577,18 +579,10 @@
         url = [NSURL URLWithString:anotherURL];
         openURL = [[UIApplication sharedApplication] openURL:url];
     }
+    return openURL ? UEX_TRUE : UEX_FALSE ;
 }
 
-- (void)checkUpdate:(NSMutableArray *)inArguments {
-    if (self.EBrwView.mwWgt.ver && self.EBrwView.mwWgt.appId) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self checkUpdateWgt:self.EBrwView.mwWgt];
-        });
-    }else {
-        NSString *json = @{@"result":@3}.ac_JSONFragment;
-        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbCheckUpdate" arguments:ACArgsPack(@0,@1,json)];
-    }
-}
+
 - (void)checkMAMUpdate:(NSMutableArray *)inArguments{
     
     Class  analysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
@@ -603,33 +597,44 @@
     [analysisObject ac_invoke:@"startWithAppKey:" arguments:ACArgsPack([BUtility appKey])];
     
 }
-- (void)checkUpdateWgt:(WWidget *)wgtObj{
 
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:5];
-    WWidgetMgr *wgtMgrObj = [[WWidgetMgr alloc]init];
-    NSMutableDictionary *updateDict = [wgtMgrObj wgtUpdate:wgtObj];
+- (void)checkUpdate:(NSMutableArray *)inArguments {
     
-    int statusCode = [[updateDict objectForKey:@"statusCode"] intValue];
-    if(statusCode ==200 &&[updateDict count]==1) {
-        [dict setObject:[NSNumber numberWithInt:UEX_JVNoUpdate] forKey:UEX_JKRESULT];
-    }else if (statusCode ==200 && [updateDict count]>1) {
-        [dict setObject:[NSNumber numberWithInt:UEX_JVUpdate] forKey:UEX_JKRESULT];
-        if ([updateDict objectForKey:@"updateFileName"]) {
-            [dict setObject:[updateDict objectForKey:@"updateFileName"] forKey:UEX_JKNAME];
-        }
-        if ([updateDict objectForKey:@"updateFileUrl"]) {
-            [dict setObject:[updateDict objectForKey:@"updateFileUrl"] forKey:UEX_JKURL];
-        }
-        if ([updateDict objectForKey:@"fileSize"]) {
-            [dict setObject:[updateDict objectForKey:@"fileSize"] forKey:UEX_JKSIZE];
-        }
-        if ([updateDict objectForKey:@"version"]) {
-            [dict setObject:[updateDict objectForKey:@"version"] forKey:UEX_JKVERSION];
-        }
-    }else {
-        [dict setObject:[NSNumber numberWithInt:UEX_JVError] forKey:UEX_JKRESULT];
+    ACArgsUnpack(ACJSFunctionRef *cb) = inArguments;
+
+    void (^callback)(UEX_ERROR error,NSDictionary *data) = ^(UEX_ERROR error,NSDictionary *data){
+            [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbCheckUpdate" arguments:ACArgsPack(@0,@1,data.ac_JSONFragment)];
+            [cb executeWithArguments:ACArgsPack(error,data)];
+        
+    };
+    WWidget *currentWidget = self.EBrwView.mwWgt;
+    if (!currentWidget.ver || currentWidget.ver.length == 0 || !currentWidget.appId || currentWidget.appId == 0) {
+        UEX_ERROR err = uexErrorMake(-1, @"当前widget信息缺失,不能进行更新");
+        callback(err,nil);
+        return;
     }
-    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbCheckUpdate" arguments:ACArgsPack(@0,@1,dict.ac_JSONFragment)];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        WWidgetMgr *wgtMgrObj = [[WWidgetMgr alloc]init];
+        NSMutableDictionary *updateDict = [wgtMgrObj wgtUpdate:currentWidget];
+        
+        NSInteger statusCode = [[updateDict objectForKey:@"statusCode"] integerValue];
+        UEX_ERROR err = nil;
+        if (statusCode == 200 && [updateDict count] > 1) {
+            [dict setValue:@0 forKey:@"result"];
+            [dict setValue:updateDict[@"updateFileName"] forKey:@"version"];
+            [dict setValue:updateDict[@"updateFileUrl"] forKey:@"url"];
+            [dict setValue:updateDict[@"fileSize"] forKey:@"size"];
+            [dict setValue:updateDict[@"version"] forKey:@"version"];
+        }else {
+            [dict setValue:@1 forKey:@"result"];
+            err = uexErrorMake(1,@"网络请求错误");
+        }
+        callback(err,dict);
+    });
+    
+
 }
 
 
@@ -647,10 +652,8 @@
     }
 }
 
-- (void)getPushInfo:(NSMutableArray *)inArguments {
+- (NSString *)getPushInfo:(NSMutableArray *)inArguments {
     ACArgsUnpack(NSNumber *inFlag) = inArguments;
-    UEX_PARAM_GUARD_NOT_NIL(inFlag);
-
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *dataKey = @"pushData";
@@ -667,12 +670,13 @@
         pushDataStr = pushData;
     }
     if (pushDataStr) {
-        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetPushInfo" arguments:ACArgsPack(@0,@1,pushData)];
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetPushInfo" arguments:ACArgsPack(@0,@1,pushDataStr)];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self sendReportRead:pushDataStr];
         });
     }
     [defaults removeObjectForKey:dataKey];
+    return pushDataStr;
 }
 
 - (void)sendReportRead:(NSString *)pushDataStr{
@@ -909,7 +913,7 @@
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
     }
 }
-- (void)getPushState:(NSMutableArray*)inArguments{
+- (UEX_BOOL)getPushState:(NSMutableArray*)inArguments{
     BOOL pushState = NO;
     if (ACSystemVersion() >= 8.0) {
         pushState = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
@@ -920,6 +924,7 @@
     }
     NSNumber *result = pushState ? @0 : @1;
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetPushState" arguments:ACArgsPack(@0,@2,result)];
+    return pushState ? UEX_TRUE : UEX_FALSE ;
 }
 
 - (void)setSpaceEnable:(NSMutableArray *)inArguments{
@@ -937,14 +942,14 @@
 }
 #pragma mark - isAppInstalled
 //20150706 by lkl
-- (NSNumber *)isAppInstalled:(NSMutableArray *)inArguments{
+- (UEX_BOOL)isAppInstalled:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSDictionary *info) = inArguments;
     NSString *appData = stringArg(info[@"appData"]);
     UEX_PARAM_GUARD_NOT_NIL(appData,@(NO));
     BOOL isInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appData]];
     NSDictionary *resultDict = @{@"installed": isInstalled? @0 : @1};
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbIsAppInstalled" arguments:ACArgsPack(resultDict.ac_JSONFragment)];
-    return @(isInstalled);
+    return isInstalled ? UEX_TRUE : UEX_FALSE ;
 }
 
 #pragma mark - closeLoading

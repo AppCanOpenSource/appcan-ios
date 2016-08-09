@@ -129,31 +129,29 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
     UexWindowOpenDataTypeURLAndHTMLData,
 };
 
-#define UEX_BOOL    NSNumber *
-#define UEX_TRUE    @(YES)
-#define UEX_FALSE   @(NO)
+
 
 
 
 #define UEX_WINDOW_GUARD_USE_IN_WINDOW(returnValue)                             \
-if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypeMain) {     \
-ACLogDebug(@"%@ must use in window",NSStringFromSelector(_cmd));        \
-return returnValue;                                                     \
-}
+    if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypeMain) {     \
+        ACLogDebug(@"%@ must use in window",NSStringFromSelector(_cmd));        \
+        return returnValue;                                                     \
+    }
 #define UEX_WINDOW_GUARD_USE_IN_POPOVER(returnValue)                            \
-if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypePopover) {  \
-ACLogDebug(@"%@ must use in popover",NSStringFromSelector(_cmd));       \
-return returnValue;                                                     \
-}
+    if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypePopover) {  \
+        ACLogDebug(@"%@ must use in popover",NSStringFromSelector(_cmd));       \
+        return returnValue;                                                     \
+    }
 
 
 
 #define UEX_WINDOW_GUARD_NOT_USE_IN_CONTROLLER(returnValue)                     \
-if (self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation ||   \
-self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent){       \
-ACLogDebug(@"%@ cannot use in controller",NSStringFromSelector(_cmd));  \
-return returnValue;                                                     \
-}
+    if (self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation ||   \
+        self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent){       \
+        ACLogDebug(@"%@ cannot use in controller",NSStringFromSelector(_cmd));  \
+        return returnValue;                                                     \
+    }
 
 @interface EUExWindow()
 @property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
@@ -1106,6 +1104,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
 }
 
+- (void)test:(NSMutableArray *)inArguments{
+
+}
 
 - (void)windowBack:(NSMutableArray *)inArguments {
     UEX_WINDOW_GUARD_NOT_USE_IN_CONTROLLER();
@@ -3817,19 +3818,18 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 }
 - (void)disturbLongPressGestureHandler:(UILongPressGestureRecognizer*)sender{
     if([sender isEqual:self.longPressGestureDisturbRecognizer]){
-        if(sender.state==UIGestureRecognizerStateBegan){
+        if(sender.state == UIGestureRecognizerStateBegan){
             //NSLog(@"disturbLongPressGesture");
         }
     }
 }
 #pragma mark - Log API
 
-- (NSNumber *)log:(NSMutableArray *)inArguments{
-    if([inArguments count] < 1){
-        return @0;
+- (void)log:(NSMutableArray *)inArguments{
+    for (id obj in inArguments) {
+        ACLogInfo(@"%@",obj);
     }
-    ACLogInfo(@"%@",inArguments[0]);
-    return @1;
+    
 }
 
 

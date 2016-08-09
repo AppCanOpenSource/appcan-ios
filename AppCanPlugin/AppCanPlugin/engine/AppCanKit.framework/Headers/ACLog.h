@@ -167,14 +167,15 @@ APPCAN_EXPORT BOOL ACLogAsyncLogEnabled;
 
 
 
-#define _ACLogMacro(isAsync,lvl,func,fmt,...)   \
-    do{                                         \
-        [ACLog log: isAsync                     \
-             level: lvl                         \
-              file: __FILE__                    \
-          function: func                        \
-              line: __LINE__                    \
-            format: (fmt),## __VA_ARGS__];      \
+#define _ACLogMacro(isAsync,lvl,func,fmt,...)       \
+    do{                                             \
+        if ((ACLogGlobalLogMode & lvl))             \
+        [ACLog log: isAsync                         \
+             level: lvl                             \
+              file: __FILE__                        \
+          function: func                            \
+              line: __LINE__                        \
+            format: (fmt),## __VA_ARGS__];          \
     }while(0)
 
 

@@ -33,6 +33,7 @@
 #import "ACEJSCInvocation.h"
 #import "EBrowserView.h"
 #import "ACEPluginInfo.h"
+#import <AppCanKit/ACInvoker.h>
 
 #define ACE_LOG_TRACE(cmd)\
     _Pragma("clang diagnostic push")\
@@ -157,31 +158,34 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     if(![self isPluginInstanceValid:pluginInstance]){
         return nil;
     }
-    SEL method = NSSelectorFromString([methodName stringByAppendingString:@":"]);
-    if(![pluginInstance respondsToSelector:method]){
+    
+    NSString *selector = [methodName stringByAppendingString:@":"];
+    SEL sel = NSSelectorFromString(selector);
+    if(![pluginInstance respondsToSelector:sel]){
         return nil;
     }
     
     
     NSMutableArray *args = [self arrayFromArguments:arguments count:argCount];
-    BOOL isAsync = [self selector:method isAsynchronousMethodInClass:[pluginInstance class]];
+    BOOL isAsync = [self selector:sel isAsynchronousMethodInClass:[pluginInstance class]];
     
     
 
     //log trace
-    ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@ method:%@.%@ args:%@ async:%@",args,self.eBrowserView.muexObjName,pluginName,methodName,args,isAsync?@"YES":@"NO"))
+    ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@ method:%@.%@ async:%@",args,self.eBrowserView.muexObjName,pluginName,methodName,isAsync?@"YES":@"NO"))
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     if (isAsync) {
         dispatch_async(dispatch_get_main_queue(), ^{
             ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
-            [pluginInstance performSelector:method withObject:args];
+            [pluginInstance ac_invoke:selector arguments:ACArgsPack(args)];
+
         });
         return nil;
     }else{
         ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
-        return [pluginInstance performSelector:method withObject:args];
+        return [pluginInstance ac_invoke:selector arguments:ACArgsPack(args)];
     }
     /*
     switch (mode) {

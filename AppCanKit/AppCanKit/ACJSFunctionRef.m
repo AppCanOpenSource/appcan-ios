@@ -54,7 +54,7 @@
         }
         
         intenal[funcRef.identifier] = value;
-        ACLogVerbose(@"js funcRef <%@> init",funcRef.identifier);
+        ACLogVerbose(@"js funcRef %@ init",funcRef);
     }
     return funcRef;
 
@@ -85,7 +85,7 @@
 - (void)dealloc{
     self.ctx[@"_ACJSFunctionRefIntenal"][self.identifier] = nil;
     [self.machine removeManagedReference:self.managedFunction withOwner:self];
-    ACLogVerbose(@"js funcRef <%@> dealloc",self.identifier);
+    ACLogVerbose(@"js funcRef %@ dealloc",self);
 }
 
 

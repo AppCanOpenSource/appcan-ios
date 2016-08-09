@@ -76,11 +76,11 @@
 }
 
 
--(void)dealloc{
+- (void)dealloc{
 
 }
 
--(void)getId:(NSMutableArray *)inArguments {
+- (void)getId:(NSMutableArray *)inArguments {
     ACLogInfo(@"uexWidgetOne.getId has been deprecated");
     //[self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetOne has been deprecated"];
 	//NSString *wgtOneId =[self.meBrwView.meBrwCtrler.mwWgtMgr wgtOneID];
@@ -91,7 +91,7 @@
 //	}
 }
 
--(void)getVersion:(NSMutableArray *)inArguments {
+- (void)getVersion:(NSMutableArray *)inArguments {
     ACLogInfo(@"uexWidgetOne.getVersion has been deprecated");
     //[self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetone version has been deprecated"];
 //	NSString*version = [self.meBrwView.meBrwCtrler.mwWgtMgr WidgetOneVersion];
@@ -102,12 +102,12 @@
 //	}
 }
 
--(id)getPlatform:(NSMutableArray *)inArguments {
+- (NSNumber *)getPlatform:(NSMutableArray *)inArguments {
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetPlatform" arguments:ACArgsPack(@0,@2,@0)];
     return @0;
 }
 
--(void)exit:(NSMutableArray *)inArguments {
+- (void)exit:(NSMutableArray *)inArguments {
     ACArgsUnpack(NSNumber *inFlag) = inArguments;
     if (inFlag) {
         NSInteger flag = inFlag.integerValue;
@@ -146,14 +146,14 @@
 
 }
 
--(void)getWidgetNumber:(NSMutableArray *)inArguments {
+- (void)getWidgetNumber:(NSMutableArray *)inArguments {
 
 	int wgtNum = [self.EBrwView.meBrwCtrler.mwWgtMgr widgetNumber];
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetWidgetNumber" arguments:ACArgsPack(@0,@2,@(wgtNum))];
 	
 }
 
--(void)getWidgetInfo:(NSMutableArray *)inArguments {
+- (void)getWidgetInfo:(NSMutableArray *)inArguments {
 
     ACArgsUnpack(NSNumber *inIndex) = inArguments;
     int index =inIndex.intValue;
@@ -183,7 +183,7 @@
 	}
 }
 
--(void)getCurrentWidgetInfo:(NSMutableArray *)inArguments {
+- (void)getCurrentWidgetInfo:(NSMutableArray *)inArguments {
 	WWidget *curWgt =self.EBrwView.mwWgt;
 	if (curWgt) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -208,7 +208,7 @@
 	}
 }
 
--(void)cleanCache:(NSMutableArray *)inArguments {
+- (void)cleanCache:(NSMutableArray *)inArguments {
     NSNumber *result = @1;
 	if (self.EBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
@@ -218,17 +218,18 @@
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbCleanCache" arguments:ACArgsPack(@0,@2,result)];
 }
 
--(void)getMainWidgetId:(NSMutableArray *)inArguments {
+- (NSString *)getMainWidgetId:(NSMutableArray *)inArguments {
     
-    NSString *appId = @"-1";
+    NSString *appId = nil;
 	WWidget *widget = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
 	if (widget) {
 		appId = widget.appId;
 	}
-    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetMainWidgetId" arguments:ACArgsPack(@0,@0,appId)];
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetMainWidgetId" arguments:ACArgsPack(@0,@0,appId ?: @"-1")];
+    return appId;
 
 }
--(void)setBadgeNumber:(NSMutableArray*)inArguments{
+- (void)setBadgeNumber:(NSMutableArray*)inArguments{
     ACArgsUnpack(NSNumber *inNumber) = inArguments;
     NSUserDefaults *ud =[NSUserDefaults standardUserDefaults];
     [ud removeObjectForKey:F_UD_BadgeNumber];

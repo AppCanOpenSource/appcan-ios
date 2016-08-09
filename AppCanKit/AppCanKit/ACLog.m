@@ -161,13 +161,12 @@ static dispatch_semaphore_t ACLogDispatchMessageSemaphore;
     }
     NSString *fileStr = [NSString stringWithFormat:@"%s",file];
     NSString *funcStr = [NSString stringWithFormat:@"%s",func];
-    ACLogMode mode = ACLogGlobalLogMode;
+
     if (ACLogFileLogModes[fileStr]) {
-        mode = (ACLogMode)ACLogFileLogModes[fileStr].integerValue;
+        ACLogMode mode = (ACLogMode)ACLogFileLogModes[fileStr].integerValue;
+        if (! (mode & level))  return;
     }
-    if (! (mode & level)) {
-        return;
-    }
+
     va_list args;
     va_start(args, fmt);
     NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];

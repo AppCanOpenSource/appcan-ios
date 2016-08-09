@@ -24,6 +24,7 @@
 
 #import "ACInvoker.h"
 #import "ACLog.h"
+#import "ACJSON.h"
 #import <UIKit/UIKit.h>
 
 
@@ -391,12 +392,50 @@ typedef NS_ENUM(NSInteger, ACMethodArgumentType) {
 
 @implementation NSObject (ACInvoker)
 
+- (NSString *)ac_description{
+    if ([self isKindOfClass:[NSString class]]) {
+        return [NSString stringWithFormat:@"<String>%@",[self ac_JSONFragment]];
+    }
+    if ([self isKindOfClass:[NSNumber class]]) {
+        NSNumber *num = (NSNumber *)self;
+        return [NSString stringWithFormat:@"<Number.%s>%@",num.objCType,num];
+    }
+    if ([self isKindOfClass:[NSArray class]]) {
+        NSMutableString *desc = [@"<Array>[\n" mutableCopy];
+        NSArray *arr = (NSArray *)self;
+        [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [desc appendFormat:@"\t%@,\n",[[obj ac_description] stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
+        }];
+        [desc appendString:@"]"];
+        return [desc copy];
+    }
+    if ([self isKindOfClass:[NSDictionary class]]) {
+        NSMutableString *desc = [@"<Dictionary>{\n" mutableCopy];
+        NSDictionary *dict = (NSDictionary *)self;
+        [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [desc appendFormat:@"\t%@: %@\n",[[key ac_description] stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"],[[obj ac_description]  stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"]];
+        }];
+        [desc appendString:@"}"];
+        return desc;
+    }
+    return self.debugDescription;
+}
+
 static id _ac_invoke(id target, NSString *selector, NSArray *arguments){
     SEL sel = NSSelectorFromString(selector);
     NSMethodSignature *signature = [target methodSignatureForSelector:sel];
     if (signature) {
         NSInvocation *invocation = [signature ac_invocationWithArguments:arguments];
-        ACLogVerbose(@"ACInvoker: %@ invoke '%@' with args:%@",target,selector,arguments);
+        if(ACLogGlobalLogMode & ACLogLevelVerbose){
+            NSMutableString *args = nil;
+            if (arguments) {
+                args = [@"\n" mutableCopy];
+                [arguments enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [args appendFormat:@"%@\n",[obj ac_description]];
+                }];
+            }
+            ACLogVerbose(@"ACInvoker: %@ invoke '%@' with args:%@",target,selector,args);
+        }
         id returnValue = [invocation ac_invoke:target selector:sel returnType:[signature ac_returnType]];
         return returnValue;
     }else{

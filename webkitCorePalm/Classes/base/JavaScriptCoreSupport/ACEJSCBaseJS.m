@@ -211,6 +211,9 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"setIsSupportSwipeCallback":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"share":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"getWindowName":ACE_METHOD_EXEC_OPT_DEFAULT,
+#ifdef DEBUG
+                               @"test":ACE_METHOD_EXEC_OPT_DEFAULT,
+#endif
                                } mutableCopy];
     return uexWindowInfo;
 }

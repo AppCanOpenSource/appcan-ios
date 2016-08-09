@@ -44,6 +44,8 @@
 		42D7F6FE1CFFBEAC00447B4C /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42D7F6F91CFFBD7300447B4C /* Quick.framework */; };
 		42DB71B01D54887700E61C19 /* ACInvoker.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DB71AE1D54887700E61C19 /* ACInvoker.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42DB71B11D54887700E61C19 /* ACInvoker.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DB71AF1D54887700E61C19 /* ACInvoker.m */; };
+		42DB71D11D59A38C00E61C19 /* EUExBaseDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DB71CF1D59A38C00E61C19 /* EUExBaseDefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42DB71D21D59A38C00E61C19 /* EUExBaseDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DB71D01D59A38C00E61C19 /* EUExBaseDefine.m */; };
 		42ED03F81CFC34E1009134BE /* ACJSFunctionRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 42ED03F61CFC34E1009134BE /* ACJSFunctionRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42ED03F91CFC34E1009134BE /* ACJSFunctionRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ED03F71CFC34E1009134BE /* ACJSFunctionRef.m */; };
 		42ED03FC1CFC3783009134BE /* ACJSValueSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 42ED03FA1CFC3783009134BE /* ACJSValueSupport.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -114,6 +116,8 @@
 		42D7F6F91CFFBD7300447B4C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = "<group>"; };
 		42DB71AE1D54887700E61C19 /* ACInvoker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACInvoker.h; sourceTree = "<group>"; };
 		42DB71AF1D54887700E61C19 /* ACInvoker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACInvoker.m; sourceTree = "<group>"; };
+		42DB71CF1D59A38C00E61C19 /* EUExBaseDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExBaseDefine.h; sourceTree = "<group>"; };
+		42DB71D01D59A38C00E61C19 /* EUExBaseDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUExBaseDefine.m; sourceTree = "<group>"; };
 		42ED03F61CFC34E1009134BE /* ACJSFunctionRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACJSFunctionRef.h; sourceTree = "<group>"; };
 		42ED03F71CFC34E1009134BE /* ACJSFunctionRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSFunctionRef.m; sourceTree = "<group>"; };
 		42ED03FA1CFC3783009134BE /* ACJSValueSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACJSValueSupport.h; sourceTree = "<group>"; };
@@ -187,6 +191,8 @@
 				421AE5281CF57181001A5053 /* Info.plist */,
 				4292795B1CF8465900665594 /* EUExBase.h */,
 				4292795C1CF8465900665594 /* EUExBase.m */,
+				42DB71CF1D59A38C00E61C19 /* EUExBaseDefine.h */,
+				42DB71D01D59A38C00E61C19 /* EUExBaseDefine.m */,
 				42A9F63B1CFD3836002710FC /* AppCanObjectProtocol.h */,
 				42A9F63F1CFD39D9002710FC /* AppCanGlobalObjectGetter.h */,
 				429ADD631CFD62F600FA43DB /* UIColor+ACHTMLColor.h */,
@@ -239,6 +245,7 @@
 				421AE58A1CF59DCC001A5053 /* ACArguments.h in Headers */,
 				421AE5941CF5AE68001A5053 /* ACJSON.h in Headers */,
 				4292795D1CF8465900665594 /* EUExBase.h in Headers */,
+				42DB71D11D59A38C00E61C19 /* EUExBaseDefine.h in Headers */,
 				42ED03F81CFC34E1009134BE /* ACJSFunctionRef.h in Headers */,
 				42A9F63D1CFD3836002710FC /* AppCanObjectProtocol.h in Headers */,
 				429ADD651CFD62F600FA43DB /* UIColor+ACHTMLColor.h in Headers */,
@@ -363,6 +370,7 @@
 				421AE58B1CF59DCC001A5053 /* ACArguments.m in Sources */,
 				421AE5951CF5AE68001A5053 /* ACJSON.m in Sources */,
 				42ED03FD1CFC3783009134BE /* ACJSValueSupport.m in Sources */,
+				42DB71D21D59A38C00E61C19 /* EUExBaseDefine.m in Sources */,
 				421AE57D1CF58347001A5053 /* ACEXTRuntimeExtensions.m in Sources */,
 				42ED03F91CFC34E1009134BE /* ACJSFunctionRef.m in Sources */,
 				42961ADA1D0EAD4500005263 /* ACLogger.m in Sources */,
