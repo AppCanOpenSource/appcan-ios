@@ -2649,7 +2649,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     switch (dataType) {
         case UexWindowOpenDataTypeURL: {
-            NSURL *url = [self parseWebviewURL:inData];
+            NSURL *url = [self parseWebviewURL:inUrl];
             NSString *urlStr = url.absoluteString;
             if (eBrwWnd.winContainer.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION && ![urlStr hasPrefix:F_HTTP_PATH]&& ![urlStr hasPrefix:F_HTTPS_PATH]) {
                 FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
@@ -2688,7 +2688,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             break;
         }
         case UexWindowOpenDataTypeURLAndHTMLData: {
-            NSURL *url = [self parseWebviewURL:inData];
+            NSURL *url = [self parseWebviewURL:inUrl];
             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
             NSString *data = [encryptObj decryptWithPath:url appendData:inData];
             [ePopBrwView loadWithData:data baseUrl:url];
