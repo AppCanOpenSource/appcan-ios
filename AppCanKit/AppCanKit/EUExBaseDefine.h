@@ -103,7 +103,7 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
  
  - (NSString *)test:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSNumber *inSpeed) = inArguments;
-    UEX_PARAM_GUARD(inSpeed > 0,@"1"); //如果inSpeed 为nil,会直接输出debug日志并退出test方法,返回值为@"1"
+    UEX_PARAM_GUARD_NOT_NI(inSpeed,@"1"); //如果inSpeed 为nil,会直接输出debug日志并退出test方法,返回值为@"1"
     return @"2";
  }
  
