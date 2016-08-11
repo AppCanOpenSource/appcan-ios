@@ -60,7 +60,10 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
  */
 
 #define uexErrorMake(...) \
-    metamacro_if_eq(2, metamacro_argcount(__VA_ARGS__))(metamacro_if_eq(1, metamacro_argcount(__VA_ARGS__))(_uexErrorMake1(__VA_ARGS__))(_uexErrorMake2(__VA_ARGS__)))(_uexErrorMake3(__VA_ARGS__))
+    metamacro_if_eq(1, metamacro_argcount(__VA_ARGS__))(_uexErrorMake1(__VA_ARGS__))(metamacro_if_eq(2, metamacro_argcount(__VA_ARGS__))(_uexErrorMake2(__VA_ARGS__))(_uexErrorMake3(__VA_ARGS__)))
+
+
+
 
 
 
@@ -149,6 +152,7 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
         ACLogDebug(@"%s error! parameters not satisfy: %s",__FUNCTION__,metamacro_stringify(condition));            \
         return returnValue;                                                                                         \
     }
+
 
 
 
