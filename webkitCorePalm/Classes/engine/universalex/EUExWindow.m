@@ -517,7 +517,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     BOOL skipLoading = (inData.length == 0);
     if (!skipLoading) {
-        skipLoading = [self helpWindow:eBrwWnd loadData:inData withDataType:(UexWindowOpenDataType)inDataType.integerValue openFlag:flag];
+        skipLoading = ![self helpWindow:eBrwWnd loadData:inData withDataType:(UexWindowOpenDataType)inDataType.integerValue openFlag:flag];
     }
     if (skipLoading) {
         [self helpBringWindowToFront:eBrwWnd];
