@@ -207,6 +207,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getLocalData":ACE_METHOD_SYNC,
                                @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
                                @"setIsSupportSwipeCallback":ACE_METHOD_ASYNC,
+                               @"share":ACE_METHOD_ASYNC,
                                @"getWindowName":ACE_METHOD_SYNC,
                                } mutableCopy];
     return uexWindowInfo;
@@ -233,6 +234,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"setLogServerIp":ACE_METHOD_ASYNC,
                                @"isAppInstalled":ACE_METHOD_SYNC,
                                @"closeLoading":ACE_METHOD_ASYNC,
+                               @"getMBaaSHost":ACE_METHOD_ASYNC,
                                } mutableCopy];
     return uexWidgetInfo;
 }

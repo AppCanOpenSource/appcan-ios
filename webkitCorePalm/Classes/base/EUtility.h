@@ -303,6 +303,8 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 + (BOOL)isUseSystemLanguage;
 + (NSString *)getAppCanUserLanguage;
 + (void)brwView:(EBrowserView*)inBrwView addSubviewToContainer:(UIView*)inSubView WithIndex:(NSInteger)index andIndentifier:(NSString *)identifier;
+//2015-12-22
++ (void)brwView:(EBrowserView*)inBrwView addViewToCurrentMultiPop:(UIView*)inSubView WithPosition:(NSInteger)position;
 + (void)setBrwView:(EBrowserView*)inBrwView hidden:(BOOL)isHidden;
 + (CGRect)brwWndFrame:(EBrowserView*)inBrwView;
 + (CGRect)brwViewFrame:(EBrowserView*)inBrwView;
