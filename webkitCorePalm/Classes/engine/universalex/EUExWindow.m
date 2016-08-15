@@ -368,14 +368,13 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
         inWindowName = stringArg(info[@"name"]);
-        inDataType = numberArg(info[@"data"]);
+        inDataType = numberArg(info[@"dataType"]);
         inData = stringArg(info[@"data"]);
         extraInfo = dictionaryArg(info[@"extras"]);
     }
     
     
     UEX_PARAM_GUARD_NOT_NIL(inWindowName);
-    UEX_PARAM_GUARD_NOT_NIL(inDataType);
     UEX_PARAM_GUARD_NOT_NIL(inData);
     
     [self openWindowControllerWithName:inWindowName
@@ -451,7 +450,6 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     UEX_PARAM_GUARD_NOT_NIL(inWindowName);
     UEX_PARAM_GUARD_NOT_NIL(inFlag);
-    UEX_PARAM_GUARD_NOT_NIL(inDataType);
     UexWindowOpenFlag flag = (UexWindowOpenFlag)[inFlag integerValue];
     if (self.EBrwView.hidden == YES) {
         return;
@@ -1919,7 +1917,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     UEX_PARAM_GUARD_NOT_NIL(inHeight);
     UEX_PARAM_GUARD_NOT_NIL(inSlibingType);
-    UEX_PARAM_GUARD_NOT_NIL(inDataType);
+    
     
     CGFloat height = [inHeight floatValue];
     if (height <= 0) {

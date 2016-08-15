@@ -183,10 +183,10 @@
 	}
 }
 
-- (void)getCurrentWidgetInfo:(NSMutableArray *)inArguments {
+- (NSDictionary *)getCurrentWidgetInfo:(NSMutableArray *)inArguments {
 	WWidget *curWgt =self.EBrwView.mwWgt;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 	if (curWgt) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         if (curWgt.appId) {
 			[dict setObject:curWgt.appId forKey:F_JK_APP_ID];
 		} 
@@ -206,6 +206,7 @@
 	}else {
         [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetCurrentWidgetInfo" arguments:ACArgsPack(@0,@2,@1)];
 	}
+    return dict.count > 0 ? dict : nil;
 }
 
 - (void)cleanCache:(NSMutableArray *)inArguments {

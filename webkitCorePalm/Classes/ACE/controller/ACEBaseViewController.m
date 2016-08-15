@@ -167,7 +167,7 @@
         _canRotate = NO;
         return YES;
     }
-    return NO;
+    return _canAutorotate;
     
 }
 
