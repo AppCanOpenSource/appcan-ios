@@ -59,37 +59,37 @@ const float AppCanFinalProgressValue = 0.9f;
         _loadingCount = 0;
         _maxLoadCount = 0;
         _interactive = NO;
-//        _historyURLs = [[NSMutableArray alloc]init];
+        //        _historyURLs = [[NSMutableArray alloc]init];
     }
     return self;
     
 }
 
 - (void)flushCommandQueue: (EBrowserView*)eInBrwView {
-
+    
 }
 
 #pragma mark -
 #pragma mark UIWebViewDelegate
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
-	if (webView != NULL) {
-		ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
-		ACENSLog(@"webViewDidStartLoad url is %@", [webView.request URL]);
+    if (webView != NULL) {
+        ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
+        ACENSLog(@"webViewDidStartLoad url is %@", [webView.request URL]);
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
         if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
             [eBrwView.indicatorView startAnimating];
         }
-		[eBrwView notifyPageStart];
+        [eBrwView notifyPageStart];
         [self webViewDidStartLoadOption:webView];
-	}
+    }
     
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-	//[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+    //[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
     if (!theApp.isFirstPageDidLoad) {
-
+        
         if (theApp.launchedByRemoteNotification) {
             ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
             EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
@@ -98,76 +98,72 @@ const float AppCanFinalProgressValue = 0.9f;
         [theApp rootPageDidFinishLoading];
         theApp.isFirstPageDidLoad = YES;
     }
-	if (webView != NULL) {
-		ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
-        NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
-        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
-            [eBrwView.indicatorView stopAnimating];
-        }
-        
-        WWidget *inCurWgt = eBrwView.mwWgt;
-        BOOL isDebug = inCurWgt.isDebug;
-        if (isDebug) {
-            NSString * logserveripStr = inCurWgt.logServerIp;
-            NSString * srcString = [NSString stringWithFormat:@"http://%@:30060/target/target-script-min.js#anonymous",logserveripStr];
-            NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
-            [eBrwView stringByEvaluatingJavaScriptFromString:script];
-        }
-		[eBrwView notifyPageFinish];
-        [eBrwView continueMultiPopoverLoading];
-        [self webViewDidFinishLoadOption:webView];
-        
-	}
-	//[BUtility cookieDebugForBroad];
+    
+    ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
+    eBrwView.retryCount = 0;
+    NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
+    if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
+        [eBrwView.indicatorView stopAnimating];
+    }
+    
+    WWidget *inCurWgt = eBrwView.mwWgt;
+    BOOL isDebug = inCurWgt.isDebug;
+    if (isDebug) {
+        NSString * logserveripStr = inCurWgt.logServerIp;
+        NSString * srcString = [NSString stringWithFormat:@"http://%@:30060/target/target-script-min.js#anonymous",logserveripStr];
+        NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
+        [eBrwView stringByEvaluatingJavaScriptFromString:script];
+    }
+    [eBrwView notifyPageFinish];
+    [eBrwView continueMultiPopoverLoading];
+    [self webViewDidFinishLoadOption:webView];
+    
+    
+    //[BUtility cookieDebugForBroad];
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	if (webView != NULL) {
-		ACENSLog(@"didFailLoadWithError url is %@", [webView.request URL]);
-		ACENSLog(@"page loaded failed! Error - %@ %@",[error localizedDescription],[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-		[((ACEBrowserView *)webView) notifyPageError];
-        [((ACEBrowserView *)webView) continueMultiPopoverLoading];
-        NSURLRequest *request = webView.request;
-        
-        BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
-        if (!isFrame) {
-            NSString *errorPath = [self errorHTMLPath];
-            NSURL *errorURL = [BUtility stringToUrl:errorPath];
-            if(![webView.request.URL.path isEqual:errorPath]){
-                [((ACEBrowserView *)webView) loadWithUrl:errorURL];
-            }
-        }
-        
+static NSUInteger kMaxErrorRetryCount = 5;
 
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    if (webView != NULL) {
+        ACENSLog(@"didFailLoadWithError url is %@", [webView.request URL]);
+        ACENSLog(@"page loaded failed! Error - %@ %@",[error localizedDescription],[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+        ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
+        [aceWebView notifyPageError];
+        [aceWebView continueMultiPopoverLoading];
         
         [self webView:webView didFailLoadWithErrorOption:error];
         
-	}
+    }
 }
 
 -(BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
-	if (webView != NULL) {
-		ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
-		NSURL *requestURL = [request URL];
-		if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
-			NSURL *oldURL = [eBrwView curUrl];
-			if (oldURL) {
-				if (![[requestURL host] isEqualToString:[oldURL host]]) {
-					[[UIApplication sharedApplication] openURL:requestURL];
+    if (webView != NULL) {
+        ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
+        NSURL *requestURL = [request URL];
+        if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
+            NSURL *oldURL = [eBrwView curUrl];
+            if (oldURL) {
+                if (![[requestURL host] isEqualToString:[oldURL host]]) {
+                    [[UIApplication sharedApplication] openURL:requestURL];
                     
                     [self completeProgress];
                     
-					return NO;
-				}
-			}
-		}
-		BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
-		if (!isFrame) {
-			//[self flushCommandQueue:eBrwView];
+                    return NO;
+                }
+            }
+        }
+        BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
+        if (!isFrame) {
+            //[self flushCommandQueue:eBrwView];
             void (^showErrorPage)(void) = ^{
-                NSString *errorPath = [self errorHTMLPath];
-                NSURL *errorURL = [BUtility stringToUrl:errorPath];
-                [eBrwView loadWithUrl:errorURL];
+                if (eBrwView.retryCount < kMaxErrorRetryCount) {
+                    eBrwView.retryCount++;
+                    NSString *errorPath = [self errorHTMLPath];
+                    NSURL *errorURL = [BUtility stringToUrl:errorPath];
+                    [eBrwView loadWithUrl:errorURL];
+                }
                 [self completeProgress];
             };
             if ([requestURL isFileURL] && ![[NSFileManager defaultManager]fileExistsAtPath:requestURL.path]) {
@@ -199,8 +195,8 @@ const float AppCanFinalProgressValue = 0.9f;
     }
     
     [self webView:webView shouldStartLoadWithRequestOption:request navigationType:navigationType];
-	
-	return YES;
+    
+    return YES;
 }
 
 -(void)alertForbidView:(NSString*)uexPluginName{
@@ -210,11 +206,11 @@ const float AppCanFinalProgressValue = 0.9f;
 
 - (void)dealloc {
     
-//    if (_historyURLs) {
-//        [_historyURLs removeAllObjects];
-//        [_historyURLs release];
-//        _historyURLs = nil;
-//    }
+    //    if (_historyURLs) {
+    //        [_historyURLs removeAllObjects];
+    //        [_historyURLs release];
+    //        _historyURLs = nil;
+    //    }
     
 }
 
@@ -286,7 +282,7 @@ const float AppCanFinalProgressValue = 0.9f;
         
         self.currentURL = request.URL;
         
-//        [_historyURLs addObject:request.URL];
+        //        [_historyURLs addObject:request.URL];
         
         [self resetProgress];
         

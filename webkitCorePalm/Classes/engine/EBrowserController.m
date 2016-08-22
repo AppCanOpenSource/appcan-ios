@@ -733,12 +733,16 @@ static BOOL userCustomLoadingImageEnabled = NO;
 		}
 	}
 }
+
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
 	EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-	UIInterfaceOrientation nowOrientation = (UIInterfaceOrientation)[[UIDevice currentDevice] orientation];
+    ACEInterfaceOrientation nowOrientation = ace_interfaceOrientationFromUIDeviceOrientation([[UIDevice currentDevice] orientation]);
     
-	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(nowOrientation))) {
-        [[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation))];
+	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & nowOrientation)) {
+        ACLogDebug(@"will log");
+        [[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation)) completion:^(JSValue * _Nonnull returnValue) {
+            ACLogDebug(@"logged");
+        }];
 
 	}
 }

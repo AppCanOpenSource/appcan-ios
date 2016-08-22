@@ -81,6 +81,8 @@
 @property (nonatomic,assign) float nowScrollPointY;
 @property (nonatomic,assign) float bottom;
 
+@property (nonatomic,assign)NSUInteger retryCount;
+
 @property (nonatomic,strong)ACEJSCHandler *JSCHandler;
 @property (nonatomic,assign)ACEEBrowserViewType mType;
 @property int mFlag;

@@ -42,11 +42,11 @@ ACEInterfaceOrientation ace_interfaceOrientationFromUIDeviceOrientation(UIDevice
             break;
         }
         case UIDeviceOrientationLandscapeLeft: {
-            return ACEInterfaceOrientationLandscapeRight;
+            return ACEInterfaceOrientationLandscapeLeft;
             break;
         }
         case UIDeviceOrientationLandscapeRight: {
-            return ACEInterfaceOrientationLandscapeLeft;
+            return ACEInterfaceOrientationLandscapeRight;
             break;
         }
 
@@ -68,11 +68,11 @@ ACEInterfaceOrientation ace_interfaceOrientationFromUIInterfaceOrientation(UIInt
             break;
         }
         case UIInterfaceOrientationLandscapeLeft: {
-            return ACEInterfaceOrientationLandscapeLeft;
+            return ACEInterfaceOrientationLandscapeRight;
             break;
         }
         case UIInterfaceOrientationLandscapeRight: {
-            return ACEInterfaceOrientationLandscapeRight;
+            return ACEInterfaceOrientationLandscapeLeft;
             break;
         }
             
