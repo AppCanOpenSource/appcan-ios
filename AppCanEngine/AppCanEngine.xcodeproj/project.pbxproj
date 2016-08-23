@@ -949,6 +949,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4233DBED1D6AC347001BE25B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4233DBE91D6AC309001BE25B;
+			remoteInfo = "AppCanKit-dynamic";
+		};
+		4233DBEF1D6AC34A001BE25B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4233DBBF1D6AC309001BE25B;
+			remoteInfo = "AppCanKit-dynamic";
+		};
 		42D7F7241CFFC26200447B4C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
@@ -962,13 +976,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 421AE52D1CF57181001A5053;
 			remoteInfo = AppCanKitTests;
-		};
-		42D7F7281CFFC27200447B4C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 421AE5221CF57181001A5053;
-			remoteInfo = AppCanKit;
 		};
 		42D7F72D1CFFC35100447B4C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1591,6 +1598,7 @@
 			isa = PBXGroup;
 			children = (
 				42D7F7251CFFC26200447B4C /* AppCanKit.framework */,
+				4233DBEE1D6AC347001BE25B /* AppCanKit-dynamic.framework */,
 				42D7F7271CFFC26200447B4C /* AppCanKitTests.xctest */,
 			);
 			name = Products;
@@ -2558,11 +2566,12 @@
 				42CF20891C1904F100F539B4 /* Frameworks */,
 				42CF20A61C1904F100F539B4 /* Headers */,
 				427F06BE1C190BF0001E17B5 /* Resources */,
+				4233DC001D6AC938001BE25B /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				42D7F7291CFFC27200447B4C /* PBXTargetDependency */,
+				4233DBF01D6AC34A001BE25B /* PBXTargetDependency */,
 			);
 			name = AppCanEngineIDEFramework;
 			productName = AppCanEngine;
@@ -2629,6 +2638,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4233DBEE1D6AC347001BE25B /* AppCanKit-dynamic.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "AppCanKit-dynamic.framework";
+			remoteRef = 4233DBED1D6AC347001BE25B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		42D7F7251CFFC26200447B4C /* AppCanKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -2656,6 +2672,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4233DC001D6AC938001BE25B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "build_product_path=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nide_product_path=${SRCROOT}/ide_product/\nrm -rf ${ide_product_path}/AppCanEngine.framework\nrm -rf ${ide_product_path}/AppCanKit.framework\ncp -rf ${build_product_path}/AppCanEngine.framework ${ide_product_path}\ncp -rf ${build_product_path}/AppCanKit.framework ${ide_product_path}";
+		};
 		427F06C51C190CF1001E17B5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3109,10 +3138,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		42D7F7291CFFC27200447B4C /* PBXTargetDependency */ = {
+		4233DBF01D6AC34A001BE25B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = AppCanKit;
-			targetProxy = 42D7F7281CFFC27200447B4C /* PBXContainerItemProxy */;
+			name = "AppCanKit-dynamic";
+			targetProxy = 4233DBEF1D6AC34A001BE25B /* PBXContainerItemProxy */;
 		};
 		42D7F72E1CFFC35100447B4C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3213,7 +3242,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3239,10 +3268,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zymobi.runner.engine;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
+				PROVISIONING_PROFILE = "09babb2a-a1a4-4cb8-aafa-39aff552764f";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -3255,7 +3284,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hangzhou Sea King Biological Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -3281,10 +3310,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.appcan.ide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zymobi.runner.engine;
 				PRODUCT_MODULE_NAME = AppCanEngine;
 				PRODUCT_NAME = AppCanEngine;
-				PROVISIONING_PROFILE = "756a3ff2-be53-4d08-862a-c050d0dfa3d9";
+				PROVISIONING_PROFILE = "09babb2a-a1a4-4cb8-aafa-39aff552764f";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
