@@ -4,22 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>CodeDirectory</key>
-		<data>
-		utohd+SmVQfJUQ0C/vBhgEILZHE=
-		</data>
-		<key>CodeRequirements</key>
-		<data>
-		+EdaYWP/hrQtemhmsYvi/G5DjHE=
-		</data>
-		<key>CodeRequirements-1</key>
-		<data>
-		hqYKBMGGLeqR+W140Kk0us7FeQc=
-		</data>
-		<key>CodeSignature</key>
-		<data>
-		k52NFE8UtVxUgO6Xh4pK3sJUing=
-		</data>
 		<key>Headers/ACArguments.h</key>
 		<data>
 		3UwvjQyvsrRFTEfVgK3XyblCBS0=
@@ -111,50 +95,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>CodeDirectory</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			utohd+SmVQfJUQ0C/vBhgEILZHE=
-			</data>
-			<key>hash2</key>
-			<data>
-			PspCxC1m5lWiWkIdRgg9a/pmGvQc3rYhyyhPBhhN00c=
-			</data>
-		</dict>
-		<key>CodeRequirements</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			+EdaYWP/hrQtemhmsYvi/G5DjHE=
-			</data>
-			<key>hash2</key>
-			<data>
-			Wihkv7URVd21YZ9bd40VmITNR5+sfKIs8NikfKazr3Q=
-			</data>
-		</dict>
-		<key>CodeRequirements-1</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			hqYKBMGGLeqR+W140Kk0us7FeQc=
-			</data>
-			<key>hash2</key>
-			<data>
-			jflW71rODimT60WGcsvZxd8FXwpiegaHVdBplyEtyvA=
-			</data>
-		</dict>
-		<key>CodeSignature</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			k52NFE8UtVxUgO6Xh4pK3sJUing=
-			</data>
-			<key>hash2</key>
-			<data>
-			r4vrnR5MdqiJm0dAzYgo+CzoKBblnRGAogzZvDYFfy4=
-			</data>
-		</dict>
 		<key>Headers/ACArguments.h</key>
 		<dict>
 			<key>hash</key>

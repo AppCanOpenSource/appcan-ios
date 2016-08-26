@@ -1396,7 +1396,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     UEX_PARAM_GUARD_NOT_NIL(inTitle);
     UEX_PARAM_GUARD_NOT_NIL(inMessage);
     self.confirmCB = JSFunctionArg(inArguments.lastObject);
-    self.mbAlertView = [[BUIAlertView alloc]initWithType:ACEBUIAlertViewTypePrompt];
+    self.mbAlertView = [[BUIAlertView alloc]initWithType:ACEBUIAlertViewTypeConfirm];
     self.mbAlertView.mAlertView = [[UIAlertView alloc]
                                    initWithTitle:inTitle
                                    message:inMessage
@@ -1404,11 +1404,10 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                    cancelButtonTitle:nil
                                    otherButtonTitles:nil];
     NSInteger buttonCount = inButtonLabels.count;
-    NSString *button = nil;
     for (int i=0; i<buttonCount; i++) {
         NSString *label = stringArg(inButtonLabels[i]);
         if (label) {
-            [self.mbAlertView.mAlertView addButtonWithTitle:button];
+            [self.mbAlertView.mAlertView addButtonWithTitle:label];
         }
     }
     
