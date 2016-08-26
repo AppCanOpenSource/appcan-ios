@@ -2499,8 +2499,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSDictionary *inContent,NSString *inMainPopName,NSNumber *inDataType,NSNumber *inX,NSNumber *inY,NSNumber *inW,NSNumber *inH,NSNumber *inFontSize,NSNumber *inFlag,NSNumber *popIndex,NSDictionary *extras) = inArguments;
     
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
-    if (info) {
+    if (info && info[@"name"]) {
         inContent = dictionaryArg(info[@"content"]);
+        inMainPopName = stringArg(info[@"name"]);
         inDataType = numberArg(info[@"dataType"]);
         inX = numberArg(info[@"x"]);
         inY = numberArg(info[@"y"]);
