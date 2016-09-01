@@ -74,8 +74,8 @@
         参数不支持可变类型(比如NSMutableDictionary等),需要可变类型时应该先获得不可变类型,然后用mutableCopy进行转换
         参数目前不支持NSInteger等基本类型或者C的struct类型。若需要获取数值类型的参数,应定义为NSNumber *,然后进行转换
  *  @note 此宏不能单独存在于一个Scope或者Condition中,且此宏的参数必须写在同一行中,否则宏展开会出错
+ *  @note 此宏只能运行在ARC环境中
  *
- *  @todo 参数支持NSInteger等数值基本类型
  */
 #define ACArgsUnpack(...)\
     _ACArgsUnpack(__VA_ARGS__)
@@ -132,6 +132,8 @@ APPCAN_EXPORT_AS_SHORT(ACJSFunctionRef* _Nullable JSFunctionArg(id _Nullable arg
 
 #define _ACArgsPack(...) (@[metamacro_foreach(_ACObjectOrNil,,__VA_ARGS__ )])
 #define _ACObjectOrNil(idx,obj) (id)(obj) ?: [ACNil null],
+
+#if __has_feature(objc_arc)
 #define _ACArgsUnpack(...)\
     metamacro_foreach(_ACArgsUnpack_Declare,, __VA_ARGS__) \
     int _ACArgsUnpackState = 0;\
@@ -164,6 +166,16 @@ APPCAN_EXPORT_AS_SHORT(ACJSFunctionRef* _Nullable JSFunctionArg(id _Nullable arg
 #define _ACArgsUnpack_Value(INDEX, ARG) \
     [NSValue valueWithPointer:&_ACArgsUnpack_Declare_Name(INDEX)],
 
+#else
+
+#define _ACArgsUnpack(...)\
+    _Pragma(metamacro_stringify(GCC error("ACArgsUnpack() can only use in ARC")))\
+    metamacro_foreach(_ACArgsUnpack_Assign_Nil,, __VA_ARGS__)\
+    [ACArgumentsHelper helper][@[[ACNil null]]]
+
+#define _ACArgsUnpack_Assign_Nil(INDEX, ARG)\
+    ARG = nil;
+#endif
 
 
 
