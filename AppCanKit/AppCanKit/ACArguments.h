@@ -169,7 +169,7 @@ APPCAN_EXPORT_AS_SHORT(ACJSFunctionRef* _Nullable JSFunctionArg(id _Nullable arg
 #else
 
 #define _ACArgsUnpack(...)\
-    _Pragma(metamacro_stringify(GCC error("ACArgsUnpack() can only use in ARC")))\
+    _Pragma(metamacro_stringify(GCC error("ACArgsUnpack() can only be used with ARC")))\
     metamacro_foreach(_ACArgsUnpack_Assign_Nil,, __VA_ARGS__)\
     [ACArgumentsHelper helper][@[[ACNil null]]]
 
