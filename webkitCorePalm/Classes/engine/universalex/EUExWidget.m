@@ -397,7 +397,11 @@ result;\
         
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppId:),wgtObj.appId);
         
-        ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setAppVersion:),wgtObj.ver);
+        if ([analysisObject respondsToSelector:@selector(setWidgetVersion:)]) {
+            ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(setWidgetVersion:),wgtObj.ver);
+        }
+        
+        
         
         ((void(*)(id, SEL,NSString*))objc_msgSend)(analysisObject, @selector(startWithChildAppKey:),inAppkey);//inKey  目前为主widget的AppKey，子widget没有
 #pragma clang diagnostic pop
