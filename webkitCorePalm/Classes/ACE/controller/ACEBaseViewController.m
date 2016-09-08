@@ -264,6 +264,9 @@
     
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return self.ACEStatusBarStyle;
+}
 
 
 

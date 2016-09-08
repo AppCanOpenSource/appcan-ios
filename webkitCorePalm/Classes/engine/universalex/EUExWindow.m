@@ -3226,12 +3226,20 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSNumber *colorFlag) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(colorFlag);
     NSInteger flag = colorFlag.integerValue;
+    __kindof ACEBaseViewController *controller = theApp.drawerController;
+    if (self.EBrwView.meBrwWnd.webController) {
+        controller = self.EBrwView.meBrwWnd.webController;
+    }
     switch (flag) {
         case 0:
             [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+            controller.ACEStatusBarStyle = UIStatusBarStyleLightContent;
+            [controller setNeedsStatusBarAppearanceUpdate];
             break;
         case 1:
             [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+            controller.ACEStatusBarStyle = UIStatusBarStyleDefault;
+            [controller setNeedsStatusBarAppearanceUpdate];
             break;
         default:
             break;
