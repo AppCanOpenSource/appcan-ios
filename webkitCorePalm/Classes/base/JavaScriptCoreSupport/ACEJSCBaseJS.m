@@ -142,6 +142,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"openPopover":ACE_METHOD_ASYNC,
                                @"closePopover":ACE_METHOD_ASYNC,
                                @"setWindowHidden":ACE_METHOD_ASYNC,
+                               @"setPopoverVisibility":ACE_METHOD_ASYNC,
                                @"insertWindowAboveWindow":ACE_METHOD_ASYNC,
                                @"insertWindowBelowWindow":ACE_METHOD_ASYNC,
                                @"setOrientation":ACE_METHOD_ASYNC,

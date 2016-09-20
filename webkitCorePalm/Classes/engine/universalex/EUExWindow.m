@@ -753,6 +753,46 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 }
 
 
+- (void)setPopoverVisibility:(NSMutableArray *)inArguments
+{
+    if (inArguments.count != 2) {
+        return;
+    }
+    
+    NSString *inName = [inArguments objectAtIndex:0];
+    NSString *value = [inArguments objectAtIndex:1];
+    NSInteger iV = [value integerValue];
+    
+    if (!inName) {
+        return;
+    }
+    NSMutableDictionary *popoverDict = meBrwView.meBrwWnd.mPopoverBrwViewDict;
+    UIView *view = [popoverDict objectForKey:inName];
+    
+    if (view == nil) {
+        
+        NSMutableDictionary *multipopoverDict = meBrwView.meBrwWnd.mMuiltPopoverDict;
+        EScrollView * muiltPopover = [multipopoverDict objectForKey:inName];
+        
+        if(!muiltPopover) {
+            return;
+        }
+        
+        view = muiltPopover;
+        
+    }
+    
+    if (iV == 0) { //隐藏
+        
+        view.hidden = YES;
+        
+    } else if (iV == 1) { //显示
+        
+        view.hidden = NO;
+    }
+    
+}
+
 - (void)setSlidingWindowEnabled:(NSMutableArray *)inArguments
 {
     
@@ -3919,10 +3959,21 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     NSMutableDictionary *popoverDict = meBrwView.meBrwWnd.mPopoverBrwViewDict;
     UIView *view = [popoverDict objectForKey:inName];
-    if (!view) {
-        return;
+    if (view != nil) {
+        [meBrwView.meBrwWnd insertSubview:view aboveSubview:meBrwView.meBrwWnd.meBrwView];
+        
+    } else {
+        
+        NSMutableDictionary *multipopoverDict = meBrwView.meBrwWnd.mMuiltPopoverDict;
+        EScrollView * muiltPopover = [multipopoverDict objectForKey:inName];
+        
+        if(!muiltPopover) {
+            return;
+        }
+        
+        [meBrwView.meBrwWnd insertSubview:muiltPopover aboveSubview:meBrwView.meBrwWnd.meBrwView];
     }
-    [meBrwView.meBrwWnd insertSubview:view aboveSubview:meBrwView.meBrwWnd.meBrwView];
+    
 }
 
 - (void)bringPopoverToFront:(NSMutableArray *)inArguments {
@@ -3935,10 +3986,20 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
     }
     NSMutableDictionary *popoverDict = meBrwView.meBrwWnd.mPopoverBrwViewDict;
     UIView *view = [popoverDict objectForKey:inName];
-    if (!view) {
-        return;
+    if (view != nil) {
+        [meBrwView.meBrwWnd bringSubviewToFront:view];
+    } else {
+        
+        NSMutableDictionary *multipopoverDict = meBrwView.meBrwWnd.mMuiltPopoverDict;
+        EScrollView * muiltPopover = [multipopoverDict objectForKey:inName];
+        
+        if(!muiltPopover) {
+            return;
+        }
+        
+        [meBrwView.meBrwWnd bringSubviewToFront:muiltPopover];
     }
-    [meBrwView.meBrwWnd bringSubviewToFront:view];
+    
 }
 
 - (void)insertAbove:(NSMutableArray *)inArguments {
