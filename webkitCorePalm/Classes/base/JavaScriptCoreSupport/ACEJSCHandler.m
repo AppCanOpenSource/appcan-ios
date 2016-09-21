@@ -34,6 +34,7 @@
 #import "EBrowserView.h"
 #import "ACEPluginInfo.h"
 #import <AppCanKit/ACInvoker.h>
+#import "EBrowserWindow.h"
 
 #define ACE_LOG_TRACE(cmd)\
     _Pragma("clang diagnostic push")\
@@ -172,7 +173,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     
 
     //log trace
-    ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@ method:%@.%@ async:%@",args,self.eBrowserView.muexObjName,pluginName,methodName,isAsync?@"YES":@"NO"))
+    ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@.%@ method:%@.%@ async:%@",args,self.eBrowserView.meBrwWnd.meBrwView.muexObjName,self.eBrowserView.muexObjName,pluginName,methodName,isAsync?@"YES":@"NO"))
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -258,6 +259,53 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 
+
+
+
+
+
+
+
+
+- (BOOL)isVersion4Plugin:(Class)cls{
+    static NSMutableDictionary *cacheDict = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cacheDict = [NSMutableDictionary dictionary];
+    });
+    NSString *clsName = NSStringFromClass(cls);
+    NSNumber *cache = cacheDict[clsName];
+    if (cache) {
+        return cache.boolValue;
+    }
+    unsigned count = 0;
+    BOOL isVersion4 = NO;
+    Method *classMethods = class_copyMethodList(cls, &count);
+    for (NSInteger i = 0;i < count;i++){
+        Method method = classMethods[i];
+        const char *methodName = sel_getName(method_getName(method));
+        if(strcmp(methodName, "initWithWebViewEngine:") == 0){
+            isVersion4 = YES;
+            break;
+        }
+    }
+    [cacheDict setValue:@(isVersion4) forKey:clsName];
+    return isVersion4;
+}
+
+- (id)newPluginInstanceForClass:(Class)instanceClass{
+    id instance;
+    if ([self isVersion4Plugin:instanceClass]) {
+        instance = [[instanceClass alloc] initWithWebViewEngine:self.engine];
+    }else{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+        instance = [[instanceClass alloc] initWithBrwView:self.engine];
+#pragma clang diagnostic pop
+    }
+    return instance;
+}
+
 - (id)getGlobalPluginInstanceByClassName:(NSString *)className{
     if(!ACEJSCGlobalPlugins[className]){
         return nil;
@@ -270,21 +318,13 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithWebViewEngine:self.engine];
+    instance = [self newPluginInstanceForClass:instanceClass];
     if(!instance){
         return nil;
     }
     [ACEJSCGlobalPlugins setValue:instance forKey:className];
     return instance;
 }
-
-
-
-
-
-
-
-
 
 - (id)getNormalPluginInstanceByClassName:(NSString *)className{
 
@@ -296,13 +336,19 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithWebViewEngine:self.engine];
+
+    instance = [self newPluginInstanceForClass:instanceClass];
+
+    
     if(!instance){
         return nil;
     }
     [self.pluginDict setValue:instance forKey:className];
     return instance;
 }
+
+
+
 
 - (void)loadDynamicPlugins:(NSString *)pluginName{
     static NSMutableArray *loadedPlugins;

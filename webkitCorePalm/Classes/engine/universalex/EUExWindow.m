@@ -155,7 +155,7 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
 
 @interface EUExWindow()
 @property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
-@property (nonatomic,strong)NSMutableDictionary *bounceParams;
+@property (nonatomic,strong)NSMutableDictionary *bounceParamsDict;
 @property (nonatomic,readonly)EBrowserView *EBrwView;
 
 @property (nonatomic,strong)ACJSFunctionRef *confirmCB;
@@ -2221,8 +2221,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     UEX_PARAM_GUARD_NOT_NIL(inType);
     UEX_PARAM_GUARD_NOT_NIL(bounceParams);
     
-    self.bounceParams = [bounceParams mutableCopy];
-    [self.bounceParams setValue:inType forKey:@"type"];
+    self.bounceParamsDict = [bounceParams mutableCopy];
+    [self.bounceParamsDict setValue:inType forKey:@"type"];
     
     int type = [inType intValue];
     EBrowserViewBounceView * targetBounceView = nil;
@@ -2253,13 +2253,13 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         if ([pjID isEqualToString:@"donghang"]){
             self.EBrwView.mBottomBounceView.projectID=pjID;
             self.EBrwView.mTopBounceView.projectID=pjID;
-            [self.bounceParams setObject:pjID forKey:@"projectID"];
+            [self.bounceParamsDict setObject:pjID forKey:@"projectID"];
         }
         imageInPath = stringArg(bounceParams[@"loadingImagePath"]);
     }
     if (imageInPath) {
         imageInPath = [self absPath:imageInPath];
-        [self.bounceParams setObject:imageInPath forKey:@"loadingImagePath"];
+        [self.bounceParamsDict setObject:imageInPath forKey:@"loadingImagePath"];
     }
     
     
@@ -2268,13 +2268,13 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     NSString * imagePath = stringArg(bounceParams[@"imagePath"]);
     if (imagePath && imagePath.length > 0) {
         imagePath = [super absPath:imagePath];
-        [self.bounceParams setObject:imagePath forKey:@"imagePath"];
+        [self.bounceParamsDict setObject:imagePath forKey:@"imagePath"];
     }
     
     NSString *textColor =stringArg(bounceParams[@"textColor"]);
     if (textColor && textColor.length>0) {
         UIColor *color = [EUtility colorFromHTMLString:textColor];
-        [self.bounceParams setObject:color forKey:@"textColor"];
+        [self.bounceParamsDict setObject:color forKey:@"textColor"];
     }
     
     
@@ -2316,7 +2316,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         case EBounceViewTypeTop:
             if (!self.EBrwView.mTopBounceView) {
                 if (shouldShowBounceViewContent) {
-                    self.EBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -self.EBrwView.bounds.size.height, self.EBrwView.bounds.size.width, self.EBrwView.bounds.size.height) andType:EBounceViewTypeTop params:self.bounceParams];
+                    self.EBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -self.EBrwView.bounds.size.height, self.EBrwView.bounds.size.width, self.EBrwView.bounds.size.height) andType:EBounceViewTypeTop params:self.bounceParamsDict];
                     [self.EBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     self.EBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -self.EBrwView.bounds.size.height, self.EBrwView.bounds.size.width, self.EBrwView.bounds.size.height)];
@@ -2329,7 +2329,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                 self.EBrwView.mTopBounceView.hidden = NO;
             } else if (self.EBrwView.mTopBounceView) {
                 if (shouldShowBounceViewContent) {
-                    [self.EBrwView.mTopBounceView resetDataWithType:EBounceViewTypeTop andParams:self.bounceParams];
+                    [self.EBrwView.mTopBounceView resetDataWithType:EBounceViewTypeTop andParams:self.bounceParamsDict];
                     [self.EBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 }
                 self.EBrwView.mTopBounceView.backgroundColor = color;
@@ -2339,7 +2339,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         case EBounceViewTypeBottom:
             if (!self.EBrwView.mBottomBounceView) {
                 if (shouldShowBounceViewContent) {
-                    self.EBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, self.EBrwView.mScrollView.contentSize.height, self.EBrwView.bounds.size.width, self.EBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:self.bounceParams];
+                    self.EBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, self.EBrwView.mScrollView.contentSize.height, self.EBrwView.bounds.size.width, self.EBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:self.bounceParamsDict];
                     [self.EBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     self.EBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, self.EBrwView.mScrollView.contentSize.height, self.EBrwView.bounds.size.width, self.EBrwView.bounds.size.height)];
@@ -2358,7 +2358,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                 self.EBrwView.mBottomBounceView.hidden = NO;
             } else if (self.EBrwView.mBottomBounceView) {
                 if (shouldShowBounceViewContent) {
-                    [self.EBrwView.mBottomBounceView resetDataWithType:EBounceViewTypeBottom andParams:self.bounceParams];
+                    [self.EBrwView.mBottomBounceView resetDataWithType:EBounceViewTypeBottom andParams:self.bounceParamsDict];
                     [self.EBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 }
                 self.EBrwView.mBottomBounceView.backgroundColor = color;
@@ -2640,7 +2640,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     [self setExtraInfo:extraInfo toEBrowserView:ePopBrwView];
     
-    if (isExist && inData.length == 0) {
+    if (isExist && inData.length == 0 && inUrl.length == 0) {
         [eBrwWnd bringSubviewToFront:ePopBrwView];
         return;
     }

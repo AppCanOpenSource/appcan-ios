@@ -949,6 +949,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		421C227D1D9244C6003BC6A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 421AE5221CF57181001A5053;
+			remoteInfo = AppCanKit;
+		};
 		4233DBED1D6AC347001BE25B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
@@ -976,13 +983,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 421AE52D1CF57181001A5053;
 			remoteInfo = AppCanKitTests;
-		};
-		42D7F72D1CFFC35100447B4C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 421AE5221CF57181001A5053;
-			remoteInfo = AppCanKit;
 		};
 		42D7F72F1CFFC35500447B4C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1598,7 +1598,7 @@
 			isa = PBXGroup;
 			children = (
 				42D7F7251CFFC26200447B4C /* AppCanKit.framework */,
-				4233DBEE1D6AC347001BE25B /* AppCanKit-dynamic.framework */,
+				4233DBEE1D6AC347001BE25B /* AppCanKit.framework */,
 				42D7F7271CFFC26200447B4C /* AppCanKitTests.xctest */,
 			);
 			name = Products;
@@ -2590,7 +2590,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				42D7F72E1CFFC35100447B4C /* PBXTargetDependency */,
+				421C227E1D9244C6003BC6A6 /* PBXTargetDependency */,
 			);
 			name = AppCanEngine;
 			productName = AppCanEngine;
@@ -2603,7 +2603,7 @@
 		B220D26B15A3152B00D02138 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				TargetAttributes = {
 					427F06BF1C190C27001E17B5 = {
 						CreatedOnToolsVersion = 7.1;
@@ -2638,10 +2638,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4233DBEE1D6AC347001BE25B /* AppCanKit-dynamic.framework */ = {
+		4233DBEE1D6AC347001BE25B /* AppCanKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = "AppCanKit-dynamic.framework";
+			path = AppCanKit.framework;
 			remoteRef = 4233DBED1D6AC347001BE25B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -3138,15 +3138,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		421C227E1D9244C6003BC6A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AppCanKit;
+			targetProxy = 421C227D1D9244C6003BC6A6 /* PBXContainerItemProxy */;
+		};
 		4233DBF01D6AC34A001BE25B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "AppCanKit-dynamic";
 			targetProxy = 4233DBEF1D6AC34A001BE25B /* PBXContainerItemProxy */;
-		};
-		42D7F72E1CFFC35100447B4C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AppCanKit;
-			targetProxy = 42D7F72D1CFFC35100447B4C /* PBXContainerItemProxy */;
 		};
 		42D7F7301CFFC35500447B4C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3325,11 +3325,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../AppCanPlugin/AppCanPlugin/engine/";
@@ -3352,7 +3355,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 arm64 i386 x86_64";
 			};
@@ -3362,11 +3365,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../AppCanPlugin/AppCanPlugin/engine/";
@@ -3381,7 +3387,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 arm64 i386 x86_64";
