@@ -120,6 +120,7 @@
 		3C5AF6EA1A4D3213008F8A3D /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		4214B40D1BE753300088E31B /* ACEMultiPopoverScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */; };
 		4214B40E1BE753300088E31B /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; };
+		421C23631D93D33A003BC6A6 /* ACESubMultiPopScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D7FEEDAC1D3E16E400874038 /* ACESubMultiPopScrollView.m */; };
 		424C9E491CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */; };
 		424C9E4A1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */; };
 		424C9E4B1CC8CBFC0014E07E /* ACEJSCInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */; };
@@ -2848,6 +2849,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				421C23631D93D33A003BC6A6 /* ACESubMultiPopScrollView.m in Sources */,
 				42FF2D621D179097003994A5 /* ACEKeychainItemWrapper.m in Sources */,
 				42BCF3CD1CD04DBE00F4677B /* EBrowserHistory.m in Sources */,
 				42CF200C1C1904F100F539B4 /* AppItemView.m in Sources */,
