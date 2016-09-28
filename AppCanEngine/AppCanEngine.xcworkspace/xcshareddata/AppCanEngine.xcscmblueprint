@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6DF796DA1B02B35BB78D8952E86824D016B918DA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "91D75592FAC7257879DA679CAC0B6A91666FE034" : 9223372036854775807,
+    "6DF796DA1B02B35BB78D8952E86824D016B918DA" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "53060058-79D4-4472-91DB-0D42D5DC12DE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "91D75592FAC7257879DA679CAC0B6A91666FE034" : "appcan-test-report\/",
+    "6DF796DA1B02B35BB78D8952E86824D016B918DA" : "appcan-ios\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AppCanEngine",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AppCanEngine\/AppCanEngine.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AppCanOpenSource\/appcan-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6DF796DA1B02B35BB78D8952E86824D016B918DA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AppCanOpenSource\/appcan-test-report.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "91D75592FAC7257879DA679CAC0B6A91666FE034"
+    }
+  ]
+}

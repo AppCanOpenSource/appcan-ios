@@ -25,13 +25,7 @@ DerivedData
 #
 # Pods/
 
-AppCanPlugin/AppCanPlugin/engine/libAppCanEngine.a
-AppCanEngine/AppCanEngine.framework/*
-AppCanEngine/libAppCanEngine.a
 
 
-#AppCanKit
-/**/AppCanKit.framework/*
-/**/AppCanKit.framework/**
 
 

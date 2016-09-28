@@ -23,9 +23,11 @@
 		423A427F1D951E5C008AA1B1 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427D1D951E5C008AA1B1 /* pop.framework */; };
 		423A42801D951E70008AA1B1 /* Ono.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427C1D951E5C008AA1B1 /* Ono.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		423A42811D951E70008AA1B1 /* pop.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427D1D951E5C008AA1B1 /* pop.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		427260091D9B58FE00B941CF /* AppCanEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427260071D9B58FE00B941CF /* AppCanEngine.framework */; };
+		4272600A1D9B58FE00B941CF /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427260081D9B58FE00B941CF /* AppCanKit.framework */; };
+		4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 427260071D9B58FE00B941CF /* AppCanEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4272600C1D9B590300B941CF /* AppCanKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 427260081D9B58FE00B941CF /* AppCanKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
-		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; };
-		42D7F7351CFFCA9600447B4C /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D7F7341CFFCA9600447B4C /* AppCanKit.framework */; };
 		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */; };
@@ -75,6 +77,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */,
+				4272600C1D9B590300B941CF /* AppCanKit.framework in Embed Frameworks */,
 				423A42801D951E70008AA1B1 /* Ono.framework in Embed Frameworks */,
 				423A42811D951E70008AA1B1 /* pop.framework in Embed Frameworks */,
 			);
@@ -98,10 +102,10 @@
 		420041941BABCD80000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		423A427C1D951E5C008AA1B1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		423A427D1D951E5C008AA1B1 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
+		427260071D9B58FE00B941CF /* AppCanEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanEngine.framework; sourceTree = "<group>"; };
+		427260081D9B58FE00B941CF /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKit.framework; sourceTree = "<group>"; };
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
-		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
-		42D7F7341CFFCA9600447B4C /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKit.framework; sourceTree = "<group>"; };
 		42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
@@ -185,7 +189,6 @@
 				420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */,
 				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */,
-				42D7F7351CFFCA9600447B4C /* AppCanKit.framework in Frameworks */,
 				423A427F1D951E5C008AA1B1 /* pop.framework in Frameworks */,
 				420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
@@ -193,6 +196,7 @@
 				DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */,
 				DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */,
 				DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */,
+				4272600A1D9B58FE00B941CF /* AppCanKit.framework in Frameworks */,
 				DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */,
 				DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */,
 				DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */,
@@ -201,10 +205,10 @@
 				6CC6036B157DCCEF00A3E13E /* MediaPlayer.framework in Frameworks */,
 				6CC6036C157DCCEF00A3E13E /* MessageUI.framework in Frameworks */,
 				6CC6036D157DCCEF00A3E13E /* MapKit.framework in Frameworks */,
-				42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */,
 				6CC60372157DCCEF00A3E13E /* Accelerate.framework in Frameworks */,
 				6CC60373157DCCEF00A3E13E /* AddressBook.framework in Frameworks */,
 				6CC60374157DCCEF00A3E13E /* AddressBookUI.framework in Frameworks */,
+				427260091D9B58FE00B941CF /* AppCanEngine.framework in Frameworks */,
 				6CC60375157DCCEF00A3E13E /* AssetsLibrary.framework in Frameworks */,
 				6CC60377157DCCEF00A3E13E /* AVFoundation.framework in Frameworks */,
 				6CC60378157DCCEF00A3E13E /* CFNetwork.framework in Frameworks */,
@@ -377,8 +381,8 @@
 		6CC60388157DCD0B00A3E13E /* engine */ = {
 			isa = PBXGroup;
 			children = (
-				42D7F7341CFFCA9600447B4C /* AppCanKit.framework */,
-				42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */,
+				427260071D9B58FE00B941CF /* AppCanEngine.framework */,
+				427260081D9B58FE00B941CF /* AppCanKit.framework */,
 				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
 				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
 				6CD1DC34159ADD8A003C3083 /* EUtility.h */,
@@ -439,6 +443,11 @@
 			attributes = {
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = zywx;
+				TargetAttributes = {
+					6CC60330157DCC0F00A3E13E = {
+						DevelopmentTeam = NZCU76652J;
+					};
+				};
 			};
 			buildConfigurationList = 6CC6032B157DCC0F00A3E13E /* Build configuration list for PBXProject "AppCanPlugin" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -579,6 +588,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NZCU76652J;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -615,6 +625,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NZCU76652J;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -673,6 +684,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NZCU76652J;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

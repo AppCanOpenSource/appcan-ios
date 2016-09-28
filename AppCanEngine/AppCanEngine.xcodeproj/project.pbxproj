@@ -438,7 +438,6 @@
 		42D653CE1C33C23E000231E4 /* ACEProgressDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */; };
 		42D653CF1C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42D653D11C33C23E000231E4 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42D7F72A1CFFC27A00447B4C /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D7F7251CFFC26200447B4C /* AppCanKit.framework */; };
 		42D7F72B1CFFC2D000447B4C /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 		42D9DEEB1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */; };
 		42D9DEED1C40B0B50039E6E2 /* ACEJSCBaseJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */; };
@@ -953,30 +952,6 @@
 		F78333961CE0722C00A52C8C /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		421C227D1D9244C6003BC6A6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 421AE5221CF57181001A5053;
-			remoteInfo = AppCanKit;
-		};
-		42D7F7241CFFC26200447B4C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 421AE5231CF57181001A5053;
-			remoteInfo = AppCanKit;
-		};
-		42D7F7261CFFC26200447B4C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 421AE52D1CF57181001A5053;
-			remoteInfo = AppCanKitTests;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseViewController.h; sourceTree = "<group>"; };
 		333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseViewController.m; sourceTree = "<group>"; };
@@ -1084,6 +1059,7 @@
 		4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ONOXMLElement+ACEConfigXML.m"; sourceTree = "<group>"; };
 		426DF1AA1CFD841600F4C53E /* ACEVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEVersion.h; sourceTree = "<group>"; };
 		426DF1AB1CFD841600F4C53E /* ACEVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEVersion.m; sourceTree = "<group>"; };
+		427260051D9B546900B941CF /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppCanKit.framework; path = "AppCanKit/build/Debug-iphoneos/AppCanKit.framework"; sourceTree = "<group>"; };
 		427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildEngineForPluginDevelopment.sh; sourceTree = "<group>"; };
 		428628F91C0708920078E783 /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
 		428628FA1C0708920078E783 /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
@@ -1102,7 +1078,6 @@
 		42D0AF411BBB8641002249AE /* ACELocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACELocalization.m; sourceTree = "<group>"; };
 		42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEProgressDialog.h; sourceTree = "<group>"; };
 		42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEProgressDialog.m; sourceTree = "<group>"; };
-		42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppCanKit.xcodeproj; path = ../AppCanKit/AppCanKit.xcodeproj; sourceTree = "<group>"; };
 		42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCBaseJS.h; sourceTree = "<group>"; };
 		42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCBaseJS.m; sourceTree = "<group>"; };
 		42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCHandler.h; sourceTree = "<group>"; };
@@ -1307,7 +1282,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42D7F72A1CFFC27A00447B4C /* AppCanKit.framework in Frameworks */,
 				42FFEF3A1C1FF86200294DE1 /* libxml2.tbd in Frameworks */,
 				42CF214D1C19070F00F539B4 /* libsqlite3.tbd in Frameworks */,
 				42CF214B1C1906E100F539B4 /* ImageIO.framework in Frameworks */,
@@ -1583,15 +1557,6 @@
 				3C2887CB1A0B099B002776E4 /* JSONRepresentation.h */,
 			);
 			path = JSON;
-			sourceTree = "<group>";
-		};
-		42D7F7201CFFC26200447B4C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				42D7F7251CFFC26200447B4C /* AppCanKit.framework */,
-				42D7F7271CFFC26200447B4C /* AppCanKitTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */ = {
@@ -1970,7 +1935,6 @@
 		B220D26915A3152B00D02138 = {
 			isa = PBXGroup;
 			children = (
-				42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */,
 				B220D27915A3152B00D02138 /* AppCanEngine */,
 				B220D27615A3152B00D02138 /* Frameworks */,
 				B220D27515A3152B00D02138 /* Products */,
@@ -1990,6 +1954,7 @@
 		B220D27615A3152B00D02138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				427260051D9B546900B941CF /* AppCanKit.framework */,
 				42F788A71D9513E80094AA05 /* Ono.framework */,
 				42F788A81D9513E80094AA05 /* pop.framework */,
 				42FFEF391C1FF86200294DE1 /* libxml2.tbd */,
@@ -2581,7 +2546,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				421C227E1D9244C6003BC6A6 /* PBXTargetDependency */,
 			);
 			name = AppCanEngine;
 			productName = AppCanEngine;
@@ -2599,6 +2563,9 @@
 					427F06BF1C190C27001E17B5 = {
 						CreatedOnToolsVersion = 7.1;
 					};
+					42CF200A1C1904F100F539B4 = {
+						DevelopmentTeam = NZCU76652J;
+					};
 					42F787431D950B5D0094AA05 = {
 						ProvisioningStyle = Automatic;
 					};
@@ -2615,12 +2582,6 @@
 			mainGroup = B220D26915A3152B00D02138;
 			productRefGroup = B220D27515A3152B00D02138 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 42D7F7201CFFC26200447B4C /* Products */;
-					ProjectRef = 42D7F71F1CFFC26200447B4C /* AppCanKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				B220D27315A3152B00D02138 /* AppCanEngine */,
@@ -2630,23 +2591,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		42D7F7251CFFC26200447B4C /* AppCanKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AppCanKit.framework;
-			remoteRef = 42D7F7241CFFC26200447B4C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		42D7F7271CFFC26200447B4C /* AppCanKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AppCanKitTests.xctest;
-			remoteRef = 42D7F7261CFFC26200447B4C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		427F06BE1C190BF0001E17B5 /* Resources */ = {
@@ -2677,7 +2621,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "build_product_path=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nide_product_path=${SRCROOT}/ide_product/\nrm -rf ${ide_product_path}/AppCanEngine.framework\nrm -rf ${ide_product_path}/AppCanKit.framework\ncp -rf ${build_product_path}/AppCanEngine.framework ${ide_product_path}\ncp -rf ${build_product_path}/AppCanKit.framework ${ide_product_path}";
+			shellScript = "build_product_path=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nide_product_path=${SRCROOT}/ide_product/\nrm -rf ${ide_product_path}/AppCanEngine.framework\nrm -rf ${ide_product_path}/AppCanKit.framework\ncp -rf ${build_product_path}/AppCanEngine.framework ${ide_product_path}/AppCanEngine.framework\ncp -rf ${build_product_path}/AppCanKit.framework ${ide_product_path}";
 		};
 		427F06C51C190CF1001E17B5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2716,7 +2660,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "build_product_path=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nide_product_path=${SRCROOT}/ide_product/\nrm -rf ${ide_product_path}/AppCanEngine.framework\nrm -rf ${ide_product_path}/AppCanKit.framework\ncp -rf ${build_product_path}/AppCanEngine.framework ${ide_product_path}\ncp -rf ${build_product_path}/AppCanKit.framework ${ide_product_path}";
+			shellScript = "buildProductPath=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nAppCanPluginProjectEnginePath=${SRCROOT}/../AppCanPlugin/AppCanPlugin/engine/\ncp -rf ${buildProductPath}/AppCanEngine.framework ${AppCanPluginProjectEnginePath}\ncp -rf ${buildProductPath}/AppCanKit.framework ${AppCanPluginProjectEnginePath}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3131,19 +3075,12 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		421C227E1D9244C6003BC6A6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AppCanKit;
-			targetProxy = 421C227D1D9244C6003BC6A6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		427F06C11C190C27001E17B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -3153,6 +3090,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -3164,10 +3102,11 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
+				CODE_SIGN_IDENTITY = "";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = NZCU76652J;
 				DSTROOT = /tmp/AppCanEngine.dst;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
@@ -3206,10 +3145,11 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: KangLi Liu (7NB75X8LDT)";
+				CODE_SIGN_IDENTITY = "";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = NZCU76652J;
 				DSTROOT = /tmp/AppCanEngine.dst;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
@@ -3261,10 +3201,11 @@
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
+					"$(BUILD_DIR)",
 					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngineIDE-Prefix.pch";
+				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
@@ -3306,10 +3247,11 @@
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
+					"$(BUILD_DIR)",
 					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngineIDE-Prefix.pch";
+				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
@@ -3421,6 +3363,7 @@
 					"$(inherited)",
 					"$SRCROOT/../AppCanKit/**",
 					"$(OBJROOT)/**",
+					"$(PROJECT_DIR)/AppCanKit/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
@@ -3455,6 +3398,7 @@
 					"$(inherited)",
 					"$SRCROOT/../AppCanKit/**",
 					"$(OBJROOT)/**",
+					"$(PROJECT_DIR)/AppCanKit/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";

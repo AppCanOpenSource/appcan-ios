@@ -1,2 +1,2 @@
-ide_product/*
+build/*
 !.gitignore

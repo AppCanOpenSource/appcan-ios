@@ -3,7 +3,7 @@
    LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
-      parallelizeBuildables = "YES"
+      parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+               BlueprintIdentifier = "42F787431D950B5D0094AA05"
                BuildableName = "AppCanEngine.framework"
-               BlueprintName = "AppCanEngineIDEFramework"
+               BlueprintName = "AppCanEngine-framework"
                ReferencedContainer = "container:AppCanEngine.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +46,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BlueprintIdentifier = "42F787431D950B5D0094AA05"
             BuildableName = "AppCanEngine.framework"
-            BlueprintName = "AppCanEngineIDEFramework"
+            BlueprintName = "AppCanEngine-framework"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -68,9 +68,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BlueprintIdentifier = "42F787431D950B5D0094AA05"
             BuildableName = "AppCanEngine.framework"
-            BlueprintName = "AppCanEngineIDEFramework"
+            BlueprintName = "AppCanEngine-framework"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -86,9 +86,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42CF200A1C1904F100F539B4"
+            BlueprintIdentifier = "42F787431D950B5D0094AA05"
             BuildableName = "AppCanEngine.framework"
-            BlueprintName = "AppCanEngineIDEFramework"
+            BlueprintName = "AppCanEngine-framework"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
