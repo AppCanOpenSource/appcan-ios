@@ -2886,11 +2886,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     NSInteger flag = value.integerValue;
     UEX_PARAM_GUARD_NOT_NIL(inName);
     //find popover
-    NSMutableDictionary *popoverDict = meBrwView.meBrwWnd.mPopoverBrwViewDict;
+    NSMutableDictionary *popoverDict = self.EBrwView.meBrwWnd.mPopoverBrwViewDict;
     UIView *view = [popoverDict objectForKey:inName];
     if (!view) {
         //find multipopover
-        NSMutableDictionary *multipopoverDict = meBrwView.meBrwWnd.mMuiltPopoverDict;
+        NSMutableDictionary *multipopoverDict = self.EBrwView.meBrwWnd.mMuiltPopoverDict;
         view = [multipopoverDict objectForKey:inName];
     }
     if (!view) {
