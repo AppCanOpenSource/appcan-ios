@@ -493,22 +493,11 @@ NSString *AppCanJS = nil;
     [window makeKeyAndVisible];
      [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
     if(theApp.usePushControl == YES) {
-        if ( ACSystemVersion() >= 8.0)  {
-            
-#ifdef __IPHONE_8_0
-            
-            UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
-            //注册推送
-            [[UIApplication sharedApplication] registerUserNotificationSettings:uns];
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
-            
-#endif
-            
-        } else {
-            
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound)];
-            
-        }
+        UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
+        //注册推送
+        [[UIApplication sharedApplication] registerUserNotificationSettings:uns];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
     }
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;

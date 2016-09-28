@@ -14,10 +14,12 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _maxIndex = -1;
+        _lastIndex = -1;
         self.pagingEnabled = YES;
         self.bounces = NO;
         self.delegate = self;
-        _lastIndex = -1;
+        self.showsHorizontalScrollIndicator = NO;
+        self.showsVerticalScrollIndicator = NO;
     }
     
     return self;

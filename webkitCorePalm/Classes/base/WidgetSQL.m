@@ -64,7 +64,7 @@
 				//fieldValue = [[NSString alloc] initWithUTF8String:rowData];
 				fieldValue = [NSString stringWithUTF8String:rowData];
 			}
-			ACENSLog(@"[widgetSQL fileValue=%@]",fieldValue);
+			//ACENSLog(@"[widgetSQL fileValue=%@]",fieldValue);
 		}
 		sqlite3_finalize(statement);  //结束数据库查询后关闭
 		return fieldValue;

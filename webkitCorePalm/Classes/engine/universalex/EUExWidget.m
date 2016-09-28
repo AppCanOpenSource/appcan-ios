@@ -301,7 +301,7 @@
 
     [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
     [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
-    [analysisObject ac_invoke:@"setAppVersion:" arguments:ACArgsPack(wgtObj.ver)];
+    [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
     [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
     
 }
@@ -896,14 +896,11 @@
     
     
     if (shouldPush.boolValue) {
-        if (ACSystemVersion() >= 8.0) {
-            UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
-            //注册推送
-            [[UIApplication sharedApplication] registerUserNotificationSettings:uns];
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
-        }else{
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound)];
-        }
+        UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
+        //注册推送
+        [[UIApplication sharedApplication] registerUserNotificationSettings:uns];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
     }
     else {
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
@@ -911,13 +908,7 @@
 }
 - (UEX_BOOL)getPushState:(NSMutableArray*)inArguments{
     BOOL pushState = NO;
-    if (ACSystemVersion() >= 8.0) {
-        pushState = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
-    }
-    else{
-        UIRemoteNotificationType type = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-        pushState = type;
-    }
+    pushState = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
     NSNumber *result = pushState ? @0 : @1;
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetPushState" arguments:ACArgsPack(@0,@2,result)];
     return pushState ? UEX_TRUE : UEX_FALSE ;
@@ -938,14 +929,14 @@
 }
 #pragma mark - isAppInstalled
 //20150706 by lkl
-- (UEX_BOOL)isAppInstalled:(NSMutableArray *)inArguments{
+- (NSNumber *)isAppInstalled:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSDictionary *info) = inArguments;
     NSString *appData = stringArg(info[@"appData"]);
     UEX_PARAM_GUARD_NOT_NIL(appData,@(NO));
     BOOL isInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appData]];
     NSDictionary *resultDict = @{@"installed": isInstalled? @0 : @1};
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbIsAppInstalled" arguments:ACArgsPack(resultDict.ac_JSONFragment)];
-    return isInstalled ? UEX_TRUE : UEX_FALSE ;
+    return isInstalled ? @0 : @1 ;
 }
 
 #pragma mark - closeLoading

@@ -2807,6 +2807,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSString *popName) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(popName);
     UIView *popView = [self.EBrwView.meBrwWnd.mPopoverBrwViewDict objectForKey:popName];
+    if (!popView) {
+        popView = [self.EBrwView.meBrwWnd.mMuiltPopoverDict objectForKey:popName];
+    }
     [self.EBrwView.meBrwWnd insertSubview:popView aboveSubview:self.EBrwView.meBrwWnd.meBrwView];
 }
 
@@ -2815,6 +2818,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSString *popName) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(popName);
     UIView *popView = [self.EBrwView.meBrwWnd.mPopoverBrwViewDict objectForKey:popName];
+    if (!popView) {
+        popView = [self.EBrwView.meBrwWnd.mMuiltPopoverDict objectForKey:popName];
+    }
     [self.EBrwView.meBrwWnd bringSubviewToFront:popView];
 }
 
@@ -2874,6 +2880,30 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         ePopBrwView.mBottomBounceView.frame = CGRectMake(ePopBrwView.mBottomBounceView.frame.origin.x, ePopBrwView.mScrollView.contentSize.height, w, h);
     }
 }
+
+- (void)setPopoverVisibility:(NSMutableArray *)inArguments{
+    ACArgsUnpack(NSString *inName,NSNumber *value) = inArguments;
+    NSInteger flag = value.integerValue;
+    UEX_PARAM_GUARD_NOT_NIL(inName);
+    //find popover
+    NSMutableDictionary *popoverDict = meBrwView.meBrwWnd.mPopoverBrwViewDict;
+    UIView *view = [popoverDict objectForKey:inName];
+    if (!view) {
+        //find multipopover
+        NSMutableDictionary *multipopoverDict = meBrwView.meBrwWnd.mMuiltPopoverDict;
+        view = [multipopoverDict objectForKey:inName];
+    }
+    if (!view) {
+        return;
+    }
+    
+    if (flag == 0) { //隐藏
+        view.hidden = YES;
+    } else if (flag == 1) { //显示
+        view.hidden = NO;
+    }
+}
+
 
 #pragma mark - MultiPopover Control API
 

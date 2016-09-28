@@ -583,6 +583,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (inWndType == ACEEBrowserViewTypeSlibingBottom) {
         [self registerKeyboardListener:nil];
     }
+    self.keyboardDisplayRequiresUserAction = NO;
 
     isSwiped = NO;
     //向右轻扫事件
@@ -613,6 +614,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     //UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     //[self addGestureRecognizer:singleTap];
     //singleTap.delegate = self;
+    
 
 }
 
