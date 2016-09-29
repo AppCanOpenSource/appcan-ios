@@ -27,7 +27,7 @@
 
 
 
-static NSString *const kAppCanEngineVersion = @"3.4.4";
+static NSString *const kAppCanEngineVersion = @"3.5.0";
 
 
 @interface ACEAvailability : NSObject<ACEAvailability>
