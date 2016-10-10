@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @discussion 对于无返回值的JS函数,returnValue为一个代表<undefined>的JSValue,而不是nil
  *
  */
-- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(nullable NSArray *)arguments completion:(nullable void (^)(JSValue *returnValue))completion;
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(nullable NSArray *)arguments completion:(nullable void (^)(JSValue  * _Nullable returnValue))completion;
 
 /**
  *  执行网页中的回调函数,参数同上

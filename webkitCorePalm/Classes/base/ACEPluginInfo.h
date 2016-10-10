@@ -23,13 +23,13 @@
  
 #import <Foundation/Foundation.h>
 
-//#define ACE_METHOD_ASYNC @"AsyncMethod"
-//#define ACE_METHOD_SYNC @"SyncMethod"
+
 
 @class ONOXMLElement;
 
-typedef NS_ENUM(NSInteger,ACEPluginMethodExecuteOption){
-    ACEPluginMethodExecuteOptionDefault = 0x0,
+typedef NS_OPTIONS(NSInteger,ACEPluginMethodExecuteOptions){
+    ACEPluginMethodExecuteNormally = 0,
+    ACEPluginMethodExecuteWithOriginJSValue = 1 << 0,
 };
 
 

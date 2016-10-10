@@ -1269,8 +1269,7 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSString *)appKey{
-
-    if (!F_DEVELOPMENT_USE) {
+    if (!appCanDevelopmetMode) {
         Class Beqtucontent = NSClassFromString(@"Beqtucontent");
         if (Beqtucontent) {
             return [Beqtucontent ac_invoke:@"getContentPath"];

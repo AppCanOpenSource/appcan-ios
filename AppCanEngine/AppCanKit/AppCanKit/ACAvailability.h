@@ -87,14 +87,14 @@
 
 
 #pragma mark - 不要直接用这个类的方法>.<
-
+NS_ASSUME_NONNULL_BEGIN
 @interface ACAvailability : NSObject
 
 + (BOOL)isEngineAvailable:(NSString *)engineVersion;
 + (NSString *)engineVersion;
 + (NSInteger)engineVersionCode;
 @end
-
+NS_ASSUME_NONNULL_END
 
 
 

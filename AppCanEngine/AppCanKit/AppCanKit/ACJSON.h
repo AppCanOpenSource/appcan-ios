@@ -30,7 +30,7 @@
  *
  *  @return 反序列化后的对象,解析失败时返回nil
  */
-- (id)ac_JSONValue;
+- (nullable id)ac_JSONValue;
 
 @end
 
@@ -41,5 +41,5 @@
  *  尝试将一个对象(NSString,NSDictionary,NSArray)序列化为JSON字符串
  *  @return 序列化后的JSON字符串,序列化失败时返回nil;
  */
-- (NSString *)ac_JSONFragment;
+- (nullable NSString *)ac_JSONFragment;
 @end

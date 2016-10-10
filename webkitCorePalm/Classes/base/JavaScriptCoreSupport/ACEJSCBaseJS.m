@@ -27,7 +27,7 @@
 
 static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
-#define ACE_METHOD_EXEC_OPT_DEFAULT          @(ACEPluginMethodExecuteOptionDefault)
+#define ACE_METHOD_EXEC_OPT_DEFAULT          @(ACEPluginMethodExecuteNormally)
 
 
 
@@ -62,7 +62,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     NSMutableString *js =[NSMutableString stringWithFormat:@""];
     [js appendFormat:@"%@={};",plugin.uexName];
     [plugin.methods enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-        [js appendString:[self javaScriptForMethod:key plugin:plugin.uexName execMode:obj]];
+        [js appendString:[self javaScriptForMethod:key plugin:plugin.uexName executeOptions:obj]];
     }];
     [plugin.properties enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [js appendString:[self javaScriptForProperty:key plugin:plugin.uexName value:obj]];
@@ -70,11 +70,11 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     return js;
 }
 
-+ (NSString *)javaScriptForMethod:(NSString *)method plugin:(NSString *)plugin execMode:(NSNumber *)execMode{
++ (NSString *)javaScriptForMethod:(NSString *)method plugin:(NSString *)plugin executeOptions:(NSNumber *)options{
     if([[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]]){
         return [[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]];
     }
-    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;return uex.execute('%@','%@',arguments,argCount,%@)};",plugin,method,plugin,method,execMode];
+    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;return __uex_JSCHandler_.execute('%@','%@',arguments,argCount,%@)};",plugin,method,plugin,method,options];
 }
 + (NSString *)javaScriptForProperty:(NSString *)property plugin:(NSString *)plugin value:(NSString *)value{
     return [NSString stringWithFormat:@"%@.%@=%@;",plugin,property,value];
@@ -82,7 +82,6 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
 + (NSDictionary *)exceptions{
     return @{
-             //@"uexDataBaseMgr.transaction":@"uexDataBaseMgr.transaction=function(inDBName,inOpId,inFunc){var temp = encodeURIComponent(inDBName)+'&'+encodeURIComponent(inOpId);uex.execute('uexDataBaseMgr','beginTransaction',[temp]); inFunc();uex.execute('uexDataBaseMgr','endTransaction',[temp]);};"
              };
 }
 

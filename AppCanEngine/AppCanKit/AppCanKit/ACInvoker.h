@@ -27,7 +27,7 @@
 
 
 
-
+NS_ASSUME_NONNULL_BEGIN
 @interface NSObject(ACInvoker)
 
 /**
@@ -59,12 +59,12 @@
  *  调用名为selector的实例方法
  *
  *  @param selector 要调用的方法名
- *  @param auguments 调用方法的参数
+ *  @param arguments 调用方法的参数
  *
  *  @return 调用的结果
  */
 
-- (id)ac_invoke:(NSString *)selector arguments:(NSArray *)arguments;
+- (id)ac_invoke:(NSString *)selector arguments:(nullable NSArray *)arguments;
 
 /**
  * 调用名为selector的实例方法
@@ -76,11 +76,11 @@
  *  调用名为selector的类方法
  *
  *  @param selector 要调用的方法名
- *  @param auguments 调用方法的参数
+ *  @param arguments 调用方法的参数
  *
  *  @return 调用的结果
  */
-+ (id)ac_invoke:(NSString *)selector arguments:(NSArray *)arguments;
++ (id)ac_invoke:(NSString *)selector arguments:(nullable NSArray *)arguments;
 
 /**
  * 调用名为selector的实例方法
@@ -90,3 +90,4 @@
 
 
 @end
+NS_ASSUME_NONNULL_END

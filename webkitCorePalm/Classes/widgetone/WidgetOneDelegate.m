@@ -60,7 +60,7 @@
 
 
 @interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter>
-
+@property (nonatomic,assign,readwrite)BOOL useInAppCanIDE;
 @end
 
 @implementation WidgetOneDelegate
@@ -192,90 +192,84 @@ NSString *AppCanJS = nil;
 }
 
 
-
-- (id)init{
+- (void)initializeDefaultSettings{
+    // set cookie storage:
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
     
+    self.userStartReport = YES;
+    self.useOpenControl = YES;
+    self.usePushControl = YES;
+    self.useUpdateControl = YES;
+    self.useOnlineArgsControl = YES;
+    self.useDataStatisticsControl = YES;
+    self.useAuthorsizeIDControl = YES;
+    //startreport
+    self.useStartReportURL = @"http://115.29.138.150/appIn/";
+    //数据统计
+    self.useAnalysisDataURL = @"http://115.29.138.150/appIn/";
+    //bind push
+    self.useBindUserPushURL = @"https://push.appcan.cn/push/";
+    //mam
+    self.useAppCanMAMURL = @"";
+    self.useAppCanUpdateURL = @"";
+    //jaibroken
+    self.useCloseAppWithJaibroken = NO;
+    //rc4 加密 js
+    self.useRC4EncryptWithLocalstorage = YES;
+    //网页增量升级
+    self.useUpdateWgtHtmlControl = YES;
+    //https密钥
+    self.useCertificatePassWord = @"pwd";
+    //擦除信息
+    _useEraseAppDataControl = YES;
+    //https 密钥控制
+    self.useCertificateControl = YES;
+    //应用内是否显示状态条
+    self.useIsHiddenStatusBarControl = NO;
+    //MDM
+    self.useAppCanMDMURL=@"";
+    self.useAppCanMDMURLControl=NO;
+    self.isFirstPageDidLoad = NO;
+    //本地签名校验开关
+    self.signVerifyControl = NO;
+    
+    //EMM单租户场景下默认的租户ID
+    self.useAppCanEMMTenantID = @"";
+    //uexAppstroeMgr所需的host
+    self.useAppCanAppStoreHost = @"";
+    //引擎中MBaaS读取的host
+    self.useAppCanMBaaSHost = @"";
+    //uexIM插件XMPP通道使用的host
+    self.useAppCanIMXMPPHost = @"";
+    //uexIM插件HTTP通道使用的host
+    self.useAppCanIMHTTPHost = @"";
+    //uexTaskSubmit登陆所需host
+    self.useAppCanTaskSubmitSSOHost = @"";
+    //uexTaskSubmit提交任务所需host
+    self.useAppCanTaskSubmitHost = @"";
+    //是否校验证书
+    self.validatesSecureCertificate = NO;
+    
+    [self setAppCanUserAgent];
+}
+
+- (instancetype)initWithDevMode{
     self = [super init];
     
     if (self != nil) {
-        
-		// set cookie storage:
-		NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-		//[cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain];
-		//[cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyNever];
-		[cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
-		//NSLog(@"cookie accept policy is %d", [cookieStorage cookieAcceptPolicy]);
-		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedCookiesChange:) name:NSHTTPCookieManagerCookiesChangedNotification object:nil];
-        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedCookiesPolicyChange:) name:NSHTTPCookieManagerAcceptPolicyChangedNotification object:nil];
-		// set cache storage:
-		/*NSURLCache *cacheStorage = [[NSURLCache alloc] initWithMemoryCapacity:512000
-         diskCapacity:100000000
-         diskPath:@"zd111"];*/
-		//[NSURLCache setSharedURLCache:cacheStorage];
-        //		NSURLCache *cacheStorage = [NSURLCache sharedURLCache];
-        //		NSLog(@"cache disk size: %d", [cacheStorage diskCapacity]);
-        //		NSLog(@"cache disk used size: %d", [cacheStorage currentDiskUsage]);
-        //		NSLog(@"cache memory size: %d", [cacheStorage memoryCapacity]);
-        //		NSLog(@"cache memory used size: %d", [cacheStorage currentMemoryUsage]);
-		//[cacheStorage release];
-		self.userStartReport = YES;
-		self.useOpenControl = YES;
-		self.usePushControl = YES;
-		self.useUpdateControl = YES;
-		self.useOnlineArgsControl = YES;
-		self.useDataStatisticsControl = YES;
-        self.useAuthorsizeIDControl = YES;
-        //startreport
-        self.useStartReportURL = @"http://115.29.138.150/appIn/";
-        //数据统计
-        self.useAnalysisDataURL = @"http://115.29.138.150/appIn/";
-        //bind push
-        self.useBindUserPushURL = @"https://push.appcan.cn/push/";
-        //mam
-        self.useAppCanMAMURL = @"";
-        self.useAppCanUpdateURL = @"";
-        //jaibroken
-        self.useCloseAppWithJaibroken = NO;
-        //rc4 加密 js
-        self.useRC4EncryptWithLocalstorage = YES;
-        //网页增量升级
-        self.useUpdateWgtHtmlControl = YES;
-        //https密钥
-        self.useCertificatePassWord = @"pwd";
-        //擦除信息
-        _useEraseAppDataControl = YES;
-        //https 密钥控制
-        self.useCertificateControl = YES;
-        //应用内是否显示状态条
-        self.useIsHiddenStatusBarControl = NO;
-        //MDM
-        self.useAppCanMDMURL=@"";
-        self.useAppCanMDMURLControl=NO;
-        self.isFirstPageDidLoad = NO;
-        //本地签名校验开关
-        self.signVerifyControl = NO;
-        
-        //EMM单租户场景下默认的租户ID
-        self.useAppCanEMMTenantID = @"";
-        //uexAppstroeMgr所需的host
-        self.useAppCanAppStoreHost = @"";
-        //引擎中MBaaS读取的host
-        self.useAppCanMBaaSHost = @"";
-        //uexIM插件XMPP通道使用的host
-        self.useAppCanIMXMPPHost = @"";
-        //uexIM插件HTTP通道使用的host
-        self.useAppCanIMHTTPHost = @"";
-        //uexTaskSubmit登陆所需host
-        self.useAppCanTaskSubmitSSOHost = @"";
-        //uexTaskSubmit提交任务所需host
-        self.useAppCanTaskSubmitHost = @"";
-        //是否校验证书
-        self.validatesSecureCertificate = NO;
-        
-        [self setAppCanUserAgent];
-        
-	}
+        [self initializeDefaultSettings];
+        self.useInAppCanIDE = YES;
+    }
     
+    return self;
+}
+
+- (instancetype)init{
+    self = [super init];
+    if (self != nil) {
+        [self initializeDefaultSettings];
+	}
     return self;
     
 }
@@ -340,21 +334,14 @@ NSString *AppCanJS = nil;
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentsDirectory = [paths objectAtIndex:0];
     NSString * writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"dyFiles"];
-    success = [fileManager fileExistsAtPath:writableDBPath];
-    
-    if (success)  {
-        //
-    } else {
-        
+
+    if (![fileManager fileExistsAtPath:writableDBPath])  {
         NSString  *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"dyFiles"];
-        
-        success = [BUtility copyMissingFile:defaultDBPath toPath:documentsDirectory];
-        if (!success) {
-            //
-        }
-        
+        [BUtility copyMissingFile:defaultDBPath toPath:documentsDirectory];
     }
-    
+    if(self.useInAppCanIDE){
+        [BUtility setAppCanDevMode:@"YES"];
+    }
     [ACEDes enable];
     [BUtility setAppCanDocument];
     pluginObj = [ACEPluginParser sharedParser];

@@ -24,38 +24,6 @@
 #import "ACLog.h"
 #import "ACLogger.h"
 
-#import <sys/ioctl.h>
-#import <sys/param.h>
-
-#if TARGET_IPHONE_SIMULATOR
-    #import <sys/conf.h>
-#else
-    #if ! defined(D_DISK)
-        #define D_DISK  2
-    #endif
-#endif
-
-static BOOL isDebug(void){
-    int fd = STDERR_FILENO;
-    if (fcntl(fd, F_GETFD, 0) < 0) {
-        return NO;
-    }
-    char buf[MAXPATHLEN + 1];
-    if (fcntl(fd, F_GETPATH, buf ) >= 0) {
-        if (strcmp(buf, "/dev/null") == 0)
-            return NO;
-        if (strncmp(buf, "/dev/tty", 8) == 0)
-            return YES;
-    }
-    int type;
-    if (ioctl(fd, FIODTYPE, &type) < 0) {
-        return NO;
-    }
-    return type != D_DISK;
-}
-
-
-
 
 
 
@@ -119,8 +87,9 @@ static dispatch_semaphore_t ACLogDispatchMessageSemaphore;
 @implementation ACLog
 
 
+
 + (void)load{
-    if (isDebug()) {
+    if (ac_isXcodeDebug()) {
         ACLogGlobalLogMode = ACLogModeDebug;
     }else{
         ACLogGlobalLogMode = ACLogModeInfo;
@@ -134,6 +103,8 @@ static dispatch_semaphore_t ACLogDispatchMessageSemaphore;
     
 }
 
+
+
 + (void)setGlobalLogMode:(ACLogMode)mode{
     ACLogGlobalLogMode = mode;
 }
@@ -143,10 +114,12 @@ static dispatch_semaphore_t ACLogDispatchMessageSemaphore;
 }
 
 + (void)setLogMode:(ACLogMode)mode forFile:(const char *)file{
-    NSString *fileStr = [NSString stringWithFormat:@"%s",file];
-    [ACLogFileLogModes setValue:@(mode) forKey:fileStr];
+    [self setLogMode:mode forFileNamed:[NSString stringWithUTF8String:file]];
 }
 
++ (void)setLogMode:(ACLogMode)mode forFileNamed:(NSString *)fileName{
+    [ACLogFileLogModes setValue:@(mode) forKey:fileName];
+}
 
 + (void)addLogger:(nullable id<ACLogger>)logger{
     ACLogNode *node = [[ACLogNode alloc]initWithLogger:logger];
@@ -155,29 +128,34 @@ static dispatch_semaphore_t ACLogDispatchMessageSemaphore;
     }
 }
 
++ (void)log:(BOOL)isAsynchronous level:(ACLogLevel)level file:(nonnull NSString *)file function:(nonnull NSString *)func line:(NSUInteger)line message:(nullable NSString *)message{
+    if (!message) {
+        return;
+    }
+
+    if (ACLogFileLogModes[file]) {
+        ACLogMode mode = (ACLogMode)ACLogFileLogModes[file].integerValue;
+        if (! (mode & level))  return;
+    }
+    ACLogMessage *msg = [[ACLogMessage alloc]initWithMessage:message
+                                                       level:level
+                                                        file:file
+                                                    function:func
+                                                        line:line
+                                                   timestamp:nil];
+    [self queueMessage:msg asynchronous:isAsynchronous];
+}
+
+
 + (void)log:(BOOL)isAsynchronous level:(ACLogLevel)level file:(const char *)file function:(const char *)func line:(NSUInteger)line format:(nullable NSString *)fmt, ...{
     if (!fmt) {
         return;
     }
-    NSString *fileStr = [NSString stringWithFormat:@"%s",file];
-    NSString *funcStr = [NSString stringWithFormat:@"%s",func];
-
-    if (ACLogFileLogModes[fileStr]) {
-        ACLogMode mode = (ACLogMode)ACLogFileLogModes[fileStr].integerValue;
-        if (! (mode & level))  return;
-    }
-
     va_list args;
     va_start(args, fmt);
     NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
-    ACLogMessage *msg = [[ACLogMessage alloc]initWithMessage:message
-                                                       level:level
-                                                        file:fileStr
-                                                    function:funcStr
-                                                        line:line
-                                                   timestamp:nil];
-    [self queueMessage:msg asynchronous:isAsynchronous];
+    [self log:isAsynchronous level:level file:[NSString stringWithUTF8String:file] function:[NSString stringWithUTF8String:func] line:line message:message];
 }
 
 + (void)queueMessage:(ACLogMessage *)message asynchronous:(BOOL)isAsynchronous{

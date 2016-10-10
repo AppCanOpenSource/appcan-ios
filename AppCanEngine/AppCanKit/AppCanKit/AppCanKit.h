@@ -6,7 +6,7 @@
 //  Copyright © 2016年 AppCan. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for AppCanKit.
 FOUNDATION_EXPORT double AppCanKitVersionNumber;

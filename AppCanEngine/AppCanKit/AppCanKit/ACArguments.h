@@ -84,7 +84,7 @@
 
 /**
  *  尝试转换一个参数为NSString
- *  @param NSString->直接返回, JSValue->解析并返回, NSNumber-> 返回其stringValue
+ *  @param arg JSValue->解析并返回, NSNumber-> 返回其stringValue
  *  @return 其他情况或解析失败时返回nil
  */
 APPCAN_EXPORT NSString* _Nullable ac_stringArg(id _Nullable arg);
@@ -92,7 +92,7 @@ APPCAN_EXPORT_AS_SHORT(NSString* _Nullable stringArg(id _Nullable arg), ac_strin
 
 /**
  *  尝试转换一个参数为NSNumber
- *  @param NSNumber->直接返回, JSValue->解析并返回, NSString且长度>0->返回一个NSDecimalNumber
+ *  @param arg JSValue->解析并返回, NSString且长度>0->返回一个NSDecimalNumber
  *  @return 其他情况或解析失败时返回nil
  */
 APPCAN_EXPORT NSNumber* _Nullable ac_numberArg(id _Nullable arg);
@@ -100,7 +100,7 @@ APPCAN_EXPORT_AS_SHORT(NSNumber* _Nullable numberArg(id _Nullable arg), ac_numbe
 
 /**
  *  尝试转换一个参数为NSDictionary
- *  @param NSDictionary->直接返回, JSValue且是Object->解析并返回, NSString且为JSON字符串 -> 解析并返回
+ *  @param arg JSValue且是Object->解析并返回, NSString且为JSON字符串 -> 解析并返回
  *  @return 其他情况或解析失败时返回nil
  */
 APPCAN_EXPORT NSDictionary* _Nullable ac_dictionaryArg(id _Nullable arg);
@@ -108,7 +108,7 @@ APPCAN_EXPORT_AS_SHORT(NSDictionary* _Nullable dictionaryArg(id _Nullable arg), 
 
 /**
  *  尝试转换一个参数为NSArray
- *  @param NSArray->直接返回 ,JSValue且是Array->解析并返回, NSString且为JSON字符串 -> 解析并返回
+ *  @param arg ,JSValue且是Array->解析并返回, NSString且为JSON字符串 -> 解析并返回
  *  @return 其他情况或解析失败时返回nil
  */
 APPCAN_EXPORT NSArray* _Nullable ac_arrayArg(id _Nullable arg);
@@ -179,7 +179,7 @@ APPCAN_EXPORT_AS_SHORT(ACJSFunctionRef* _Nullable JSFunctionArg(id _Nullable arg
 
 
 
-
+NS_SWIFT_UNAVAILABLE("请用AppCanSwift中的JSArgument")
 NS_ASSUME_NONNULL_BEGIN
 @interface ACArgumentsHelper : NSObject
 + (instancetype)helper;

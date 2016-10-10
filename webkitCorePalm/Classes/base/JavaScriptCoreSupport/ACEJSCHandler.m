@@ -52,7 +52,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
 
 
-JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execOpt:(ACEPluginMethodExecuteOption)option);
+JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options);
 
 
 - (void)log:(JSValue *)value,...;
@@ -117,7 +117,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 - (void)initializeWithJSContext:(JSContext *)context{
-    context[@"uex"] = self;
+    context[@"__uex_JSCHandler_"] = self;
 
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
@@ -143,7 +143,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 
-- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execOpt:(ACEPluginMethodExecuteOption)option{
+- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options{
     if(!ACEJSCGlobalPlugins){
         [self.class initializeGlobalPlugins];
     }
@@ -165,9 +165,16 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     if(![pluginInstance respondsToSelector:sel]){
         return nil;
     }
+    id args = nil;
+    if (options & ACEPluginMethodExecuteWithOriginJSValue) {
+        args = arguments;
+    }
     
+    if (!args) {
+        args = [self arrayFromArguments:arguments count:argCount];
+    }
     
-    NSMutableArray *args = [self arrayFromArguments:arguments count:argCount];
+
     BOOL isAsync = [self selector:sel isAsynchronousMethodInClass:[pluginInstance class]];
     
     
@@ -188,19 +195,6 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
         ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
         return [pluginInstance ac_invoke:selector arguments:ACArgsPack(args)];
     }
-    /*
-    switch (mode) {
-        case ACEPluginMethodExecuteModeAsynchronous: {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [pluginInstance performSelector:method withObject:args];
-            });
-            return nil;
-        }
-        case ACEPluginMethodExecuteModeSynchronous: {
-            return [pluginInstance performSelector:method withObject:args];
-        }
-    }
-     */
 #pragma clang diagnostic pop
 }
 

@@ -204,8 +204,10 @@ APPCAN_EXPORT BOOL ACLogAsyncLogEnabled;
 
 
 
-@protocol ACLogger;
+
 NS_ASSUME_NONNULL_BEGIN
+
+@protocol ACLogger;
 @interface ACLog : NSObject
 + (void)log:(BOOL)isAsynchronous
       level:(ACLogLevel)level
@@ -214,10 +216,18 @@ NS_ASSUME_NONNULL_BEGIN
        line:(NSUInteger)line
      format:(nullable NSString *)fmt,... NS_FORMAT_FUNCTION(6,7);
 
++ (void)log:(BOOL)isAsynchronous
+      level:(ACLogLevel)level
+       file:(NSString *)file
+   function:(NSString *)func
+       line:(NSUInteger)line
+     message:(nullable NSString *)message;
+
 + (void)setGlobalLogMode:(ACLogMode)mode;
-+ (void)setLogMode:(ACLogMode)mode forFile:(const char *)file;
+
++ (void)setLogMode:(ACLogMode)mode forFile:(const char *)file NS_SWIFT_UNAVAILABLE("use 'setLogMode:forFileNamed:' instead");
++ (void)setLogMode:(ACLogMode)mode forFileNamed:(NSString *)fileName;
 + (void)addLogger:(nullable id<ACLogger>)logger;
 + (void)setAsyncLogEnabled:(BOOL)isEnabled;
-
 @end
 NS_ASSUME_NONNULL_END

@@ -360,9 +360,6 @@ static BOOL userCustomLoadingImageEnabled = NO;
         meBrw = [[EBrowser alloc]init];
         meBrw.meBrwCtrler = self;
     }
-	if (F_DEVELOPMENT_USE) {
-		[BUtility setAppCanDevMode:@"YES"];
-	}
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
     NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
     NSString * launchImageName = nil;

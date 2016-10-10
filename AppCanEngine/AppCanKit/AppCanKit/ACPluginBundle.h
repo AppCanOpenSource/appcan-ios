@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param pluginName 插件名
  *  @param key        插件bundle中Localizable.string里声明的字符串key
- *  @param defaultValue 如果有传入第二个参数，即为defaultValue key匹配失败时会返回此值
+ *         defaultValue 如果有传入第二个参数，即为defaultValue key匹配失败时会返回此值
  *  @return key对应的国际化字符串
  */
 + (instancetype)ac_plugin:(NSString *)pluginName localizedString:(NSString *)key,...;

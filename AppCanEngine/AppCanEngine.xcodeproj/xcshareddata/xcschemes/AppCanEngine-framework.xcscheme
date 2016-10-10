@@ -28,6 +28,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "421901721D9E0D4D00DF94B0"
+               BuildableName = "AppCanKitSwift.framework"
+               BlueprintName = "AppCanKitSwift"
+               ReferencedContainer = "container:AppCanKit/AppCanKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "42F787431D950B5D0094AA05"
                BuildableName = "AppCanEngine.framework"
                BlueprintName = "AppCanEngine-framework"

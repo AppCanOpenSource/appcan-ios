@@ -884,7 +884,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	[self stopLoading];
 	// Cleanup the HTML document by removing all content
 	// This time, this hack free some additional memory on some websites, mainly big ones with a lot of content
-	[self stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
+	//[self stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
 	[self stringByEvaluatingJavaScriptFromString:@"var body=document.getElementsByTagName('body')[0];body.style.backgroundColor=(body.style.backgroundColor=='')?'white':'';"];
 	[self stringByEvaluatingJavaScriptFromString:@"document.open();document.close()"];
 

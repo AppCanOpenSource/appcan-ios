@@ -80,6 +80,9 @@
 @property(nonatomic) BOOL validatesSecureCertificate;//是否校验证书
 
 @property (nonatomic,assign) BOOL launchedByRemoteNotification;
+@property (nonatomic,assign,readonly) BOOL useInAppCanIDE;
+
+- (instancetype)initWithDevMode;
 
 //-(NSString *)getPayPublicRsaKey;
 -(void)rootPageDidFinishLoading;

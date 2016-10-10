@@ -26,6 +26,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+APPCAN_EXPORT BOOL ac_isXcodeDebug();
+
+
 @class ACLogMessage;
 @protocol ACLogger <NSObject>
 

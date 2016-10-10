@@ -388,6 +388,9 @@ typedef NS_ENUM(NSInteger, ACMethodArgumentType) {
 }
 @end
 
+#pragma mark - Verbose Description
+
+
 #pragma mark - NSObject Category
 
 @implementation NSObject (ACInvoker)
@@ -418,6 +421,7 @@ typedef NS_ENUM(NSInteger, ACMethodArgumentType) {
         [desc appendString:@"}"];
         return desc;
     }
+    
     return self.debugDescription;
 }
 
@@ -444,7 +448,7 @@ static id _ac_invoke(id target, NSString *selector, NSArray *arguments){
     }
 }
 
-- (id)ac_invoke:(NSString *)selector arguments:(NSArray *)arguments{
+- (id)ac_invoke:(NSString *)selector arguments:( NSArray *)arguments{
     return _ac_invoke(self, selector, arguments);
 }
 
