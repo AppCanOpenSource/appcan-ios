@@ -11,10 +11,9 @@ import JavaScriptCore
 
 
 
-
 public final class JSFunctionRef{
     private static let GlobalContainerKeyPath: NSString = "__jsa_functionContainer"
-    private var ctx: JSContext?
+    public weak var ctx: JSContext?
     private var _func: JSManagedValue?
     private var jsFunc: JSValue?{
         get{ return _func?.value }
@@ -24,6 +23,7 @@ public final class JSFunctionRef{
         guard argument.isFunction else{
             return nil
         }
+        ACLogVerbose("JSFunctionRef<\(String(ObjectIdentifier(self).hashValue))> init")
         let jsFunction = argument._value
         _func = JSManagedValue(value: jsFunction)
         ctx = jsFunction.context
@@ -34,6 +34,7 @@ public final class JSFunctionRef{
         if let ctx = ctx{
             ctx.virtualMachine.removeManagedReference(_func, withOwner: container(inContext: ctx))
         }
+        ACLogVerbose("JSFunctionRef<\(String(ObjectIdentifier(self).hashValue))> deinit")
     }
     
     private func container(inContext ctx: JSContext?) -> JSValue?{
@@ -71,15 +72,14 @@ public final class JSFunctionRef{
             }
         }
         queue.async {
-            guard let jsFunc = self.jsFunc else{
-                callback(nil)
-                return
+            let exec: @convention(block)() -> Void = {[unowned self] in
+                if let jsFunc = self.jsFunc{
+                    let returnValue = jsFunc.call(withArguments: args)
+                    callback(returnValue)
+                }else{
+                    callback(nil)
+                }
             }
-            let exec: @convention(block)() -> Void = {
-                let returnValue = jsFunc.call(withArguments: args)
-                callback(returnValue)
-            }
-            
             if waitingUntilNextRunLoop,
                 let setTimeout = self.ctx?.objectForKeyedSubscript("setTimeout"),
                 JSValueHelper.jsValueIsFunction(setTimeout){
