@@ -49,7 +49,7 @@ public final class JSFunctionRef{
         return container
     }
     
-    
+    @discardableResult
     public func executeSync(withArguments args: [Any]?,inQueue: DispatchQueue? = nil) -> JSValue?{
         if let inQueue = inQueue{
             var returnValue: JSValue? = nil;

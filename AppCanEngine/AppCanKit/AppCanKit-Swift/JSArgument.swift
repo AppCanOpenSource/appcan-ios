@@ -173,16 +173,16 @@ extension JSArgumment{
     }
     internal var objectKeys: [String]?{
         get{
-            var value = _value
-            if !isObject {
-                value = jsonValue
+            if isObject,let keys = _value.context.objectForKeyedSubscript("Object").invokeMethod("keys", withArguments: [_value]),JSValueHelper.jsValueIsArray(keys){
+                return keys.toArray() as? [String]
             }
-            guard value.isObject ,
-                let keys = value.context.objectForKeyedSubscript("Object").invokeMethod("keys", withArguments: [value]),
-                JSValueHelper.jsValueIsArray(keys)  else {
-                    return nil
+            if isString,
+                let jsonData = stringValue?.data(using: .utf8),
+                let obj = try? JSONSerialization.jsonObject(with: jsonData, options: []) ,
+                let jsonObj = obj as? [String: Any]{
+                return Array(jsonObj.keys)
             }
-            return keys.toArray() as? [String]
+            return nil
         }
     }
 }

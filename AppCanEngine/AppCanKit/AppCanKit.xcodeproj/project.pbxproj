@@ -31,6 +31,8 @@
 		421AE5981CF69BAE001A5053 /* ACArgumentsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE5971CF69BAE001A5053 /* ACArgumentsSpec.m */; };
 		421AE59E1CF6D09B001A5053 /* ACJSONSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE59D1CF6D09B001A5053 /* ACJSONSpec.m */; };
 		42251FC11CFC4D8200C5AA22 /* ACJSFunctionRefSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 42251FC01CFC4D8200C5AA22 /* ACJSFunctionRefSpec.m */; };
+		423F97B21DAE36DF007A382B /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423F97B01DAE36DF007A382B /* Nimble.framework */; };
+		423F97B31DAE36DF007A382B /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423F97B11DAE36DF007A382B /* Quick.framework */; };
 		426DF1A41CFD757300F4C53E /* ACPluginBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 426DF1A21CFD757300F4C53E /* ACPluginBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		426DF1A51CFD757300F4C53E /* ACPluginBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DF1A31CFD757300F4C53E /* ACPluginBundle.m */; };
 		426DF1A81CFD7DC600F4C53E /* ACAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 426DF1A61CFD7DC600F4C53E /* ACAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -45,10 +47,6 @@
 		429ADD661CFD62F600FA43DB /* UIColor+ACHTMLColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 429ADD641CFD62F600FA43DB /* UIColor+ACHTMLColor.m */; };
 		42A9F63D1CFD3836002710FC /* AppCanObjectProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A9F63B1CFD3836002710FC /* AppCanObjectProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A9F6411CFD39D9002710FC /* AppCanGlobalObjectGetter.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A9F63F1CFD39D9002710FC /* AppCanGlobalObjectGetter.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		42D7F6FA1CFFBD7300447B4C /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D7F6F81CFFBD7300447B4C /* Nimble.framework */; };
-		42D7F6FB1CFFBD7300447B4C /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D7F6F91CFFBD7300447B4C /* Quick.framework */; };
-		42D7F6FD1CFFBEA800447B4C /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42D7F6F81CFFBD7300447B4C /* Nimble.framework */; };
-		42D7F6FE1CFFBEAC00447B4C /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42D7F6F91CFFBD7300447B4C /* Quick.framework */; };
 		42DB71B01D54887700E61C19 /* ACInvoker.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DB71AE1D54887700E61C19 /* ACInvoker.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42DB71B11D54887700E61C19 /* ACInvoker.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DB71AF1D54887700E61C19 /* ACInvoker.m */; };
 		42DB71D11D59A38C00E61C19 /* EUExBaseDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DB71CF1D59A38C00E61C19 /* EUExBaseDefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,8 +89,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				42D7F6FE1CFFBEAC00447B4C /* Quick.framework in CopyFiles */,
-				42D7F6FD1CFFBEA800447B4C /* Nimble.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +126,8 @@
 		421AE59D1CF6D09B001A5053 /* ACJSONSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSONSpec.m; sourceTree = "<group>"; };
 		422269F11DA8971E003EB5AA /* private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = private.modulemap; path = AppCanKit/private.modulemap; sourceTree = "<group>"; };
 		42251FC01CFC4D8200C5AA22 /* ACJSFunctionRefSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSFunctionRefSpec.m; sourceTree = "<group>"; };
+		423F97B01DAE36DF007A382B /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = SOURCE_ROOT; };
+		423F97B11DAE36DF007A382B /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = SOURCE_ROOT; };
 		426DF1A21CFD757300F4C53E /* ACPluginBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPluginBundle.h; sourceTree = "<group>"; };
 		426DF1A31CFD757300F4C53E /* ACPluginBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPluginBundle.m; sourceTree = "<group>"; };
 		426DF1A61CFD7DC600F4C53E /* ACAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACAvailability.h; sourceTree = "<group>"; };
@@ -144,8 +142,6 @@
 		429ADD641CFD62F600FA43DB /* UIColor+ACHTMLColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ACHTMLColor.m"; sourceTree = "<group>"; };
 		42A9F63B1CFD3836002710FC /* AppCanObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanObjectProtocol.h; sourceTree = "<group>"; };
 		42A9F63F1CFD39D9002710FC /* AppCanGlobalObjectGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCanGlobalObjectGetter.h; path = AppCanKit/AppCanGlobalObjectGetter.h; sourceTree = "<group>"; };
-		42D7F6F81CFFBD7300447B4C /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = "<group>"; };
-		42D7F6F91CFFBD7300447B4C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = "<group>"; };
 		42DB71AE1D54887700E61C19 /* ACInvoker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ACInvoker.h; path = AppCanKit/ACInvoker.h; sourceTree = "<group>"; };
 		42DB71AF1D54887700E61C19 /* ACInvoker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ACInvoker.m; path = AppCanKit/ACInvoker.m; sourceTree = "<group>"; };
 		42DB71CF1D59A38C00E61C19 /* EUExBaseDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExBaseDefine.h; sourceTree = "<group>"; };
@@ -185,8 +181,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				421AE52E1CF57181001A5053 /* AppCanKit.framework in Frameworks */,
-				42D7F6FA1CFFBD7300447B4C /* Nimble.framework in Frameworks */,
-				42D7F6FB1CFFBD7300447B4C /* Quick.framework in Frameworks */,
+				423F97B21DAE36DF007A382B /* Nimble.framework in Frameworks */,
+				423F97B31DAE36DF007A382B /* Quick.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,8 +268,8 @@
 		421AE5311CF57181001A5053 /* AppCanKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				42D7F6F81CFFBD7300447B4C /* Nimble.framework */,
-				42D7F6F91CFFBD7300447B4C /* Quick.framework */,
+				423F97B01DAE36DF007A382B /* Nimble.framework */,
+				423F97B11DAE36DF007A382B /* Quick.framework */,
 				421AE5341CF57181001A5053 /* Info.plist */,
 				421AE5821CF58442001A5053 /* ACNilSpec.m */,
 				421AE5861CF5911E001A5053 /* EXTScopeSpec.m */,
@@ -806,6 +802,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AppCanKitTests",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = AppCanKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -831,6 +828,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AppCanKitTests",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = AppCanKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
