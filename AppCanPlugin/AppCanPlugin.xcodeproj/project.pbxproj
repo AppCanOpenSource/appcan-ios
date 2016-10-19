@@ -384,7 +384,9 @@
 			buildPhases = (
 				6CC6032D157DCC0F00A3E13E /* Sources */,
 				6CC6032F157DCC0F00A3E13E /* Resources */,
+				423F98A81DB77076007A382B /* ShellScript */,
 				3356F9571A4851FA00F58330 /* Embed Frameworks */,
+				423F98A91DB7712B007A382B /* ShellScript */,
 				6CC6032E157DCC0F00A3E13E /* Frameworks */,
 			);
 			buildRules = (
@@ -447,6 +449,35 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		423F98A81DB77076007A382B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#strip simulator architectures before copy frameworks\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    cd \"${SRCROOT}/AppCanPlugin/uexFrameworks\"\n    rm -rf temp\n    mkdir temp\n    for a in `ls -d */`\n    do\n        folder=\"${a%%/*}\"\n        extension=\"${folder##*.}\"\n        if [ $extension != \"framework\" ]; then\n            continue\n        fi\n        framework=\"${folder%.*}\"\n        cp -rf \"${folder}\" \"temp/${folder}\"\n        info=$(lipo -info ${folder}/${framework} | sed 's/.*are: //')\n        if [[ $info == *\"i386\"* ]]; then\n            lipo -remove i386 \"${folder}/${framework}\" -output \"${folder}/${framework}\"\n        fi\n        if [[ $info == *\"x86_64\"* ]]; then\n            lipo -remove x86_64 \"${folder}/${framework}\" -output \"${folder}/${framework}\"\n        fi\n    done\nfi";
+		};
+		423F98A91DB7712B007A382B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#restore frameworks\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    cd \"${SRCROOT}/AppCanPlugin/uexFrameworks/temp\"\n    for a in `ls -d */`\n    do\n        folder=\"${a%%/*}\"\n        rm -rf \"../${folder}\"\n        cp -rf \"${folder}\" \"../${folder}\"\n    done\n    cd ..\n    rm -rf temp\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6CC6032D157DCC0F00A3E13E /* Sources */ = {
