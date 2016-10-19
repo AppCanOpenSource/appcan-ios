@@ -2220,12 +2220,19 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSNumber *inType,NSDictionary *bounceParams) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(inType);
     UEX_PARAM_GUARD_NOT_NIL(bounceParams);
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
-    self.bounceParamsDict = [bounceParams mutableCopy];
-    [self.bounceParamsDict setValue:inType forKey:@"type"];
+    for(NSString *key in @[@"pullToReloadText",@"releaseToReloadText",@"loadingText"]){
+        NSString *value = stringArg(bounceParams[key]);
+        if(value && value.length > 0){
+            dict[key] = value;
+        }
+    }
+    
+    [dict setValue:inType.stringValue forKey:@"type"];
     
     int type = [inType intValue];
-    EBrowserViewBounceView * targetBounceView = nil;
+    EBrowserViewBounceView *targetBounceView = nil;
     
     switch (type)        {
         case EBounceViewTypeTop:
@@ -2237,46 +2244,45 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         default:
             break;
     }
-    if (targetBounceView) {
-        NSString *levelText =  stringArg(bounceParams[@"levelText"]);
-        if (levelText && levelText.length > 0) {
-            [targetBounceView setLevelText:levelText];
-        }
-    }
-    
     
 
-    NSString *imageInPath = nil;
+    NSString *levelText = stringArg(bounceParams[@"levelText"]);
+    if (levelText && levelText.length > 0) {
+        [targetBounceView setLevelText:levelText];
+        dict[@"levelText"] = levelText;
+    }
+    
 //#warning 企业版的设置?
-    if ([inArguments count] ==3){
-        NSString * pjID=[inArguments objectAtIndex:2];
-        if ([pjID isEqualToString:@"donghang"]){
+    if ([inArguments count] >= 3){
+        NSString * pjID= stringArg(inArguments[2]);
+        if ([pjID isEqual:@"donghang"]){
             self.EBrwView.mBottomBounceView.projectID=pjID;
             self.EBrwView.mTopBounceView.projectID=pjID;
-            [self.bounceParamsDict setObject:pjID forKey:@"projectID"];
+            [dict setObject:pjID forKey:@"projectID"];
         }
-        imageInPath = stringArg(bounceParams[@"loadingImagePath"]);
+        NSString *imageInPath = stringArg(bounceParams[@"loadingImagePath"]);
+        if (imageInPath) {
+            imageInPath = [self absPath:imageInPath];
+            [dict setObject:imageInPath forKey:@"loadingImagePath"];
+        }
     }
-    if (imageInPath) {
-        imageInPath = [self absPath:imageInPath];
-        [self.bounceParamsDict setObject:imageInPath forKey:@"loadingImagePath"];
-    }
-    
-    
-    
     
     NSString * imagePath = stringArg(bounceParams[@"imagePath"]);
     if (imagePath && imagePath.length > 0) {
-        imagePath = [super absPath:imagePath];
-        [self.bounceParamsDict setObject:imagePath forKey:@"imagePath"];
+        imagePath = [self absPath:imagePath];
+        [dict setObject:imagePath forKey:@"imagePath"];
     }
     
-    NSString *textColor =stringArg(bounceParams[@"textColor"]);
-    if (textColor && textColor.length>0) {
-        UIColor *color = [EUtility colorFromHTMLString:textColor];
-        [self.bounceParamsDict setObject:color forKey:@"textColor"];
+    NSString *textColor = stringArg(bounceParams[@"textColor"]);
+    if (textColor) {
+        UIColor *color = [UIColor ac_ColorWithHTMLColorString:textColor];
+        if(color){
+            [dict setObject:color forKey:@"textColor"];
+        }
+        
     }
     
+    self.bounceParamsDict = dict;
     
 }
 
