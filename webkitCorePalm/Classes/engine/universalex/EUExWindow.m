@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 
 @interface EUExWindow()
 @property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
-@property (nonatomic,strong)NSMutableDictionary *bounceParams;
+@property (nonatomic,strong)NSMutableDictionary *bounceParamsDict;
 @end
 
 @implementation EScrollView
@@ -3044,72 +3044,77 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 - (void)setBounceParams:(NSMutableArray *)inArguments {
     
     @try {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSString * inJson = [inArguments objectAtIndex:1];
-        self.bounceParams = [[NSMutableDictionary alloc] initWithDictionary:[inJson JSONValue]];
+        id info = [inJson JSONValue];
+        if (!info || ![info isKindOfClass:[NSDictionary class]]) {
+            return;
+        }
+        for( NSString *key in @[@"pullToReloadText",@"releaseToReloadText",@"loadingText"]){
+            NSString *value = info[key];
+            if(KUEXIS_NSString(value)){
+                dict[key] = value;
+            }
+        }
+        
+        
         NSString *inType = [inArguments objectAtIndex:0];
-        [self.bounceParams setObject:inType forKey:@"type"];
+        [dict setObject:inType forKey:@"type"];
         
         int type = [inType intValue];
-        
-        switch (type)
-        {
-            case EBounceViewTypeTop:
-                if(meBrwView.mTopBounceView){
-                    NSString *levelText = [self.bounceParams objectForKey:@"levelText"];
-                    //levelText && levelText.length>0
-                    if (KUEXIS_NSString(levelText)) {
+        NSString *levelText = [info objectForKey:@"levelText"];
+        if(KUEXIS_NSString(levelText)){
+            switch (type)
+            {
+                case EBounceViewTypeTop:
+                    if(meBrwView.mTopBounceView){
                         [meBrwView.mTopBounceView setLevelText:levelText];
                     }
-                    //                return;
-                }
-                break;
-            case EBounceViewTypeBottom:
-                if(meBrwView.mBottomBounceView){
-                    NSString *levelText=[self.bounceParams objectForKey:@"levelText"];
-                    //levelText && levelText.length>0
-                    if (KUEXIS_NSString(levelText)) {
+                    break;
+                case EBounceViewTypeBottom:
+                    if(meBrwView.mBottomBounceView){
                         [meBrwView.mBottomBounceView setLevelText:levelText];
+                        
                     }
-                    //                return;
-                }
-                break;
-            default:
-                break;
-        }
-        NSString *imageInPath = nil;
-        if ([inArguments count] ==3)
-        {
-            NSString * pjID=[inArguments objectAtIndex:2];
-            if ([pjID isEqualToString:@"donghang"])
-            {
-                meBrwView.mBottomBounceView.projectID=pjID;
-                meBrwView.mTopBounceView.projectID=pjID;
-                [self.bounceParams setObject:pjID forKey:@"projectID"];
+                    break;
+                default:
+                    break;
             }
-            imageInPath =[self.bounceParams objectForKey:@"loadingImagePath"];
-        }
-        //imageInPath
-        //imageInPath && imageInPath.length>0
-        if (KUEXIS_NSString(imageInPath)) {
-            imageInPath = [super absPath:imageInPath];
-            [self.bounceParams setObject:imageInPath forKey:@"loadingImagePath"];
+            dict[@"levelText"] = levelText;
         }
         
-        NSString * imagePath = [self.bounceParams objectForKey:@"imagePath"];
-        //imagePath
-        //imagePath && imagePath.length>0
+
+        if ([inArguments count] >= 3)
+        {
+            NSString * pjID=[inArguments objectAtIndex:2];
+            if ([pjID isEqual:@"donghang"]){
+                meBrwView.mBottomBounceView.projectID = pjID;
+                meBrwView.mTopBounceView.projectID = pjID;
+                [dict setObject:pjID forKey:@"projectID"];
+            }
+            NSString * imageInPath = info[@"loadingImagePath"];
+            if (KUEXIS_NSString(imageInPath)) {
+                [dict setObject:[self absPath:imageInPath] forKey:@"loadingImagePath"];
+            }
+        }
+
+
+        
+        NSString * imagePath = info[@"imagePath"];
+
         if (KUEXIS_NSString(imagePath)) {
-            imagePath = [super absPath:imagePath];
-            [self.bounceParams setObject:imagePath forKey:@"imagePath"];
+            [dict setObject:[self absPath:imagePath] forKey:@"imagePath"];
         }
         //textColor
-        NSString *textColor =[self.bounceParams objectForKey:@"textColor"];
+        NSString *textColor =[info objectForKey:@"textColor"];
         //textColor && textColor.length>0
         if (KUEXIS_NSString(textColor)) {
             UIColor *color = [EUtility colorFromHTMLString:textColor];
-            [self.bounceParams setObject:color forKey:@"textColor"];
+            if(color){
+                [dict setObject:color forKey:@"textColor"];
+            }
         }
-        
+        self.bounceParamsDict = dict;
     }
     @catch (NSException *exception) {
         
@@ -3163,7 +3168,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
-                    meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeTop params:self.bounceParams];
+                    meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeTop params:self.bounceParamsDict];
                     [meBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mTopBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, -meBrwView.bounds.size.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
@@ -3176,7 +3181,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 meBrwView.mTopBounceView.hidden = NO;
             } else if (meBrwView.mTopBounceView) {
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
-                    [meBrwView.mTopBounceView resetDataWithType:EBounceViewTypeTop andParams:self.bounceParams];
+                    [meBrwView.mTopBounceView resetDataWithType:EBounceViewTypeTop andParams:self.bounceParamsDict];
                     [meBrwView.mTopBounceView setStatus:EBounceViewStatusPullToReload];
                 }
                 meBrwView.mTopBounceView.backgroundColor = color;
@@ -3189,7 +3194,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
 #pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
 
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
-                    meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:self.bounceParams];
+                    meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height) andType:EBounceViewTypeBottom params:self.bounceParamsDict];
                     [meBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 } else {
                     meBrwView.mBottomBounceView = [[EBrowserViewBounceView alloc] initWithFrame:CGRectMake(0, meBrwView.mScrollView.contentSize.height, meBrwView.bounds.size.width, meBrwView.bounds.size.height)];
@@ -3211,7 +3216,7 @@ typedef NS_ENUM(NSInteger,ACEDisturbLongPressGestureStatus){
                 meBrwView.mBottomBounceView.hidden = NO;
             } else if (meBrwView.mBottomBounceView) {
                 if ((flag & F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) == F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM) {
-                    [meBrwView.mBottomBounceView resetDataWithType:EBounceViewTypeBottom andParams:self.bounceParams];
+                    [meBrwView.mBottomBounceView resetDataWithType:EBounceViewTypeBottom andParams:self.bounceParamsDict];
                     [meBrwView.mBottomBounceView setStatus:EBounceViewStatusPullToReload];
                 }
                 meBrwView.mBottomBounceView.backgroundColor = color;
