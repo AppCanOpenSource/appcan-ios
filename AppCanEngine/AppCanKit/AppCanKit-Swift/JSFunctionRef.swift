@@ -13,6 +13,7 @@ import JavaScriptCore
 
 public final class JSFunctionRef{
     private static let GlobalContainerKeyPath: NSString = "__jsa_functionContainer"
+    private static let GlobalContainer = NSObject()
     public weak var ctx: JSContext?
     private var _func: JSManagedValue?
     private var jsFunc: JSValue?{
@@ -37,16 +38,12 @@ public final class JSFunctionRef{
         ACLogVerbose("JSFunctionRef<\(String(ObjectIdentifier(self).hashValue))> deinit")
     }
     
-    private func container(inContext ctx: JSContext?) -> JSValue?{
-        guard let ctx = ctx else{
-            return nil
+    private func container(inContext ctx: JSContext?) -> NSObject{
+
+        if let ctx = ctx,let container = ctx.objectForKeyedSubscript(JSFunctionRef.GlobalContainerKeyPath),container.isUndefined {
+            ctx.setObject(JSFunctionRef.GlobalContainer, forKeyedSubscript: JSFunctionRef.GlobalContainerKeyPath)
         }
-        var container = ctx.objectForKeyedSubscript(JSFunctionRef.GlobalContainerKeyPath)!
-        if container.isUndefined {
-            container = JSValue(newObjectIn: ctx);
-            ctx.setObject(container, forKeyedSubscript: JSFunctionRef.GlobalContainerKeyPath)
-        }
-        return container
+        return JSFunctionRef.GlobalContainer
     }
     
     @discardableResult
