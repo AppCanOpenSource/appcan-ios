@@ -2060,7 +2060,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (inWndName.length > 0) {
         EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.EBrwView];
         EBrowserWindow *tmpWindow = [eBrwWndContainer brwWndForKey:inWndName];
-        eBrwWnd = tmpWindow ?: eBrwWnd;
+        eBrwWnd = tmpWindow;
     }
     
     if (eBrwWnd == nil) {
@@ -2145,9 +2145,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (windowName && windowName.length > 0) {
         EBrowserWindow * tempWindow = [eBrwWndContainer brwWndForKey:windowName];
-        if (tempWindow) {
-            eBrwWnd = tempWindow;
-        }
+        eBrwWnd = tempWindow;
     }
     
     EBrowserView * ePopBrwView = [eBrwWnd.mPopoverBrwViewDict objectForKey:inPageName];
