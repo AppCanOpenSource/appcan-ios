@@ -193,8 +193,8 @@
 			isa = PBXGroup;
 			children = (
 				4219018A1D9E0D8300DF94B0 /* JSArgument.swift */,
-				4219018B1D9E0D8300DF94B0 /* JSArgumentConvertible.swift */,
 				4219018C1D9E0D8300DF94B0 /* JSFunctionRef.swift */,
+				4219018B1D9E0D8300DF94B0 /* JSArgumentConvertible.swift */,
 				421901751D9E0D4D00DF94B0 /* AppCanKit-Swift.h */,
 				421901761D9E0D4D00DF94B0 /* Info.plist */,
 				421901921D9E0DA200DF94B0 /* ACLog.swift */,

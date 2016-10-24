@@ -928,6 +928,25 @@ NSString *AppCanJS = nil;
 }
 
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler{
+    for (NSInteger i = 0; i < pluginObj.classNameArray.count; i++) {
+        NSString *pluginName = pluginObj.classNameArray[i];
+        NSString *pluginClassName = [NSString stringWithFormat:@"EUEx%@", [pluginName substringFromIndex:3]];
+        Class pluginClass = NSClassFromString(pluginClassName);
+        Method delegateMethod = class_getClassMethod(pluginClass, @selector(application:continueUserActivity:restorationHandler:));
+        if (delegateMethod) {
+            BOOL ret = [pluginClass application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+            if (ret){
+                return YES;
+            }
+        }
+    }
+    return NO;
+    
+    
+}
+
+
 #pragma mark - root page finish loading invokation
 
 -(void)rootPageDidFinishLoading{

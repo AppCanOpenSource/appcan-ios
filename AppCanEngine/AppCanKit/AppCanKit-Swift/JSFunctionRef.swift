@@ -8,42 +8,60 @@
 
 import Foundation
 import JavaScriptCore
+import AppCanKit
 
 
 
 public final class JSFunctionRef{
     private static let GlobalContainerKeyPath: NSString = "__jsa_functionContainer"
     private static let GlobalContainer = NSObject()
-    public weak var ctx: JSContext?
-    private var _func: JSManagedValue?
+    let uuid = UUID().uuidString
+    weak var ctx: JSContext?
+    private var managedValue: JSManagedValue
+    
     private var jsFunc: JSValue?{
-        get{ return _func?.value }
+        get{
+            if let jsfunc = managedValue.value{
+                return jsfunc
+            }
+            if let globalContainerJS = ctx?.objectForKeyedSubscript(JSFunctionRef.GlobalContainerKeyPath),globalContainerJS.hasProperty(uuid){
+                return globalContainerJS.forProperty(uuid)
+            }
+            return nil
+        }
     }
     
-    internal init?(_ argument: JSArgumment){
+    init?(_ argument: JSArgumment){
         guard argument.isFunction else{
             return nil
         }
-        ACLogVerbose("JSFunctionRef<\(String(ObjectIdentifier(self).hashValue))> init")
+        
         let jsFunction = argument._value
-        _func = JSManagedValue(value: jsFunction)
+        managedValue = JSManagedValue(value: jsFunction)
         ctx = jsFunction.context
-        jsFunction.context.virtualMachine.addManagedReference(_func, withOwner: container(inContext: ctx))
+        container(inContext: ctx)?.setObject(jsFunction, forKeyedSubscript: uuid as NSString)
+        ctx?.virtualMachine.addManagedReference(managedValue, withOwner: JSFunctionRef.GlobalContainer)
+        ACLogVerbose("JSFunctionRef<\(String(ObjectIdentifier(self).hashValue))> init")
     }
     
     deinit {
         if let ctx = ctx{
-            ctx.virtualMachine.removeManagedReference(_func, withOwner: container(inContext: ctx))
+            ctx.virtualMachine.removeManagedReference(managedValue, withOwner: JSFunctionRef.GlobalContainer)
+            container(inContext: ctx)?.setObject(ACNil.null(), forKeyedSubscript: uuid as NSString)
         }
         ACLogVerbose("JSFunctionRef<\(String(ObjectIdentifier(self).hashValue))> deinit")
     }
     
-    private func container(inContext ctx: JSContext?) -> NSObject{
-
-        if let ctx = ctx,let container = ctx.objectForKeyedSubscript(JSFunctionRef.GlobalContainerKeyPath),container.isUndefined {
-            ctx.setObject(JSFunctionRef.GlobalContainer, forKeyedSubscript: JSFunctionRef.GlobalContainerKeyPath)
-        }
-        return JSFunctionRef.GlobalContainer
+    private func container(inContext ctx: JSContext?) -> JSValue?{
+        if
+            let ctx = ctx,
+            let container = ctx.objectForKeyedSubscript(JSFunctionRef.GlobalContainerKeyPath),
+            container.isUndefined{
+                    ctx.setObject(JSFunctionRef.GlobalContainer, forKeyedSubscript: JSFunctionRef.GlobalContainerKeyPath)
+                }
+        
+        
+        return ctx?.objectForKeyedSubscript(JSFunctionRef.GlobalContainerKeyPath)
     }
     
     @discardableResult

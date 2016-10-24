@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  AppCan插件基类
  */
-@interface EUExBase : NSObject<AppCanApplicationEventObserver>
+@interface EUExBase : NSObject
 
 @property (nonatomic, weak) id<AppCanWebViewEngineObject> webViewEngine;
 
