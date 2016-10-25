@@ -2471,10 +2471,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     CGFloat x = inX ? inX.floatValue : 0;
     CGFloat y = inY ? inY.floatValue : 0;
-    CGFloat w = inW ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width;
-    CGFloat h = inH ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height;
-    UEX_PARAM_GUARD(w > 0);
-    UEX_PARAM_GUARD(h > 0);
+    CGFloat w = inW.floatValue > 0 ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width;
+    CGFloat h = inH.floatValue > 0 ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height;
+
     CGFloat fontSize = inFontSize.floatValue;
     CGFloat bottom = inBottom.floatValue;
     if (bottom > 0) {
@@ -2527,13 +2526,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     NSInteger startPageIndex = popIndex ? popIndex.integerValue : 0;
     CGFloat x = inX ? inX.floatValue : 0;
     CGFloat y = inY ? inY.floatValue : 0;
-    CGFloat w = inW ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width;
-    CGFloat h = inH ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height;
+    CGFloat w = inW.floatValue > 0 ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width;
+    CGFloat h = inH.floatValue > 0 ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height;
     UexWindowOpenFlag flag = inFlag.integerValue;
     CGFloat fontSize = inFontSize.floatValue;
-    UEX_PARAM_GUARD(w > 0);
-    UEX_PARAM_GUARD(h > 0);
-    
+
     EBrowserWindow *eBrwWnd = self.EBrwView.meBrwWnd;
     NSInteger multipopCount = [contentArray count];
     EScrollView * multiPopover = [[EScrollView alloc]initWithFrame:CGRectMake(x,y,w,h)];
