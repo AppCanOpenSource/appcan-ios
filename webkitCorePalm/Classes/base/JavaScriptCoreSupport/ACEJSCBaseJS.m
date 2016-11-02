@@ -74,7 +74,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     if([[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]]){
         return [[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]];
     }
-    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;return __uex_JSCHandler_.execute('%@','%@',arguments,argCount,%@)};",plugin,method,plugin,method,options];
+    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;var args = [];for(var i = 0; i < argCount; i++){args[i] = arguments[i];};return __uex_JSCHandler_.execute('%@','%@',args,argCount,%@);};",plugin,method,plugin,method,options];
 }
 + (NSString *)javaScriptForProperty:(NSString *)property plugin:(NSString *)plugin value:(NSString *)value{
     return [NSString stringWithFormat:@"%@.%@=%@;",plugin,property,value];

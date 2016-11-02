@@ -9,10 +9,83 @@
 import Foundation
 import JavaScriptCore
 
+fileprivate final class JSONBox{
+
+    enum LazyValue {
+        case notYetComputed
+        case null
+        case object(object: [String: Any])
+        case array(array: [Any])
+    }
+    private var _value: LazyValue
+    private let jsValue: JSValue
+    
+    init(jsValue: JSValue){
+        _value = .notYetComputed
+        self.jsValue = jsValue
+    }
+    
+    
+    func compute(){
+        guard case .notYetComputed = _value else{
+            return
+        }
+        if jsValue.isString,
+            let jsonData = jsValue.toString().data(using: .utf8),
+            let value = try? JSONSerialization.jsonObject(with: jsonData, options: []){
+            if let object = value as? [String: Any]{
+                _value = .object(object: object)
+                return
+            }
+            if let array = value as? [Any]{
+                _value = .array(array: array)
+                return
+            }
+        }
+        _value = .null
+    }
+    public var isJSON: Bool{
+        get{
+            compute()
+            switch _value {
+            case .object,.array:
+                return true
+            default:
+                return false
+            }
+        }
+    }
+    
+    public var object: [String: Any]?{
+        get{
+            compute()
+            if case .object(let obj) = _value{
+                return obj
+            }
+            return nil
+        }
+    }
+    public var array: [Any]?{
+        get{
+            compute()
+            if case .array(let array) = _value{
+                return array
+            }
+            return nil
+        }
+    }
+    
+    
+}
+
+
+
 public struct JSArgumment{
     public let _value: JSValue
+    fileprivate let _json: JSONBox
     public init(_ jsValue: JSValue) {
         _value = jsValue
+        _json = JSONBox(jsValue: jsValue)
     }
 }
 
@@ -101,11 +174,24 @@ extension String: JSArgummentSubscriptType{
 extension JSArgumment{
     private subscript (index index: Int) -> JSArgumment{
         get{
+            if
+                isString,
+                let array = _json.array,
+                let js = JSValue(object: array, in: _value.context){
+                return JSArgumment(js.objectAtIndexedSubscript(index))
+            }
             return JSArgumment(_value.objectAtIndexedSubscript(index))
         }
     }
     private subscript (key key: String) -> JSArgumment{
         get{
+            if
+                isString,
+                let object = _json.object,
+                let js = JSValue(object: object, in: _value.context){
+                return JSArgumment(js.objectForKeyedSubscript(key))
+            }
+            
             return JSArgumment(_value.objectForKeyedSubscript(key))
         }
     }
@@ -147,11 +233,7 @@ extension JSArgumment{
             return nil
         }
     }
-    internal var jsonValue: JSValue{
-        get{
-            return _value.context.objectForKeyedSubscript("JSON").invokeMethod("parse", withArguments: [_value])
-        }
-    }
+
     
 }
 
@@ -159,16 +241,13 @@ extension JSArgumment{
 extension JSArgumment{
      internal var arrayLength: Int?{
         get{
-            var value = _value
-            if !isArray {
-                value = jsonValue
+            if isArray,let length = _value.forProperty("length"),length.isNumber{
+                return Int(length.toInt32())
             }
-            guard JSValueHelper.jsValueIsArray(value) ,
-                let length = value.forProperty("length"),
-                length.isNumber else {
-                    return nil
+            if let array = _json.array{
+                return array.count
             }
-            return Int(length.toUInt32())
+            return nil
         }
     }
     internal var objectKeys: [String]?{
@@ -176,18 +255,17 @@ extension JSArgumment{
             if isObject,let keys = _value.context.objectForKeyedSubscript("Object").invokeMethod("keys", withArguments: [_value]),JSValueHelper.jsValueIsArray(keys){
                 return keys.toArray() as? [String]
             }
-            if isString,
-                let jsonData = stringValue?.data(using: .utf8),
-                let obj = try? JSONSerialization.jsonObject(with: jsonData, options: []) ,
-                let jsonObj = obj as? [String: Any]{
-                return Array(jsonObj.keys)
+            if let obj = _json.object{
+                return Array(obj.keys)
             }
             return nil
         }
     }
 }
 
-//MARK: - Operator
+//MARK: - Operator ~
+prefix operator ~
+
 public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> T?{
     return T.jsa_fromJSArgument(argument)
 }
@@ -206,6 +284,14 @@ public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> [T]
     return array
 }
 
+public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> Set<T>?{
+    if let array: [T] = ~argument{
+        return Set(array)
+    }
+    return nil
+}
+
+
 public prefix func ~(_ argument: JSArgumment) -> [Any]?{
     guard let count = argument.arrayLength else{
         return nil
@@ -218,7 +304,6 @@ public prefix func ~(_ argument: JSArgumment) -> [Any]?{
     }
     return array
 }
-
 public prefix func ~<T: JSArgummentConvertible>(_ argument: JSArgumment) -> [String: T]?{
     guard let keys = argument.objectKeys else{
         return nil
@@ -231,7 +316,6 @@ public prefix func ~<T: JSArgummentConvertible>(_ argument: JSArgumment) -> [Str
     }
     return dict
 }
-
 public prefix func ~(_ argument: JSArgumment) -> [String: Any]?{
     guard let keys = argument.objectKeys else{
         return nil
@@ -241,6 +325,96 @@ public prefix func ~(_ argument: JSArgumment) -> [String: Any]?{
         dict[key] = argument[key]._value.toObject()
     }
     return dict
+}
+
+infix operator <~
+
+public func <~<T: JSArgummentConvertible>(_ left: inout T?,_ right: JSArgumment){
+    left = ~right
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout T!,_ right: JSArgumment) -> Bool{
+    if let obj: T = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout T,_ right: JSArgumment) -> Bool{
+    if let obj: T = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+public func <~<T: JSArgummentConvertible>(_ left: inout [T]?,_ right: JSArgumment){
+    left = ~right
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout [T]!,_ right: JSArgumment) -> Bool{
+    if let obj: [T] = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout [T],_ right: JSArgumment) -> Bool{
+    if let obj: [T] = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>?,_ right: JSArgumment){
+    left = ~right
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>!,_ right: JSArgumment) -> Bool{
+    if let obj: Set<T> = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>,_ right: JSArgumment) -> Bool{
+    if let obj: Set<T> = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+public func <~<T: JSArgummentConvertible>(_ left: inout [String: T]?,_ right: JSArgumment){
+    left = ~right
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout [String: T]!,_ right: JSArgumment) -> Bool{
+    if let obj: [String: T] = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+
+@discardableResult
+public func <~<T: JSArgummentConvertible>(_ left: inout [String: T],_ right: JSArgumment) -> Bool{
+    if let obj: [String: T] = ~right{
+        left = obj
+        return true
+    }
+    return false
 }
 
 

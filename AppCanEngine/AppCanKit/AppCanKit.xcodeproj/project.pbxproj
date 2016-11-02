@@ -8,12 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		4219017C1D9E0D4D00DF94B0 /* AppCanKitSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421901731D9E0D4D00DF94B0 /* AppCanKitSwift.framework */; };
-		421901811D9E0D4D00DF94B0 /* AppCanKit_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421901801D9E0D4D00DF94B0 /* AppCanKit_SwiftTests.swift */; };
 		421901831D9E0D4D00DF94B0 /* AppCanKit-Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 421901751D9E0D4D00DF94B0 /* AppCanKit-Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4219018D1D9E0D8300DF94B0 /* JSArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4219018A1D9E0D8300DF94B0 /* JSArgument.swift */; };
 		4219018E1D9E0D8300DF94B0 /* JSArgumentConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4219018B1D9E0D8300DF94B0 /* JSArgumentConvertible.swift */; };
 		4219018F1D9E0D8300DF94B0 /* JSFunctionRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4219018C1D9E0D8300DF94B0 /* JSFunctionRef.swift */; };
 		421901931D9E0DA200DF94B0 /* ACLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421901921D9E0DA200DF94B0 /* ACLog.swift */; };
+		4219BE3D1DC1A475002E5C4E /* JSArgumentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4219BE3C1DC1A475002E5C4E /* JSArgumentSpec.swift */; };
+		4219BE421DC1A5EA002E5C4E /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4219BE401DC1A5EA002E5C4E /* Nimble.framework */; };
+		4219BE431DC1A5EA002E5C4E /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4219BE401DC1A5EA002E5C4E /* Nimble.framework */; };
+		4219BE441DC1A5EA002E5C4E /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4219BE411DC1A5EA002E5C4E /* Quick.framework */; };
+		4219BE451DC1A5EA002E5C4E /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4219BE411DC1A5EA002E5C4E /* Quick.framework */; };
+		4219BE461DC1A98C002E5C4E /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4219BE401DC1A5EA002E5C4E /* Nimble.framework */; };
+		4219BE471DC1A98C002E5C4E /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4219BE411DC1A5EA002E5C4E /* Quick.framework */; };
+		4219BE491DC1A9A5002E5C4E /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4219BE401DC1A5EA002E5C4E /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4219BE4A1DC1A9A5002E5C4E /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4219BE411DC1A5EA002E5C4E /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4219BE4C1DC1AB11002E5C4E /* JSArgumentSpec.js in Resources */ = {isa = PBXBuildFile; fileRef = 4219BE4B1DC1AB11002E5C4E /* JSArgumentSpec.js */; };
+		4219BE4D1DC1AB11002E5C4E /* JSArgumentSpec.js in Resources */ = {isa = PBXBuildFile; fileRef = 4219BE4B1DC1AB11002E5C4E /* JSArgumentSpec.js */; };
 		421AE5271CF57181001A5053 /* AppCanKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 421AE5261CF57181001A5053 /* AppCanKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		421AE52E1CF57181001A5053 /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421AE5231CF57181001A5053 /* AppCanKit.framework */; };
 		421AE5751CF5825C001A5053 /* ACMetamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 421AE5741CF5825C001A5053 /* ACMetamacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,8 +41,6 @@
 		421AE5981CF69BAE001A5053 /* ACArgumentsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE5971CF69BAE001A5053 /* ACArgumentsSpec.m */; };
 		421AE59E1CF6D09B001A5053 /* ACJSONSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 421AE59D1CF6D09B001A5053 /* ACJSONSpec.m */; };
 		42251FC11CFC4D8200C5AA22 /* ACJSFunctionRefSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 42251FC01CFC4D8200C5AA22 /* ACJSFunctionRefSpec.m */; };
-		423F97B21DAE36DF007A382B /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423F97B01DAE36DF007A382B /* Nimble.framework */; };
-		423F97B31DAE36DF007A382B /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423F97B11DAE36DF007A382B /* Quick.framework */; };
 		426DF1A41CFD757300F4C53E /* ACPluginBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 426DF1A21CFD757300F4C53E /* ACPluginBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		426DF1A51CFD757300F4C53E /* ACPluginBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DF1A31CFD757300F4C53E /* ACPluginBundle.m */; };
 		426DF1A81CFD7DC600F4C53E /* ACAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 426DF1A61CFD7DC600F4C53E /* ACAvailability.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -83,12 +91,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4219BE481DC1A992002E5C4E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4219BE491DC1A9A5002E5C4E /* Nimble.framework in CopyFiles */,
+				4219BE4A1DC1A9A5002E5C4E /* Quick.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		42D7F6FC1CFFBE9800447B4C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 16;
+			dstSubfolderSpec = 10;
 			files = (
+				4219BE461DC1A98C002E5C4E /* Nimble.framework in CopyFiles */,
+				4219BE471DC1A98C002E5C4E /* Quick.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,12 +120,15 @@
 		421901751D9E0D4D00DF94B0 /* AppCanKit-Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanKit-Swift.h"; sourceTree = "<group>"; };
 		421901761D9E0D4D00DF94B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4219017B1D9E0D4D00DF94B0 /* AppCanKitSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppCanKitSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		421901801D9E0D4D00DF94B0 /* AppCanKit_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCanKit_SwiftTests.swift; sourceTree = "<group>"; };
 		421901821D9E0D4D00DF94B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4219018A1D9E0D8300DF94B0 /* JSArgument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSArgument.swift; sourceTree = "<group>"; };
 		4219018B1D9E0D8300DF94B0 /* JSArgumentConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSArgumentConvertible.swift; sourceTree = "<group>"; };
 		4219018C1D9E0D8300DF94B0 /* JSFunctionRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSFunctionRef.swift; sourceTree = "<group>"; };
 		421901921D9E0DA200DF94B0 /* ACLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACLog.swift; sourceTree = "<group>"; };
+		4219BE3C1DC1A475002E5C4E /* JSArgumentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSArgumentSpec.swift; sourceTree = "<group>"; };
+		4219BE401DC1A5EA002E5C4E /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
+		4219BE411DC1A5EA002E5C4E /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		4219BE4B1DC1AB11002E5C4E /* JSArgumentSpec.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = JSArgumentSpec.js; sourceTree = "<group>"; };
 		421AE5231CF57181001A5053 /* AppCanKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCanKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		421AE5261CF57181001A5053 /* AppCanKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppCanKit.h; sourceTree = "<group>"; };
 		421AE5281CF57181001A5053 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -126,8 +150,6 @@
 		421AE59D1CF6D09B001A5053 /* ACJSONSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSONSpec.m; sourceTree = "<group>"; };
 		422269F11DA8971E003EB5AA /* private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = private.modulemap; path = AppCanKit/private.modulemap; sourceTree = "<group>"; };
 		42251FC01CFC4D8200C5AA22 /* ACJSFunctionRefSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSFunctionRefSpec.m; sourceTree = "<group>"; };
-		423F97B01DAE36DF007A382B /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = SOURCE_ROOT; };
-		423F97B11DAE36DF007A382B /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = SOURCE_ROOT; };
 		426DF1A21CFD757300F4C53E /* ACPluginBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPluginBundle.h; sourceTree = "<group>"; };
 		426DF1A31CFD757300F4C53E /* ACPluginBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPluginBundle.m; sourceTree = "<group>"; };
 		426DF1A61CFD7DC600F4C53E /* ACAvailability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACAvailability.h; sourceTree = "<group>"; };
@@ -166,6 +188,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4219017C1D9E0D4D00DF94B0 /* AppCanKitSwift.framework in Frameworks */,
+				4219BE431DC1A5EA002E5C4E /* Nimble.framework in Frameworks */,
+				4219BE451DC1A5EA002E5C4E /* Quick.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,8 +205,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				421AE52E1CF57181001A5053 /* AppCanKit.framework in Frameworks */,
-				423F97B21DAE36DF007A382B /* Nimble.framework in Frameworks */,
-				423F97B31DAE36DF007A382B /* Quick.framework in Frameworks */,
+				4219BE421DC1A5EA002E5C4E /* Nimble.framework in Frameworks */,
+				4219BE441DC1A5EA002E5C4E /* Quick.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,10 +229,20 @@
 		4219017F1D9E0D4D00DF94B0 /* AppCanKit-SwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				421901801D9E0D4D00DF94B0 /* AppCanKit_SwiftTests.swift */,
 				421901821D9E0D4D00DF94B0 /* Info.plist */,
+				4219BE3C1DC1A475002E5C4E /* JSArgumentSpec.swift */,
+				4219BE4B1DC1AB11002E5C4E /* JSArgumentSpec.js */,
 			);
 			path = "AppCanKit-SwiftTests";
+			sourceTree = "<group>";
+		};
+		4219BE3F1DC1A5D4002E5C4E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4219BE401DC1A5EA002E5C4E /* Nimble.framework */,
+				4219BE411DC1A5EA002E5C4E /* Quick.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		421AE5191CF57181001A5053 = {
@@ -219,6 +253,7 @@
 				421901741D9E0D4D00DF94B0 /* AppCanKit-Swift */,
 				421AE5311CF57181001A5053 /* AppCanKitTests */,
 				4219017F1D9E0D4D00DF94B0 /* AppCanKit-SwiftTests */,
+				4219BE3F1DC1A5D4002E5C4E /* Frameworks */,
 				421AE5241CF57181001A5053 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -268,8 +303,6 @@
 		421AE5311CF57181001A5053 /* AppCanKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				423F97B01DAE36DF007A382B /* Nimble.framework */,
-				423F97B11DAE36DF007A382B /* Quick.framework */,
 				421AE5341CF57181001A5053 /* Info.plist */,
 				421AE5821CF58442001A5053 /* ACNilSpec.m */,
 				421AE5861CF5911E001A5053 /* EXTScopeSpec.m */,
@@ -366,6 +399,7 @@
 				421901771D9E0D4D00DF94B0 /* Sources */,
 				421901781D9E0D4D00DF94B0 /* Frameworks */,
 				421901791D9E0D4D00DF94B0 /* Resources */,
+				4219BE481DC1A992002E5C4E /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -433,6 +467,7 @@
 					4219017A1D9E0D4D00DF94B0 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = MMWCPWYKS6;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 					421AE5221CF57181001A5053 = {
@@ -477,6 +512,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4219BE4D1DC1AB11002E5C4E /* JSArgumentSpec.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +527,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4219BE4C1DC1AB11002E5C4E /* JSArgumentSpec.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,7 +549,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				421901811D9E0D4D00DF94B0 /* AppCanKit_SwiftTests.swift in Sources */,
+				4219BE3D1DC1A475002E5C4E /* JSArgumentSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,15 +660,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEVELOPMENT_TEAM = MMWCPWYKS6;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "AppCanKit-SwiftTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SDiC.AppCanKit-SwiftTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -641,14 +685,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEVELOPMENT_TEAM = MMWCPWYKS6;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "AppCanKit-SwiftTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SDiC.AppCanKit-SwiftTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};

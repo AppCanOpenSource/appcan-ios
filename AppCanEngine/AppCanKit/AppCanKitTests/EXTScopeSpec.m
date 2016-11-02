@@ -28,7 +28,7 @@ describe(@"onExitTest", ^{
             };
             expect(num).to(equal(@0));
         });
-        expect(num).withTimeout(0.01).toEventually(equal(@1));
+        expect(num).withTimeout(0.1).toEventually(equal(@1));
     });
     
     it(@"should be executed in reverse",^{
