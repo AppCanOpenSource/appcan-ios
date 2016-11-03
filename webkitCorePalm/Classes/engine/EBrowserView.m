@@ -43,8 +43,8 @@
 #import <objc/message.h>
 
 #import <AppCanKit/ACJSValueSupport.h>
-
-
+#import "ACEMultiPopoverScrollView.h"
+#import "ACEPluginViewContainer.h"
 @interface EBrowserView ()
 @property (nonatomic,assign)BOOL initialized;
 @end
@@ -692,12 +692,44 @@
     [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (nullable __kindof UIScrollView<AppCanScrollViewEventProducer> *)multiPopoverForName:(NSString *)multiPopoverName{
+    EBrowserWindow *window = self.meBrowserView.meBrwWnd;
+    EScrollView * multiPopover = [window.mMuiltPopoverDict objectForKey:multiPopoverName];
+    return multiPopover.scrollView;
 }
-*/
+- (nullable __kindof UIScrollView<AppCanScrollViewEventProducer> *)pluginViewContainerForName:(NSString *)containerName{
+    EBrowserWindow *window = self.meBrowserView.meBrwWnd;
+    for (UIView *subView in window.subviews) {
+        if(![subView isKindOfClass:[ACEPluginViewContainer class]]){
+            continue;
+        }
+        ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+        if (![container.containerIdentifier isEqual:containerName]) {
+            continue;
+        }
+        return container;
+    }
+    return nil;
+}
+
+
+- (BOOL)addSubView:(UIView *)view toPluginViewContainerWithName:(NSString *)containerName atIndex:(NSInteger)index{
+    ACEPluginViewContainer *container = (ACEPluginViewContainer *)[self pluginViewContainerForName:containerName];
+    if (!container || !view || index < 0) {
+        return NO;
+    }
+    CGFloat containerWidth = container.frame.size.width;
+    CGRect tmp = view.frame;
+    tmp.origin.x += containerWidth * index;
+    view.frame = tmp;
+    [container  addSubview:view];
+    if (container.maxIndex < index) {
+        container.maxIndex = index;
+        [container setContentSize:CGSizeMake(containerWidth * (index + 1), container.frame.size.height)];
+    }
+    return YES;
+}
+
+
 
 @end

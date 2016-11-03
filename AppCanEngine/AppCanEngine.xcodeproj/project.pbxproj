@@ -452,6 +452,10 @@
 		42F788B51D9519700094AA05 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F788B21D9519700094AA05 /* Ono.framework */; };
 		42F788C91D951B7F0094AA05 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F788C81D951B7F0094AA05 /* pop.framework */; };
 		42F788CA1D951B7F0094AA05 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F788C81D951B7F0094AA05 /* pop.framework */; };
+		42FAC5B41DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */; };
+		42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */; };
+		42FAC5B61DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */; };
+		42FAC5B71DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */; };
 		42FFEF331C1FF2C500294DE1 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
 		42FFEF361C1FF2C500294DE1 /* ACEPluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */; };
 		464272DE1BCE562E00F4BE36 /* ACEPluginViewContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */; };
@@ -772,6 +776,8 @@
 		42F788A81D9513E80094AA05 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../appcan-test-report/_UnitTest/AppCanPlugin_4.0/AppCanPlugin/uexFrameworks/pop.framework"; sourceTree = "<group>"; };
 		42F788B21D9519700094AA05 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		42F788C81D951B7F0094AA05 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
+		42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEScrollViewDelegateProxy.h; sourceTree = "<group>"; };
+		42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEScrollViewDelegateProxy.m; sourceTree = "<group>"; };
 		42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginParser.h; sourceTree = "<group>"; };
 		42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginParser.m; sourceTree = "<group>"; };
 		42FFEF391C1FF86200294DE1 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -1399,6 +1405,8 @@
 				5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */,
 				464272DC1BCE562E00F4BE36 /* ACEPluginViewContainer.h */,
 				464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */,
+				42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */,
+				42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */,
 				5AAA860A18B1B93D000D7600 /* universalex */,
 			);
 			path = engine;
@@ -1737,6 +1745,7 @@
 				42F7882E1D950B5D0094AA05 /* UpdateParser.h in Headers */,
 				42F7882F1D950B5D0094AA05 /* AsyncUdpSocket.h in Headers */,
 				42F788301D950B5D0094AA05 /* unzip.h in Headers */,
+				42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */,
 				42F788311D950B5D0094AA05 /* ACEJSCInvocation.h in Headers */,
 				42F788321D950B5D0094AA05 /* ACEDrawerViewController.h in Headers */,
 				42F788331D950B5D0094AA05 /* EBrowserController.h in Headers */,
@@ -1930,6 +1939,7 @@
 				3C2887B41A0B0984002776E4 /* NSDictionary_JSONExtensions.h in Headers */,
 				5AAA868618B1B93D000D7600 /* BAnimation.h in Headers */,
 				5AAA86DE18B1B93D000D7600 /* EBrowserHistory.h in Headers */,
+				42FAC5B41DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */,
 				5AAA86FA18B1B93D000D7600 /* EUExConsole.h in Headers */,
 				5AAA86B518B1B93D000D7600 /* JSONKit.h in Headers */,
 				3C2887D51A0B099B002776E4 /* CJSONSerializer.h in Headers */,
@@ -2180,6 +2190,7 @@
 				42F787871D950B5D0094AA05 /* ASIDataDecompressor.m in Sources */,
 				42F787881D950B5D0094AA05 /* SpecConfigParser.m in Sources */,
 				42F787891D950B5D0094AA05 /* ACEPluginViewContainer.m in Sources */,
+				42FAC5B71DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */,
 				42F7878A1D950B5D0094AA05 /* CFilteringJSONSerializer.m in Sources */,
 				42F7878B1D950B5D0094AA05 /* BStatusBarWindow.m in Sources */,
 				42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */,
@@ -2316,6 +2327,7 @@
 				5AAA86AE18B1B93D000D7600 /* SpecConfigParser.m in Sources */,
 				464272DF1BCE562E00F4BE36 /* ACEPluginViewContainer.m in Sources */,
 				3C2887AB1A0B0984002776E4 /* CFilteringJSONSerializer.m in Sources */,
+				42FAC5B61DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */,
 				5AAA868D18B1B93D000D7600 /* BStatusBarWindow.m in Sources */,
 				5AAA871C18B1B93D000D7600 /* Reachability.m in Sources */,
 				5AAA875D18B1B93D000D7600 /* WWidget.m in Sources */,

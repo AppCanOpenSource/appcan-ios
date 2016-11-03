@@ -34,6 +34,7 @@
 
 #import "ACEJSCBaseJS.h"
 #import "ACEBrowserView.h"
+#import "ACEMultiPopoverScrollView.h"
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
 @end

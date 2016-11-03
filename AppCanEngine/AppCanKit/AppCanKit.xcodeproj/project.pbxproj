@@ -64,6 +64,7 @@
 		42ED03FC1CFC3783009134BE /* ACJSValueSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 42ED03FA1CFC3783009134BE /* ACJSValueSupport.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42ED03FD1CFC3783009134BE /* ACJSValueSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ED03FB1CFC3783009134BE /* ACJSValueSupport.m */; };
 		42ED03FF1CFC3D9E009134BE /* ACJSFunctionRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 42ED03FE1CFC3D9E009134BE /* ACJSFunctionRefInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		42FAC5B91DCB199D0072DFCF /* AppCanWindowObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B81DCB199D0072DFCF /* AppCanWindowObject.h */; settings = {ATTRIBUTES = (Private, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +174,7 @@
 		42ED03FA1CFC3783009134BE /* ACJSValueSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ACJSValueSupport.h; path = AppCanKit/ACJSValueSupport.h; sourceTree = "<group>"; };
 		42ED03FB1CFC3783009134BE /* ACJSValueSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ACJSValueSupport.m; path = AppCanKit/ACJSValueSupport.m; sourceTree = "<group>"; };
 		42ED03FE1CFC3D9E009134BE /* ACJSFunctionRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ACJSFunctionRefInternal.h; path = AppCanKit/ACJSFunctionRefInternal.h; sourceTree = "<group>"; };
+		42FAC5B81DCB199D0072DFCF /* AppCanWindowObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanWindowObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -288,6 +290,7 @@
 				42DB71CF1D59A38C00E61C19 /* EUExBaseDefine.h */,
 				42DB71D01D59A38C00E61C19 /* EUExBaseDefine.m */,
 				42A9F63B1CFD3836002710FC /* AppCanObjectProtocol.h */,
+				42FAC5B81DCB199D0072DFCF /* AppCanWindowObject.h */,
 				429ADD631CFD62F600FA43DB /* UIColor+ACHTMLColor.h */,
 				429ADD641CFD62F600FA43DB /* UIColor+ACHTMLColor.m */,
 				426DF1A21CFD757300F4C53E /* ACPluginBundle.h */,
@@ -366,6 +369,7 @@
 				42A9F6411CFD39D9002710FC /* AppCanGlobalObjectGetter.h in Headers */,
 				42ED03FF1CFC3D9E009134BE /* ACJSFunctionRefInternal.h in Headers */,
 				42961AD91D0EAD4500005263 /* ACLogger.h in Headers */,
+				42FAC5B91DCB199D0072DFCF /* AppCanWindowObject.h in Headers */,
 				421AE5271CF57181001A5053 /* AppCanKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

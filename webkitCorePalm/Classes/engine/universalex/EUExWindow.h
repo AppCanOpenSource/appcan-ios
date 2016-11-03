@@ -100,11 +100,4 @@
 - (void)closeSlibing:(NSMutableArray *)inArguments;
 @end
 
-@interface EScrollView : UIImageView {
-    
-}
 
-@property (nonatomic, strong) NSString *mainPopName;
-@property (nonatomic, strong) UIScrollView * scrollView;
-
-@end

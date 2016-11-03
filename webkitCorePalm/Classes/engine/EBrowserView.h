@@ -38,7 +38,7 @@
 #define WIDGETREPORT_WIDGETSTATUS_CLOSE		@"000"
 
 #import <UIKit/UIKit.h>
-
+#import <AppCanKit/AppCanWindowObject.h>
 
 @class EBrowserController;
 @class CBrowserMainFrame;
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 };
 
 
-@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate,AppCanWebViewEngineObject>
+@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate,AppCanWebViewEngineObject,AppCanWindowObject>
 
 @property (nonatomic,assign) NSString *muexObjName;
 
@@ -156,3 +156,8 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 
 
 @end
+
+
+
+
+

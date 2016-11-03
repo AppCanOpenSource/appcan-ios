@@ -8,6 +8,12 @@
 
 #import "ACEPluginViewContainer.h"
 #import "EUExWindow.h"
+#import "ACEScrollViewDelegateProxy.h"
+
+@interface ACEPluginViewContainer()<UIScrollViewDelegate>
+
+@property (nonatomic,strong)ACEScrollViewDelegateProxy *delegateProxy;
+@end
 
 @implementation ACEPluginViewContainer
 
@@ -17,9 +23,11 @@
         _lastIndex = -1;
         self.pagingEnabled = YES;
         self.bounces = NO;
-        self.delegate = self;
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
+        _delegateProxy = [[ACEScrollViewDelegateProxy alloc] init];
+        self.delegate = _delegateProxy;
+        _delegateProxy.mainDelegate = self;
     }
     
     return self;
@@ -46,6 +54,16 @@
     float fractionalPage = scrollView.contentOffset.x / pageWidth ;
     NSInteger index = lround(fractionalPage) ;
     [self onPluginContainerPageChange:index];
+}
+
+
+
+- (void)addScrollViewEventObserver:(id<UIScrollViewDelegate>)observer{
+    [self.delegateProxy addDelegate:observer];
+}
+
+- (void)removeScrollViewEventObserver:(id<UIScrollViewDelegate>)observer{
+    [self.delegateProxy removeDelegate:observer];
 }
 
 /*

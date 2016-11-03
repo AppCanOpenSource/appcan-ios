@@ -168,11 +168,7 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
 static NSTimeInterval kDefaultAnimationDuration = 0.26;
 static NSString *const kChannelNofitication = @"uexWindow.channelNofitication";
 static NSString *const kGlobalNofitication = @"uexWindow.globalNofitication";
-@implementation EScrollView
 
-
-
-@end
 
 
 @implementation EUExWindow

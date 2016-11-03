@@ -373,10 +373,10 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     for (UIView * subView in [inBrwView.meBrwWnd subviews]) {
         if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
             ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            
             if ([container.containerIdentifier isEqualToString:identifier]) {
                 CGRect tmpRect = inSubView.frame;
-                tmpRect.origin.y = 0;
-                tmpRect.origin.x = index*tmpRect.size.width;
+                tmpRect.origin.x += container.frame.size.width * index;
                 inSubView.frame = tmpRect;
                 [container addSubview:inSubView];
                 if (container.maxIndex < index) {

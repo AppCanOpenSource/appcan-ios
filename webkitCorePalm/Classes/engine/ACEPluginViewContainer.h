@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AppCanKit/AppCanWindowObject.h>
 @class EUExWindow;
 
-@interface ACEPluginViewContainer : UIScrollView <UIScrollViewDelegate>
+@interface ACEPluginViewContainer : UIScrollView <AppCanScrollViewEventProducer>
 
 @property (nonatomic, strong) NSString * containerIdentifier;
 @property (nonatomic, assign) NSInteger maxIndex;
