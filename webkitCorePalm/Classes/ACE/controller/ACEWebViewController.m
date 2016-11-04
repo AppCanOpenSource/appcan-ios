@@ -102,11 +102,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setIsNeedSwipeGestureRecognizer:(BOOL)isNeedSwipeGestureRecognizer{
-    _isNeedSwipeGestureRecognizer = isNeedSwipeGestureRecognizer;
-    ACLogDebug(@"webViewController<%p> isNeedSwipeGestureRecognizer set to : %@",self,isNeedSwipeGestureRecognizer?@"true":@"false");
-}
-
-
 
 @end
