@@ -504,7 +504,7 @@
             brwWnd_.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         }
     }
-    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)brwWnd_.superview;
+    EBrowserWindowContainer *eBrwWndContainer = [brwWnd_ winContainer];
     EBrowserWindow *eAboveWnd = [eBrwWndContainer aboveWindow];
     [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
     int goType = eAboveWnd.meBrwView.mwWgt.wgtType;
@@ -929,14 +929,14 @@
 }
 #pragma mark - isAppInstalled
 //20150706 by lkl
-- (NSNumber *)isAppInstalled:(NSMutableArray *)inArguments{
+- (UEX_BOOL)isAppInstalled:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSDictionary *info) = inArguments;
     NSString *appData = stringArg(info[@"appData"]);
     UEX_PARAM_GUARD_NOT_NIL(appData,@(NO));
     BOOL isInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appData]];
     NSDictionary *resultDict = @{@"installed": isInstalled? @0 : @1};
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbIsAppInstalled" arguments:ACArgsPack(resultDict.ac_JSONFragment)];
-    return isInstalled ? @0 : @1 ;
+    return isInstalled ? UEX_TRUE : UEX_FALSE ;
 }
 
 #pragma mark - closeLoading
