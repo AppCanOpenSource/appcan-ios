@@ -52,6 +52,8 @@
 #import <AppCanKit/AppCanGlobalObjectGetter.h>
 #import <AppCanKit/ACInvoker.h>
 #import "ONOXMLElement+ACEConfigXML.h"
+#import <UserNotifications/UserNotifications.h>
+
 
 #define kViewTagExit 100
 #define kViewTagLocalNotification 200
@@ -59,7 +61,7 @@
 #define ACE_USERAGENT @"AppCanUserAgent"
 
 
-@interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter>
+@interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter,UNUserNotificationCenterDelegate>
 @property (nonatomic,assign,readwrite)BOOL useInAppCanIDE;
 @end
 
@@ -105,53 +107,12 @@
 
 
 
-
-/*
- 
-
-
-
-
-
-NSString *AppCanJS = nil;
-
-
-
--(void)readAppCanJS {
-    
-    NSString * baseJS = nil;
-    
-    if (_useRC4EncryptWithLocalstorage) {
-        
-        baseJS = [NSString stringWithFormat:@"%@\n%@",[BUtility getBaseJSKey],[BUtility getRC4LocalStoreJSKey]];
-        
-    } else {
-        
-        baseJS = [BUtility getBaseJSKey];
-        
-    }
-    
-    pluginObj = [[ACEPluginParser alloc] init] ;
-    NSString *pluginJS = [pluginObj pluginBaseJS];
-    
-	if (pluginJS && [pluginJS length] > 0) {
-        
-		AppCanJS = [[NSString alloc] initWithFormat:@"%@\n%@",baseJS,pluginJS];
-        
-	} else {
-        
-		AppCanJS = [[NSString alloc] initWithFormat:@"%@\n",baseJS];
-        
-	}
-    
-}
-*/
 - (void)parseURL:(NSURL *)url application:(UIApplication *)application {
-
+    
     EBrowserWindow * ebv = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
     EBrowserView * ebview = [ebv theFrontView];
     ACEJSCHandler *handler = ebview.meBrowserView.JSCHandler;
-
+    
     NSMutableDictionary *objDict = handler.pluginDict;
     //get the plist file from bundle
     NSString * plistPath = [[NSBundle mainBundle] pathForResource:@"CBSchemesList" ofType:@"plist"];
@@ -172,24 +133,7 @@ NSString *AppCanJS = nil;
         }
     }
 }
-- (BOOL)isSingleTask {
-    
-	struct utsname name;
-	uname(&name);
-    
-	float version = [[UIDevice currentDevice].systemVersion floatValue];//判定系统版本。
-    
-	if (version < 4.0 || strstr(name.machine, "iPod1,1") != 0 || strstr(name.machine, "iPod2,1") != 0) {
-        
-		return YES;
-        
-	} else {
-        
-		return NO;
-        
-	}
-    
-}
+
 
 
 - (void)initializeDefaultSettings{
@@ -269,7 +213,7 @@ NSString *AppCanJS = nil;
     self = [super init];
     if (self != nil) {
         [self initializeDefaultSettings];
-	}
+    }
     return self;
     
 }
@@ -313,28 +257,14 @@ NSString *AppCanJS = nil;
     [dictionnary release];
 }
 
-- (void)stopAllNetService {
-    
-	if (!meBrwCtrler) {
-        
-		return;
-        
-	}
-	if (!meBrwCtrler.meBrw) {
-        
-		[meBrwCtrler.meBrw stopAllNetService];
-        
-	}
-    
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    BOOL success;
+    
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentsDirectory = [paths objectAtIndex:0];
     NSString * writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"dyFiles"];
-
+    
     if (![fileManager fileExistsAtPath:writableDBPath])  {
         NSString  *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"dyFiles"];
         [BUtility copyMissingFile:defaultDBPath toPath:documentsDirectory];
@@ -353,7 +283,7 @@ NSString *AppCanJS = nil;
             
             UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:ACELocalized(@"本应用仅适用未越狱机，即将关闭。") delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
             alertView.tag = kViewTagExit;
-			[alertView show];
+            [alertView show];
             [alertView release];
             return NO;
             
@@ -370,7 +300,7 @@ NSString *AppCanJS = nil;
         if (dict) {
             [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
             [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"appStateOfGetPushData"];
-
+            
         }
         
         if (userData != nil) {
@@ -394,7 +324,7 @@ NSString *AppCanJS = nil;
         }
     }
     
-	//应用从未启动到启动，获取本地通知信息
+    //应用从未启动到启动，获取本地通知信息
     if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey] ) {
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
@@ -402,12 +332,12 @@ NSString *AppCanJS = nil;
     
     
     Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-
+    
     if (analysisClass) {
         
         id analysisObject = class_createInstance(analysisClass,0);
         [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
-
+        
     }else{
         
         analysisClass = NSClassFromString(@"AppCanAnalysis");
@@ -419,9 +349,9 @@ NSString *AppCanJS = nil;
         }
         
     }
-
+    
     ACEUINavigationController *meNav = nil;
-	meBrwCtrler = [[EBrowserController alloc]init];
+    meBrwCtrler = [[EBrowserController alloc]init];
     
     NSString *hardware = [BUtility getDeviceVer];
     
@@ -446,17 +376,17 @@ NSString *AppCanJS = nil;
     //[ACEUtils setNavigationBarColor:meNav color:[UIColor purpleColor]];
     
     mwWgtMgr = [[WWidgetMgr alloc]init];
-	meBrwCtrler.mwWgtMgr = mwWgtMgr;
-	//[self readAppCanJS];
+    meBrwCtrler.mwWgtMgr = mwWgtMgr;
+    //[self readAppCanJS];
     
     
-	window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-	window.autoresizesSubviews = YES;
+    window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    window.autoresizesSubviews = YES;
     
     _drawerController = [[ACEDrawerViewController alloc]
-                                             initWithCenterViewController:meNav
-                                             leftDrawerViewController:nil
-                                             rightDrawerViewController:nil];
+                         initWithCenterViewController:meNav
+                         leftDrawerViewController:nil
+                         rightDrawerViewController:nil];
     
     [_drawerController setMaximumRightDrawerWidth:200.0];
     [_drawerController setMaximumLeftDrawerWidth:200.0];
@@ -478,7 +408,7 @@ NSString *AppCanJS = nil;
     [meNav release];
     
     [window makeKeyAndVisible];
-     [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
+    [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
     if(theApp.usePushControl == YES) {
         UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
         //注册推送
@@ -489,21 +419,14 @@ NSString *AppCanJS = nil;
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-	//支付宝支付－－》4.0以前为单任务
-	if ([self isSingleTask]) {
-        
-		NSURL * url = [launchOptions objectForKey:@"UIApplicationLaunchOptionsURLKey"];
-		
-		if (nil != url) {
-            
-			[self parseURL:url application:application];
-            
-		}
-        
-	}
-    
-    [self invokeAppDelegateMethod:application didFinishLaunchingWithOptions:launchOptions];
 
+    
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application didFinishLaunchingWithOptions:launchOptions];
+    }];
+    if (ACSystemVersion() >= 10) {
+        [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+    }
     return YES;
     
 }
@@ -512,62 +435,52 @@ NSString *AppCanJS = nil;
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
     NSString * devStr = [deviceToken description];
-	NSString * firstStr = [devStr stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    NSString * firstStr = [devStr stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     
-	if (firstStr) {
-        
-		NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-		[userDefault setValue:firstStr forKey:@"deviceToken"];
+    if (firstStr) {
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        [userDefault setValue:firstStr forKey:@"deviceToken"];
         [userDefault setValue:deviceToken forKey:@"device_Token"];
-        
-	}
+    }
     
-    [self invokeAppDelegateMethod:app didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:app didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    }];
     
 }
 // 注册APNs错误
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
     
-    [self invokeAppDelegateMethod:app didFailToRegisterForRemoteNotificationsWithError:err];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:app didFailToRegisterForRemoteNotificationsWithError:err];
+    }];
 }
 // 接收推送通知
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
-    
     NSUserDefaults *appStateUD = [NSUserDefaults standardUserDefaults];
-    
     NSString *userData = [userInfo objectForKey:@"userInfo"];
     if (userInfo) {
-        
         [appStateUD setObject:userInfo forKey:@"allPushData"];
     }
     if (userData != nil || userInfo) {
-        
         [appStateUD setObject:userData forKey:@"pushData"];
-        
         EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-        
         if (aboveWindowContainer && application.applicationState != UIApplicationStateBackground) {
-            
             if (application.applicationState == UIApplicationStateActive) {
-                
                 [appStateUD setObject:@"2" forKey:@"appStateOfGetPushData"];
-                
             } else {
-                
                 [appStateUD setObject:@"1" forKey:@"appStateOfGetPushData"];
-                
             }
             [appStateUD synchronize];
             [aboveWindowContainer pushNotify];
-            
         }
-        
     }
     
-    [self invokeAppDelegateMethod:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+    }];
     
 }
 
@@ -594,19 +507,25 @@ NSString *AppCanJS = nil;
             [aboveWindowContainer pushNotify];
         }
     }
-    [self invokeAppDelegateMethod:application didReceiveRemoteNotification:userInfo];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application didReceiveRemoteNotification:userInfo];
+    }];
     
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    [self invokeAppDelegateMethod:application didReceiveLocalNotification:notification];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application didReceiveLocalNotification:notification];
+    }];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-	//支付完成后返回当前应用shi调用
-	[self parseURL:url application:application];
-    [self invokeAppDelegateMethod:application handleOpenURL:url];
-	return YES;
+    //支付完成后返回当前应用shi调用
+    [self parseURL:url application:application];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application handleOpenURL:url];
+    }];
+    return YES;
     
 }
 
@@ -647,9 +566,11 @@ NSString *AppCanJS = nil;
         }
     }
     //支付完成后返回当前应用shi调用
-	[self parseURL:url application:application];
-    [self invokeAppDelegateMethod:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-	return YES;
+    [self parseURL:url application:application];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+    }];
+    return YES;
 }
 
 - (void)delayLoadByOtherAppWithParam:(NSString *)param {
@@ -669,16 +590,18 @@ NSString *AppCanJS = nil;
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	[UIApplication sharedApplication].applicationIconBadgeNumber = -1;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = -1;
     //	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
-	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSuspend){uexWidget.onSuspend();}"];
+    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSuspend){uexWidget.onSuspend();}"];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass applicationWillResignActive:application];
+    }];
     
-    [self invokeAppDelegateMethodApplicationWillResignActive:application];
     
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-
+    
     //data analysis
     Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
@@ -686,21 +609,24 @@ NSString *AppCanJS = nil;
         [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
     }else{
         
-    analysisClass = NSClassFromString(@"AppCanAnalysis");
+        analysisClass = NSClassFromString(@"AppCanAnalysis");
         
         if (analysisClass) {
             
             id analysisObject = class_createInstance(analysisClass,0);
             [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
         }
-    
+        
     }
     
     [self performSelector:@selector(onResume) withObject:self afterDelay:1.0];
     
-    [self invokeAppDelegateMethodApplicationDidBecomeActive:application];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass applicationDidBecomeActive:application];
+    }];
     
-
+    
+    
 }
 
 
@@ -722,7 +648,7 @@ NSString *AppCanJS = nil;
         
     }
     
-	[self stopAllNetService];
+    [meBrwCtrler.meBrw stopAllNetService];
     //data analysis
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
     NSString * viewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
@@ -733,53 +659,45 @@ NSString *AppCanJS = nil;
         
         NSArray * popViewArray = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
         for (EBrowserView * ePopView in popViewArray) {
-            
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
             NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
             [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-            //[BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1];
-            
         }
         
     }
     
     Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
-        
         id analysisObject = class_createInstance(analysisClass,0);
         [analysisObject ac_invoke:@"setAppBecomeBackground"];
         //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
         
     }else{
-        
         analysisClass = NSClassFromString(@"AppCanAnalysis");
-        
         if (analysisClass) {
-            
             id analysisObject = class_createInstance(analysisClass,0);
             [analysisObject ac_invoke:@"setAppBecomeBackground"];
-            //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
-            
         }
-        
     }
     
-    [self invokeAppDelegateMethodApplicationDidEnterBackground:application];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass applicationDidEnterBackground:application];
+    }];
+    
     
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
     [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterForeground){uexWidget.onEnterForeground();}"];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass applicationWillEnterForeground:application];
+    }];
     
-    [self invokeAppDelegateMethodApplicationWillEnterForeground:application];
-	//[self startAllNetService];
     int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
     NSString * goViewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-    //[BUtility setAppCanViewBackground:type name:viewName closeReason:2];
     if (!goViewName || [goViewName isKindOfClass:[NSNull class]]) {
-        
         [BUtility writeLog:@"appcan crash ....."];
         return;
         
@@ -787,16 +705,12 @@ NSString *AppCanJS = nil;
     NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
     [BUtility setAppCanViewActive:type opener:@"application://" name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
     if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
-        
         NSArray * popViewArray = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
-        
         for (EBrowserView * ePopView in popViewArray) {
-            
             int type =ePopView.mwWgt.wgtType;
             NSString * viewName =[ePopView.curUrl absoluteString];
             NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
             [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
-            
         }
         
     }
@@ -804,8 +718,10 @@ NSString *AppCanJS = nil;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass applicationWillTerminate:application];
+    }];
     
-    [self invokeAppDelegateMethodApplicationWillTerminate:application];
     
     //data analysis
     Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
@@ -843,170 +759,105 @@ NSString *AppCanJS = nil;
         
     }
     
-	[UIApplication sharedApplication].applicationIconBadgeNumber = -1;
-	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onTerminate();"];
-
+    [UIApplication sharedApplication].applicationIconBadgeNumber = -1;
+    [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onTerminate();"];
+    
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
     
-	[BUtility writeLog:@"wigetone application receive memory warning"];
+    [BUtility writeLog:@"wigetone application receive memory warning"];
     
     // Remove and disable all URL Cache, but doesn't seem to affect the memory
-	[[NSURLCache sharedURLCache] removeAllCachedResponses];
-	[[NSURLCache sharedURLCache] setDiskCapacity:0];
-	[[NSURLCache sharedURLCache] setMemoryCapacity:0];
-	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
-	// Remove all credential on release, but memory used doesn't move!
-	NSURLCredentialStorage * credentialsStorage = [NSURLCredentialStorage sharedCredentialStorage];
-	NSDictionary * allCredentials = [credentialsStorage allCredentials];
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+    [[NSURLCache sharedURLCache] setDiskCapacity:0];
+    [[NSURLCache sharedURLCache] setMemoryCapacity:0];
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+    // Remove all credential on release, but memory used doesn't move!
+    NSURLCredentialStorage * credentialsStorage = [NSURLCredentialStorage sharedCredentialStorage];
+    NSDictionary * allCredentials = [credentialsStorage allCredentials];
     
-	for (NSURLProtectionSpace * protectionSpace in allCredentials) {
-        
-		NSDictionary * credentials = [credentialsStorage credentialsForProtectionSpace:protectionSpace];
-        
-		for (NSString * credentialKey in credentials) {
-            
-			[credentialsStorage removeCredential:[credentials objectForKey:credentialKey] forProtectionSpace:protectionSpace];
-            
-		}
-        
-	}
-    
-    [self invokeAppDelegateMethodApplicationDidReceiveMemoryWarning:application];
-    
+    for (NSURLProtectionSpace * protectionSpace in allCredentials) {
+        NSDictionary * credentials = [credentialsStorage credentialsForProtectionSpace:protectionSpace];
+        for (NSString * credentialKey in credentials) {
+            [credentialsStorage removeCredential:[credentials objectForKey:credentialKey] forProtectionSpace:protectionSpace];
+        }
+    }
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass applicationDidReceiveMemoryWarning:application];
+    }];
 }
 
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
 
-    [self invokeAppDelegateMethodApplication:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
-
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
+    }];
 }
 
 
 
--(void)invokeAppDelegateMethodApplication:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:performActionForShortcutItem:completionHandler:));
-        
-        if (delegateMethod) {
-
-            [acecls application:application performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
-            
-        }
-    }
-}
 
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
-    [self invokeAppDelegateMethodApplication:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+    }];
+    
 }
 
--(void)invokeAppDelegateMethodApplication:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:handleEventsForBackgroundURLSession:completionHandler:));
-        
-        if (delegateMethod) {
-            [acecls application:application handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
-            
-        }
-    }
-}
 
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler{
-    for (NSInteger i = 0; i < pluginObj.classNameArray.count; i++) {
-        NSString *pluginName = pluginObj.classNameArray[i];
-        NSString *pluginClassName = [NSString stringWithFormat:@"EUEx%@", [pluginName substringFromIndex:3]];
-        Class pluginClass = NSClassFromString(pluginClassName);
-        Method delegateMethod = class_getClassMethod(pluginClass, @selector(application:continueUserActivity:restorationHandler:));
-        if (delegateMethod) {
-            BOOL ret = [pluginClass application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
-            if (ret){
-                return YES;
-            }
+    __block BOOL shouldContinue = NO;
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        BOOL ret = [pluginClass application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+        if (ret) {
+            *stop = YES;
+            shouldContinue = YES;
         }
-    }
-    return NO;
-    
-    
+    }];
+    return shouldContinue;
 }
 
 
-#pragma mark - root page finish loading invokation
+#pragma mark - root page finish loading
 
 -(void)rootPageDidFinishLoading{
     [EBrowserWindow postWindowSequenceChange];
-    [self invokeRootPageDidFinishLoading];
-    
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass,BOOL *stop) {
+        [pluginClass rootPageDidFinishLoading];
+    }];
 }
-- (void)invokeRootPageDidFinishLoading
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(rootPageDidFinishLoading));
-        
-        if (delegateMethod) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wobjc-method-access"
-            [acecls rootPageDidFinishLoading];
-#pragma clang diagnostic pop
-    
-        }
-    }
-}
+
+
+
 
 #pragma mark - UIAlertViewDelgate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
     [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
-    
-	if (alertView.tag == kViewTagExit) {
-        
-		[BUtility exitWithClearData];
-        
-	}
+    if (alertView.tag == kViewTagExit) {
+        [BUtility exitWithClearData];
+    }
     
 }
 - (void)dealloc {
-	if(pluginObj){
-		[pluginObj release];
-		pluginObj = nil;
-	}
-	
-
-	if (window) {
-		[window release];
-		window = nil;
-	}
-	if (meBrwCtrler) {
-		[meBrwCtrler release];
-		meBrwCtrler = nil;
-	}
-	if (mwWgtMgr) {
-		[mwWgtMgr release];
-		mwWgtMgr = nil;
-	}
+    if(pluginObj){
+        [pluginObj release];
+        pluginObj = nil;
+    }
+    if (window) {
+        [window release];
+        window = nil;
+    }
+    if (meBrwCtrler) {
+        [meBrwCtrler release];
+        meBrwCtrler = nil;
+    }
+    if (mwWgtMgr) {
+        [mwWgtMgr release];
+        mwWgtMgr = nil;
+    }
     self.useAppCanMAMURL = nil;
     self.useAppCanMCMURL=nil;
     self.useAppCanMDMURL=nil;
@@ -1029,308 +880,32 @@ NSString *AppCanJS = nil;
     [_leftWebController release];
     [_rightWebController release];
     [_drawerController release];
-	[super dealloc];
+    [super dealloc];
 }
 
-- (void)invokeAppDelegateMethod:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didFinishLaunchingWithOptions:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:application didFinishLaunchingWithOptions:launchOptions];
-            
-        }
+
+- (void)enumeratePluginClassesResponsingToSelector:(SEL)selector withBlock:(void (^)(Class pluginClass, BOOL *stop))block{
+    if (!block) {
+        return;
     }
-}
-
-- (void)invokeAppDelegateMethod:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
+    BOOL stop = NO;
     for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
         NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:app didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-            
+        NSString *fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
+        Class clz = NSClassFromString(fullClassName);
+        Method delegateMethod = class_getClassMethod(clz, selector);
+        if (!delegateMethod) {
+            continue;
         }
-    }
-}
-
-- (void)invokeAppDelegateMethod:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)er
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didFailToRegisterForRemoteNotificationsWithError:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:app didFailToRegisterForRemoteNotificationsWithError:er];
-            
+        block(clz,&stop);
+        if (stop) {
+            return;
         }
-    }
-}
-
-- (void)invokeAppDelegateMethod:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString * className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didReceiveRemoteNotification:fetchCompletionHandler:));
-        
-        if (delegateMethod) {
-            
-            [acecls application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-            
-        }
-        
     }
     
 }
 
-- (void)invokeAppDelegateMethod:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didReceiveRemoteNotification:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:application didReceiveRemoteNotification:userInfo];
-            
-        }
-    }
-}
 
-- (void)invokeAppDelegateMethod:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:didReceiveLocalNotification:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:application didReceiveLocalNotification:notification];
-            
-        }
-    }
-}
-
-- (BOOL)invokeAppDelegateMethod:(UIApplication *)application handleOpenURL:(NSURL *)url
-{
-    
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:handleOpenURL:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:application handleOpenURL:url];
-            
-        }
-    }
-    
-    return YES;
-}
-
--(BOOL)invokeAppDelegateMethod:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(application:openURL:sourceApplication:annotation:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-            
-        }
-    }
-    
-    return YES;
-}
-- (void)invokeAppDelegateMethodApplicationWillResignActive:(UIApplication *)application
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(applicationWillResignActive:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls applicationWillResignActive:application];
-            
-        }
-    }
-}
-
-- (void)invokeAppDelegateMethodApplicationDidBecomeActive:(UIApplication *)application
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(applicationDidBecomeActive:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls applicationDidBecomeActive:application];
-            
-        }
-    }
-}
-
-- (void)invokeAppDelegateMethodApplicationDidEnterBackground:(UIApplication *)application
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(applicationDidEnterBackground:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls applicationDidEnterBackground:application];
-            
-        }
-    }
-}
-
-- (void)invokeAppDelegateMethodApplicationWillEnterForeground:(UIApplication *)application
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(applicationWillEnterForeground:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls applicationWillEnterForeground:application];
-            
-        }
-    }
-}
-
-- (void)invokeAppDelegateMethodApplicationWillTerminate:(UIApplication *)application
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(applicationWillTerminate:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls applicationWillTerminate:application];
-            
-        }
-    }
-}
-
-- (void)invokeAppDelegateMethodApplicationDidReceiveMemoryWarning:(UIApplication *)application
-{
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
-        
-        NSString * fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
-        
-        Class acecls = NSClassFromString(fullClassName);
-        
-        Method delegateMethod = class_getClassMethod(acecls, @selector(applicationDidReceiveMemoryWarning:));
-        
-        if (delegateMethod) {
-            
-            
-            [acecls applicationDidReceiveMemoryWarning:application];
-            
-        }
-    }
-}
 
 #pragma mark - AppCanGlobalObjectGetter
 
@@ -1341,4 +916,18 @@ NSString *AppCanJS = nil;
 - (id<AppCanWidgetObject>)getAppCanMainWidget{
     return self.meBrwCtrler.mwWgtMgr.mainWidget;
 }
+
+#pragma mark - UNUserNotificationCenterDelegate
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass userNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
+    }];
+}
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
+    [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
+        [pluginClass userNotificationCenter:center didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+    }];
+}
+
 @end

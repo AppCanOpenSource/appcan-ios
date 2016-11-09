@@ -25,6 +25,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class JSValue;
+@class UNUserNotificationCenter;
+@class UNNotification;
+@class UNNotificationResponse;
 @protocol AppCanWidgetObject <NSObject>
 
 @property (nonatomic,strong,readonly) NSString *widgetOneId;
@@ -105,6 +108,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
+
+// UIApplicationDelegate方法
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions;
 + (void)applicationDidBecomeActive:(UIApplication *)application;
 + (void)applicationWillResignActive:(UIApplication *)application;
@@ -126,8 +131,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
 + (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler;
+
+
+
+
+//UNUserNotificationCenterDelegate方法(iOS 10+)
+
+//注意此方法的completionHandler参数应为`UNNotificationPresentationOptions`
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSUInteger))completionHandler;
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler;
+
 //应用root网页加载完成时,会执行此方法
 + (void)rootPageDidFinishLoading;
-
 @end
 NS_ASSUME_NONNULL_END

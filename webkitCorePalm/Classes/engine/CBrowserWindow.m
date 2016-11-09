@@ -88,16 +88,7 @@ const float AppCanFinalProgressValue = 0.9f;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     //[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
-    if (!theApp.isFirstPageDidLoad) {
-        
-        if (theApp.launchedByRemoteNotification) {
-            ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
-            EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-            [aboveWindowContainer pushNotify];
-        }
-        [theApp rootPageDidFinishLoading];
-        theApp.isFirstPageDidLoad = YES;
-    }
+
     
     ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
     eBrwView.retryCount = 0;
@@ -118,7 +109,16 @@ const float AppCanFinalProgressValue = 0.9f;
     [eBrwView continueMultiPopoverLoading];
     [self webViewDidFinishLoadOption:webView];
     
-    
+    if (!theApp.isFirstPageDidLoad) {
+        
+        if (theApp.launchedByRemoteNotification) {
+            ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
+            EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+            [aboveWindowContainer pushNotify];
+        }
+        [theApp rootPageDidFinishLoading];
+        theApp.isFirstPageDidLoad = YES;
+    }
     //[BUtility cookieDebugForBroad];
 }
 
