@@ -148,7 +148,7 @@ typedef union _BGColor {
 +(NSString *)getResPath:(NSString *)fileName;
 +(int)lastIndexOf:(NSString*)baseString findChar:(char)inChar;
 //+(NSMutableArray*)convertToArray:(NSURL*)inURL;
-+(EUExAction *)convertToAction:(NSURL*)inURL;
+
 +(NSURL*)stringToUrl:(NSString *)inString;
 +(NSString*)wgtResPath:(NSString*)inUrl;
 + (UIColor *) colorWithHexString: (NSString *) stringToConvert;

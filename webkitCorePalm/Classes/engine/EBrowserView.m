@@ -21,7 +21,7 @@
 
 #import "BUtility.h"
 #import "CBrowserWindow.h"
-#import "CBrowserMainFrame.h"
+
 #import "WWidget.h"
 #import "WWidgetMgr.h"
 #import "BUtility.h"

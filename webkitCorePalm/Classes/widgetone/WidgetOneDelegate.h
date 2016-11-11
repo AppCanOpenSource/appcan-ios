@@ -26,61 +26,57 @@
 @class ACEDrawerViewController;
 @class RESideMenu;
 @class ACEPluginParser;
-@interface WidgetOneDelegate: NSObject <UIApplicationDelegate,UIAlertViewDelegate> {
-	UIWindow *window;
-	EBrowserController *meBrwCtrler;
-	WWidgetMgr *mwWgtMgr;
-	ACEPluginParser *pluginObj;
-}
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, assign) EBrowserController *meBrwCtrler;
-@property (nonatomic, assign) WWidgetMgr *mwWgtMgr;
-@property (nonatomic) BOOL userStartReport;
-@property (nonatomic) BOOL useEmmControl;
-@property (nonatomic) BOOL useOpenControl;
-@property (nonatomic) BOOL useUpdateControl;
-@property (nonatomic) BOOL useOnlineArgsControl;
-@property (nonatomic) BOOL usePushControl;
-@property (nonatomic) BOOL useDataStatisticsControl;
-@property (nonatomic) BOOL useAuthorsizeIDControl;
-@property (nonatomic) BOOL useCloseAppWithJaibroken;
-@property (nonatomic) BOOL useRC4EncryptWithLocalstorage;
-@property (nonatomic) BOOL useUpdateWgtHtmlControl;
-@property (nonatomic) BOOL signVerifyControl;
-@property (nonatomic) BOOL useCertificateControl;
-@property (nonatomic) BOOL useIsHiddenStatusBarControl;
-@property (nonatomic,readonly) BOOL useEraseAppDataControl;
-@property(nonatomic,copy)NSString *useStartReportURL;
-@property(nonatomic,copy)NSString *useAnalysisDataURL;
-@property(nonatomic,copy)NSString *useBindUserPushURL;
-@property(nonatomic,copy)NSString *useAppCanMAMURL;
-@property(nonatomic,copy)NSString *useAppCanMCMURL;
-@property(nonatomic,copy)NSString *useAppCanMDMURL;
-@property(nonatomic,copy)NSString *useCertificatePassWord;
-@property(nonatomic,copy)NSString *useAppCanUpdateURL;
-@property(nonatomic)BOOL useAppCanMDMURLControl;
+@interface WidgetOneDelegate: NSObject <UIApplicationDelegate>
+@property (nonatomic, strong) ACEPluginParser *pluginObj;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) EBrowserController *meBrwCtrler;
+@property (nonatomic, strong) WWidgetMgr *mwWgtMgr;
+@property (nonatomic, assign) BOOL userStartReport;
+@property (nonatomic, assign) BOOL useEmmControl;
+@property (nonatomic, assign) BOOL useOpenControl;
+@property (nonatomic, assign) BOOL useUpdateControl;
+@property (nonatomic, assign) BOOL useOnlineArgsControl;
+@property (nonatomic, assign) BOOL usePushControl;
+@property (nonatomic, assign) BOOL useDataStatisticsControl;
+@property (nonatomic, assign) BOOL useAuthorsizeIDControl;
+@property (nonatomic, assign) BOOL useCloseAppWithJaibroken;
+@property (nonatomic, assign) BOOL useRC4EncryptWithLocalstorage;
+@property (nonatomic, assign) BOOL useUpdateWgtHtmlControl;
+@property (nonatomic, assign) BOOL signVerifyControl;
+@property (nonatomic, assign) BOOL useCertificateControl;
+@property (nonatomic, assign) BOOL useIsHiddenStatusBarControl;
+@property (nonatomic, assign, readonly) BOOL useEraseAppDataControl;
+@property (nonatomic, strong) NSString *useStartReportURL;
+@property (nonatomic, strong) NSString *useAnalysisDataURL;
+@property (nonatomic, strong) NSString *useBindUserPushURL;
+@property (nonatomic, strong) NSString *useAppCanMAMURL;
+@property (nonatomic, strong) NSString *useAppCanMCMURL;
+@property (nonatomic, strong) NSString *useAppCanMDMURL;
+@property (nonatomic, strong) NSString *useCertificatePassWord;
+@property (nonatomic, strong) NSString *useAppCanUpdateURL;
+@property (nonatomic, assign) BOOL useAppCanMDMURLControl;
 @property (nonatomic, retain) NSMutableDictionary *thirdInfoDict;
 @property (nonatomic, assign) BOOL isFirstPageDidLoad;
 
-@property (nonatomic, retain) ACEWebViewController *leftWebController;
-@property (nonatomic, retain) ACEWebViewController *rightWebController;
-@property (nonatomic, retain) ACEDrawerViewController *drawerController;
-@property (nonatomic, retain) RESideMenu *sideMenuViewController;
+@property (nonatomic, strong) ACEWebViewController *leftWebController;
+@property (nonatomic, strong) ACEWebViewController *rightWebController;
+@property (nonatomic, strong) ACEDrawerViewController *drawerController;
+@property (nonatomic, strong) RESideMenu *sideMenuViewController;
 @property (nonatomic, assign) NSInteger enctryptcj;
 
 
 //4.0
-@property (nonatomic, copy) NSString * useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
-@property (nonatomic, copy) NSString * useAppCanAppStoreHost;//uexAppstroeMgr所需的host
-@property (nonatomic, copy) NSString * useAppCanMBaaSHost;//引擎中MBaaS读取的host
-@property (nonatomic, copy) NSString * useAppCanIMXMPPHost;//uexIM插件XMPP通道使用的host
-@property (nonatomic, copy) NSString * useAppCanIMHTTPHost;//uexIM插件HTTP通道使用的host
-@property (nonatomic, copy) NSString * useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
-@property (nonatomic, copy) NSString * useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
-@property(nonatomic) BOOL validatesSecureCertificate;//是否校验证书
+@property (nonatomic, strong) NSString * useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
+@property (nonatomic, strong) NSString * useAppCanAppStoreHost;//uexAppstroeMgr所需的host
+@property (nonatomic, strong) NSString * useAppCanMBaaSHost;//引擎中MBaaS读取的host
+@property (nonatomic, strong) NSString * useAppCanIMXMPPHost;//uexIM插件XMPP通道使用的host
+@property (nonatomic, strong) NSString * useAppCanIMHTTPHost;//uexIM插件HTTP通道使用的host
+@property (nonatomic, strong) NSString * useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
+@property (nonatomic, strong) NSString * useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
+@property (nonatomic, assign) BOOL validatesSecureCertificate;//是否校验证书
 
-@property (nonatomic,assign) BOOL launchedByRemoteNotification;
-@property (nonatomic,assign,readonly) BOOL useInAppCanIDE;
+@property (nonatomic, assign) BOOL launchedByRemoteNotification;
+@property (nonatomic, assign, readonly) BOOL useInAppCanIDE;
 
 - (instancetype)initWithDevMode;
 

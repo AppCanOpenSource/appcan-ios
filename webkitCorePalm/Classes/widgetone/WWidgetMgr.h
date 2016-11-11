@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 @class WWidget;
-@class WgtReportParser;
+
 @class SpecConfigParser;
 @class UpdateParser;
 #define F_WIDGETONEVERSION					@"widgetone_version"

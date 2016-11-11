@@ -427,11 +427,9 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
     
 
-    if (ACSystemVersion() < 7.0) {
-        mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].applicationFrame.size.width, [UIScreen mainScreen].applicationFrame.size.height);
-    }else{
-        mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    }
+
+    mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+
 	mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
 	if ([BUtility getAppCanDevMode]) {
@@ -466,11 +464,9 @@ static BOOL userCustomLoadingImageEnabled = NO;
             });
         }
     }
-	//[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(hideSplashScreen:) userInfo:nil repeats:NO];
-    
+
     [meBrw start:mwWgtMgr.wMainWgt];
-        //NSString *clientPWd =[BUtility RC4DecryptWithInput:theApp.useCertificatePassWord key:mwWgtMgr.mainWidget.appId];
-    //[BUtility setClientCertificatePwd:clientPWd];
+
     
 }
 
@@ -611,96 +607,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
 }
 
 
-/*
- -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
- //    if (!meBrwMainFrm || meBrwMainFrm.isHidden) {
- //        return YES;
- //    }
- //ipad 横竖屏
- //NSLog(@"self.meBrwMainFrm.hidden=%d",self.mStartView.hidden);
- //if (self.meBrwMainFrm.hidden) {
- //    NSLog(@"self.meBrwMainFrm.hidden");
- //    return NO;
- //}
- 
- EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
- if (aboveWndContainer) {
- EBrowserWindow *eBrwWnd = [aboveWndContainer aboveWindow];
- if (eBrwWnd && eBrwWnd.meBottomSlibingBrwView && ((eBrwWnd.meBottomSlibingBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_ROTATE) == F_EBRW_VIEW_FLAG_FORBID_ROTATE)) {
- return NO;
- }
- if ((mFlag & F_EBRW_CTRL_FLAG_FORBID_ROTATE) == F_EBRW_CTRL_FLAG_FORBID_ROTATE) {
- return NO;
- }
- if (meBrwMainFrm.mSBWnd && (meBrwMainFrm.mSBWnd.hidden == NO)) {
- return NO;
- }
- switch (toInterfaceOrientation) {
- case UIInterfaceOrientationPortrait:
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
- return YES;
- }
- break;
- case UIInterfaceOrientationPortraitUpsideDown:
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
- return YES;
- }
- break;
- case UIInterfaceOrientationLandscapeLeft:
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
- return YES;
- }
- break;
- case UIInterfaceOrientationLandscapeRight:
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
- return YES;
- }
- break;
- default:
- break;
- }
- }
- return YES;
- }
- 
- - (BOOL)shouldAutorotate {
- EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
- if (aboveWndContainer) {
- EBrowserWindow *eBrwWnd = [aboveWndContainer aboveWindow];
- if (eBrwWnd && eBrwWnd.meBottomSlibingBrwView && ((eBrwWnd.meBottomSlibingBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_ROTATE) == F_EBRW_VIEW_FLAG_FORBID_ROTATE)) {
- return NO;
- }
- if ((mFlag & F_EBRW_CTRL_FLAG_FORBID_ROTATE) == F_EBRW_CTRL_FLAG_FORBID_ROTATE) {
- return NO;
- }
- if (meBrwMainFrm.mSBWnd && (meBrwMainFrm.mSBWnd.hidden == NO)) {
- return NO;
- }
- return YES;
- }
- return YES;
- }
- 
- - (NSUInteger)supportedInterfaceOrientations {
- int orientation = 0;
- EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
- if (aboveWndContainer) {
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
- orientation |= UIInterfaceOrientationMaskPortrait;
- }
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
- orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
- }
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
- orientation |= UIInterfaceOrientationMaskLandscapeLeft;
- }
- if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
- orientation |= UIInterfaceOrientationMaskLandscapeRight;
- }
- }
- return orientation;
- }
- */
+
 //  控制屏幕方向
 
 
@@ -736,18 +643,16 @@ static BOOL userCustomLoadingImageEnabled = NO;
     ACEInterfaceOrientation nowOrientation = ace_interfaceOrientationFromUIDeviceOrientation([[UIDevice currentDevice] orientation]);
     
 	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & nowOrientation)) {
-        ACLogDebug(@"will log");
+
         [[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation)) completion:^(JSValue * _Nonnull returnValue) {
-            ACLogDebug(@"logged");
+
         }];
 
 	}
 }
 
 - (void)didReceiveMemoryWarning {
-	//[BUtility writeLog:@"Ebrowser controller receive memory warning"];
-	//ACENSLog(@"init the start view :the uesdMemory is %f,the have memory is %f",[BUtility usedMemory],[BUtility availableMemory]);
-	//ACENSLog(@"warning :the uesdMemory is %f",[BUtility usedMemory]);
+
     [super didReceiveMemoryWarning] ;
 
 }

@@ -20,7 +20,7 @@
 #import "EBrowserController.h"
 #import "EBrowserMainFrame.h"
 #import "BUtility.h"
-#import "EUExBaseDefine.h"
+
 
 @implementation EUExAppCenter
 

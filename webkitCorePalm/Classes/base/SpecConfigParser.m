@@ -21,7 +21,7 @@
 #import "WidgetSQL.h"
 #import "WWidgetMgr.h"
 #import "WWidget.h"
-#import "WgtReportParser.h"
+
 #import "WidgetOneDelegate.h"
 #import "FileEncrypt.h"
 

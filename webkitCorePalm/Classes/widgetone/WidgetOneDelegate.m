@@ -36,7 +36,7 @@
 
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "EUExBaseDefine.h"
+
 
 #import "ACEUINavigationController.h"
 #import "ACEDrawerViewController.h"
@@ -61,55 +61,19 @@
 #define ACE_USERAGENT @"AppCanUserAgent"
 
 
-@interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter,UNUserNotificationCenterDelegate>
+@interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter,UNUserNotificationCenterDelegate,UIAlertViewDelegate>
 @property (nonatomic,assign,readwrite)BOOL useInAppCanIDE;
 @end
 
 @implementation WidgetOneDelegate
 
-@synthesize window;
-@synthesize meBrwCtrler;
-@synthesize mwWgtMgr;
-@synthesize userStartReport = _userStartReport;
-@synthesize useEmmControl = _useEmmControl;
-@synthesize useOpenControl = _useOpenControl;
-@synthesize useUpdateControl = _useUpdateControl;
-@synthesize useOnlineArgsControl = _useOnlineArgsControl;
-@synthesize usePushControl = _usePushControl;
-@synthesize useDataStatisticsControl = _useDataStatisticsControl;
-@synthesize useAuthorsizeIDControl = _useAuthorsizeIDControl;
-@synthesize useAppCanMAMURL = _useAppCanMAMURL;
-@synthesize useAppCanMCMURL = _useAppCanMCMURL;
-@synthesize useAppCanMDMURL = _useAppCanMDMURL;
-@synthesize useStartReportURL = _useStartReportURL;
-@synthesize useAnalysisDataURL = _useAnalysisDataURL;
-@synthesize useBindUserPushURL = _useBindUserPushURL;
-@synthesize useCloseAppWithJaibroken =_useCloseAppWithJaibroken;
-@synthesize useRC4EncryptWithLocalstorage =_useRC4EncryptWithLocalstorage;
-@synthesize useUpdateWgtHtmlControl =_useUpdateWgtHtmlControl;
-@synthesize useCertificatePassWord = _useCertificatePassWord;
-@synthesize useEraseAppDataControl =_useEraseAppDataControl;
-@synthesize useCertificateControl = _useCertificateControl;
-@synthesize useIsHiddenStatusBarControl =_useIsHiddenStatusBarControl;
-@synthesize useAppCanUpdateURL = _useAppCanUpdateURL;
-@synthesize useAppCanMDMURLControl = _useAppCanMDMURLControl;
-@synthesize thirdInfoDict = _thirdInfoDict;
 
-//4.0
-@synthesize useAppCanEMMTenantID = _useAppCanEMMTenantID;
-@synthesize useAppCanAppStoreHost = _useAppCanAppStoreHost;
-@synthesize useAppCanMBaaSHost = _useAppCanMBaaSHost;
-@synthesize useAppCanIMXMPPHost = _useAppCanIMXMPPHost;
-@synthesize useAppCanIMHTTPHost = _useAppCanIMHTTPHost;
-@synthesize useAppCanTaskSubmitSSOHost = _useAppCanTaskSubmitSSOHost;
-@synthesize useAppCanTaskSubmitHost = _useAppCanTaskSubmitHost;
-@synthesize validatesSecureCertificate = _validatesSecureCertificate;
 
 
 
 - (void)parseURL:(NSURL *)url application:(UIApplication *)application {
     
-    EBrowserWindow * ebv = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
+    EBrowserWindow * ebv = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
     EBrowserView * ebview = [ebv theFrontView];
     ACEJSCHandler *handler = ebview.meBrowserView.JSCHandler;
     
@@ -254,7 +218,7 @@
     }
     NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
-    [dictionnary release];
+
 }
 
 
@@ -274,7 +238,7 @@
     }
     [ACEDes enable];
     [BUtility setAppCanDocument];
-    pluginObj = [ACEPluginParser sharedParser];
+    self.pluginObj = [ACEPluginParser sharedParser];
     if (_useCloseAppWithJaibroken) {
         
         BOOL isjab = [BUtility isJailbroken];
@@ -284,7 +248,6 @@
             UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:ACELocalized(@"本应用仅适用未越狱机，即将关闭。") delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
             alertView.tag = kViewTagExit;
             [alertView show];
-            [alertView release];
             return NO;
             
         }
@@ -331,27 +294,14 @@
     
     
     
-    Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-    
+    Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {
-        
-        id analysisObject = class_createInstance(analysisClass,0);
+        id analysisObject = [[analysisClass alloc] init];
         [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
-        
-    }else{
-        
-        analysisClass = NSClassFromString(@"AppCanAnalysis");
-        
-        if (analysisClass) {
-            id analysisObject = class_createInstance(analysisClass,0);
-            [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
-            
-        }
-        
     }
     
     ACEUINavigationController *meNav = nil;
-    meBrwCtrler = [[EBrowserController alloc]init];
+    self.meBrwCtrler = [[EBrowserController alloc]init];
     
     NSString *hardware = [BUtility getDeviceVer];
     
@@ -363,25 +313,25 @@
         
         if (or== 10 || or ==11 ||or ==12 ||or ==9 ||or ==14 ||or ==13 ||or ==8) {
             
-            meBrwCtrler.wgtOrientation=2;
+            self.meBrwCtrler.wgtOrientation=2;
             
         }
         
     }
     
-    meNav = [[ACEUINavigationController alloc] initWithRootViewController:meBrwCtrler];
+    meNav = [[ACEUINavigationController alloc] initWithRootViewController:self.meBrwCtrler];
     
     [meNav setNavigationBarHidden:YES];
     
-    //[ACEUtils setNavigationBarColor:meNav color:[UIColor purpleColor]];
+ 
     
-    mwWgtMgr = [[WWidgetMgr alloc]init];
-    meBrwCtrler.mwWgtMgr = mwWgtMgr;
+    self.mwWgtMgr = [[WWidgetMgr alloc]init];
+    self.meBrwCtrler.mwWgtMgr = self.mwWgtMgr;
     //[self readAppCanJS];
     
     
-    window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    window.autoresizesSubviews = YES;
+    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.autoresizesSubviews = YES;
     
     _drawerController = [[ACEDrawerViewController alloc]
                          initWithCenterViewController:meNav
@@ -403,11 +353,11 @@
          }
      }];
     
-    window.rootViewController = _drawerController;
+    self.window.rootViewController = _drawerController;
     
-    [meNav release];
+
     
-    [window makeKeyAndVisible];
+    [self.window makeKeyAndVisible];
     [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
     if(theApp.usePushControl == YES) {
         UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
@@ -466,7 +416,7 @@
     }
     if (userData != nil || userInfo) {
         [appStateUD setObject:userData forKey:@"pushData"];
-        EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+        EBrowserWindowContainer * aboveWindowContainer = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
         if (aboveWindowContainer && application.applicationState != UIApplicationStateBackground) {
             if (application.applicationState == UIApplicationStateActive) {
                 [appStateUD setObject:@"2" forKey:@"appStateOfGetPushData"];
@@ -492,7 +442,7 @@
         ACLogDebug(@"appcan--widgetOneDelegate.m--didReceiveRemoteNotification--userInfo == %@",userInfo);
         NSString *userinfoJson=[userInfo JSONFragment];
         NSString *Json=[NSString stringWithFormat:@"uexWidget.onRemoteNotification(\'%@\');",userinfoJson];
-        [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];
+        [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];
         
     }
     
@@ -502,7 +452,7 @@
     }
     if (userData != nil || userInfo) {
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
-        EBrowserWindowContainer * aboveWindowContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
+        EBrowserWindowContainer * aboveWindowContainer = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
         if (aboveWindowContainer) {
             [aboveWindowContainer pushNotify];
         }
@@ -530,41 +480,8 @@
 }
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    if (!url) return NO;
     
-    if (url != NULL) {
-        NSString * strUrl = [url resourceSpecifier];
-        NSArray * paramUrlArray = [strUrl componentsSeparatedByString:@"?"];
-        if (paramUrlArray != NULL && paramUrlArray.count > 1) {
-            NSString * paramUrl = [paramUrlArray objectAtIndex:1];
-            if (paramUrl != NULL) {
-                NSArray * paramUrlArray1 = [paramUrl componentsSeparatedByString:@"&"];
-                if (paramUrlArray1 != NULL && paramUrlArray1.count > 0) {
-                    for (NSInteger i = 0; i < paramUrlArray1.count; i++) {
-                        NSString * parmStr = [paramUrlArray1 objectAtIndex:i];
-                        NSArray * parmStrArray = [parmStr componentsSeparatedByString:@"="];
-                        if (paramUrlArray1 != NULL && parmStrArray.count == 2) {
-                            NSString *paramKey = [parmStrArray objectAtIndex:0];
-                            NSString *paramValue = [parmStrArray objectAtIndex:1];
-                            if (paramValue && paramKey) {
-                                if (_thirdInfoDict == nil) {
-                                    _thirdInfoDict = [[NSMutableDictionary dictionary] retain];
-                                }
-                                [_thirdInfoDict setValue:paramValue forKey:paramKey];
-                            }
-                        } else if (paramUrlArray1 != NULL && parmStrArray.count == 1) {
-                            NSString * paramValue = [parmStrArray objectAtIndex:0];
-                            if (paramValue) {
-                                [self performSelector:@selector(delayLoadByOtherAppWithParam:) withObject:paramValue afterDelay:1.0];
-                            }
-                        }
-                    }
-                    if (_thirdInfoDict.count != 0) {
-                        [self performSelector:@selector(delayLoadByOtherApp) withObject:self afterDelay:1.0];
-                    }
-                }
-            }
-        }
-    }
     //支付完成后返回当前应用shi调用
     [self parseURL:url application:application];
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
@@ -573,26 +490,11 @@
     return YES;
 }
 
-- (void)delayLoadByOtherAppWithParam:(NSString *)param {
-    NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",param];
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
-    
-}
-
-- (void)delayLoadByOtherApp {
-    NSString * josnStr = [_thirdInfoDict JSONFragment];
-    NSString * jsSuccessCB = [NSString stringWithFormat:@"if(uexWidget.onLoadByOtherApp){uexWidget.onLoadByOtherApp(\'%@\');}",josnStr];
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:jsSuccessCB];
-    self.thirdInfoDict = nil;
-    
-}
-
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = -1;
-    //	[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onSuspend();"];
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSuspend){uexWidget.onSuspend();}"];
+
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass applicationWillResignActive:application];
     }];
@@ -603,24 +505,12 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     //data analysis
-    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-    if (analysisClass) {//类不存在直接返回
-        id analysisObject = class_createInstance(analysisClass,0);
+    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis")?:NSClassFromString(@"AppCanAnalysis");
+    if (analysisClass) {
+        id analysisObject = [[analysisClass alloc] init];
         [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
-    }else{
-        
-        analysisClass = NSClassFromString(@"AppCanAnalysis");
-        
-        if (analysisClass) {
-            
-            id analysisObject = class_createInstance(analysisClass,0);
-            [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
-        }
-        
     }
-    
-    [self performSelector:@selector(onResume) withObject:self afterDelay:1.0];
-    
+
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass applicationDidBecomeActive:application];
     }];
@@ -630,16 +520,9 @@
 }
 
 
--(void)onResume{
-    
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onResume){uexWidget.onResume();}"];
-    
-}
-
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterBackground){uexWidget.onEnterBackground();}"];
-    
+
     id number = [[NSUserDefaults standardUserDefaults] objectForKey:F_UD_BadgeNumber];
     if (number) {
         
@@ -648,16 +531,16 @@
         
     }
     
-    [meBrwCtrler.meBrw stopAllNetService];
+    [self.meBrwCtrler.meBrw stopAllNetService];
     //data analysis
-    int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
-    NSString * viewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
+    int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
+    NSString * viewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
     [BUtility setAppCanViewBackground:type name:viewName closeReason:2 appInfo:appInfo];
     
-    if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
+    if ([[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
         
-        NSArray * popViewArray = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
+        NSArray * popViewArray = [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
         for (EBrowserView * ePopView in popViewArray) {
             int type =ePopView.mwWgt.wgtType;
             NSString *viewName =[ePopView.curUrl absoluteString];
@@ -667,18 +550,10 @@
         
     }
     
-    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
+    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis")?:NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
-        id analysisObject = class_createInstance(analysisClass,0);
+        id analysisObject = [[analysisClass alloc] init];
         [analysisObject ac_invoke:@"setAppBecomeBackground"];
-        //objc_msgSend(analysisObject, @selector(setAppBecomeBackground),nil);
-        
-    }else{
-        analysisClass = NSClassFromString(@"AppCanAnalysis");
-        if (analysisClass) {
-            id analysisObject = class_createInstance(analysisClass,0);
-            [analysisObject ac_invoke:@"setAppBecomeBackground"];
-        }
     }
     
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
@@ -689,23 +564,22 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
-    [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onEnterForeground){uexWidget.onEnterForeground();}"];
+
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass applicationWillEnterForeground:application];
     }];
     
-    int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
-    NSString * goViewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
+    int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
+    NSString * goViewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
     if (!goViewName || [goViewName isKindOfClass:[NSNull class]]) {
         [BUtility writeLog:@"appcan crash ....."];
         return;
         
     }
-    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
     [BUtility setAppCanViewActive:type opener:@"application://" name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
-    if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
-        NSArray * popViewArray = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
+    if ([[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
+        NSArray * popViewArray = [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
         for (EBrowserView * ePopView in popViewArray) {
             int type =ePopView.mwWgt.wgtType;
             NSString * viewName =[ePopView.curUrl absoluteString];
@@ -724,29 +598,20 @@
     
     
     //data analysis
-    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
+    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
     if (analysisClass) {//类不存在直接返回
-        id analysisObject = class_createInstance(analysisClass,0);
+        id analysisObject = [[analysisClass alloc] init];
         [analysisObject ac_invoke:@"setAppBecomeBackground"];
-        //((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
-    }else{
-        analysisClass = NSClassFromString(@"AppCanAnalysis");
-        if (analysisClass) {
-            id analysisObject = class_createInstance(analysisClass,0);
-            [analysisObject ac_invoke:@"setAppBecomeBackground"];
-            //((void(*)(id, SEL))objc_msgSend)(analysisObject, @selector(setAppBecomeBackground));
-        }
-        
     }
     
-    int type = [[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
-    NSString * viewName =[[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
+    int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
+    NSString * viewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
     [BUtility setAppCanViewBackground:type name:viewName closeReason:2 appInfo:appInfo];
     
-    if ([[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
+    if ([[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
         
-        NSArray * popViewArray = [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
+        NSArray * popViewArray = [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
         
         for (EBrowserView *ePopView in popViewArray) {
             
@@ -760,7 +625,7 @@
     }
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = -1;
-    [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onTerminate();"];
+    [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onTerminate();"];
     
 }
 
@@ -842,22 +707,18 @@
     
 }
 - (void)dealloc {
-    if(pluginObj){
-        [pluginObj release];
-        pluginObj = nil;
-    }
-    if (window) {
-        [window release];
-        window = nil;
-    }
-    if (meBrwCtrler) {
-        [meBrwCtrler release];
-        meBrwCtrler = nil;
-    }
-    if (mwWgtMgr) {
-        [mwWgtMgr release];
-        mwWgtMgr = nil;
-    }
+
+    _pluginObj = nil;
+    
+
+    _window = nil;
+    
+
+    _meBrwCtrler = nil;
+    
+
+    _mwWgtMgr = nil;
+    
     self.useAppCanMAMURL = nil;
     self.useAppCanMCMURL=nil;
     self.useAppCanMDMURL=nil;
@@ -877,10 +738,7 @@
     self.useAppCanTaskSubmitSSOHost = nil;
     self.useAppCanTaskSubmitHost = nil;
     
-    [_leftWebController release];
-    [_rightWebController release];
-    [_drawerController release];
-    [super dealloc];
+
 }
 
 
@@ -889,8 +747,11 @@
         return;
     }
     BOOL stop = NO;
-    for (NSInteger i = 0; i < [pluginObj.classNameArray count]; i++) {
-        NSString *className = [pluginObj.classNameArray objectAtIndex:i];
+    NSArray *enginePlugins = @[@"uexWindow",@"uexWidget",@"uexWidgetOne",@"uexAppCenter"];
+    NSArray *allPLugins = [enginePlugins arrayByAddingObjectsFromArray:self.pluginObj.classNameArray];
+    
+    for (NSInteger i = 0; i < [allPLugins count]; i++) {
+        NSString *className = allPLugins[i];
         NSString *fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];
         Class clz = NSClassFromString(fullClassName);
         Method delegateMethod = class_getClassMethod(clz, selector);

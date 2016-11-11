@@ -37,7 +37,7 @@
 #import <QuartzCore/CALayer.h>
 #import "WWidgetMgr.h"
 #import "BStatusBarWindow.h"
-#import "EUExBaseDefine.h"
+
 #import "EBrowserViewAnimition.h"
 #import "BAnimationTransform.h"
 #import "ACEWebViewController.h"
@@ -1079,21 +1079,21 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if ([self.EBrwView canGoForward]){
         [self.webViewEngine evaluateScript:@"window.history.forward()"];
-        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:UEX_CSUCCESS];
+        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:0];
         return UEX_TRUE;
         
     }else{
-        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:UEX_CFAILED];
+        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:1];
         return UEX_FALSE;
     }
 }
 - (UEX_BOOL)pageBack:(NSMutableArray *)inArguments{
     if ([self.EBrwView canGoBack]){
         [self.webViewEngine evaluateScript:@"window.history.back()"];
-        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:UEX_CSUCCESS];
+        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:0];
         return UEX_TRUE;
     }else{
-        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:UEX_CFAILED];
+        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:1];
         return UEX_FALSE;
     }
 }
@@ -3177,7 +3177,6 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             break;
         }
         default:
-            return;
             break;
     }
     

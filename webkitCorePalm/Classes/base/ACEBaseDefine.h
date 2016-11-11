@@ -26,8 +26,6 @@
 
 
 
-
-
 typedef NS_OPTIONS(NSInteger, ACEInterfaceOrientation){
     ACEInterfaceOrientationUnknown = 0,
     ACEInterfaceOrientationProtrait = 1 << 0,

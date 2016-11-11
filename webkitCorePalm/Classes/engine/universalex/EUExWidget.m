@@ -30,7 +30,7 @@
 #import "BAnimation.h"
 #import "BUtility.h"
 #import "JSON.h"
-#import "EUExBaseDefine.h"
+
 #import "ASIFormDataRequest.h"
 #import "WidgetOneDelegate.h"
 #import <Security/Security.h>
@@ -59,11 +59,40 @@
 
 
 
-@interface EUExWidget()
+@interface EUExWidget()<AppCanApplicationEventObserver>
 @property (nonatomic,readonly)EBrowserView *EBrwView;
 @end
 
 @implementation EUExWidget
+
+#pragma marl - Application Event
+
++ (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSString *cbString = [url query];
+    for (NSURLQueryItem *item in components.queryItems){
+        [params setValue:item.value forKey:item.name];
+    }
+    if (params.count > 0) {
+        cbString = [params ac_JSONFragment];
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onLoadByOtherApp" arguments:ACArgsPack(cbString)];
+    });
+    
+    
+    return YES;
+}
+
++ (void)applicationWillResignActive:(UIApplication *)application{
+    [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onSuspend" arguments:nil];
+}
+
++ (void)applicationDidBecomeActive:(UIApplication *)application{
+     [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onResume" arguments:nil];
+}
+
 
 #pragma mark - EBrowserView Getter
 
