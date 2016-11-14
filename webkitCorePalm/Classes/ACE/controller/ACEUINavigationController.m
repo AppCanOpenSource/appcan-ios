@@ -25,77 +25,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    if (self.navigationBar &&  [self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)])
-    {
-//        [self.navigationBar setBackgroundImage:[UIImage imageNamed:UM_IMAGE_PATH_NAVBAR] forBarMetrics:UIBarMetricsDefault];
-        
-    }
-    
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.navigationBar.frame.size.width, self.navigationBar.frame.size.height)];
-//    
-//    view.backgroundColor = [UIColor purpleColor];
-//    
-//    [self.navigationBar addSubview:view];
-//    
-//    [view release];
-    
-    
-    
-//    if (isSysVersionAbove7_0) {
-//        self.navigationBar.barTintColor = [UIColor purpleColor];
-//    } else {
-//        self.navigationBar.tintColor = [UIColor purpleColor];
-//        [self.navigationBar setTranslucent: YES];
-//    }
-    
-    
-//    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
-//    {
-//        self.interactivePopGestureRecognizer.delegate = self;
-////        self.delegate = self;
-//    }
-    
-    
 }
 
-// Hijack the push method to disable the gesture
-
-//- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
-//{
-//    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
-//        self.interactivePopGestureRecognizer.enabled = NO;
-//    
-//    [super pushViewController:viewController animated:animated];
-//}
-//
-//#pragma mark UINavigationControllerDelegate
-//
-//- (void)navigationController:(UINavigationController *)navigationController
-//       didShowViewController:(UIViewController *)viewController
-//                    animated:(BOOL)animate
-//{
-//    // Enable the gesture again once the new controller is shown
-//    
-//    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
-//        self.interactivePopGestureRecognizer.enabled = YES;
-//}
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

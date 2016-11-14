@@ -26,7 +26,7 @@
 		333D00061A42B9CA00F501B3 /* ACEUINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */; };
 		333D00071A42B9CA00F501B3 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		333D00081A42B9CA00F501B3 /* ACEWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFD1A42B9CA00F501B3 /* ACEWebViewController.h */; };
-		333D00091A42B9CA00F501B3 /* ACEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFE1A42B9CA00F501B3 /* ACEWebViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		333D00091A42B9CA00F501B3 /* ACEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFE1A42B9CA00F501B3 /* ACEWebViewController.m */; };
 		334D18051A47A9B70050DD13 /* ACEDrawerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18031A47A9B70050DD13 /* ACEDrawerViewController.h */; };
 		334D18061A47A9B70050DD13 /* ACEDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18041A47A9B70050DD13 /* ACEDrawerViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		334D180A1A47B4200050DD13 /* MMNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18081A47B4200050DD13 /* MMNavigationController.h */; };
@@ -144,7 +144,7 @@
 		42F787461D950B5D0094AA05 /* EBrowserHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F718B1B93D000D7600 /* EBrowserHistory.m */; };
 		42F787471D950B5D0094AA05 /* AppItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865D18B1B93D000D7600 /* AppItemView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787481D950B5D0094AA05 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBE1A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.m */; };
-		42F787491D950B5D0094AA05 /* ACEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFE1A42B9CA00F501B3 /* ACEWebViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787491D950B5D0094AA05 /* ACEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFE1A42B9CA00F501B3 /* ACEWebViewController.m */; };
 		42F7874A1D950B5D0094AA05 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887A61A0B0984002776E4 /* CJSONSerializer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7874B1D950B5D0094AA05 /* ACUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865918B1B93D000D7600 /* ACUtility.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7874C1D950B5D0094AA05 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C491B2A6D3500D5F279 /* UIImage+GIF.m */; };

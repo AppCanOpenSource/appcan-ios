@@ -29,8 +29,7 @@
 
 @implementation ACEWebViewController
 
-- (instancetype)init
-{
+- (instancetype)init{
     self = [super init];
     if (self) {
         _isNeedSwipeGestureRecognizer = YES;
@@ -40,66 +39,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-//    _browserWindow = (EBrowserWindow *)self.view;
-    
+
+
     CGRect rect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    
-    NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
-    int statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
-
-    if ([statusBarStyleIOS7 boolValue] == NO) {
-        
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        rect = CGRectMake(0, statusBarHeight, self.view.frame.size.width, self.view.frame.size.height - statusBarHeight);
-        self.view.backgroundColor = [UIColor blackColor];
-    }
-
-    
     _browserWindow.frame = rect;
     [self.view addSubview:_browserWindow];
-    
     self.view.backgroundColor = [UIColor clearColor];
-    
-    ACENSLog(@"NavWindowTest ACEWebViewController viewDidLoad browserWindow");
-    
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    
-}
 
-- (void)dealloc
-{
-//    _browserWindow = (EBrowserWindow *)self.view;
-    
-    if (_browserWindow != nil && [_browserWindow isKindOfClass:[EBrowserWindow class]]) {
-        NSString *name = _browserWindow.windowName;
-        
-        EBrowserWindow *eBrwWnd = [_browserWindow.winContainer brwWndForKey:name];
-        if (eBrwWnd != nil) {
-            [_browserWindow.winContainer removeFromWndDict:name];
-            [eBrwWnd release];
-        }
-        eBrwWnd = nil;
-    }
-    
-    
-    [super dealloc];
-}
 
-- (void)back:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)dealloc{
+    [_browserWindow.winContainer removeFromWndDict:_browserWindow.windowName];
 }
 
 
