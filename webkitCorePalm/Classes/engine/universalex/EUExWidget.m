@@ -56,7 +56,8 @@
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
 #define UEX_EXITAPP_ALERT_CANCLE @"取消"
 
-
+static NSString *const kUexPushNotifyBrwViewNameKey=@"kUexPushNotifyBrwViewNameKey";
+static NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFunctionNameKey";
 
 
 @interface EUExWidget()<AppCanApplicationEventObserver>
@@ -65,7 +66,99 @@
 
 @implementation EUExWidget
 
+typedef NS_ENUM(NSInteger,uexWidgetPushStatus){
+    uexWidgetPushWhenAppLaunched = 0,
+    uexWidgetPushWhenAppInBackground,
+    uexWidgetPushWhenAppInForeground
+};
+
+
+
+
+
 #pragma marl - Application Event
+
+
+
+
++ (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    [self onReceivePushNotification:userInfo];
+}
+
++ (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [self onReceivePushNotification:userInfo];
+}
+
+
+
++ (void)onReceivePushNotification:(NSDictionary *)userInfo{
+    if (!userInfo) {
+        return;
+    }
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:userInfo forKey:@"allPushData"];
+    [ud setObject:userInfo[@"userInfo"] forKey:@"pushData"];
+    switch ([UIApplication sharedApplication].applicationState) {
+        case UIApplicationStateBackground:
+            return;
+        case UIApplicationStateActive:
+            [self pushNotifyWithState:uexWidgetPushWhenAppInForeground];
+            break;
+        case UIApplicationStateInactive:
+            [self pushNotifyWithState:uexWidgetPushWhenAppInBackground];
+            break;
+    }
+}
+
+
+static BOOL isAppLaunchedByPush = NO;
+
+
++ (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    //应用从未启动到启动，获取推送信息
+    if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] ) {
+        isAppLaunchedByPush = YES;
+        NSDictionary *dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        NSString *userData = [dict objectForKey:@"userInfo"];
+        if (dict) {
+            [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
+        }
+        if (userData != nil) {
+            [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
+        }
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
+    
+    
+    return YES;
+}
+
++ (void)rootPageDidFinishLoading{
+    if(isAppLaunchedByPush){
+        [self pushNotifyWithState:uexWidgetPushWhenAppLaunched];
+    }
+}
+
++ (void)pushNotifyWithState:(uexWidgetPushStatus)state {
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
+    NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
+    if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
+        return;
+    }
+    EBrowserWindow *eBrwWnd = [[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] brwWndForKey:pushNotifyBrwViewName];
+    if (!eBrwWnd) {
+        return;
+    }
+    [eBrwWnd.meBrwView callbackWithFunctionKeyPath:pushNotifyCallbackFunctionName arguments:@[@(state)]];
+
+    
+}
+
+
+
+
 
 + (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];

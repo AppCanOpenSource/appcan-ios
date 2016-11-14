@@ -240,41 +240,14 @@
     [BUtility setAppCanDocument];
     self.pluginObj = [ACEPluginParser sharedParser];
     if (_useCloseAppWithJaibroken) {
-        
-        BOOL isjab = [BUtility isJailbroken];
-        
-        if (isjab) {
-            
+        if ([BUtility isJailbroken]) {
             UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:ACELocalized(@"提示") message:ACELocalized(@"本应用仅适用未越狱机，即将关闭。") delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
             alertView.tag = kViewTagExit;
             [alertView show];
             return NO;
-            
         }
-        
     }
-    //应用从未启动到启动，获取推送信息
-    if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] ) {
-        self.launchedByRemoteNotification=YES;
-        NSDictionary *dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-        NSString *userData = [dict objectForKey:@"userInfo"];
-        ACLogDebug(@"appcan--widgetOneDelegate.m--didFinishLaunchingWithOptions--dict == %@",dict);
-        
-        if (dict) {
-            [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
-            [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"appStateOfGetPushData"];
-            
-        }
-        
-        if (userData != nil) {
-            
-            [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
-            
-        }
-        
-        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-        
-    }
+
     //设置Debug日志
     ONOXMLElement *debug = [[ONOXMLElement ACENewestConfigXML] firstChildWithTag:@"debug"];
     NSString *debugEnable = debug[@"enable"];
@@ -329,14 +302,12 @@
     self.meBrwCtrler.mwWgtMgr = self.mwWgtMgr;
     //[self readAppCanJS];
     
-    
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.autoresizesSubviews = YES;
+
     
-    _drawerController = [[ACEDrawerViewController alloc]
-                         initWithCenterViewController:meNav
-                         leftDrawerViewController:nil
-                         rightDrawerViewController:nil];
+    _drawerController = [[ACEDrawerViewController alloc] initWithCenterViewController:meNav
+                                                             leftDrawerViewController:nil
+                                                            rightDrawerViewController:nil];
     
     [_drawerController setMaximumRightDrawerWidth:200.0];
     [_drawerController setMaximumLeftDrawerWidth:200.0];
@@ -409,25 +380,7 @@
 // 接收推送通知
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSUserDefaults *appStateUD = [NSUserDefaults standardUserDefaults];
-    NSString *userData = [userInfo objectForKey:@"userInfo"];
-    if (userInfo) {
-        [appStateUD setObject:userInfo forKey:@"allPushData"];
-    }
-    if (userData != nil || userInfo) {
-        [appStateUD setObject:userData forKey:@"pushData"];
-        EBrowserWindowContainer * aboveWindowContainer = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-        if (aboveWindowContainer && application.applicationState != UIApplicationStateBackground) {
-            if (application.applicationState == UIApplicationStateActive) {
-                [appStateUD setObject:@"2" forKey:@"appStateOfGetPushData"];
-            } else {
-                [appStateUD setObject:@"1" forKey:@"appStateOfGetPushData"];
-            }
-            [appStateUD synchronize];
-            [aboveWindowContainer pushNotify];
-        }
-    }
-    
+
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
     }];
@@ -437,26 +390,7 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-    {
-        ACLogDebug(@"appcan--widgetOneDelegate.m--didReceiveRemoteNotification--userInfo == %@",userInfo);
-        NSString *userinfoJson=[userInfo JSONFragment];
-        NSString *Json=[NSString stringWithFormat:@"uexWidget.onRemoteNotification(\'%@\');",userinfoJson];
-        [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];
-        
-    }
-    
-    NSString *userData = [userInfo objectForKey:@"userInfo"];
-    if (userInfo) {
-        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
-    }
-    if (userData != nil || userInfo) {
-        [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
-        EBrowserWindowContainer * aboveWindowContainer = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-        if (aboveWindowContainer) {
-            [aboveWindowContainer pushNotify];
-        }
-    }
+
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass application:application didReceiveRemoteNotification:userInfo];
     }];
@@ -780,7 +714,12 @@
 
 #pragma mark - UNUserNotificationCenterDelegate
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
+    
+
+    
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass userNotificationCenter:center willPresentNotification:notification withCompletionHandler:completionHandler];
     }];

@@ -28,8 +28,7 @@
 @class EBrowserView;
 @class AliPayInfo;
 
-extern NSString *const kUexPushNotifyBrwViewNameKey;
-extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
+
 
 @interface EBrowserWindowContainer : UIView
 @property (nonatomic, weak) EBrowserController *meBrwCtrler;
@@ -52,7 +51,6 @@ extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
 - (EBrowserWindow*)brwWndForKey: (id)inKey;
 - (void)removeAllUnActiveBrwWnd;
 - (void)removeFromWndDict:(id)inKey;
-- (void)pushNotify;
 - (void)clean;
 + (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView;
 @end

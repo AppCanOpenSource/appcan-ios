@@ -37,8 +37,7 @@
 #import "ACEPOPAnimation.h"
 #import "EUtility.h"
 
-NSString *const kUexPushNotifyBrwViewNameKey=@"kUexPushNotifyBrwViewNameKey";
-NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFunctionNameKey";
+
 
 @implementation EBrowserWindowContainer
 
@@ -303,32 +302,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
     return aBrowserWin;
 }
 
-- (void)pushNotify {
-    
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
-    NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
-    
-    NSString *appStateStr = @"";
-    if ([defaults objectForKey:@"appStateOfGetPushData"]) {
-        appStateStr = [defaults objectForKey:@"appStateOfGetPushData"];
-    }
-    
-    //NSLog(@"appcan-->EBrowserWindowContainer.m-->pushNotify-->appStateOfGetPushData-->%@",appStateStr);
-    
-    
-    if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
-        return;
-    }
-    EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
-    if (!eBrwWnd) {
-        return;
-    }
-    NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@!= null){%@(\'%@\');}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName,appStateStr];
-    
-    [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
-    
-}
+
 
 
 - (void)clean {

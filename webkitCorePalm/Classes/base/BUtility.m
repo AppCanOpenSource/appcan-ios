@@ -771,15 +771,11 @@ static NSString *clientCertificatePwd = nil;
 }
 + (NSString *)wgtResPath:(NSString*)inUrl{
 	if ([inUrl hasPrefix:F_RES_PATH]) {
-		inUrl = [inUrl substringFromIndex:5];
+		inUrl = [inUrl substringFromIndex:F_RES_PATH.length];
         NSString *wgtResPath = nil;
         BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
         if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-            if ([BUtility getSDKVersion]<5.0) {
-                wgtResPath =[BUtility getCachePath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
-            }else {
-                wgtResPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
-            }
+            wgtResPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
         }else {
             wgtResPath =[BUtility getResPath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
         }

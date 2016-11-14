@@ -111,11 +111,7 @@ const float AppCanFinalProgressValue = 0.9f;
     
     if (!theApp.isFirstPageDidLoad) {
         
-        if (theApp.launchedByRemoteNotification) {
-            ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
-            EBrowserWindowContainer * aboveWindowContainer = [eBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-            [aboveWindowContainer pushNotify];
-        }
+
         [theApp rootPageDidFinishLoading];
         theApp.isFirstPageDidLoad = YES;
     }
