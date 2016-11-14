@@ -868,7 +868,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	} else {
 		[eBrwWndContainer.meRootBrwWnd.meBrwView loadWithUrl:url];
 	}
-	eBrwWndContainer.mFlag |= F_BRW_WND_CONTAINER_LOAD_WGT_DONE;
+
     //first view
     int goType = eBrwWndContainer.meRootBrwWnd.meBrwView.mwWgt.wgtType;
     NSString *goViewName =[url absoluteString];

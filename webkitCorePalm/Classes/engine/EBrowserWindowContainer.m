@@ -89,24 +89,6 @@
 	}
 }
 
-- (void)removeAllUnActiveBrwWnd {
-    if (mBrwWndDict) {
-		NSArray *brwWndArray = [mBrwWndDict allValues];
-		for (EBrowserWindow *brwWnd in brwWndArray) {
-            if (brwWnd == [self aboveWindow]) {
-                continue;
-            }
-            if (brwWnd == meRootBrwWnd) {
-                [brwWnd cleanAllBrwViews];
-                continue;
-            }
-			if (brwWnd.superview) {
-				[brwWnd removeFromSuperview];
-			}
-            [mBrwWndDict removeObjectForKey:brwWnd.meBrwView.muexObjName];
-		}
-	}
-}
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt {
     self = [super initWithFrame:frame];

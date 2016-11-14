@@ -98,26 +98,7 @@
 
 }
 
-- (void)removeAllUnActiveBrwWndContainer {
-    if (mBrwWndContainerDict) {
-        NSArray *brwWndContainerArray = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict allValues];
-        for (EBrowserWindowContainer *brwWndContainer in brwWndContainerArray) {
-            if (brwWndContainer == meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer) {
-                [brwWndContainer removeAllUnActiveBrwWnd];
-                continue;
-            }
-            if (brwWndContainer == [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer]) {
-                [brwWndContainer removeAllUnActiveBrwWnd];
-                continue;
-            }
-            if (brwWndContainer.superview) {
-                [brwWndContainer removeFromSuperview];
-                [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict removeObjectForKey:brwWndContainer.mwWgt.appId];
 
-            }
-        }
-    }
-}
 
 - (EBrowserView*)popReuseBrwView {
     [mReUseBrwViewArray removeAllObjects];
@@ -133,20 +114,7 @@
 }
 
 - (void)pushReuseBrwView:(EBrowserView*)inBrwView {
-    
-//    if (inBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
-//        
-//        return;
-//    }
-//
-    /*
-	[inBrwView reset];
-	if (mReUseBrwViewArray.count >= F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE) {
-		return;
-	}
-     [mReUseBrwViewArray addObject:inBrwView];
-     */
-	
+
     
 }
 

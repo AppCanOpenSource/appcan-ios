@@ -36,6 +36,6 @@
 - (EBrowserWindowContainer*)aboveWindowContainer;
 - (EBrowserView*)popReuseBrwView;
 - (void)pushReuseBrwView:(EBrowserView*)inBrwView;
-- (void)removeAllUnActiveBrwWndContainer;
+
 
 @end

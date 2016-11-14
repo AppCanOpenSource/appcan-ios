@@ -30,116 +30,46 @@
 @implementation EBrowser
 
 
-@synthesize meBrwCtrler;
-@synthesize mFlag;
-
--(void)dealloc{
-	[super dealloc];
-}
-
-static EBrowser * eBrwInstance = NULL;
-+ (EBrowser*)instance {
-	return eBrwInstance;
-}
-
-- (id)init {
-	if (self = [super init]) {
-		eBrwInstance = self;
-	}
-	return self;
-}
 
 -(void)start:(WWidget*)inWWgt {
-
-	 //inWWgt.indexUrl = @"http://192.168.1.38:8080/xll/bug/widget11216/index.html";
-	//inWWgt.indexUrl = @"http://192.168.1.38:8080/bug/AppCan_Case/Demo048/index.html";
-	
-    //inWWgt.indexUrl = @"http://192.168.1.38:8080/bug/normal1/index.html";
-
-	[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:NULL];
+	[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:NULL];
 }
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
-    [meBrwCtrler.meBrwMainFrm notifyLoadPageStartOfBrwView:eInBrwView];
+    [self.meBrwCtrler.meBrwMainFrm notifyLoadPageStartOfBrwView:eInBrwView];
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
-    [meBrwCtrler.meBrwMainFrm notifyLoadPageFinishOfBrwView:eInBrwView];
+    [self.meBrwCtrler.meBrwMainFrm notifyLoadPageFinishOfBrwView:eInBrwView];
 }
 
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView {
 	switch (eInBrwView.mType) {
 		case ACEEBrowserViewTypeMain:
-			[meBrwCtrler.meBrwMainFrm notifyLoadPageErrorOfBrwView:eInBrwView];
+			[self.meBrwCtrler.meBrwMainFrm notifyLoadPageErrorOfBrwView:eInBrwView];
 			break;
 		default:
 			break;
 	}
 }
 
-- (void)removeAllNotActiveViews {
-	if (!meBrwCtrler) {
-		return;
-	}
-	if (!meBrwCtrler.meBrwMainFrm) {
-		return;
-	}
-	if (!meBrwCtrler.meBrwMainFrm.meBrwWgtContainer) {
-		return;
-	}
-	if (!meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict) {
-		return;
-	}
-	if (meBrwCtrler.meBrwMainFrm.meAdBrwView) {
-		[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer pushReuseBrwView:meBrwCtrler.meBrwMainFrm.meAdBrwView];
-        meBrwCtrler.meBrwMainFrm.meAdBrwView = nil;
-	}
-    if (meBrwCtrler.meBrwMainFrm.meBrwWgtContainer) {
-        [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer removeAllUnActiveBrwWndContainer];
+
+- (void)stopAllNetService {
+    [self.meBrwCtrler.meBrwMainFrm.meAdBrwView stopAllNetService];
+    NSArray *brwWndContainerArray = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict allValues];
+    for (EBrowserWindowContainer *brwWndContainer in brwWndContainerArray) {
+        NSArray *brwWndArray = [brwWndContainer.mBrwWndDict allValues];
+        for (EBrowserWindow* brwWnd in brwWndArray) {
+            [brwWnd.meBrwView stopAllNetService];
+            [brwWnd.meTopSlibingBrwView stopAllNetService];
+            [brwWnd.meBottomSlibingBrwView stopAllNetService];
+            for (EBrowserView *brwView in [brwWnd.mPopoverBrwViewDict allValues]) {
+                [brwView stopAllNetService];
+            }
+        }
     }
 }
 
-- (void)stopAllNetService {
-	if (!meBrwCtrler) {
-		return;
-	}
-	if (!meBrwCtrler.meBrwMainFrm) {
-		return;
-	}
-	if (!meBrwCtrler.meBrwMainFrm.meBrwWgtContainer) {
-		return;
-	}
-	if (!meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict) {
-		return;
-	}
-	if (meBrwCtrler.meBrwMainFrm.meAdBrwView) {
-		[meBrwCtrler.meBrwMainFrm.meAdBrwView stopAllNetService];
-	}
-	if (meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict) {
-		NSArray *brwWndContainerArray = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict allValues];
-		for (EBrowserWindowContainer *brwWndContainer in brwWndContainerArray) {
-			if (brwWndContainer.mBrwWndDict) {
-				NSArray *brwWndArray = [brwWndContainer.mBrwWndDict allValues];
-				for (EBrowserWindow* brwWnd in brwWndArray) {
-					if (brwWnd.meBrwView) {
-						[brwWnd.meBrwView stopAllNetService];
-					}
-					if (brwWnd.meTopSlibingBrwView) {
-						[brwWnd.meTopSlibingBrwView stopAllNetService];
-					}
-					if (brwWnd.meBottomSlibingBrwView) {
-						[brwWnd.meBottomSlibingBrwView stopAllNetService];
-					}
-					if (brwWnd.mPopoverBrwViewDict) {
-						NSArray *brwPopView = [brwWnd.mPopoverBrwViewDict allValues];
-						for (EBrowserView *brwView in brwPopView) {
-							[brwView stopAllNetService];
-						}
-					}
-				}
-			}
-		}
-	}
-}
+
 @end
 

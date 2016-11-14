@@ -80,20 +80,17 @@
 #define F_INTENT_DATA_VALUE_RET_CODE_SUCCESS	0
 #define F_INTENT_DATA_VALUE_RET_CODE_FAILED		1
 
-@interface EBrowser : NSObject{
-	EBrowserController *meBrwCtrler;
-	int mFlag;
-}
-@property (nonatomic, assign) EBrowserController *meBrwCtrler;
-@property int mFlag;
+@interface EBrowser : NSObject
+@property (nonatomic, weak) EBrowserController *meBrwCtrler;
+@property (nonatomic, assign) int mFlag;
 
 - (void)start:(WWidget*)inWWgt;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;
 - (void)stopAllNetService;
-- (void)removeAllNotActiveViews;
-//- (void)processCallbackResult:(NSMutableDictionary*)inArgsDict;
+
+
 @end
 
 

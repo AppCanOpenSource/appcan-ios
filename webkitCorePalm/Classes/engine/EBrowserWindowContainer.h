@@ -18,7 +18,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define F_BRW_WND_CONTAINER_LOAD_WGT_DONE					0x1
+
 
 #define F_BRW_WND_CONTAINER_BRW_WND_DICT_SIZE				30
 #define F_BRW_WND_ROOT_NAME									@"root"
@@ -49,7 +49,7 @@
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;
 - (EBrowserWindow*)aboveWindow;
 - (EBrowserWindow*)brwWndForKey: (id)inKey;
-- (void)removeAllUnActiveBrwWnd;
+
 - (void)removeFromWndDict:(id)inKey;
 - (void)clean;
 + (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView;

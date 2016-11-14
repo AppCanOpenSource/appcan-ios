@@ -530,40 +530,25 @@ static NSString *clientCertificatePwd = nil;
 + (NSURL*)stringToUrl:(NSString*)inString {
 	
     NSRange range = [inString rangeOfString:@"#"];
-    
     if (range.location != NSNotFound) {
-        
         inString = [inString substringToIndex:range.location];
-        
     }
-    
     NSURL * url = nil;
-    
 	if ([BUtility isSimulator]==NO) {
         url = [NSURL URLWithString:inString];
         if(!url || url.absoluteString.length == 0){
             NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             url = [NSURL URLWithString:urlStr];
         }
-        
 	} else {
-        
 		if ([inString hasPrefix:@"http://"]) {
-            
 			url = [NSURL URLWithString:inString];
-            
 		} else if([inString hasPrefix:@"file://"]){
-            
 			url = [NSURL URLWithString:[inString substringFromIndex:7]];
-            
 		} else {
-            
 			url = [NSURL fileURLWithPath:inString];
-            
-		}
-        
+        }
 	}
-    
 	return url;
     
 }
