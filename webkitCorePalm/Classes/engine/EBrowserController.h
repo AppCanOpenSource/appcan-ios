@@ -25,19 +25,15 @@
 @class WWidget;
 @class BallView;
 @class WWidgetUpdate;
-#define F_STARTIMG_WIDTH_HEIGHT  480
+
 
 #define F_EBRW_CTRL_FLAG_FORBID_ROTATE		0x1
 #define F_NEED_REPORT_APP_START             0x2
-#define F_EBRW_CTRL_FLAG_AUTH_SUCCESSED     0x4
 
 
 
 
-//4.8
-#define F_ForbidPlugins    @"AppCanPluginsKey"
-#define F_ForbidWindows    @"AppCanWindowsKey"
-#define F_AuthType         @"AppCanAuthType"
+
 
 APPCAN_EXPORT NSString *const kACECustomLoadingImagePathKey;
 APPCAN_EXPORT NSString *const kACECustomLoadingImageTimeKey;
@@ -48,28 +44,16 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
     ACELoadingImageCloseEventAppLoadingTimeout//默认的APP加载时间到的事件(3s)
 };
 
-@interface EBrowserController : ACEBaseViewController <UIAccelerometerDelegate,UIAlertViewDelegate>{
-	UIImageView *mStartView;
-	EBrowser *meBrw;
-	EBrowserMainFrame *meBrwMainFrm;
-	WWidgetMgr *mwWgtMgr;
-	NSLock *mSplashLock;
-	BallView *ballView;
-	int mFlag;
-	BOOL ballHasShow; 
-    NSMutableArray *mamList;
-    WWidgetUpdate *mwWgtUpdate;
-    //
-    int wgtOrientation;
-}
-@property (nonatomic, retain) UIImageView *mStartView;
-@property (nonatomic, retain) EBrowserMainFrame *meBrwMainFrm;
-@property (nonatomic, retain) EBrowser *meBrw;
-@property (nonatomic, retain) WWidgetMgr *mwWgtMgr;
+@interface EBrowserController : ACEBaseViewController <UIAccelerometerDelegate,UIAlertViewDelegate>
+@property (nonatomic, strong) UIImageView *mStartView;
+@property (nonatomic, strong) EBrowserMainFrame *meBrwMainFrm;
+@property (nonatomic, strong) EBrowser *meBrw;
+@property (nonatomic, strong) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, assign) BOOL ballHasShow;
 @property (nonatomic, assign) int mFlag;
+@property (nonatomic, strong) BallView *ballView;
 
-@property(nonatomic,assign)int wgtOrientation;
+@property (nonatomic, assign) int wgtOrientation;
 - (EBrowserWidgetContainer*)brwWidgetContainer;
 
 

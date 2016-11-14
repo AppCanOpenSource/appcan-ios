@@ -227,7 +227,7 @@
 		42F7879C1D950B5D0094AA05 /* ONOXMLElement+ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */; };
 		42F7879D1D950B5D0094AA05 /* EBrowserViewAnimition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860118B1B93D000D7600 /* EBrowserViewAnimition.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7879E1D950B5D0094AA05 /* ACEJSCBaseJS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */; };
-		42F787A01D950B5D0094AA05 /* EBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F518B1B93D000D7600 /* EBrowserController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787A01D950B5D0094AA05 /* EBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F518B1B93D000D7600 /* EBrowserController.m */; };
 		42F787A11D950B5D0094AA05 /* ACEVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DF1AB1CFD841600F4C53E /* ACEVersion.m */; };
 		42F787A21D950B5D0094AA05 /* EBrowserViewBounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860318B1B93D000D7600 /* EBrowserViewBounceView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787A31D950B5D0094AA05 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887961A0B0984002776E4 /* CJSONDeserializer_BlocksExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -499,7 +499,7 @@
 		5AAA86DA18B1B93D000D7600 /* EBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F218B1B93D000D7600 /* EBrowser.h */; };
 		5AAA86DB18B1B93D000D7600 /* EBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F318B1B93D000D7600 /* EBrowser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5AAA86DC18B1B93D000D7600 /* EBrowserController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F418B1B93D000D7600 /* EBrowserController.h */; };
-		5AAA86DD18B1B93D000D7600 /* EBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F518B1B93D000D7600 /* EBrowserController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5AAA86DD18B1B93D000D7600 /* EBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F518B1B93D000D7600 /* EBrowserController.m */; };
 		5AAA86DE18B1B93D000D7600 /* EBrowserHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F618B1B93D000D7600 /* EBrowserHistory.h */; };
 		5AAA86DF18B1B93D000D7600 /* EBrowserHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F718B1B93D000D7600 /* EBrowserHistory.m */; };
 		5AAA86E018B1B93D000D7600 /* EBrowserHistoryEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F818B1B93D000D7600 /* EBrowserHistoryEntry.h */; };
