@@ -795,16 +795,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
             
         }
 			break;
-        case ACEEBrowserViewTypeAd:{
-			if (self.superview != meBrwCtrler.meBrwMainFrm) {
-				[meBrwCtrler.meBrwMainFrm addSubview:self.superDelegate];
-			}
-			if ((self.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-				self.hidden = NO;
-			}
-			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
-        }
-			break;
+
 	}
     
     

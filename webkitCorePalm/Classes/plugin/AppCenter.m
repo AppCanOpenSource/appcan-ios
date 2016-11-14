@@ -268,11 +268,6 @@
 		//如果sview已经存在了。直接显示（要不要刷新?）
 		sView.hidden = NO;
 		[eBView.meBrwWnd.superview bringSubviewToFront:sView];
-		EBrowserMainFrame *eBrwMainFrm = eBView.meBrwCtrler.meBrwMainFrm;
-		if (eBrwMainFrm.meAdBrwView) {
-			eBrwMainFrm.meAdBrwView.hidden = YES;
-			[eBrwMainFrm invalidateAdTimers];
-		}
 	}else {
 		//初始化
 		[self initForDisplay];
@@ -292,11 +287,8 @@
 	}
 	[self.eBView.meBrwWnd.superview addSubview:sView];
  	[eBView.meBrwWnd.superview bringSubviewToFront:sView];
-	EBrowserMainFrame *eBrwMainFrm = eBView.meBrwCtrler.meBrwMainFrm;
-	if (eBrwMainFrm.meAdBrwView) {
-		eBrwMainFrm.meAdBrwView.hidden = YES;
-		[eBrwMainFrm invalidateAdTimers];
-	}
+
+
 	_showTag = YES;	
 	//加载推荐应用数据
  	[self loadPopAppList];

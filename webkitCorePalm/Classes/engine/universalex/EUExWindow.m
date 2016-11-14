@@ -458,11 +458,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
         return;
     }
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
+
     
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || flag & UexWindowOpenFlagEnableSwipeClose) {
         [self openWindowControllerWithName:inWindowName
@@ -899,13 +896,6 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             [self.EBrwView removeFromSuperview];
             break;
         }
-        case ACEEBrowserViewTypeAd: {
-            self.EBrwView.meBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-            self.EBrwView.hidden = YES;
-            [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-            return;
-            
-        }
         case ACEEBrowserViewTypeSlibingTop:
         case ACEEBrowserViewTypeSlibingBottom: {
             return;
@@ -953,11 +943,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         brwWnd.mMuiltPopoverDict = nil;
     }
     
-    if (self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
-        brwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
-        [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-    }
+
     if ((brwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) && (brwWnd.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING)) {
         brwWnd.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
     }
@@ -1117,14 +1103,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (!eBrwWnd.meBackWnd){
         return;
     }
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
+
     NSInteger animiId = [inAnimId integerValue];
     NSTimeInterval animiDuration = getAnimationDuration(inAnimDuration);
     
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
     [self helpBringWindowToFront:eBrwWnd.meBackWnd withAnimationId:animiId animationDuration:animiDuration];
 }
 
@@ -1139,17 +1122,14 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     
     EBrowserWindow *eBrwWnd = self.EBrwView.meBrwWnd;
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
+
     if (!eBrwWnd.meFrontWnd) {
         return;
     }
     NSInteger animiId = [inAnimID integerValue];
     NSTimeInterval animiDuration = getAnimationDuration(inAnimDuration);
     
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
     [self helpBringWindowToFront:eBrwWnd.meFrontWnd withAnimationId:animiId animationDuration:animiDuration];
     
 }
@@ -3603,173 +3583,12 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 
 - (void)openAd:(NSMutableArray *)inArguments {
-    
-    ACArgsUnpack(NSNumber *inType,NSNumber *inDisplayTime,NSNumber *inInterval,NSNumber *inFlag) = inArguments;
-    
-    
-    
-    int type = F_EBRW_MAINFRM_AD_TYPE_TOP;
-    UexWindowOpenFlag flag = [inFlag integerValue];
-    CGRect ADFrame;
-    if (!self.EBrwView) {
-        return;
-    }
-    if (self.EBrwView.mType != ACEEBrowserViewTypeMain) {
-        return;
-    }
-    if (self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.openAdStatus != 1) {
-        return;
-    }
-    self.EBrwView.mFlag |= F_EBRW_VIEW_FLAG_HAS_AD;
-    EBrowserWindow *eBrwWnd = (EBrowserWindow*)self.EBrwView.meBrwWnd;
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    
-    type = [inType intValue];
-    self.EBrwView.mAdType = type;
-    
-    
-    self.EBrwView.mAdDisplayTime = [inDisplayTime intValue];
-    eBrwMainFrm.mAdDisplayTime = [inDisplayTime intValue];
-    
-    
-    self.EBrwView.mAdIntervalTime = [inInterval intValue];
-    eBrwMainFrm.mAdIntervalTime = [inInterval intValue];
-    
-    
-    
-    self.EBrwView.mAdFlag = flag;
-    
-    switch (type) {
-        case F_EBRW_MAINFRM_AD_TYPE_TOP:
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PAD);
-            } else {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PHONE);
-            }
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_MIDDLE:
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, eBrwWnd.bounds.size.height) ;
-            } else {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, eBrwWnd.bounds.size.height);
-            }
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_BOTTOM:
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, (eBrwWnd.bounds.size.height-F_EBRW_MAINFRM_AD_HEIGHT_PAD), eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PAD) ;
-            } else {
-                ADFrame = CGRectMake(0, (eBrwWnd.bounds.size.height-F_EBRW_MAINFRM_AD_HEIGHT_PHONE), eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PHONE);
-            }
-            break;
-        default:
-            type = 0;
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PAD);
-            } else {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PHONE);
-            }
-            break;
-    }
-    if (!eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView = [[EBrowserView alloc] initWithFrame:ADFrame BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt BrwWnd:eBrwWnd UExObjName:@"" Type:ACEEBrowserViewTypeAd];
-        eBrwMainFrm.mAdType = type;
-    } else {
-        eBrwMainFrm.meAdBrwView.hidden = NO;
-        eBrwMainFrm.meAdBrwView.meBrwWnd = eBrwWnd;
-        if (eBrwMainFrm.mAdType != type) {
-            eBrwMainFrm.mAdType = type;
-            [eBrwMainFrm.meAdBrwView setFrame:ADFrame];
-            eBrwMainFrm.meAdBrwView.hidden = YES;
-        }
-        if (eBrwMainFrm.meAdBrwView.hidden == NO) {
-            if (eBrwMainFrm.mAdDisplayTimer) {
-                if ([eBrwMainFrm.mAdDisplayTimer isValid]) {
-                    [eBrwMainFrm.mAdDisplayTimer invalidate];
-                }
-                eBrwMainFrm.mAdDisplayTimer = NULL;
-            }
-        } else {
-            if (eBrwMainFrm.mAdIntervalTimer) {
-                if ([eBrwMainFrm.mAdIntervalTimer isValid]) {
-                    [eBrwMainFrm.mAdIntervalTimer invalidate];
-                }
-                eBrwMainFrm.mAdIntervalTimer = NULL;
-            }
-        }
-    }
-    if (flag & UexWindowOpenFlagOpaque){
-        eBrwMainFrm.meAdBrwView.backgroundColor = [UIColor whiteColor];
-    }
-    eBrwMainFrm.meAdBrwView.mFlag = 0;
-    if (flag & UexWindowOpenFlagDisableCrossDomain) {
-        eBrwMainFrm.meAdBrwView.mFlag |= F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN;
-    }
-    int reportAdType = 0;
-    //NSString *adURL = @"http://app.tx100.com/adver/index.html";
-    NSString *adURL =  @"http://wgb.tx100.com/mobile/adver.wg";
-    switch (eBrwMainFrm.mAdType) {
-        case F_EBRW_MAINFRM_AD_TYPE_TOP:
-            reportAdType = 0;
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_MIDDLE:
-            //adURL = @"http://app.tx100.com/adver/adver_big.html";
-            reportAdType = 1;
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_BOTTOM:
-            reportAdType = 0;
-            break;
-        default:
-            break;
-    }
-    NSString *keyStr = [self.EBrwView.mwWgt.appId stringByAppendingString:@"BD7463CD-D608-BEB4-C633-EF3574213060"];
-    NSData *keyData = [keyStr dataUsingEncoding:NSUTF8StringEncoding];
-    CC_MD5_CTX md5;
-    CC_MD5_Init(&md5);
-    CC_MD5_Update(&md5, [keyData bytes],(CC_LONG)[keyData length]);
-    unsigned char digest[CC_MD5_DIGEST_LENGTH];
-    CC_MD5_Final(digest, &md5);
-    NSString *md5Str = [NSString stringWithFormat:
-                        @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-                        digest[0], digest[1], digest[2], digest[3],
-                        digest[4], digest[5], digest[6], digest[7],
-                        digest[8], digest[9], digest[10], digest[11],
-                        digest[12], digest[13], digest[14], digest[15]];
-    NSString *md5Key = [md5Str lowercaseString];
-    NSString *adURLQuery = NULL;
-    if ([BUtility isIpad]) {
-        adURLQuery = [NSString stringWithFormat:@"?appid=%@&pt=%d&dw=%d&dh=%d&md5=%@&type=%d", self.EBrwView.mwWgt.appId,0,768,1024,md5Key,reportAdType];
-    } else {
-        adURLQuery = [NSString stringWithFormat:@"?appid=%@&pt=%d&dw=%d&dh=%d&md5=%@&type=%d", self.EBrwView.mwWgt.appId,0,320,460,md5Key,reportAdType];
-    }
-    adURL = [adURL stringByAppendingString:adURLQuery];
-    ACENSLog(@"adURL is %@", adURL);
-    //adURL.length != 0
-    if (adURL && adURL.length > 0) {
-        
-        NSURL *url = [BUtility stringToUrl:adURL];
-        [eBrwMainFrm.meAdBrwView loadWithUrl:url];
-    } else {
-        [eBrwMainFrm bringSubviewToFront:eBrwMainFrm.meAdBrwView];
-        eBrwMainFrm.meAdBrwView.hidden = NO;
-    }
-    if (eBrwMainFrm.mAdDisplayTime > 0) {
-        eBrwMainFrm.mAdDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:eBrwMainFrm.mAdDisplayTime target:eBrwMainFrm selector:@selector(displayDone) userInfo:nil repeats:NO];
-    }
+    //deprecated
+
 }
 
 
 
-- (void)closeAD:(NSMutableArray *)inArguments {
-    if (self.EBrwView.mType != ACEEBrowserViewTypeMain) {
-        return;
-    }
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        self.EBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-    }
-}
 
 
 

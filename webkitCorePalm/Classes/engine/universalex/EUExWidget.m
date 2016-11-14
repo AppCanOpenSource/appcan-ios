@@ -302,11 +302,8 @@ static BOOL isAppLaunchedByPush = NO;
     };
     
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
+
     WWidget *wgtObj = [self getStartWgtByAppId:inAppId];
     if (!wgtObj) {//
         err = uexErrorMake(1,@"inAppId对应的widget未找到");
@@ -602,7 +599,6 @@ static BOOL isAppLaunchedByPush = NO;
         NSString *viewName = [ePopView.curUrl absoluteString];
         NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
         [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-        [[self.EBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
         [brwWnd_.mPopoverBrwViewDict removeAllObjects];
         brwWnd_.mPopoverBrwViewDict = nil;
     }
@@ -616,11 +612,7 @@ static BOOL isAppLaunchedByPush = NO;
     [brwWnd_.mMuiltPopoverDict removeAllObjects];
     brwWnd_.mMuiltPopoverDict = nil;
     
-    if (self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
-        brwWnd_.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
-        [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-    }
+
     if ((brwWnd_.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
         if ((brwWnd_.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
             brwWnd_.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;

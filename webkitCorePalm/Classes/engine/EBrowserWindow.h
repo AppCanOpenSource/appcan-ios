@@ -40,14 +40,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
     ACEWebWindowTypePresent, //present
 };
 
-@interface EBrowserWindow : UIView {
-
-	NSString *mOAuthWndName;
-	WWidget *mwWgt;
-	int mOpenAnimiId;
-	float mOpenAnimiDuration;
-	int mFlag;
-}
+@interface EBrowserWindow : UIView 
 @property (nonatomic,weak) EBrowserController *meBrwCtrler;
 @property (nonatomic,strong) EBrowserView *meTopSlibingBrwView;
 @property (nonatomic,strong) EBrowserView *meBrwView;
@@ -59,15 +52,15 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 @property (nonatomic,strong) EBrowserHistory *meBrwHistory;
 @property (nonatomic,strong) NSString *mOAuthWndName;
 @property (nonatomic,strong) WWidget *mwWgt;
-@property int mOpenAnimiId;
-@property float mOpenAnimiDuration;
-@property int mFlag;
+@property (nonatomic,assign) int mOpenAnimiId;
+@property (nonatomic,assign) float mOpenAnimiDuration;
+@property (nonatomic,assign) int mFlag;
 @property (nonatomic,retain) NSMutableDictionary *mMuiltPopoverDict;
-@property (nonatomic, assign) ACEWebWindowType webWindowType;
-@property (nonatomic, weak) EBrowserWindowContainer *winContainer;
-@property (nonatomic, strong) NSString *windowName;
-@property (nonatomic, assign) id webController;
-@property (nonatomic, assign) BOOL isSliding;
+@property (nonatomic,assign) ACEWebWindowType webWindowType;
+@property (nonatomic,weak) EBrowserWindowContainer *winContainer;
+@property (nonatomic,strong) NSString *windowName;
+@property (nonatomic,assign) id webController;
+@property (nonatomic,assign) BOOL isSliding;
 @property (nonatomic,assign) BOOL enableSwipeClose;
 //
 @property (nonatomic,assign) BOOL usingPopAnimation;

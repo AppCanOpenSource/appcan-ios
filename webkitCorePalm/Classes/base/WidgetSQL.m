@@ -57,7 +57,7 @@
 	sqlite3_stmt *statement; 
 	const char *sql = [sqlStr UTF8String];
 	if(sqlite3_prepare_v2(dbObject, sql, -1, &statement, NULL)==SQLITE_OK){		
-		NSString *fieldValue;
+		NSString *fieldValue = nil;
 		while (sqlite3_step(statement) == SQLITE_ROW) {
 			char *rowData = (char *)sqlite3_column_text(statement,1);  
 			if (rowData && !(strcmp(rowData, "(null)")==0)) {

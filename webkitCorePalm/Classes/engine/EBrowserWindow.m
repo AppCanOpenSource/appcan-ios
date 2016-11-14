@@ -110,7 +110,6 @@
 		self.opaque = YES;
 		meBrwCtrler = eInBrwCtrler;
 		mwWgt = inWgt;
-		mOAuthWndName = nil;
 		if (meBrwView) {
 			[meBrwView reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
 		} else {

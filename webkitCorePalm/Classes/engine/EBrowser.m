@@ -55,7 +55,6 @@
 
 
 - (void)stopAllNetService {
-    [self.meBrwCtrler.meBrwMainFrm.meAdBrwView stopAllNetService];
     NSArray *brwWndContainerArray = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict allValues];
     for (EBrowserWindowContainer *brwWndContainer in brwWndContainerArray) {
         NSArray *brwWndArray = [brwWndContainer.mBrwWndDict allValues];

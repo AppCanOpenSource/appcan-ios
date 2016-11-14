@@ -59,7 +59,6 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
     ACEEBrowserViewTypeSlibingTop,
     ACEEBrowserViewTypeSlibingBottom,
     ACEEBrowserViewTypePopover,
-    ACEEBrowserViewTypeAd
 };
 
 
