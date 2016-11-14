@@ -38,7 +38,7 @@
 @synthesize meBrwCtrler;
 @synthesize meRootBrwWndContainer;
 @synthesize mBrwWndContainerDict;
-@synthesize mReUseBrwViewArray;
+
 @synthesize mWWigets;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler {
@@ -55,7 +55,7 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		meRootBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:meBrwCtrler.mwWgtMgr.wMainWgt];
 		[mBrwWndContainerDict setObject:meRootBrwWndContainer forKey:meBrwCtrler.mwWgtMgr.wMainWgt.appId];
-		mReUseBrwViewArray = [[NSMutableArray alloc] initWithCapacity:F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE];
+
 		[self addSubview:meRootBrwWndContainer];
 	}
 	ACENSLog(@"EBrowserWidgetContainer alloc is %x", self);
@@ -63,96 +63,34 @@
 }
 
 - (void)dealloc {
-
-	ACENSLog(@"EBrowserWidgetContainer dealloc is %x", self);
-	if (meRootBrwWndContainer) {
-
-		meRootBrwWndContainer = nil;
-	}
-    if (mWWigets) {
-        self.mWWigets=nil;
+    meRootBrwWndContainer = nil;
+    self.mWWigets=nil;
+    NSArray *brwWndContainerArray = [mBrwWndContainerDict allValues];
+    for (EBrowserWindowContainer *wndContainer in brwWndContainerArray){
+        [wndContainer removeFromSuperview];
     }
-	if (mBrwWndContainerDict) {
-		NSArray *brwWndContainerArray = [mBrwWndContainerDict allValues];
-		for (EBrowserWindowContainer *wndContainer in brwWndContainerArray){
-			if (wndContainer.superview) {
-				[wndContainer removeFromSuperview];
-			}
-
-		}
-		[mBrwWndContainerDict removeAllObjects];
-
-		mBrwWndContainerDict = nil;
-	}
-	if (mReUseBrwViewArray) {
-		for (EBrowserView* eBrwView in mReUseBrwViewArray) {
-			if (eBrwView.superview) {
-				[eBrwView removeFromSuperview];
-			}
-
-		}
-		[mReUseBrwViewArray removeAllObjects];
-
-		mReUseBrwViewArray = NULL;
-	}
-
+    [mBrwWndContainerDict removeAllObjects];
+    mBrwWndContainerDict = nil;
 }
 
 
 
-- (EBrowserView*)popReuseBrwView {
-    [mReUseBrwViewArray removeAllObjects];
-    return nil;
-    /*
-	if (mReUseBrwViewArray.count == 0) {
-		return nil;
-	}
-	EBrowserView *eBrwView = [[mReUseBrwViewArray objectAtIndex:0] retain];
-	[mReUseBrwViewArray removeObject:eBrwView];
-	return eBrwView;
-     */
-}
 
-- (void)pushReuseBrwView:(EBrowserView*)inBrwView {
-
-    
-}
-
-- (void)layoutSubviews {
-	ACENSLog(@"EBrowserWidgetContainer layoutSubviews!");
-	ACENSLog(@"wnd rect is:%f,%f,%f,%f", self.frame.origin.x, self.frame.origin.y, self.bounds.size.width, self.bounds.size.height);
-}
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
-//	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
-//    EBrowserWindowContainer *eSuperBrwWndContainer = (EBrowserWindowContainer*)eSuperBrwWnd.superview;
-    
     EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
-    
-
-    
-    
-	
 	[eSuperBrwWndContainer notifyLoadPageStartOfBrwView:eInBrwView];
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
     ACLogVerbose(@"window '%@' opened;",eInBrwView.meBrwWnd.meBrwView.muexObjName);
 	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
-    
     EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
-
-    
     if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
         [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-        
         return;
-        
     }
-    
-    
-//	EBrowserWindowContainer *eSuperBrwWndContainer = (EBrowserWindowContainer*)eSuperBrwWnd.superview;
+
 	EBrowserWindowContainer *eCurBrwWndContainer = [self.subviews objectAtIndex:self.subviews.count-1];
     
     if (!eSuperBrwWndContainer) {

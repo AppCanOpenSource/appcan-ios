@@ -85,9 +85,8 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 - (EBrowserHistoryEntry*)curHisEntry;
 - (EBrowserView*)popBrwViewForKey:(id)inKey;
 - (void)removeFromPopBrwViewDict:(id)inKey;
-- (void)cleanAllBrwViews;
 - (void)clean;
--(EBrowserView *)theFrontView;
+- (EBrowserView *)theFrontView;
 
 
 +(void)postWindowSequenceChange;

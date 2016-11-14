@@ -26,7 +26,6 @@
 @property (nonatomic, weak) EBrowserController *meBrwCtrler;
 @property (nonatomic, strong) EBrowserWindowContainer *meRootBrwWndContainer;
 @property (nonatomic, strong) NSMutableDictionary<NSString *,EBrowserWindowContainer *> *mBrwWndContainerDict;
-@property (nonatomic, strong) NSMutableArray *mReUseBrwViewArray;
 @property (nonatomic, strong) NSMutableDictionary *mWWigets;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler;
@@ -34,8 +33,7 @@
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;
 - (EBrowserWindowContainer*)aboveWindowContainer;
-- (EBrowserView*)popReuseBrwView;
-- (void)pushReuseBrwView:(EBrowserView*)inBrwView;
+
 
 
 @end

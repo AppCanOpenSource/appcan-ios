@@ -60,118 +60,48 @@
 
 
 - (void)dealloc {
-
-	if (meTopSlibingBrwView) {
-
-		if (meTopSlibingBrwView.superview) {
-			[meTopSlibingBrwView removeFromSuperview];
-		}
-		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meTopSlibingBrwView];
-
-		meTopSlibingBrwView = nil;
-	}
-	if (meBrwView) {
-
-		if (meBrwView.superview) {
-			[meBrwView removeFromSuperview];
-		}
-		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meBrwView];
-
-		meBrwView = nil;
-	}
-	if (meBottomSlibingBrwView) {
-
-		if (meBottomSlibingBrwView.superview) {
-			[meBottomSlibingBrwView removeFromSuperview];
-		}
-		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meBottomSlibingBrwView];
-
-		meBottomSlibingBrwView =nil;
-	}
-	if (mPreOpenArray) {
-		[mPreOpenArray removeAllObjects];
-		mPreOpenArray = nil;
-	}
-	if (mPopoverBrwViewDict) {
-		NSArray *popViewArray = [mPopoverBrwViewDict allValues];
-		for (EBrowserView *popView in popViewArray) {
-			if (popView.superview) {
-				[popView removeFromSuperview];
-			}
-			[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:popView];
-
-		}
-		[mPopoverBrwViewDict removeAllObjects];
-
-		mPopoverBrwViewDict = nil;
-	}
-    //
-    if (mMuiltPopoverDict)
-    {
-        NSArray * mulitPopArray = [mMuiltPopoverDict allValues];
-        for (UIScrollView * popView in mulitPopArray)
-        {
-            if (popView.subviews) {
-                [popView removeFromSuperview];
-            }
-        }
-        [mMuiltPopoverDict removeAllObjects];
-        //        [mMuiltPopoverDict release];
-        mMuiltPopoverDict = nil;
+    [meTopSlibingBrwView removeFromSuperview];
+    meTopSlibingBrwView = nil;
+    [meBrwView removeFromSuperview];
+    meBrwView = nil;
+    [meBottomSlibingBrwView removeFromSuperview];
+    meBottomSlibingBrwView =nil;
+    [mPreOpenArray removeAllObjects];
+    mPreOpenArray = nil;
+    
+    NSArray *popViewArray = [mPopoverBrwViewDict allValues];
+    for (EBrowserView *popView in popViewArray) {
+        [popView removeFromSuperview];
     }
-    ////
-	if (meFrontWnd && [meFrontWnd isKindOfClass:[EBrowserWindow class]]) {
-		
+    [mPopoverBrwViewDict removeAllObjects];
+    mPopoverBrwViewDict = nil;
+    
+    NSArray * mulitPopArray = [mMuiltPopoverDict allValues];
+    for (UIScrollView * popView in mulitPopArray){
+        [popView removeFromSuperview];
+    }
+    [mMuiltPopoverDict removeAllObjects];
+    mMuiltPopoverDict = nil;
+    
+
+    if (meFrontWnd && [meFrontWnd isKindOfClass:[EBrowserWindow class]]) {
         if ([meFrontWnd respondsToSelector:@selector(setMeBackWnd:)]) {
-            
             [meFrontWnd setMeBackWnd:nil];
-            
         }
-        
-	}
+    }
     
     if (meBackWnd && [meBackWnd isKindOfClass:[EBrowserWindow class]]) {
-            
         if ([meBackWnd respondsToSelector:@selector(setMeFrontWnd:)]) {
-                
             [meBackWnd setMeFrontWnd:nil];
         }
-            
     }
     
-	
-    //
-	if (meBrwHistory) {
-
-		meBrwHistory = nil;
-	}
-
-	mOAuthWndName = nil;
-
+    meBrwHistory = nil;
+    mOAuthWndName = nil;
     [self deregisterWindowSequenceChange];
-    if(self.popAnimationInfo){
-        self.popAnimationInfo=nil;
-    }
-
+    self.popAnimationInfo = nil;
 }
 
-- (void)cleanAllBrwViews {
-	if (meTopSlibingBrwView) {
-        [meTopSlibingBrwView cleanAllEexObjs];
-	}
-	if (meBrwView) {
-         [meBrwView cleanAllEexObjs];
-	}
-	if (meBottomSlibingBrwView) {
-        [meBottomSlibingBrwView cleanAllEexObjs];
-	}
-	if (mPopoverBrwViewDict) {
-		NSArray *popViewArray = [mPopoverBrwViewDict allValues];
-		for (EBrowserView *popView in popViewArray) {
-            [popView cleanAllEexObjs];
-		}
-	}
-}
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName {
     self = [super initWithFrame:frame];
@@ -181,7 +111,6 @@
 		meBrwCtrler = eInBrwCtrler;
 		mwWgt = inWgt;
 		mOAuthWndName = nil;
-		meBrwView = [[meBrwCtrler brwWidgetContainer] popReuseBrwView];
 		if (meBrwView) {
 			[meBrwView reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
 		} else {
