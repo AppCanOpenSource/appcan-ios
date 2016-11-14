@@ -3211,20 +3211,14 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 - (void)hideStatusBar:(NSArray *)inArgument {
     theApp.drawerController.isStatusBarHidden = YES;
-    if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
-        [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    } else {
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-    }
+    [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+    
 }
 
 - (void)showStatusBar:(NSArray *)inArgument {
     theApp.drawerController.isStatusBarHidden = NO;
-    if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
-        [[UIApplication sharedApplication]setStatusBarHidden:NO];
-    } else {
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-    }
+    [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+    
 }
 
 //设置状态条上字体的颜色

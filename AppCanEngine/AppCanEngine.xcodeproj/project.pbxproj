@@ -22,7 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		333D00041A42B9CA00F501B3 /* ACEBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */; };
-		333D00051A42B9CA00F501B3 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		333D00051A42B9CA00F501B3 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; };
 		333D00061A42B9CA00F501B3 /* ACEUINavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */; };
 		333D00071A42B9CA00F501B3 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		333D00081A42B9CA00F501B3 /* ACEWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 333DFFFD1A42B9CA00F501B3 /* ACEWebViewController.h */; };
@@ -248,7 +248,7 @@
 		42F787B21D950B5D0094AA05 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AA18B1B93D000D7600 /* NSString+SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787B31D950B5D0094AA05 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; };
 		42F787B41D950B5D0094AA05 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
-		42F787B51D950B5D0094AA05 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787B51D950B5D0094AA05 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; };
 		42F787B61D950B5D0094AA05 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787B71D950B5D0094AA05 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862318B1B93D000D7600 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787B81D950B5D0094AA05 /* EBrowserWindowContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */; };
