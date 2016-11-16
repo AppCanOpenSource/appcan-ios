@@ -435,7 +435,7 @@ static NSString *clientCertificatePwd = nil;
         else {
             
             NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
-            //        int statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+
             int statusBarHeight = 20;
             if ([statusBarStyleIOS7 boolValue] == YES) {
                 rect =  CGRectMake(0, 0, appWidth, appHeight);
@@ -1634,7 +1634,6 @@ static NSString *clientCertificatePwd = nil;
         
         if (isEncrypt) {
             
-            //            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
             
             
             
@@ -1746,8 +1745,7 @@ static NSString *clientCertificatePwd = nil;
         BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
         
         if (isEncrypt) {
-            
-            //            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+
             
             
             

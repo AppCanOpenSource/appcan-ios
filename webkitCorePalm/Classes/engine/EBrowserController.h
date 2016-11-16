@@ -25,6 +25,7 @@
 @class WWidget;
 @class BallView;
 @class WWidgetUpdate;
+@class ACEUINavigationController;
 
 
 #define F_EBRW_CTRL_FLAG_FORBID_ROTATE		0x1
@@ -53,7 +54,11 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, assign) int mFlag;
 @property (nonatomic, strong) BallView *ballView;
 
-@property (nonatomic, assign) int wgtOrientation;
+
+@property (nonatomic, weak) ACEUINavigationController *aceNaviController;
+
+
+
 - (EBrowserWidgetContainer*)brwWidgetContainer;
 
 

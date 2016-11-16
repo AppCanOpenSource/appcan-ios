@@ -369,16 +369,7 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 
 #pragma mark - Update Swipe Close Status
 -(void)updateSwipeCloseEnableStatus{
-    ACEUINavigationController *navController = nil;
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    if (app.drawerController) {
-        navController = (ACEUINavigationController *)app.drawerController.centerViewController;
-    } else {
-        navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
-    }
-    if(navController){
-        navController.canDragBack=self.enableSwipeClose;
-    }
+    self.meBrwCtrler.aceNaviController.canDragBack = self.enableSwipeClose;
 }
 
 @end

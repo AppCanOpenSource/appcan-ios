@@ -285,8 +285,7 @@ NSString * webappShowAactivety;
         BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
         
         if (isEncrypt) {
-            
-//            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+
             
             
 

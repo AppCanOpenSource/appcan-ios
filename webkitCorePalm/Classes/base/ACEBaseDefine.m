@@ -78,3 +78,26 @@ ACEInterfaceOrientation ace_interfaceOrientationFromUIInterfaceOrientation(UIInt
             
     }
 }
+
+UIInterfaceOrientationMask ace_interfaceOrientationMaskFromACEInterfaceOrientation(ACEInterfaceOrientation orientation){
+
+    UIInterfaceOrientationMask mask = 0;
+    if (orientation & ACEInterfaceOrientationProtrait) {
+        mask |= UIInterfaceOrientationMaskPortrait;
+    }
+    if (orientation & ACEInterfaceOrientationLandscapeLeft) {
+        mask |= UIInterfaceOrientationMaskLandscapeRight;
+    }
+    if (orientation & ACEInterfaceOrientationProtraitUpsideDown) {
+        mask |= UIInterfaceOrientationMaskPortraitUpsideDown;
+    }
+    if (orientation & ACEInterfaceOrientationLandscapeRight) {
+        mask |= UIInterfaceOrientationMaskLandscapeLeft;
+    }
+    if (mask == 0) {
+        mask = UIInterfaceOrientationMaskAll;
+    }
+    return mask;
+}
+
+

@@ -33,7 +33,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "ACEBrowserView.h"
-#import "ONOXMLElement+ACEConfigXML.h"
+#import "ACEConfigXML.h"
 
 extern NSString * webappShowAactivety;
 
@@ -341,7 +341,7 @@ static NSUInteger kMaxErrorRetryCount = 5;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         errorHTMLPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"error/error.html"];
-        ONOXMLElement *configXML = [ONOXMLElement ACEOriginConfigXML];
+        ONOXMLElement *configXML = [ACEConfigXML ACEOriginConfigXML];
         ONOXMLElement *errorXML = [configXML firstChildWithTag:@"error"];
         if (errorXML && errorXML[@"src"]) {
             errorHTMLPath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,@"widget",errorXML[@"src"]]];

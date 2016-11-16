@@ -51,7 +51,7 @@
 #import "ACEBrowserView.h"
 #import <AppCanKit/AppCanGlobalObjectGetter.h>
 #import <AppCanKit/ACInvoker.h>
-#import "ONOXMLElement+ACEConfigXML.h"
+#import "ACEConfigXML.h"
 #import <UserNotifications/UserNotifications.h>
 
 
@@ -249,7 +249,7 @@
     }
 
     //设置Debug日志
-    ONOXMLElement *debug = [[ONOXMLElement ACENewestConfigXML] firstChildWithTag:@"debug"];
+    ONOXMLElement *debug = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"debug"];
     NSString *debugEnable = debug[@"enable"];
     NSString *debugVerbose = debug[@"verbose"];
     if (debugEnable.boolValue) {
@@ -273,30 +273,15 @@
         [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
     }
     
-    ACEUINavigationController *meNav = nil;
+
     self.meBrwCtrler = [[EBrowserController alloc]init];
     
-    NSString *hardware = [BUtility getDeviceVer];
+
     
-    if (![hardware hasPrefix:@"iPad"]) {
-        
-        //如果设置的屏幕方向包括右横屏，则启动时候先禁止有横屏，启动后再解禁
-        NSString * orientation = [BUtility getMainWidgetConfigInterface];
-        int or = [orientation intValue];
-        
-        if (or== 10 || or ==11 ||or ==12 ||or ==9 ||or ==14 ||or ==13 ||or ==8) {
-            
-            self.meBrwCtrler.wgtOrientation=2;
-            
-        }
-        
-    }
+
     
-    meNav = [[ACEUINavigationController alloc] initWithRootViewController:self.meBrwCtrler];
     
-    [meNav setNavigationBarHidden:YES];
-    
- 
+
     
     self.mwWgtMgr = [[WWidgetMgr alloc]init];
     self.meBrwCtrler.mwWgtMgr = self.mwWgtMgr;
@@ -304,10 +289,14 @@
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
 
-    
+    ACEUINavigationController *meNav = [[ACEUINavigationController alloc] initWithRootViewController:self.meBrwCtrler];
+    self.meBrwCtrler.aceNaviController = meNav;
     _drawerController = [[ACEDrawerViewController alloc] initWithCenterViewController:meNav
                                                              leftDrawerViewController:nil
                                                             rightDrawerViewController:nil];
+    
+    _drawerController.mainContentController = meNav;
+
     
     [_drawerController setMaximumRightDrawerWidth:200.0];
     [_drawerController setMaximumLeftDrawerWidth:200.0];
@@ -329,7 +318,7 @@
 
     
     [self.window makeKeyAndVisible];
-    [BUtility writeLog:[NSString stringWithFormat:@"-----didFinishLaunchingWithOptions------>>theApp.usePushControl==%d",theApp.usePushControl]];
+
     if(theApp.usePushControl == YES) {
         UIUserNotificationSettings *uns = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:nil];
         //注册推送

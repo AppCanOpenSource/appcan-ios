@@ -886,10 +886,7 @@
 //		self.eBView.meBrwCtrler.ballHasShow = NO;
 		EBrowserWindow *eAboveWnd = [[self.eBView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
 		[eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-		if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-			NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-			[eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-		}
+
 	}
 }
 -(void)appPressLongForDelete:(NSString *)appID{

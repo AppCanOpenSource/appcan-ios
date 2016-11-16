@@ -31,12 +31,14 @@ typedef NS_OPTIONS(NSInteger, ACEInterfaceOrientation){
     ACEInterfaceOrientationProtrait = 1 << 0,
     ACEInterfaceOrientationLandscapeLeft = 1 << 1,
     ACEInterfaceOrientationProtraitUpsideDown = 1 << 2,
-    ACEInterfaceOrientationLandscapeRight = 1 << 3
+    ACEInterfaceOrientationLandscapeRight = 1 << 3,
+    ACEInterfaceOrientationVertical = (ACEInterfaceOrientationProtrait | ACEInterfaceOrientationProtraitUpsideDown),
+    ACEInterfaceOrientationHorizontal = (ACEInterfaceOrientationLandscapeLeft | ACEInterfaceOrientationLandscapeRight),
 };
 
 APPCAN_EXPORT ACEInterfaceOrientation ace_interfaceOrientationFromUIDeviceOrientation(UIDeviceOrientation orientation);
 APPCAN_EXPORT ACEInterfaceOrientation ace_interfaceOrientationFromUIInterfaceOrientation(UIInterfaceOrientation orientation);
-
+APPCAN_EXPORT UIInterfaceOrientationMask ace_interfaceOrientationMaskFromACEInterfaceOrientation(ACEInterfaceOrientation orientation);
 
 
 

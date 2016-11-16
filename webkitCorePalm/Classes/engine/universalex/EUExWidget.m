@@ -46,7 +46,7 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACInvoker.h>
-#import "ONOXMLElement+ACEConfigXML.h"
+#import "ACEConfigXML.h"
 #import "ACEBaseDefine.h"
 
 
@@ -321,9 +321,11 @@ static BOOL isAppLaunchedByPush = NO;
     int mOrientaion =self.EBrwView.mwWgt.orientation;
     int subOrientation = wgtObj.orientation;
     
-    theApp.drawerController.canRotate = YES;
     
+#warning TODO
+    //theApp.drawerController.canRotate = YES;
     
+    EBrowserController *browserController = [[EBrowserController alloc] init];
     
     
     
@@ -348,7 +350,7 @@ static BOOL isAppLaunchedByPush = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
-    theApp.drawerController.canRotate = NO;
+    //theApp.drawerController.canRotate = NO;
 
     self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WIDGET_IN_OPENING;
     EBrowserWidgetContainer *eBrwWgtContainer = self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
@@ -375,10 +377,7 @@ static BOOL isAppLaunchedByPush = NO;
         
         EBrowserWindow *eAboveWnd = [eBrwWndContainer aboveWindow];
         [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-        if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-            NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-            [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-        }
+
         if (eBrwWgtContainer.meRootBrwWndContainer == eBrwWndContainer) {
             self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
         }
@@ -442,7 +441,9 @@ static BOOL isAppLaunchedByPush = NO;
     int mOrientaion = [[BUtility getMainWidgetConfigInterface]intValue];
     
     int subOrientation =self.EBrwView.mwWgt.orientation;
-    theApp.drawerController.canRotate = YES;
+    
+#warning TODO
+    //theApp.drawerController.canRotate = YES;
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     if (subOrientation == mOrientaion || mOrientaion == 15) {
         
@@ -473,7 +474,7 @@ static BOOL isAppLaunchedByPush = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
-    theApp.drawerController.canRotate = NO;
+    //theApp.drawerController.canRotate = NO;
     
     EBrowserWidgetContainer *eBrwWgtContainer = self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     EBrowserWindowContainer *eBrwWndContainer = nil;
@@ -566,10 +567,7 @@ static BOOL isAppLaunchedByPush = NO;
     if (self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter && self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.sView.hidden == NO) {
         return;
     }
-    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
     
 }
 
@@ -634,11 +632,7 @@ static BOOL isAppLaunchedByPush = NO;
             [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
         }
     }
-    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        ACENSLog(@"openAdStr is %@",openAdStr);
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
 }
 
 
@@ -1057,7 +1051,7 @@ static BOOL isAppLaunchedByPush = NO;
 
 - (void)closeLoading:(NSMutableArray *)inArguments{
     BOOL userCloseLoading = NO;
-    ONOXMLElement *config = [ONOXMLElement ACEOriginConfigXML];
+    ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
     ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
     if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
         userCloseLoading = YES;

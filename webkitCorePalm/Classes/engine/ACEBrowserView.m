@@ -77,10 +77,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 @synthesize mFlag;
 @synthesize mTopBounceState;
 @synthesize mBottomBounceState;
-@synthesize mAdType;
-@synthesize mAdDisplayTime;
-@synthesize mAdIntervalTime;
-@synthesize mAdFlag;
+
 @synthesize currentUrl;
 @synthesize isMuiltPopover;
 @synthesize lastScrollPointY;
@@ -200,10 +197,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	mFlag = 0;
 	mTopBounceState = 0;
 	mBottomBounceState = 0;
-	mAdType = 0;
-	mAdDisplayTime = 0;
-	mAdIntervalTime = 0;
-	mAdFlag = 0;
+
 	if (mcBrwWnd) {
 		mcBrwWnd = nil;
 	}
@@ -730,7 +724,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         }
     } 
     
-    BOOL isStatusBarHidden = theApp.drawerController.isStatusBarHidden;
+    BOOL isStatusBarHidden = [[[NSBundle mainBundle].infoDictionary valueForKey:@"UIStatusBarHidden"] boolValue];
     [self loadUEXScript];
     initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
     [self stringByEvaluatingJavaScriptFromString:initStr];

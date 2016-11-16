@@ -62,7 +62,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 
 
 
-@synthesize wgtOrientation;
+
 -(void)getHideEnterStatus:(NSNotification *)inNotification{
 	if ([BUtility getAppCanDevMode]) {
 		return;
@@ -142,22 +142,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 		//[self.mStartView setFrame:CGRectMake(0, 0, 320, 460)];
 	}
 }
-/*
-- (void)hideSplashScreen:(id)sender
-{
-	[mSplashLock lock];
-	mSplashFired = YES;
-	if (meBrwMainFrm.mLoadDone) {
-		[mStartView removeFromSuperview];
-		mStartView = nil;
-        meBrwMainFrm.hidden = NO;
-	}
-    self.wgtOrientation= [[BUtility getMainWidgetConfigInterface]intValue];
-	[mSplashLock unlock];
-    
-    
-}
-*/
+
 #pragma mark - UPdateWgtHtml
 
 - (void)doUpdateWgt {
@@ -293,6 +278,33 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)loadView {
 	[super loadView];
+    [self presentStartImage];
+    //配置是否支持增量升级
+    if (theApp.useUpdateWgtHtmlControl) {
+        [self doUpdateWgt];
+    }
+	[self.mwWgtMgr loadMainWidget];
+    self.meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[BUtility getApplicationInitFrame] BrwCtrler:self];
+	[self.view addSubview:self.meBrwMainFrm];
+	self.meBrwMainFrm.hidden = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
+    });
+    if (userCustomLoadingImageEnabled) {
+        NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
+        if (launchTime && launchTime.integerValue > 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(launchTime.integerValue * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventCustomLoadingTimeout];
+            });
+        }
+    }
+
+    [self.meBrw start:self.mwWgtMgr.wMainWgt];
+
+    
+}
+
+- (void)presentStartImage{
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
     NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
     NSString * launchImageName = nil;
@@ -359,49 +371,26 @@ static BOOL userCustomLoadingImageEnabled = NO;
         }
     }
     
-
-
+    
+    
     self.mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-
-	self.mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
-	if ([BUtility getAppCanDevMode]) {
-		UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,30)];
-		devMark.backgroundColor =[UIColor clearColor];
-		devMark.text =ACELocalized(@"测试版本仅用于开发测试");
-		devMark.textColor = [UIColor redColor];
-		devMark.textAlignment = NSTextAlignmentLeft;
-		devMark.font = [UIFont boldSystemFontOfSize:24];
-		[self.mStartView addSubview:devMark];
-
-	}
-	[self.view addSubview:self.mStartView];
-    //配置是否支持增量升级
-    if (theApp.useUpdateWgtHtmlControl) {
-        [self doUpdateWgt];
-        NSString * configOrientation = [BUtility getMainWidgetConfigInterface];
-        self.wgtOrientation = [configOrientation intValue];
-    }
-	[self.mwWgtMgr loadMainWidget];
-    self.meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[BUtility getApplicationInitFrame] BrwCtrler:self];
-	[self.view addSubview:self.meBrwMainFrm];
-	self.meBrwMainFrm.hidden = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
-    });
-    if (userCustomLoadingImageEnabled) {
-        NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
-        if (launchTime && launchTime.integerValue > 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(launchTime.integerValue * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-                [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventCustomLoadingTimeout];
-            });
-        }
-    }
-
-    [self.meBrw start:self.mwWgtMgr.wMainWgt];
-
+    self.mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
+    if ([BUtility getAppCanDevMode]) {
+        UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,30)];
+        devMark.backgroundColor =[UIColor clearColor];
+        devMark.text =ACELocalized(@"测试版本仅用于开发测试");
+        devMark.textColor = [UIColor redColor];
+        devMark.textAlignment = NSTextAlignmentLeft;
+        devMark.font = [UIFont boldSystemFontOfSize:24];
+        [self.mStartView addSubview:devMark];
+        
+    }
+    [self.view addSubview:self.mStartView];
 }
+
+
 
 
 - (void)handleLoadingImageCloseEvent:(ACELoadingImageCloseEvent)event{
@@ -454,7 +443,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
         [self.mStartView removeFromSuperview];
         self.mStartView = nil;
         self.meBrwMainFrm.hidden = NO;
-        self.wgtOrientation= [[BUtility getMainWidgetConfigInterface]intValue];
+
     });
 
 }

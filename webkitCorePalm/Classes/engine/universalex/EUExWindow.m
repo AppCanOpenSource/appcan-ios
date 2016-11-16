@@ -59,6 +59,7 @@
 
 #import "ACEProgressDialog.h"
 #import "ACEBaseDefine.h"
+#import "ACEConfigXML.h"
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -579,10 +580,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     [self reportWindowOpeningEventWithSourceWindow:eCurBrwWnd newOpenedWindow:eBrwWnd openedURL:eBrwWnd.meBrwView.curUrl];
     
-    if ((eBrwWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eBrwWnd.meBrwView.mAdType, eBrwWnd.meBrwView.mAdDisplayTime, eBrwWnd.meBrwView.mAdIntervalTime, eBrwWnd.meBrwView.mAdFlag];
-        [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
     eBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
     self.EBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
     
@@ -968,10 +966,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         }
     }
     
-    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
 }
 
 
@@ -1809,10 +1804,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         [self.EBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
         [self reportWindowOpeningEventWithSourceWindow:eCurBrwWnd newOpenedWindow:eBrwWnd openedURL:eBrwWnd.meBrwView.curUrl];
-        if ((eBrwWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-            NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eBrwWnd.meBrwView.mAdType, eBrwWnd.meBrwView.mAdDisplayTime, eBrwWnd.meBrwView.mAdIntervalTime, eBrwWnd.meBrwView.mAdFlag];
-            [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-        }
+
         eBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
         self.EBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         
@@ -3121,47 +3113,45 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 - (void)setAutorotateEnable:(NSMutableArray *)inArguments {
     ACArgsUnpack(NSString *autoRotate) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(autoRotate);
-    NSString * orientaion = [BUtility getMainWidgetConfigInterface];
-    [[NSUserDefaults standardUserDefaults] setObject:orientaion forKey:@"subwgtOrientaion"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-    BOOL isAutorotate = ![autoRotate boolValue];
-    theApp.drawerController.canAutorotate = isAutorotate;
+    self.EBrwView.meBrwCtrler.aceNaviController.canAutoRotate = ![autoRotate boolValue];
+
 }
 - (void)setOrientation:(NSMutableArray *)inArguments{
-    ACArgsUnpack(NSNumber *orientation) = inArguments;
-    UEX_PARAM_GUARD_NOT_NIL(orientation);
+    ACArgsUnpack(NSNumber *orientationNumber) = inArguments;
+    UEX_PARAM_GUARD_NOT_NIL(orientationNumber);
+    ACEInterfaceOrientation orientation = orientationNumber.integerValue;
+    if (orientation == 0) {
+        orientation = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"orientation"].stringValue.integerValue;
+    }
     
-    int orientationNumber = [orientation intValue];
-    theApp.drawerController.canRotate = YES;
-    [[NSUserDefaults standardUserDefaults] setObject:orientation.stringValue forKey:@"subwgtOrientaion"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-    switch (orientationNumber){
-        case 1:
-        case 5:{
+    ACEUINavigationController *navi = self.EBrwView.meBrwCtrler.aceNaviController;
+    
+    navi.supportedOrientation = orientation;
+    navi.rotateOnce = YES;
+    switch (orientation){
+        case ACEInterfaceOrientationProtrait:
+        case ACEInterfaceOrientationVertical:{
             [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
             break;
         }
-        case 3:
-        case 8:
-        case 10:{
+        case ACEInterfaceOrientationLandscapeRight:{
             [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
             break;
         }
-        case 2:
-        case 9:{
+        case ACEInterfaceOrientationLandscapeLeft:
+        case ACEInterfaceOrientationHorizontal:{
             [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
             break;
         }
-        case 4:{
+        case ACEInterfaceOrientationProtraitUpsideDown:{
             [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
             break;
         }
         default:
+            navi.rotateOnce = NO;
             break;
     }
     
-    
-    theApp.drawerController.canRotate = NO;
     
     
 }
@@ -3210,14 +3200,15 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 #pragma mark - StatusBar API
 
 - (void)hideStatusBar:(NSArray *)inArgument {
-    theApp.drawerController.isStatusBarHidden = YES;
-    [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+    self.EBrwView.meBrwCtrler.shouldHideStatusBarNumber = @(YES);
+    [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
+
     
 }
 
 - (void)showStatusBar:(NSArray *)inArgument {
-    theApp.drawerController.isStatusBarHidden = NO;
-    [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
+    self.EBrwView.meBrwCtrler.shouldHideStatusBarNumber = @(NO);
+    [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
     
 }
 
@@ -3226,20 +3217,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSNumber *colorFlag) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(colorFlag);
     NSInteger flag = colorFlag.integerValue;
-    __kindof ACEBaseViewController *controller = theApp.drawerController;
-    if (self.EBrwView.meBrwWnd.webController) {
-        controller = self.EBrwView.meBrwWnd.webController;
-    }
+    __kindof ACEBaseViewController *controller = self.EBrwView.meBrwWnd.webController ?: self.EBrwView.meBrwCtrler;
+    
     switch (flag) {
         case 0:
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-            controller.ACEStatusBarStyle = UIStatusBarStyleLightContent;
-            [controller setNeedsStatusBarAppearanceUpdate];
+            controller.statusBarStyleNumber = @(UIStatusBarStyleLightContent);
+            [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
             break;
         case 1:
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-            controller.ACEStatusBarStyle = UIStatusBarStyleDefault;
-            [controller setNeedsStatusBarAppearanceUpdate];
+            controller.statusBarStyleNumber = @(UIStatusBarStyleDefault);
+            [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
             break;
         default:
             break;
@@ -3598,13 +3585,13 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 - (void)setRightSwipeEnable:(NSMutableArray *)inArguments{
     
-    ACArgsUnpack(NSNumber *flagNum) = inArguments;
-    BOOL isNeedSwipeGestureRecognizer = flagNum ? flagNum.boolValue :  YES;
-    EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
-    if (eCurBrwWnd.webController){
-        ACEWebViewController * webViewController = eCurBrwWnd.webController;
-        webViewController.isNeedSwipeGestureRecognizer = isNeedSwipeGestureRecognizer;
-    }
+//    ACArgsUnpack(NSNumber *flagNum) = inArguments;
+//    BOOL isNeedSwipeGestureRecognizer = flagNum ? flagNum.boolValue :  YES;
+//    EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
+//    if (eCurBrwWnd.webController){
+//        ACEWebViewController * webViewController = eCurBrwWnd.webController;
+//        webViewController.isNeedSwipeGestureRecognizer = isNeedSwipeGestureRecognizer;
+//    }
     
 }
 

@@ -16,12 +16,27 @@
  *
  */
 #import "ACEUINavigationController.h"
-
-@interface ACEUINavigationController ()<UIGestureRecognizerDelegate, UINavigationControllerDelegate>
+#import "BUtility.h"
+#import "ACEConfigXML.h"
+#import "ACEBaseViewController.h"
+@interface ACEUINavigationController ()
 
 @end
 
 @implementation ACEUINavigationController
+
+
+- (instancetype)initWithRootViewController:(UIViewController *)rootViewController{
+    self = [super initWithRootViewController:rootViewController];
+    if (self) {
+        [self setNavigationBarHidden:YES];
+        _supportedOrientation = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"orientation"].stringValue.integerValue;
+
+       
+    }
+    return self;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,6 +44,48 @@
 
 
 
+- (BOOL)prefersStatusBarHidden{
+    for (ACEBaseViewController *controller in self.viewControllers.reverseObjectEnumerator) {
+        if (![controller isKindOfClass:[ACEBaseViewController class]]) {
+            continue;
+        }
+        if (controller.shouldHideStatusBarNumber) {
+            return controller.shouldHideStatusBarNumber.boolValue;
+        }
+    }
+    return [super preferredStatusBarStyle];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    for (ACEBaseViewController *controller in self.viewControllers.reverseObjectEnumerator) {
+        if (![controller isKindOfClass:[ACEBaseViewController class]]) {
+            continue;
+        }
+        if (controller.statusBarStyleNumber) {
+            return controller.statusBarStyleNumber.integerValue;
+        }
+    }
+    return [super preferredStatusBarStyle];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    return ace_interfaceOrientationMaskFromACEInterfaceOrientation(self.supportedOrientation);
+}
+
+- (BOOL)shouldAutorotate{
+    if (self.rotateOnce) {
+        self.rotateOnce = NO;
+        return YES;
+    }
+    return self.canAutoRotate;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    if (self.presentOrientationNumber) {
+        return self.presentOrientationNumber.integerValue;
+    }
+    return [super preferredInterfaceOrientationForPresentation];
+}
 
 
 @end

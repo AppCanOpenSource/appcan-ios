@@ -24,6 +24,6 @@
 
 @property (nonatomic, strong) EBrowserWindow *browserWindow;
 
-@property (nonatomic, assign) BOOL isNeedSwipeGestureRecognizer;
+
 
 @end

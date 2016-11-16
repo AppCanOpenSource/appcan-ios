@@ -29,7 +29,7 @@
 #import "WidgetOneDelegate.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "ONOXMLElement+ACEConfigXML.h"
+#import "ACEConfigXML.h"
 
 
 @interface EBrowserMainFrame()
@@ -121,7 +121,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         BOOL userCloseLoading = NO;
-        ONOXMLElement *config = [ONOXMLElement ACEOriginConfigXML];
+        ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
         ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
         if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
             userCloseLoading = YES;

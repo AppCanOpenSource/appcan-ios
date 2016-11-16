@@ -209,10 +209,7 @@
 			[eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
 		}
 		[eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-		if ((eSuperBrwWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-			NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eSuperBrwWnd.meBrwView.mAdType, eSuperBrwWnd.meBrwView.mAdDisplayTime, eSuperBrwWnd.meBrwView.mAdIntervalTime, eSuperBrwWnd.meBrwView.mAdFlag];
-			[eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-		}
+
 
 		if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
 			eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
@@ -258,13 +255,9 @@
 
 - (EBrowserWindow*)aboveWindow {
     EBrowserWindow *aBrowserWin = nil;
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    ACEUINavigationController *navController = nil;
-    if (app.drawerController) {
-        navController = (ACEUINavigationController *)app.drawerController.centerViewController;
-    } else {
-        navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
-    }
+
+    ACEUINavigationController *navController = self.meBrwCtrler.aceNaviController;
+
     if ([navController.viewControllers count] > 1) {
         ACEWebViewController *webController = (ACEWebViewController *)navController.topViewController;
         if (webController != nil && [webController isKindOfClass:[ACEWebViewController class]]) {

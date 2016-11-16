@@ -537,47 +537,8 @@
     [_meBrowserView setMBottomBounceState:inmBottomBounceState];
 }
 
-//@property int mAdType;
--(int)mAdType
-{
-    return [_meBrowserView mAdType];
-}
 
-- (void)setMAdType:(int)inmAdType
-{
-    [_meBrowserView setMAdType:inmAdType];
-}
 
-//@property int mAdDisplayTime;
--(int)mAdDisplayTime
-{
-    return [_meBrowserView mAdDisplayTime];
-}
-
-- (void)setMAdDisplayTime:(int)inmAdDisplayTime
-{
-    [_meBrowserView setMAdDisplayTime:inmAdDisplayTime];
-}
-//@property int mAdIntervalTime;
--(int)mAdIntervalTime
-{
-    return [_meBrowserView mAdIntervalTime];
-}
-
-- (void)setMAdIntervalTime:(int)inmAdIntervalTime
-{
-    [_meBrowserView setMAdIntervalTime:inmAdIntervalTime];
-}
-//@property int mAdFlag;
--(int)mAdFlag
-{
-    return [_meBrowserView mAdFlag];
-}
-
-- (void)setMAdFlag:(int)inmAdFlag
-{
-    [_meBrowserView setMAdFlag:inmAdFlag];
-}
 //@property (nonatomic,retain)NSURL *currentUrl;
 -(NSURL *)currentUrl
 {

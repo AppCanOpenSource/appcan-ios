@@ -17,7 +17,7 @@
  */
 
 #import "ACEDrawerViewController.h"
-
+#import "ACEUINavigationController.h"
 @interface ACEDrawerViewController ()
 
 @end
@@ -35,14 +35,31 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    return self.mainContentController.supportedInterfaceOrientations;
 }
-*/
+
+
+- (BOOL)shouldAutorotate {
+    return self.mainContentController.shouldAutorotate;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.mainContentController.prefersStatusBarHidden;
+    
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return self.mainContentController.preferredStatusBarStyle;
+}
+
+
+
+
+
+
+
 
 @end

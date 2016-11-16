@@ -1,10 +1,10 @@
 /**
  *
- *	@file   	: ONOXMLElement+ACEConfigXML.m  in AppCanEngine
+ *	@file   	: ACEConfigXML.m  in AppCanEngine
  *
  *	@author 	: CeriNo
- *
- *	@date   	: Created on 16/5/19.
+ * 
+ *	@date   	: 2016/11/15
  *
  *	@copyright 	: 2016 The AppCan Open Source Project.
  *
@@ -21,38 +21,58 @@
  *
  */
 
-#import "ONOXMLElement+ACEConfigXML.h"
+
+#import "ACEConfigXML.h"
+
 #import "WidgetOneDelegate.h"
 #import "BUtility.h"
-@implementation ONOXMLElement (ACEConfigXML)
+#import "FileEncrypt.h"
 
+
+@implementation ACEConfigXML
 static ONOXMLDocument * originDocument = nil;
-static ONOXMLDocument * newestDocument = nil;
+static ONOXMLDocument * widgetDocument = nil;
 
 __attribute__((constructor)) static void buildDocuments (void){
-    NSString *XMLPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"widget/config.xml"];
-    NSString *XMLString = [NSString stringWithContentsOfFile:XMLPath encoding:NSUTF8StringEncoding error:nil];
-    originDocument = [ONOXMLDocument XMLDocumentWithString:XMLString encoding:NSUTF8StringEncoding error:nil];
+    NSURL *originConfigURL = [[NSBundle mainBundle].resourceURL URLByAppendingPathComponent:@"widget/config.xml"];
+    originDocument = [ONOXMLDocument XMLDocumentWithData:decrytedDataWithURL(originConfigURL) error:nil];
+    
     
     if (theApp.useUpdateWgtHtmlControl && [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue]) {
         NSString *documentPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-        NSString *XMLPath = [documentPath stringByAppendingPathComponent:@"widget/config.xml"];
-        NSData *data = [NSData dataWithContentsOfFile:XMLPath];
+        NSURL *documentURL = [NSURL fileURLWithPath:documentPath];
+        NSURL *widgetConfigURL = [documentURL URLByAppendingPathComponent:@"widget/config.xml"];
+        
+        NSData *data = decrytedDataWithURL(widgetConfigURL);
         if (data) {
-            newestDocument = [ONOXMLDocument XMLDocumentWithData:data error:nil];
+            widgetDocument = [ONOXMLDocument XMLDocumentWithData:data error:nil];
         }
     }
 }
 
-+ (instancetype)ACEOriginConfigXML{
+static NSData * _Nullable decrytedDataWithURL(NSURL * fileURL){
+    NSData *originData = [NSData dataWithContentsOfURL:fileURL];
+    if (!originData || ![FileEncrypt isDataEncrypted:originData]) {
+        return originData;
+    }
+    FileEncrypt *decrypter = [[FileEncrypt alloc]init];
+    return [[decrypter decryptWithPath:fileURL appendData:nil] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+
+
++ (ONOXMLElement *)ACEOriginConfigXML{
     return originDocument.rootElement;
 }
 
-+ (instancetype)ACENewestConfigXML{
-    if (newestDocument) {
-        return newestDocument.rootElement;
++ (ONOXMLElement *)ACEWidgetConfigXML{
+    if (widgetDocument) {
+        return widgetDocument.rootElement;
     }
     return originDocument.rootElement;
 }
+
+
+
 
 @end

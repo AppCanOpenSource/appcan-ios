@@ -18,7 +18,19 @@
 #import <UIKit/UIKit.h>
 
 #import "MMNavigationController.h"
+#import "ACEBaseDefine.h"
+
+
+
 
 @interface ACEUINavigationController : MMNavigationController
+
+
+
+
+@property (nonatomic,strong)NSNumber * presentOrientationNumber;
+@property (nonatomic,assign)BOOL canAutoRotate;
+@property (nonatomic,assign)BOOL rotateOnce;
+@property (nonatomic,assign)ACEInterfaceOrientation supportedOrientation;
 
 @end

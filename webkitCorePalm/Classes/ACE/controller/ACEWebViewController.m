@@ -32,7 +32,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
-        _isNeedSwipeGestureRecognizer = YES;
+
     }
     return self;
 }
