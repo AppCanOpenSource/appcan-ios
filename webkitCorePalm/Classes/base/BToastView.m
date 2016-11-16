@@ -29,7 +29,7 @@
 @synthesize mPos;
 
 + (CGRect)viewRectWithPos:(int)inPos wndWidth:(float)inWndWidth wndHeight:(float)inWndHeight {
-	CGRect toastViewRect;
+	CGRect toastViewRect = CGRectZero;
 	int width = 0;
 	int height = 0;
 	if ([BUtility isIpad]) {

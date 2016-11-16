@@ -45,7 +45,6 @@
 	int mAdDisplayTime;
 	int mAdIntervalTime;
 	int mAdType;
-	BStatusBarWindow *mSBWnd;
 	NSTimer *mSBWndTimer;
 	NSMutableArray *mNotifyArray;
 }
@@ -57,7 +56,7 @@
 @property (nonatomic, retain)AppCenter *mAppCenter;
 @property (nonatomic, assign)NSTimer *mAdDisplayTimer;
 @property (nonatomic, assign)NSTimer *mAdIntervalTimer;
-@property (nonatomic, assign)BStatusBarWindow *mSBWnd;
+@property (nonatomic, strong)BStatusBarWindow *mSBWnd;
 @property (nonatomic, assign)NSTimer *mSBWndTimer;
 @property (nonatomic, assign)NSMutableArray *mNotifyArray;
 
@@ -72,6 +71,7 @@
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;
 - (void)invalidateAdTimers;
+- (void)displayDone;
 @end
 
 

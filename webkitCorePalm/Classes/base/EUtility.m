@@ -27,14 +27,13 @@
 #import "EBrowserMainFrame.h"
 #import "BStatusBarWindow.h"
 #import <CommonCrypto/CommonDigest.h>
+#import <AppCanKit/ACEXTScope.h>
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.h"
 #import "ACEPluginViewContainer.h"
 #import "ACEBrowserView.h"
 #import "ACEJSCInvocation.h"
-#import "ACEUtils.h"
-#import "ACESubMultiPopScrollView.h"
-
+#import "ACEBaseDefine.h"
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
 	va_list args;
@@ -273,55 +272,6 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 	return [inBrwView.request URL];
 }
 
-+ (void)brwView:(EBrowserView*)inBrwView addViewToCurrentMultiPop:(UIView*)inSubView WithPosition:(NSInteger)position{
-    
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    
-    [ud setValue:[NSString stringWithFormat:@"%ld",(long)position]forKey:@"addViewToCurrentMultiPop_position"];
-    
-    NSLog(@"addViewToCurrentMultiPop==>>inSubView=%@",inSubView);
-    
-    ACESubMultiPopScrollView *subMultiPopView = [[ACESubMultiPopScrollView alloc] initWithFrame:inSubView.frame];
-    
-    [subMultiPopView addSubview:inSubView];
-    
-    NSLog(@"addViewToCurrentMultiPop==>>subMultiPopView=%@",subMultiPopView);
-    
-    [inBrwView.superview addSubview:subMultiPopView];
-    
-    CGRect multiPopFrame = inBrwView.frame;
-    
-    CGRect subViewFrame = subMultiPopView.frame;
-    
-    subViewFrame.origin.x = multiPopFrame.origin.x;
-    
-    if (position == 0) {
-        
-        multiPopFrame.origin.y = CGRectGetMaxY(subViewFrame) + 2;
-        
-        multiPopFrame.size.height = multiPopFrame.size.height - multiPopFrame.origin.y;
-        
-        subMultiPopView.frame = subViewFrame;
-        
-        NSLog(@"addViewToCurrentMultiPop==>>subMultiPopView添加到头部时=%@",subMultiPopView);
-        
-    }else{
-        
-        subViewFrame.origin.y  = CGRectGetMaxY(multiPopFrame) - subMultiPopView.frame.size.height;
-        
-        subMultiPopView.frame = subViewFrame;
-        
-        multiPopFrame.size.height = subMultiPopView.frame.origin.y - 2;
-        
-        NSLog(@"addViewToCurrentMultiPop==>>subMultiPopView添加到底部时=%@",subMultiPopView);
-        
-    }
-    
-    inBrwView.frame = multiPopFrame;
-    
-    NSLog(@"addViewToCurrentMultiPop==>>inBrwView.frame=%@",inBrwView);
-    
-}
 
 
 + (void)brwView:(EBrowserView*)inBrwView addSubview:(UIView*)inSubView {
@@ -334,7 +284,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     [inBrwView.meBrwCtrler presentViewController:viewControllerToPresent animated:flag completion:completion];
 }
 
-+(void)doJsCB:(NSDictionary*)dict{
++ (void)doJsCB:(NSDictionary*)dict{
     EBrowserView *brwView =(EBrowserView*)[dict objectForKey:@"Brw"];
     NSString *inScript =[dict objectForKey:@"CBStr"];
     [brwView stringByEvaluatingJavaScriptFromString:inScript];
@@ -370,7 +320,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     return [BUtility getAbsPath:meBrwView path:inPath];
 }
 
-+(BOOL)appCanDev{
++ (BOOL)appCanDev{
     return [BUtility getAppCanDevMode];
 }
 + (EBrowserView *)rootBrwoserView{
@@ -381,11 +331,11 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     return [theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView;
 }
 
-+(void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
++ (void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
 	[BUtility evaluatingJavaScriptInRootWnd:script_];
 }
 
-+(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_{
++ (void)evaluatingJavaScriptInFrontWnd:(NSString*)script_{
 	[BUtility evaluatingJavaScriptInFrontWnd:script_];
 }
 
@@ -409,7 +359,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 
 
 
-+(BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation {
++ (BOOL)isValidateOrientation:(UIInterfaceOrientation)inOrientation {
     return [BUtility isValidateOrientation:inOrientation];
 }
 
@@ -423,10 +373,10 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     for (UIView * subView in [inBrwView.meBrwWnd subviews]) {
         if ([subView isKindOfClass:[ACEPluginViewContainer class]]) {
             ACEPluginViewContainer * container = (ACEPluginViewContainer *)subView;
+            
             if ([container.containerIdentifier isEqualToString:identifier]) {
                 CGRect tmpRect = inSubView.frame;
-                tmpRect.origin.y = 0;
-                tmpRect.origin.x = index*tmpRect.size.width;
+                tmpRect.origin.x += container.frame.size.width * index;
                 inSubView.frame = tmpRect;
                 [container addSubview:inSubView];
                 if (container.maxIndex < index) {
@@ -536,7 +486,7 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 +(NSString *)deviceIdentifyNo{
     return [BUtility getDeviceIdentifyNo];
 }
-+(BOOL)isNetConnected{
++ (BOOL)isNetConnected{
     return [BUtility isConnected];
 }
 +(UIImage *)imageByScalingAndCroppingForSize:(UIImage *)image{
@@ -557,13 +507,13 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     CC_MD5_CTX md5;
     CC_MD5_Init(&md5);
     
-    CC_MD5_Update(&md5, [mac bytes], [mac length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [uuid bytes], [uuid length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [Others bytes], [Others length]);
-    CC_MD5_Update(&md5, [appkeyData bytes], [appkeyData length]);
+    CC_MD5_Update(&md5, [mac bytes], (CC_LONG)[mac length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [uuid bytes], (CC_LONG)[uuid length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [Others bytes], (CC_LONG)[Others length]);
+    CC_MD5_Update(&md5, [appkeyData bytes], (CC_LONG)[appkeyData length]);
     
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
     CC_MD5_Final(digest, &md5);
@@ -602,35 +552,36 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
     }
     return color;
 }
-+(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
++ (void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable
 {
 
 }
-+(void)writeLog:(NSString*)inLog{
++ (void)writeLog:(NSString*)inLog{
     return [BUtility writeLog:inLog];
 }
 
-+(NSInteger)supportedInterfaceOrientations:(EBrowserView*)meBrwView{
-    int orientation = 0;
++ (UIInterfaceOrientationMask)supportedInterfaceOrientations:(EBrowserView*)meBrwView{
+
+    UIInterfaceOrientationMask orientation = 0;
     EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
     if (aboveWndContainer) {
-        if ((meBrwView.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationProtrait) {
             orientation |= UIInterfaceOrientationMaskPortrait;
         }
-        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationProtraitUpsideDown) {
             orientation |= UIInterfaceOrientationMaskPortraitUpsideDown;
         }
-        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationLandscapeLeft) {
             orientation |= UIInterfaceOrientationMaskLandscapeLeft;
         }
-        if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
+        if (aboveWndContainer.mwWgt.orientation & ACEInterfaceOrientationLandscapeRight) {
             orientation |= UIInterfaceOrientationMaskLandscapeRight;
         }
     }
     return orientation;
 }
 
-+(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView{
++ (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView{
     EBrowserWindowContainer *aboveWndContainer = [meBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
     if (aboveWndContainer) {
         EBrowserWindow *eBrwWnd = [aboveWndContainer aboveWindow];
@@ -643,29 +594,9 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
         if (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd && (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd.hidden == NO)) {
             return NO;
         }
-        switch (toInterfaceOrientation) {
-            case UIInterfaceOrientationPortrait:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
-                    return YES;
-                }
-                break;
-            case UIInterfaceOrientationPortraitUpsideDown:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-                    return YES;
-                }
-                break;
-            case UIInterfaceOrientationLandscapeLeft:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
-                    return YES;
-                }
-                break;
-            case UIInterfaceOrientationLandscapeRight:
-                if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-                    return YES;
-                }
-                break;
-            default:
-                break;
+        
+        if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
+            return YES;
         }
     }
     NSString *oritent =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
@@ -683,12 +614,11 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
 }
 
 + (void)brwView:(EBrowserView*)inBrwView presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
-    [inBrwView.meBrwCtrler presentModalViewController:modalViewController animated:animated];
-
+    [inBrwView.meBrwCtrler presentViewController:modalViewController animated:animated completion:nil];
 }
 
 + (void)brwView:(EBrowserView*)inBrwView navigationPresentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated {
-    [inBrwView.meBrwCtrler.navigationController presentModalViewController:modalViewController animated:animated];
+    [inBrwView.meBrwCtrler.navigationController presentViewController:modalViewController animated:animated completion:nil];
 }
 
 

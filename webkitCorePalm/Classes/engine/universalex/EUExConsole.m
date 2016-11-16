@@ -37,7 +37,7 @@
 }
 
 -(void)log:(NSMutableArray *)inArguments {
-	NSString *logInfo = [inArguments objectAtIndex:0];
+
 }
 
 

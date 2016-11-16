@@ -34,7 +34,17 @@
 #define WIDGETREPORT_SPACESTATUS_OPEN				0x1
 #define WIDGETREPORT_SPACESTATUS_EXTEN_OPEN			0X2
 
-@interface WWidget : NSObject {
+
+
+
+
+
+
+
+
+
+
+@interface WWidget : NSObject<AppCanWidgetObject> {
 	// 数据库中的主键id
 	int wId;
 	// 手机端WidgetOne系统的唯一标识
@@ -70,7 +80,7 @@
 	//showMySpace
 	int showMySpace;
 	//description
-	NSString *description;
+	NSString *desc;
 	//email;
 	NSString *email;
 	//author
@@ -109,7 +119,7 @@
 @property (nonatomic,retain)	NSString *indexUrl;
 @property (nonatomic,retain)	NSString *logServerIp;
 @property (nonatomic,retain)	NSString *updateUrl;
-@property (nonatomic,retain)	NSString *description;
+@property (nonatomic,retain)	NSString *desc;
 @property (nonatomic,retain)	NSString *email;
 @property (nonatomic,retain)	NSString *author;
 @property (nonatomic,retain)	NSString *license;

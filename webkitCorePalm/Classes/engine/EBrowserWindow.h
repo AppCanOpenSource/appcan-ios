@@ -38,7 +38,6 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
     ACEWebWindowTypeNormal, //普通类型
     ACEWebWindowTypeNavigation, //具有手势导航功能
     ACEWebWindowTypePresent, //present
-    ACEWebWindowTypeOther
 };
 
 @interface EBrowserWindow : UIView {

@@ -45,7 +45,7 @@ NSString * webappShowAactivety;
 }
 #pragma mark mainWidget
 //得到主widget
--(WWidget*)mainWidget{
+- (WWidget *)mainWidget{
 	return wMainWgt;
 }
 //get wgtPath by wgtObj
@@ -254,7 +254,7 @@ NSString * webappShowAactivety;
 	if([arr count]>0 && [arr objectAtIndex:0]!=nil){
 		WWidget *tmpWidget = (WWidget*)[arr objectAtIndex:0];
 		NSString *updateSQL = [NSString stringWithFormat:@"UPDATE %@ SET widgetOneId='%@',ver='%@',channelCode='%@',imei='%@',widgetName='%@',iconPath='%@',widgetPath='%@',indexUrl='%@',obfuscation=%d, logServerIp='%@',updateUrl='%@',showMySpace=%d,description='%@',author='%@',email='%@',license='%@',orientation=%d,preload=%d, WHERE id=%d",SQL_WGTS_TABLE,
-							   @"",wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.description,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload, tmpWidget.wId];
+							   @"",wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload, tmpWidget.wId];
 		[widgetSql updateSql:[updateSQL UTF8String]];
 		
 	}else{
@@ -265,7 +265,7 @@ NSString * webappShowAactivety;
 		}
 		//插入语句
 		NSString *insertStrSQL = [NSString stringWithFormat:@"INSERT INTO %@(widgetOneId,appId,ver,channelCode,imei,widgetName,iconPath,widgetPath,indexUrl,obfuscation,wgtType,logServerIp,updateUrl,showMySpace,description,author,email,license,orientation,preload) VALUES('%@','%@','%@','%@','%@','%@','%@','%@','%@',%d,%d,'%@','%@',%d,'%@','%@','%@','%@',%d,%d)",SQL_WGTS_TABLE,
-								  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.wgtType,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.description,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload];
+								  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.wgtType,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload];
 		
 		[widgetSql insertSql:[insertStrSQL UTF8String]];
 	}
@@ -326,14 +326,14 @@ NSString * webappShowAactivety;
 }
 
 
--(NSMutableDictionary*)wgtUpdate:(WWidget*)inWgt{
+- (NSMutableDictionary*)wgtUpdate:(WWidget*)inWgt{
 	if (inWgt!=nil&&inWgt.appId!=nil && inWgt.ver!=nil && inWgt.updateUrl!=nil) {
 		NSString *urlStr = inWgt.updateUrl;
 		NSString *requestUrl = nil;
 		if ([urlStr rangeOfString:@"?"].location!=NSNotFound) {
-			requestUrl = [NSString stringWithFormat:@"%@&appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,F_WIDGETONE_PLATFORM_IOS];
+			requestUrl = [NSString stringWithFormat:@"%@&appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,0];
 		}else {
-			requestUrl = [NSString stringWithFormat:@"%@?appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,F_WIDGETONE_PLATFORM_IOS];
+			requestUrl = [NSString stringWithFormat:@"%@?appId=%@&ver=%@&platform=%d",urlStr,inWgt.appId,inWgt.ver,0];
 		}
 		ACENSLog(@"requestUrl=%@",requestUrl);
 		wgtUpParser =[[UpdateParser alloc]init];
@@ -344,7 +344,7 @@ NSString * webappShowAactivety;
 	}
 	return nil;
 }
--(void)initLoginAndMoreWidget{
+- (void)initLoginAndMoreWidget{
 	WWidget *loginWgt = [[WWidget alloc] init];
 	loginWgt.indexUrl = F_WIDGET_LOGIN_URL;
 	loginWgt.appId = @"9999998";
@@ -364,7 +364,7 @@ NSString * webappShowAactivety;
 }
 #pragma mark commonWidget
 
--(WWidget*)wgtDataByAppId:(NSString*)inAppId{
+- (WWidget *)wgtDataByAppId:(NSString*)inAppId{
     
     NSString *tmpAppId = [NSString stringWithString:inAppId];
     
@@ -441,7 +441,7 @@ NSString * webappShowAactivety;
     return wgtObj;
 }
 //plugin widget
--(WWidget*)wgtPluginDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt{
+- (WWidget *)wgtPluginDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt{
 	
 	NSString *pluginId = [NSString stringWithString:inWgtId];
 	WWidget *pluginWgtObj = nil;
@@ -527,7 +527,7 @@ NSString * webappShowAactivety;
 	return deleteWgt;
 }
 #pragma mark util
--(WWidget*)dictToWgt:(NSMutableDictionary*)inDict{
+- (WWidget *)dictToWgt:(NSMutableDictionary*)inDict{
 	NSMutableDictionary *tmpDict =[NSMutableDictionary dictionaryWithDictionary:inDict];
 	
 	WWidget *tmpWgt = [[WWidget alloc]init];
@@ -614,7 +614,7 @@ NSString * webappShowAactivety;
 	//17.description
 	NSString *desStr = [tmpDict objectForKey:CONFIG_TAG_DESCRIPTION];
 	if (desStr) {
-		tmpWgt.description = desStr;
+		tmpWgt.desc = desStr;
 	}
 	//author 18,19
 	NSString *authorStr = [[tmpDict objectForKey:CONFIG_TAG_AUTHOR] objectForKey:CONFIG_TAG_NAME];
@@ -771,7 +771,7 @@ NSString * webappShowAactivety;
 				//NSString *tmpInsert = [NSString stringWithFormat:@"INSERT INTO %@(widgetOneId,appId,ver,channelCode,imei,widgetName,iconPath,widgetPath,indexUrl,obfuscation,wgtType,logServerIp,updateUrl) VALUES('%@','%@','%@','%@','%@','%@','%@','%@','%@',%d,%d,'%@','%@');",SQL_WGTS_TABLE, 
 //									   wgtObj.widgetOneId,wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,F_WWIDGET_TMPWIDGET,wgtObj.logServerIp,wgtObj.updateUrl];
 				NSString *tmpInsert = [NSString stringWithFormat:@"INSERT INTO %@(widgetOneId,appId,ver,channelCode,imei,widgetName,iconPath,widgetPath,indexUrl,obfuscation,wgtType,logServerIp,updateUrl,showMySpace,description,author,email,license,orientation) VALUES('%@','%@','%@','%@','%@','%@','%@','%@','%@',%d,%d,'%@','%@',%d,'%@','%@','%@','%@',%d);",SQL_WGTS_TABLE,
-										  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,F_WWIDGET_TMPWIDGET,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.description,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation];
+										  @"",wgtObj.appId,wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,F_WWIDGET_TMPWIDGET,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation];
 				
 				[insertStrSQL appendString:tmpInsert];
 			}
@@ -795,9 +795,9 @@ NSString * webappShowAactivety;
 	[widgetObj close_database];
 	[widgetObj release];
 	[tmpArr removeAllObjects];
-	return wgtsNum;
+	return (int)wgtsNum;
 }
--(WWidget*)wgtDataByID:(int)inIndex{
+- (WWidget *)wgtDataByID:(int)inIndex{
 	if (inIndex<[wgtArr count]) {
 		WWidget *wgtObj = [wgtArr objectAtIndex:inIndex];
 		return wgtObj;

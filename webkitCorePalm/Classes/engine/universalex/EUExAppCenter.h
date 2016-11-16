@@ -17,7 +17,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "EUExBase.h"
 #import "EBrowserView.h"
 #import "AppCenter.h"
 

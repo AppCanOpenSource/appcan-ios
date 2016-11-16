@@ -1,0 +1,6 @@
+explicit module AppCanKit.Private {
+    header "ACEXTRuntimeExtensions.h"
+    header "ACInvoker.h"
+    header "AppCanWindowObject.h"
+    export *
+}

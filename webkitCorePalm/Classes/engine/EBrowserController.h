@@ -17,7 +17,7 @@
  */
 
 #import "ACEBaseViewController.h"
-#import "ACEUtils.h"
+
 @class EBrowserMainFrame;
 @class EBrowserWidgetContainer;
 @class EBrowser;
@@ -32,17 +32,15 @@
 #define F_EBRW_CTRL_FLAG_AUTH_SUCCESSED     0x4
 
 
-#define F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT				1
-#define F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT			2
-#define F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN	4
-#define F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT		8
+
+
 //4.8
 #define F_ForbidPlugins    @"AppCanPluginsKey"
 #define F_ForbidWindows    @"AppCanWindowsKey"
 #define F_AuthType         @"AppCanAuthType"
 
-ACE_EXTERN NSString *const kACECustomLoadingImagePathKey;
-ACE_EXTERN NSString *const kACECustomLoadingImageTimeKey;
+APPCAN_EXPORT NSString *const kACECustomLoadingImagePathKey;
+APPCAN_EXPORT NSString *const kACECustomLoadingImageTimeKey;
 
 typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
     ACELoadingImageCloseEventWebViewFinishLoading,//网页加载完成的事件(用户手动closeLoading或者网页加载完成后0.5s)
@@ -70,9 +68,7 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, retain) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, assign) BOOL ballHasShow;
 @property (nonatomic, assign) int mFlag;
-@property (nonatomic,retain)NSMutableArray *forebidPluginsList;
-@property (nonatomic,retain)NSMutableArray *forebidWinsList;
-@property (nonatomic,retain)NSMutableArray *forebidPopWinsList;
+
 @property(nonatomic,assign)int wgtOrientation;
 - (EBrowserWidgetContainer*)brwWidgetContainer;
 

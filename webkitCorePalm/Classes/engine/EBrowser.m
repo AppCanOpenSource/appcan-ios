@@ -60,36 +60,16 @@ static EBrowser * eBrwInstance = NULL;
 }
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
-	switch (eInBrwView.mType) {
-		case F_EBRW_VIEW_TYPE_MAIN:
-		case F_EBRW_VIEW_TYPE_SLIBING_TOP:
-		case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
-		case F_EBRW_VIEW_TYPE_POPOVER:
-		case F_EBRW_VIEW_TYPE_AD:
-			[meBrwCtrler.meBrwMainFrm notifyLoadPageStartOfBrwView:eInBrwView];
-			break;
-		default:
-			break;
-	}
+    [meBrwCtrler.meBrwMainFrm notifyLoadPageStartOfBrwView:eInBrwView];
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
-	switch (eInBrwView.mType) {
-		case F_EBRW_VIEW_TYPE_MAIN:
-		case F_EBRW_VIEW_TYPE_SLIBING_TOP:
-		case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
-		case F_EBRW_VIEW_TYPE_POPOVER:
-		case F_EBRW_VIEW_TYPE_AD:
-			[meBrwCtrler.meBrwMainFrm notifyLoadPageFinishOfBrwView:eInBrwView];
-			break;
-		default:
-			break;
-	}
+    [meBrwCtrler.meBrwMainFrm notifyLoadPageFinishOfBrwView:eInBrwView];
 }
 
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView {
 	switch (eInBrwView.mType) {
-		case F_EBRW_VIEW_TYPE_MAIN:
+		case ACEEBrowserViewTypeMain:
 			[meBrwCtrler.meBrwMainFrm notifyLoadPageErrorOfBrwView:eInBrwView];
 			break;
 		default:

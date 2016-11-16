@@ -7,7 +7,7 @@
 //
 
 #import "ACEMultiPopoverScrollView.h"
-
+#import "ACEScrollViewDelegateProxy.h"
 
 typedef NS_ENUM(NSInteger,ACEMultiPopoverLoadingStatus) {
     ACEMultiPopoverInitialized,
@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger,ACEMultiPopoverLoadingStatus) {
 @interface ACEMultiPopoverScrollView()
 @property (nonatomic,strong)NSMutableArray<ACEMultiPopoverPageLoadingBlock> *loadPopViewBlocks;
 @property (nonatomic,assign)ACEMultiPopoverLoadingStatus status;
+@property (nonatomic,strong)ACEScrollViewDelegateProxy *delegateProxy;
 @end
 
 @implementation ACEMultiPopoverScrollView
@@ -40,6 +41,11 @@ typedef NS_ENUM(NSInteger,ACEMultiPopoverLoadingStatus) {
     return self;
 }
 
+- (void)setDelegate:(id<UIScrollViewDelegate>)delegate{
+    [super setDelegate:self.delegateProxy];
+    self.delegateProxy.mainDelegate = delegate;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -57,8 +63,18 @@ typedef NS_ENUM(NSInteger,ACEMultiPopoverLoadingStatus) {
     return self;
 }
 -(void)initializer {
-    self.loadPopViewBlocks=[NSMutableArray array];
-    self.status=ACEMultiPopoverInitialized;
+    _loadPopViewBlocks = [NSMutableArray array];
+    _status = ACEMultiPopoverInitialized;
+    _delegateProxy = [[ACEScrollViewDelegateProxy alloc] init];
+}
+
+
+- (void)addScrollViewEventObserver:(id<UIScrollViewDelegate>)observer{
+    [self.delegateProxy addDelegate:observer];
+}
+
+- (void)removeScrollViewEventObserver:(id<UIScrollViewDelegate>)observer{
+    [self.delegateProxy removeDelegate:observer];
 }
 
 -(void)addLoadingBlock:(ACEMultiPopoverPageLoadingBlock)pageLoadingBlock{
@@ -94,4 +110,7 @@ typedef NS_ENUM(NSInteger,ACEMultiPopoverLoadingStatus) {
     [self.loadPopViewBlocks removeAllObjects];
     self.loadPopViewBlocks=nil;
 }
+@end
+
+@implementation EScrollView
 @end

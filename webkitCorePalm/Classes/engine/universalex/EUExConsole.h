@@ -17,7 +17,7 @@
  */
 
 
-#import "EUExBase.h"
+
 #import "ZipArchive.h"
 
 @interface EUExConsole : EUExBase {

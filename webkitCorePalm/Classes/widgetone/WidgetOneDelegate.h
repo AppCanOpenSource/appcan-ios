@@ -67,7 +67,7 @@
 @property (nonatomic, retain) ACEDrawerViewController *drawerController;
 @property (nonatomic, retain) RESideMenu *sideMenuViewController;
 @property (nonatomic, assign) NSInteger enctryptcj;
-@property (nonatomic, retain) NSMutableDictionary *globalPluginDict;
+
 
 //4.0
 @property (nonatomic, copy) NSString * useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
@@ -80,6 +80,9 @@
 @property(nonatomic) BOOL validatesSecureCertificate;//是否校验证书
 
 @property (nonatomic,assign) BOOL launchedByRemoteNotification;
+@property (nonatomic,assign,readonly) BOOL useInAppCanIDE;
+
+- (instancetype)initWithDevMode;
 
 //-(NSString *)getPayPublicRsaKey;
 -(void)rootPageDidFinishLoading;

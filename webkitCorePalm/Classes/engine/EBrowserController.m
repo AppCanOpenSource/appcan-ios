@@ -37,8 +37,9 @@
 #import "SFHFKeychainUtils.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "ACEUtils.h"
+#import "ACEBaseDefine.h"
 
+#import <AppCanKit/ACInvoker.h>
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
 
@@ -54,9 +55,8 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 @synthesize mwWgtMgr;
 @synthesize mFlag;
 @synthesize ballHasShow;
-@synthesize forebidPluginsList;
-@synthesize forebidWinsList;
-@synthesize forebidPopWinsList;
+
+
 @synthesize wgtOrientation;
 -(void)getHideEnterStatus:(NSNotification *)inNotification{
 	if ([BUtility getAppCanDevMode]) {
@@ -135,18 +135,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
     }
     [mwWgtUpdate release];
     mwWgtUpdate = nil;
-    if (forebidPluginsList) {
-        [forebidPluginsList release];
-        forebidPluginsList = nil;
-    }
-    if (forebidWinsList) {
-        [forebidWinsList release];
-        forebidWinsList = nil;
-    }
-    if (forebidPopWinsList) {
-        [forebidPopWinsList release];
-        forebidPopWinsList = nil;
-    }
+
 	[super dealloc];
 }
 
@@ -371,9 +360,6 @@ static BOOL userCustomLoadingImageEnabled = NO;
         meBrw = [[EBrowser alloc]init];
         meBrw.meBrwCtrler = self;
     }
-	if (F_DEVELOPMENT_USE) {
-		[BUtility setAppCanDevMode:@"YES"];
-	}
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
     NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
     NSString * launchImageName = nil;
@@ -419,7 +405,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             launchImage = [UIImage imageNamed:launchImageName];
             if (launchImage == nil) { //iPhone包在ipad显示
                 launchImageName = [NSString stringWithFormat:@"%@-568h@2x",launchImagePrefixFile];
-                if (ACE_iOSVersion < 7.0) {
+                if (ACSystemVersion() < 7.0) {
                     launchImageName = [NSString stringWithFormat:@"%@",launchImagePrefixFile];
                 }
             }
@@ -441,7 +427,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
     
 
-    if (ACE_iOSVersion < 7.0) {
+    if (ACSystemVersion() < 7.0) {
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].applicationFrame.size.width, [UIScreen mainScreen].applicationFrame.size.height);
     }else{
         mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
@@ -593,7 +579,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             }
         }
         id analysisObject = class_createInstance(analysisClass,0);
-        ((void(*)(id, SEL,BOOL))objc_msgSend)(analysisObject, @selector(setErrorReport:),YES);
+        [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
     }
     NSString * inKey = [BUtility appKey];
     if (theApp.userStartReport) {
@@ -601,7 +587,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
         if (analysisClass) {
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
             id analysisObject = class_createInstance(analysisClass,0);
-            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+
         }
     }
     if (theApp.userStartReport) {
@@ -609,7 +596,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
         if (analysisClass) {
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,mwWgtMgr,self,nil];
             id analysisObject = class_createInstance(analysisClass,0);
-            ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(startEveryReport:),array);
+            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
         }
     }
     if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
@@ -619,7 +606,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             return;
         }
         id analysisObject = class_createInstance(updateClass,0);
-        ((void(*)(id, SEL,NSArray*))objc_msgSend)(analysisObject, @selector(doUpdate:),dataArray);
+        [analysisObject ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
     }
 }
 
@@ -720,64 +707,40 @@ static BOOL userCustomLoadingImageEnabled = NO;
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
 	if (aboveWndContainer) {
+
+        
+        
 		switch (toInterfaceOrientation) {
 			case UIInterfaceOrientationPortrait:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
+            case UIInterfaceOrientationPortraitUpsideDown:{
+				if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
 					[meBrwMainFrm setVerticalFrame];
 				}
 				break;
-			case UIInterfaceOrientationPortraitUpsideDown:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-					[meBrwMainFrm setVerticalFrame];
-				}
-				break;
+            }
 			case UIInterfaceOrientationLandscapeLeft:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
+            case UIInterfaceOrientationLandscapeRight:{
+				if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
 					[meBrwMainFrm setHorizontalFrame];
 				}
 				break;
-			case UIInterfaceOrientationLandscapeRight:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-					[meBrwMainFrm setHorizontalFrame];
-				}
-				break;
+            }
 			default:
 				break;
 		}
 	}
 }
+
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-	NSString *jsStr = nil;
 	EBrowserWindowContainer *aboveWndContainer = [meBrwMainFrm.meBrwWgtContainer aboveWindowContainer];
-	UIInterfaceOrientation nowOrientation = (UIInterfaceOrientation)[[UIDevice currentDevice] orientation];
-	if (aboveWndContainer) {
-		switch (nowOrientation) {
-			case UIInterfaceOrientationPortrait:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT];
-				}
-				break;
-			case UIInterfaceOrientationPortraitUpsideDown:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) == F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_PORTRAIT_UPSIDEDOWN];
-				}
-				break;
-			case UIInterfaceOrientationLandscapeLeft:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_LEFT];
-				}
-				break;
-			case UIInterfaceOrientationLandscapeRight:
-				if ((aboveWndContainer.mwWgt.orientation & F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) == F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT) {
-					jsStr = [NSString stringWithFormat:@"if(%@!=null){%@(%d);}",@"uexDevice.onOrientationChange",@"uexDevice.onOrientationChange",F_DEVICE_INFO_ID_ORIENTATION_LANDSCAPE_RIGHT];
-				}
-				break;
-			default:
-				break;
-		}
-		if ([[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow] isKindOfClass:[EBrowserWindow class]]) {
-			[[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:jsStr];
-		}
+    ACEInterfaceOrientation nowOrientation = ace_interfaceOrientationFromUIDeviceOrientation([[UIDevice currentDevice] orientation]);
+    
+	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & nowOrientation)) {
+        ACLogDebug(@"will log");
+        [[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation)) completion:^(JSValue * _Nonnull returnValue) {
+            ACLogDebug(@"logged");
+        }];
+
 	}
 }
 

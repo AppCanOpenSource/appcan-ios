@@ -19,13 +19,19 @@
 		420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041901BABCD6F000A57F5 /* libstdc++.tbd */; };
 		420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041921BABCD79000A57F5 /* libxml2.tbd */; };
 		420041951BABCD80000A57F5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041941BABCD80000A57F5 /* libz.tbd */; };
-		428629001C0709BF0078E783 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428628FF1C0709BF0078E783 /* pop.framework */; };
+		423A427E1D951E5C008AA1B1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427C1D951E5C008AA1B1 /* Ono.framework */; };
+		423A427F1D951E5C008AA1B1 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427D1D951E5C008AA1B1 /* pop.framework */; };
+		423A42801D951E70008AA1B1 /* Ono.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427C1D951E5C008AA1B1 /* Ono.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		423A42811D951E70008AA1B1 /* pop.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427D1D951E5C008AA1B1 /* pop.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		427260091D9B58FE00B941CF /* AppCanEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427260071D9B58FE00B941CF /* AppCanEngine.framework */; };
+		4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 427260071D9B58FE00B941CF /* AppCanEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
-		42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */; };
+		42D96D4B1DAB7B69001ABB17 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D4A1DAB7B69001ABB17 /* VideoToolbox.framework */; };
+		42D96D511DAB7BDB001ABB17 /* AppCanKitSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D4C1DAB7B88001ABB17 /* AppCanKitSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42D96D561DAB92B4001ABB17 /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D551DAB92B4001ABB17 /* AppCanKit.framework */; };
+		42D96D571DAB92B9001ABB17 /* AppCanKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D551DAB92B4001ABB17 /* AppCanKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
-		42FFEF421C200F9400294DE1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF411C200F9400294DE1 /* Ono.framework */; };
-		46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D6D7B316F1CB3800D8E883 /* StoreKit.framework */; };
 		6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */; };
 		6CC60340157DCC0F00A3E13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */; };
 		6CC60342157DCC0F00A3E13E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC60341157DCC0F00A3E13E /* main.m */; };
@@ -73,6 +79,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				42D96D571DAB92B9001ABB17 /* AppCanKit.framework in Embed Frameworks */,
+				42D96D511DAB7BDB001ABB17 /* AppCanKitSwift.framework in Embed Frameworks */,
+				4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */,
+				423A42801D951E70008AA1B1 /* Ono.framework in Embed Frameworks */,
+				423A42811D951E70008AA1B1 /* pop.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,25 +103,18 @@
 		420041901BABCD6F000A57F5 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		420041921BABCD79000A57F5 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		420041941BABCD80000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		428628FF1C0709BF0078E783 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
+		423A427C1D951E5C008AA1B1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
+		423A427D1D951E5C008AA1B1 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = pop.framework; sourceTree = "<group>"; };
+		427260071D9B58FE00B941CF /* AppCanEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanEngine.framework; sourceTree = "<group>"; };
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
-		42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppCanEngine.a; sourceTree = "<group>"; };
+		42D96D4A1DAB7B69001ABB17 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		42D96D4C1DAB7B88001ABB17 /* AppCanKitSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKitSwift.framework; sourceTree = "<group>"; };
+		42D96D551DAB92B4001ABB17 /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKit.framework; sourceTree = "<group>"; };
 		42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
-		42FFEF411C200F9400294DE1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
 		46D6D7B316F1CB3800D8E883 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		6C9017BD159992B90034AA19 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
-		6C9017BF159992B90034AA19 /* CDataScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner_Extensions.h; sourceTree = "<group>"; };
-		6C9017C0159992B90034AA19 /* NSCharacterSet_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCharacterSet_Extensions.h; sourceTree = "<group>"; };
-		6C9017C1159992B90034AA19 /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
-		6C9017C2159992B90034AA19 /* NSScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSScanner_Extensions.h; sourceTree = "<group>"; };
-		6C9017C4159992B90034AA19 /* CJSONDataSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDataSerializer.h; sourceTree = "<group>"; };
-		6C9017C5159992B90034AA19 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer.h; sourceTree = "<group>"; };
-		6C9017C6159992B90034AA19 /* CJSONScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONScanner.h; sourceTree = "<group>"; };
-		6C9017C7159992B90034AA19 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
-		6C9017C8159992B90034AA19 /* CSerializedJSONData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSerializedJSONData.h; sourceTree = "<group>"; };
 		6CC60331157DCC0F00A3E13E /* AppCanPlugin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppCanPlugin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6CC6033D157DCC0F00A3E13E /* AppCanPlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCanPlugin-Info.plist"; sourceTree = "<group>"; };
@@ -145,7 +149,6 @@
 		6CC6038D157DCD9300A3E13E /* img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = img; sourceTree = "<group>"; };
 		6CC6038E157DCD9300A3E13E /* plugin.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = plugin.xml; sourceTree = "<group>"; };
 		6CC6038F157DCD9300A3E13E /* sound */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sound; sourceTree = "<group>"; };
-		6CC603A2157DD4D800A3E13E /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		6CC603A7157DD65E00A3E13E /* WidgetOnePseudoDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOnePseudoDelegate.h; sourceTree = "<group>"; };
 		6CC603A8157DD65E00A3E13E /* WidgetOnePseudoDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetOnePseudoDelegate.m; sourceTree = "<group>"; };
 		6CC60441157DCC0F00A3E13E /* Beqtucontent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Beqtucontent.m; sourceTree = "<group>"; };
@@ -169,6 +172,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42D96D4B1DAB7B69001ABB17 /* VideoToolbox.framework in Frameworks */,
+				6CC60376157DCCEF00A3E13E /* AudioToolbox.framework in Frameworks */,
 				42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */,
 				420041951BABCD80000A57F5 /* libz.tbd in Frameworks */,
 				420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */,
@@ -177,8 +182,10 @@
 				4200418D1BABCD5C000A57F5 /* libicucore.tbd in Frameworks */,
 				4200418B1BABCD53000A57F5 /* libiconv.tbd in Frameworks */,
 				420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */,
+				42D96D561DAB92B4001ABB17 /* AppCanKit.framework in Frameworks */,
 				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */,
+				423A427F1D951E5C008AA1B1 /* pop.framework in Frameworks */,
 				420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
 				DE94A2DB18F7CE48000CA6E7 /* Foundation.framework in Frameworks */,
@@ -189,18 +196,15 @@
 				DE94A2D918F7CE12000CA6E7 /* QuickLook.framework in Frameworks */,
 				DE94A2D718F7CD9B000CA6E7 /* ImageIO.framework in Frameworks */,
 				DE94A2D518F7CD91000CA6E7 /* CoreText.framework in Frameworks */,
-				46D6D7B416F1CB3800D8E883 /* StoreKit.framework in Frameworks */,
 				6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */,
 				6CC6036B157DCCEF00A3E13E /* MediaPlayer.framework in Frameworks */,
-				428629001C0709BF0078E783 /* pop.framework in Frameworks */,
 				6CC6036C157DCCEF00A3E13E /* MessageUI.framework in Frameworks */,
 				6CC6036D157DCCEF00A3E13E /* MapKit.framework in Frameworks */,
-				42D0AF551BBBAA0D002249AE /* libAppCanEngine.a in Frameworks */,
 				6CC60372157DCCEF00A3E13E /* Accelerate.framework in Frameworks */,
 				6CC60373157DCCEF00A3E13E /* AddressBook.framework in Frameworks */,
 				6CC60374157DCCEF00A3E13E /* AddressBookUI.framework in Frameworks */,
+				427260091D9B58FE00B941CF /* AppCanEngine.framework in Frameworks */,
 				6CC60375157DCCEF00A3E13E /* AssetsLibrary.framework in Frameworks */,
-				6CC60376157DCCEF00A3E13E /* AudioToolbox.framework in Frameworks */,
 				6CC60377157DCCEF00A3E13E /* AVFoundation.framework in Frameworks */,
 				6CC60378157DCCEF00A3E13E /* CFNetwork.framework in Frameworks */,
 				6CC60379157DCCEF00A3E13E /* CoreAudio.framework in Frameworks */,
@@ -215,7 +219,7 @@
 				6CC60382157DCCEF00A3E13E /* QuartzCore.framework in Frameworks */,
 				6CC60383157DCCEF00A3E13E /* Security.framework in Frameworks */,
 				6CC60384157DCCEF00A3E13E /* SystemConfiguration.framework in Frameworks */,
-				42FFEF421C200F9400294DE1 /* Ono.framework in Frameworks */,
+				423A427E1D951E5C008AA1B1 /* Ono.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,44 +229,10 @@
 		469DCDD0166EFA5100FC2F72 /* uexFrameworks */ = {
 			isa = PBXGroup;
 			children = (
-				42FFEF411C200F9400294DE1 /* Ono.framework */,
-				428628FF1C0709BF0078E783 /* pop.framework */,
+				423A427C1D951E5C008AA1B1 /* Ono.framework */,
+				423A427D1D951E5C008AA1B1 /* pop.framework */,
 			);
 			path = uexFrameworks;
-			sourceTree = "<group>";
-		};
-		6C9017BC159992B90034AA19 /* TouchJSON */ = {
-			isa = PBXGroup;
-			children = (
-				6C9017BD159992B90034AA19 /* CDataScanner.h */,
-				6C9017BE159992B90034AA19 /* Extensions */,
-				6C9017C3159992B90034AA19 /* JSON */,
-			);
-			name = TouchJSON;
-			path = ../../../../ACCode/Classes/commonCode/header/TouchJSON;
-			sourceTree = "<group>";
-		};
-		6C9017BE159992B90034AA19 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				6C9017BF159992B90034AA19 /* CDataScanner_Extensions.h */,
-				6C9017C0159992B90034AA19 /* NSCharacterSet_Extensions.h */,
-				6C9017C1159992B90034AA19 /* NSDictionary_JSONExtensions.h */,
-				6C9017C2159992B90034AA19 /* NSScanner_Extensions.h */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		6C9017C3159992B90034AA19 /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				6C9017C4159992B90034AA19 /* CJSONDataSerializer.h */,
-				6C9017C5159992B90034AA19 /* CJSONDeserializer.h */,
-				6C9017C6159992B90034AA19 /* CJSONScanner.h */,
-				6C9017C7159992B90034AA19 /* CJSONSerializer.h */,
-				6C9017C8159992B90034AA19 /* CSerializedJSONData.h */,
-			);
-			path = JSON;
 			sourceTree = "<group>";
 		};
 		6CC60326157DCC0F00A3E13E = {
@@ -286,6 +256,7 @@
 		6CC60334157DCC0F00A3E13E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42D96D4A1DAB7B69001ABB17 /* VideoToolbox.framework */,
 				42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */,
 				420041941BABCD80000A57F5 /* libz.tbd */,
 				420041921BABCD79000A57F5 /* libxml2.tbd */,
@@ -372,7 +343,9 @@
 		6CC60388157DCD0B00A3E13E /* engine */ = {
 			isa = PBXGroup;
 			children = (
-				42D0AF541BBBAA0D002249AE /* libAppCanEngine.a */,
+				42D96D551DAB92B4001ABB17 /* AppCanKit.framework */,
+				42D96D4C1DAB7B88001ABB17 /* AppCanKitSwift.framework */,
+				427260071D9B58FE00B941CF /* AppCanEngine.framework */,
 				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
 				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
 				6CD1DC34159ADD8A003C3083 /* EUtility.h */,
@@ -384,8 +357,6 @@
 		6CC60389157DCD0B00A3E13E /* engineHeader */ = {
 			isa = PBXGroup;
 			children = (
-				6C9017BC159992B90034AA19 /* TouchJSON */,
-				6CC603A2157DD4D800A3E13E /* JSON.h */,
 			);
 			path = engineHeader;
 			sourceTree = "<group>";
@@ -413,7 +384,9 @@
 			buildPhases = (
 				6CC6032D157DCC0F00A3E13E /* Sources */,
 				6CC6032F157DCC0F00A3E13E /* Resources */,
+				423F98A81DB77076007A382B /* ShellScript */,
 				3356F9571A4851FA00F58330 /* Embed Frameworks */,
+				423F98A91DB7712B007A382B /* ShellScript */,
 				6CC6032E157DCC0F00A3E13E /* Frameworks */,
 			);
 			buildRules = (
@@ -431,8 +404,13 @@
 		6CC60328157DCC0F00A3E13E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = zywx;
+				TargetAttributes = {
+					6CC60330157DCC0F00A3E13E = {
+						ProvisioningStyle = Manual;
+					};
+				};
 			};
 			buildConfigurationList = 6CC6032B157DCC0F00A3E13E /* Build configuration list for PBXProject "AppCanPlugin" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -471,6 +449,35 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		423F98A81DB77076007A382B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#strip simulator architectures before copy frameworks\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    cd \"${SRCROOT}/AppCanPlugin/uexFrameworks\"\n    rm -rf temp\n    mkdir temp\n    for a in `ls -d */`\n    do\n        folder=\"${a%%/*}\"\n        extension=\"${folder##*.}\"\n        if [ $extension != \"framework\" ]; then\n            continue\n        fi\n        framework=\"${folder%.*}\"\n        cp -rf \"${folder}\" \"temp/${folder}\"\n        info=$(lipo -info ${folder}/${framework} | sed 's/.*are: //')\n        if [[ $info == *\"i386\"* ]]; then\n            lipo -remove i386 \"${folder}/${framework}\" -output \"${folder}/${framework}\"\n        fi\n        if [[ $info == *\"x86_64\"* ]]; then\n            lipo -remove x86_64 \"${folder}/${framework}\" -output \"${folder}/${framework}\"\n        fi\n    done\nfi";
+		};
+		423F98A91DB7712B007A382B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#restore frameworks\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    cd \"${SRCROOT}/AppCanPlugin/uexFrameworks/temp\"\n    for a in `ls -d */`\n    do\n        folder=\"${a%%/*}\"\n        rm -rf \"../${folder}\"\n        cp -rf \"${folder}\" \"../${folder}\"\n    done\n    cd ..\n    rm -rf temp\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6CC6032D157DCC0F00A3E13E /* Sources */ = {
@@ -536,7 +543,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64";
@@ -555,7 +562,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -573,6 +580,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -584,7 +592,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -609,6 +617,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -620,7 +629,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",
@@ -648,7 +657,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -667,6 +676,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -678,7 +688,7 @@
 				GCC_PREFIX_HEADER = "AppCanPlugin/AppCanPlugin-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "AppCanPlugin/AppCanPlugin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/AppCanPlugin/engine\"",

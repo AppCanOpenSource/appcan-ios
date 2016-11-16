@@ -27,8 +27,8 @@
 
 static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
-#define ACE_METHOD_SYNC          @(ACEPluginMethodExecuteModeSynchronous)
-#define ACE_METHOD_ASYNC         @(ACEPluginMethodExecuteModeAsynchronous)
+#define ACE_METHOD_EXEC_OPT_DEFAULT          @(ACEPluginMethodExecuteNormally)
+
 
 
 
@@ -62,7 +62,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     NSMutableString *js =[NSMutableString stringWithFormat:@""];
     [js appendFormat:@"%@={};",plugin.uexName];
     [plugin.methods enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
-        [js appendString:[self javaScriptForMethod:key plugin:plugin.uexName execMode:obj]];
+        [js appendString:[self javaScriptForMethod:key plugin:plugin.uexName executeOptions:obj]];
     }];
     [plugin.properties enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [js appendString:[self javaScriptForProperty:key plugin:plugin.uexName value:obj]];
@@ -70,18 +70,19 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     return js;
 }
 
-+ (NSString *)javaScriptForMethod:(NSString *)method plugin:(NSString *)plugin execMode:(NSNumber *)execMode{
++ (NSString *)javaScriptForMethod:(NSString *)method plugin:(NSString *)plugin executeOptions:(NSNumber *)options{
     if([[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]]){
         return [[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]];
     }
-    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;return uex.execute('%@','%@',arguments,argCount,%@)};",plugin,method,plugin,method,execMode];
+    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;var args = [];for(var i = 0; i < argCount; i++){args[i] = arguments[i];};return __uex_JSCHandler_.execute('%@','%@',args,argCount,%@);};",plugin,method,plugin,method,options];
 }
 + (NSString *)javaScriptForProperty:(NSString *)property plugin:(NSString *)plugin value:(NSString *)value{
     return [NSString stringWithFormat:@"%@.%@=%@;",plugin,property,value];
 }
 
 + (NSDictionary *)exceptions{
-    return @{@"uexDataBaseMgr.transaction":@"uexDataBaseMgr.transaction=function(inDBName,inOpId,inFunc){var temp = [inDBName,inOpId];uex.execute('uexDataBaseMgr','beginTransaction',temp,2,0); inFunc();uex.execute('uexDataBaseMgr','endTransaction',temp,2,0);};"};
+    return @{
+             };
 }
 
 
@@ -104,112 +105,115 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     
     ACEPluginInfo *uexWindowInfo = [[ACEPluginInfo alloc] initWithName:@"uexWindow"];
     uexWindowInfo.methods = [@{
-                               @"forward":ACE_METHOD_ASYNC,
-                               @"back":ACE_METHOD_ASYNC,
-                               @"setMultiPopoverFrame":ACE_METHOD_ASYNC,
-                               @"evaluateMultiPopoverScript":ACE_METHOD_ASYNC,
-                               @"pageForward":ACE_METHOD_ASYNC,
-                               @"pageBack":ACE_METHOD_ASYNC,
-                               @"reload":ACE_METHOD_ASYNC,
-                               @"alert":ACE_METHOD_ASYNC,
-                               @"confirm":ACE_METHOD_ASYNC,
-                               @"prompt":ACE_METHOD_ASYNC,
-                               @"actionSheet":ACE_METHOD_ASYNC,
-                               @"open":ACE_METHOD_ASYNC,
-                               @"openPresentWindow":ACE_METHOD_ASYNC,
-                               @"setLoadingImagePath":ACE_METHOD_ASYNC,
-                               @"toggleSlidingWindow":ACE_METHOD_ASYNC,
-                               @"setSlidingWindowEnabled":ACE_METHOD_ASYNC,
-                               @"setSlidingWindow":ACE_METHOD_ASYNC,
-                               @"closeByName":ACE_METHOD_ASYNC,
-                               @"closeAboveWndByName":ACE_METHOD_ASYNC,
-                               @"close":ACE_METHOD_ASYNC,
-                               @"openSlibing":ACE_METHOD_ASYNC,
-                               @"openMultiPopover":ACE_METHOD_ASYNC,
-                               @"closeMultiPopover":ACE_METHOD_ASYNC,
-                               @"setSelectedPopOverInMultiWindow":ACE_METHOD_ASYNC,
-                               @"setAutorotateEnable":ACE_METHOD_ASYNC,
-                               @"closeSlibing":ACE_METHOD_ASYNC,
-                               @"showSlibing":ACE_METHOD_ASYNC,
-                               @"evaluateScript":ACE_METHOD_ASYNC,
-                               @"windowForward":ACE_METHOD_ASYNC,
-                               @"windowBack":ACE_METHOD_ASYNC,
-                               @"loadObfuscationData":ACE_METHOD_ASYNC,
-                               @"toast":ACE_METHOD_ASYNC,
-                               @"closeToast":ACE_METHOD_ASYNC,
-                               @"setReportKey":ACE_METHOD_ASYNC,
-                               @"getState":ACE_METHOD_SYNC,
-                               @"openPopover":ACE_METHOD_ASYNC,
-                               @"closePopover":ACE_METHOD_ASYNC,
-                               @"setWindowHidden":ACE_METHOD_ASYNC,
-                               @"setPopoverVisibility":ACE_METHOD_ASYNC,
-                               @"insertWindowAboveWindow":ACE_METHOD_ASYNC,
-                               @"insertWindowBelowWindow":ACE_METHOD_ASYNC,
-                               @"setOrientation":ACE_METHOD_ASYNC,
-                               @"setStatusBarTitleColor":ACE_METHOD_ASYNC,
-                               @"setWindowScrollbarVisible":ACE_METHOD_ASYNC,
-                               @"setPopoverFrame":ACE_METHOD_ASYNC,
-                               @"evaluatePopoverScript":ACE_METHOD_ASYNC,
-                               @"openAd":ACE_METHOD_ASYNC,
-                               @"setBounce":ACE_METHOD_ASYNC,
-                               @"getBounce":ACE_METHOD_ASYNC,
-                               @"setBounceParams":ACE_METHOD_ASYNC,
-                               @"setRightSwipeEnable":ACE_METHOD_ASYNC,
-                               @"topBounceViewRefresh":ACE_METHOD_ASYNC,
-                               @"showBounceView":ACE_METHOD_ASYNC,
-                               @"hiddenBounceView":ACE_METHOD_ASYNC,
-                               @"resetBounceView":ACE_METHOD_ASYNC,
-                               @"notifyBounceEvent":ACE_METHOD_ASYNC,
-                               @"getUrlQuery":ACE_METHOD_SYNC,
-                               @"statusBarNotification":ACE_METHOD_ASYNC,
-                               @"preOpenStart":ACE_METHOD_ASYNC,
-                               @"preOpenFinish":ACE_METHOD_ASYNC,
-                               @"beginAnimition":ACE_METHOD_ASYNC,
-                               @"setAnimitionDelay":ACE_METHOD_ASYNC,
-                               @"setAnimitionDuration":ACE_METHOD_ASYNC,
-                               @"setAnimitionCurve":ACE_METHOD_ASYNC,
-                               @"creatPluginViewContainer":ACE_METHOD_ASYNC,
-                               @"setPageInContainer":ACE_METHOD_ASYNC,
-                               @"setAnimitionRepeatCount":ACE_METHOD_ASYNC,
-                               @"setAnimitionAutoReverse":ACE_METHOD_ASYNC,
-                               @"makeAlpha":ACE_METHOD_ASYNC,
-                               @"makeTranslation":ACE_METHOD_ASYNC,
-                               @"makeScale":ACE_METHOD_ASYNC,
-                               @"makeRotate":ACE_METHOD_ASYNC,
-                               @"commitAnimition":ACE_METHOD_ASYNC,
-                               @"insertPopoverAbovePopover":ACE_METHOD_ASYNC,
-                               @"insertPopoverBelowPopover":ACE_METHOD_ASYNC,
-                               @"bringPopoverToFront":ACE_METHOD_ASYNC,
-                               @"sendPopoverToBack":ACE_METHOD_ASYNC,
-                               @"insertAbove":ACE_METHOD_ASYNC,
-                               @"insertBelow":ACE_METHOD_ASYNC,
-                               @"bringToFront":ACE_METHOD_ASYNC,
-                               @"sendToBack":ACE_METHOD_ASYNC,
-                               @"setWindowFrame":ACE_METHOD_ASYNC,
-                               @"setMultilPopoverFlippingEnbaled":ACE_METHOD_ASYNC,
-                               @"getSlidingWindowState":ACE_METHOD_ASYNC,
-                               @"postGlobalNotification":ACE_METHOD_ASYNC,
-                               @"onGlobalNotification":ACE_METHOD_ASYNC,
-                               @"subscribeChannelNotification":ACE_METHOD_ASYNC,
-                               @"publishChannelNotification":ACE_METHOD_ASYNC,
-                               @"disturbLongPressGesture":ACE_METHOD_ASYNC,
-                               @"setSwipeCloseEnable":ACE_METHOD_ASYNC,
-                               @"setWebViewScrollable":ACE_METHOD_ASYNC,
-                               @"createProgressDialog":ACE_METHOD_ASYNC,
-                               @"destroyProgressDialog":ACE_METHOD_ASYNC,
-                               @"hideStatusBar":ACE_METHOD_ASYNC,
-                               @"showStatusBar":ACE_METHOD_ASYNC,
-                               @"createPluginViewContainer":ACE_METHOD_ASYNC,
-                               @"closePluginViewContainer":ACE_METHOD_ASYNC,
-                               @"log":ACE_METHOD_SYNC,
-                               @"getWidth":ACE_METHOD_SYNC,
-                               @"getHeight":ACE_METHOD_SYNC,
-                               @"putLocalData":ACE_METHOD_ASYNC,
-                               @"getLocalData":ACE_METHOD_SYNC,
-                               @"publishChannelNotificationForJson":ACE_METHOD_ASYNC,
-                               @"setIsSupportSwipeCallback":ACE_METHOD_ASYNC,
-                               @"share":ACE_METHOD_ASYNC,
-                               @"getWindowName":ACE_METHOD_SYNC,
+                               @"forward":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"back":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setMultiPopoverFrame":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"evaluateMultiPopoverScript":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"pageForward":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"pageBack":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"reload":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"alert":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"confirm":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"prompt":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"actionSheet":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"open":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"openPresentWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setLoadingImagePath":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"toggleSlidingWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setSlidingWindowEnabled":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setSlidingWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closeByName":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closeAboveWndByName":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"close":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"openSlibing":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"openMultiPopover":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closeMultiPopover":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setSelectedPopOverInMultiWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setAutorotateEnable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closeSlibing":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"showSlibing":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"evaluateScript":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"windowForward":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"windowBack":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"loadObfuscationData":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"toast":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closeToast":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setReportKey":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getState":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"openPopover":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closePopover":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setWindowHidden":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"insertWindowAboveWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"insertWindowBelowWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setOrientation":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setStatusBarTitleColor":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setWindowScrollbarVisible":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setPopoverFrame":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"evaluatePopoverScript":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"openAd":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setBounce":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getBounce":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setBounceParams":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setRightSwipeEnable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"topBounceViewRefresh":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"showBounceView":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"hiddenBounceView":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"resetBounceView":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"notifyBounceEvent":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getUrlQuery":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"statusBarNotification":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"preOpenStart":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"preOpenFinish":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"beginAnimition":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setAnimitionDelay":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setAnimitionDuration":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setAnimitionCurve":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"creatPluginViewContainer":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setPageInContainer":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setAnimitionRepeatCount":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setAnimitionAutoReverse":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"makeAlpha":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"makeTranslation":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"makeScale":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"makeRotate":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"commitAnimition":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"insertPopoverAbovePopover":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"insertPopoverBelowPopover":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"bringPopoverToFront":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"sendPopoverToBack":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"insertAbove":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"insertBelow":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"bringToFront":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"sendToBack":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setWindowFrame":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setMultilPopoverFlippingEnbaled":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getSlidingWindowState":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"postGlobalNotification":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"onGlobalNotification":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"subscribeChannelNotification":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"publishChannelNotification":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"disturbLongPressGesture":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setSwipeCloseEnable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setWebViewScrollable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"createProgressDialog":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"destroyProgressDialog":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"hideStatusBar":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"showStatusBar":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"createPluginViewContainer":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closePluginViewContainer":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"log":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getWidth":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getHeight":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"putLocalData":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getLocalData":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"publishChannelNotificationForJson":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setIsSupportSwipeCallback":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"share":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getWindowName":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setPopoverVisibility":ACE_METHOD_EXEC_OPT_DEFAULT,
+#ifdef DEBUG
+                               @"test":ACE_METHOD_EXEC_OPT_DEFAULT,
+#endif
                                } mutableCopy];
     return uexWindowInfo;
 }
@@ -217,25 +221,24 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 + (ACEPluginInfo *)uexWidgetInfo{
     ACEPluginInfo *uexWidgetInfo = [[ACEPluginInfo alloc] initWithName:@"uexWidget"];
     uexWidgetInfo.methods = [@{
-                               @"reloadWidgetByAppId":ACE_METHOD_ASYNC,
-                               @"startWidget":ACE_METHOD_ASYNC,
-                               @"finishWidget":ACE_METHOD_ASYNC,
-                               @"removeWidget":ACE_METHOD_ASYNC,
-                               @"getOpenerInfo":ACE_METHOD_ASYNC,
-                               @"loadApp":ACE_METHOD_ASYNC,
-                               @"checkUpdate":ACE_METHOD_ASYNC,
-                               @"checkMAMUpdate":ACE_METHOD_ASYNC,
-                               @"setPushNotifyCallback":ACE_METHOD_ASYNC,
-                               @"getPushInfo":ACE_METHOD_ASYNC,
-                               @"setPushInfo":ACE_METHOD_ASYNC,
-                               @"delPushInfo":ACE_METHOD_ASYNC,
-                               @"getPushState":ACE_METHOD_ASYNC,
-                               @"setSpaceEnable":ACE_METHOD_ASYNC,
-                               @"setPushState":ACE_METHOD_ASYNC,
-                               @"setLogServerIp":ACE_METHOD_ASYNC,
-                               @"isAppInstalled":ACE_METHOD_SYNC,
-                               @"closeLoading":ACE_METHOD_ASYNC,
-                               @"getMBaaSHost":ACE_METHOD_ASYNC,
+                               @"reloadWidgetByAppId":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"startWidget":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"finishWidget":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"removeWidget":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getOpenerInfo":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"loadApp":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"checkUpdate":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"checkMAMUpdate":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setPushNotifyCallback":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getPushInfo":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setPushInfo":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"delPushInfo":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"getPushState":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setSpaceEnable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setPushState":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setLogServerIp":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"isAppInstalled":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"closeLoading":ACE_METHOD_EXEC_OPT_DEFAULT,
                                } mutableCopy];
     return uexWidgetInfo;
 }
@@ -244,18 +247,18 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     ACEPluginInfo *uexWidgetOneInfo = [[ACEPluginInfo alloc] initWithName:@"uexWidgetOne"];
 
     uexWidgetOneInfo.methods = [@{
-                                  @"getId":ACE_METHOD_ASYNC,
-                                  @"getVersion":ACE_METHOD_ASYNC,
-                                  @"getPlatform":ACE_METHOD_SYNC,
-                                  @"exit":ACE_METHOD_ASYNC,
-                                  @"cleanCache":ACE_METHOD_ASYNC,
-                                  @"getWidgetNumber":ACE_METHOD_ASYNC,
-                                  @"getWidgetInfo":ACE_METHOD_ASYNC,
-                                  @"getCurrentWidgetInfo":ACE_METHOD_ASYNC,
-                                  @"getMainWidgetId":ACE_METHOD_ASYNC,
-                                  @"setBadgeNumber":ACE_METHOD_ASYNC,
-                                  @"getEngineVersion":ACE_METHOD_SYNC,
-                                  @"getEngineVersionCode":ACE_METHOD_SYNC,
+                                  @"getId":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getVersion":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getPlatform":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"exit":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"cleanCache":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getWidgetNumber":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getWidgetInfo":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getCurrentWidgetInfo":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getMainWidgetId":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"setBadgeNumber":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getEngineVersion":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getEngineVersionCode":ACE_METHOD_EXEC_OPT_DEFAULT,
                                   } mutableCopy];
     uexWidgetOneInfo.properties = [@{@"platformName":@"'iOS'"} mutableCopy];
     return uexWidgetOneInfo;
@@ -264,10 +267,10 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 + (ACEPluginInfo *)uexAppCenterInfo {
     ACEPluginInfo *uexAppCenterInfo = [[ACEPluginInfo alloc] initWithName:@"uexAppCenter"];
     uexAppCenterInfo.methods = [@{
-                                  @"appCenterLoginResult":ACE_METHOD_ASYNC,
-                                  @"downloadApp":ACE_METHOD_ASYNC,
-                                  @"loginOut":ACE_METHOD_ASYNC,
-                                  @"getSessionKey":ACE_METHOD_ASYNC,
+                                  @"appCenterLoginResult":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"downloadApp":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"loginOut":ACE_METHOD_EXEC_OPT_DEFAULT,
+                                  @"getSessionKey":ACE_METHOD_EXEC_OPT_DEFAULT,
                                   } mutableCopy];
     return uexAppCenterInfo;
 }
