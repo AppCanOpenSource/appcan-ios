@@ -23,13 +23,10 @@
 
 #import "ACEVersion.h"
 
-
-static NSString *kEngineVersion = @"4.0.0";
-
 @implementation ACEVersion
 
 + (NSString *)version{
-    return kEngineVersion;
+    return [[NSBundle bundleForClass:[self class]].infoDictionary objectForKey:(__bridge NSString*)kCFBundleVersionKey];
 }
 
 @end

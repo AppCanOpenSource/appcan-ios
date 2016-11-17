@@ -434,6 +434,11 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
 	mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
+    if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && mStartView.frame.size.width > mStartView.frame.size.height){
+        //iPhone 横屏应用,特殊处理
+        mStartView.image = [UIImage imageWithCGImage:mStartView.image.CGImage scale:1 orientation:UIImageOrientationLeft];
+    }
+    
 	if ([BUtility getAppCanDevMode]) {
 		UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,30)];
 		devMark.backgroundColor =[UIColor clearColor];
