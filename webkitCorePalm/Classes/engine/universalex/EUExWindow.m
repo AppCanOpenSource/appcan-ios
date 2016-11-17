@@ -235,7 +235,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if ([urlStr hasPrefix:F_WGTROOT_PATH]) {
         absoluteURLString = [self.EBrwView.mwWgt.widgetPath stringByAppendingPathComponent:[urlStr substringFromIndex:[F_WGTROOT_PATH length]]];
         if (![absoluteURLString hasPrefix:@"file://"]) {
-            absoluteURLString =[NSString stringWithFormat:@"file://%@", urlStr];
+            absoluteURLString =[NSString stringWithFormat:@"file://%@", absoluteURLString];
         }
     }else{
         absoluteURLString = [BUtility makeUrl:[self.EBrwView curUrl].absoluteString url:urlStr];
