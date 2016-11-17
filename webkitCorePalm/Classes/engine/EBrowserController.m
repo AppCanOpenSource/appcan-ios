@@ -377,6 +377,12 @@ static BOOL userCustomLoadingImageEnabled = NO;
     
     self.mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
+    
+    if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && self.mStartView.frame.size.width > self.mStartView.frame.size.height){
+        //iPhone 横屏应用,特殊处理
+        self.mStartView.image = [UIImage imageWithCGImage:self.mStartView.image.CGImage scale:1 orientation:UIImageOrientationLeft];
+    }
+    
     if ([BUtility getAppCanDevMode]) {
         UILabel *devMark = [[UILabel alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,30)];
         devMark.backgroundColor =[UIColor clearColor];
