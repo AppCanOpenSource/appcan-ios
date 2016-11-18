@@ -30,13 +30,10 @@
 
 
 - (void)dealloc{
-     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidLoad {
-
     self.automaticallyAdjustsScrollViewInsets = NO;
-
 }
 
 @end

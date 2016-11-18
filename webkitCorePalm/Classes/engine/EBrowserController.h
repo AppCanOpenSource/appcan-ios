@@ -26,7 +26,8 @@
 @class BallView;
 @class WWidgetUpdate;
 @class ACEUINavigationController;
-
+@class EBrowserWindow;
+@class ACEWidgetInfo;
 
 #define F_EBRW_CTRL_FLAG_FORBID_ROTATE		0x1
 #define F_NEED_REPORT_APP_START             0x2
@@ -45,21 +46,28 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
     ACELoadingImageCloseEventAppLoadingTimeout//默认的APP加载时间到的事件(3s)
 };
 
+
+
+
 @interface EBrowserController : ACEBaseViewController <UIAccelerometerDelegate,UIAlertViewDelegate>
 @property (nonatomic, strong) UIImageView *mStartView;
 @property (nonatomic, strong) EBrowserMainFrame *meBrwMainFrm;
 @property (nonatomic, strong) EBrowser *meBrw;
-@property (nonatomic, strong) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, assign) BOOL ballHasShow;
 @property (nonatomic, assign) int mFlag;
 @property (nonatomic, strong) BallView *ballView;
-
-
+@property (nonatomic, readonly) WWidgetMgr *mwWgtMgr;
+@property (nonatomic, readonly)EBrowserWidgetContainer *brwWidgetContainer;
+@property (nonatomic, readonly)EBrowserWindow *rootWindow;
 @property (nonatomic, weak) ACEUINavigationController *aceNaviController;
+@property (nonatomic, assign)BOOL isAppCanRootViewController;
+@property (nonatomic, strong)WWidget *widget;
+@property (nonatomic, strong)ACEWidgetInfo *widgetInfo;
 
 
 
-- (EBrowserWidgetContainer*)brwWidgetContainer;
+- (instancetype)initWithMainWidget;
+- (instancetype)initWithwidget:(WWidget *)widget;
 
 
 - (void)handleLoadingImageCloseEvent:(ACELoadingImageCloseEvent)event;

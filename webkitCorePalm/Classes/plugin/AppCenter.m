@@ -24,7 +24,6 @@
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowserWindow.h"
-#import "EBrowserWidgetContainer.h"
 #import "EBrowserWindowContainer.h"
 #import "EUExWidget.h"
 #import "JSON.h"
@@ -231,13 +230,13 @@
 	sView= [[MySpaceView alloc] initWithFrame:CGRectMake(0, 0, [BUtility getScreenWidth], [BUtility getScreenHeight])];
 	sView.delegate = self;
 	//判断是不是显示“更多”
-	if ([eBView.meBrwCtrler.mwWgtMgr.wMainWgt getMoreWgtsStatus]) {
+	if ([eBView.meBrwCtrler.mwWgtMgr.mainWidget getMoreWgtsStatus]) {
 		sView.moreDisplay = YES;
 	}else {
 		sView.moreDisplay = NO;
 	}
 	//先获取主appid
-	self.portalID = eBView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+	self.portalID = eBView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
 	//获取widgetpath
 	NSString *wgtPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@",portalID]];
 	self.mainWgtPath = wgtPath;
@@ -608,7 +607,7 @@
 	[MBProgressHUD hideHUDForView:sView animated:YES];
 	[ACUtility showNetworkActivityIndicator:NO];
 	//判断是不是显示“更多”
-	if ([eBView.meBrwCtrler.mwWgtMgr.wMainWgt getMoreWgtsStatus]) {
+	if ([eBView.meBrwCtrler.mwWgtMgr.mainWidget getMoreWgtsStatus]) {
 		sView.moreDisplay = YES;
 	}else {
 		sView.moreDisplay = NO;
@@ -877,7 +876,7 @@
 		sView.hidden = YES;
 		_showTag = NO;
 		self.eBView.meBrwCtrler.mFlag = 0;
-		if ([eBView.meBrwCtrler.mwWgtMgr.wMainWgt getMySpaceStatus]) {
+		if ([eBView.meBrwCtrler.mwWgtMgr.mainWidget getMySpaceStatus]) {
 			self.eBView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = NO;
 		}else {
 			self.eBView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;

@@ -76,8 +76,8 @@
 @synthesize lastScrollPointY;
 @synthesize nowScrollPointY;
 */
-- (void)dealloc
-{
+- (void)dealloc{
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -217,6 +217,7 @@
         UExObjName:(NSString *)inUExObjName
               Type:(ACEEBrowserViewType)inWndType{
     if (self = [super initWithFrame:frame]) {
+
         _initialized = NO;
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
@@ -373,8 +374,6 @@
 
 
 
-
-//@property (nonatomic,assign) EBrowserController *meBrwCtrler;
 -(EBrowserController *)meBrwCtrler
 {
     return [_meBrowserView meBrwCtrler];
@@ -384,7 +383,10 @@
 {
     [_meBrowserView setMeBrwCtrler:inmeBrwCtrler];
 }
-//@property (nonatomic,assign) CBrowserWindow *mcBrwWnd;
+
+
+
+
 -(CBrowserWindow *)mcBrwWnd
 {
     return [_meBrowserView mcBrwWnd];
@@ -394,7 +396,7 @@
 {
     [_meBrowserView setMcBrwWnd:inmcBrwWnd];
 }
-//@property (nonatomic,assign) EBrowserWindow *meBrwWnd;
+
 -(EBrowserWindow *)meBrwWnd
 {
     return [_meBrowserView meBrwWnd];

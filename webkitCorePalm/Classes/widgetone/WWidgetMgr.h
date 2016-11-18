@@ -51,23 +51,23 @@
 
 
 @interface WWidgetMgr : NSObject {
-	WWidget *wMainWgt;
 	NSMutableDictionary *wgtDict;
 	NSMutableArray	*wgtArr;
 	UpdateParser	*wgtUpParser;
-    
 }
-@property (nonatomic, retain) WWidget *wMainWgt;
+@property (nonatomic,readonly)WWidget* mainWidget;
+
+
+
++ (instancetype)sharedManager;
+
 
 //all
-- (void)loadMainWidget;
+
 -(NSString*)curWidgetPath:(WWidget*)inWgtObj;
 
 
 
-//mainWidget
--(WWidget*)mainWidget;
--(void)initMainWidget;
 
 //space
 -(void)initLoginAndMoreWidget;

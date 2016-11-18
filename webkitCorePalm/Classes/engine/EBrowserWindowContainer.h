@@ -26,7 +26,7 @@
 @class EBrowserController;
 @class EBrowserWindow;
 @class EBrowserView;
-@class AliPayInfo;
+
 
 
 
@@ -37,8 +37,7 @@
 @property (nonatomic, weak) WWidget *mwWgt;
 @property (nonatomic, weak) EBrowserWindowContainer *meOpenerContainer;
 @property (nonatomic, strong) NSString *mOpenerForRet;
-@property (nonatomic, strong) NSString *mOpenerInfo;
-@property (nonatomic, strong) AliPayInfo *mAliPayInfo;
+
 @property (nonatomic, assign)int mStartAnimiId;
 @property (nonatomic, assign)float mStartAnimiDuration;
 @property (nonatomic, assign)int mFlag;

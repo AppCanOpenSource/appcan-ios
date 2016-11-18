@@ -21,6 +21,7 @@
 @class EBrowserController;
 @class EBrowserWindowContainer;
 @class EBrowserView;
+@class WWidget;
 
 @interface EBrowserWidgetContainer : UIView 
 @property (nonatomic, weak) EBrowserController *meBrwCtrler;
@@ -28,7 +29,7 @@
 @property (nonatomic, strong) NSMutableDictionary<NSString *,EBrowserWindowContainer *> *mBrwWndContainerDict;
 @property (nonatomic, strong) NSMutableDictionary *mWWigets;
 
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler;
+- (instancetype)initWithFrame:(CGRect)frame browserController:(EBrowserController*)eInBrwCtrler widget:(WWidget *)widget;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;

@@ -34,7 +34,7 @@
 #import "WWidgetMgr.h"
 #import "WidgetOneDelegate.h"
 #import "EBrowserMainFrame.h"
-#import "EBrowserWidgetContainer.h"
+
 #import "SFHFKeychainUtils.h"
 
 //mac begin
@@ -1231,7 +1231,7 @@ static NSString *clientCertificatePwd = nil;
 
 +(NSString *)getSubWidgetAppKeyByAppid:(NSString *)inAppId {
     
-    WWidgetMgr *wgtMgr = theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView .meBrwCtrler.mwWgtMgr;
+    WWidgetMgr *wgtMgr = [WWidgetMgr sharedManager];
     WWidget * mainWgt = [wgtMgr mainWidget];
     WWidget *startWgt = nil;
     startWgt = (WWidget*)[wgtMgr wgtPluginDataByAppId:inAppId curWgt:mainWgt];
@@ -1602,12 +1602,12 @@ static NSString *clientCertificatePwd = nil;
 
 +(void)evaluatingJavaScriptInRootWnd:(NSString*)script_ {
 	ACLogVerbose(@"exe script is %@", script_);
-	[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
+	[theApp.meBrwCtrler.rootWindow.meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 
 +(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_ {
 	ACLogVerbose(@"exe script is %@", script_);
-	[[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
+	[[theApp.meBrwCtrler.rootWindow.winContainer aboveWindow].meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 // 获取config里设置的屏幕方向
 +(NSString * )getMainWidgetConfigInterface

@@ -483,6 +483,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (!eBrwWnd) {
         eBrwWnd = [[EBrowserWindow alloc]initWithFrame:CGRectMake(0, 0, eBrwWndContainer.bounds.size.width, eBrwWndContainer.bounds.size.height) BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt UExObjName:inWindowName];
+        eBrwWnd.winContainer = eBrwWndContainer;
         [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inWindowName];
     } else {
         eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
@@ -834,7 +835,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                 
             }
             
-            [eBrwWndContainer removeFromWndDict:self.EBrwView.muexObjName];
+            [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
             eBrwWnd.mFlag = 0;
             
             if([ACEPOPAnimation isPopAnimation:animiId]){
@@ -971,46 +972,48 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (void)moveeBrwWnd:(EBrowserWindow*)temp andTime:(float)aniDuration andAnimiId:(int)animiId{
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:aniDuration];
-    [UIView setAnimationDelegate:self];
-    //	[UIView setAnimationDidStopSelector:@selector(animationFinish:finished:context:)];
-    switch(animiId)
-    {
-        case 13:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.x=frame.origin.x+[BUtility getScreenWidth];
-            [temp setFrame:frame];
-        }
-            break;
-        case 14:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.x=frame.origin.x-[BUtility getScreenWidth];
-            [temp setFrame:frame];
-        }
-            break;
-        case 15:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.y=frame.origin.y+[BUtility getScreenHeight];
-            [temp setFrame:frame];
-        }
-            break;
-        case 16:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.y=frame.origin.y-[BUtility getScreenHeight];
-            [temp setFrame:frame];
-        }
-            break;
-            
-        default:
-            break;
-            
-    }
-    [UIView commitAnimations];
+    
+    [UIView animateWithDuration:aniDuration
+                     animations:^{
+                         switch(animiId)
+                         {
+                             case 13:
+                             {
+                                 CGRect frame= temp.frame ;
+                                 frame.origin.x=frame.origin.x+[BUtility getScreenWidth];
+                                 [temp setFrame:frame];
+                             }
+                                 break;
+                             case 14:
+                             {
+                                 CGRect frame= temp.frame ;
+                                 frame.origin.x=frame.origin.x-[BUtility getScreenWidth];
+                                 [temp setFrame:frame];
+                             }
+                                 break;
+                             case 15:
+                             {
+                                 CGRect frame= temp.frame ;
+                                 frame.origin.y=frame.origin.y+[BUtility getScreenHeight];
+                                 [temp setFrame:frame];
+                             }
+                                 break;
+                             case 16:
+                             {
+                                 CGRect frame= temp.frame ;
+                                 frame.origin.y=frame.origin.y-[BUtility getScreenHeight];
+                                 [temp setFrame:frame];
+                             }
+                                 break;
+                                 
+                             default:
+                                 break;
+                                 
+                         }
+                     }
+                     completion:^(BOOL finished) {
+                         [temp removeFromSuperview];
+                     }];
 }
 
 
@@ -1211,16 +1214,15 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     CGFloat x = inX.floatValue;
     CGFloat y = inY.floatValue;
     NSTimeInterval duration = inAnimDuration.doubleValue / 1000;
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(onSetWindowFrameFinish)];
-    [self.EBrwView.meBrwWnd setFrame:CGRectMake(x, y, self.EBrwView.meBrwWnd.frame.size.width, self.EBrwView.meBrwWnd.frame.size.height)];
-    [UIView commitAnimations];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:duration]];
-}
-- (void)onSetWindowFrameFinish {
-    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWindow.onSetWindowFrameFinish" arguments:nil];
+    
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         [self.EBrwView.meBrwWnd setFrame:CGRectMake(x, y, self.EBrwView.meBrwWnd.frame.size.width, self.EBrwView.meBrwWnd.frame.size.height)];
+                     }
+                     completion:^(BOOL finished) {
+                         [self.webViewEngine callbackWithFunctionKeyPath:@"uexWindow.onSetWindowFrameFinish" arguments:nil];
+    }];
+    
 }
 
 

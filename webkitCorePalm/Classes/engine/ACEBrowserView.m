@@ -98,7 +98,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 
 - (void)initializeJSCHandler{
+    _JSContext = nil;
     JSContext *context = self.JSContext;
+
     if(!context){
         return;
     }
@@ -171,13 +173,16 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)dealloc {
-    
+
     self.indicatorView = nil;
-    
     [self.JSCHandler clean];
+    self.JSContext[ACEJSCHandlerInjectField] = nil;
     self.JSCHandler = nil;
     [self reset];
     self.currentUrl = nil;
+    self.delegate = nil;
+    [self loadWithData:@"" baseUrl:nil];
+    [self stopLoading];
 
 }
 
@@ -197,25 +202,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	mFlag = 0;
 	mTopBounceState = 0;
 	mBottomBounceState = 0;
-
-	if (mcBrwWnd) {
-		mcBrwWnd = nil;
-	}
-	if (muexObjName) {
-		muexObjName = nil;
-	}
-	if (mPageInfoDict) {
-		[mPageInfoDict removeAllObjects];
-		mPageInfoDict = nil;
-	}
-	if (mTopBounceView) {
-        [mTopBounceView removeFromSuperview];
-		mTopBounceView = nil;
-	}
-	if (mBottomBounceView) {
-        [mBottomBounceView removeFromSuperview];
-		mBottomBounceView = nil;
-	}
+    mcBrwWnd = nil;
+    muexObjName = nil;
+    [mPageInfoDict removeAllObjects];
+    mPageInfoDict = nil;
+    [mTopBounceView removeFromSuperview];
+    mTopBounceView = nil;
+    [mBottomBounceView removeFromSuperview];
+    mBottomBounceView = nil;
 }
 
 - (void)setView {
@@ -461,10 +455,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [super scrollViewDidEndDecelerating:scrollView];
     
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-        [super scrollViewDidEndDecelerating:scrollView];
-    }
     
     if (scrollView.contentOffset.y <= 0) {
         NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedUpEdge!=null){uexWindow.slipedUpEdge();}"];
@@ -629,26 +621,17 @@ const CGFloat loadingVisibleHeight = 60.0f;
         if (gesture.direction==UISwipeGestureRecognizerDirectionRight )
         {
             NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSwipeRight!=null){uexWindow.onSwipeRight();}"];
-            ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
             [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
         }
         isSwiped=YES;
         [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(noSwipe) userInfo:nil repeats:NO];
     }
 }
--(void)noSwipe
-{
+-(void)noSwipe{
     isSwiped = NO;
 }
--(void)longPressedOncell:(id)sender
-{
-    //    if ([(UILongPressGestureRecognizer *)sender state] == UIGestureRecognizerStateBegan)
-    //    {
-    //        NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.longPress!=null){uexWindow.longPress(0,1,\'长按手势\');}"];
-    //        ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
-    //        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
-    //    }
-}
+
+
 -(void)didSwipeLeft:(id)sender
 {
     if (!isSwiped && self.swipeCallbackEnabled)
@@ -657,7 +640,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
         if (gesture.direction==UISwipeGestureRecognizerDirectionLeft)
         {
             NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSwipeLeft!=null){uexWindow.onSwipeLeft();}"];
-            ACENSLog(@"jsSuccessStr=%@",jsSuccessStr);
             [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
         }
         isSwiped=YES;
@@ -697,6 +679,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)notifyPageStart {
 	mFlag &= ~F_EBRW_VIEW_FLAG_LOAD_FINISHED;
 	[meBrwCtrler.meBrw notifyLoadPageStartOfBrwView:self.superDelegate];
+
+
 }
 
 - (void)notifyPageFinish {
@@ -706,7 +690,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
     UIScrollView * subScrollView = NULL;
 	NSString * initStr = NULL;
     
-    ACENSLog(@"Broad in notifyPageFinish");
 	mFlag |= F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
 	mFlag |= F_EBRW_VIEW_FLAG_LOAD_FINISHED;
     version =[[[UIDevice currentDevice]systemVersion]floatValue];
@@ -814,15 +797,15 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
-	//ACENSLog(@"scroll to top");
+
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-	//ACENSLog(@"will begin dragging");
+
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-	//ACENSLog(@"will begin decelerating");
+
 }
 
 
@@ -878,14 +861,12 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)loadWithData:(NSString*)inData baseUrl:(NSURL*)inBaseUrl {
     self.currentUrl = inBaseUrl;
-	NSString *trueData = [inData stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	ACENSLog(@"ACEBrowserView.loadWithData: escaped file data is %@", trueData);
 	[self loadHTMLString:inData baseURL:inBaseUrl];
 }
 
 - (void)loadWithUrl: (NSURL*)inUrl {
     self.currentUrl = inUrl;
-	ACENSLog(@"ACEBrowserView LoadWithUrl: in Url is %@", [inUrl absoluteString]);
+
 	NSURLRequest *request = [NSURLRequest requestWithURL:inUrl];
 	[self loadRequest:request];
 }

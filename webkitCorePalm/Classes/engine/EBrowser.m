@@ -32,7 +32,7 @@
 
 
 -(void)start:(WWidget*)inWWgt {
-	[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:NULL];
+	[self.meBrwCtrler.rootWindow.meBrwView loadWidgetWithQuery:NULL];
 }
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {

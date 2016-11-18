@@ -1,46 +1,52 @@
-/*
- *  Copyright (C) 2014 The AppCan Open Source Project.
+/**
+ *
+ *	@file   	: ACESubwidgetManager.h  in AppCanEngine
+ *
+ *	@author 	: CeriNo
+ * 
+ *	@date   	: 2016/11/18
+ *
+ *	@copyright 	: 2016 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
- 
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#import <UIKit/UIKit.h>
 
-#import "MMNavigationController.h"
-#import "ACEBaseDefine.h"
+
+#import <Foundation/Foundation.h>
+
+
+@class WWidget;
 @class EBrowserController;
 
 
-
-@interface ACEUINavigationController : MMNavigationController
-
-
-
-
-@property (nonatomic,strong)NSNumber * presentOrientationNumber;
-@property (nonatomic,assign)BOOL canAutoRotate;
-@property (nonatomic,assign)BOOL rotateOnce;
-@property (nonatomic,assign)ACEInterfaceOrientation supportedOrientation;
-@property (nonatomic,strong)EBrowserController *rootController;
-
-- (instancetype)initWithEBrowserController:(EBrowserController *)rootController;
-
-
+@interface ACEWidgetInfo : NSObject
+@property (nonatomic,strong)NSString *callbackFunc;
+@property (nonatomic,strong)NSString *info;
 @end
 
 
 
+@interface ACESubwidgetManager: NSObject
+
++ (instancetype)defaultManager;
+
+- (BOOL)launchWidget:(WWidget *)subwidget withInfo:(ACEWidgetInfo *)info;
+- (BOOL)finishWidget:(WWidget *)subwidget;
 
 
 
+- (void)notifySubwidgetControllerLoadingCompleted:(EBrowserController *)subwidgetController;
+
+
+
+@end

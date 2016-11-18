@@ -20,7 +20,7 @@
 #import "EBrowserWindowContainer.h"
 #import "EBrowserView.h"
 #import "BUtility.h"
-
+#import <AppCanKit/AppCanKit.h>
 @interface ACEWebViewController ()
 
 
@@ -29,13 +29,7 @@
 
 @implementation ACEWebViewController
 
-- (instancetype)init{
-    self = [super init];
-    if (self) {
 
-    }
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

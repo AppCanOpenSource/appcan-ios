@@ -60,7 +60,9 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 
 @implementation EBrowserController
 
-
+- (WWidgetMgr *)mwWgtMgr{
+    return [WWidgetMgr sharedManager];
+}
 
 
 -(void)getHideEnterStatus:(NSNotification *)inNotification{
@@ -73,7 +75,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 		return;
 	}
 	int mySpaceValue = [str intValue];
-	self.mwWgtMgr.wMainWgt.showMySpace = mySpaceValue;
+	self.mwWgtMgr.mainWidget.showMySpace = mySpaceValue;
 
 	if (mySpaceValue & WIDGETREPORT_SPACESTATUS_OPEN) {
 		self.meBrwMainFrm.meBrwToolBar.hidden = NO;
@@ -90,15 +92,37 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 	}
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"componentStatusUpdate" object:nil];
 }
-- (instancetype)init {
-	if (self = [super init]) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHideEnterStatus:) name:@"componentStatusUpdate" object:nil];
-		_mFlag = 0;
+
+
+
+- (instancetype)initWithwidget:(WWidget *)widget{
+    self = [super init];
+    if (self) {
+        _widget = widget;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHideEnterStatus:) name:@"componentStatusUpdate" object:nil];
+        _mFlag = 0;
         _mamList =[[NSMutableArray alloc] initWithCapacity:1];
         _mwWgtUpdate = [[WWidgetUpdate alloc] init];
-	}
-	return self;
+        _meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[UIScreen mainScreen].bounds BrwCtrler:self];
+        _meBrw = [[EBrowser alloc] init];
+        _meBrw.meBrwCtrler = self;
+        _meBrwMainFrm.meBrwWgtContainer = [[EBrowserWidgetContainer alloc] initWithFrame:[UIScreen mainScreen].bounds browserController:self widget:widget];
+        [_meBrwMainFrm addSubview:_meBrwMainFrm.meBrwWgtContainer];
+    }
+    
+    return self;
+    
+
 }
+
+- (instancetype)initWithMainWidget{
+    self = [self initWithwidget:[WWidgetMgr sharedManager].mainWidget];
+    if (self) {
+        self.isAppCanRootViewController = YES;
+    }
+    return self;
+}
+
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
@@ -107,7 +131,6 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
     [_meBrwMainFrm removeFromSuperview];
     _meBrwMainFrm = nil;
     _meBrw = nil;
-    _mwWgtMgr = nil;
     _mamList = nil;
     _mwWgtUpdate = nil;
 }
@@ -265,46 +288,14 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 }
 
 
-- (EBrowser *)meBrw{
-    if (!_meBrw) {
-        _meBrw = [[EBrowser alloc] init];
-        _meBrw.meBrwCtrler = self;
-    }
-    return _meBrw;
-}
 
 
 static BOOL userCustomLoadingImageEnabled = NO;
 
-- (void)loadView {
-	[super loadView];
-    [self presentStartImage];
-    //配置是否支持增量升级
-    if (theApp.useUpdateWgtHtmlControl) {
-        [self doUpdateWgt];
-    }
-	[self.mwWgtMgr loadMainWidget];
-    self.meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[BUtility getApplicationInitFrame] BrwCtrler:self];
-	[self.view addSubview:self.meBrwMainFrm];
-	self.meBrwMainFrm.hidden = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
-    });
-    if (userCustomLoadingImageEnabled) {
-        NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
-        if (launchTime && launchTime.integerValue > 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(launchTime.integerValue * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-                [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventCustomLoadingTimeout];
-            });
-        }
-    }
 
-    [self.meBrw start:self.mwWgtMgr.wMainWgt];
-
-    
-}
 
 - (void)presentStartImage{
+    self.meBrwMainFrm.hidden = YES;
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
     NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
     NSString * launchImageName = nil;
@@ -394,6 +385,19 @@ static BOOL userCustomLoadingImageEnabled = NO;
         
     }
     [self.view addSubview:self.mStartView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
+    });
+    
+    
+    if (userCustomLoadingImageEnabled) {
+        NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
+        if (launchTime && launchTime.integerValue > 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(launchTime.integerValue * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventCustomLoadingTimeout];
+            });
+        }
+    }
 }
 
 
@@ -490,6 +494,20 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    if (theApp.useUpdateWgtHtmlControl) {
+        [self doUpdateWgt];
+    }
+
+    
+    
+    [self.view addSubview:self.meBrwMainFrm];
+    if (self.isAppCanRootViewController) {
+        [self presentStartImage];
+        [self.meBrw start:self.mwWgtMgr.mainWidget];
+    }
+    
+
+    
     NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
     [self setExtraInfo:extraDic toEBrowserView:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView];
     
@@ -520,7 +538,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
         }
     }
     if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
-        NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.wMainWgt.appId,inKey,self.mwWgtMgr.wMainWgt.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
+        NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
         Class  updateClass = NSClassFromString(@"EUExUpdate");
         if (!updateClass) {
             return;
@@ -572,6 +590,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
 	}
 }
 
-
+- (EBrowserWindow *)rootWindow{
+    return self.brwWidgetContainer.meRootBrwWndContainer.meRootBrwWnd;
+}
 
 @end

@@ -323,6 +323,7 @@ double radians(float degrees){
 
 - (id)initWithFrame:(CGRect)frame andType:(int)inType params:(NSMutableDictionary*)dict{
   if (self = [super initWithFrame:frame]) {
+
       self.isImgCenter = NO;
       if ([[dict objectForKey:@"levelText"] length] == 0 && [[dict objectForKey:@"loadingText"] length] == 0 && [[dict objectForKey:@"pullToReloadText"] length] == 0 && [[dict objectForKey:@"releaseToReloadText"] length] == 0 && [[dict objectForKey:@"textColor"] length] == 0) {
           if ([[dict allKeys] count] > 0) {
@@ -579,6 +580,7 @@ double radians(float degrees){
 }
 
 - (void)dealloc {
+    
     [bounceParamsDict release];
     bounceParamsDict =nil;
 	if (mActivityView) {

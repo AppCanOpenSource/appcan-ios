@@ -47,42 +47,28 @@
 @synthesize mwWgt;
 @synthesize meOpenerContainer;
 @synthesize mOpenerForRet;
-@synthesize mOpenerInfo;
-@synthesize mAliPayInfo;
+
 @synthesize mStartAnimiId;
 @synthesize mStartAnimiDuration;
 @synthesize mFlag;
 
 - (void)dealloc {
-    
-	if (mwWgt) {
-		mwWgt = nil;
-	}
-	if (mOpenerInfo) {
-		mOpenerInfo = NULL;
-	}
+    mwWgt = nil;
 	if (mOpenerForRet) {
 		mOpenerForRet = NULL;
 	}
-	if (mAliPayInfo) {
-		mAliPayInfo = NULL;
-	}
-
-
 	if (meRootBrwWnd) {
 		if (meRootBrwWnd.superview) {
 			[meRootBrwWnd removeFromSuperview];
 		}
 		meRootBrwWnd = NULL;
 	}
-
 	if (mBrwWndDict) {
 		NSArray *brwWndArray = [mBrwWndDict allValues];
 		for (EBrowserWindow *brwWnd in brwWndArray) {
 			if (brwWnd.superview) {
 				[brwWnd removeFromSuperview];
 			}
-//			[brwWnd release];
 		}
 		[mBrwWndDict removeAllObjects];
 		mBrwWndDict = NULL;
@@ -101,7 +87,7 @@
 		self.mwWgt = inWgt;
 		meOpenerContainer = nil;
 		mOpenerForRet = nil;
-		mOpenerInfo = nil;
+
 		mFlag = 0;
 		meRootBrwWnd = [[EBrowserWindow alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt UExObjName:F_BRW_WND_ROOT_NAME];
 		[mBrwWndDict setObject:meRootBrwWnd forKey:F_BRW_WND_ROOT_NAME];
@@ -118,23 +104,17 @@
 	//[superBrwWnd notifyLoadPageStartOfBrwView:eInBrwView];
 }
 
-- (void)addViewToACEWebViewController:(EBrowserWindow *)view
-{
-    
-    ACENSLog(@"NavWindowTest addViewToACEWebViewController view= %@", view);
+- (void)addViewToACEWebViewController:(EBrowserWindow *)view{
     
     ACEWebViewController *webController = [[ACEWebViewController alloc] init];
-    
     
 //    testController.view = view;
     webController.browserWindow = view;
     view.webController = webController;
     if (view.webWindowType == ACEWebWindowTypeNavigation) {
-        [meBrwCtrler.navigationController pushViewController:webController animated:YES];
+        [meBrwCtrler.aceNaviController pushViewController:webController animated:YES];
     } else if (view.webWindowType == ACEWebWindowTypePresent) {
-        [meBrwCtrler.navigationController presentViewController:webController animated:YES completion:^{
-            //
-        }];
+        [meBrwCtrler.aceNaviController presentViewController:webController animated:YES completion:nil];
     }
     
     
@@ -143,29 +123,16 @@
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
 
 	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
-    
     if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
-        
         if (eSuperBrwWnd.isSliding) {
             return;
         }
-        
         [self addViewToACEWebViewController:eSuperBrwWnd];
-        
-        ///prev window
-//        if (eCurBrwWnd) {
-//            [eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-//        }
         [eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-        
-        
-        if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
+        if (eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) {
             eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
             eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         }
-        
-        
         return;
     }
     

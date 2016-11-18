@@ -100,22 +100,21 @@
     mOAuthWndName = nil;
     [self deregisterWindowSequenceChange];
     self.popAnimationInfo = nil;
+
 }
 
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName {
     self = [super initWithFrame:frame];
     if (self) {
+
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = YES;
 		meBrwCtrler = eInBrwCtrler;
 		mwWgt = inWgt;
-		if (meBrwView) {
-			[meBrwView reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
-		} else {
-			meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
-		}
-		ACENSLog(@"meBrwView retainCount is %d", meBrwView);
+
+        meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+		
 		[self addSubview:meBrwView];
 		mPopoverBrwViewDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
 		mMuiltPopoverDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
@@ -127,10 +126,10 @@
 			meBrwHistory = [[EBrowserHistory alloc]init];
 		}
 		mOpenAnimiId = 0;
+        self.windowName = inUExObjName;
     }
-	ACENSLog(@"EBrowserWindow alloc is %x", self);
-    self.isTopWindow=NO;
-    self.enableSwipeClose=YES;
+    self.isTopWindow = NO;
+    self.enableSwipeClose = YES;
     [self registerWindowSequenceChange];
     return self;
 }

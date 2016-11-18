@@ -61,7 +61,7 @@
 #define ACE_USERAGENT @"AppCanUserAgent"
 
 
-@interface WidgetOneDelegate()<RESideMenuDelegate,AppCanGlobalObjectGetter,UNUserNotificationCenterDelegate,UIAlertViewDelegate>
+@interface WidgetOneDelegate()<RESideMenuDelegate,UNUserNotificationCenterDelegate,UIAlertViewDelegate>
 @property (nonatomic,assign,readwrite)BOOL useInAppCanIDE;
 @end
 
@@ -274,22 +274,22 @@
     }
     
 
-    self.meBrwCtrler = [[EBrowserController alloc]init];
-    
-
-    
-
+    self.meBrwCtrler = [[EBrowserController alloc] initWithMainWidget];
+    self.meBrwCtrler.isAppCanRootViewController = YES;
     
     
 
     
-    self.mwWgtMgr = [[WWidgetMgr alloc]init];
-    self.meBrwCtrler.mwWgtMgr = self.mwWgtMgr;
+    
+
+    
+    self.mwWgtMgr = [WWidgetMgr sharedManager];
+
     //[self readAppCanJS];
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
 
-    ACEUINavigationController *meNav = [[ACEUINavigationController alloc] initWithRootViewController:self.meBrwCtrler];
+    ACEUINavigationController *meNav = [[ACEUINavigationController alloc] initWithEBrowserController:self.meBrwCtrler];
     self.meBrwCtrler.aceNaviController = meNav;
     _drawerController = [[ACEDrawerViewController alloc] initWithCenterViewController:meNav
                                                              leftDrawerViewController:nil
@@ -554,14 +554,14 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
     
-    [BUtility writeLog:@"wigetone application receive memory warning"];
+
     
-    // Remove and disable all URL Cache, but doesn't seem to affect the memory
+
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     [[NSURLCache sharedURLCache] setDiskCapacity:0];
     [[NSURLCache sharedURLCache] setMemoryCapacity:0];
     [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
-    // Remove all credential on release, but memory used doesn't move!
+    
     NSURLCredentialStorage * credentialsStorage = [NSURLCredentialStorage sharedCredentialStorage];
     NSDictionary * allCredentials = [credentialsStorage allCredentials];
     

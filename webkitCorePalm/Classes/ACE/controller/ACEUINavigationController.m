@@ -19,16 +19,28 @@
 #import "BUtility.h"
 #import "ACEConfigXML.h"
 #import "ACEBaseViewController.h"
+#import "EBrowserController.h"
+#import "WWidget.h"
 @interface ACEUINavigationController ()
 
 @end
 
 @implementation ACEUINavigationController
 
+- (EBrowserController *)rootController{
+    UIViewController *controller = self.childViewControllers.firstObject;
+    if ([controller isKindOfClass:[EBrowserController class]]) {
+        return (EBrowserController *)controller;
+    }
+    return nil;
+}
+
+
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController{
     self = [super initWithRootViewController:rootViewController];
     if (self) {
+
         [self setNavigationBarHidden:YES];
         _supportedOrientation = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"orientation"].stringValue.integerValue;
 
@@ -38,8 +50,16 @@
 }
 
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (instancetype)initWithEBrowserController:(EBrowserController *)rootController{
+    self = [super initWithRootViewController:rootController];
+    if (self) {
+        
+        [self setNavigationBarHidden:YES];
+        _supportedOrientation = rootController.widget.orientation;
+        
+        
+    }
+    return self;
 }
 
 
@@ -84,7 +104,18 @@
     if (self.presentOrientationNumber) {
         return self.presentOrientationNumber.integerValue;
     }
-    return [super preferredInterfaceOrientationForPresentation];
+    UIInterfaceOrientationMask mask = self.supportedInterfaceOrientations;
+    if (mask & UIInterfaceOrientationMaskPortrait) {
+        return UIInterfaceOrientationPortrait;
+    }
+    if (mask & UIInterfaceOrientationMaskLandscapeRight) {
+        return UIInterfaceOrientationLandscapeRight;
+    }
+    if (mask & UIInterfaceOrientationMaskLandscapeLeft) {
+        return UIInterfaceOrientationLandscapeLeft;
+    }
+    return UIInterfaceOrientationPortraitUpsideDown;
+
 }
 
 

@@ -46,10 +46,9 @@
 		self.autoresizesSubviews = YES;
 		self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		_meBrwCtrler = eInBrwCtrler;
-		_meBrwWgtContainer = [[EBrowserWidgetContainer alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) BrwCtrler:eInBrwCtrler];
-		[self addSubview:self.meBrwWgtContainer];
 
-        if ([BUtility getAppCanDevMode] || [self.meBrwCtrler.mwWgtMgr.wMainWgt getMySpaceStatus]) {
+
+        if ([BUtility getAppCanDevMode] || [self.meBrwCtrler.mwWgtMgr.mainWidget getMySpaceStatus]) {
             self.meBrwToolBar =[[EBrowserToolBar alloc] initWithFrame:CGRectMake(BOTTOM_LOCATION_VERTICAL_X,BOTTOM_LOCATION_VERTICAL_Y, BOTTOM_VIEW_WIDTH,BOTTOM_VIEW_HEIGHT) BrwCtrler:eInBrwCtrler];
             [self addSubview:self.meBrwToolBar];
         }
@@ -89,16 +88,9 @@
 	switch (eInBrwView.mType) {
 		case ACEEBrowserViewTypeMain:
             [self notifyLoadingImageShouldClose];
-			if (eInBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) {
-				eInBrwView.meBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
-				eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
-				ACENSLog(@"reset wnd opening flag");
-				[self.meBrwWgtContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-			} else if ((eInBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
-				[self.meBrwWgtContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-			} else if (eInBrwView.meBrwWnd.mOAuthWndName) {
-				[self.meBrwWgtContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-			}
+            eInBrwView.meBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
+            eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
+            [self.meBrwWgtContainer notifyLoadPageFinishOfBrwView:eInBrwView];
 			break;
 		default:
 			break;

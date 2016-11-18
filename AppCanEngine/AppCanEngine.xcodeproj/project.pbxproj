@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */; };
+		427A79201DDE95B800E85BA4 /* ACESubwidgetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */; };
 		42AFC68A1DDC3A3900C22C9F /* AppCanEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42AFC6891DDC3A3900C22C9F /* AppCanEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CF2D651DDADBD80060C610 /* ACEConfigXML.h */; };
 		42CF2D6A1DDADBD80060C610 /* ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D661DDADBD80060C610 /* ACEConfigXML.m */; };
@@ -114,7 +116,7 @@
 		42F787A11D950B5D0094AA05 /* ACEVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DF1AB1CFD841600F4C53E /* ACEVersion.m */; };
 		42F787A21D950B5D0094AA05 /* EBrowserViewBounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860318B1B93D000D7600 /* EBrowserViewBounceView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787A31D950B5D0094AA05 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887961A0B0984002776E4 /* CJSONDeserializer_BlocksExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F787A41D950B5D0094AA05 /* EBrowserToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FD18B1B93D000D7600 /* EBrowserToolBar.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787A41D950B5D0094AA05 /* EBrowserToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FD18B1B93D000D7600 /* EBrowserToolBar.m */; };
 		42F787A51D950B5D0094AA05 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887A21A0B0984002776E4 /* CJSONDeserializer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787A61D950B5D0094AA05 /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AC18B1B93D000D7600 /* SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787A71D950B5D0094AA05 /* WWidgetUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -431,6 +433,8 @@
 		426DF1AA1CFD841600F4C53E /* ACEVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEVersion.h; sourceTree = "<group>"; };
 		426DF1AB1CFD841600F4C53E /* ACEVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEVersion.m; sourceTree = "<group>"; };
 		427260051D9B546900B941CF /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppCanKit.framework; path = "AppCanKit/build/Debug-iphoneos/AppCanKit.framework"; sourceTree = "<group>"; };
+		427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACESubwidgetManager.h; sourceTree = "<group>"; };
+		427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACESubwidgetManager.m; sourceTree = "<group>"; };
 		427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildEngineForPluginDevelopment.sh; sourceTree = "<group>"; };
 		428628F91C0708920078E783 /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
 		428628FA1C0708920078E783 /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
@@ -1036,6 +1040,8 @@
 				464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */,
 				42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */,
 				42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */,
+				427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */,
+				427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */,
 				5AAA860A18B1B93D000D7600 /* universalex */,
 			);
 			path = engine;
@@ -1356,6 +1362,7 @@
 				42F788221D950B5D0094AA05 /* UIViewController+RESideMenu.h in Headers */,
 				42F788231D950B5D0094AA05 /* SBJsonParser.h in Headers */,
 				42F788241D950B5D0094AA05 /* NSObject+SBJSON.h in Headers */,
+				427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */,
 				42F788251D950B5D0094AA05 /* EBrowser.h in Headers */,
 				42F788261D950B5D0094AA05 /* ASIDownloadCache.h in Headers */,
 				42F788271D950B5D0094AA05 /* UIImageView+WebCache.h in Headers */,
@@ -1588,6 +1595,7 @@
 				42F787701D950B5D0094AA05 /* SDImageCache.m in Sources */,
 				42F787711D950B5D0094AA05 /* BallView.m in Sources */,
 				42F787721D950B5D0094AA05 /* ACEPluginParser.m in Sources */,
+				427A79201DDE95B800E85BA4 /* ACESubwidgetManager.m in Sources */,
 				42F787731D950B5D0094AA05 /* ioapi.c in Sources */,
 				42F787741D950B5D0094AA05 /* NSDictionary_JSONExtensions.m in Sources */,
 				42F787751D950B5D0094AA05 /* ASIDownloadCache.m in Sources */,

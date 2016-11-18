@@ -46,10 +46,8 @@
 @synthesize flag;
 
 - (void)dealloc {
-	//yangfan MOD--->leaks
-	[barbtn release];
 	barbtn = nil;
-	[super dealloc];
+
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -72,8 +70,7 @@
 			if (!result && err) {
 				ACENSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
 			}
-		}    
-		[fileMgr release];
+		}
 		exit(0);
 	}
 }
@@ -87,9 +84,7 @@
 		[self setFrame:CGRectMake(320-33,BOTTOM_LOCATION_VERTICAL_Y,BOTTOM_ITEM_WIDTH,BOTTOM_ITEM_HEIGHT)];
 	}
 	[self setUserInteractionEnabled:YES];
-	UIPanGestureRecognizer *gesture = [[[UIPanGestureRecognizer alloc] 
-										initWithTarget:self 
-										action:@selector(btnDragged:)] autorelease];
+	UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(btnDragged:)];
 	[self addGestureRecognizer:gesture];
 	
 //  初始化barbtn
@@ -131,12 +126,11 @@
             NSString * exit = ACELocalized(UEX_EXITAPP_ALERT_EXIT);
             NSString * cancel = ACELocalized(UEX_EXITAPP_ALERT_CANCLE);
             
-            UIAlertView *widgetOneConfirmView = [[[UIAlertView alloc]
-                                                 initWithTitle:title
-                                                 message:message
-                                                 delegate:self
-                                                 cancelButtonTitle:nil
-                                                 otherButtonTitles:exit,cancel,nil] autorelease];
+            UIAlertView *widgetOneConfirmView = [[UIAlertView alloc] initWithTitle:title
+                                                                           message:message
+                                                                          delegate:self
+                                                                 cancelButtonTitle:nil
+                                                                 otherButtonTitles:exit,cancel,nil];
             [widgetOneConfirmView show];
             return;
         }
@@ -149,11 +143,9 @@
 	//强制转屏
 	UIInterfaceOrientation cOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	if ((cOrientation == UIInterfaceOrientationLandscapeLeft) || (cOrientation == UIInterfaceOrientationLandscapeRight)) {
-		if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-			[[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-										   withObject:(id)UIInterfaceOrientationPortrait];
-			eBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrwCtrler.mFlag = 1;
-		}
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+        eBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrwCtrler.mFlag = 1;
+		
 	}
 }
 - (void)LoadSpace{
@@ -179,7 +171,7 @@
         if (!eView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
             AppCenter *tmpCenter = [[AppCenter alloc] init];
             eView.meBrwCtrler.meBrwMainFrm.mAppCenter = tmpCenter;
-            [tmpCenter release];
+
         }
         if (eView.meBrwCtrler.meBrwMainFrm.mAppCenter.showTag == YES) {
             return;

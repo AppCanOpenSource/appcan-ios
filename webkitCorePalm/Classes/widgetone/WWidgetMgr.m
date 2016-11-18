@@ -31,23 +31,34 @@
 
 NSString * webappShowAactivety;
 
+@interface WWidgetMgr()
+@property (nonatomic,strong,readwrite)WWidget* mainWidget;
+@end
+
+
 @implementation WWidgetMgr
-@synthesize wMainWgt;
+
+
++ (instancetype)sharedManager{
+    static WWidgetMgr *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manager = [[self alloc]init];
+        [manager loadMainWidget];
+    });
+    return manager;
+}
 
 
 -(void)dealloc{
-	ACENSLog(@"wwidgetMgr dealloc");
-    [wMainWgt release];
-	wMainWgt = nil;
+
+
 	[wgtDict release];
 	[wgtArr release];
 	[super dealloc];
 }
 #pragma mark mainWidget
-//得到主widget
-- (WWidget *)mainWidget{
-	return wMainWgt;
-}
+
 //get wgtPath by wgtObj
 - (NSString*)curWidgetPath:(WWidget*)inWgtObj {
     
@@ -166,8 +177,7 @@ NSString * webappShowAactivety;
 	if (wgtobj!=nil) {
 		wgtobj.openAdStatus = 0;//不显示广告
 		if ([wgtobj.ver isEqualToString:mVer]) {
-			self.wMainWgt = wgtobj;
-			ACENSLog(@"wwidgetMgr wmainwgt=%d",[wMainWgt retainCount]);
+			self.mainWidget = wgtobj;
 			[widgetSql close_database];
 			[widgetSql release];
 			[tempArr removeAllObjects];
@@ -233,7 +243,7 @@ NSString * webappShowAactivety;
 		wgtobj.iconPath = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.iconPath];
 	}
 	wgtobj.openAdStatus = 0;//不显示广告。3.30
-	self.wMainWgt = wgtobj;
+	self.mainWidget = wgtobj;
 	[widgetSql close_database];
 	[widgetSql release];
 	[tempArr removeAllObjects];
@@ -347,7 +357,7 @@ NSString * webappShowAactivety;
 	WWidget *loginWgt = [[WWidget alloc] init];
 	loginWgt.indexUrl = F_WIDGET_LOGIN_URL;
 	loginWgt.appId = @"9999998";
-	loginWgt.widgetPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@/%@",wMainWgt.appId,loginWgt.appId]];
+	loginWgt.widgetPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@/%@",self.mainWidget.appId,loginWgt.appId]];
 	if (!wgtDict) {
 		wgtDict = [[NSMutableDictionary alloc] initWithCapacity:0];
 	}
@@ -356,7 +366,7 @@ NSString * webappShowAactivety;
 	WWidget *moreWgt = [[WWidget alloc] init];
 	moreWgt.indexUrl =F_WIDGET_MOREWIDGET_URL;
 	moreWgt.appId = @"9999997";
-	moreWgt.widgetPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@/%@",self.wMainWgt.appId,moreWgt.appId]];	
+	moreWgt.widgetPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@/%@",self.mainWidget.appId,moreWgt.appId]];
 	[wgtDict setObject:moreWgt forKey:moreWgt.appId];
 	[moreWgt release];
 	
@@ -658,8 +668,8 @@ NSString * webappShowAactivety;
 //create request folder
 -(void)createReqFolder{
 	NSFileManager *fManager = [NSFileManager defaultManager];
-	if (wMainWgt) {
-		NSString *absMainPath =[self curWidgetPath:wMainWgt];
+	if (self.mainWidget) {
+		NSString *absMainPath =[self curWidgetPath:self.mainWidget];
 		NSString *videoPath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_VIDEO];
 		NSString *audioPath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_AUDIO];
 		NSString *photoPath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_PHOTO];

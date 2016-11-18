@@ -35,6 +35,7 @@
 #import "ACEPluginInfo.h"
 #import <AppCanKit/ACInvoker.h>
 #import "EBrowserWindow.h"
+#import "ACEBrowserView.h"
 
 #define ACE_LOG_TRACE(cmd)\
     _Pragma("clang diagnostic push")\
@@ -65,6 +66,10 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 @interface ACEJSCHandler()<ACEJSCHandler>
 
 @end
+
+
+
+NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 @implementation ACEJSCHandler
 
@@ -117,8 +122,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 - (void)initializeWithJSContext:(JSContext *)context{
-    context[@"__uex_JSCHandler_"] = self;
-
+    context[ACEJSCHandlerInjectField] = self;
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
     [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
@@ -127,6 +131,11 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     }];
     self.ctx = context;
 }
+
+
+
+
+
 
 - (void)log:(JSValue *)value, ...{
     NSArray *args = [JSContext currentArguments];
@@ -361,7 +370,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     NSBundle *dynamicBundle = [NSBundle bundleWithPath:[[BUtility dynamicPluginFrameworkFolderPath] stringByAppendingPathComponent:frameworkName]];
     
     if(dynamicBundle && [dynamicBundle load]){
-        NSLog(@"load dynamic framework for plugin:%@",pluginName);
+        ACLogInfo(@"load dynamic framework for plugin:%@",pluginName);
         return;
     }
     
@@ -370,7 +379,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     
     dynamicBundle = [NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
     if(dynamicBundle && [dynamicBundle load]){
-        NSLog(@"load dynamic framework in res for plugin:%@",pluginName);
+        ACLogInfo(@"load dynamic framework in res for plugin:%@",pluginName);
         return;
         
     }
@@ -379,7 +388,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     
     dynamicBundle = [NSBundle bundleWithPath:[NSString pathWithComponents:@[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,@"dyFiles",frameworkName]]];
     if(dynamicBundle && [dynamicBundle load]){
-        NSLog(@"load dynamic framework in dyFiles for plugin:%@",pluginName);
+        ACLogInfo(@"load dynamic framework in dyFiles for plugin:%@",pluginName);
         return;
     }
 
@@ -404,11 +413,10 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
     self.engine = nil;
-
-}
-
-- (void)dealloc{
+    self.ctx = nil;
     
+
 }
+
 
 @end

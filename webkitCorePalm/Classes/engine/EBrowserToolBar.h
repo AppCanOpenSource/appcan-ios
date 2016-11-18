@@ -54,16 +54,13 @@
 #define F_TOOLBAR_FLAG_FINISH_WIDGET	0x1
 
 @interface EBrowserToolBar : UIView{
-	UIButton *barbtn;
-	EBrowserController *eBrwCtrler;
 	CGGradientRef gradient;
 	BOOL screenIsPortraitTag;
-	int mFlag;
 }
-@property(nonatomic,assign) int flag;
-@property(nonatomic,retain)UIButton *barbtn;
-@property(nonatomic,assign)EBrowserController *eBrwCtrler;
-@property int mFlag;
+@property (nonatomic,assign) int flag;
+@property (nonatomic,strong)UIButton *barbtn;
+@property (nonatomic,weak)EBrowserController *eBrwCtrler;
+@property (nonatomic,assign)int mFlag;
 //-(void)drawViewWithBrwWnd:(EBrowserWindow *)eBrwWnd_;
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler;
 - (void)LoadSpace;

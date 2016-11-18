@@ -206,7 +206,7 @@
 - (void)cleanCache:(NSMutableArray *)inArguments {
     NSNumber *result = @1;
 	if (self.EBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
-		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];
         result = @0;
 	}
@@ -216,7 +216,7 @@
 - (NSString *)getMainWidgetId:(NSMutableArray *)inArguments {
     
     NSString *appId = nil;
-	WWidget *widget = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
+	WWidget *widget = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget;
 	if (widget) {
 		appId = widget.appId;
 	}

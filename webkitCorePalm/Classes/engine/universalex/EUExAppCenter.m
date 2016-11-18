@@ -25,18 +25,13 @@
 @implementation EUExAppCenter
 
 -(id)initWithBrwView:(EBrowserView *)eInBrwView{
-	ACENSLog(@"enter appcenter");
 	if (self=[super initWithBrwView:eInBrwView]) {
 		appCenter = eInBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter;
 	}
 	return self;
 }
 
--(void)dealloc{
-	ACENSLog(@"EUExAppCenter retain count is %d",[self retainCount]);
-	ACENSLog(@"EUExAppCenter dealloc is %x", self);
-	[super dealloc];
-}
+
 
 -(void)appCenterLoginResult:(NSMutableArray *)inArguments {
 	NSString *uInfo = [inArguments objectAtIndex:0];
