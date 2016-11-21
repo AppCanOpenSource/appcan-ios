@@ -461,7 +461,12 @@ static NSString *clientCertificatePwd = nil;
 	float ver = [[[[UIDevice currentDevice] systemVersion] substringToIndex:3] floatValue];
 	return ver;
 }
-+(BOOL)isSimulator{	
++(BOOL)isSimulator{
+    if (ACSystemVersion() >= 9.0) {
+        return ([NSProcessInfo processInfo].environment[@"SIMULATOR_DEVICE_NAME"] != nil);
+    }
+
+    
 	NSString *platStr = [[UIDevice currentDevice] model];
 	if ([platStr isEqualToString:@"iPhone Simulator"]||[platStr isEqualToString:@"iPad Simulator"]) {
 		return YES;
@@ -1446,6 +1451,10 @@ static NSString *clientCertificatePwd = nil;
 //        
 //        return outstring;
 //    }
+    if([self isSimulator]){
+        return @"";
+    }
+    
     return [OpenUDID value];
 }
 
