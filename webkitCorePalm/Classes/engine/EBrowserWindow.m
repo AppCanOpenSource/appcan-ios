@@ -35,6 +35,11 @@
 #import "ACEJSCBaseJS.h"
 #import "ACEBrowserView.h"
 #import "ACEMultiPopoverScrollView.h"
+
+#import "ACESubwidgetManager.h"
+#import <AppCanKit/ACGCDThrottle.h>
+
+
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
 @end
@@ -318,52 +323,35 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 }
 
 
--(void)onWindowAppear{
 
-    [self updateSwipeCloseEnableStatus];
-    [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowAppear != null){uexWindow.onWindowAppear();}"];
-}
--(void)onWindowDisappear{
-
-
-    [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowDisappear != null){uexWindow.onWindowDisappear();}"];
-}
 -(void)wndSeqChange{
+    EBrowserController *topController = [ACESubwidgetManager defaultManager].topWidgetController ?: theApp.meBrwCtrler;
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
-        if([eBrwWndContainer respondsToSelector:@selector(aboveWindow)]){
-            
-            EBrowserWindow * topWindow=[eBrwWndContainer aboveWindow];
+    
+    EBrowserWindow *topWindow = topController.aboveWindow;
+    if (self.isTopWindow && self != topWindow) {
+        ACLogDebug(@"%@ is no longer top window",self.windowName);
+        self.isTopWindow = NO;
+        [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowDisappear" arguments:nil];
+        return;
+    }
+    if (!self.isTopWindow && self == topWindow) {
+        ACLogDebug(@"%@ becomes top window",self.windowName);
+        
+        
+        self.isTopWindow = YES;
+        [self updateSwipeCloseEnableStatus];
+        [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowAppear" arguments:nil];
+        return;
+    }
 
-            if(self == topWindow && !_isTopWindow){
-
-                [self performSelectorOnMainThread:@selector(onWindowAppear) withObject:nil waitUntilDone:NO];
-                
-                
-                _isTopWindow=YES;
-                return;
-            }
-            if(self != topWindow && _isTopWindow){
-
-                [self performSelectorOnMainThread:@selector(onWindowDisappear) withObject:nil waitUntilDone:NO];
-                
-                _isTopWindow=NO;
-                return;
-            }
-            
-        }
-
-    });
     
 }
 
 +(void)postWindowSequenceChange{
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 50ull * NSEC_PER_MSEC);
-    dispatch_after(time, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-       [[NSNotificationCenter defaultCenter] postNotificationName:cDidWindowSequenceChange object:nil];
+    ac_dispatch_throttle(0.15, dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:cDidWindowSequenceChange object:nil];
     });
-    
 }
 
 #pragma mark - Update Swipe Close Status

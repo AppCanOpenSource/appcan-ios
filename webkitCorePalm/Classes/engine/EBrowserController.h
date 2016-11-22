@@ -59,6 +59,7 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, readonly) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, readonly)EBrowserWidgetContainer *brwWidgetContainer;
 @property (nonatomic, readonly)EBrowserWindow *rootWindow;
+@property (nonatomic, readonly)EBrowserWindow *aboveWindow;
 @property (nonatomic, weak) ACEUINavigationController *aceNaviController;
 @property (nonatomic, assign)BOOL isAppCanRootViewController;
 @property (nonatomic, strong)WWidget *widget;

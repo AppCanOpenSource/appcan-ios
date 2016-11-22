@@ -26,7 +26,8 @@
 #import "EBrowserController.h"
 #import "ACEUINavigationController.h"
 #import "EBrowser.h"
-
+#import "EBrowserWindow.h"
+#import "EBrowserView.h"
 #import "WWidget.h"
 
 
@@ -75,14 +76,22 @@
     return YES;
 }
 
-- (BOOL)finishWidget:(WWidget *)subwidget{
+- (EBrowserController *)topWidgetController{
+    return self.subwidgetControllers.lastObject.rootController;
+}
+
+
+
+- (BOOL)finishWidget:(WWidget *)subwidget withCallbackResult:(NSString *)result{
     
     NSInteger idx = -1;
-    
+
+    ACEUINavigationController *widgetController = nil;
     for  (NSInteger i = self.subwidgetControllers.count - 1 ; i >= 0; i--) {
         ACEUINavigationController *controller = self.subwidgetControllers[i];
         if ([controller.rootController.widget.appId isEqual:subwidget.appId]) {
-            [controller.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+
+            widgetController = controller;
             idx = i;
             break;
         }
@@ -94,7 +103,13 @@
     while (self.subwidgetControllers.count > idx) {
         [self.subwidgetControllers removeLastObject];
     }
-    
+    NSString *callbackFunc = widgetController.rootController.widgetInfo.closeCallbackFuncName;
+    if (callbackFunc) {
+        [self.subwidgetControllers.lastObject.rootController.aboveWindow.meBrwView callbackWithFunctionKeyPath:callbackFunc arguments:ACArgsPack(result)];
+    }
+    [widgetController.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [EBrowserWindow postWindowSequenceChange];
+    }];
     return YES;
 
 }
@@ -110,7 +125,9 @@
     while (controller.presentedViewController) {
         controller = controller.presentedViewController;
     }
-    [controller presentViewController:subwidgetController.aceNaviController animated:YES completion:nil];
+    [controller presentViewController:subwidgetController.aceNaviController animated:YES completion:^{
+         [EBrowserWindow postWindowSequenceChange];
+    }];
 }
 
 

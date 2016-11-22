@@ -31,6 +31,7 @@
 #import "EBrowser.h"
 #import "ACEUINavigationController.h"
 #import "ACESubwidgetManager.h"
+#import <AppCanKit/ACEXTScope.h>
 #define F_BRW_WGT_CONTAINER_DICT_SIZE			5
 #define F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE		10
 
@@ -82,20 +83,22 @@
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
+    
+    
+    
     ACLogVerbose(@"window '%@' opened;",eInBrwView.meBrwWnd.meBrwView.muexObjName);
-	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
-    EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
-    if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-        return;
-    }
     
     
-    if ([eInBrwView.meBrwCtrler.aceNaviController isBeingPresented] || eInBrwView.meBrwCtrler.isAppCanRootViewController) {
+    
+
+    
+    if (eInBrwView.meBrwCtrler.aceNaviController.presentingViewController.presentedViewController == eInBrwView.meBrwCtrler.aceNaviController || eInBrwView.meBrwCtrler.isAppCanRootViewController) {
+        EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
         [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
     }else{
         [[ACESubwidgetManager defaultManager]notifySubwidgetControllerLoadingCompleted:eInBrwView.meBrwCtrler];
     }
+    
     
 
 //	EBrowserWindowContainer *eCurBrwWndContainer = [self.subviews objectAtIndex:self.subviews.count-1];

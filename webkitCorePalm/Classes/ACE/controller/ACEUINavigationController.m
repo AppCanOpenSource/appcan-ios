@@ -37,18 +37,6 @@
 
 
 
-- (instancetype)initWithRootViewController:(UIViewController *)rootViewController{
-    self = [super initWithRootViewController:rootViewController];
-    if (self) {
-
-        [self setNavigationBarHidden:YES];
-        _supportedOrientation = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"orientation"].stringValue.integerValue;
-
-       
-    }
-    return self;
-}
-
 
 - (instancetype)initWithEBrowserController:(EBrowserController *)rootController{
     self = [super initWithRootViewController:rootController];
@@ -118,5 +106,8 @@
 
 }
 
+- (void)dealloc{
+    ACLogError(@"navi dealloc");
+}
 
 @end

@@ -585,7 +585,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
     ACEInterfaceOrientation nowOrientation = ace_interfaceOrientationFromUIDeviceOrientation([[UIDevice currentDevice] orientation]);
     
 	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & nowOrientation)) {
-        [[[self.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation))];
+        [[self aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation))];
 
 	}
 }
@@ -593,5 +593,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
 - (EBrowserWindow *)rootWindow{
     return self.brwWidgetContainer.meRootBrwWndContainer.meRootBrwWnd;
 }
-
+- (EBrowserWindow *)aboveWindow{
+    return self.brwWidgetContainer.aboveWindowContainer.aboveWindow;
+}
 @end

@@ -113,8 +113,11 @@
     view.webController = webController;
     if (view.webWindowType == ACEWebWindowTypeNavigation) {
         [meBrwCtrler.aceNaviController pushViewController:webController animated:YES];
+         [EBrowserWindow postWindowSequenceChange];
     } else if (view.webWindowType == ACEWebWindowTypePresent) {
-        [meBrwCtrler.aceNaviController presentViewController:webController animated:YES completion:nil];
+        [meBrwCtrler.aceNaviController presentViewController:webController animated:YES completion:^{
+             [EBrowserWindow postWindowSequenceChange];
+        }];
     }
     
     
@@ -185,6 +188,7 @@
 
 
 	}
+    [EBrowserWindow postWindowSequenceChange];
 	[eSuperBrwWnd notifyLoadPageFinishOfBrwView:eInBrwView];
 }
 
@@ -225,6 +229,8 @@
 
     ACEUINavigationController *navController = self.meBrwCtrler.aceNaviController;
 
+    
+    
     if ([navController.viewControllers count] > 1) {
         ACEWebViewController *webController = (ACEWebViewController *)navController.topViewController;
         if (webController != nil && [webController isKindOfClass:[ACEWebViewController class]]) {

@@ -30,18 +30,20 @@
 
 
 @interface ACEWidgetInfo : NSObject
-@property (nonatomic,strong)NSString *callbackFunc;
-@property (nonatomic,strong)NSString *info;
+@property (nonatomic,strong)NSString *closeCallbackFuncName;
+@property (nonatomic,strong)NSString *startInfo;
+
 @end
 
 
 
 @interface ACESubwidgetManager: NSObject
+@property (nonatomic,readonly)EBrowserController *topWidgetController;
 
 + (instancetype)defaultManager;
 
 - (BOOL)launchWidget:(WWidget *)subwidget withInfo:(ACEWidgetInfo *)info;
-- (BOOL)finishWidget:(WWidget *)subwidget;
+- (BOOL)finishWidget:(WWidget *)subwidget withCallbackResult:(NSString *)result;
 
 
 

@@ -283,12 +283,12 @@ static BOOL isAppLaunchedByPush = NO;
         return;
     }
     
-    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *inForRet,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey) = inArguments;
+    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey) = inArguments;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
         inAppId = stringArg(info[@"appId"]);
         inAnimiId = numberArg(info[@"animId"]);
-        inForRet = stringArg(info[@"funcName"]);
+        closeCallbackFuncName = stringArg(info[@"funcName"]);
         inOpenerInfo = stringArg(info[@"info"]);
         inAnimiDuration = numberArg(info[@"animDuration"]);
         inAppkey = stringArg(info[@"appKey"]);
@@ -321,7 +321,9 @@ static BOOL isAppLaunchedByPush = NO;
     }
 
     ACEWidgetInfo *widgetInfo = [ACEWidgetInfo new];
-    widgetInfo.info = inOpenerInfo;
+    widgetInfo.startInfo = inOpenerInfo;
+    widgetInfo.closeCallbackFuncName = closeCallbackFuncName;
+    
     
     BOOL ret = [[ACESubwidgetManager defaultManager]launchWidget:wgtObj withInfo:widgetInfo];
     
@@ -443,7 +445,7 @@ static BOOL isAppLaunchedByPush = NO;
     
     
     WWidget *wgtObj = appID ? [self getStartWgtByAppId:appID] : self.EBrwView.meBrwCtrler.widget;
-    [[ACESubwidgetManager defaultManager]finishWidget:wgtObj];
+    [[ACESubwidgetManager defaultManager]finishWidget:wgtObj withCallbackResult:inRet];
     
     
     /*
@@ -678,7 +680,7 @@ static BOOL isAppLaunchedByPush = NO;
 }
 - (NSString *)getOpenerInfo:(NSMutableArray *)inArguments {
     
-    NSString *info = self.EBrwView.meBrwCtrler.widgetInfo.info;
+    NSString *info = self.EBrwView.meBrwCtrler.widgetInfo.startInfo;
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetOpenerInfo" arguments:ACArgsPack(@0,@0,info)];
     return info;
 }

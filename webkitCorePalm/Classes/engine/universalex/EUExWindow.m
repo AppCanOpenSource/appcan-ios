@@ -793,7 +793,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             ACEWebViewController *webController = eBrwWnd.webController;
             [webController.navigationController popViewControllerAnimated:YES];
         }
-        [EBrowserWindow postWindowSequenceChange];
+
         return;
     }
     if (eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
@@ -900,7 +900,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             return;
         }
     }
-    [EBrowserWindow postWindowSequenceChange];
+    
 }
 
 - (void)closeWindowAfterAnimation:(EBrowserWindow*)brwWnd{
@@ -966,7 +966,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
         }
     }
-    
+    [EBrowserWindow postWindowSequenceChange];
 
 }
 
@@ -1013,6 +1013,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                      }
                      completion:^(BOOL finished) {
                          [temp removeFromSuperview];
+                         [EBrowserWindow postWindowSequenceChange];
                      }];
 }
 

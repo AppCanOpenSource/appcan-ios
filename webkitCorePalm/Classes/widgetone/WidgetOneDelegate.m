@@ -495,7 +495,6 @@
     int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
     NSString * goViewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
     if (!goViewName || [goViewName isKindOfClass:[NSNull class]]) {
-        [BUtility writeLog:@"appcan crash ....."];
         return;
         
     }
@@ -612,7 +611,7 @@
 #pragma mark - root page finish loading
 
 -(void)rootPageDidFinishLoading{
-    [EBrowserWindow postWindowSequenceChange];
+    
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass,BOOL *stop) {
         [pluginClass rootPageDidFinishLoading];
     }];

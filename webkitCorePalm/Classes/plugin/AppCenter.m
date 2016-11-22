@@ -883,7 +883,7 @@
 		} 
 //		[self close_database];
 //		self.eBView.meBrwCtrler.ballHasShow = NO;
-		EBrowserWindow *eAboveWnd = [[self.eBView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow];
+		EBrowserWindow *eAboveWnd = [self.eBView.meBrwCtrler aboveWindow];
 		[eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
 
 	}
