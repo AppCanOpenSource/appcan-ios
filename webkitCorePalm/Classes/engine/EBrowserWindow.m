@@ -319,7 +319,7 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(wndSeqChange) name:cDidWindowSequenceChange object:nil];
 }
 -(void)deregisterWindowSequenceChange{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:cDidWindowSequenceChange object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -330,15 +330,11 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
     
     EBrowserWindow *topWindow = topController.aboveWindow;
     if (self.isTopWindow && self != topWindow) {
-        ACLogDebug(@"%@ is no longer top window",self.windowName);
         self.isTopWindow = NO;
         [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowDisappear" arguments:nil];
         return;
     }
     if (!self.isTopWindow && self == topWindow) {
-        ACLogDebug(@"%@ becomes top window",self.windowName);
-        
-        
         self.isTopWindow = YES;
         [self updateSwipeCloseEnableStatus];
         [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowAppear" arguments:nil];
@@ -355,6 +351,8 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 }
 
 #pragma mark - Update Swipe Close Status
+
+
 -(void)updateSwipeCloseEnableStatus{
     self.meBrwCtrler.aceNaviController.canDragBack = self.enableSwipeClose;
 }

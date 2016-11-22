@@ -1244,7 +1244,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (NSString *)getWindowName:(NSMutableArray *)inArguments{
-    return self.EBrwView.meBrwWnd.meBrwView.muexObjName;
+    return self.EBrwView.meBrwWnd.windowName;
 }
 
 - (NSNumber *)getWidth:(NSMutableArray *)inArguments{
@@ -1820,18 +1820,18 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 #pragma mark 设置是否允许侧滑关闭
 
 - (void)setSwipeCloseEnable:(NSMutableArray *)inArguments{
-    if([inArguments count] < 1){
-        return;
-    }
-    id info = [inArguments[0] JSONValue];
-    if(!info || ![info isKindOfClass:[NSDictionary class]]){
-        return;
-    }
-    BOOL canSwipeClose=YES;
-    if([info objectForKey:@"enable"]){
-        canSwipeClose=[[info objectForKey:@"enable"]boolValue];
-    }
-    self.EBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
+    ACArgsUnpack(NSDictionary *info) = inArguments;
+    NSNumber *flag = numberArg(info[@"enable"]);
+    self.EBrwView.meBrwWnd.enableSwipeClose = flag ? flag.boolValue : YES;
+    [self.EBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+}
+
+
+// DEPRECATED
+- (void)setRightSwipeEnable:(NSMutableArray *)inArguments{
+    ACArgsUnpack(NSNumber *flag) = inArguments;
+    
+    self.EBrwView.meBrwWnd.enableSwipeClose = flag ? flag.boolValue : YES;
     [self.EBrwView.meBrwWnd updateSwipeCloseEnableStatus];
 }
 
@@ -3586,17 +3586,6 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 
 
-- (void)setRightSwipeEnable:(NSMutableArray *)inArguments{
-    
-//    ACArgsUnpack(NSNumber *flagNum) = inArguments;
-//    BOOL isNeedSwipeGestureRecognizer = flagNum ? flagNum.boolValue :  YES;
-//    EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
-//    if (eCurBrwWnd.webController){
-//        ACEWebViewController * webViewController = eCurBrwWnd.webController;
-//        webViewController.isNeedSwipeGestureRecognizer = isNeedSwipeGestureRecognizer;
-//    }
-    
-}
 
 
 

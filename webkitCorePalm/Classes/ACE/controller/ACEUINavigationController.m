@@ -106,8 +106,4 @@
 
 }
 
-- (void)dealloc{
-    ACLogError(@"navi dealloc");
-}
-
 @end
