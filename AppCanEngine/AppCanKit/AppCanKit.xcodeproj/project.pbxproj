@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		420350C41DE40FA90065A8E6 /* ACGCDThrottle.h in Headers */ = {isa = PBXBuildFile; fileRef = 420350C21DE40FA90065A8E6 /* ACGCDThrottle.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		420350C51DE40FA90065A8E6 /* ACGCDThrottle.m in Sources */ = {isa = PBXBuildFile; fileRef = 420350C31DE40FA90065A8E6 /* ACGCDThrottle.m */; };
 		4219017C1D9E0D4D00DF94B0 /* AppCanKitSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421901731D9E0D4D00DF94B0 /* AppCanKitSwift.framework */; };
 		421901831D9E0D4D00DF94B0 /* AppCanKit-Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 421901751D9E0D4D00DF94B0 /* AppCanKit-Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4219018D1D9E0D8300DF94B0 /* JSArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4219018A1D9E0D8300DF94B0 /* JSArgument.swift */; };
@@ -117,6 +119,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		420350C21DE40FA90065A8E6 /* ACGCDThrottle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ACGCDThrottle.h; path = AppCanKit/ACGCDThrottle.h; sourceTree = "<group>"; };
+		420350C31DE40FA90065A8E6 /* ACGCDThrottle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ACGCDThrottle.m; path = AppCanKit/ACGCDThrottle.m; sourceTree = "<group>"; };
 		421901731D9E0D4D00DF94B0 /* AppCanKitSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCanKitSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		421901751D9E0D4D00DF94B0 /* AppCanKit-Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppCanKit-Swift.h"; sourceTree = "<group>"; };
 		421901761D9E0D4D00DF94B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -319,6 +323,8 @@
 		422269EE1DA8959F003EB5AA /* AppCanKitPrivate */ = {
 			isa = PBXGroup;
 			children = (
+				420350C21DE40FA90065A8E6 /* ACGCDThrottle.h */,
+				420350C31DE40FA90065A8E6 /* ACGCDThrottle.m */,
 				422269F11DA8971E003EB5AA /* private.modulemap */,
 				42A9F63F1CFD39D9002710FC /* AppCanGlobalObjectGetter.h */,
 				421AE5841CF5906E001A5053 /* ACEXTScope.h */,
@@ -370,6 +376,7 @@
 				42ED03FF1CFC3D9E009134BE /* ACJSFunctionRefInternal.h in Headers */,
 				42961AD91D0EAD4500005263 /* ACLogger.h in Headers */,
 				42FAC5B91DCB199D0072DFCF /* AppCanWindowObject.h in Headers */,
+				420350C41DE40FA90065A8E6 /* ACGCDThrottle.h in Headers */,
 				421AE5271CF57181001A5053 /* AppCanKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -568,6 +575,7 @@
 				426DF1A51CFD757300F4C53E /* ACPluginBundle.m in Sources */,
 				421AE58B1CF59DCC001A5053 /* ACArguments.m in Sources */,
 				421AE5951CF5AE68001A5053 /* ACJSON.m in Sources */,
+				420350C51DE40FA90065A8E6 /* ACGCDThrottle.m in Sources */,
 				42ED03FD1CFC3783009134BE /* ACJSValueSupport.m in Sources */,
 				42DB71D21D59A38C00E61C19 /* EUExBaseDefine.m in Sources */,
 				421AE57D1CF58347001A5053 /* ACEXTRuntimeExtensions.m in Sources */,
