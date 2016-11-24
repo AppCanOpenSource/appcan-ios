@@ -588,7 +588,8 @@ static NSString *clientCertificatePwd = nil;
 	   [inUrl hasPrefix:F_APP_PATH]||
 	   [inUrl hasPrefix:F_RES_PATH]||
 	   [inUrl hasPrefix:F_DATA_PATH]||
-	   [inUrl hasPrefix:F_BOX_PATH]||
+       [inUrl hasPrefix:F_BOX_PATH]||
+       [inUrl hasPrefix:F_EXTERBOX_PATH]||
        [inUrl hasPrefix:@"file://"]) {
 		
 		return inUrl;
@@ -1471,15 +1472,28 @@ static NSString *clientCertificatePwd = nil;
 		return inPath;
 	}
 	NSURL *curURL = [meBrwView curUrl];
+    NSString *scheme = [[NSURL URLWithString:inPath] scheme];
 	inPath = [BUtility makeUrl:[curURL absoluteString] url:inPath];
+    
 	//box://
-	if ([inPath hasPrefix:F_BOX_PATH]) {
-		NSString * str = [BUtility getDocumentsPath:@"box"];
+	if ([inPath hasPrefix:F_BOX_PATH] ||
+        [inPath hasPrefix:F_EXTERBOX_PATH]) {
+        
+		NSString *str = [BUtility getDocumentsPath:@"box"];
+        
 		if (![[NSFileManager defaultManager] fileExistsAtPath:str]) {
-			[[NSFileManager defaultManager] createDirectoryAtPath:str withIntermediateDirectories:YES attributes:nil error:nil];
+            
+			[[NSFileManager defaultManager] createDirectoryAtPath:str
+                                      withIntermediateDirectories:YES
+                                                       attributes:nil
+                                                            error:nil];
+            
 		}
-		NSString *resultStr = [NSString stringWithFormat:@"%@/%@",str,[inPath substringFromIndex:6]];
+        
+		NSString *resultStr =  resultStr = [NSString stringWithFormat:@"%@/%@",str,[inPath substringFromIndex:scheme.length+3]];
+        
 		return resultStr;
+        
 	}
 	if ([inPath hasPrefix:F_WGTS_PATH]||[inPath hasPrefix:F_APP_PATH]||[inPath hasPrefix:F_RES_PATH]) {
 //		EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)meBrwView.meBrwWnd.superview;
