@@ -48,7 +48,7 @@
 #import <AppCanKit/ACInvoker.h>
 #import "ONOXMLElement+ACEConfigXML.h"
 #import "ACEBaseDefine.h"
-
+#import <Foundation/Foundation.h>
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -156,7 +156,19 @@
     return startWgt;
 }
 - (void)startWidget:(NSMutableArray *)inArguments {
+    
+    __block NSNumber *startWidgetResult = @1;
+    __block UEX_ERROR err = kUexNoError;
+    @onExit{
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidget" arguments:ACArgsPack(@0,@2,startWidgetResult)];
+        [cb executeWithArguments:ACArgsPack(err)];
+    };
+    
     if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
+        
+        startWidgetResult = @2;
+        err = uexErrorMake(1,@"widget正在加载");
+        
         return;
     }
     
@@ -171,13 +183,6 @@
         inAppkey = stringArg(info[@"appKey"]);
     }
     ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
-    
-    __block NSNumber *startWidgetResult = @1;
-    __block UEX_ERROR err = kUexNoError;
-    @onExit{
-        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidget" arguments:ACArgsPack(@0,@2,startWidgetResult)];
-        [cb executeWithArguments:ACArgsPack(err)];
-    };
     
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
     EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
@@ -203,10 +208,6 @@
     int subOrientation = wgtObj.orientation;
     
     theApp.drawerController.canRotate = YES;
-    
-    
-    
-    
     
     if (subOrientation == mOrientaion || subOrientation == 15) {
         
@@ -308,12 +309,13 @@
 
 - (void)finishWidget:(NSMutableArray *)inArguments {
     
-    ACArgsUnpack(NSString *inRet,NSString *appID,NSNumber *useWgtBg) = inArguments;
+    ACArgsUnpack(NSString *inRet,NSString *appID,NSNumber *useWgtBg,NSNumber *inAnimiId) = inArguments;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
         inRet = stringArg(info[@"resultInfo"]);
         appID = stringArg(info[@"appId"]);
         useWgtBg = numberArg(info[@"finishMode"]);
+        inAnimiId = numberArg(info[@"animId"]);
     }
     BOOL isWgtBG  = useWgtBg.boolValue;
     
@@ -402,6 +404,11 @@
     }
     
     int animiId = [BAnimation ReverseAnimiId:eBrwWndContainer.mStartAnimiId];
+    
+    if (inAnimiId) {
+        animiId = [inAnimiId intValue];
+    }
+    
     float duration = eBrwWndContainer.mStartAnimiDuration;
     if (isWgtBG) {
         if ([BAnimation isPush:animiId]) {
