@@ -48,7 +48,7 @@
 #import <AppCanKit/ACInvoker.h>
 #import "ONOXMLElement+ACEConfigXML.h"
 #import "ACEBaseDefine.h"
-
+#import <Foundation/Foundation.h>
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -156,7 +156,20 @@
     return startWgt;
 }
 - (void)startWidget:(NSMutableArray *)inArguments {
+    
+    __block NSNumber *startWidgetResult = @1;
+    __block UEX_ERROR err = kUexNoError;
+    ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
+    @onExit{
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidget" arguments:ACArgsPack(@0,@2,startWidgetResult)];
+        [cb executeWithArguments:ACArgsPack(err)];
+    };
+    
     if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
+        
+        startWidgetResult = @2;
+        err = uexErrorMake(1,@"widget正在加载");
+        
         return;
     }
     
@@ -170,14 +183,7 @@
         inAnimiDuration = numberArg(info[@"animDuration"]);
         inAppkey = stringArg(info[@"appKey"]);
     }
-    ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
     
-    __block NSNumber *startWidgetResult = @1;
-    __block UEX_ERROR err = kUexNoError;
-    @onExit{
-        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidget" arguments:ACArgsPack(@0,@2,startWidgetResult)];
-        [cb executeWithArguments:ACArgsPack(err)];
-    };
     
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
     EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
@@ -203,10 +209,6 @@
     int subOrientation = wgtObj.orientation;
     
     theApp.drawerController.canRotate = YES;
-    
-    
-    
-    
     
     if (subOrientation == mOrientaion || subOrientation == 15) {
         
@@ -286,34 +288,51 @@
     startWidgetResult = @0;
     //子widget启动上报代码
     //    NSString *inKey=[BUtility appKey];
-    Class  analysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
-    if (!analysisClass) {
-        analysisClass =  NSClassFromString(@"AppCanAnalysis");
-        if (!analysisClass) {
+    
+//    AppCanAnalysis
+    Class  analysisClass =  NSClassFromString(@"AppCanAnalysis");//判断类是否存在，如果存在子widget上报
+    if (analysisClass) {
+        
+        //过滤掉无appkey的子应用上报(plugin类型)
+        if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_PLUGINWIDGET || !inAppkey || inAppkey.length == 0) {
             return;
         }
+        id analysisObject = [[analysisClass alloc] init];
+        
+        [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
+        [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
+        [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
+        [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
+        
     }
-    //过滤掉无appkey的子应用上报(plugin类型)
-    if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_PLUGINWIDGET || !inAppkey || inAppkey.length == 0) {
-        return;
-    }
-    id analysisObject = [[analysisClass alloc] init];
-
-    [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
-    [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
-    [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
-    [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
     
+//    UexDataAnalysisAppCanAnalysis
+    Class  uexAnalysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
+    if (analysisClass) {
+        
+        //过滤掉无appkey的子应用上报(plugin类型)
+        if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_PLUGINWIDGET || !inAppkey || inAppkey.length == 0) {
+            return;
+        }
+        id analysisObject = [[analysisClass alloc] init];
+        
+        [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
+        [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
+        [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
+        [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
+        
+    }
 }
 
 - (void)finishWidget:(NSMutableArray *)inArguments {
     
-    ACArgsUnpack(NSString *inRet,NSString *appID,NSNumber *useWgtBg) = inArguments;
+    ACArgsUnpack(NSString *inRet,NSString *appID,NSNumber *useWgtBg,NSNumber *inAnimiId) = inArguments;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
         inRet = stringArg(info[@"resultInfo"]);
         appID = stringArg(info[@"appId"]);
         useWgtBg = numberArg(info[@"finishMode"]);
+        inAnimiId = numberArg(info[@"animId"]);
     }
     BOOL isWgtBG  = useWgtBg.boolValue;
     
@@ -402,6 +421,11 @@
     }
     
     int animiId = [BAnimation ReverseAnimiId:eBrwWndContainer.mStartAnimiId];
+    
+    if (inAnimiId) {
+        animiId = [inAnimiId intValue];
+    }
+    
     float duration = eBrwWndContainer.mStartAnimiDuration;
     if (isWgtBG) {
         if ([BAnimation isPush:animiId]) {
@@ -522,7 +546,6 @@
     }
     if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
         NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        ACENSLog(@"openAdStr is %@",openAdStr);
         [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
     }
 }
@@ -675,6 +698,52 @@
     return pushDataStr;
 }
 
++ (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/",theApp.useBindUserPushURL];
+    NSURL *requestUrl = [NSURL URLWithString:urlStr];
+    NSString *appid = theApp.mwWgtMgr.mainWidget.appId?theApp.mwWgtMgr.mainWidget.appId:@"";
+    NSString *appkey = [BUtility appKey] ?: @"";
+    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ?: @"";
+    NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
+    NSString *verifyAppStr = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
+    NSString *softToken = [EUtility md5SoftToken];
+    
+    NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithObject:verifyAppStr forKey:@"appverify"];
+    [headerDict setObject:@"application/json" forKey:@"Content-Type"];
+    NSString *masAppId = [NSString stringWithFormat:@"%@", appid];
+    [headerDict setObject:masAppId forKey:@"x-mas-app-id"];
+    NSMutableDictionary *bodyDict = [NSMutableDictionary dictionaryWithCapacity:5];
+    [bodyDict setObject:@"1" forKey:@"count"];
+    [bodyDict setObject:deviceToken forKey:@"deviceToken"];
+    [bodyDict setObject:softToken forKey:@"softToken"];
+    NSString *useAppCanEMMTenantID = theApp.useAppCanEMMTenantID ? theApp.useAppCanEMMTenantID : @"";
+    [bodyDict setObject:useAppCanEMMTenantID forKey:@"tenantMark"];
+    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
+    [request setRequestMethod:@"POST"];
+    [request setRequestHeaders:headerDict];
+    [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
+    
+    @weakify(request);
+    [request setTimeOutSeconds:60];
+    [request setCompletionBlock:^{
+        @strongify(request);
+        if (200 == request.responseStatusCode) {
+            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseString is %@",request.responseString);
+        } else {
+            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
+        }
+    }];
+    [request setFailedBlock:^{
+        @strongify(request);
+        ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
+        
+    }];
+    [request startAsynchronous];
+}
+
 - (void)sendReportRead:(NSString *)pushDataStr{
     @autoreleasepool {
         NSDictionary *dict = dictionaryArg(pushDataStr);
@@ -825,66 +894,226 @@
     
 }
 - (void)delPushInfo:(NSMutableArray *)inArguments {
-    @autoreleasepool {
-        NSString *softToken = [EUtility md5SoftToken];
-        NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",theApp.useBindUserPushURL,softToken];
-        SecIdentityRef identity = NULL;
-        SecTrustRef trust = NULL;
-        SecCertificateRef certChain=NULL;
-        NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-        [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
-        ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
-        if (theApp.useCertificateControl) {
-            [request setValidatesSecureCertificate:YES];
-            [request setClientCertificateIdentity:identity];
-        }else{
-            [request setValidatesSecureCertificate:NO];
+    
+    if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+        
+        NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+        NSString *appkey = [BUtility appKey];
+        NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
+        NSString *varifyAppStr = [BUtility getVarifyAppMd5Code:appId AppKey:appkey time:time];
+        NSMutableDictionary *userDict = [NSMutableDictionary dictionaryWithCapacity:5];
+        NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithCapacity:5];
+        NSMutableDictionary *paramDict = [NSMutableDictionary dictionaryWithCapacity:5];
+        
+        //user信息
+        //请求头信息
+        [headerDict setObject:@"text/plain;charset=UTF-8" forKey:@"Content-Type"];
+        [headerDict setObject:@"*/*" forKey:@"Accept"];
+        [headerDict setObject:@"push" forKey:@"x-push-verify-key"];
+        [headerDict setObject:@"push" forKey:@"x-push-verify-id"];
+        [headerDict setObject:varifyAppStr forKey:@"x-mas-verify"];
+        [headerDict setObject:appId forKey:@"x-mas-app-id"];
+        
+        //设备标识 deviceToken
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
+        
+        if (!deviceToken || ![deviceToken isEqualToString:@"(null)"]) {
+            deviceToken = @"";
         }
-        [request setTimeOutSeconds:60];
-        [request setRequestMethod:@"POST"];
-        [request startSynchronous];
-        if (200 == request.responseStatusCode) {
-            NSString *responseStr = [request responseString];
-            [EUtility writeLog:[NSString stringWithFormat:@"responseStr------>>%@",responseStr]];
+        
+        [paramDict setObject:deviceToken forKey:@"deviceToken"];
+        [paramDict setObject:userDict forKey:@"user"];
+        
+        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations",theApp.useBindUserPushURL];
+        
+        ASIFormDataRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
+        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->headerDict = %@-->body = %@",headerDict,paramDict);
+        [requestSetPushInfo setRequestMethod:@"POST"];
+        [requestSetPushInfo setRequestHeaders:headerDict];
+        [requestSetPushInfo setPostBody:(NSMutableData *)[[paramDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setTimeOutSeconds:60];
+        @weakify(requestSetPushInfo);
+        [requestSetPushInfo setCompletionBlock:^{
+            @strongify(requestSetPushInfo);
+            if (200 == requestSetPushInfo.responseStatusCode) {
+                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->request.responseString is %@",requestSetPushInfo.responseString);
+            } else {
+                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->request.responseStatusCode is %d--->[request error] = %@",requestSetPushInfo.responseStatusCode, [requestSetPushInfo error]);
+            }
+        }];
+        [requestSetPushInfo setFailedBlock:^{
+            @strongify(requestSetPushInfo);
+            ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->setFailedBlock-->error is %@",[requestSetPushInfo error]);
+            
+        }];
+        
+        [requestSetPushInfo startAsynchronous];
+        
+        
+    } else {
+        @autoreleasepool {
+            NSString *softToken = [EUtility md5SoftToken];
+            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",theApp.useBindUserPushURL,softToken];
+            SecIdentityRef identity = NULL;
+            SecTrustRef trust = NULL;
+            SecCertificateRef certChain=NULL;
+            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
+            if (theApp.useCertificateControl) {
+                [request setValidatesSecureCertificate:YES];
+                [request setClientCertificateIdentity:identity];
+            }else{
+                [request setValidatesSecureCertificate:NO];
+            }
+            [request setTimeOutSeconds:60];
+            [request setRequestMethod:@"POST"];
+            [request startSynchronous];
+            if (200 == request.responseStatusCode) {
+                NSString *responseStr = [request responseString];
+                [EUtility writeLog:[NSString stringWithFormat:@"responseStr------>>%@",responseStr]];
+            }
         }
+
     }
+    
 }
 
 - (void)sendPushUserMsg:(id)userInfo{
-    @autoreleasepool {
-        NSDictionary *dict = (NSDictionary*)userInfo;
-        //
-        //        Class analysisClass = NSClassFromString(@"AppCanAnalysis");
-        //        if (analysisClass) {
+    
+    if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+        
         NSString *softToken = [EUtility md5SoftToken];
         NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
-        NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",theApp.useBindUserPushURL,softToken];
-        ACENSLog(@"usrStr=%@",urlStr);
+        NSString *appkey = [BUtility appKey];
         
-        SecIdentityRef identity = NULL;
-        SecTrustRef trust = NULL;
-        SecCertificateRef certChain=NULL;
-        NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-        [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+        NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
+        NSString *varifyAppStr = [BUtility getVarifyAppMd5Code:appId AppKey:appkey time:time];
+        
+        NSDictionary *dict = (NSDictionary*)userInfo;
+        
+        NSString *urlStr = @"";
         
         
-        ASIFormDataRequest *FormatReq =[[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-        [FormatReq setPostValue:[dict objectForKey:@"uId"] forKey:@"userId"];
-        [FormatReq setPostValue:[dict objectForKey:@"uNickName"] forKey:@"userNick"];
-        [FormatReq setPostValue:[dict objectForKey:@"deviceToken"] forKey:@"deviceToken"];
-        [FormatReq setPostValue:softToken forKey:@"softToken"];
-        [FormatReq setPostValue:appId forKey:@"appId"];
-        [FormatReq setPostValue:[NSNumber numberWithInt:0] forKey:@"platform"];
+        NSMutableDictionary *userDict = [NSMutableDictionary dictionaryWithCapacity:5];
+        NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithCapacity:5];
+        NSMutableDictionary *paramDict = [NSMutableDictionary dictionaryWithCapacity:5];
+        
+        //user信息
+        [userDict setObject:[dict objectForKey:@"uId"] forKey:@"userId"];
+        [userDict setObject:[dict objectForKey:@"uNickName"] forKey:@"username"];
+        
+        //请求头信息
+        [headerDict setObject:@"text/plain;charset=UTF-8" forKey:@"Content-Type"];
+        [headerDict setObject:@"*/*" forKey:@"Accept"];
+        [headerDict setObject:@"push" forKey:@"x-push-verify-key"];
+        [headerDict setObject:@"push" forKey:@"x-push-verify-id"];
+        [headerDict setObject:varifyAppStr forKey:@"x-mas-verify"];
+        [headerDict setObject:appId forKey:@"x-mas-app-id"];
+        
+        //设备名称
+        //NSString *apphardware = [BUtility getDeviceVer];
+        //设备版本
+        //NSString *appOS = [[UIDevice currentDevice] systemVersion];
+        
+        //设备标识 deviceToken
+        NSString *deviceToken = [dict objectForKey:@"deviceToken"];
+        
+        [paramDict setObject:@"IOS" forKey:@"deviceType"];
+        [paramDict setObject:deviceToken forKey:@"deviceToken"];
+        [paramDict setObject:softToken forKey:@"softToken"];
+        [paramDict setObject:userDict forKey:@"user"];
+        
+        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->headerDict = %@-->body = %@",headerDict,paramDict);
+        
+        urlStr = [NSString stringWithFormat:@"%@4.0/installations",theApp.useBindUserPushURL];
+        
+        ASIHTTPRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
+        //requestSetPushInfo = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
+        
+        [requestSetPushInfo setRequestMethod:@"POST"];
+        [requestSetPushInfo setRequestHeaders:headerDict];
+        [requestSetPushInfo setPostBody:(NSMutableData *)[[paramDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [requestSetPushInfo setTimeOutSeconds:60];
+        @weakify(requestSetPushInfo);
+        
+        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->theApp.validatesSecureCertificate is %d-->theApp.useCertificateControl = %d",theApp.validatesSecureCertificate,theApp.useCertificateControl);
+        
         if (theApp.useCertificateControl) {
-            [FormatReq setValidatesSecureCertificate:YES];
-            [FormatReq setClientCertificateIdentity:identity];
-        }else{
-            [FormatReq setValidatesSecureCertificate:NO];
+            SecIdentityRef identity = NULL;
+            SecTrustRef trust = NULL;
+            SecCertificateRef certChain = NULL;
+            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            
+            [requestSetPushInfo setClientCertificateIdentity:identity];
+            
+        } else {
+            
+            [requestSetPushInfo setClientCertificateIdentity:nil];
+            
         }
-        [FormatReq setTimeOutSeconds:60];
-        [FormatReq startSynchronous];
+        
+        if (theApp.validatesSecureCertificate) {
+            
+            [requestSetPushInfo setValidatesSecureCertificate:YES];
+            
+        } else {
+            [requestSetPushInfo setValidatesSecureCertificate:NO];
+        }
+        
+        
+        [requestSetPushInfo setCompletionBlock:^{
+            @strongify(requestSetPushInfo);
+            if (200 == requestSetPushInfo.responseStatusCode) {
+                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->request.responseString is %@",requestSetPushInfo.responseString);
+            } else {
+                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->request.responseStatusCode is %d--->[request error] = %@",requestSetPushInfo.responseStatusCode, [requestSetPushInfo error]);
+            }
+        }];
+        [requestSetPushInfo setFailedBlock:^{
+            @strongify(requestSetPushInfo);
+            ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->setFailedBlock-->error is %@",[requestSetPushInfo error]);
+        }];
+        
+        [requestSetPushInfo startAsynchronous];
+        
+    } else {
+        @autoreleasepool {
+            NSDictionary *dict = (NSDictionary*)userInfo;
+            NSString *softToken = [EUtility md5SoftToken];
+            NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",theApp.useBindUserPushURL,softToken];
+            
+            SecIdentityRef identity = NULL;
+            SecTrustRef trust = NULL;
+            SecCertificateRef certChain=NULL;
+            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
+            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            
+            ASIFormDataRequest *FormatReq =[[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
+            [FormatReq setPostValue:[dict objectForKey:@"uId"] forKey:@"userId"];
+            [FormatReq setPostValue:[dict objectForKey:@"uNickName"] forKey:@"userNick"];
+            [FormatReq setPostValue:[dict objectForKey:@"deviceToken"] forKey:@"deviceToken"];
+            [FormatReq setPostValue:softToken forKey:@"softToken"];
+            [FormatReq setPostValue:appId forKey:@"appId"];
+            [FormatReq setPostValue:[NSNumber numberWithInt:0] forKey:@"platform"];
+            if (theApp.useCertificateControl) {
+                [FormatReq setValidatesSecureCertificate:YES];
+                [FormatReq setClientCertificateIdentity:identity];
+            }else{
+                [FormatReq setValidatesSecureCertificate:NO];
+            }
+            [FormatReq setTimeOutSeconds:60];
+            [FormatReq startSynchronous];
+        }
+
     }
+    
 }
+
 - (void)setPushState:(NSMutableArray*)inArguments{
     if(theApp.usePushControl == NO) {
         return;
