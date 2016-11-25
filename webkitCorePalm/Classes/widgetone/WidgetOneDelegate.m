@@ -296,9 +296,10 @@
         NSDictionary *dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         NSString *userData = [dict objectForKey:@"userInfo"];
         ACLogDebug(@"appcan--widgetOneDelegate.m--didFinishLaunchingWithOptions--dict == %@",dict);
+        NSString * pushString = [dict JSONFragment];
         
-        if (dict) {
-            [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
+        if (pushString) {
+            [[NSUserDefaults standardUserDefaults] setObject:pushString forKey:@"allPushData"];
             [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"appStateOfGetPushData"];
             
         }
@@ -461,8 +462,9 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSUserDefaults *appStateUD = [NSUserDefaults standardUserDefaults];
     NSString *userData = [userInfo objectForKey:@"userInfo"];
-    if (userInfo) {
-        [appStateUD setObject:userInfo forKey:@"allPushData"];
+    NSString * pushString = [userInfo JSONFragment];
+    if (pushString) {
+        [appStateUD setObject:pushString forKey:@"allPushData"];
     }
     if (userData != nil || userInfo) {
         [appStateUD setObject:userData forKey:@"pushData"];
@@ -497,8 +499,9 @@
     }
     
     NSString *userData = [userInfo objectForKey:@"userInfo"];
-    if (userInfo) {
-        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"allPushData"];
+    NSString * pushString = [userInfo JSONFragment];
+    if (pushString) {
+        [[NSUserDefaults standardUserDefaults] setObject:pushString forKey:@"allPushData"];
     }
     if (userData != nil || userInfo) {
         [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
