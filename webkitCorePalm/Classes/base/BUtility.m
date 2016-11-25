@@ -410,10 +410,6 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (int)getScreenHeight {
-//    if ([self getSystemVersion]>=7.0)
-//    {
-//        return [UIScreen mainScreen].bounds.size.height;
-//    }
     return [UIScreen mainScreen].bounds.size.height;
 }
 +(CGRect)getApplicationInitFrame {

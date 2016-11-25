@@ -25,7 +25,6 @@
     va_end(argList);
     
     return [ACELocalization localizedStringForKey:key defaultValue:value];
-    //return [[NSBundle mainBundle] localizedStringForKey:key value:value table:@"AppCanEngineLocalization"];
 }
 
 + (NSString *)localizedStringForKey:(NSString *)key defaultValue:(NSString *)value {
@@ -41,27 +40,18 @@
 + (BOOL)isUseSystemLanguage {
     
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    
     NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
-    
     if (!userLanguag || userLanguag == nil || userLanguag.length == 0) {
-        
         return YES;
-        
     }
-    
     return NO;
     
 }
 
 + (NSString *)getAppCanUserLanguage {
-    
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    
     NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
-    
     return userLanguag;
-    
 }
 
 + (NSBundle *)languageBundle {
