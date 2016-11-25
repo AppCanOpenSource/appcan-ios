@@ -16,11 +16,7 @@
  *
  */
 
-#define F_EBRW_VIEW_TYPE_MAIN				0
-#define F_EBRW_VIEW_TYPE_SLIBING_TOP		1
-#define F_EBRW_VIEW_TYPE_SLIBING_BOTTOM		2
-#define F_EBRW_VIEW_TYPE_POPOVER			3
-#define F_EBRW_VIEW_TYPE_AD					4
+
 
 #define F_PAGEINFO_DICT_SIZE				1
 
@@ -42,7 +38,7 @@
 #define WIDGETREPORT_WIDGETSTATUS_CLOSE		@"000"
 
 #import <UIKit/UIKit.h>
-
+#import <AppCanKit/AppCanWindowObject.h>
 
 @class EBrowserController;
 @class CBrowserMainFrame;
@@ -57,7 +53,17 @@
 @class ACEBrowserView;
 @class JSValue;
 
-@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate>
+
+typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
+    ACEEBrowserViewTypeMain = 0,
+    ACEEBrowserViewTypeSlibingTop,
+    ACEEBrowserViewTypeSlibingBottom,
+    ACEEBrowserViewTypePopover,
+    ACEEBrowserViewTypeAd
+};
+
+
+@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate,AppCanWebViewEngineObject,AppCanWindowObject>
 
 @property (nonatomic,assign) NSString *muexObjName;
 
@@ -70,14 +76,14 @@
 @property (nonatomic,weak) WWidget *mwWgt;
 
 @property (nonatomic,weak) NSMutableDictionary *mPageInfoDict;
-@property (nonatomic,weak) EBrowserViewBounceView *mTopBounceView;
-@property (nonatomic,weak) EBrowserViewBounceView *mBottomBounceView;
+@property (nonatomic,strong) EBrowserViewBounceView *mTopBounceView;
+@property (nonatomic,strong) EBrowserViewBounceView *mBottomBounceView;
 @property (nonatomic,weak) UIScrollView *mScrollView;
 @property (nonatomic,assign) float lastScrollPointY;
 @property (nonatomic,assign) float nowScrollPointY;
 @property (nonatomic,assign) float bottom;
 
-@property (nonatomic,assign)int mType;
+@property (nonatomic,assign)ACEEBrowserViewType mType;
 @property (nonatomic,assign)int mFlag;
 @property (nonatomic,assign)int mTopBounceState;
 @property (nonatomic,assign)int mBottomBounceState;
@@ -126,8 +132,8 @@
 
 
 
-- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType;
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(int)inWndType;
+- (void)reuseWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(ACEEBrowserViewType)inWndType;
+- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(ACEEBrowserViewType)inWndType;
 - (void)reset;
 - (void)notifyPageStart;
 - (void)notifyPageFinish;
@@ -150,3 +156,8 @@
 
 
 @end
+
+
+
+
+

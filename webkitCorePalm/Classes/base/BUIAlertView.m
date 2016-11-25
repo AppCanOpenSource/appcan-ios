@@ -20,25 +20,23 @@
 
 @implementation BUIAlertView
 
-@synthesize mAlertView;
-@synthesize mType;
-@synthesize mTextField;
 
-- (void)initWithType:(int)inType {
-    mType = inType;
+- (instancetype)initWithType:(ACEBUIAlertViewType)type{
+    self = [self init];
+    if (self) {
+        _mType = type;
+    }
+    return self;
 }
 
 - (void)dealloc {
-	if (mTextField && mTextField.superview) {
-		[mTextField removeFromSuperview];
-		[mTextField release];
-		mTextField = NULL;
+	if (_mTextField) {
+		[_mTextField removeFromSuperview];
+		_mTextField = nil;
 	}
-	if (mAlertView) {
-		[mAlertView dismissWithClickedButtonIndex:0 animated:YES];
-		[mAlertView release];
-		mAlertView = NULL;
+	if (_mAlertView) {
+		[_mAlertView dismissWithClickedButtonIndex:0 animated:YES];
+		_mAlertView = nil;
 	}
-    [super dealloc];
 }
 @end

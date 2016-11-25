@@ -303,8 +303,6 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 + (BOOL)isUseSystemLanguage;
 + (NSString *)getAppCanUserLanguage;
 + (void)brwView:(EBrowserView*)inBrwView addSubviewToContainer:(UIView*)inSubView WithIndex:(NSInteger)index andIndentifier:(NSString *)identifier;
-//2015-12-22
-+ (void)brwView:(EBrowserView*)inBrwView addViewToCurrentMultiPop:(UIView*)inSubView WithPosition:(NSInteger)position;
 + (void)setBrwView:(EBrowserView*)inBrwView hidden:(BOOL)isHidden;
 + (CGRect)brwWndFrame:(EBrowserView*)inBrwView;
 + (CGRect)brwViewFrame:(EBrowserView*)inBrwView;
@@ -322,14 +320,14 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 + (void)brwView:(EBrowserView *)inBrwView sendSubviewToBack:(UIView *)inSubView;
 + (void)brwView:(EBrowserView *)inBrwView bringSubviewToFront:(UIView *)inSubView;
 + (BOOL)brwViewIsFront:(EBrowserView*)inBrwView;
-+(UIImage *)rotateImage:(UIImage *)aImage;
-+(NSString *)getPlatform;
-+(NSString *)deviceIdentifyNo;
-+(BOOL)isNetConnected;
-+(UIImage *)imageByScalingAndCroppingForSize:(UIImage *)image;
-+(NSString*)LogServerIp:(EBrowserView*)inBrwView;
-+(NSString*)md5SoftToken;
-+(NSString*)getCachePath:(NSString*)fileName;
++ (UIImage *)rotateImage:(UIImage *)aImage;
++ (NSString *)getPlatform;
++ (NSString *)deviceIdentifyNo;
++ (BOOL)isNetConnected;
++ (UIImage *)imageByScalingAndCroppingForSize:(UIImage *)image;
++ (NSString*)LogServerIp:(EBrowserView*)inBrwView;
++ (NSString*)md5SoftToken;
++ (NSString*)getCachePath:(NSString*)fileName;
 @end
 
 #pragma mark - 已废弃的方法
@@ -340,12 +338,12 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 
 
 
-+(UIColor*)ColorFromString:(NSString*)inColor;
-+(void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable;
-+(void)writeLog:(NSString*)inLog;
-+(NSInteger)supportedInterfaceOrientations:(EBrowserView*)meBrwView;
++ (UIColor*)ColorFromString:(NSString*)inColor;
++ (void)setRootViewGestureRecognizerEnabled:(BOOL)isEnable;
++ (void)writeLog:(NSString*)inLog;
++ (UIInterfaceOrientationMask)supportedInterfaceOrientations:(EBrowserView*)meBrwView;
 +(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation brwView:(EBrowserView*)meBrwView;
-+(NSString*)macAddress;
++ (NSString*)macAddress;
 + (void)brwView:(EBrowserView*)inBrwView navigationPresentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;
 + (void)brwView:(EBrowserView*)inBrwView presentModalViewController:(UIViewController *)modalViewController animated:(BOOL)animated;
 @end

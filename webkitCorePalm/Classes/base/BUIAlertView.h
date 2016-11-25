@@ -17,18 +17,20 @@
  */
 
 #import <UIKit/UIKit.h>
-#define F_BUIALERTVIEW_TYPE_ALERT		0
-#define F_BUIALERTVIEW_TYPE_CONFIRM		1
-#define F_BUIALERTVIEW_TYPE_PROMPT		2
 
-@interface BUIAlertView : NSObject {
-	int mType;
-	UIAlertView *mAlertView;
-	UITextField *mTextField;
-}
-@property int mType;
-@property (nonatomic, retain) UIAlertView *mAlertView;
-@property (nonatomic, retain) UITextField *mTextField;
+typedef NS_ENUM(NSInteger,ACEBUIAlertViewType){
+    ACEBUIAlertViewTypeAlert = 0,
+    ACEBUIAlertViewTypeConfirm,
+    ACEBUIAlertViewTypePrompt
+};
 
-- (void)initWithType:(int)inType;
+
+@interface BUIAlertView : NSObject
+@property (nonatomic, assign)ACEBUIAlertViewType mType;
+@property (nonatomic, strong) UIAlertView *mAlertView;
+@property (nonatomic, strong) UITextField *mTextField;
+
+- (instancetype)initWithType:(ACEBUIAlertViewType)type;
+
+
 @end

@@ -161,7 +161,7 @@
 	ACENSLog(@"EBrowserMainFrame layoutSubviews!");
 	ACENSLog(@"wnd rect is:%f,%f,%f,%f", self.frame.origin.x, self.frame.origin.y, self.bounds.size.width, self.bounds.size.height);
 	if (meAdBrwView) {
-		CGRect ADFrame;
+		CGRect ADFrame = CGRectZero;
 		switch (mAdType) {
 			case F_EBRW_MAINFRM_AD_TYPE_TOP:
 				if ([BUtility isIpad]) {
@@ -192,48 +192,16 @@
 }
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
-	switch (eInBrwView.mType) {
-		case F_EBRW_VIEW_TYPE_SLIBING_TOP:
-		case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
-		case F_EBRW_VIEW_TYPE_POPOVER:
-		case F_EBRW_VIEW_TYPE_AD:
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-			break;
-		case F_EBRW_VIEW_TYPE_MAIN:
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-			//[meBrwWgtContainer notifyLoadPageStartOfBrwView:eInBrwView];
-			break;
-		default:
-			break;
-	}
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
-	ACENSLog(@"EBrowserMainFrame notifyLoadPageFinishOfBrwView");
+
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	switch (eInBrwView.mType) {
-		case F_EBRW_VIEW_TYPE_SLIBING_TOP:
-		case F_EBRW_VIEW_TYPE_SLIBING_BOTTOM:
-		case F_EBRW_VIEW_TYPE_POPOVER:
-		case F_EBRW_VIEW_TYPE_AD:
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-			break;
-		case F_EBRW_VIEW_TYPE_MAIN:
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            /*
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-                
-                if (meBrwCtrler.mStartView) {
-                    self.hidden = NO;
-                    [meBrwCtrler.mStartView removeFromSuperview];
-                    meBrwCtrler.mStartView = nil;
-                    
-                }
-                
-            });
-            */
-            
+		case ACEEBrowserViewTypeMain:
             [self notifyLoadingImageShouldClose];
-			
 			if ((eInBrwView.meBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
 				eInBrwView.meBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
 				eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
@@ -252,21 +220,8 @@
 
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView {
 	switch (eInBrwView.mType) {
-		case F_EBRW_VIEW_TYPE_MAIN:
+		case ACEEBrowserViewTypeMain:
             [self notifyLoadingImageShouldClose];
-//			if (meBrwCtrler.mStartView && meBrwCtrler.mSplashFired) {
-//                /*[[UIApplication sharedApplication] setStatusBarHidden:theApp.useIsHiddenStatusBarControl];
-//                if (!theApp.useIsHiddenStatusBarControl) {
-//                     meBrwCtrler.view.frame =  CGRectMake(0, 20, [BUtility getScreenWidth], [BUtility getScreenHeight]);
-//                }
-//                
-//                sleep(1);*/
-//                
-//                [meBrwCtrler.mStartView removeFromSuperview];
-//				meBrwCtrler.mStartView = nil;
-//                self.hidden = NO;
-//			}
-
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 			[meBrwWgtContainer notifyLoadPageErrorOfBrwView:eInBrwView];
 			break;

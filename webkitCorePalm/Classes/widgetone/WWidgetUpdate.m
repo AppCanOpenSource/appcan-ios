@@ -121,7 +121,7 @@
     if (!saveWgtPath) {
         saveWgtPath = [[NSString alloc] initWithFormat:@"%@/%@.zip",folderPath,[self md5:self.downLoadURL]];
     }
-    NSLog(@"savePath=%@",saveWgtPath);
+    ACLogInfo(@"savePath=%@",saveWgtPath);
     NSString *tempPath = [NSString stringWithFormat:@"%@/%@.temp",folderPath,[self md5:self.downLoadURL]];
     ACENSLog(@"savePath=%@",tempPath);
     //
@@ -267,7 +267,7 @@
 	const char *cStr = [str UTF8String];	
 	unsigned char result[16];
 	
-	CC_MD5( cStr, strlen(cStr), result );
+	CC_MD5( cStr, (CC_LONG)strlen(cStr), result );
 	
 	return [NSString stringWithFormat:
 			@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",			

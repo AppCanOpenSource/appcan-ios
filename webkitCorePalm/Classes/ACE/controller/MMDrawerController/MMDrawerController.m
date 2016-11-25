@@ -910,7 +910,7 @@ static CAKeyframeAnimation * bounceKeyFrameAnimationForDistanceOnView(CGFloat di
 - (void)applyOvershootScaleTransformForDrawerSide:(MMDrawerSide)drawerSide percentVisible:(CGFloat)percentVisible{
     
     if (percentVisible >= 1.f) {
-        CATransform3D transform;
+        CATransform3D transform = CATransform3DIdentity;
         UIViewController * sideDrawerViewController = [self sideDrawerViewControllerForSide:drawerSide];
         if(drawerSide == MMDrawerSideLeft) {
             transform = CATransform3DMakeScale(percentVisible, 1.f, 1.f);
@@ -1051,7 +1051,7 @@ static inline CGFloat originXForDrawerOriginAndTargetOriginOffset(CGFloat origin
             UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
             CGPoint translate = [pan translationInView:self.view];
             
-            BOOL possible = (translate.x != 0) && ((fabsf(translate.y) / fabsf(translate.x)) < 1.0f);
+            BOOL possible = (translate.x != 0) && ((fabs(translate.y) / fabs(translate.x)) < 1.0f);
             if (possible) {
                 return YES;
             } else {

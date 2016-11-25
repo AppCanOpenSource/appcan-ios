@@ -279,9 +279,8 @@ double radians(float degrees){
         }
         
     }
-    
-    CGSize sizeMstatu = [mStatusLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
-    CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+    CGSize sizeMstatu = [mStatusLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
+    CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
     CGSize size = (sizeMstatu.width>sizeMlast.width)?sizeMstatu:sizeMlast;
     if (size.width<70)
     {
@@ -301,7 +300,7 @@ double radians(float degrees){
     
     
     NSString * loading =[bounceParamsDict objectForKey:@"loadingText"];
-    CGSize sizeLoad = [loading sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+    CGSize sizeLoad = [loading sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
     CGRect acimageFrame = mActivityImageView.frame;
     acimageFrame.origin.x=[UIScreen mainScreen].bounds.size.width/2-sizeLoad.width/2-imageFrame.size.width-35;
     if (self.isImgCenter) {
@@ -537,8 +536,8 @@ double radians(float degrees){
 
 	}
       
-      CGSize sizeMstatu = [mStatusLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
-      CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+      CGSize sizeMstatu = [mStatusLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
+      CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
       CGSize size = (sizeMstatu.width>sizeMlast.width)?sizeMstatu:sizeMlast;
       if (size.width<70)
       {
@@ -558,7 +557,7 @@ double radians(float degrees){
       
       
       NSString * loading =[bounceParamsDict objectForKey:@"loadingText"];
-      CGSize sizeLoad = [loading sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+      CGSize sizeLoad = [loading sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
       CGRect acimageFrame = mActivityImageView.frame;
       acimageFrame.origin.x=[UIScreen mainScreen].bounds.size.width/2-sizeLoad.width/2-imageFrame.size.width-35;
       if (self.isImgCenter) {
@@ -633,8 +632,8 @@ double radians(float degrees){
 }
 -(void)setLevelText:(NSString*)inText{
     mLastUpdatedLabel.text = [NSString stringWithString:inText];
-    CGSize sizeMstatu = [mStatusLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
-    CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+    CGSize sizeMstatu = [mStatusLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
+    CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
     CGSize size = (sizeMstatu.width>sizeMlast.width)?sizeMstatu:sizeMlast;
     CGRect temRect = mStatusLabel.frame;
    float widthLabel = temRect.size.width;
@@ -711,8 +710,8 @@ double radians(float degrees){
   }
     //下拉刷新时图标自适应提示文字大小
     {
-        CGSize sizeMstatu = [mStatusLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
-        CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithFont:[UIFont systemFontOfSize:12.0f]];
+        CGSize sizeMstatu = [mStatusLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
+        CGSize sizeMlast = [mLastUpdatedLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0f]}];
         CGSize size = (sizeMstatu.width>sizeMlast.width)?sizeMstatu:sizeMlast;
         if (size.width<70)
         {

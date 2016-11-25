@@ -34,6 +34,7 @@
 
 #import "ACEJSCBaseJS.h"
 #import "ACEBrowserView.h"
+#import "ACEMultiPopoverScrollView.h"
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
 @end
@@ -182,9 +183,9 @@
 		mOAuthWndName = nil;
 		meBrwView = [[meBrwCtrler brwWidgetContainer] popReuseBrwView];
 		if (meBrwView) {
-			[meBrwView reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:F_EBRW_VIEW_TYPE_MAIN];
+			[meBrwView reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
 		} else {
-			meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:F_EBRW_VIEW_TYPE_MAIN];
+			meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
 		}
 		ACENSLog(@"meBrwView retainCount is %d", meBrwView);
 		[self addSubview:meBrwView];
@@ -207,26 +208,16 @@
 }
 
 - (void)layoutSubviews {
-	ACENSLog(@"EBrowserWindow layoutSubviews!");
-	ACENSLog(@"wnd name is %@", self.meBrwView.muexObjName);
-	ACENSLog(@"wnd rect is:%f,%f,%f,%f", self.frame.origin.x, self.frame.origin.y, self.bounds.size.width, self.bounds.size.height);
+
 	//[self setFrame:self.superview.bounds];
 	if (meTopSlibingBrwView) {
-		ACENSLog(@"top is not null");
 		[meTopSlibingBrwView setFrame:CGRectMake(0, 0, self.bounds.size.width, meTopSlibingBrwView.bounds.size.height)];
 	} 
 	if (meBottomSlibingBrwView) {
-		ACENSLog(@"bottom is not null");
 		[meBottomSlibingBrwView setFrame:CGRectMake(0, self.bounds.size.height-meBottomSlibingBrwView.bounds.size.height, self.bounds.size.width, meBottomSlibingBrwView.bounds.size.height)];
 	}
 	[meBrwView setFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
-	if (meTopSlibingBrwView) {
-		ACENSLog(@"top rect is:%f,%f,%f,%f", meTopSlibingBrwView.frame.origin.x, meTopSlibingBrwView.frame.origin.y, meTopSlibingBrwView.bounds.size.width, meTopSlibingBrwView.bounds.size.height);
-	}
-	if (meBottomSlibingBrwView) {
-		ACENSLog(@"bottom rect is:%f,%f,%f,%f", meBottomSlibingBrwView.frame.origin.x, meBottomSlibingBrwView.frame.origin.y, meBottomSlibingBrwView.bounds.size.width, meBottomSlibingBrwView.bounds.size.height);
-	}
-	ACENSLog(@"view rect is:%f,%f,%f,%f", meBrwView.frame.origin.x, meBrwView.frame.origin.y, meBrwView.bounds.size.width, meBrwView.bounds.size.height);
+
 }
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
@@ -374,6 +365,18 @@
     return self.meBrwView;
     
 }
+
+
+- (EBrowserWindowContainer *)winContainer{
+    if (!_winContainer) {
+        if ([self.superview isKindOfClass:[EBrowserWindowContainer class]]) {
+            _winContainer = (EBrowserWindowContainer*)self.superview;
+        }
+    }
+    return _winContainer;
+}
+
+
 
 #pragma mark - onWindowAppear & onWindowDisappear
 //20150703 by lkl

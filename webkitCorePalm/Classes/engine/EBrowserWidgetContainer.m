@@ -169,6 +169,7 @@
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
+    ACLogVerbose(@"window '%@' opened;",eInBrwView.meBrwWnd.meBrwView.muexObjName);
 	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
     
     EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];

@@ -1,3 +1,2 @@
-AppCanKit.framework/*
-libAppCanEngine.a
+build/*
 !.gitignore

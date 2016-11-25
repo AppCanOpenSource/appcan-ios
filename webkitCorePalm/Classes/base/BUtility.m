@@ -36,7 +36,7 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
 #import "SFHFKeychainUtils.h"
-#import "EUExBase.h"
+
 //mac begin
 #include <sys/socket.h> // Per msqr 
 #include <sys/sysctl.h> 
@@ -53,8 +53,7 @@
 
 #import "FileEncrypt.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "ACEUtils.h"
-
+#import <AppCanKit/ACInvoker.h>
 
 
 void rc4_setup( struct rc4_state *s, unsigned char *key, int length ) 
@@ -258,7 +257,6 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 "uexWindow.setWindowFrame = function() { uex.exec('uexWindow.setWindowFrame/'+uexJoin(arguments));};"
 "uexWindow.hideStatusBar = function() { uex.exec('uexWindow.hideStatusBar/'+uexJoin(arguments));};"
 "uexWindow.showStatusBar = function() { uex.exec('uexWindow.showStatusBar/'+uexJoin(arguments));};"
-"uexWindow.setPopoverVisibility = function() { uex.exec('uexWindow.setPopoverVisibility/'+uexJoin(arguments));};"
 
 "uexWindow.setMultilPopoverFlippingEnbaled = function() { uex.exec('uexWindow.setMultilPopoverFlippingEnbaled/'+uexJoin(arguments));};"
 "uexWindow.getSlidingWindowState = function() { uex.exec('uexWindow.getSlidingWindowState/'+uexJoin(arguments));};"
@@ -311,7 +309,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 //"uexDataAnalysis.getUserInfo = function(){uex.exec('uexDataAnalysis.getUserInfo/'+uexJoin(arguments));};"
 "window.uexGameEngine={};uexGameEngine.screenWidth =null;uexGameEngine.screenHeight =null";
 
-+(NSString*)getBaseJSKey{
++ (NSString *)getBaseJSKey{
     return baseJSKey;
 }
 */
@@ -319,7 +317,7 @@ static NSString *baseJSKey = @"var uex_s_uex='&';"
 #pragma  mark - RC4EnryptLocalstorage
 static NSString *rc4JSKey = @"uexSecure={ls:localStorage,open:function(p){try{this.t=true;this.o=uexCrypto.m(p)}catch(e){}},write:function(k,v){if(this.t){try{this.ls.setItem(this.o+k,uexCrypto.zy_rc4ex(v,this.o))}catch(e){}}},read:function(k){if(this.t){try{return uexCrypto.zy_rc4ex(this.ls.getItem(this.o+k),this.o)}catch(e){return null}}else{return null}},remove:function(k){if(this.t){try{this.ls.removeItem(this.o+k)}catch(e){}}},reencrypt:function(n){if(this.t){try{var np=uexCrypto.m(n);var ra=new Array();var ta=new Array();for(var m=0;m<this.ls.length;m++){ta[m]=this.ls.key(m)};for(var i=0;i<ta.length;i++){var tp=ta[i];if(tp.substring(0,this.o.length)==this.o){this.ls.setItem(np+tp.substring(this.o.length),uexCrypto.zy_rc4ex(uexCrypto.zy_rc4ex(this.ls.getItem(tp),this.o),np));this.ls.removeItem(tp)}};this.o=null;this.t=false}catch(e){this.o=null;this.t=false}}},close:function(){if(this.t){try{this.o=null;this.t=false}catch(e){}}},destory:function(){if(this.t){try{var ta=new Array();for(var m=0;m<this.ls.length;m++){ta[m]=this.ls.key(m)};for(var i=0;i<ta.length;i++){var tp=ta[i];if(tp.substring(0,this.o.length)==this.o){this.ls.removeItem(tp)}};this.o=null;this.t=false}catch(e){this.o=null;this.t=false}}}};uexCrypto={zt:function(key){var s=[],j=0,x,res='';for(var i=0;i<256;i++){s[i]=i};for(i=0;i<256;i++){j=(j+s[i]+key.charCodeAt(i%key.length))%256;x=s[i];s[i]=s[j];s[j]=x};return s},z4:function(str,s){var i=0;var j=0;var res='';var k=[];k=k.concat(s);for(var y=0;y<str.length;y++){i=(i+1)%256;j=(j+k[i])%256;x=k[i];k[i]=k[j];k[j]=x;var ztemp=str.charCodeAt(y)^k[(k[i]+k[j])%256];if(ztemp==0){res+=str.charAt(y)}else{res+=String.fromCharCode(ztemp)}};return res},zy_rc4ex:function(str,key){var s=this.zt(key);return this.z4(str,s)},m:function(zs){return hmd5(zs);var hs=0;function hmd5(s){return rx(r5(s8(s)))};function r5(s){return br(b5(rl(s),s.length*8))};function rx(it){try{hs}catch(e){hs=0};var hb=hs?'0123456789ABCDEF':'0123456789abcdef';var ot='';var x;for(var i=0;i<it.length;i++){x=it.charCodeAt(i);ot+=hb.charAt((x>>>4)&0x0F)+hb.charAt(x&0x0F)};return ot};function s8(it){var ot='';var i=-1;var x,y;while(++i<it.length){x=it.charCodeAt(i);y=i+1<it.length?it.charCodeAt(i+1):0;if(0xD800<=x&&x<=0xDBFF&&0xDC00<=y&&y<=0xDFFF){x=0x10000+((x&0x03FF)<<10)+(y&0x03FF);i++};if(x<=0x7F)ot+=String.fromCharCode(x);else if(x<=0x7FF)ot+=String.fromCharCode(0xC0|((x>>>6)&0x1F),0x80|(x&0x3F));else if(x<=0xFFFF)ot+=String.fromCharCode(0xE0|((x>>>12)&0x0F),0x80|((x>>>6)&0x3F),0x80|(x&0x3F));else if(x<=0x1FFFFF)ot+=String.fromCharCode(0xF0|((x>>>18)&0x07),0x80|((x>>>12)&0x3F),0x80|((x>>>6)&0x3F),0x80|(x&0x3F))};return ot};function rl(it){var ot=Array(it.length>>2);for(var i=0;i<ot.length;i++)ot[i]=0;for(var i=0;i<it.length*8;i+=8)ot[i>>5]|=(it.charCodeAt(i/8)&0xFF)<<(i%32);return ot};function br(it){var ot='';for(var i=0;i<it.length*32;i+=8)ot+=String.fromCharCode((it[i>>5]>>>(i%32))&0xFF);return ot};function b5(x,len){x[len>>5]|=0x80<<((len)%32);x[(((len+64)>>>9)<<4)+14]=len;var a=1732584193;var b=-271733879;var c=-1732584194;var d=271733878;for(var i=0;i<x.length;i+=16){var olda=a;var oldb=b;var oldc=c;var oldd=d;a=f(a,b,c,d,x[i+0],7,-680876936);d=f(d,a,b,c,x[i+1],12,-389564586);c=f(c,d,a,b,x[i+2],17,606105819);b=f(b,c,d,a,x[i+3],22,-1044525330);a=f(a,b,c,d,x[i+4],7,-176418897);d=f(d,a,b,c,x[i+5],12,1200080426);c=f(c,d,a,b,x[i+6],17,-1473231341);b=f(b,c,d,a,x[i+7],22,-45705983);a=f(a,b,c,d,x[i+8],7,1770035416);d=f(d,a,b,c,x[i+9],12,-1958414417);c=f(c,d,a,b,x[i+10],17,-42063);b=f(b,c,d,a,x[i+11],22,-1990404162);a=f(a,b,c,d,x[i+12],7,1804603682);d=f(d,a,b,c,x[i+13],12,-40341101);c=f(c,d,a,b,x[i+14],17,-1502002290);b=f(b,c,d,a,x[i+15],22,1236535329);a=g(a,b,c,d,x[i+1],5,-165796510);d=g(d,a,b,c,x[i+6],9,-1069501632);c=g(c,d,a,b,x[i+11],14,643717713);b=g(b,c,d,a,x[i+0],20,-373897302);a=g(a,b,c,d,x[i+5],5,-701558691);d=g(d,a,b,c,x[i+10],9,38016083);c=g(c,d,a,b,x[i+15],14,-660478335);b=g(b,c,d,a,x[i+4],20,-405537848);a=g(a,b,c,d,x[i+9],5,568446438);d=g(d,a,b,c,x[i+14],9,-1019803690);c=g(c,d,a,b,x[i+3],14,-187363961);b=g(b,c,d,a,x[i+8],20,1163531501);a=g(a,b,c,d,x[i+13],5,-1444681467);d=g(d,a,b,c,x[i+2],9,-51403784);c=g(c,d,a,b,x[i+7],14,1735328473);b=g(b,c,d,a,x[i+12],20,-1926607734);a=h(a,b,c,d,x[i+5],4,-378558);d=h(d,a,b,c,x[i+8],11,-2022574463);c=h(c,d,a,b,x[i+11],16,1839030562);b=h(b,c,d,a,x[i+14],23,-35309556);a=h(a,b,c,d,x[i+1],4,-1530992060);d=h(d,a,b,c,x[i+4],11,1272893353);c=h(c,d,a,b,x[i+7],16,-155497632);b=h(b,c,d,a,x[i+10],23,-1094730640);a=h(a,b,c,d,x[i+13],4,681279174);d=h(d,a,b,c,x[i+0],11,-358537222);c=h(c,d,a,b,x[i+3],16,-722521979);b=h(b,c,d,a,x[i+6],23,76029189);a=h(a,b,c,d,x[i+9],4,-640364487);d=h(d,a,b,c,x[i+12],11,-421815835);c=h(c,d,a,b,x[i+15],16,530742520);b=h(b,c,d,a,x[i+2],23,-995338651);a=ii(a,b,c,d,x[i+0],6,-198630844);d=ii(d,a,b,c,x[i+7],10,1126891415);c=ii(c,d,a,b,x[i+14],15,-1416354905);b=ii(b,c,d,a,x[i+5],21,-57434055);a=ii(a,b,c,d,x[i+12],6,1700485571);d=ii(d,a,b,c,x[i+3],10,-1894986606);c=ii(c,d,a,b,x[i+10],15,-1051523);b=ii(b,c,d,a,x[i+1],21,-2054922799);a=ii(a,b,c,d,x[i+8],6,1873313359);d=ii(d,a,b,c,x[i+15],10,-30611744);c=ii(c,d,a,b,x[i+6],15,-1560198380);b=ii(b,c,d,a,x[i+13],21,1309151649);a=ii(a,b,c,d,x[i+4],6,-145523070);d=ii(d,a,b,c,x[i+11],10,-1120210379);c=ii(c,d,a,b,x[i+2],15,718787259);b=ii(b,c,d,a,x[i+9],21,-343485551);a=add(a,olda);b=add(b,oldb);c=add(c,oldc);d=add(d,oldd)};return Array(a,b,c,d)};function mn(q,a,b,x,s,t){return add(bl(add(add(a,q),add(x,t)),s),b)};function f(a,b,c,d,x,s,t){return mn((b&c)|((~b)&d),a,b,x,s,t)};function g(a,b,c,d,x,s,t){return mn((b&d)|(c&(~d)),a,b,x,s,t)};function h(a,b,c,d,x,s,t){return mn(b^c^d,a,b,x,s,t)};function ii(a,b,c,d,x,s,t){return mn(c^(b|(~d)),a,b,x,s,t)};function add(x,y){var lsw=(x&0xFFFF)+(y&0xFFFF);var msw=(x>>16)+(y>>16)+(lsw>>16);return(msw<<16)|(lsw&0xFFFF)};function bl(num,cnt){return(num<<cnt)|(num>>>(32-cnt))}}};uexOFAuth={ls:window.localStorage,push:function(un,pwd,context){var key=uexCrypto.zy_rc4ex(un,pwd);var con=uexCrypto.zy_rc4ex(context,pwd);this.ls[un]=key;this.ls[key]=con;return 0},clear:function(un){try{delete this.ls[this.ls[un]];delete this.ls[un]}catch(e){};return 0},check:function(un,pwd){if(!this.ls[un]){return-1};var key=uexCrypto.zy_rc4ex(un,pwd);if(this.ls[un]==key){return uexCrypto.zy_rc4ex(this.ls[key],pwd)}else{return-1}}}";
 
-+(NSString*)getRC4LocalStoreJSKey{
++ (NSString *)getRC4LocalStoreJSKey{
     return rc4JSKey;
 }
 #pragma appCanDevMode
@@ -346,7 +344,7 @@ static NSString *clientCertificatePwd = nil;
 +(void)setClientCertificatePwd:(NSString*)inPwd{
     clientCertificatePwd = [[NSString alloc] initWithString:inPwd];
 }
-+(NSString*)ClientCertificatePassWord{
++ (NSString *)ClientCertificatePassWord{
     if (clientCertificatePwd) {
         return clientCertificatePwd;
     }
@@ -357,7 +355,7 @@ static NSString *clientCertificatePwd = nil;
 	if (!inColorStr || inColorStr.length == 0) {
 		return c;
 	}
-	int length = inColorStr.length;
+	NSInteger length = inColorStr.length;
 	const char * colorChars = [inColorStr UTF8String];
 	char str[] = "ffffff";
 	
@@ -366,7 +364,7 @@ static NSString *clientCertificatePwd = nil;
 		str[0] = str[1] = colorChars[3];
 		str[2] = str[3] = colorChars[2];
 		str[4] = str[5] = colorChars[1];
-		c.hex = 0xff000000 | strtol( str, NULL, 16 );
+		c.hex = (unsigned int)(0xff000000 | strtol( str, NULL, 16 ));
 	} else if(length == 7) { //#ff00ff
 		str[0] = colorChars[5];
 		str[1] = colorChars[6];
@@ -374,7 +372,7 @@ static NSString *clientCertificatePwd = nil;
 		str[3] = colorChars[4];
 		str[4] = colorChars[1];
 		str[5] = colorChars[2];
-		c.hex = 0xff000000 | strtol( str, NULL, 16 );
+		c.hex = (unsigned int)(0xff000000 | strtol( str, NULL, 16 ));
 	} 
 	// rgba(255,0,255,255) format
 	else { 
@@ -426,7 +424,7 @@ static NSString *clientCertificatePwd = nil;
     CGRect rect = CGRectMake(0, 0, appWidth, appHeight);
     
     //if (isSysVersionAbove7_0){
-    if (ACE_iOSVersion >= 7.0){
+    if (ACSystemVersion() >= 7.0){
         appWidth = [UIScreen mainScreen].bounds.size.width;
         appHeight = [UIScreen mainScreen].bounds.size.height;
         
@@ -452,7 +450,7 @@ static NSString *clientCertificatePwd = nil;
     
     return rect;
 }
-+(NSString*)getScreenWAndH{
++ (NSString *)getScreenWAndH{
 	CGRect rect = [[UIScreen mainScreen] bounds];
 	int width = rect.size.width;
 	int height = rect.size.height;
@@ -463,7 +461,12 @@ static NSString *clientCertificatePwd = nil;
 	float ver = [[[[UIDevice currentDevice] systemVersion] substringToIndex:3] floatValue];
 	return ver;
 }
-+(BOOL)isSimulator{	
++(BOOL)isSimulator{
+    if (ACSystemVersion() >= 9.0) {
+        return ([NSProcessInfo processInfo].environment[@"SIMULATOR_DEVICE_NAME"] != nil);
+    }
+
+    
 	NSString *platStr = [[UIDevice currentDevice] model];
 	if ([platStr isEqualToString:@"iPhone Simulator"]||[platStr isEqualToString:@"iPad Simulator"]) {
 		return YES;
@@ -495,7 +498,7 @@ static NSString *clientCertificatePwd = nil;
 	}
 	return NO;
 }
-+(NSString*)makeSpecUrl:(NSString*)inStr{
++ (NSString *)makeSpecUrl:(NSString*)inStr{
 	if(inStr==nil && [inStr length]==0){
 		return nil;
 	}
@@ -570,7 +573,7 @@ static NSString *clientCertificatePwd = nil;
     
 }
 
-+(NSString*)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl{
++ (NSString *)makeUrl:(NSString*)inBaseStr url:(NSString*)inUrl{
 	ACENSLog(@"inbaseUrl=%@",inBaseStr);
 	//
 	if (inUrl==nil && [inUrl length]==0) {
@@ -692,7 +695,7 @@ static NSString *clientCertificatePwd = nil;
 			return j;
 		}
 	}
-	return NSNotFound;
+	return (int)NSNotFound;
 }
 +(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubSting{
 	NSRange range = [inSouceString rangeOfString:inSubSting];
@@ -815,7 +818,7 @@ static NSString *clientCertificatePwd = nil;
 	}
 	return NO;
 }
-+(NSString*)wgtResPath:(NSString*)inUrl{
++ (NSString *)wgtResPath:(NSString*)inUrl{
 	if ([inUrl hasPrefix:F_RES_PATH]) {
 		inUrl = [inUrl substringFromIndex:5];
         NSString *wgtResPath = nil;
@@ -880,7 +883,7 @@ static NSString *clientCertificatePwd = nil;
 }
 +(NSString *)getTransferredString:(NSData *)inData{
 	const char *bytes = [inData bytes];
-	int length = [inData length];
+	int length = (int)[inData length];
 	if (length==0) {
 		return NULL;
 	}
@@ -1256,54 +1259,38 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSString *)bundleIdentifier {
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wundeclared-selector"
+
     Class packageInfo = NSClassFromString(@"PackageInfo");
-    if(packageInfo){
-        @try {
-            return objc_msgSend(packageInfo,@selector(getBundleIdentifier));
-        }
-        @catch (NSException *exception) {
-            NSLog(@"ERROR!!packageInfo不存在!");
-            NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
-        }
-        @finally {
-        }
-        
+    NSString *appcanIndentifier =  @"com.zywx.appcan";
+    if (packageInfo) {
+        appcanIndentifier = [packageInfo ac_invoke:@"getBundleIdentifier"];
+    }else{
+        ACLogError(@"AppCan PackageInfo 不存在!!");
     }
-    return @"com.zywx.appcan";
-#pragma clang diagnostic pop
+
+    return appcanIndentifier;
+
 
 }
 
-+(NSString*)appKey{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wundeclared-selector"
-    if(F_DEVELOPMENT_USE==NO){
++ (NSString *)appKey{
+    if (!appCanDevelopmetMode) {
         Class Beqtucontent = NSClassFromString(@"Beqtucontent");
-        if(Beqtucontent){
-            @try {
-                return objc_msgSend(Beqtucontent,@selector(getContentPath));
-            }
-            @catch (NSException *exception) {
-                NSLog(@"ERROR!!Beqtucontent不存在");
-                NSLog(@"NSException name:%@ reason :%@ info:%@",exception.name,exception.reason,exception.userInfo);
-            }
-            @finally {
-            }
+        if (Beqtucontent) {
+            return [Beqtucontent ac_invoke:@"getContentPath"];
+        }else{
+            ACLogError(@"AppCan Beqtucontent 不存在!!");;
         }
     }
-#pragma clang diagnostic pop
-    
+
     NSString* appKeyStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"appkey"];
     if (appKeyStr && [appKeyStr length] > 0) {
         return appKeyStr;
     }
     return nil;
 }
-+(NSString*)appId{
-    NSString* appIdStr =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"appid"];
++ (NSString *)appId{
+    NSString * appIdStr =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"appid"];
     if (appIdStr &&[appIdStr length]>1) {
         return appIdStr;
     }
@@ -1331,119 +1318,68 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (void)setAppCanViewActive:(int)wgtType opener:(NSString *)inOpener name:(NSString *)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd appInfo:(NSDictionary *)appInfo {
-    
     if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
-        
         NSString * fromUrlStr =[BUtility makeSpecUrl:inOpener];
-        
         NSString * goUrlStr =[BUtility makeSpecUrl:inName];
-        
         if ([fromUrlStr hasPrefix:@"file"]) {
-            
             NSUInteger dest =[fromUrlStr rangeOfString:@"widget"].location;
-            
             if (dest != NSNotFound) {
-                
                 fromUrlStr =[fromUrlStr substringFromIndex:(dest+7)];
-                
             }
-            
         }
-        
         if ([goUrlStr hasPrefix:@"file"]) {
-            
             NSUInteger dest = [goUrlStr rangeOfString:@"widget"].location;
-            
             if (dest != NSNotFound) {
-                
                 goUrlStr =[goUrlStr substringFromIndex:(dest+7)];
-                
             }
-            
         }
-        
         Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-        
         if (!analysisClass) {
-            
             analysisClass = NSClassFromString(@"AppCanAnalysis");
-            
             if (!analysisClass) {
-                
                 return;
-                
             }
         }
-        
         id analysisObject = class_createInstance(analysisClass,0);
-        
-        if ([analysisObject respondsToSelector:@selector(setAppCanViewBecomeActive:goView:startReason:mainWin:)]) {
+        NSString *appcanViewBeconeActiveSelector = @"setAppCanViewBecomeActive:goView:startReason:mainWin:";
+        if ([analysisObject respondsToSelector:NSSelectorFromString(appcanViewBeconeActiveSelector)]) {
+            [analysisObject ac_invoke:appcanViewBeconeActiveSelector arguments:ACArgsPack(fromUrlStr,goUrlStr,@(inOpenReason),@(inMainWnd))];
             //兼容旧的数据统计&兼容大众版的数据统计
-            ((void(*)(id, SEL,NSString*,NSString*,NSInteger,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeActive:goView:startReason:mainWin:), fromUrlStr,goUrlStr,inOpenReason,inMainWnd);
-            
         } else {
-            
             [analysisObject release];
-            
             //新的数据统计使用通知告知统计插件
             NSDictionary * pageInfo = [NSDictionary dictionaryWithObjectsAndKeys:fromUrlStr,@"fromPage",goUrlStr,@"goPage",[NSString stringWithFormat:@"%d",inOpenReason],@"openReason",[NSString stringWithFormat:@"%d", inMainWnd],@"mainWindow",appInfo,@"appInfo", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanDataAnalysisPageBecomeActive" object:pageInfo];
-            
         }
-        
     }
-    
 }
 
 + (void)setAppCanViewBackground:(int)wgtType name:(NSString *)inName closeReason:(int)inCloseReason appInfo:(NSDictionary *)appInfo {
-    
     if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
-        
         NSString * closeUrl = [BUtility makeSpecUrl:inName];
-        
         if ([closeUrl hasPrefix:@"file"]) {
-            
             NSUInteger dest = [closeUrl rangeOfString:@"widget"].location;
-            
             if (dest != NSNotFound) {
-                
                 closeUrl =[closeUrl substringFromIndex:(dest+7)];
-                
             }
-            
         }
-        
         Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-        
         if (!analysisClass) {
-            
             analysisClass = NSClassFromString(@"AppCanAnalysis");
-            
             if (!analysisClass) {
-                
                 return;
-                
             }
-            
         }
-        
         id analysisObject = class_createInstance(analysisClass,0);
-        
-        if ([analysisObject respondsToSelector:@selector(setAppCanViewBecomeBackground:closeReason:)]) {
-            
-            ((void(*)(id, SEL,NSString*,NSInteger))objc_msgSend)(analysisObject, @selector(setAppCanViewBecomeBackground:closeReason:),closeUrl,inCloseReason);
-            
+        NSString *appcanViewBecomeBackgroundSelector = @"setAppCanViewBecomeBackground:closeReason:";
+        if ([analysisObject respondsToSelector:NSSelectorFromString(appcanViewBecomeBackgroundSelector)]) {
+            [analysisObject ac_invoke:appcanViewBecomeBackgroundSelector arguments:ACArgsPack(closeUrl,@(inCloseReason))];
         } else {
-            
             [analysisObject release];
-            
             NSDictionary * pageInfo = [NSDictionary dictionaryWithObjectsAndKeys:closeUrl,@"closeUrl",[NSString stringWithFormat:@"%d",inCloseReason],@"closeReason",appInfo,@"appInfo", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanDataAnalysisPageBackground" object:pageInfo];
-            
         }
-        
     }
-
 }
 
 +(NSString *)macAddress{ 
@@ -1515,10 +1451,14 @@ static NSString *clientCertificatePwd = nil;
 //        
 //        return outstring;
 //    }
+    if([self isSimulator]){
+        return @"";
+    }
+    
     return [OpenUDID value];
 }
 
-+(NSString*)getAbsPath:(EBrowserView*)meBrwView path:(NSString*)inPath{
++ (NSString *)getAbsPath:(EBrowserView*)meBrwView path:(NSString*)inPath{
     if (!meBrwView) {
         return @"";
     }
@@ -1592,11 +1532,11 @@ static NSString *clientCertificatePwd = nil;
 	return rand();
 }
 #pragma mark for RC4
-+(NSString*)RC4DecryptWithInput:(NSString*)aInput key:(NSString*)aKey{
++ (NSString *)RC4DecryptWithInput:(NSString*)aInput key:(NSString*)aKey{
     ///// 将16进制数据转化成Byte 数组
     NSString *hexString = aInput; //16进制字符串
     int j=0;
-    int byteSize =[hexString length]/2;
+    int byteSize =(int)[hexString length]/2;
     Byte bytes[byteSize];  ///3ds key的Byte 数组， 128位
     for(int i=0;i<[hexString length];i++)
     {
@@ -1631,7 +1571,7 @@ static NSString *clientCertificatePwd = nil;
 
     const char *keyChar;
     keyChar = [keyData bytes];
-    int keyLen = [keyData length];
+    int keyLen = (int)[keyData length];
     
 	char *tmpInputChar = malloc(byteSize+1);
     char *tmpKeyChar = malloc(keyLen+1);
@@ -1656,7 +1596,7 @@ static NSString *clientCertificatePwd = nil;
 }
 
 
-+(NSString*)rc4WithInput:(NSString *)aInput key:(NSString *)aKey{
++ (NSString *)rc4WithInput:(NSString *)aInput key:(NSString *)aKey{
     
     NSMutableArray *iS = [[NSMutableArray alloc] initWithCapacity:256];
     NSMutableArray *iK = [[NSMutableArray alloc] initWithCapacity:256];
@@ -1715,7 +1655,7 @@ static NSString *clientCertificatePwd = nil;
     
     return result;
 }
-+(NSString*)clientCertficatePath{
++ (NSString *)clientCertficatePath{
     NSString *basePath =nil;
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
     if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
@@ -1814,12 +1754,12 @@ static NSString *clientCertificatePwd = nil;
 }
 
 +(void)evaluatingJavaScriptInRootWnd:(NSString*)script_ {
-	NSLog(@"exe script is %@", script_);
+	ACLogVerbose(@"exe script is %@", script_);
 	[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 
 +(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_ {
-	NSLog(@"exe script is %@", script_);
+	ACLogVerbose(@"exe script is %@", script_);
 	[[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 // 获取config里设置的屏幕方向
@@ -2046,7 +1986,7 @@ static NSString *clientCertificatePwd = nil;
         
         [fm createDirectoryAtPath:dynamicPluginFrameworkFolderPath withIntermediateDirectories:NO attributes:nil error:&error];
         if(error){
-            NSLog(@"%@",[error localizedDescription]);
+            ACLogWarning(@"%@",[error localizedDescription]);
         }
     }
 
@@ -2081,15 +2021,7 @@ static NSString *clientCertificatePwd = nil;
 
 #pragma mark - change orientation
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation{
-    SEL selector = NSSelectorFromString([self rotateMethod]);
-    if ([[UIDevice currentDevice] respondsToSelector:selector]) {
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
-        [invocation setSelector:selector];
-        [invocation setTarget:[UIDevice currentDevice]];
-        int val = orientation;
-        [invocation setArgument:&val atIndex:2];
-        [invocation invoke];
-    }
+    [[UIDevice currentDevice] ac_invoke:[self rotateMethod] arguments:ACArgsPack(@(orientation))];
 }
 
 + (NSString *)rotateMethod{

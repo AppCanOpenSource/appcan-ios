@@ -134,7 +134,7 @@
     UIView *superView = inView.superview;
     CGRect originSelfRect = inView.frame;
     CGRect originSuperRect = superView.frame;
-    CGRect animationRect;
+    CGRect animationRect = CGRectZero;
     switch(inAnimiId){
 		case F_BRW_WND_SWITCH_ANIMI_ID_LEFT_TO_RIGHT_PUSH:
             inView.frame = CGRectMake(inView.frame.origin.x-inView.bounds.size.width, inView.frame.origin.y, inView.bounds.size.width, inView.bounds.size.height);
@@ -168,7 +168,7 @@
     UIView *superView = inView.superview;
     CGRect originSelfRect = inView.frame;
     CGRect originSuperRect = superView.frame;
-    CGRect animationRect;
+    CGRect animationRect = CGRectZero;
     switch(inAnimiId){
 		case F_BRW_WND_SWITCH_ANIMI_ID_LEFT_TO_RIGHT_PUSH:
             inView.frame = CGRectMake(inView.frame.origin.x-inView.bounds.size.width, inView.frame.origin.y, inView.bounds.size.width, inView.bounds.size.height);

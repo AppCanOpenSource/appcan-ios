@@ -62,17 +62,14 @@
 	[dfts removeObjectForKey:@"fromDomain"];
 	[dfts removeObjectForKey:@"spuid"];
 	[appCenter cleanUserInfo];
-	[self jsSuccessWithName:@"uexAppCenter.cbLoginOut" opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CSUCCESS];
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexAppCenter.cbLoginOut" arguments:ACArgsPack(@0,@2,@0)];
+
 }
 
 -(void)getSessionKey:(NSMutableArray *)inArguments{
 	ACENSLog(@"getsessionkey enter");
 	NSUserDefaults *dfts = [NSUserDefaults standardUserDefaults];
 	NSString *skey = [dfts objectForKey:@"sessionKey"];
-	if (dfts&&[skey length]>0) {
-		[self jsSuccessWithName:@"uexAppCenter.cbGetSessionKey" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:skey];
-	}else {
-		[self jsSuccessWithName:@"uexAppCenter.cbGetSessionKey" opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:NULL];
-	}
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexAppCenter.cbGetSessionKey" arguments:ACArgsPack(@0,@0,skey)];
 }
 @end

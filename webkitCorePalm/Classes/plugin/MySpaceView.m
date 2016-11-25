@@ -187,7 +187,7 @@
 	}
 	NSMutableArray *recAppSet = [NSMutableArray arrayWithArray:itemsArray];
 	int lineNum = 2;//行数
-	int count = [itemsArray count];  //总数
+	int count = (int)[itemsArray count];  //总数
  	int linecount = 4;    //每行的个数
 	int hasCount = 8; //还有多少items没有draw
  
@@ -259,7 +259,7 @@
 			[itemView removeFromSuperview];
 	}
 	int lineNum = 0;//行数
-	int count = [muArray count];  //总数
+	int count = (int)[muArray count];  //总数
 	if (count == 0) {
 		return;
 	}
@@ -289,7 +289,7 @@
 			NSURL *img = aItem.appIconUrl;
 			NSString *appName = aItem.appName;
 			NSString *appId = [NSString stringWithString:aItem.appId];
-			NSLog(@"MYSPACE APPID = %@,aitemDownload= %d",appId,aItem.downloadTag);
+			NSLog(@"MYSPACE APPID = %@,aitemDownload= %ld",appId,(long)aItem.downloadTag);
 			aItem.isMyAppItem = YES;
 			 
 			[aItem initWithFrame:cframe image:img title:appName appTag:appId];
@@ -338,7 +338,7 @@
  
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex==0) {
-		NSString *appid = [NSString stringWithFormat:@"%d",actionSheet.tag];
+		NSString *appid = [NSString stringWithFormat:@"%ld",(long)actionSheet.tag];
 		if ([_delegate respondsToSelector:@selector(appPressLongForDelete:)]) {
 			[_delegate appPressLongForDelete:appid];
 		}

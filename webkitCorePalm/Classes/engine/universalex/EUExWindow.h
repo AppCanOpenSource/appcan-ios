@@ -17,7 +17,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "EUExBase.h"
+
 @class BToastView;
 
 @class EBrowserMainFrame;
@@ -26,17 +26,17 @@
 @class BStatusBarWindow;
 @class EBrowserViewAnimition;
 
-#define F_EUEXWINDOW_TYPE_NORMAL			0
-#define F_EUEXWINDOW_TYPE_POPUP				1
-#define F_EUEXWINDOW_TYPE_SLIBING_TOP		2
-#define F_EUEXWINDOW_TYPE_SLIBING_BOTTOM	3
+//#define F_EUEXWINDOW_TYPE_NORMAL			0
+//#define F_EUEXWINDOW_TYPE_POPUP				1
+//#define F_EUEXWINDOW_TYPE_SLIBING_TOP		2
+//#define F_EUEXWINDOW_TYPE_SLIBING_BOTTOM	3
 
-#define F_EUEXWINDOW_SRC_TYPE_URL			0
-#define F_EUEXWINDOW_SRC_TYPE_DATA			1
-#define F_EUEXWINDOW_SRC_TYPE_URL_AND_DATA	2
+//#define F_EUEXWINDOW_SRC_TYPE_URL			0
+//#define F_EUEXWINDOW_SRC_TYPE_DATA			1
+//#define F_EUEXWINDOW_SRC_TYPE_URL_AND_DATA	2
 
-#define F_EUEXWINDOW_SIZE_FULL_PARENT		-1
-#define F_EUEXWINDOW_SIZE_FULL_SCREEN		-2
+//#define F_EUEXWINDOW_SIZE_FULL_PARENT		-1
+//#define F_EUEXWINDOW_SIZE_FULL_SCREEN		-2
 
 //#define F_EUEXWINDOW_AD_Y_POS_TOP_PHONE_P		0
 //#define F_EUEXWINDOW_AD_Y_POS_MIDDLE_PHONE_P	200
@@ -55,15 +55,25 @@
 //#define F_EUEXWINDOW_AD_Y_POS_BOTTOM_PAD_L		939
 
 
-#define F_EUEXWINDOW_OPEN_FLAG_OAUTH				0x1
-#define F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION			0x2
-#define F_EUEXWINDOW_OPEN_FLAG_RELOAD				0x4
-#define F_EUEXWINDOW_OPEN_FLAG_DISABLE_CROSSDOMAIN  0x8
-#define F_EUEXWINDOW_OPEN_FLAG_OPAQUE				0x10
-#define F_EUEXWINDOW_OPEN_FLAG_HIDDEN				0x20
-#define F_EUEXWINDOW_OPEN_FLAG_HAS_PREOPEN			0x40
-#define F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE         0x80
-#define F_EUExWINDOW_OPEN_FLAG_NAV_TYPE             0x400
+
+//#define F_EUEXWINDOW_OPEN_FLAG_OAUTH				0x1
+//#define F_EUEXWINDOW_OPEN_FLAG_OBFUSCATION			0x2
+//#define F_EUEXWINDOW_OPEN_FLAG_RELOAD				0x4
+//#define F_EUEXWINDOW_OPEN_FLAG_DISABLE_CROSSDOMAIN  0x8
+//#define F_EUEXWINDOW_OPEN_FLAG_OPAQUE				0x10
+//#define F_EUEXWINDOW_OPEN_FLAG_HIDDEN				0x20
+//#define F_EUEXWINDOW_OPEN_FLAG_HAS_PREOPEN			0x40
+//#define F_EUExWINDOW_OPEN_FLAG_ENABLE_SCALE         0x80
+//#define F_EUExWINDOW_OPEN_FLAG_NAV_TYPE             0x400
+
+
+
+
+
+
+
+
+
 
 #define F_EUEXWINDOW_BOUNCE_FLAG_CUSTOM     0x1
 
@@ -86,16 +96,8 @@
 @property(nonatomic,strong)NSTimer *mToastTimer;
 @property(nonatomic,strong)EBrowserViewAnimition *meBrwAnimi;
 @property(nonatomic,strong)NSMutableDictionary *notificationDic;
-@property(nonatomic,assign)NSInteger isFristSetPopoverFrame;
 
 - (void)closeSlibing:(NSMutableArray *)inArguments;
 @end
 
-@interface EScrollView : UIImageView {
-    
-}
 
-@property (nonatomic, strong) NSString *mainPopName;
-@property (nonatomic, strong) UIScrollView * scrollView;
-
-@end

@@ -273,58 +273,33 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 	}
 }
 
-- (BOOL)ifActiveOrNot:(UIView*)inUIView {
-	if (![inUIView isKindOfClass:[EBrowserWindow class]]) {
-		return NO;
-	}
-	if (inUIView.hidden == YES) {
-		return NO;
-	}
-	return YES;
-}
+
 
 - (EBrowserWindow*)aboveWindow {
-    
     EBrowserWindow *aBrowserWin = nil;
-    
     WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    
-    
     ACEUINavigationController *navController = nil;
-    
     if (app.drawerController) {
         navController = (ACEUINavigationController *)app.drawerController.centerViewController;
     } else {
         navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
     }
-    
-    
     if ([navController.viewControllers count] > 1) {
-        
         ACEWebViewController *webController = (ACEWebViewController *)navController.topViewController;
-        
         if (webController != nil && [webController isKindOfClass:[ACEWebViewController class]]) {
-            
-            
             aBrowserWin = webController.browserWindow;
-            
         }
-        
-        
     } else {
-        
         NSUInteger subViewCount = self.subviews.count;
         NSInteger i = subViewCount-1;
         while (i >= 0) {
             UIView *aboveView = [self.subviews objectAtIndex:i];
-            if ([self ifActiveOrNot:aboveView]) {
+            if ([aboveView isKindOfClass:[EBrowserWindow class]] && !aboveView.hidden) {
                 return (EBrowserWindow*)aboveView;
             }
             i--;
         }
-        
     }
-    
     return aBrowserWin;
 }
 
@@ -335,14 +310,11 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
     NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
     
     NSString *appStateStr = @"";
-    
     if ([defaults objectForKey:@"appStateOfGetPushData"]) {
-        
         appStateStr = [defaults objectForKey:@"appStateOfGetPushData"];
-        
     }
     
-    NSLog(@"appcan-->EBrowserWindowContainer.m-->pushNotify-->appStateOfGetPushData-->%@",appStateStr);
+    //NSLog(@"appcan-->EBrowserWindowContainer.m-->pushNotify-->appStateOfGetPushData-->%@",appStateStr);
     
     
     if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
@@ -372,30 +344,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 }
 
 
-+ (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView
-{
-    EBrowserWindowContainer *eBrwWndContainer = nil;
-    EBrowserWindow *eBrwWnd = browserView.meBrwWnd;
-    
-    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
-        
-        
-        if (eBrwWnd.superview != nil && [eBrwWnd.superview isKindOfClass:[EBrowserWindowContainer class]]) {
-            eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
-            
-            eBrwWnd.winContainer = eBrwWndContainer;
-            
-        } else {
-            
-            eBrwWndContainer = eBrwWnd.winContainer;
-        }
-        
-        
-    } else {
-        eBrwWndContainer = (EBrowserWindowContainer*)eBrwWnd.superview;
-    }
-    
-    return eBrwWndContainer;
++ (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView{
+    return browserView.meBrwWnd.winContainer;
 }
 @end

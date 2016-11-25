@@ -25,55 +25,64 @@
 #import "EBrowser.h"
 #import "JSON.h"
 #import "EUExBaseDefine.h"
-#import "ACEUtils.h"
+
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
 #define UEX_EXITAPP_ALERT_CANCLE @"取消"
+@interface EUExWidgetOne()
+@property (nonatomic,readonly)EBrowserView *EBrwView;
+@end
 
 
 @implementation EUExWidgetOne
+
+- (EBrowserView *)EBrwView{
+    id brwView = [self webViewEngine];
+    BOOL isEBrowserView = [brwView isKindOfClass:[EBrowserView class]];
+    NSAssert(isEBrowserView,@"uexWidgetOne only use for EBrowserView *");
+    return isEBrowserView ? brwView : nil;
+}
+
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	[alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
 	if (buttonIndex == 0) {
 		NSFileManager* fileMgr = [[NSFileManager alloc] init];
-		NSError* err = nil;    
+		    
 		
 		//clear contents of NSTemporaryDirectory 
-		NSString* tempDirectoryPath = NSTemporaryDirectory();
-		ACENSLog(@"+++++Broad+++++: %@",tempDirectoryPath);
+		NSString *tempDirectoryPath = NSTemporaryDirectory();
 		NSDirectoryEnumerator* directoryEnumerator = [fileMgr enumeratorAtPath:tempDirectoryPath];    
-		NSString* fileName = nil;
-		BOOL result;
+		NSString *fileName = nil;
 		
 		while ((fileName = [directoryEnumerator nextObject])) {
+            NSError* err = nil;
 			NSString* filePath = [tempDirectoryPath stringByAppendingPathComponent:fileName];
-			ACENSLog(@"+++++Broad+++++: %@",filePath);
-			result = [fileMgr removeItemAtPath:filePath error:&err];
-			if (!result && err) {
-				NSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
+			BOOL result = [fileMgr removeItemAtPath:filePath error:&err];
+			if (!result || err) {
+				ACLogWarning(@"Failed to delete: %@ (error: %@)", filePath, err);
 			}
-		}    
-		[fileMgr release];
+		}
 		exit(0);
 	}
 }
-
--(id)initWithBrwView:(EBrowserView *) eInBrwView{	
-	if (self = [super initWithBrwView:eInBrwView]) {
-	}
-	return self;
+- (instancetype)initWithWebViewEngine:(id<AppCanWebViewEngineObject>)engine{
+    if (self = [super initWithWebViewEngine:engine]) {
+        
+    }
+    return self;
 }
 
--(void)dealloc{
-	ACENSLog(@"EUExWidgetOne retain count is %d",[self retainCount]);
-	ACENSLog(@"EUExWidgetOne dealloc is %x", self);
-	[super dealloc];
+
+- (void)dealloc{
+
 }
 
--(void)getId:(NSMutableArray *)inArguments {
-    [self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetOne has been deprecated"];
+- (void)getId:(NSMutableArray *)inArguments {
+    ACLogInfo(@"uexWidgetOne.getId has been deprecated");
+    //[self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetOne has been deprecated"];
 	//NSString *wgtOneId =[self.meBrwView.meBrwCtrler.mwWgtMgr wgtOneID];
 //	if (wgtOneId) {
 //		[self jsSuccessWithName:F_CB_WIDGETONE_GET_ID opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:wgtOneId];
@@ -82,8 +91,9 @@
 //	}
 }
 
--(void)getVersion:(NSMutableArray *)inArguments {
-    [self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetone version has been deprecated"];
+- (void)getVersion:(NSMutableArray *)inArguments {
+    ACLogInfo(@"uexWidgetOne.getVersion has been deprecated");
+    //[self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetone version has been deprecated"];
 //	NSString*version = [self.meBrwView.meBrwCtrler.mwWgtMgr WidgetOneVersion];
 //	if (version!=nil) {
 //		[self jsSuccessWithName:F_CB_WIDGETONE_GET_VERSION opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:version];
@@ -92,32 +102,31 @@
 //	}
 }
 
--(id)getPlatform:(NSMutableArray *)inArguments {
-	[self jsSuccessWithName:F_CB_WIDGETONE_GET_PLATFORM opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:F_WIDGETONE_PLATFORM_IOS];
+- (NSNumber *)getPlatform:(NSMutableArray *)inArguments {
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetPlatform" arguments:ACArgsPack(@0,@2,@0)];
     return @0;
 }
 
--(void)exit:(NSMutableArray *)inArguments {
-    if (inArguments && [inArguments count]==1) {
-        int flag =[[inArguments objectAtIndex:0] intValue];
-        if (flag==0) {
-            NSFileManager* fileMgr = [[NSFileManager alloc] init];
-            NSError* err = nil;
+- (void)exit:(NSMutableArray *)inArguments {
+    ACArgsUnpack(NSNumber *inFlag) = inArguments;
+    if (inFlag) {
+        NSInteger flag = inFlag.integerValue;
+        if (flag == 0) {
+            NSFileManager* fileMgr = [NSFileManager defaultManager];
+           
             //clear contents of NSTemporaryDirectory
             NSString* tempDirectoryPath = NSTemporaryDirectory();
-            ACENSLog(@"+++++Broad+++++: %@",tempDirectoryPath);
             NSDirectoryEnumerator* directoryEnumerator = [fileMgr enumeratorAtPath:tempDirectoryPath];
             NSString* fileName = nil;
             BOOL result;
             while ((fileName = [directoryEnumerator nextObject])) {
-                NSString* filePath = [tempDirectoryPath stringByAppendingPathComponent:fileName];
-                ACENSLog(@"+++++Broad+++++: %@",filePath);
+                NSError *err = nil;
+                NSString *filePath = [tempDirectoryPath stringByAppendingPathComponent:fileName];
                 result = [fileMgr removeItemAtPath:filePath error:&err];
-                if (!result && err) {
-                    NSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
+                if (!result || err) {
+                    ACLogWarning(@"Failed to delete: %@ (error: %@)", filePath, err);
                 }
-            }    
-            [fileMgr release];
+            }
             exit(0);
             return;
         }
@@ -134,22 +143,22 @@
                                          cancelButtonTitle:nil
                                          otherButtonTitles:exit,cancel,nil];
 	[widgetOneConfirmView show];
-	//
-	[widgetOneConfirmView release];
+
 }
 
--(void)getWidgetNumber:(NSMutableArray *)inArguments {
-	ACENSLog(@"[EUExWidgetone getWidgetNumber]");
-	int wgtNum = [self.meBrwView.meBrwCtrler.mwWgtMgr widgetNumber];
-	[self jsSuccessWithName:F_CB_WIDGETONE_GET_WIDGET_NUM opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:wgtNum];	
+- (void)getWidgetNumber:(NSMutableArray *)inArguments {
+
+	int wgtNum = [self.EBrwView.meBrwCtrler.mwWgtMgr widgetNumber];
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetWidgetNumber" arguments:ACArgsPack(@0,@2,@(wgtNum))];
+	
 }
 
--(void)getWidgetInfo:(NSMutableArray *)inArguments {
-	ACENSLog(@"[EUExWidgetone getWidgetInfo]");
-	NSString *inIndex = [inArguments objectAtIndex:0];
-	int index = [inIndex intValue];
-	ACENSLog(@"index=%d",index);
-	WWidget *curWgt = [self.meBrwView.meBrwCtrler.mwWgtMgr wgtDataByID:index];
+- (void)getWidgetInfo:(NSMutableArray *)inArguments {
+
+    ACArgsUnpack(NSNumber *inIndex) = inArguments;
+    int index =inIndex.intValue;
+
+	WWidget *curWgt = [self.EBrwView.meBrwCtrler.mwWgtMgr wgtDataByID:index];
 	if (curWgt) {
 		NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithCapacity:5];
 		if (curWgt.appId) {
@@ -167,20 +176,18 @@
 		if (curWgt.ver) {
 			[dict setObject:curWgt.ver forKey:F_JK_VERSION];
 		}
-		NSString *info = [dict JSONFragment];
-		//ACENSLog(@"info=%@",info);
-		[self jsSuccessWithName:F_CB_WIDGETONE_GET_WIDGET_INFO opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:info];
-		[dict release];
+
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetWidgetInfo" arguments:ACArgsPack(@0,@1,dict.ac_JSONFragment)];
 	}else {
-		[self jsSuccessWithName:F_CB_WIDGETONE_GET_WIDGET_INFO opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CFAILED];
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetWidgetInfo" arguments:ACArgsPack(@0,@2,@1)];
 	}
 }
 
--(void)getCurrentWidgetInfo:(NSMutableArray *)inArguments {
-	WWidget *curWgt =self.meBrwView.mwWgt;
+- (NSDictionary *)getCurrentWidgetInfo:(NSMutableArray *)inArguments {
+	WWidget *curWgt =self.EBrwView.mwWgt;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 	if (curWgt) {
-		NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithCapacity:5];
-		if (curWgt.appId) {
+        if (curWgt.appId) {
 			[dict setObject:curWgt.appId forKey:F_JK_APP_ID];
 		} 
 		if (curWgt.widgetId) {
@@ -195,52 +202,48 @@
 		if (curWgt.ver) {
 			[dict setObject:curWgt.ver forKey:F_JK_VERSION];
 		}
-		NSString *info = [dict JSONFragment];
-		//ACENSLog(@"info=%@",info);
-		[self jsSuccessWithName:F_CB_WIDGETONE_GET_CURRENTWIDGET_INFO opId:0 dataType:UEX_CALLBACK_DATATYPE_JSON strData:info];
-		[dict release];
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetCurrentWidgetInfo" arguments:ACArgsPack(@0,@1,dict.ac_JSONFragment)];
 	}else {
-		[self jsSuccessWithName:F_CB_WIDGETONE_GET_CURRENTWIDGET_INFO opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:UEX_CFAILED];
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetCurrentWidgetInfo" arguments:ACArgsPack(@0,@2,@1)];
 	}
+    return dict.count > 0 ? dict : nil;
 }
 
--(void)cleanCache:(NSMutableArray *)inArguments {
-	if (self.meBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
+- (void)cleanCache:(NSMutableArray *)inArguments {
+    NSNumber *result = @1;
+	if (self.EBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
 		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
-		NSURLCache *shareCache = [NSURLCache sharedURLCache];
-		if (shareCache) {
-			[shareCache removeAllCachedResponses];
-		}
-		[self jsSuccessWithName:F_CB_WIDGETONE_CLEAN_CACHE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:0];
-	} else {
-		[self jsSuccessWithName:F_CB_WIDGETONE_CLEAN_CACHE opId:0 dataType:UEX_CALLBACK_DATATYPE_INT intData:1];
+		[[NSURLCache sharedURLCache] removeAllCachedResponses];
+        result = @0;
 	}
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbCleanCache" arguments:ACArgsPack(@0,@2,result)];
 }
 
--(void)getMainWidgetId:(NSMutableArray *)inArguments {
-	WWidget *widget = self.meBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
+- (NSString *)getMainWidgetId:(NSMutableArray *)inArguments {
+    
+    NSString *appId = nil;
+	WWidget *widget = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
 	if (widget) {
-		NSString *appId =widget.appId; 
-		[self jsSuccessWithName:F_CB_WIDGETONE_GET_MAINWIDGET_ID opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:appId];
-	}else {
-		[self jsSuccessWithName:F_CB_WIDGETONE_GET_MAINWIDGET_ID opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:[NSString stringWithFormat:@"%d",-1]];
+		appId = widget.appId;
 	}
+    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbGetMainWidgetId" arguments:ACArgsPack(@0,@0,appId ?: @"-1")];
+    return appId;
 
 }
--(void)setBadgeNumber:(NSMutableArray*)inArguments{
-    int number =[[inArguments objectAtIndex:0] intValue];
+- (void)setBadgeNumber:(NSMutableArray*)inArguments{
+    ACArgsUnpack(NSNumber *inNumber) = inArguments;
     NSUserDefaults *ud =[NSUserDefaults standardUserDefaults];
     [ud removeObjectForKey:F_UD_BadgeNumber];
-    [ud setObject:[NSNumber numberWithInt:number] forKey:F_UD_BadgeNumber];
+    [ud setObject:inNumber forKey:F_UD_BadgeNumber];
     [ud synchronize];
 }
 
 - (NSNumber *)getEngineVersionCode:(NSMutableArray*)inArguments{
-    return @(ACE_VersionCode());
+    return @(ACEngineVersionCode());
 }
 
 - (NSString *)getEngineVersion:(NSMutableArray*)inArguments{
-    return ACE_Version();
+    return ACEnginVersion();
 }
 
 @end

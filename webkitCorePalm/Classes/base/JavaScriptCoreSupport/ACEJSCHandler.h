@@ -23,22 +23,10 @@
  
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "ACEPluginInfo.h"
+
 @class EBrowserView;
 
 
-
-
-@protocol ACEJSCHandler <JSExport>
-
-
-
-JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode);
-
-
-- (void)log:(JSValue *)value,...;
-
-@end
 
 
 
@@ -48,9 +36,9 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 /**
  *  基于JavaScriptCore的插件调用管理
  */
-@interface ACEJSCHandler : NSObject<ACEJSCHandler>
+@interface ACEJSCHandler : NSObject
 @property (nonatomic,strong)NSMutableDictionary *pluginDict;
-@property (nonatomic,weak)EBrowserView *eBrowserView;
+@property (nonatomic,weak)id<AppCanWebViewEngineObject> engine;
 @property (nonatomic,weak)JSContext *ctx;
 
 /**
@@ -60,20 +48,22 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
  */
 + (void)registerGlobalPlugin:(NSString *)pluginClass;
 
+- (instancetype)initWithWebViewEngine:(id<AppCanWebViewEngineObject>)engine;
 
-- (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView;
 //在指定JS上下文中初始化JSCHandler;
 - (void)initializeWithJSContext:(JSContext *)context;
-
 /**
  *  @warning 由于ACEJSCHandler同时也是一个JSValue 受JavaScriptCore的GC机制管理，因此当网页被release时ACEJSCHandler不一定会被及时release!
  *  @note 此方法用于清除所有插件，以避免由于网页已被release引起的Crash
  */
 - (void)clean;
 
-
-
-
-
-
 @end
+
+//EBrowserView
+@interface ACEJSCHandler()
+@property (nonatomic,weak)EBrowserView *eBrowserView;
+- (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView;
+@end
+
+

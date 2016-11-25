@@ -22,16 +22,47 @@
  */
 
 #import "ACEJSCHandler.h"
-#import "EUExBase.h"
 #import "BUtility.h"
 #import <objc/message.h>
+#import <objc/runtime.h>
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
-#import "ACEJSFunctionRefPrivate.h"
+#import <AppCanKit/ACJSValueSupport.h>
+#import <AppCanKit/ACEXTScope.h>
+#import <AppCanKit/ACJSFunctionRefInternal.h>
 #import "ACEJSCInvocation.h"
-#import "ACENil.h"
+#import "EBrowserView.h"
+#import "ACEPluginInfo.h"
+#import <AppCanKit/ACInvoker.h>
+#import "EBrowserWindow.h"
+
+#define ACE_LOG_TRACE(cmd)\
+    _Pragma("clang diagnostic push")\
+    _Pragma("clang diagnostic ignored \"-Wformat\"")\
+    if(ACLogGlobalLogMode & ACLogLevelVerbose)\
+        cmd;\
+    _Pragma("clang diagnostic pop")
+
+
 static NSMutableDictionary *ACEJSCGlobalPlugins;
-@interface ACEJSCHandler()
+
+
+
+@protocol ACEJSCHandler <JSExport>
+
+
+
+JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options);
+
+
+- (void)log:(JSValue *)value,...;
+
+@end
+
+
+
+
+@interface ACEJSCHandler()<ACEJSCHandler>
 
 @end
 
@@ -54,6 +85,26 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
 }
 
+
+- (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView{
+    return [self initWithWebViewEngine:eBrowserView];
+}
+
+- (instancetype)initWithWebViewEngine:(id<AppCanWebViewEngineObject>)engine{
+    if (!engine || ![engine conformsToProtocol:@protocol(AppCanWebViewEngineObject)]) {
+        return nil;
+    }
+    self = [super init];
+    if (self) {
+        _pluginDict = [NSMutableDictionary dictionary];
+        _engine = engine;
+        if ([engine isKindOfClass:[EBrowserView class]]) {
+            _eBrowserView = (EBrowserView *)engine;
+        }
+    }
+    return self;
+}
+
 - (instancetype)init{
     self = [super init];
     if (self) {
@@ -62,23 +113,16 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     return self;
 }
 
-+ (instancetype)currentHandler{
-    JSContext *ctx = [JSContext currentContext];
-    id handler = ctx[@"uex"];
-    if (handler && [handler isKindOfClass:[self class]]) {
-        return handler;
-    }
-    return nil;
-}
+
 
 
 - (void)initializeWithJSContext:(JSContext *)context{
-    context[@"uex"] = self;
+    context[@"__uex_JSCHandler_"] = self;
 
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
     [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
-        NSLog(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
+        ACLogWarning(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
         ctx.exception = exception;
     }];
     self.ctx = context;
@@ -90,11 +134,16 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     for (int i = 0; i < args.count; i++) {
         [log appendFormat:@"%@",args[i]];
     }
-    NSLog(@"%@",log);
+    ACLogInfo(@"%@",log);
 }
 
 
-- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount execMode:(ACEPluginMethodExecuteMode)mode{
+
+
+
+
+
+- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options{
     if(!ACEJSCGlobalPlugins){
         [self.class initializeGlobalPlugins];
     }
@@ -110,43 +159,89 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(![self isPluginInstanceValid:pluginInstance]){
         return nil;
     }
-    SEL method = NSSelectorFromString([methodName stringByAppendingString:@":"]);
-    if(![pluginInstance respondsToSelector:method]){
+    
+    NSString *selector = [methodName stringByAppendingString:@":"];
+    SEL sel = NSSelectorFromString(selector);
+    if(![pluginInstance respondsToSelector:sel]){
         return nil;
     }
-    NSMutableArray *args = [self arrayFromArguments:arguments count:argCount];
+    id args = nil;
+    if (options & ACEPluginMethodExecuteWithOriginJSValue) {
+        args = arguments;
+    }
+    
+    if (!args) {
+        args = [self arrayFromArguments:arguments count:argCount];
+    }
+    
+
+    BOOL isAsync = [self selector:sel isAsynchronousMethodInClass:[pluginInstance class]];
+    
+    
+
+    //log trace
+    ACE_LOG_TRACE(ACLogVerbose(@"exec <%x> in webView:%@.%@ method:%@.%@ async:%@",args,self.eBrowserView.meBrwWnd.meBrwView.muexObjName,self.eBrowserView.muexObjName,pluginName,methodName,isAsync?@"YES":@"NO"))
+    
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    switch (mode) {
-        case ACEPluginMethodExecuteModeAsynchronous: {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [pluginInstance performSelector:method withObject:args];
-            });
-            return nil;
-        }
-        case ACEPluginMethodExecuteModeSynchronous: {
-            return [pluginInstance performSelector:method withObject:args];
-        }
+    if (isAsync) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
+            [pluginInstance ac_invoke:selector arguments:ACArgsPack(args)];
+
+        });
+        return nil;
+    }else{
+        ACE_LOG_TRACE(@onExit{ACLogVerbose(@"exec <%x> finish",args);})
+        return [pluginInstance ac_invoke:selector arguments:ACArgsPack(args)];
     }
 #pragma clang diagnostic pop
 }
+
+- (BOOL)selector:(SEL)sel isAsynchronousMethodInClass:(Class)cls{
+    NSParameterAssert(sel != nil);
+    NSParameterAssert(cls != nil);
+    
+    static NSMutableDictionary<NSString *,NSNumber *> *selCache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        selCache = [NSMutableDictionary dictionary];
+    });
+    NSString *identifier = [NSStringFromClass(cls) stringByAppendingString:NSStringFromSelector(sel)];
+    if ([selCache objectForKey:identifier]) {
+        return selCache[identifier].boolValue;
+    }
+    
+    Method method = class_getInstanceMethod(cls, sel);
+    NSParameterAssert(method != NULL);
+    
+    NSString *type = [NSString stringWithCString:method_getTypeEncoding(method) encoding:NSUTF8StringEncoding];
+    BOOL isAsync = YES;
+    if ([type hasPrefix:@"@"]) {
+        isAsync = NO;
+    }
+    [selCache setValue:@(isAsync) forKey:identifier];
+    return isAsync;
+}
+
+
 
 
 - (NSMutableArray *)arrayFromArguments:(JSValue *)arguments count:(NSInteger)argCount{
     NSMutableArray *array = [NSMutableArray array];
     for (int i = 0; i < argCount; i++) {
         JSValue *value = arguments[i];
-        if ([ACEJSCInvocation JSTypeOf:value] != ACEJSValueTypeFunction) {
+        if (value.ac_type != ACJSValueTypeFunction) {
             id obj = [value toObject];
             if (!obj || [obj isKindOfClass:[NSNull class]]) {
-                obj = [ACENil null];
+                obj = [ACNil null];
             }
             [array addObject:obj];
             continue;
         }
-        id ref = [[ACEJSFunctionRef alloc]initWithJSCHandler:self function:value];
+        id ref = [ACJSFunctionRef functionRefFromJSValue: value];
         if (!ref) {
-            ref = [ACENil null];
+            ref = [ACNil null];
         }
         [array addObject:ref];
     }
@@ -157,6 +252,53 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
 
 
+
+
+
+
+
+
+
+
+
+- (BOOL)isVersion4Plugin:(Class)cls{
+    static NSMutableDictionary *cacheDict = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cacheDict = [NSMutableDictionary dictionary];
+    });
+    NSString *clsName = NSStringFromClass(cls);
+    NSNumber *cache = cacheDict[clsName];
+    if (cache) {
+        return cache.boolValue;
+    }
+    unsigned count = 0;
+    BOOL isVersion4 = NO;
+    Method *classMethods = class_copyMethodList(cls, &count);
+    for (NSInteger i = 0;i < count;i++){
+        Method method = classMethods[i];
+        const char *methodName = sel_getName(method_getName(method));
+        if(strcmp(methodName, "initWithWebViewEngine:") == 0){
+            isVersion4 = YES;
+            break;
+        }
+    }
+    [cacheDict setValue:@(isVersion4) forKey:clsName];
+    return isVersion4;
+}
+
+- (id)newPluginInstanceForClass:(Class)instanceClass{
+    id instance;
+    if ([self isVersion4Plugin:instanceClass]) {
+        instance = [[instanceClass alloc] initWithWebViewEngine:self.engine];
+    }else{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+        instance = [[instanceClass alloc] initWithBrwView:self.engine];
+#pragma clang diagnostic pop
+    }
+    return instance;
+}
 
 - (id)getGlobalPluginInstanceByClassName:(NSString *)className{
     if(!ACEJSCGlobalPlugins[className]){
@@ -170,21 +312,13 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithBrwView:self.eBrowserView];
+    instance = [self newPluginInstanceForClass:instanceClass];
     if(!instance){
         return nil;
     }
     [ACEJSCGlobalPlugins setValue:instance forKey:className];
     return instance;
 }
-
-
-
-
-
-
-
-
 
 - (id)getNormalPluginInstanceByClassName:(NSString *)className{
 
@@ -196,13 +330,19 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     if(!instanceClass){
         return nil;
     }
-    instance = [[instanceClass alloc] initWithBrwView:self.eBrowserView];
+
+    instance = [self newPluginInstanceForClass:instanceClass];
+
+    
     if(!instance){
         return nil;
     }
     [self.pluginDict setValue:instance forKey:className];
     return instance;
 }
+
+
+
 
 - (void)loadDynamicPlugins:(NSString *)pluginName{
     static NSMutableArray *loadedPlugins;
@@ -227,12 +367,12 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     
     //载入res目录下的framework
     //测试用
-
+    
     dynamicBundle = [NSBundle bundleWithPath:[BUtility wgtResPath:[NSString stringWithFormat:@"res://%@",frameworkName]]];
     if(dynamicBundle && [dynamicBundle load]){
         NSLog(@"load dynamic framework in res for plugin:%@",pluginName);
         return;
-
+        
     }
     //载入dyFiles目录下的framework
     //本地打包用
@@ -245,12 +385,6 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
 }
 
-
-
-
-
-
-
 - (BOOL)isPluginInstanceValid:(id)pluginInstance{
     if(!pluginInstance){
         return NO;
@@ -261,18 +395,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     return YES;
 }
 
-- (instancetype)initWithEBrowserView:(EBrowserView *)eBrowserView{
-    if(!eBrowserView){
-        return nil;
-    }
-    
-    self = [super init];
-    if (self) {
-        _pluginDict = [NSMutableDictionary dictionary];
-        _eBrowserView = eBrowserView;
-    }
-    return self;
-}
+
 
 - (void)clean{
     for(__kindof EUExBase *plugin in self.pluginDict.allValues){
@@ -280,6 +403,7 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
     }
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
+    self.engine = nil;
 
 }
 
