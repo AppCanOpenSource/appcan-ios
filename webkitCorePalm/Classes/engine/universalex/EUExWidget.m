@@ -159,6 +159,7 @@
     
     __block NSNumber *startWidgetResult = @1;
     __block UEX_ERROR err = kUexNoError;
+    ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
     @onExit{
         [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidget" arguments:ACArgsPack(@0,@2,startWidgetResult)];
         [cb executeWithArguments:ACArgsPack(err)];
@@ -182,7 +183,7 @@
         inAnimiDuration = numberArg(info[@"animDuration"]);
         inAppkey = stringArg(info[@"appKey"]);
     }
-    ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
+    
     
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
     EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
@@ -720,14 +721,6 @@
         
         deviceToken = @"";
     }
-    //租户ID tenantId
-    NSString *tenantId = nil;
-    
-    if ([dict objectForKey:@"tenantId"]) {
-        
-        tenantId = [NSString stringWithFormat:@"%@", [dict objectForKey:@"tenantId"]];
-    }
-
     NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
     
     NSString *verifyAppStr = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
@@ -738,11 +731,6 @@
     
     NSString *masAppId = [NSString stringWithFormat:@"%@", appid];
     
-    if (tenantId && tenantId.length > 0) {
-        
-        masAppId = [NSString stringWithFormat:@"%@:%@",tenantId, appid];
-        
-    }
     [headerDict setObject:masAppId forKey:@"x-mas-app-id"];
     
     NSMutableDictionary *bodyDict = [NSMutableDictionary dictionaryWithCapacity:5];
@@ -761,28 +749,29 @@
     
     ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
     
+    __weak typeof (request) weakRequest = request;
+    
     [request setTimeOutSeconds:60];
     [request setCompletionBlock:^{
         
-        if (200 == request.responseStatusCode) {
+        if (200 == weakRequest.responseStatusCode) {
             
-            ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseString is %@",request.responseString);
+            ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseString is %@",weakRequest.responseString);
             
             
         } else {
             
-            ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
+            ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",weakRequest.responseStatusCode, [weakRequest error]);
             
         }
     }];
     [request setFailedBlock:^{
         
-        ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
+        ACENSLog(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[weakRequest error]);
         
     }];
     
     [request startAsynchronous];
-    [request release];
 }
 
 - (void)sendReportRead:(NSString *)pushDataStr{
@@ -1042,6 +1031,18 @@
 - (void)sendPushUserMsg:(id)userInfo{
     
     if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+        
+        NSString *softToken = [EUtility md5SoftToken];
+        NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+        NSString *appkey = [BUtility appKey];
+        
+        NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
+        NSString *varifyAppStr = [BUtility getVarifyAppMd5Code:appId AppKey:appkey time:time];
+        
+        NSDictionary *dict = (NSDictionary*)userInfo;
+        
+        NSString *urlStr = @"";
+        
         
         NSMutableDictionary *userDict = [NSMutableDictionary dictionaryWithCapacity:5];
         NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithCapacity:5];
