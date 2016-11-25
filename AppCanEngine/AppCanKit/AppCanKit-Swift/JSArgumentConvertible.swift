@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-public protocol JSArgummentConvertible {
-    static func jsa_fromJSArgument(_ argument: JSArgumment) -> Self?
+public protocol JSArgumentConvertible {
+    static func jsa_fromJSArgument(_ argument: JSArgument) -> Self?
 }
 
 //MARK: - String
-extension String: JSArgummentConvertible{
-    public static func jsa_fromJSArgument(_ argument: JSArgumment) -> String? {
+extension String: JSArgumentConvertible{
+    public static func jsa_fromJSArgument(_ argument: JSArgument) -> String? {
         if argument.isString || argument.isNumber{
             return argument._value.toString()
         }
@@ -24,8 +24,8 @@ extension String: JSArgummentConvertible{
 }
 
 //MARK: - NSNumber
-extension NSNumber: JSArgummentConvertible{
-    public static func jsa_fromJSArgument(_ argument: JSArgumment) -> Self? {
+extension NSNumber: JSArgumentConvertible{
+    public static func jsa_fromJSArgument(_ argument: JSArgument) -> Self? {
         if let number = argument.numberValue{
             return self.init(value: number.doubleValue)
         }
@@ -35,25 +35,25 @@ extension NSNumber: JSArgummentConvertible{
 
 
 //MARK: - Basic Numeric Type
-private protocol JSArgummentNumericConvertible: JSArgummentConvertible{}
+private protocol JSArgumentNumericConvertible: JSArgumentConvertible{}
 
-extension JSArgummentNumericConvertible{
-    public static func jsa_fromJSArgument(_ argument: JSArgumment) -> Self?{
+extension JSArgumentNumericConvertible{
+    public static func jsa_fromJSArgument(_ argument: JSArgument) -> Self?{
         return argument.numberValue as? Self
     }
 }
-extension Int: JSArgummentNumericConvertible{}
-extension UInt: JSArgummentNumericConvertible{}
-extension Int64: JSArgummentNumericConvertible{}
-extension UInt64: JSArgummentNumericConvertible{}
-extension Float: JSArgummentNumericConvertible{}
-extension CGFloat: JSArgummentNumericConvertible{}
-extension Double: JSArgummentNumericConvertible{}
+extension Int: JSArgumentNumericConvertible{}
+extension UInt: JSArgumentNumericConvertible{}
+extension Int64: JSArgumentNumericConvertible{}
+extension UInt64: JSArgumentNumericConvertible{}
+extension Float: JSArgumentNumericConvertible{}
+extension CGFloat: JSArgumentNumericConvertible{}
+extension Double: JSArgumentNumericConvertible{}
 
 
 //MARK: - Boolean
-extension Bool: JSArgummentConvertible{
-    public static func jsa_fromJSArgument(_ argument: JSArgumment) -> Bool? {
+extension Bool: JSArgumentConvertible{
+    public static func jsa_fromJSArgument(_ argument: JSArgument) -> Bool? {
         if let str = argument.stringValue {
             if str == "true" {
                 return true
@@ -70,8 +70,8 @@ extension Bool: JSArgummentConvertible{
 }
 
 //MARK: - Function
-extension JSFunctionRef: JSArgummentConvertible{
-    public static func jsa_fromJSArgument(_ argument: JSArgumment) -> JSFunctionRef? {
+extension JSFunctionRef: JSArgumentConvertible{
+    public static func jsa_fromJSArgument(_ argument: JSArgument) -> JSFunctionRef? {
         return JSFunctionRef(argument)
     }
 }

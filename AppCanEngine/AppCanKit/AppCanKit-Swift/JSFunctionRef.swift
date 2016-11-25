@@ -31,7 +31,7 @@ public final class JSFunctionRef{
         }
     }
     
-    init?(_ argument: JSArgumment){
+    init?(_ argument: JSArgument){
         guard argument.isFunction else{
             return nil
         }
