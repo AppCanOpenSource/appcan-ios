@@ -101,6 +101,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 
 - (void)initializeJSCHandler{
+    _JSContext = nil;
     JSContext *context = self.JSContext;
     if(!context){
         return;
