@@ -493,6 +493,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     
+    [self.mScrollView setUserInteractionEnabled:YES];
+    
     if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_REFRESH) != 0) {
         if (scrollView.contentOffset.y <= refreshKeyValue && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) == 0)) {
             mFlag |= F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING;
@@ -931,6 +933,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
     if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_REFRESH) != 0 && mTopBounceState != EBounceViewStatusLoading) {
         
+        [self.mScrollView setUserInteractionEnabled:NO];
         [self.mScrollView setContentOffset:CGPointMake(0, refreshKeyValue) animated:YES];
         
     }
