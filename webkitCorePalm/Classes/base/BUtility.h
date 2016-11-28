@@ -34,6 +34,7 @@
 #define F_WGTS_PATH			@"wgts://"
 #define F_RES_PATH			@"res://"
 #define F_BOX_PATH			@"box://"
+#define F_EXTERBOX_PATH		@"exterbox://"
 #define F_DATA_PATH			@"data:"
 #define F_WGTROOT_PATH		@"wgtroot://"
 

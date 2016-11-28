@@ -10,8 +10,7 @@
 
 @implementation ACELocalization
 
-
-+(NSString*)localizedString:(NSString *)key, ...{
++ (NSString *)localizedString:(NSString *)key, ... {
     
     NSString *value = @"";
     if(!key){
@@ -24,8 +23,44 @@
         value=arg;
     }
     va_end(argList);
-    return [[NSBundle mainBundle] localizedStringForKey:key value:value table:@"AppCanEngineLocalization"];
+    
+    return [ACELocalization localizedStringForKey:key defaultValue:value];
 }
 
++ (NSString *)localizedStringForKey:(NSString *)key defaultValue:(NSString *)value {
+    
+    if(![ACELocalization languageBundle]) {
+        return value;
+    }
+    return [[ACELocalization languageBundle] localizedStringForKey:key value:value table:@"AppCanEngineLocalization"];
+    
+    
+}
+
++ (BOOL)isUseSystemLanguage {
+    
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    if (!userLanguag || userLanguag == nil || userLanguag.length == 0) {
+        return YES;
+    }
+    return NO;
+    
+}
+
++ (NSString *)getAppCanUserLanguage {
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    NSString * userLanguag = [ud valueForKey:@"AppCanUserLanguage"];
+    return userLanguag;
+}
+
++ (NSBundle *)languageBundle {
+    if ([ACELocalization isUseSystemLanguage]) {
+        return [NSBundle mainBundle];
+    } else {
+        NSString * userLanguage = [ACELocalization getAppCanUserLanguage];
+        return [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:userLanguage ofType:@"lproj"]];
+    }
+}
 
 @end

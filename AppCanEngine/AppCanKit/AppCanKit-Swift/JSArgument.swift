@@ -80,7 +80,7 @@ fileprivate final class JSONBox{
 
 
 
-public struct JSArgumment{
+public struct JSArgument{
     public let _value: JSValue
     fileprivate let _json: JSONBox
     public init(_ jsValue: JSValue) {
@@ -90,7 +90,7 @@ public struct JSArgumment{
 }
 
 
-extension JSArgumment{
+extension JSArgument{
     public var isNull: Bool{
         get{ return _value.isNull}
     }
@@ -150,52 +150,52 @@ struct JSValueHelper{
 
 
 // MARK: Subscript
-public enum JSArgummentKey{
+public enum JSArgumentKey{
     case index(Int)
     case key(String)
 }
 
-public protocol JSArgummentSubscriptType {
-    var jsa_argumentKey: JSArgummentKey { get }
+public protocol JSArgumentSubscriptType {
+    var jsa_argumentKey: JSArgumentKey { get }
 }
 
-extension Int: JSArgummentSubscriptType{
-    public var jsa_argumentKey: JSArgummentKey{
-        get{ return JSArgummentKey.index(self) }
+extension Int: JSArgumentSubscriptType{
+    public var jsa_argumentKey: JSArgumentKey{
+        get{ return JSArgumentKey.index(self) }
     }
 }
 
-extension String: JSArgummentSubscriptType{
-    public var jsa_argumentKey: JSArgummentKey{
-        get{ return JSArgummentKey.key(self) }
+extension String: JSArgumentSubscriptType{
+    public var jsa_argumentKey: JSArgumentKey{
+        get{ return JSArgumentKey.key(self) }
     }
 }
 
-extension JSArgumment{
-    private subscript (index index: Int) -> JSArgumment{
+extension JSArgument{
+    private subscript (index index: Int) -> JSArgument{
         get{
             if
                 isString,
                 let array = _json.array,
                 let js = JSValue(object: array, in: _value.context){
-                return JSArgumment(js.objectAtIndexedSubscript(index))
+                return JSArgument(js.objectAtIndexedSubscript(index))
             }
-            return JSArgumment(_value.objectAtIndexedSubscript(index))
+            return JSArgument(_value.objectAtIndexedSubscript(index))
         }
     }
-    private subscript (key key: String) -> JSArgumment{
+    private subscript (key key: String) -> JSArgument{
         get{
             if
                 isString,
                 let object = _json.object,
                 let js = JSValue(object: object, in: _value.context){
-                return JSArgumment(js.objectForKeyedSubscript(key))
+                return JSArgument(js.objectForKeyedSubscript(key))
             }
             
-            return JSArgumment(_value.objectForKeyedSubscript(key))
+            return JSArgument(_value.objectForKeyedSubscript(key))
         }
     }
-    private subscript (sub sub: JSArgummentSubscriptType) -> JSArgumment{
+    private subscript (sub sub: JSArgumentSubscriptType) -> JSArgument{
         get{
             switch sub.jsa_argumentKey{
             case .index(let idx): return self[index: idx]
@@ -203,12 +203,12 @@ extension JSArgumment{
             }
         }
     }
-    public subscript (keypath: [JSArgummentSubscriptType]) -> JSArgumment{
+    public subscript (keypath: [JSArgumentSubscriptType]) -> JSArgument{
         get{
             return keypath.reduce(self){$0[sub: $1]}
         }
     }
-    public subscript (keypath: JSArgummentSubscriptType...) -> JSArgumment{
+    public subscript (keypath: JSArgumentSubscriptType...) -> JSArgument{
         get{
             return self[keypath]
         }
@@ -216,7 +216,7 @@ extension JSArgumment{
 }
 
 // MARK: Possible Inner Value
-extension JSArgumment{
+extension JSArgument{
     internal var stringValue: String?{
         get{
             return self.isString || self.isNumber ? self._value.toString() : nil
@@ -238,7 +238,7 @@ extension JSArgumment{
 }
 
 // MARK: Possible Object Type
-extension JSArgumment{
+extension JSArgument{
      internal var arrayLength: Int?{
         get{
             if isArray,let length = _value.forProperty("length"),length.isNumber{
@@ -266,10 +266,21 @@ extension JSArgumment{
 //MARK: - Operator ~
 prefix operator ~
 
-public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> T?{
+
+/// 尝试将一个JS参数解析转化为指定类型T, T必须遵循JSArgumentConvertible协议
+///
+/// - Parameter argument: 要转换的参数
+/// - Returns: 转换结果
+public prefix func ~<T: JSArgumentConvertible> (_ argument: JSArgument) -> T?{
     return T.jsa_fromJSArgument(argument)
 }
-public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> [T]?{
+
+
+/// 尝试将一个JS参数解析转化为指定类型T构成的数组, T必须遵循JSArgumentConvertible协议
+///
+/// - Parameter argument: 要转换的参数
+/// - Returns: 转换结果
+public prefix func ~<T: JSArgumentConvertible> (_ argument: JSArgument) -> [T]?{
     guard let count = argument.arrayLength else{
         return nil
     }
@@ -283,16 +294,22 @@ public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> [T]
     }
     return array
 }
-
-public prefix func ~<T: JSArgummentConvertible> (_ argument: JSArgumment) -> Set<T>?{
+/// 尝试将一个JS参数解析转化为指定类型T构成的集合, T必须遵循JSArgumentConvertible协议
+///
+/// - Parameter argument: 要转换的参数
+/// - Returns: 转换结果
+public prefix func ~<T: JSArgumentConvertible> (_ argument: JSArgument) -> Set<T>?{
     if let array: [T] = ~argument{
         return Set(array)
     }
     return nil
 }
 
-
-public prefix func ~(_ argument: JSArgumment) -> [Any]?{
+/// 尝试将一个JS参数解析转化为JSON数组
+///
+/// - Parameter argument: 要转换的参数
+/// - Returns: 转换结果
+public prefix func ~(_ argument: JSArgument) -> [Any]?{
     guard let count = argument.arrayLength else{
         return nil
     }
@@ -304,7 +321,12 @@ public prefix func ~(_ argument: JSArgumment) -> [Any]?{
     }
     return array
 }
-public prefix func ~<T: JSArgummentConvertible>(_ argument: JSArgumment) -> [String: T]?{
+
+/// 尝试将一个JS参数解析转化为key为字符串,value为指定类型T构成的JSON字典, T必须遵循JSArgumentConvertible协议
+///
+/// - Parameter argument: 要转换的参数
+/// - Returns: 转换结果
+public prefix func ~<T: JSArgumentConvertible>(_ argument: JSArgument) -> [String: T]?{
     guard let keys = argument.objectKeys else{
         return nil
     }
@@ -316,7 +338,12 @@ public prefix func ~<T: JSArgummentConvertible>(_ argument: JSArgumment) -> [Str
     }
     return dict
 }
-public prefix func ~(_ argument: JSArgumment) -> [String: Any]?{
+
+/// 尝试将一个JS参数解析转化为JSON字典, T必须遵循JSArgumentConvertible协议
+///
+/// - Parameter argument: 要转换的参数
+/// - Returns: 转换结果
+public prefix func ~(_ argument: JSArgument) -> [String: Any]?{
     guard let keys = argument.objectKeys else{
         return nil
     }
@@ -327,14 +354,42 @@ public prefix func ~(_ argument: JSArgumment) -> [String: Any]?{
     return dict
 }
 
+//MARK: - Operator <~
+
 infix operator <~
 
-public func <~<T: JSArgummentConvertible>(_ left: inout T?,_ right: JSArgumment){
+/// 尝试将一个JS参数解析转换为可选指定类型T?,并赋值. T必须遵循JSArgumentConvertible协议
+///
+/// - Parameters:
+///   - left: 要赋值的T?
+///   - right: 要解析的JS参数
+public func <~<T: JSArgumentConvertible>(_ left: inout T?,_ right: JSArgument){
     left = ~right
 }
 
+
+/// 尝试将一个JS参数解析转换为指定类型T!,并赋值. T必须遵循JSArgumentConvertible协议
+///
+/// - Parameters:
+///   - left: 要赋值的T!
+///   - right: 要解析的JS参数
+/// - Returns: 赋值成功返回true,否则返回false
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout T!,_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout T!,_ right: JSArgument) -> Bool{
+    if let obj: T = ~right{
+        left = obj
+        return true
+    }
+    return false
+}
+/// 尝试将一个JS参数解析转换为指定类型T,并赋值. T必须遵循JSArgumentConvertible协议
+///
+/// - Parameters:
+///   - left: 要赋值的T
+///   - right: 要解析的JS参数
+/// - Returns: 赋值成功返回true,否则返回false
+@discardableResult
+public func <~<T: JSArgumentConvertible>(_ left: inout T,_ right: JSArgument) -> Bool{
     if let obj: T = ~right{
         left = obj
         return true
@@ -342,21 +397,13 @@ public func <~<T: JSArgummentConvertible>(_ left: inout T!,_ right: JSArgumment)
     return false
 }
 
-@discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout T,_ right: JSArgumment) -> Bool{
-    if let obj: T = ~right{
-        left = obj
-        return true
-    }
-    return false
-}
 
-public func <~<T: JSArgummentConvertible>(_ left: inout [T]?,_ right: JSArgumment){
+public func <~<T: JSArgumentConvertible>(_ left: inout [T]?,_ right: JSArgument){
     left = ~right
 }
 
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout [T]!,_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout [T]!,_ right: JSArgument) -> Bool{
     if let obj: [T] = ~right{
         left = obj
         return true
@@ -365,7 +412,7 @@ public func <~<T: JSArgummentConvertible>(_ left: inout [T]!,_ right: JSArgummen
 }
 
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout [T],_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout [T],_ right: JSArgument) -> Bool{
     if let obj: [T] = ~right{
         left = obj
         return true
@@ -373,12 +420,12 @@ public func <~<T: JSArgummentConvertible>(_ left: inout [T],_ right: JSArgumment
     return false
 }
 
-public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>?,_ right: JSArgumment){
+public func <~<T: JSArgumentConvertible>(_ left: inout Set<T>?,_ right: JSArgument){
     left = ~right
 }
 
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>!,_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout Set<T>!,_ right: JSArgument) -> Bool{
     if let obj: Set<T> = ~right{
         left = obj
         return true
@@ -387,7 +434,7 @@ public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>!,_ right: JSArgum
 }
 
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>,_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout Set<T>,_ right: JSArgument) -> Bool{
     if let obj: Set<T> = ~right{
         left = obj
         return true
@@ -395,12 +442,12 @@ public func <~<T: JSArgummentConvertible>(_ left: inout Set<T>,_ right: JSArgumm
     return false
 }
 
-public func <~<T: JSArgummentConvertible>(_ left: inout [String: T]?,_ right: JSArgumment){
+public func <~<T: JSArgumentConvertible>(_ left: inout [String: T]?,_ right: JSArgument){
     left = ~right
 }
 
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout [String: T]!,_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout [String: T]!,_ right: JSArgument) -> Bool{
     if let obj: [String: T] = ~right{
         left = obj
         return true
@@ -409,7 +456,7 @@ public func <~<T: JSArgummentConvertible>(_ left: inout [String: T]!,_ right: JS
 }
 
 @discardableResult
-public func <~<T: JSArgummentConvertible>(_ left: inout [String: T],_ right: JSArgumment) -> Bool{
+public func <~<T: JSArgumentConvertible>(_ left: inout [String: T],_ right: JSArgument) -> Bool{
     if let obj: [String: T] = ~right{
         left = obj
         return true
