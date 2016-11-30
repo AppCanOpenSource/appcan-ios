@@ -24,8 +24,6 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowser.h"
 #import "BUtility.h"
-#import "BAnimation.h"
-//#import "AliPayInfo.h"
 #import "AppCenter.h"
 #import "WWidget.h"
 #import "ACEWebViewController.h"
@@ -36,7 +34,7 @@
 #import "RESideMenu.h"
 #import "ACEPOPAnimation.h"
 #import "EUtility.h"
-
+#import "ACEAnimation.h"
 
 
 @implementation EBrowserWindowContainer
@@ -157,36 +155,22 @@
 		} else {
 			[self bringSubviewToFront:eSuperBrwWnd];
 		}
-        if([ACEPOPAnimation isPopAnimation:eSuperBrwWnd.mOpenAnimiId]){
-            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eSuperBrwWnd.popAnimationInfo];
-            config.duration=eSuperBrwWnd.mOpenAnimiDuration;
+        
+#warning Animation
+        [ACEAnimations addOpeningAnimationWithID:eSuperBrwWnd.openAnimationID
+                                        fromView:self
+                                          toView:eSuperBrwWnd
+                                        duration:eSuperBrwWnd.openAnimationDuration
+                                   configuration:eSuperBrwWnd.openAnimationConfig
+                               completionHandler:nil];
 
-
-
-            [ACEPOPAnimation doAnimationInView:eSuperBrwWnd
-                                          type:(ACEPOPAnimateType)(eSuperBrwWnd.mOpenAnimiId)
-                                 configuration:config
-                                          flag:ACEPOPAnimateWhenWindowOpening
-                                    completion:^{
-                                        eSuperBrwWnd.usingPopAnimation=YES;
-                                    }];
-        }else if ([BAnimation isMoveIn:eSuperBrwWnd.mOpenAnimiId]) {
-            [BAnimation doMoveInAnimition:eSuperBrwWnd animiId:eSuperBrwWnd.mOpenAnimiId animiTime:eSuperBrwWnd.mOpenAnimiDuration];
-        } else {
-            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWnd.mOpenAnimiId AnimiTime:eSuperBrwWnd.mOpenAnimiDuration];
-        }
-		if (eCurBrwWnd) {
-			[eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-		}
+        [eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
 		[eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
 
-
-		if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
+		if (eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) {
 			eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
 			eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
 		}
-
-
 	}
     [EBrowserWindow postWindowSequenceChange];
 	[eSuperBrwWnd notifyLoadPageFinishOfBrwView:eInBrwView];

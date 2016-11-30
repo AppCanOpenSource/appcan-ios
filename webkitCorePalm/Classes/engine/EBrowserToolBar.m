@@ -29,7 +29,6 @@
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowserView.h"
-#import "BAnimation.h"
 #import "EBrowserController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -184,8 +183,9 @@
         }else {
             eView.meBrwCtrler.mFlag = 1;
         }
+#warning Animation
         
-        [BAnimation SwapAnimationWithView:eView.meBrwWnd.superview AnimiId:8 AnimiTime:2.0];
+        //[BAnimation SwapAnimationWithView:eView.meBrwWnd.superview AnimiId:8 AnimiTime:2.0];
         
         [self setHidden:YES];
 

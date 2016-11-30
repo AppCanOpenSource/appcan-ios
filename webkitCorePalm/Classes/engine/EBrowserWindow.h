@@ -17,7 +17,7 @@
  */
 
 #import <UIKit/UIKit.h>
-
+#import "ACEAnimation.h"
 
 
 @class EBrowser;
@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
     ACEWebWindowTypePresent, //present
 };
 
+
 @interface EBrowserWindow : UIView 
 @property (nonatomic,weak) EBrowserController *meBrwCtrler;
 @property (nonatomic,strong) EBrowserView *meTopSlibingBrwView;
@@ -52,8 +53,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 @property (nonatomic,strong) EBrowserHistory *meBrwHistory;
 @property (nonatomic,strong) NSString *mOAuthWndName;
 @property (nonatomic,strong) WWidget *mwWgt;
-@property (nonatomic,assign) int mOpenAnimiId;
-@property (nonatomic,assign) float mOpenAnimiDuration;
+
 @property (nonatomic,assign) int mFlag;
 @property (nonatomic,retain) NSMutableDictionary *mMuiltPopoverDict;
 @property (nonatomic,assign) ACEWebWindowType webWindowType;
@@ -62,9 +62,12 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 @property (nonatomic,assign) id webController;
 @property (nonatomic,assign) BOOL isSliding;
 @property (nonatomic,assign) BOOL enableSwipeClose;
-//
-@property (nonatomic,assign) BOOL usingPopAnimation;
-@property (nonatomic,strong) NSDictionary *popAnimationInfo;
+
+@property (nonatomic,assign)ACEAnimationID openAnimationID;
+@property (nonatomic,assign)NSTimeInterval openAnimationDuration;
+@property (nonatomic,strong)NSDictionary *openAnimationConfig;
+
+
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
@@ -88,3 +91,4 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 
 
 @end
+

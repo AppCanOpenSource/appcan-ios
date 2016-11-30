@@ -30,8 +30,6 @@
 #import "FileEncrypt.h"
 #import "WWidget.h"
 #import "EBrowserHistoryEntry.h"
-#import "JSON.h"
-#import "BAnimation.h"
 #import "BToastView.h"
 #import "EBrowserViewBounceView.h"
 #import <QuartzCore/CALayer.h>
@@ -60,6 +58,7 @@
 #import "ACEProgressDialog.h"
 #import "ACEBaseDefine.h"
 #import "ACEConfigXML.h"
+#import "ACEAnimation.h"
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -378,6 +377,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                   data:inData
                               dataType:inDataType.integerValue
                             windowType:ACEWebWindowTypePresent
+                           animationID:kACEAnimationNone
+                     animationDuration:kDefaultAnimationDuration
                              extraInfo:extraInfo];
 }
 
@@ -393,6 +394,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                 data:(NSString *)data
                             dataType:(UexWindowOpenDataType)dataType
                           windowType:(ACEWebWindowType)windowType
+                         animationID:(ACEAnimationID)animationID
+                   animationDuration:(NSTimeInterval)animationDuration
                            extraInfo:(NSDictionary *)extraInfo {
     
     EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
@@ -404,6 +407,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     
     [eBrwWndContainer removeFromWndDict:windowName];
+    eBrwWnd.openAnimationID = animationID;
+    eBrwWnd.openAnimationDuration = animationDuration;
     eBrwWnd.webWindowType = windowType;
     eBrwWnd.windowName = windowName;
     eBrwWnd.winContainer = eBrwWndContainer;
@@ -414,14 +419,13 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     eCurBrwWnd.meFrontWnd = eBrwWnd;
     if (extraInfo) {
         [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:eBrwWnd.meBrwView];
-        [eBrwWnd setPopAnimationInfo: dictionaryArg(extraInfo[@"animationInfo"])];
-        
+        [eBrwWnd setOpenAnimationConfig:dictionaryArg(extraInfo[@"animationInfo"])];
     }
     self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WINDOW_IN_OPENING;
     eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN;
     eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_OPENING;
     eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
-    eBrwWnd.mOpenAnimiId = 0;
+    
     [self helpWindow:eBrwWnd loadData:data withDataType:dataType openFlag:UexWindowOpenFlagNone];
 }
 
@@ -439,7 +443,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         inWindowName = stringArg(info[@"name"]);
         inDataType = numberArg(info[@"dataType"]);
         inData = stringArg(info[@"data"]);
-        inAniID = numberArg(info[@"animiID"]);
+        inAniID = numberArg(info[@"animID"]);
         inFlag = numberArg(info[@"flag"]);
         inAniDuration = numberArg(info[@"animDuration"]);
         extraInfo = dictionaryArg(info[@"extras"]);
@@ -467,6 +471,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                       data:inData
                                   dataType:inDataType.integerValue
                                 windowType:ACEWebWindowTypeNavigation
+                               animationID:inAniID.unsignedIntegerValue
+                         animationDuration:getAnimationDuration(inAniDuration)
                                  extraInfo:extraInfo];
         return;
     }
@@ -495,7 +501,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (extraInfo) {
         [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:eBrwWnd.meBrwView];
-        [eBrwWnd setPopAnimationInfo: dictionaryArg(extraInfo[@"animationInfo"])];
+        [eBrwWnd setOpenAnimationConfig: dictionaryArg(extraInfo[@"animationInfo"])];
     }
     
     self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WINDOW_IN_OPENING;
@@ -503,10 +509,10 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_OPENING;
     eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
     
-    eBrwWnd.mOpenAnimiId = [inAniID intValue];
-    eBrwWnd.mOpenAnimiDuration = getAnimationDuration(inAniDuration);
+    eBrwWnd.openAnimationID = [inAniID unsignedIntegerValue];
+    eBrwWnd.openAnimationDuration = getAnimationDuration(inAniDuration);
     if (eBrwWnd.hidden == YES) {
-        eBrwWnd.mOpenAnimiId = 0;
+        eBrwWnd.openAnimationID = kACEAnimationNone;
     }
     BOOL skipLoading = (inData.length == 0);
     if (!skipLoading) {
@@ -553,28 +559,21 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 #warning Animation 
 
-- (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd withAnimationId:(NSInteger)animationID animationDuration:(NSTimeInterval)animationDuration{
+- (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd withAnimationId:(ACEAnimationID)animationID animationDuration:(NSTimeInterval)animationDuration{
     EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
     EBrowserWindowContainer *eBrwWndContainer = eCurBrwWnd.winContainer;
     [eBrwWndContainer bringSubviewToFront:eBrwWnd];
     
-    if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
-        ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
-        config.duration=eBrwWnd.mOpenAnimiDuration;
-        [ACEPOPAnimation doAnimationInView:eBrwWnd
-                                      type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
-                             configuration:config
-                                      flag:ACEPOPAnimateWhenWindowOpening
-                                completion:^{
-                                    eBrwWnd.usingPopAnimation=YES;
-                                }];
-    }else if ([BAnimation isMoveIn:eBrwWnd.mOpenAnimiId]) {
-        [BAnimation doMoveInAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
-    }else if ([BAnimation isPush:eBrwWnd.mOpenAnimiId]) {
-        [BAnimation doPushAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
-    }else {
-        [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:eBrwWnd.mOpenAnimiId AnimiTime:eBrwWnd.mOpenAnimiDuration];
-    }
+    
+    
+    [ACEAnimations addOpeningAnimationWithID:eBrwWnd.openAnimationID
+                                    fromView:eCurBrwWnd
+                                      toView:eBrwWnd
+                                    duration:animationDuration
+                               configuration:eBrwWnd.openAnimationConfig
+                           completionHandler:nil];
+    
+
     
     [self.EBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
     [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
@@ -590,7 +589,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd{
-    [self helpBringWindowToFront:eBrwWnd withAnimationId:eBrwWnd.mOpenAnimiId animationDuration:eBrwWnd.mOpenAnimiDuration];
+    [self helpBringWindowToFront:eBrwWnd withAnimationId:eBrwWnd.openAnimationID animationDuration:eBrwWnd.openAnimationDuration];
     
 }
 
@@ -826,63 +825,24 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             NSInteger animiId = inAnimID.integerValue;
             NSTimeInterval aniDuration = getAnimationDuration(inAnimDuration);
             
-            if (animiId == -1) {
-                if(eBrwWnd.usingPopAnimation){
-                    animiId = [ACEPOPAnimation reverseAnimationId:eBrwWnd.mOpenAnimiId];
-                }else{
-                    animiId = [BAnimation ReverseAnimiId:eBrwWnd.mOpenAnimiId];
-                }
-                
+            if (animiId == -1){
+                animiId = [ACEAnimations closeAnimationForOpenAnimation:eBrwWnd.openAnimationID];
             }
-            
+    
             [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
             eBrwWnd.mFlag = 0;
             
-            if([ACEPOPAnimation isPopAnimation:animiId]){
-                NSDictionary *animateInfo=eBrwWnd.popAnimationInfo;
-                if([inArguments count]>=3 && [inArguments[2] JSONValue] && [[inArguments[2] JSONValue] isKindOfClass:[NSDictionary class]]){
-                    animateInfo=[inArguments[2] JSONValue];
-                }
-                ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:animateInfo];
-                config.duration=aniDuration;
-                [ACEPOPAnimation doAnimationInView:eBrwWnd
-                                              type:(ACEPOPAnimateType)animiId
-                                     configuration:config
-                                              flag:ACEPOPAnimateWhenWindowClosing
-                                        completion:^{
-                                            [eBrwWnd clean];
-                                            if (eBrwWnd.superview) {
-                                                [eBrwWnd removeFromSuperview];
-                                            }
-                                            [self closeWindowAfterAnimation:eBrwWnd];
-                                            
-                                        }];
-            }else if(animiId>=13 && animiId<=16) {
-                [self moveeBrwWnd:eBrwWnd andTime:(float)aniDuration andAnimiId:(int)animiId];
-            }else {
-                if ([BAnimation isPush:(int)animiId]) {
-                    [BAnimation doPushCloseAnimition:eBrwWnd animiId:(int)animiId animiTime:aniDuration completion:^(BOOL finished) {
-                        [eBrwWnd clean];
-                        if (eBrwWnd.superview) {
-                            [eBrwWnd removeFromSuperview];
-                        }
-                        [self closeWindowAfterAnimation:eBrwWnd];
-                        
-                    }];
-                }else {
-                    [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:(int)animiId AnimiTime:aniDuration];
-                    [eBrwWnd clean];
-                    if (eBrwWnd.superview) {
-                        [eBrwWnd removeFromSuperview];
-                    }
-                    [self closeWindowAfterAnimation:eBrwWnd];
-                    
-                }
-                
+            [ACEAnimations addClosingAnimationWithID:animiId fromView:eBrwWnd toView:eBrwWndContainer duration:aniDuration configuration:nil completionHandler:^(BOOL finished) {
+                [eBrwWnd clean];
+                [eBrwWnd removeFromSuperview];
+                [self closeWindowAfterAnimation:eBrwWnd];
                 NSArray * allLivingWindows = [eBrwWndContainer subviews];
                 EBrowserWindow * presentLayerWindows = [allLivingWindows lastObject];
                 [presentLayerWindows.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-            }
+            }];
+            
+            
+
             
             break;
         }
@@ -918,7 +878,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (brwWnd.meBottomSlibingBrwView) {
         [brwWnd.meBottomSlibingBrwView removeFromSuperview];
-        brwWnd.meBottomSlibingBrwView = NULL;
+        brwWnd.meBottomSlibingBrwView = nil;
     }
     if (brwWnd.mPopoverBrwViewDict) {
         NSArray *popViewArray = [brwWnd.mPopoverBrwViewDict allValues];
@@ -1471,7 +1431,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
             [retDict setObject:@(buttonIndex) forKey:@"num"];
             [retDict setValue:text forKey:@"value"];
-            [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict JSONFragment]];
+            [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict ac_JSONFragment]];
             [self.promptCB executeWithArguments:ACArgsPack(@(buttonIndex),text)];
             self.promptCB = nil;
             break;
@@ -2975,7 +2935,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (indexStr) {
         [dict setObject:indexStr forKey:APP_JSON_KEY_MULTIPOPSELECTEDNUM];
     }
-    NSString *info = [dict JSONFragment];
+    NSString *info = [dict ac_JSONFragment];
     [self callbackWithKeyPath:@"uexWindow.cbOpenMultiPopover" jsonData:info];
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
@@ -2993,7 +2953,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (indexStr) {
         [dict setObject:indexStr forKey:APP_JSON_KEY_MULTIPOPSELECTEDNUM];
     }
-    NSString *info = [dict JSONFragment];
+    NSString *info = [dict ac_JSONFragment];
     
     [self callbackWithKeyPath:@"uexWindow.cbOpenMultiPopover" jsonData:info];
 }

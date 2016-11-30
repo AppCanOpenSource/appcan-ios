@@ -27,14 +27,10 @@
 #import "EBrowserToolBar.h"
 #import "EBrowser.h"
 #import "WWidget.h"
-#import "BAnimation.h"
 #import "BUtility.h"
-#import "JSON.h"
-
 #import "ASIFormDataRequest.h"
 #import "WidgetOneDelegate.h"
 #import <Security/Security.h>
-#import "BAnimation.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "JSONKit.h"
@@ -212,7 +208,7 @@ static BOOL isAppLaunchedByPush = NO;
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
     [request setRequestMethod:@"POST"];
     [request setRequestHeaders:headerDict];
-    [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+    [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
     
     ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
     
@@ -893,7 +889,7 @@ static BOOL isAppLaunchedByPush = NO;
             ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
             [request setRequestMethod:@"POST"];
             [request setRequestHeaders:headerDict];
-            [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+            [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
             
             if (theApp.useCertificateControl) {
                 SecIdentityRef identity = NULL;
@@ -1048,7 +1044,7 @@ static BOOL isAppLaunchedByPush = NO;
         ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->headerDict = %@-->body = %@",headerDict,paramDict);
         [requestSetPushInfo setRequestMethod:@"POST"];
         [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:(NSMutableData *)[[paramDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setPostBody:[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
         [requestSetPushInfo setTimeOutSeconds:60];
         @weakify(requestSetPushInfo);
         [requestSetPushInfo setCompletionBlock:^{
@@ -1151,7 +1147,7 @@ static BOOL isAppLaunchedByPush = NO;
         
         [requestSetPushInfo setRequestMethod:@"POST"];
         [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:(NSMutableData *)[[paramDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setPostBody:[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
         
         [requestSetPushInfo setTimeOutSeconds:60];
         @weakify(requestSetPushInfo);

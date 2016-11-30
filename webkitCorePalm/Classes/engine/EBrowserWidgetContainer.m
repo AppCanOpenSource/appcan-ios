@@ -25,7 +25,6 @@
 #import	"EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "BUtility.h"
-#import "BAnimation.h"
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowser.h"

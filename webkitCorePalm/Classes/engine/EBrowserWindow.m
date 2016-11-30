@@ -57,8 +57,6 @@
 @synthesize meBrwHistory;
 @synthesize mOAuthWndName;
 @synthesize mwWgt;
-@synthesize mOpenAnimiId;
-@synthesize mOpenAnimiDuration;
 @synthesize mFlag;
 @synthesize mMuiltPopoverDict;
 
@@ -104,8 +102,6 @@
     meBrwHistory = nil;
     mOAuthWndName = nil;
     [self deregisterWindowSequenceChange];
-    self.popAnimationInfo = nil;
-
 }
 
 
@@ -130,8 +126,8 @@
 		if (mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
 			meBrwHistory = [[EBrowserHistory alloc]init];
 		}
-		mOpenAnimiId = 0;
-        self.windowName = inUExObjName;
+        _openAnimationID = kACEAnimationNone;
+        _windowName = inUExObjName;
     }
     self.isTopWindow = NO;
     self.enableSwipeClose = YES;
