@@ -2483,8 +2483,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     CGFloat x = inX ? inX.floatValue : 0;
     CGFloat y = inY ? inY.floatValue : 0;
-    CGFloat w = inW.floatValue > 0 ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width;
-    CGFloat h = inH.floatValue > 0 ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height;
+    CGFloat w = inW.floatValue > 0 ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width - x;
+    CGFloat h = inH.floatValue > 0 ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height - y;
 
     CGFloat fontSize = inFontSize.floatValue;
     CGFloat bottom = inBottom.floatValue;
