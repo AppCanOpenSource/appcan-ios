@@ -23,6 +23,8 @@
 /* Begin PBXBuildFile section */
 		4245EC961DED18C900C07B2D /* ACEBasicAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4245EC941DED18C900C07B2D /* ACEBasicAnimation.h */; };
 		4245EC971DED18C900C07B2D /* ACEBasicAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4245EC951DED18C900C07B2D /* ACEBasicAnimation.m */; };
+		4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4257D7221DF1148F004DE380 /* ACEWindowFilter.h */; };
+		4257D7251DF1148F004DE380 /* ACEWindowFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257D7231DF1148F004DE380 /* ACEWindowFilter.m */; };
 		4260408D1DEC297D00B49B5C /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 426040871DEC297D00B49B5C /* ACEPOPAnimation.h */; };
 		4260408E1DEC297D00B49B5C /* ACEPOPAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 426040881DEC297D00B49B5C /* ACEPOPAnimation.m */; };
 		426040911DEC297D00B49B5C /* BAnimationTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 4260408B1DEC297D00B49B5C /* BAnimationTransform.h */; };
@@ -436,6 +438,8 @@
 		4247F33C1D50918A00D316C1 /* ACEBaseDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseDefine.m; sourceTree = "<group>"; };
 		424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCInvocation.h; sourceTree = "<group>"; };
 		424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCInvocation.m; sourceTree = "<group>"; };
+		4257D7221DF1148F004DE380 /* ACEWindowFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEWindowFilter.h; sourceTree = "<group>"; };
+		4257D7231DF1148F004DE380 /* ACEWindowFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEWindowFilter.m; sourceTree = "<group>"; };
 		426040871DEC297D00B49B5C /* ACEPOPAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPOPAnimation.h; sourceTree = "<group>"; };
 		426040881DEC297D00B49B5C /* ACEPOPAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPOPAnimation.m; sourceTree = "<group>"; };
 		4260408B1DEC297D00B49B5C /* BAnimationTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimationTransform.h; sourceTree = "<group>"; };
@@ -1026,6 +1030,8 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				4257D7221DF1148F004DE380 /* ACEWindowFilter.h */,
+				4257D7231DF1148F004DE380 /* ACEWindowFilter.m */,
 				4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */,
 				4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */,
 				3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */,
@@ -1349,6 +1355,7 @@
 				42F787FF1D950B5D0094AA05 /* ASIDataDecompressor.h in Headers */,
 				426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */,
 				42F788001D950B5D0094AA05 /* Reachability.h in Headers */,
+				4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */,
 				42F788011D950B5D0094AA05 /* ACEPluginViewContainer.h in Headers */,
 				42F788021D950B5D0094AA05 /* SDImageCache.h in Headers */,
 				4260408D1DEC297D00B49B5C /* ACEPOPAnimation.h in Headers */,
@@ -1692,6 +1699,7 @@
 				42F787BA1D950B5D0094AA05 /* ACEProgressDialog.m in Sources */,
 				42F787BB1D950B5D0094AA05 /* CJSONSerializedData.m in Sources */,
 				42F787BC1D950B5D0094AA05 /* UIViewController+MMDrawerController.m in Sources */,
+				4257D7251DF1148F004DE380 /* ACEWindowFilter.m in Sources */,
 				42F787BD1D950B5D0094AA05 /* EUExWidget.m in Sources */,
 				42F787BF1D950B5D0094AA05 /* ZipArchive.mm in Sources */,
 				427890781DEEB57700B8476D /* ACEViewControllerAnimator.m in Sources */,

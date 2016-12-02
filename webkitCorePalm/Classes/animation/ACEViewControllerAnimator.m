@@ -77,6 +77,7 @@
     UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
     UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     UIView *containerView = transitionContext.containerView;
+    toView.frame = fromView.frame;
     [containerView addSubview:fromView];
     [containerView addSubview:toView];
     [ACEAnimations addOpeningAnimationWithID:self.animationID
@@ -98,8 +99,10 @@
     UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
     UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     UIView *containerView = transitionContext.containerView;
+    toView.frame = fromView.frame;
     [containerView addSubview:toView];
     [containerView addSubview:fromView];
+    
     [ACEAnimations addClosingAnimationWithID:self.animationID
                                     fromView:fromView
                                       toView:toView

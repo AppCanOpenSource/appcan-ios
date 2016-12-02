@@ -56,8 +56,12 @@
 
 #import "ACEProgressDialog.h"
 #import "ACEBaseDefine.h"
+
 #import "ACEConfigXML.h"
 #import "ACEAnimation.h"
+
+#import "ACEWindowFilter.h"
+
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -409,7 +413,6 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     eBrwWnd.openAnimationID = animationID;
     eBrwWnd.openAnimationDuration = animationDuration;
     eBrwWnd.webWindowType = windowType;
-    eBrwWnd.windowName = windowName;
     eBrwWnd.winContainer = eBrwWndContainer;
     [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:windowName];
     eBrwWnd.hidden = NO;
@@ -450,6 +453,15 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     UEX_PARAM_GUARD_NOT_NIL(inWindowName);
     UEX_PARAM_GUARD_NOT_NIL(inFlag);
+    
+    if ([ACEWindowFilter shouldBanWindowWithName:inWindowName]) {
+        ACLogDebug(@"forbid opening window '%@'",inWindowName);
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbError" arguments:ACArgsPack(@0,@10,inWindowName)];
+        return;
+    }
+    
+    
+    
     UexWindowOpenFlag flag = (UexWindowOpenFlag)[inFlag integerValue];
     if (self.EBrwView.hidden == YES) {
         return;
@@ -1684,7 +1696,6 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                                                Wgt:self.EBrwView.mwWgt
                                                         UExObjName:winName];
     eBrwWnd.webWindowType = ACEWebWindowTypeNavigation;
-    eBrwWnd.windowName = winName;
     eBrwWnd.winContainer = eBrwWndContainer;
     eBrwWnd.isSliding = YES;
     webController.browserWindow = eBrwWnd;
@@ -2346,6 +2357,14 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     
     UEX_PARAM_GUARD_NOT_NIL(inPopName);
+    NSString *windowName = self.EBrwView.meBrwWnd.windowName;
+    if ([ACEWindowFilter shouldBanPopoverWithName:inPopName inWindow:windowName]) {
+        ACLogDebug(@"forbid opening popover '%@' in window '%@'",inPopName,windowName);
+        NSString *cbMessage = [NSString stringWithFormat:@"%@:%@",windowName,inPopName];
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbError" arguments:ACArgsPack(@0,@10,cbMessage)];
+        return;
+    }
+    
     
     
     CGFloat x = inX ? inX.floatValue : 0;

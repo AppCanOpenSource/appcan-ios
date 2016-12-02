@@ -35,7 +35,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    return self.mainContentController.preferredInterfaceOrientationForPresentation;
+}
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
     return self.mainContentController.supportedInterfaceOrientations;

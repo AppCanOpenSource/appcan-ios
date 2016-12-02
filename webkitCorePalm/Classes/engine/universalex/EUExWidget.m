@@ -363,7 +363,7 @@ static BOOL isAppLaunchedByPush = NO;
         err = uexErrorMake(1,@"inAppId对应的widget未找到");
         return;
     }
-    int animiId = inAnimiId.intValue;
+
     NSTimeInterval animiDuration = 0.2f;
     if (inAnimiDuration && inAnimiDuration.floatValue > 0) {
         animiDuration = inAnimiDuration.floatValue / 1000;
@@ -374,6 +374,8 @@ static BOOL isAppLaunchedByPush = NO;
     }
     wgtObj.closeCallbackName = closeCallbackFuncName;
     wgtObj.openMessage = inOpenerInfo;
+    wgtObj.openAnimation = inAnimiId.unsignedIntegerValue;
+    wgtObj.openAnimationDuration = animiDuration;
 
     
     
@@ -383,7 +385,7 @@ static BOOL isAppLaunchedByPush = NO;
     startWidgetResult = ret ? @0 : @1;
     
     
-#warning TODO
+
     //theApp.drawerController.canRotate = YES;
     
     
@@ -497,7 +499,9 @@ static BOOL isAppLaunchedByPush = NO;
     
     
     
-    WWidget *wgtObj = appID ? [self getStartWgtByAppId:appID] : self.EBrwView.meBrwCtrler.widget;
+    WWidget *wgtObj = appID ? [[ACESubwidgetManager defaultManager] launchedWidgetWithID:appID] : self.EBrwView.meBrwCtrler.widget;
+    wgtObj.closeAnimation = inAnimiId ? inAnimiId.unsignedIntegerValue : [ACEAnimations closeAnimationForOpenAnimation:wgtObj.openAnimation];
+    wgtObj.closeAnimationDuration = 0.2;
     [[ACESubwidgetManager defaultManager]finishWidget:wgtObj withCallbackResult:inRet];
     
     

@@ -30,6 +30,8 @@
 #import "EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "WWidget.h"
+#import "ACEViewControllerAnimator.h"
+
 
 
 
@@ -68,9 +70,11 @@
     EBrowserController *browserController = [[EBrowserController alloc] initWithwidget:subwidget];
 
     ACEUINavigationController *meNav = [[ACEUINavigationController alloc] initWithEBrowserController:browserController];
-    meNav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     browserController.aceNaviController = meNav;
+    browserController.view.backgroundColor = [UIColor clearColor];//触发loadView
+    
     [browserController.meBrw start:nil];
+    
     [self.subwidgetControllers addObject:meNav];
     return YES;
 }
@@ -128,6 +132,8 @@
     if (callbackFunc) {
         [self.subwidgetControllers.lastObject.rootController.aboveWindow.meBrwView callbackWithFunctionKeyPath:callbackFunc arguments:ACArgsPack(result)];
     }
+
+    
     [widgetController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [EBrowserWindow postWindowSequenceChange];
     }];
@@ -150,6 +156,8 @@
          [EBrowserWindow postWindowSequenceChange];
     }];
 }
+
+
 
 
 @end

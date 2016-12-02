@@ -24,7 +24,7 @@
 #import "ACEViewControllerAnimator.h"
 #import "ACEWebViewController.h"
 #import "EBrowserWindow.h"
-@interface ACEUINavigationController ()<UINavigationControllerDelegate>
+@interface ACEUINavigationController ()<UINavigationControllerDelegate,UIViewControllerTransitioningDelegate>
 
 @end
 
@@ -46,11 +46,11 @@
 - (instancetype)initWithEBrowserController:(EBrowserController *)rootController{
     self = [super initWithRootViewController:rootController];
     if (self) {
-        
         [self setNavigationBarHidden:YES];
         _supportedOrientation = rootController.widget.orientation;
         _rootController = rootController;
         self.delegate = self;
+        self.transitioningDelegate = self;
         
     }
     return self;
@@ -67,7 +67,8 @@
             return controller.shouldHideStatusBarNumber.boolValue;
         }
     }
-    return [super preferredStatusBarStyle];
+    NSNumber *UIStatusBarHidden = [NSBundle mainBundle].infoDictionary[@"UIStatusBarHidden"];
+    return UIStatusBarHidden ? UIStatusBarHidden.boolValue : NO;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
@@ -82,6 +83,8 @@
     return [super preferredStatusBarStyle];
 }
 
+
+
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
     return ace_interfaceOrientationMaskFromACEInterfaceOrientation(self.supportedOrientation);
 }
@@ -93,6 +96,8 @@
     }
     return self.canAutoRotate;
 }
+
+
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
     if (self.presentOrientationNumber) {
@@ -111,6 +116,8 @@
     return UIInterfaceOrientationPortraitUpsideDown;
 
 }
+
+
 
 #pragma mark - UINavigationControllerDelegate
 - (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
@@ -142,6 +149,27 @@
     }
 }
 
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source{
+    if (![presented isKindOfClass:[ACEUINavigationController class]]) {
+        return nil;
+    }
+    ACEUINavigationController *navi = (ACEUINavigationController *)presented;
+    WWidget *widget = navi.rootController.widget;
+    return [ACEViewControllerAnimator openingAnimatorWithAnimationID:widget.openAnimation duration:widget.openAnimationDuration config:widget.openAnimationConfig];
+    
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed{
+    if (![dismissed isKindOfClass:[ACEUINavigationController class]]) {
+        return nil;
+    }
+    
+    ACEUINavigationController *navi = (ACEUINavigationController *)dismissed;
+    WWidget *widget = navi.rootController.widget;
+    return [ACEViewControllerAnimator closingAnimatorWithAnimationID:widget.closeAnimation duration:widget.closeAnimationDuration config:widget.closeAnimationConfig];
+}
 
                     
                     

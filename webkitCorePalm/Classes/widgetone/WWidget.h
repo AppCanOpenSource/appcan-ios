@@ -96,8 +96,10 @@
 @property (nonatomic,strong) NSString *closeCallbackName;
 @property (nonatomic,assign) ACEAnimationID openAnimation;
 @property (nonatomic,assign) NSTimeInterval openAnimationDuration;
+@property (nonatomic,strong) NSDictionary *openAnimationConfig;
 @property (nonatomic,assign) ACEAnimationID closeAnimation;
 @property (nonatomic,assign) NSTimeInterval closeAnimationDuration;
+@property (nonatomic,strong) NSDictionary *closeAnimationConfig;
 
 -(BOOL)getMySpaceStatus;
 -(BOOL)getMoreWgtsStatus;

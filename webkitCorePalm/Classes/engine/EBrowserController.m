@@ -154,17 +154,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 }
 
 
-- (void) doRotate:(NSNotification*)inNotification {
-	ACENSLog(@"browser controler doRotate %@", inNotification);
-	if (self.mStartView) {
-		UIDeviceOrientation deviceOrientation = (UIDeviceOrientation)[UIDevice currentDevice].orientation;
-		UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
-		if ([BUtility isValidateOrientation:(UIInterfaceOrientation)deviceOrientation] == NO) {
-			deviceOrientation = (UIDeviceOrientation)statusBarOrientation;
-		}
-		//[self.mStartView setFrame:CGRectMake(0, 0, 320, 460)];
-	}
-}
+
 
 #pragma mark - UPdateWgtHtml
 
