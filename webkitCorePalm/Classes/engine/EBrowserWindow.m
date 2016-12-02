@@ -199,6 +199,7 @@
 			meBrwHistory = [[EBrowserHistory alloc]init];
 		}
 		mOpenAnimiId = 0;
+        _windowName = inUExObjName;
     }
 	ACENSLog(@"EBrowserWindow alloc is %x", self);
     self.isTopWindow=NO;

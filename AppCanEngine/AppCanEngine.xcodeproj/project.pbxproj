@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		426040821DEC058900B49B5C /* ACEWindowFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 426040801DEC058900B49B5C /* ACEWindowFilter.h */; };
+		426040831DEC058900B49B5C /* ACEWindowFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 426040811DEC058900B49B5C /* ACEWindowFilter.m */; };
 		42F787451D950B5D0094AA05 /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 		42F787461D950B5D0094AA05 /* EBrowserHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F718B1B93D000D7600 /* EBrowserHistory.m */; };
 		42F787471D950B5D0094AA05 /* AppItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865D18B1B93D000D7600 /* AppItemView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -438,6 +440,8 @@
 		4247F33C1D50918A00D316C1 /* ACEBaseDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseDefine.m; sourceTree = "<group>"; };
 		424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCInvocation.h; sourceTree = "<group>"; };
 		424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCInvocation.m; sourceTree = "<group>"; };
+		426040801DEC058900B49B5C /* ACEWindowFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEWindowFilter.h; sourceTree = "<group>"; };
+		426040811DEC058900B49B5C /* ACEWindowFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEWindowFilter.m; sourceTree = "<group>"; };
 		4263D70F1CED5D0B000C6E3E /* ONOXMLElement+ACEConfigXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ONOXMLElement+ACEConfigXML.h"; sourceTree = "<group>"; };
 		4263D7101CED5D0C000C6E3E /* ONOXMLElement+ACEConfigXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ONOXMLElement+ACEConfigXML.m"; sourceTree = "<group>"; };
 		426DF1AA1CFD841600F4C53E /* ACEVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEVersion.h; sourceTree = "<group>"; };
@@ -1068,6 +1072,8 @@
 				464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */,
 				42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */,
 				42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */,
+				426040801DEC058900B49B5C /* ACEWindowFilter.h */,
+				426040811DEC058900B49B5C /* ACEWindowFilter.m */,
 				5AAA860A18B1B93D000D7600 /* universalex */,
 			);
 			path = engine;
@@ -1331,6 +1337,7 @@
 			files = (
 				42F787E51D950B5D0094AA05 /* DataAnalysisInfo.h in Headers */,
 				42F787E61D950B5D0094AA05 /* GCDAsyncUdpSocket.h in Headers */,
+				426040821DEC058900B49B5C /* ACEWindowFilter.h in Headers */,
 				42F787E71D950B5D0094AA05 /* EBrowserViewBounceView.h in Headers */,
 				42F787E81D950B5D0094AA05 /* ACEJSCHandler.h in Headers */,
 				42F787E91D950B5D0094AA05 /* EBrowserView.h in Headers */,
@@ -1605,6 +1612,7 @@
 				42F787541D950B5D0094AA05 /* UpdateParser.m in Sources */,
 				42F787551D950B5D0094AA05 /* ASIHTTPRequest.m in Sources */,
 				42F787561D950B5D0094AA05 /* WidgetOneDelegate.m in Sources */,
+				426040831DEC058900B49B5C /* ACEWindowFilter.m in Sources */,
 				42F787571D950B5D0094AA05 /* UIImageView+WebCache.m in Sources */,
 				42F787581D950B5D0094AA05 /* MySpaceView.m in Sources */,
 				42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */,
