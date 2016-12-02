@@ -700,16 +700,26 @@
 
 + (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/",theApp.useBindUserPushURL];
+    //4.0推送，角标清零逻辑
+    
+    if(!theApp.usePushControl) {//推送开关没有开启
+        return;
+    }
+    
+    if ([theApp.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
+        return;
+    }
+    
+    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",theApp.useBindUserPushURL];
     NSURL *requestUrl = [NSURL URLWithString:urlStr];
-    NSString *appid = theApp.mwWgtMgr.mainWidget.appId?theApp.mwWgtMgr.mainWidget.appId:@"";
-    NSString *appkey = [BUtility appKey] ?: @"";
-    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ?: @"";
+    NSString *appid = theApp.mwWgtMgr.mainWidget.appId ? theApp.mwWgtMgr.mainWidget.appId : @"";
+    NSString *appkey = [BUtility appKey] ? [BUtility appKey] : @"";
+    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ? [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] : @"";
     NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
-    NSString *verifyAppStr = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
+    NSString *appverify = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
     NSString *softToken = [EUtility md5SoftToken];
     
-    NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithObject:verifyAppStr forKey:@"appverify"];
+    NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithObject:appverify forKey:@"appverify"];
     [headerDict setObject:@"application/json" forKey:@"Content-Type"];
     NSString *masAppId = [NSString stringWithFormat:@"%@", appid];
     [headerDict setObject:masAppId forKey:@"x-mas-app-id"];
@@ -722,12 +732,13 @@
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
     [request setRequestMethod:@"POST"];
     [request setRequestHeaders:headerDict];
+    [request setTimeOutSeconds:60.0];
     [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
     
     ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
     
     @weakify(request);
-    [request setTimeOutSeconds:60];
+    
     [request setCompletionBlock:^{
         @strongify(request);
         if (200 == request.responseStatusCode) {
@@ -736,12 +747,15 @@
             ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
         }
     }];
+    
     [request setFailedBlock:^{
         @strongify(request);
         ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
         
     }];
+    
     [request startAsynchronous];
+    
 }
 
 - (void)sendReportRead:(NSString *)pushDataStr{
@@ -1181,5 +1195,7 @@
         [self.EBrwView.meBrwCtrler handleLoadingImageCloseEvent:ACELoadingImageCloseEventWebViewFinishLoading];
     }
 }
+
+
 
 @end
