@@ -23,8 +23,19 @@
 
 
 #import <Foundation/Foundation.h>
+#import "ACEAnimation.h"
+
+NS_ASSUME_NONNULL_BEGIN;
 
 
-@interface ACEViewControllerAnimator: NSObject
+@interface ACEViewControllerAnimator: NSObject<UIViewControllerAnimatedTransitioning>
+
+
+
++ (nullable instancetype)closingAnimatorWithAnimationID:(ACEAnimationID)animationID duration:(NSTimeInterval)duration config:(nullable NSDictionary*)config;
++ (nullable instancetype)openingAnimatorWithAnimationID:(ACEAnimationID)animationID duration:(NSTimeInterval)duration config:(nullable NSDictionary*)config;
+
+
 
 @end
+NS_ASSUME_NONNULL_END

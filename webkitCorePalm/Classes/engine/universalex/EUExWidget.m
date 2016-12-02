@@ -276,8 +276,7 @@ static BOOL isAppLaunchedByPush = NO;
 
 
 
-- (void)dealloc{
-}
+
 
 - (void)reloadWidgetByAppId:(NSMutableArray *)inArguments {
     ACArgsUnpack(NSString *appId) = inArguments;
@@ -334,7 +333,7 @@ static BOOL isAppLaunchedByPush = NO;
         [cb executeWithArguments:ACArgsPack(err)];
     };
     
-    if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
+    if (self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) {
         
         startWidgetResult = @2;
         err = uexErrorMake(1,@"widget正在加载");
@@ -354,6 +353,8 @@ static BOOL isAppLaunchedByPush = NO;
     }
     
     
+    
+    
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
 
 
@@ -371,14 +372,13 @@ static BOOL isAppLaunchedByPush = NO;
     if(inAppkey){
         wgtObj.appKey = inAppkey;
     }
+    wgtObj.closeCallbackName = closeCallbackFuncName;
+    wgtObj.openMessage = inOpenerInfo;
 
-    ACEWidgetInfo *widgetInfo = [ACEWidgetInfo new];
-    widgetInfo.startInfo = inOpenerInfo;
-    widgetInfo.closeCallbackFuncName = closeCallbackFuncName;
     
     
 
-    BOOL ret = [[ACESubwidgetManager defaultManager]launchWidget:wgtObj withInfo:widgetInfo];
+    BOOL ret = [[ACESubwidgetManager defaultManager] launchWidget:wgtObj];
     
     startWidgetResult = ret ? @0 : @1;
     
@@ -738,7 +738,7 @@ static BOOL isAppLaunchedByPush = NO;
 }
 - (NSString *)getOpenerInfo:(NSMutableArray *)inArguments {
     
-    NSString *info = self.EBrwView.meBrwCtrler.widgetInfo.startInfo;
+    NSString *info = self.EBrwView.meBrwCtrler.widget.openMessage;
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetOpenerInfo" arguments:ACArgsPack(@0,@0,info)];
     return info;
 }
@@ -794,7 +794,7 @@ static BOOL isAppLaunchedByPush = NO;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        WWidgetMgr *wgtMgrObj = [[WWidgetMgr alloc]init];
+        WWidgetMgr *wgtMgrObj = [WWidgetMgr sharedManager];
         NSMutableDictionary *updateDict = [wgtMgrObj wgtUpdate:currentWidget];
         
         NSInteger statusCode = [[updateDict objectForKey:@"statusCode"] integerValue];

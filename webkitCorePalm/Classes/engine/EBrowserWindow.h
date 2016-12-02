@@ -27,6 +27,7 @@
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
 @class EBrowserWindowContainer;
+@class ACEWebViewController;
 
 #define F_POPOVER_BRW_VIEW_DICT_SIZE	1
 #define F_EBRW_WND_FLAG_IN_CLOSING		0x1
@@ -59,7 +60,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 @property (nonatomic,assign) ACEWebWindowType webWindowType;
 @property (nonatomic,weak) EBrowserWindowContainer *winContainer;
 @property (nonatomic,strong) NSString *windowName;
-@property (nonatomic,assign) id webController;
+@property (nonatomic,weak) ACEWebViewController *webController;
 @property (nonatomic,assign) BOOL isSliding;
 @property (nonatomic,assign) BOOL enableSwipeClose;
 

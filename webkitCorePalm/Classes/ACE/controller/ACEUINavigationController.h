@@ -20,7 +20,7 @@
 #import "MMNavigationController.h"
 #import "ACEBaseDefine.h"
 @class EBrowserController;
-
+@class ACEWebViewController;
 
 
 @interface ACEUINavigationController : MMNavigationController
@@ -35,7 +35,7 @@
 @property (nonatomic,strong)EBrowserController *rootController;
 
 - (instancetype)initWithEBrowserController:(EBrowserController *)rootController;
-
+- (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated;
 
 @end
 

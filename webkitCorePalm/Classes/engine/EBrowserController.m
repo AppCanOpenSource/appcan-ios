@@ -591,9 +591,13 @@ static BOOL userCustomLoadingImageEnabled = NO;
 }
 
 - (EBrowserWindow *)rootWindow{
-    return self.brwWidgetContainer.meRootBrwWndContainer.meRootBrwWnd;
+    return self.rootWindowContainer.meRootBrwWnd;
 }
 - (EBrowserWindow *)aboveWindow{
     return self.brwWidgetContainer.aboveWindowContainer.aboveWindow;
 }
+- (EBrowserWindowContainer *)rootWindowContainer{
+    return self.brwWidgetContainer.meRootBrwWndContainer;
+}
+
 @end

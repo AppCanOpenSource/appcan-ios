@@ -33,7 +33,6 @@
 #import "BToastView.h"
 #import "EBrowserViewBounceView.h"
 #import <QuartzCore/CALayer.h>
-#import "WWidgetMgr.h"
 #import "BStatusBarWindow.h"
 
 #import "EBrowserViewAnimition.h"
@@ -557,7 +556,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 
-#warning Animation 
+
 
 - (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd withAnimationId:(ACEAnimationID)animationID animationDuration:(NSTimeInterval)animationDuration{
     EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
@@ -774,6 +773,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (!self.EBrwView.meBrwWnd) {
         return;
     }
+    if (self.EBrwView.mType == ACEEBrowserViewTypeSlibingTop || self.EBrwView.mType == ACEEBrowserViewTypeSlibingBottom) {
+        return;
+    }
     
     ACArgsUnpack(NSNumber *inAnimID,NSNumber *inAnimDuration) = inArguments;
     
@@ -784,34 +786,45 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     
     EBrowserWindow *eBrwWnd = self.EBrwView.meBrwWnd;
-    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
-        if (self.EBrwView.mType == ACEEBrowserViewTypePopover) {
-            [self.EBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
-            [self.EBrwView removeFromSuperview];
-        } else if (self.EBrwView.mType == ACEEBrowserViewTypeMain) {
-            ACEWebViewController *webController = eBrwWnd.webController;
-            [webController.navigationController popViewControllerAnimated:YES];
+    
+    if (self.EBrwView.mType == ACEEBrowserViewTypePopover) {
+        
+        if (self.EBrwView.isMuiltPopover) {
+            //多浮动窗口不做处理
+            return;
         }
+        //浮动窗口直接关闭
+        [eBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
+        [self.EBrwView removeFromSuperview];
+    }
+    
+    //以下是在主窗口中调用close的情况
+    
+    NSInteger animiId = inAnimID.integerValue;
+    NSTimeInterval aniDuration = getAnimationDuration(inAnimDuration);
 
-        return;
+
+    
+
+    if (animiId == -1){
+        animiId = [ACEAnimations closeAnimationForOpenAnimation:eBrwWnd.openAnimationID];
     }
-    if (eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        if (self.EBrwView.mType == ACEEBrowserViewTypePopover) {
-            [self.EBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
-            [self.EBrwView removeFromSuperview];
-        } else if (self.EBrwView.mType == ACEEBrowserViewTypeMain) {
-            ACEWebViewController *webController = eBrwWnd.webController;
-            [webController dismissViewControllerAnimated:YES completion:nil];
+    eBrwWnd.webController.closeAnimationID = animiId;
+    eBrwWnd.webController.closeAnimationDuration = aniDuration;
+    
+    switch (eBrwWnd.webWindowType) {
+        case ACEWebWindowTypeNavigation:{
+            [eBrwWnd.meBrwCtrler.aceNaviController closeChildViewController:eBrwWnd.webController animated:YES];
+            break;
         }
-        [EBrowserWindow postWindowSequenceChange];
-        return;
-    }
-    
-    
-    EBrowserWindowContainer *eBrwWndContainer = eBrwWnd.winContainer;
-    
-    switch (self.EBrwView.mType) {
-        case ACEEBrowserViewTypeMain: {
+        case ACEWebWindowTypePresent:{
+            [eBrwWnd.webController dismissViewControllerAnimated:YES completion:^{
+                [EBrowserWindow postWindowSequenceChange];
+            }];
+            break;
+        }
+        case ACEWebWindowTypeNormal:{
+            EBrowserWindowContainer *eBrwWndContainer = eBrwWnd.winContainer;
             if (self.EBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
                 return;
             }
@@ -821,14 +834,6 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_CLOSING;
             eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
             eBrwWnd.meFrontWnd.meBackWnd = eBrwWnd.meBackWnd;
-#warning Animation
-            NSInteger animiId = inAnimID.integerValue;
-            NSTimeInterval aniDuration = getAnimationDuration(inAnimDuration);
-            
-            if (animiId == -1){
-                animiId = [ACEAnimations closeAnimationForOpenAnimation:eBrwWnd.openAnimationID];
-            }
-    
             [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
             eBrwWnd.mFlag = 0;
             
@@ -839,27 +844,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                 NSArray * allLivingWindows = [eBrwWndContainer subviews];
                 EBrowserWindow * presentLayerWindows = [allLivingWindows lastObject];
                 [presentLayerWindows.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
+                [EBrowserWindow postWindowSequenceChange];
             }];
-            
-            
-
-            
             break;
-        }
-            
-        case ACEEBrowserViewTypePopover: {
-            if (self.EBrwView.isMuiltPopover) {
-                return;
-            }
-            [self.EBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
-            [self.EBrwView removeFromSuperview];
-            break;
-        }
-        case ACEEBrowserViewTypeSlibingTop:
-        case ACEEBrowserViewTypeSlibingBottom: {
-            return;
         }
     }
+
+    
+    
+    
+
     
 }
 
@@ -926,56 +920,10 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
         }
     }
-    [EBrowserWindow postWindowSequenceChange];
-
-}
-
-
-- (void)moveeBrwWnd:(EBrowserWindow*)temp andTime:(float)aniDuration andAnimiId:(int)animiId{
     
-    [UIView animateWithDuration:aniDuration
-                     animations:^{
-                         switch(animiId)
-                         {
-                             case 13:
-                             {
-                                 CGRect frame= temp.frame ;
-                                 frame.origin.x=frame.origin.x+[BUtility getScreenWidth];
-                                 [temp setFrame:frame];
-                             }
-                                 break;
-                             case 14:
-                             {
-                                 CGRect frame= temp.frame ;
-                                 frame.origin.x=frame.origin.x-[BUtility getScreenWidth];
-                                 [temp setFrame:frame];
-                             }
-                                 break;
-                             case 15:
-                             {
-                                 CGRect frame= temp.frame ;
-                                 frame.origin.y=frame.origin.y+[BUtility getScreenHeight];
-                                 [temp setFrame:frame];
-                             }
-                                 break;
-                             case 16:
-                             {
-                                 CGRect frame= temp.frame ;
-                                 frame.origin.y=frame.origin.y-[BUtility getScreenHeight];
-                                 [temp setFrame:frame];
-                             }
-                                 break;
-                                 
-                             default:
-                                 break;
-                                 
-                         }
-                     }
-                     completion:^(BOOL finished) {
-                         [temp removeFromSuperview];
-                         [EBrowserWindow postWindowSequenceChange];
-                     }];
+
 }
+
 
 
 
@@ -1255,7 +1203,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
         
-        ACEWebViewController *webController = (ACEWebViewController *)eCurBrwWnd.webController;
+        ACEWebViewController *webController = eCurBrwWnd.webController;
         
         if (webController == webController.navigationController.topViewController) {
             [self callbackWithKeyPath:F_CB_WINDOW_GET_STATE intData:0];

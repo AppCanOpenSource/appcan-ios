@@ -29,11 +29,7 @@
 @class EBrowserController;
 
 
-@interface ACEWidgetInfo : NSObject
-@property (nonatomic,strong)NSString *closeCallbackFuncName;
-@property (nonatomic,strong)NSString *startInfo;
 
-@end
 
 
 
@@ -42,10 +38,14 @@
 
 + (instancetype)defaultManager;
 
-- (BOOL)launchWidget:(WWidget *)subwidget withInfo:(ACEWidgetInfo *)info;
+
+
+- (BOOL)launchWidget:(WWidget *)subwidget;
+
 - (BOOL)finishWidget:(WWidget *)subwidget withCallbackResult:(NSString *)result;
 
-
+- (WWidget *)launchedWidgetWithID:(NSString *)appID;
+- (void)reloadWidgetByID:(NSString *)appID;
 
 - (void)notifySubwidgetControllerLoadingCompleted:(EBrowserController *)subwidgetController;
 

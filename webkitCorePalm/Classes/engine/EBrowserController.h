@@ -28,7 +28,7 @@
 @class ACEUINavigationController;
 @class EBrowserWindow;
 @class ACEWidgetInfo;
-
+@class EBrowserWindowContainer;
 #define F_EBRW_CTRL_FLAG_FORBID_ROTATE		0x1
 #define F_NEED_REPORT_APP_START             0x2
 
@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, readonly)EBrowserWidgetContainer *brwWidgetContainer;
 @property (nonatomic, readonly)EBrowserWindow *rootWindow;
 @property (nonatomic, readonly)EBrowserWindow *aboveWindow;
+@property (nonatomic, readonly)EBrowserWindowContainer *rootWindowContainer;
 @property (nonatomic, weak) ACEUINavigationController *aceNaviController;
 @property (nonatomic, assign)BOOL isAppCanRootViewController;
 @property (nonatomic, strong)WWidget *widget;

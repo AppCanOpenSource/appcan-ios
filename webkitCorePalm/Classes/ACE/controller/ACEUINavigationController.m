@@ -21,20 +21,25 @@
 #import "ACEBaseViewController.h"
 #import "EBrowserController.h"
 #import "WWidget.h"
-@interface ACEUINavigationController ()
+#import "ACEViewControllerAnimator.h"
+#import "ACEWebViewController.h"
+#import "EBrowserWindow.h"
+@interface ACEUINavigationController ()<UINavigationControllerDelegate>
 
 @end
 
 @implementation ACEUINavigationController
 
-- (EBrowserController *)rootController{
-    UIViewController *controller = self.childViewControllers.firstObject;
-    if ([controller isKindOfClass:[EBrowserController class]]) {
-        return (EBrowserController *)controller;
-    }
-    return nil;
-}
 
+- (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated{
+    NSArray *controllers = self.childViewControllers;
+    for (NSInteger i = controllers.count - 2; i >= 0 ; i--) {
+        if (controllers[i + 1] == childController) {
+            [self popToViewController:controllers[i] animated:animated];
+            return;
+        }
+    }
+}
 
 
 
@@ -44,7 +49,8 @@
         
         [self setNavigationBarHidden:YES];
         _supportedOrientation = rootController.widget.orientation;
-        
+        _rootController = rootController;
+        self.delegate = self;
         
     }
     return self;
@@ -106,4 +112,37 @@
 
 }
 
+#pragma mark - UINavigationControllerDelegate
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC{
+    
+    
+    switch (operation) {
+        case UINavigationControllerOperationPush:{
+            if (![toVC isKindOfClass:[ACEWebViewController class]]) {
+                return nil;
+            }
+
+            EBrowserWindow *window = [(ACEWebViewController *)toVC browserWindow];
+            return [ACEViewControllerAnimator openingAnimatorWithAnimationID:window.openAnimationID duration:window.openAnimationDuration config:window.openAnimationConfig];
+        }
+        case UINavigationControllerOperationPop:{
+            if (![fromVC isKindOfClass:[ACEWebViewController class]]) {
+                return nil;
+            }
+            
+            EBrowserWindow *window = [(ACEWebViewController *)fromVC browserWindow];
+            return [ACEViewControllerAnimator closingAnimatorWithAnimationID:window.openAnimationID duration:window.openAnimationDuration config:window.openAnimationConfig];
+            
+        }
+        default:
+            return nil;
+    }
+}
+
+
+                    
+                    
 @end

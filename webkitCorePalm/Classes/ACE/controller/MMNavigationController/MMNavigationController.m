@@ -117,7 +117,7 @@
             }
         }
     }
-    
+    [EBrowserWindow postWindowSequenceChange];
     return [super popToViewController:viewController animated:animated];
 }
 
@@ -173,6 +173,8 @@
 
 #pragma mark - Gesture Recognizer -
 
+
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if (self.viewControllers.count <= 1 || !self.canDragBack){
@@ -188,7 +190,7 @@
     //xrg-暂时这么写
     float sizeOfTouchView = touch.view.frame.size.width * touch.view.frame.size.height;
     float sizeOfScreen = [EUtility screenHeight] * [EUtility screenWidth];
-    if (![[[touch.view class] description] isEqualToString:@"UIWebBrowserView"] && (sizeOfTouchView < sizeOfScreen*0.6)) {
+    if (![[[touch.view class] description] isEqualToString:@"UIWebBrowserView"] && (sizeOfTouchView < sizeOfScreen * 0.6)) {
         return NO;
     }
     

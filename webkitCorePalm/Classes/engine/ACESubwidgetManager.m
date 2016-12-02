@@ -24,6 +24,7 @@
 
 #import "ACESubwidgetManager.h"
 #import "EBrowserController.h"
+#import "EBrowserWindowContainer.h"
 #import "ACEUINavigationController.h"
 #import "EBrowser.h"
 #import "EBrowserWindow.h"
@@ -31,9 +32,7 @@
 #import "WWidget.h"
 
 
-@implementation ACEWidgetInfo
 
-@end
 
 @interface ACESubwidgetManager()
 @property (nonatomic,strong)NSMutableArray<ACEUINavigationController *> *subwidgetControllers;
@@ -61,13 +60,13 @@
 }
 
 
-- (BOOL)launchWidget:(WWidget *)subwidget withInfo:(ACEWidgetInfo *)info{
+- (BOOL)launchWidget:(WWidget *)subwidget{
     if (self.isLaunchingSubwidget) {
         return NO;
     }
     self.isLaunchingSubwidget = YES;
     EBrowserController *browserController = [[EBrowserController alloc] initWithwidget:subwidget];
-    browserController.widgetInfo = info;
+
     ACEUINavigationController *meNav = [[ACEUINavigationController alloc] initWithEBrowserController:browserController];
     meNav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     browserController.aceNaviController = meNav;
@@ -80,6 +79,28 @@
     return self.subwidgetControllers.lastObject.rootController;
 }
 
+- (WWidget *)launchedWidgetWithID:(NSString *)appID{
+    for (ACEUINavigationController *navi in self.subwidgetControllers) {
+        if ([navi.rootController.widget.appId isEqual:appID]) {
+            return navi.rootController.widget;
+        }
+    }
+    return nil;
+}
+
+- (void)reloadWidgetByID:(NSString *)appID{
+    for (ACEUINavigationController *navi in self.subwidgetControllers) {
+        if ([navi.rootController.widget.appId isEqual:appID]) {
+            for (EBrowserWindow *window in navi.rootController.rootWindowContainer.mBrwWndDict.allValues) {
+                for (EBrowserView *popover in window.mPopoverBrwViewDict.allValues) {
+                    [popover reload];
+                }
+                [window.meBrwView reload];
+            }
+            return;
+        }
+    }
+}
 
 
 - (BOOL)finishWidget:(WWidget *)subwidget withCallbackResult:(NSString *)result{
@@ -103,7 +124,7 @@
     while (self.subwidgetControllers.count > idx) {
         [self.subwidgetControllers removeLastObject];
     }
-    NSString *callbackFunc = widgetController.rootController.widgetInfo.closeCallbackFuncName;
+    NSString *callbackFunc = widgetController.rootController.widget.closeCallbackName;
     if (callbackFunc) {
         [self.subwidgetControllers.lastObject.rootController.aboveWindow.meBrwView callbackWithFunctionKeyPath:callbackFunc arguments:ACArgsPack(result)];
     }

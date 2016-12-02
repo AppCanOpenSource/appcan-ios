@@ -104,7 +104,7 @@
 		42F7878A1D950B5D0094AA05 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887941A0B0984002776E4 /* CFilteringJSONSerializer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7878B1D950B5D0094AA05 /* BStatusBarWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */; };
 		42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863718B1B93D000D7600 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867D18B1B93D000D7600 /* WWidget.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867D18B1B93D000D7600 /* WWidget.m */; };
 		42F7878E1D950B5D0094AA05 /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; };
 		42F7878F1D950B5D0094AA05 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863918B1B93D000D7600 /* AsyncSocket.m */; };
 		42F787901D950B5D0094AA05 /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };

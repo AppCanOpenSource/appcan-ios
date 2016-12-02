@@ -472,16 +472,11 @@ NSString * webappShowAactivety;
 		[tmpWgtDict setObject:[NSNumber numberWithInt:F_WWIDGET_PLUGINWIDGET] forKey:CONFIG_TAG_WIDGETTYPE];
 		WWidget * tmpWgtObj = [self dictToWgt:tmpWgtDict];
 		
-		if ([BUtility isSimulator]==YES) {
-			//if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
-			//	tmpWgtObj.indexUrl =[NSString stringWithFormat:@"%@/%@",wgtPath,tmpWgtObj.indexUrl];
-			//}
-			//tmpWgtObj.iconPath = [NSString stringWithFormat:@"%@/%@",wgtPath,tmpWgtObj.iconPath];
-		}else{
-			if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
-				tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@",tmpWgtObj.indexUrl];
-			}
-			tmpWgtObj.iconPath = [NSString stringWithFormat:@"file://%@",tmpWgtObj.iconPath];
+		if (![BUtility isSimulator]) {
+            if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+                tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@",tmpWgtObj.indexUrl];
+            }
+            tmpWgtObj.iconPath = [NSString stringWithFormat:@"file://%@",tmpWgtObj.iconPath];
 		}
 		//处理widgetpath 以备给插件调用 写文件，共用当前widget文件夹
 		NSString *absPath = [BUtility getDocumentsPath:@""];

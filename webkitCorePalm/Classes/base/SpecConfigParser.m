@@ -19,7 +19,6 @@
 #import "SpecConfigParser.h"
 #import "BUtility.h"
 #import "WidgetSQL.h"
-#import "WWidgetMgr.h"
 #import "WWidget.h"
 
 #import "WidgetOneDelegate.h"

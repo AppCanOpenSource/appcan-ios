@@ -53,7 +53,7 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 }
 
 + (BOOL)isAnimationValid:(ACEAnimationID)animationID{
-    return [_animations.allKeys containsObject:@(animationID)];
+    return (animationID != kACEAnimationNone) && [_animations.allKeys containsObject:@(animationID)];
 }
 
 + (ACEAnimationID)closeAnimationForOpenAnimation:(ACEAnimationID)openAnimationID{

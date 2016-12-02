@@ -156,7 +156,6 @@
 			[self bringSubviewToFront:eSuperBrwWnd];
 		}
         
-#warning Animation
         [ACEAnimations addOpeningAnimationWithID:eSuperBrwWnd.openAnimationID
                                         fromView:self
                                           toView:eSuperBrwWnd
