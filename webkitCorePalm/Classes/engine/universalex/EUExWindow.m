@@ -3873,7 +3873,7 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     }
 }
 
-- (void)setInlineMediaPlaybackEnabled:(NSMutableArray *)inArguments{
+- (void)setInlineMediaPlaybackEnable:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSNumber *enabled) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(enabled);
     self.EBrwView.meBrowserView.allowsInlineMediaPlayback = enabled.boolValue;
