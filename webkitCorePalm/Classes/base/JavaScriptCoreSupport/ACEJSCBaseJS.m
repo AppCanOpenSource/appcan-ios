@@ -211,6 +211,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"share":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"getWindowName":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setPopoverVisibility":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setInlineMediaPlaybackEnabled":ACE_METHOD_EXEC_OPT_DEFAULT,
 #ifdef DEBUG
                                @"test":ACE_METHOD_EXEC_OPT_DEFAULT,
 #endif
