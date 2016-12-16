@@ -1500,9 +1500,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             UITextField * temp = [self.mbAlertView.mAlertView textFieldAtIndex:0];
             NSString *text = [temp text];
             NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
-            [retDict setObject:@(buttonIndex) forKey:@"num"];
+            [retDict setObject:@(buttonIndex) forKey:@"index"];
             [retDict setValue:text forKey:@"value"];
-            [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict JSONFragment]];
+            [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict ac_JSONFragment]];
             [self.promptCB executeWithArguments:ACArgsPack(@(buttonIndex),text)];
             self.promptCB = nil;
             break;
