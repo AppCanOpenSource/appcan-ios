@@ -131,25 +131,25 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
 
 #define _UEX_PARAM_GUARD_NOT_NIL1(param)                                                                            \
     if(!param){                                                                                                     \
-        ACLogDebug(@"%s error! parameter '%s' should not be null",__FUNCTION__,metamacro_stringify(param));         \
+        ACLogError(@"%s error! parameter '%s' should not be null",__FUNCTION__,metamacro_stringify(param));         \
         return;                                                                                                     \
     }
 
 #define _UEX_PARAM_GUARD_NOT_NIL2(param,returnValue)                                                                \
     if(!param){                                                                                                     \
-        ACLogDebug(@"%s error! parameter '%s' should not be null",__FUNCTION__,metamacro_stringify(param));         \
+        ACLogError(@"%s error! parameter '%s' should not be null",__FUNCTION__,metamacro_stringify(param));         \
         return returnValue;                                                                                         \
     }
 
 #define _UEX_PARAM_GUARD1(condition)                                                                                \
     if(!(condition)){                                                                                               \
-        ACLogDebug(@"%s error! parameters not satisfy: %s",__FUNCTION__,metamacro_stringify(condition));            \
+        ACLogError(@"%s error! parameters not satisfy: %s",__FUNCTION__,metamacro_stringify(condition));            \
         return;                                                                                                     \
     }
 
 #define _UEX_PARAM_GUARD2(condition,returnValue)                                                                    \
     if(!(condition)){                                                                                               \
-        ACLogDebug(@"%s error! parameters not satisfy: %s",__FUNCTION__,metamacro_stringify(condition));            \
+        ACLogError(@"%s error! parameters not satisfy: %s",__FUNCTION__,metamacro_stringify(condition));            \
         return returnValue;                                                                                         \
     }
 

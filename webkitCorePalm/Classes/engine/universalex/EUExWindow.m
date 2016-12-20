@@ -231,16 +231,31 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 }
 
 - (NSURL *)parseWebviewURL:(NSString *)urlStr{
-    NSString * absoluteURLString = nil;
-    if ([urlStr hasPrefix:F_WGTROOT_PATH]) {
-        absoluteURLString = [self.EBrwView.mwWgt.widgetPath stringByAppendingPathComponent:[urlStr substringFromIndex:[F_WGTROOT_PATH length]]];
-        if (![absoluteURLString hasPrefix:@"file://"]) {
-            absoluteURLString =[NSString stringWithFormat:@"file://%@", absoluteURLString];
-        }
-    }else{
-        absoluteURLString = [BUtility makeUrl:[self.EBrwView curUrl].absoluteString url:urlStr];
+
+    if ([urlStr hasPrefix:@"wgtroot://"]) {
+        urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
+        NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
+        NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
+        return [NSURL fileURLWithPath:urlStr relativeToURL:baseURL].standardizedURL;
     }
-    return [BUtility stringToUrl:absoluteURLString];
+
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if (!url) {
+        //escaping
+        urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        url = [NSURL URLWithString:urlStr];
+    }
+    if (url.scheme.length > 0) {
+        //absolutePath
+        return url;
+    }
+    //relativePath
+    if ([self.EBrwView.curUrl isFileURL]) {
+        return [NSURL fileURLWithPath:urlStr relativeToURL:self.EBrwView.curUrl].standardizedURL;
+    }else{
+        urlStr = [self.EBrwView.curUrl.absoluteString stringByAppendingPathComponent:urlStr];
+        return [NSURL URLWithString:urlStr];
+    }
 }
 
 
