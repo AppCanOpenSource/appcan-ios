@@ -250,12 +250,14 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         return url;
     }
     //relativePath
-    if ([self.EBrwView.curUrl isFileURL]) {
-        return [NSURL fileURLWithPath:urlStr relativeToURL:self.EBrwView.curUrl].standardizedURL;
-    }else{
-        urlStr = [self.EBrwView.curUrl.absoluteString stringByAppendingPathComponent:urlStr];
-        return [NSURL URLWithString:urlStr];
+
+    urlStr = [[self.EBrwView.curUrl URLByDeletingLastPathComponent].absoluteString stringByAppendingPathComponent:urlStr];
+    url = [NSURL URLWithString:urlStr];
+    if (url.isFileURL) {
+        url = url.standardizedURL;
     }
+    return url;
+    
 }
 
 
