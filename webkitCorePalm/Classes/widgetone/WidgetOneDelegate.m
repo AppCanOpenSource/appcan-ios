@@ -490,13 +490,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
-    {
-        ACLogDebug(@"appcan--widgetOneDelegate.m--didReceiveRemoteNotification--userInfo == %@",userInfo);
-        NSString *userinfoJson=[userInfo JSONFragment];
-        NSString *Json=[NSString stringWithFormat:@"uexWidget.onRemoteNotification(\'%@\');",userinfoJson];
-        [[[meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:Json];
-        
-    }
+
     
     NSString *userData = [userInfo objectForKey:@"userInfo"];
     NSString * pushString = [userInfo JSONFragment];

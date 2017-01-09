@@ -137,12 +137,12 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
 
 #define UEX_WINDOW_GUARD_USE_IN_WINDOW(returnValue)                             \
     if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypeMain) {     \
-        ACLogDebug(@"%@ must use in window",NSStringFromSelector(_cmd));        \
+        ACLogError(@"%@ must use in window",NSStringFromSelector(_cmd));        \
         return returnValue;                                                     \
     }
 #define UEX_WINDOW_GUARD_USE_IN_POPOVER(returnValue)                            \
     if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypePopover) {  \
-        ACLogDebug(@"%@ must use in popover",NSStringFromSelector(_cmd));       \
+        ACLogError(@"%@ must use in popover",NSStringFromSelector(_cmd));       \
         return returnValue;                                                     \
     }
 
@@ -151,7 +151,7 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
 #define UEX_WINDOW_GUARD_NOT_USE_IN_CONTROLLER(returnValue)                     \
     if (self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation ||   \
         self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent){       \
-        ACLogDebug(@"%@ cannot use in controller",NSStringFromSelector(_cmd));  \
+        ACLogError(@"%@ cannot use in controller",NSStringFromSelector(_cmd));  \
         return returnValue;                                                     \
     }
 
