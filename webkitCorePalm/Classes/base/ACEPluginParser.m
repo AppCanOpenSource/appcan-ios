@@ -72,10 +72,11 @@
 }
  */
 - (NSArray *)classNameArray{
-    if(!self.pluginDict){
-        return @[];
+    NSMutableArray *plugins = [@[@"uexWindow",@"uexWidgetOne",@"uexWidget"] mutableCopy];
+    if(self.pluginDict){
+        [plugins addObjectsFromArray:self.pluginDict.allKeys];
     }
-    return self.pluginDict.allKeys;
+    return plugins;
 }
 
 #pragma mark - Private

@@ -43,9 +43,7 @@
 @synthesize mAdDisplayTime;
 @synthesize mAdIntervalTime;
 @synthesize mAdType;
-@synthesize mSBWnd;
-@synthesize mSBWndTimer;
-@synthesize mNotifyArray;
+
 
 -(void)updateAdStatus:(NSNotification*)inNsNotfication{
 	ACENSLog(@"adStatus");
@@ -76,7 +74,7 @@
 			[self addSubview:meBrwToolBar];
 		}
 
-		mNotifyArray = [[NSMutableArray alloc] initWithCapacity:1];
+
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAdStatus:) name:@"adStatusUpdate" object:nil];
 	}
 	ACENSLog(@"EBrowserMainFrame alloc is %x", self);
@@ -112,18 +110,7 @@
 		[mAppCenter release];
 		mAppCenter = nil;
 	}
-	if (mSBWnd) {
-		[mSBWnd release];
-		mSBWnd = nil;
-	}
-	if (mSBWndTimer) {
-		[mSBWndTimer release];
-		mSBWndTimer = nil;
-	}
-	if (mNotifyArray) {
-		[mNotifyArray release];
-		mNotifyArray = nil;
-	}
+
 	[super dealloc];
 }
 
