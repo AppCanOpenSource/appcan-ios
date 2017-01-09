@@ -233,16 +233,33 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 }
 
 - (NSURL *)parseWebviewURL:(NSString *)urlStr{
-    NSString * absoluteURLString = nil;
-    if ([urlStr hasPrefix:F_WGTROOT_PATH]) {
-        absoluteURLString = [self.EBrwView.mwWgt.widgetPath stringByAppendingPathComponent:[urlStr substringFromIndex:[F_WGTROOT_PATH length]]];
-        if (![absoluteURLString hasPrefix:@"file://"]) {
-            absoluteURLString =[NSString stringWithFormat:@"file://%@", absoluteURLString];
-        }
-    }else{
-        absoluteURLString = [BUtility makeUrl:[self.EBrwView curUrl].absoluteString url:urlStr];
+
+    if ([urlStr hasPrefix:@"wgtroot://"]) {
+        urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
+        NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
+        NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
+        return [NSURL fileURLWithPath:urlStr relativeToURL:baseURL].standardizedURL;
     }
-    return [BUtility stringToUrl:absoluteURLString];
+
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if (!url) {
+        //escaping
+        urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        url = [NSURL URLWithString:urlStr];
+    }
+    if (url.scheme.length > 0) {
+        //absolutePath
+        return url;
+    }
+    //relativePath
+
+    urlStr = [[self.EBrwView.curUrl URLByDeletingLastPathComponent].absoluteString stringByAppendingPathComponent:urlStr];
+    url = [NSURL URLWithString:urlStr];
+    if (url.isFileURL) {
+        url = url.standardizedURL;
+    }
+    return url;
+    
 }
 
 
@@ -1389,7 +1406,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             UITextField * temp = [self.mbAlertView.mAlertView textFieldAtIndex:0];
             NSString *text = [temp text];
             NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
-            [retDict setObject:@(buttonIndex) forKey:@"num"];
+            [retDict setObject:@(buttonIndex) forKey:@"index"];
             [retDict setValue:text forKey:@"value"];
             [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict ac_JSONFragment]];
             [self.promptCB executeWithArguments:ACArgsPack(@(buttonIndex),text)];
@@ -2369,8 +2386,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     CGFloat x = inX ? inX.floatValue : 0;
     CGFloat y = inY ? inY.floatValue : 0;
-    CGFloat w = inW.floatValue > 0 ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width;
-    CGFloat h = inH.floatValue > 0 ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height;
+    CGFloat w = inW.floatValue > 0 ? inW.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.width - x;
+    CGFloat h = inH.floatValue > 0 ? inH.floatValue : self.EBrwView.meBrwCtrler.meBrwMainFrm.bounds.size.height - y;
 
     CGFloat fontSize = inFontSize.floatValue;
     CGFloat bottom = inBottom.floatValue;
@@ -3574,6 +3591,14 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
         }
     }
 }
+
+- (void)setInlineMediaPlaybackEnable:(NSMutableArray *)inArguments{
+    ACArgsUnpack(NSNumber *enabled) = inArguments;
+    UEX_PARAM_GUARD_NOT_NIL(enabled);
+    self.EBrwView.meBrowserView.allowsInlineMediaPlayback = enabled.boolValue;
+}
+
+
 #pragma mark - Log API
 
 - (void)log:(NSMutableArray *)inArguments{

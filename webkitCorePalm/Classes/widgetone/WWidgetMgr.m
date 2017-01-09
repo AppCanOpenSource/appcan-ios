@@ -810,33 +810,53 @@ NSString * webappShowAactivety;
 }
 
 #pragma mark -update 
--(BOOL)isNeetUpdateWgt{
-    if (theApp.useUpdateWgtHtmlControl) {
-        NSString *newConfigPath = nil;
-        NSString *appConfigPath = nil;
-        if ([BUtility getSDKVersion]<5.0) {
-            newConfigPath=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }else {
-            newConfigPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }
-        appConfigPath =[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        //new
-        SpecConfigParser *newWidgetXml = [[SpecConfigParser alloc] init];
-        NSString *mNewVer = [newWidgetXml initwithReqData:newConfigPath queryPara:CONFIG_TAG_VERSION type:YES];
-        if (!mNewVer) {
-            mNewVer = @"";
-        }
-        [newWidgetXml release];
-        //app
-        SpecConfigParser *appWidgetXml = [[SpecConfigParser alloc] init];
-        NSString *mAppVer = [appWidgetXml initwithReqData:appConfigPath queryPara:CONFIG_TAG_VERSION type:YES];
-        [appWidgetXml release];
-        NSComparisonResult result = [mNewVer compare:mAppVer];
-        if (result==NSOrderedAscending) {
-            return YES;
-        }
+- (BOOL)isNeetUpdateWgt {
+    
+    if (!theApp.useUpdateWgtHtmlControl) {
+        return NO;
     }
-    return NO;
+    NSString *newConfigPath = nil;
+    NSString *appConfigPath = nil;
+    if ([BUtility getSDKVersion] < 5.0) {
+        newConfigPath = [BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    } else {
+        newConfigPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    }
+    appConfigPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    //new
+    SpecConfigParser *newWidgetXml = [[SpecConfigParser alloc] init];
+    NSString *mNewVer = [newWidgetXml initwithReqData:newConfigPath queryPara:CONFIG_TAG_VERSION type:YES];
+    if (!mNewVer) {
+        mNewVer = @"";
+    }
+    [newWidgetXml release];
+    //app
+    SpecConfigParser *appWidgetXml = [[SpecConfigParser alloc] init];
+    NSString *mAppVer = [appWidgetXml initwithReqData:appConfigPath queryPara:CONFIG_TAG_VERSION type:YES];
+    [appWidgetXml release];
+    
+    return [self version:mAppVer isGreaterThan:mNewVer];
+        
 }
+
+- (BOOL)version:(NSString *)version1 isGreaterThan:(NSString *)version2 {
+    
+    NSArray *versions1 = [version1 componentsSeparatedByString:@"."];
+    NSArray *versions2 = [version2 componentsSeparatedByString:@"."];
+    
+    for (int i = 0; i < (versions1.count > versions2.count) ? versions1.count : versions2.count; i++) {
+        
+        if (versions1.count < i+1) return NO;
+        if (versions2.count < i+1) return YES;
+        
+        int v1 = [versions1[i] intValue];
+        int v2 = [versions2[i] intValue];
+        if (v1 != v2) return v1 > v2;
+    }
+    
+    return NO;
+    
+}
+
 
 @end
