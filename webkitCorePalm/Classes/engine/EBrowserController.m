@@ -30,7 +30,6 @@
 #import "WWidgetMgr.h"
 #import "WidgetSQL.h"
 #import "EBrowserToolBar.h"
-#import "BStatusBarWindow.h"
 #import "WidgetOneDelegate.h"
 #import "WWidgetUpdate.h"
 #import "NSString+SBJSON.h"

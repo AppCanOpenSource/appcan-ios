@@ -23,7 +23,7 @@
 @class EBrowserMainFrame;
 @class EBrowserWindowContainer;
 @class BUIAlertView;
-@class BStatusBarWindow;
+
 @class EBrowserViewAnimition;
 
 //#define F_EUEXWINDOW_TYPE_NORMAL			0

@@ -24,7 +24,7 @@
 @class EBrowserController;
 @class EBrowserView;
 @class AppCenter;
-@class BStatusBarWindow;
+
 @class BStatusBarView;
 
 #define F_EBRW_MAINFRM_AD_TYPE_TOP			0
@@ -45,8 +45,7 @@
 	int mAdDisplayTime;
 	int mAdIntervalTime;
 	int mAdType;
-	NSTimer *mSBWndTimer;
-	NSMutableArray *mNotifyArray;
+
 }
 
 @property (nonatomic, assign)EBrowserController *meBrwCtrler;
@@ -56,9 +55,7 @@
 @property (nonatomic, retain)AppCenter *mAppCenter;
 @property (nonatomic, assign)NSTimer *mAdDisplayTimer;
 @property (nonatomic, assign)NSTimer *mAdIntervalTimer;
-@property (nonatomic, strong)BStatusBarWindow *mSBWnd;
-@property (nonatomic, assign)NSTimer *mSBWndTimer;
-@property (nonatomic, assign)NSMutableArray *mNotifyArray;
+
 
 @property int mAdDisplayTime;
 @property int mAdIntervalTime;

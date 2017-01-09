@@ -93,7 +93,6 @@
 		42F787881D950B5D0094AA05 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787891D950B5D0094AA05 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
 		42F7878A1D950B5D0094AA05 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2887941A0B0984002776E4 /* CFilteringJSONSerializer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F7878B1D950B5D0094AA05 /* BStatusBarWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */; };
 		42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863718B1B93D000D7600 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867D18B1B93D000D7600 /* WWidget.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7878E1D950B5D0094AA05 /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; };
@@ -266,7 +265,6 @@
 		42F7883A1D950B5D0094AA05 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864418B1B93D000D7600 /* crypt.h */; };
 		42F7883B1D950B5D0094AA05 /* CBrowserMainFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85EE18B1B93D000D7600 /* CBrowserMainFrame.h */; };
 		42F7883C1D950B5D0094AA05 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85A418B1B93D000D7600 /* JSON.h */; };
-		42F7883D1D950B5D0094AA05 /* BStatusBarWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */; };
 		42F7883E1D950B5D0094AA05 /* PullDownRefreshHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA866218B1B93D000D7600 /* PullDownRefreshHeaderView.h */; };
 		42F788401D950B5D0094AA05 /* EBrowserWidgetContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860418B1B93D000D7600 /* EBrowserWidgetContainer.h */; };
 		42F788411D950B5D0094AA05 /* SDWebImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C3D1B2A6D3500D5F279 /* SDWebImageDownloader.h */; };
@@ -485,8 +483,6 @@
 		5AAA859218B1B93D000D7600 /* BAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAnimation.m; sourceTree = "<group>"; };
 		5AAA859318B1B93D000D7600 /* BAnimationTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAnimationTransform.h; sourceTree = "<group>"; };
 		5AAA859418B1B93D000D7600 /* BAnimationTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BAnimationTransform.m; sourceTree = "<group>"; };
-		5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BStatusBarWindow.h; sourceTree = "<group>"; };
-		5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BStatusBarWindow.m; sourceTree = "<group>"; };
 		5AAA859918B1B93D000D7600 /* BToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BToastView.h; sourceTree = "<group>"; };
 		5AAA859A18B1B93D000D7600 /* BToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BToastView.m; sourceTree = "<group>"; };
 		5AAA859B18B1B93D000D7600 /* BUIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUIAlertView.h; sourceTree = "<group>"; };
@@ -928,8 +924,6 @@
 				5AAA859418B1B93D000D7600 /* BAnimationTransform.m */,
 				428628F91C0708920078E783 /* ACEPOPAnimation.h */,
 				428628FA1C0708920078E783 /* ACEPOPAnimation.m */,
-				5AAA859718B1B93D000D7600 /* BStatusBarWindow.h */,
-				5AAA859818B1B93D000D7600 /* BStatusBarWindow.m */,
 				5AAA859918B1B93D000D7600 /* BToastView.h */,
 				5AAA859A18B1B93D000D7600 /* BToastView.m */,
 				5AAA859B18B1B93D000D7600 /* BUIAlertView.h */,
@@ -1425,7 +1419,6 @@
 				42F7883A1D950B5D0094AA05 /* crypt.h in Headers */,
 				42F7883B1D950B5D0094AA05 /* CBrowserMainFrame.h in Headers */,
 				42F7883C1D950B5D0094AA05 /* JSON.h in Headers */,
-				42F7883D1D950B5D0094AA05 /* BStatusBarWindow.h in Headers */,
 				42F7883E1D950B5D0094AA05 /* PullDownRefreshHeaderView.h in Headers */,
 				42F788401D950B5D0094AA05 /* EBrowserWidgetContainer.h in Headers */,
 				42F788411D950B5D0094AA05 /* SDWebImageDownloader.h in Headers */,
@@ -1666,7 +1659,6 @@
 				42F787891D950B5D0094AA05 /* ACEPluginViewContainer.m in Sources */,
 				42FAC5B71DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */,
 				42F7878A1D950B5D0094AA05 /* CFilteringJSONSerializer.m in Sources */,
-				42F7878B1D950B5D0094AA05 /* BStatusBarWindow.m in Sources */,
 				42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */,
 				42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */,
 				42F7878E1D950B5D0094AA05 /* ACEMultiPopoverScrollView.m in Sources */,
