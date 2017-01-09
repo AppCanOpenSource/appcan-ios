@@ -48,6 +48,9 @@ rm -rf ./AppCanKitSwift.framework
 cp -rf ../AppCanPlugin/AppCanPlugin/engine/AppCanKitSwift.framework ./build/
 lipo -create ./temp/AppCanKitSwift_Device ./temp/AppCanKitSwift_Simulator -output ./build/AppCanKitSwift.framework/AppCanKitSwift
 
+#复制引擎依赖的framework
+cp -rf ../AppCanPlugin/AppCanPlugin/uexFrameworks/Ono.framework ./build/
+cp -rf ../AppCanPlugin/AppCanPlugin/uexFrameworks/pop.framework ./build/
 
 
 #删除临时文件夹

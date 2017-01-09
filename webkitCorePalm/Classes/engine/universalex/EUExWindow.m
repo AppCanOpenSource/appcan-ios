@@ -231,16 +231,33 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 }
 
 - (NSURL *)parseWebviewURL:(NSString *)urlStr{
-    NSString * absoluteURLString = nil;
-    if ([urlStr hasPrefix:F_WGTROOT_PATH]) {
-        absoluteURLString = [self.EBrwView.mwWgt.widgetPath stringByAppendingPathComponent:[urlStr substringFromIndex:[F_WGTROOT_PATH length]]];
-        if (![absoluteURLString hasPrefix:@"file://"]) {
-            absoluteURLString =[NSString stringWithFormat:@"file://%@", absoluteURLString];
-        }
-    }else{
-        absoluteURLString = [BUtility makeUrl:[self.EBrwView curUrl].absoluteString url:urlStr];
+
+    if ([urlStr hasPrefix:@"wgtroot://"]) {
+        urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
+        NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
+        NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
+        return [NSURL fileURLWithPath:urlStr relativeToURL:baseURL].standardizedURL;
     }
-    return [BUtility stringToUrl:absoluteURLString];
+
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if (!url) {
+        //escaping
+        urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        url = [NSURL URLWithString:urlStr];
+    }
+    if (url.scheme.length > 0) {
+        //absolutePath
+        return url;
+    }
+    //relativePath
+
+    urlStr = [[self.EBrwView.curUrl URLByDeletingLastPathComponent].absoluteString stringByAppendingPathComponent:urlStr];
+    url = [NSURL URLWithString:urlStr];
+    if (url.isFileURL) {
+        url = url.standardizedURL;
+    }
+    return url;
+    
 }
 
 
@@ -1500,9 +1517,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             UITextField * temp = [self.mbAlertView.mAlertView textFieldAtIndex:0];
             NSString *text = [temp text];
             NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
-            [retDict setObject:@(buttonIndex) forKey:@"num"];
+            [retDict setObject:@(buttonIndex) forKey:@"index"];
             [retDict setValue:text forKey:@"value"];
-            [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict JSONFragment]];
+            [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict ac_JSONFragment]];
             [self.promptCB executeWithArguments:ACArgsPack(@(buttonIndex),text)];
             self.promptCB = nil;
             break;
