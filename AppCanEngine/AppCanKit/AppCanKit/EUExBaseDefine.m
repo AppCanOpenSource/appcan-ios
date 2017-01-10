@@ -47,7 +47,7 @@ APPCAN_EXPORT UEX_ERROR _uex_ErrorMake(NSInteger code,NSString * _Nullable descr
         [log appendFormat:@", errInfo: %@",info];
     }
     if (log) {
-        ACLogDebug(@"%@.",log);
+        ACLogError(@"%@.",log);
     }
     return @(code);
 }

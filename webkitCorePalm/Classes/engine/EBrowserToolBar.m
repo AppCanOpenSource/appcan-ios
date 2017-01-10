@@ -183,7 +183,7 @@
         }else {
             eView.meBrwCtrler.mFlag = 1;
         }
-#warning Animation
+
         
         //[BAnimation SwapAnimationWithView:eView.meBrwWnd.superview AnimiId:8 AnimiTime:2.0];
         

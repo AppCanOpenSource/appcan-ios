@@ -284,22 +284,15 @@ NSString * webappShowAactivety;
 	[widgetSql release];
 }
 
--(NSMutableDictionary*)wgtParameters:(NSString*)inFileName{
+- (NSMutableDictionary*)wgtParameters:(NSString*)inFileName{
 	//获得了当地的xml配置文件信息，得到字典
 	
 	NSMutableDictionary *xmlDict =nil;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:inFileName]) {
 		NSData *configData = [NSData dataWithContentsOfFile:inFileName];
 		AllConfigParser *configParser=[[AllConfigParser alloc]init];
-        
         BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
-        
         if (isEncrypt) {
-
-            
-            
-
-            
             NSURL *url = nil;
             if ([inFileName hasSuffix:@"file://"]) {
                 url = [BUtility stringToUrl:inFileName];;

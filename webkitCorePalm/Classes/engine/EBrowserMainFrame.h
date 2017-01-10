@@ -24,7 +24,7 @@
 @class EBrowserController;
 @class EBrowserView;
 @class AppCenter;
-@class BStatusBarWindow;
+
 @class BStatusBarView;
 
 #define F_EBRW_MAINFRM_AD_TYPE_TOP			0
@@ -34,15 +34,15 @@
 #define F_EBRW_MAINFRM_AD_HEIGHT_PHONE		50
 #define F_EBRW_MAINFRM_AD_HEIGHT_PAD		90
 
+
 @interface EBrowserMainFrame : UIView
 
 @property (nonatomic, weak)EBrowserController *meBrwCtrler;
 @property (nonatomic, strong)EBrowserWidgetContainer *meBrwWgtContainer;
 @property (nonatomic, strong)EBrowserToolBar *meBrwToolBar;
 @property (nonatomic, strong)AppCenter *mAppCenter;
-@property (nonatomic, strong)BStatusBarWindow *mSBWnd;
-@property (nonatomic, strong)NSTimer *mSBWndTimer;
-@property (nonatomic, strong)NSMutableArray *mNotifyArray;
+
+
 
 
 - (void)setVerticalFrame;

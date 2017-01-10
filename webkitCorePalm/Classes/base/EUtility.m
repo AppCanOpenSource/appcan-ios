@@ -25,7 +25,7 @@
 #import "EBrowserWindowContainer.h"
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserMainFrame.h"
-#import "BStatusBarWindow.h"
+
 #import <CommonCrypto/CommonDigest.h>
 #import <AppCanKit/ACEXTScope.h>
 #import "WidgetOneDelegate.h"
@@ -591,10 +591,6 @@ NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWin
         if ((meBrwView.meBrwCtrler.mFlag & F_EBRW_CTRL_FLAG_FORBID_ROTATE) == F_EBRW_CTRL_FLAG_FORBID_ROTATE) {
             return NO;
         }
-        if (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd && (meBrwView.meBrwCtrler.meBrwMainFrm.mSBWnd.hidden == NO)) {
-            return NO;
-        }
-        
         if (aboveWndContainer.mwWgt.orientation & ace_interfaceOrientationFromUIInterfaceOrientation(toInterfaceOrientation)) {
             return YES;
         }

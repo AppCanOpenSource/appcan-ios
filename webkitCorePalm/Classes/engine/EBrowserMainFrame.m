@@ -41,25 +41,23 @@
 
 
 
+
 - (instancetype)initWithFrame: (CGRect)frame BrwCtrler: (EBrowserController*)eInBrwCtrler {
     if (self = [super initWithFrame:frame]) {
 		self.autoresizesSubviews = YES;
 		self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		_meBrwCtrler = eInBrwCtrler;
-
-
         if ([BUtility getAppCanDevMode] || [self.meBrwCtrler.mwWgtMgr.mainWidget getMySpaceStatus]) {
             self.meBrwToolBar =[[EBrowserToolBar alloc] initWithFrame:CGRectMake(BOTTOM_LOCATION_VERTICAL_X,BOTTOM_LOCATION_VERTICAL_Y, BOTTOM_VIEW_WIDTH,BOTTOM_VIEW_HEIGHT) BrwCtrler:eInBrwCtrler];
             [self addSubview:self.meBrwToolBar];
         }
-        
-		_mNotifyArray = [NSMutableArray array];
 	}
 
 	return self;
 }
 
 - (void)dealloc {
+
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
@@ -69,10 +67,8 @@
     [self.meBrwToolBar removeFromSuperview];
     self.meBrwToolBar = nil;
     self.mAppCenter = nil;
-    self.mSBWnd = nil;
-	
-    [self.mSBWndTimer invalidate];
-    self.mSBWndTimer = nil;
+
+
 }
 
 

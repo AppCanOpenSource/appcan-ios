@@ -669,9 +669,7 @@
         return;
     }
     BOOL stop = NO;
-    NSArray *enginePlugins = @[@"uexWindow",@"uexWidget",@"uexWidgetOne",@"uexAppCenter"];
-    NSArray *allPLugins = [enginePlugins arrayByAddingObjectsFromArray:self.pluginObj.classNameArray];
-    
+    NSArray *allPLugins = self.pluginObj.classNameArray;
     for (NSInteger i = 0; i < [allPLugins count]; i++) {
         NSString *className = allPLugins[i];
         NSString *fullClassName = [NSString stringWithFormat:@"EUEx%@", [className substringFromIndex:3]];

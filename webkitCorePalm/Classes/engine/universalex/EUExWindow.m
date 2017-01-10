@@ -33,14 +33,12 @@
 #import "BToastView.h"
 #import "EBrowserViewBounceView.h"
 #import <QuartzCore/CALayer.h>
-#import "BStatusBarWindow.h"
 
 #import "EBrowserViewAnimition.h"
 #import "BAnimationTransform.h"
 #import "ACEWebViewController.h"
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.H"
-#import "JSONKit.h"
 #import "RESideMenu.h"
 #import "UIViewController+RESideMenu.h"
 #import "ACEUINavigationController.h"
@@ -61,6 +59,7 @@
 #import "ACEAnimation.h"
 
 #import "ACEWindowFilter.h"
+#import <UserNotifications/UserNotifications.h>
 
 
 #define kWindowConfirmViewTag (-9999)
@@ -138,12 +137,12 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
 
 #define UEX_WINDOW_GUARD_USE_IN_WINDOW(returnValue)                             \
     if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypeMain) {     \
-        ACLogDebug(@"%@ must use in window",NSStringFromSelector(_cmd));        \
+        ACLogError(@"%@ must use in window",NSStringFromSelector(_cmd));        \
         return returnValue;                                                     \
     }
 #define UEX_WINDOW_GUARD_USE_IN_POPOVER(returnValue)                            \
     if (!self.EBrwView || self.EBrwView.mType != ACEEBrowserViewTypePopover) {  \
-        ACLogDebug(@"%@ must use in popover",NSStringFromSelector(_cmd));       \
+        ACLogError(@"%@ must use in popover",NSStringFromSelector(_cmd));       \
         return returnValue;                                                     \
     }
 
@@ -152,11 +151,11 @@ typedef NS_ENUM(NSInteger,UexWindowOpenDataType){
 #define UEX_WINDOW_GUARD_NOT_USE_IN_CONTROLLER(returnValue)                     \
     if (self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation ||   \
         self.EBrwView.meBrwWnd.webWindowType == ACEWebWindowTypePresent){       \
-        ACLogDebug(@"%@ cannot use in controller",NSStringFromSelector(_cmd));  \
+        ACLogError(@"%@ cannot use in controller",NSStringFromSelector(_cmd));  \
         return returnValue;                                                     \
     }
 
-@interface EUExWindow()
+@interface EUExWindow()<AppCanApplicationEventObserver>
 @property (nonatomic,strong)UILongPressGestureRecognizer *longPressGestureDisturbRecognizer;
 @property (nonatomic,strong)NSMutableDictionary *bounceParamsDict;
 @property (nonatomic,readonly)EBrowserView *EBrwView;
@@ -175,6 +174,27 @@ static NSString *const kGlobalNofitication = @"uexWindow.globalNofitication";
 
 
 @implementation EUExWindow
+
+
+#pragma mark - Application Event
+
+static NSString *const kStatusBarNotificationSpecifier = @"uexWindow.statusBarNotificationSpecifier";
+
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSUInteger))completionHandler{
+    if (![notification.request.content.userInfo[kStatusBarNotificationSpecifier] boolValue]) {
+        return;
+    }
+    completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionSound);
+}
+
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
+    if (![response.notification.request.content.userInfo[kStatusBarNotificationSpecifier] boolValue]) {
+        return;
+    }
+    completionHandler();
+}
+
 
 #pragma mark - Life Cycle
 
@@ -3181,111 +3201,130 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 }
 #pragma mark - StatusBar Notification API
 
-- (void)closeStatusBarNotification {
-    NSString *text = nil;
-    UIInterfaceOrientation  statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.mNotifyArray.count > 0) {
-        text = [eBrwMainFrm.mNotifyArray objectAtIndex:0];
-    }
-    if (eBrwMainFrm.mSBWnd) {
-        if (text && (eBrwMainFrm.mSBWnd.mInitOrientation == statusBarOrientation)) {
-            eBrwMainFrm.mSBWnd.hidden = NO;
-            if (eBrwMainFrm.mSBWndTimer) {
-                [eBrwMainFrm.mSBWndTimer invalidate];
-                eBrwMainFrm.mSBWndTimer = nil;
-            }
-            [eBrwMainFrm.mSBWnd setNotifyText:text];
-            AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-            [eBrwMainFrm.mNotifyArray removeObjectAtIndex:0];
-            eBrwMainFrm.mSBWndTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(closeStatusBarNotification) userInfo:nil repeats:NO];
-            return;
-        }
-        eBrwMainFrm.mSBWnd.hidden = YES;
-        if (eBrwMainFrm.mSBWndTimer) {
-            [eBrwMainFrm.mSBWndTimer invalidate];
-            eBrwMainFrm.mSBWndTimer = nil;
-        }
-    }
-}
+
 
 - (void)statusBarNotification:(NSMutableArray *)inArguments {
+    if (ACSystemVersion() < 10) {
+        return;
+    }
+    
     ACArgsUnpack(NSString *title,id msg) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(title);
     UEX_PARAM_GUARD_NOT_NIL(msg);
     
-    if ([inArguments count]<2) {
-        return;
-    }
-    
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    CGRect sbFrame = [[UIApplication sharedApplication] statusBarFrame];
-    if ([[UIApplication sharedApplication] isStatusBarHidden]) {
-        UIApplication *app = [UIApplication sharedApplication];
-        switch (app.statusBarOrientation) {
-            case UIDeviceOrientationLandscapeLeft:
-                sbFrame = CGRectMake([UIScreen mainScreen].bounds.size.width - 20, 0, 20, [UIScreen mainScreen].bounds.size.height);
-                break;
-            case UIDeviceOrientationLandscapeRight:
-                sbFrame = CGRectMake(0, 0, 20, [UIScreen mainScreen].bounds.size.height);
-                break;
-            case UIDeviceOrientationPortrait:
-                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
-                break;
-            case UIDeviceOrientationPortraitUpsideDown:
-                sbFrame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 20, [UIScreen mainScreen].bounds.size.width, 20);
-                break;
-            default:
-                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
-                break;
-        }
-    }
-    if (!eBrwMainFrm.mSBWnd) {
-        eBrwMainFrm.mSBWnd = [[BStatusBarWindow alloc] initWithFrame:sbFrame andNotifyText:title];
-        AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-        [eBrwMainFrm.mSBWnd makeKeyAndVisible];
-    } else {
-        if (eBrwMainFrm.mSBWnd.mInitOrientation == statusBarOrientation) {
-            if (eBrwMainFrm.mSBWnd.hidden == YES) {
-                eBrwMainFrm.mSBWnd.hidden = NO;
-                [eBrwMainFrm.mSBWnd setNotifyText:title];
-                AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-            } else {
-                [eBrwMainFrm.mNotifyArray addObject:title];
-                return;
+    void (^sendNotification)() = ^{
+        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+        content.title = title;
+        content.body = msg;
+        content.userInfo = @{
+                             kStatusBarNotificationSpecifier: @(YES)
+                             };
+        content.sound = [UNNotificationSound defaultSound];
+        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:0.1 repeats:NO];
+        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[NSUUID UUID].UUIDString content:content trigger:trigger];
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+            if (error) {
+                ACLogError(@"uexWindow.statusBarNotification ~> add notification failed: %@",error.localizedDescription);
             }
-        } else {
-            return;
+        }];
+    };
+    
+    
+    
+    [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        switch (settings.authorizationStatus) {
+            case UNAuthorizationStatusDenied:
+                return;
+            case UNAuthorizationStatusAuthorized:
+                sendNotification();
+                break;
+            case UNAuthorizationStatusNotDetermined:{
+                [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionAlert | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                    if (granted) {
+                        sendNotification();
+                    }
+                    if (error) {
+                        ACLogError(@"uexWindow.statusBarNotification ~> request authorization failed: %@",error.localizedDescription);
+                    }
+                }];
+            }
+                break;
+           
         }
-        
-    }
-    if (eBrwMainFrm.mSBWndTimer) {
-        [eBrwMainFrm.mSBWndTimer invalidate];
-        eBrwMainFrm.mSBWndTimer = nil;
-    }
-    eBrwMainFrm.mSBWndTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(closeStatusBarNotification) userInfo:nil repeats:NO];
-    //添加本地通知在通知栏显示
-    UILocalNotification *notification=[[UILocalNotification alloc] init];
-    if (notification!=nil) {        NSDate *now = [NSDate date];
-        //从现在开始，1秒以后通知
-        notification.fireDate=[now dateByAddingTimeInterval:1.0];
-        //使用本地时区
-        notification.timeZone=[NSTimeZone defaultTimeZone];
-        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-        
-        NSDictionary *msgDict = dictionaryArg(msg);
-        if (msgDict) {
-            [dict addEntriesFromDictionary:msgDict];
-        }else{
-            [dict setValue:stringArg(msg) forKey:@"userInforStr"];
-        }
-        [notification setUserInfo:dict];
-        notification.alertBody = title;
-        notification.hasAction = YES;
-        //启动这个通知
-        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    }
+    }];
+    
+    
+
+    
+
+//    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
+//    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+//    CGRect sbFrame = [[UIApplication sharedApplication] statusBarFrame];
+//    if ([[UIApplication sharedApplication] isStatusBarHidden]) {
+//        UIApplication *app = [UIApplication sharedApplication];
+//        switch (app.statusBarOrientation) {
+//            case UIDeviceOrientationLandscapeLeft:
+//                sbFrame = CGRectMake([UIScreen mainScreen].bounds.size.width - 20, 0, 20, [UIScreen mainScreen].bounds.size.height);
+//                break;
+//            case UIDeviceOrientationLandscapeRight:
+//                sbFrame = CGRectMake(0, 0, 20, [UIScreen mainScreen].bounds.size.height);
+//                break;
+//            case UIDeviceOrientationPortrait:
+//                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
+//                break;
+//            case UIDeviceOrientationPortraitUpsideDown:
+//                sbFrame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 20, [UIScreen mainScreen].bounds.size.width, 20);
+//                break;
+//            default:
+//                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
+//                break;
+//        }
+//    }
+//    if (!eBrwMainFrm.mSBWnd) {
+//        eBrwMainFrm.mSBWnd = [[BStatusBarWindow alloc] initWithFrame:sbFrame andNotifyText:title];
+//        AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
+//        [eBrwMainFrm.mSBWnd makeKeyAndVisible];
+//    } else {
+//        if (eBrwMainFrm.mSBWnd.mInitOrientation == statusBarOrientation) {
+//            if (eBrwMainFrm.mSBWnd.hidden == YES) {
+//                eBrwMainFrm.mSBWnd.hidden = NO;
+//                [eBrwMainFrm.mSBWnd setNotifyText:title];
+//                AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
+//            } else {
+//                [eBrwMainFrm.mNotifyArray addObject:title];
+//                return;
+//            }
+//        } else {
+//            return;
+//        }
+//        
+//    }
+//    if (eBrwMainFrm.mSBWndTimer) {
+//        [eBrwMainFrm.mSBWndTimer invalidate];
+//        eBrwMainFrm.mSBWndTimer = nil;
+//    }
+//    eBrwMainFrm.mSBWndTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(closeStatusBarNotification) userInfo:nil repeats:NO];
+//    //添加本地通知在通知栏显示
+//    UILocalNotification *notification=[[UILocalNotification alloc] init];
+//    if (notification!=nil) {        NSDate *now = [NSDate date];
+//        //从现在开始，1秒以后通知
+//        notification.fireDate=[now dateByAddingTimeInterval:1.0];
+//        //使用本地时区
+//        notification.timeZone=[NSTimeZone defaultTimeZone];
+//        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
+//        
+//        NSDictionary *msgDict = dictionaryArg(msg);
+//        if (msgDict) {
+//            [dict addEntriesFromDictionary:msgDict];
+//        }else{
+//            [dict setValue:stringArg(msg) forKey:@"userInforStr"];
+//        }
+//        [notification setUserInfo:dict];
+//        notification.alertBody = title;
+//        notification.hasAction = YES;
+//        //启动这个通知
+//        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+//    }
     
 }
 

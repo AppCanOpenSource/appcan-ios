@@ -30,7 +30,6 @@
 #import "WWidgetMgr.h"
 #import "WidgetSQL.h"
 #import "EBrowserToolBar.h"
-#import "BStatusBarWindow.h"
 #import "WidgetOneDelegate.h"
 #import "WWidgetUpdate.h"
 #import "NSString+SBJSON.h"
@@ -575,10 +574,13 @@ static BOOL userCustomLoadingImageEnabled = NO;
     ACEInterfaceOrientation nowOrientation = ace_interfaceOrientationFromUIDeviceOrientation([[UIDevice currentDevice] orientation]);
     
 	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & nowOrientation)) {
+
         [[self aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation))];
+
 
 	}
 }
+
 
 - (EBrowserWindow *)rootWindow{
     return self.rootWindowContainer.meRootBrwWnd;
@@ -589,5 +591,6 @@ static BOOL userCustomLoadingImageEnabled = NO;
 - (EBrowserWindowContainer *)rootWindowContainer{
     return self.brwWidgetContainer.meRootBrwWndContainer;
 }
+
 
 @end
