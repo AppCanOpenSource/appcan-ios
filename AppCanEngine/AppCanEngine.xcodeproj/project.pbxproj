@@ -289,7 +289,6 @@
 		42F7887A1D950B5D0094AA05 /* ASINetworkQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863318B1B93D000D7600 /* ASINetworkQueue.h */; };
 		42F7887B1D950B5D0094AA05 /* WWidgetUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA868018B1B93D000D7600 /* WWidgetUpdate.h */; };
 		42F7887C1D950B5D0094AA05 /* SDWebImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C411B2A6D3500D5F279 /* SDWebImageManager.h */; };
-		42F7887D1D950B5D0094AA05 /* WidgetOnePseudoDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */; };
 		42F788B51D9519700094AA05 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F788B21D9519700094AA05 /* Ono.framework */; };
 		42F788CA1D951B7F0094AA05 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F788C81D951B7F0094AA05 /* pop.framework */; };
 		42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */; };
@@ -550,7 +549,6 @@
 		5AAA867F18B1B93D000D7600 /* WWidgetMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetMgr.m; sourceTree = "<group>"; };
 		5AAA868018B1B93D000D7600 /* WWidgetUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWidgetUpdate.h; sourceTree = "<group>"; };
 		5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetUpdate.m; sourceTree = "<group>"; };
-		5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOnePseudoDelegate.h; sourceTree = "<group>"; };
 		5AE8735618B74DD20040BC9A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
 		76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAnalysisInfo.m; sourceTree = "<group>"; };
@@ -737,7 +735,6 @@
 				5AAA862018B1B93D000D7600 /* platform */,
 				5AAA865718B1B93D000D7600 /* plugin */,
 				5AAA867918B1B93D000D7600 /* widgetone */,
-				5AAA868218B1B93D000D7600 /* WidgetOnePseudoDelegate.h */,
 				426DF1AA1CFD841600F4C53E /* ACEVersion.h */,
 				426DF1AB1CFD841600F4C53E /* ACEVersion.m */,
 			);
@@ -1234,7 +1231,6 @@
 				42F7887A1D950B5D0094AA05 /* ASINetworkQueue.h in Headers */,
 				42F7887B1D950B5D0094AA05 /* WWidgetUpdate.h in Headers */,
 				42F7887C1D950B5D0094AA05 /* SDWebImageManager.h in Headers */,
-				42F7887D1D950B5D0094AA05 /* WidgetOnePseudoDelegate.h in Headers */,
 				426040911DEC297D00B49B5C /* BAnimationTransform.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
