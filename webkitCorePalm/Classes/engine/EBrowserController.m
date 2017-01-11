@@ -36,9 +36,10 @@
 #import "SFHFKeychainUtils.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
 
 #import <AppCanKit/ACInvoker.h>
+#import "ACEConfigXML.h"
 //#import <usr/in>
 #define KAlertWithUpdateTag 1000
 
@@ -170,7 +171,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
     
     BOOL appCanDevMode = [BUtility getAppCanDevMode];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *configPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    NSString *configPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     
     BOOL isExists = [fileManager fileExistsAtPath:configPath];
     if (appCanDevMode && isExists) {
@@ -182,13 +183,14 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         isCopyFinish = NO;
         [ud setObject:@"NO" forKey:F_UD_WgtCopyFinish];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
             BOOL isCopyFinishAndSuccess = [self copyWgtToDocument];
+            if (!isCopyFinishAndSuccess) {
+                return;
+            }
+            [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+            [ACEConfigXML updateWidgetConfigXML];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (isCopyFinishAndSuccess) {
-                    [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
-                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
             });
         });
     }
@@ -220,20 +222,17 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
     
     NSError * error;
     NSFileManager * fileMgr = [NSFileManager defaultManager];
-	NSString * wgtOldPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"widget"];
-    NSString * wgtNewPath = nil;
+	NSString * wgtOldPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[AppCanEngine.configuration originWidgetPath]];
+    NSString * wgtNewPath = [BUtility getDocumentsPath:[AppCanEngine.configuration documentWidgetPath]];
     
-    if ([BUtility getSDKVersion] < 5.0) {
-        wgtNewPath = [BUtility getCachePath:@"widget"];
-    } else {
-        wgtNewPath =[BUtility getDocumentsPath:@"widget"];
-    }
-    BOOL folderFlag = YES;
+
     
-    if (![fileMgr fileExistsAtPath:wgtNewPath isDirectory:&folderFlag]) {
-        BOOL result = [fileMgr createDirectoryAtPath:wgtNewPath withIntermediateDirectories:NO attributes:nil error:&error];
+    BOOL folderFlag = NO;
+    
+    if (![fileMgr fileExistsAtPath:wgtNewPath isDirectory:&folderFlag] || !folderFlag) {
+        BOOL result = [fileMgr createDirectoryAtPath:wgtNewPath withIntermediateDirectories:YES attributes:nil error:&error];
         [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtNewPath]];
-        if (!result && error) {
+        if (!result || error) {
             return NO;
         }
     }
@@ -297,7 +296,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
         if ([userCustomLoadingImagePath hasPrefix:F_RES_PATH]) {
             userCustomLoadingImagePath = [userCustomLoadingImagePath substringFromIndex:F_RES_PATH.length];
             BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-            if (theApp.useUpdateWgtHtmlControl && isCopyFinish){
+            if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish){
                 userCustomLoadingImagePath = [[BUtility getDocumentsPath:@"widget/wgtRes"] stringByAppendingPathComponent:userCustomLoadingImagePath];
             }else{
                 userCustomLoadingImagePath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,@"widget/wgtRes",userCustomLoadingImagePath]];
@@ -483,7 +482,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-    if (theApp.useUpdateWgtHtmlControl) {
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
         [self doUpdateWgt];
     }
 
@@ -509,7 +508,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
         [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
     }
     NSString * inKey = [BUtility appKey];
-    if (theApp.userStartReport) {
+    if (AppCanEngine.configuration.userStartReport) {
         Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
         if (analysisClass) {
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
@@ -518,7 +517,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
         }
     }
-    if (theApp.userStartReport) {
+    if (AppCanEngine.configuration.userStartReport) {
         Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
         if (analysisClass) {
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
@@ -526,7 +525,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
             [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
         }
     }
-    if (theApp.useUpdateControl || theApp.useUpdateWgtHtmlControl) {//添加升级
+    if (AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) {//添加升级
         NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
         Class  updateClass = NSClassFromString(@"EUExUpdate");
         if (!updateClass) {

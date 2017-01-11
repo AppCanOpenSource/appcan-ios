@@ -18,7 +18,7 @@
 #import <UIKit/UIKit.h>
 
 #import "MMNavigationController.h"
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
 @class EBrowserController;
 @class ACEWebViewController;
 

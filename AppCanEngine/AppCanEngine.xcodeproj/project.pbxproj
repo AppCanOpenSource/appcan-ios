@@ -31,11 +31,15 @@
 		426040921DEC297D00B49B5C /* BAnimationTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 4260408C1DEC297D00B49B5C /* BAnimationTransform.m */; };
 		426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 426040931DEC2BB300B49B5C /* ACEAnimation.h */; };
 		426040961DEC2BB300B49B5C /* ACEAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 426040941DEC2BB300B49B5C /* ACEAnimation.m */; };
+		4272CCC01E2486A500712C54 /* AppCanEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCBE1E2486A500712C54 /* AppCanEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4272CCC11E2486A500712C54 /* AppCanEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4272CCBF1E2486A500712C54 /* AppCanEngine.m */; };
+		4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCD71E24C43900712C54 /* AppCanEnginePrivate.h */; };
+		4272CCF11E261D2F00712C54 /* ACEInterfaceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCEF1E261D2F00712C54 /* ACEInterfaceOrientation.h */; };
+		4272CCF21E261D2F00712C54 /* ACEInterfaceOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4272CCF01E261D2F00712C54 /* ACEInterfaceOrientation.m */; };
 		427890771DEEB57700B8476D /* ACEViewControllerAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 427890751DEEB57700B8476D /* ACEViewControllerAnimator.h */; };
 		427890781DEEB57700B8476D /* ACEViewControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 427890761DEEB57700B8476D /* ACEViewControllerAnimator.m */; };
 		427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */; };
 		427A79201DDE95B800E85BA4 /* ACESubwidgetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */; };
-		42AFC68A1DDC3A3900C22C9F /* AppCanEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42AFC6891DDC3A3900C22C9F /* AppCanEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CF2D651DDADBD80060C610 /* ACEConfigXML.h */; };
 		42CF2D6A1DDADBD80060C610 /* ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D661DDADBD80060C610 /* ACEConfigXML.m */; };
 		42F787451D950B5D0094AA05 /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
@@ -60,7 +64,6 @@
 		42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AE18B1B93D000D7600 /* SBJsonBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7875A1D950B5D0094AA05 /* PullDownRefreshHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA866318B1B93D000D7600 /* PullDownRefreshHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7875B1D950B5D0094AA05 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C8E2EF1B1EE7E300C33492 /* RECommonFunctions.m */; };
-		42F7875C1D950B5D0094AA05 /* ACEBaseDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4247F33C1D50918A00D316C1 /* ACEBaseDefine.m */; };
 		42F7875D1D950B5D0094AA05 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBA1A448EFD00DC7397 /* MMDrawerController.m */; };
 		42F7875F1D950B5D0094AA05 /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C3C1B2A6D3500D5F279 /* SDWebImageDecoder.m */; };
 		42F787601D950B5D0094AA05 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C4B1B2A6D3500D5F279 /* UIImage+MultiFormat.m */; };
@@ -80,7 +83,7 @@
 		42F787721D950B5D0094AA05 /* ACEPluginParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFEF321C1FF2C500294DE1 /* ACEPluginParser.m */; };
 		42F787731D950B5D0094AA05 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864518B1B93D000D7600 /* ioapi.c */; };
 		42F787751D950B5D0094AA05 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862A18B1B93D000D7600 /* ASIDownloadCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F787761D950B5D0094AA05 /* WWidgetMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867F18B1B93D000D7600 /* WWidgetMgr.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787761D950B5D0094AA05 /* WWidgetMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867F18B1B93D000D7600 /* WWidgetMgr.m */; };
 		42F787771D950B5D0094AA05 /* EBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F318B1B93D000D7600 /* EBrowser.m */; };
 		42F787791D950B5D0094AA05 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C531B2A6D3500D5F279 /* UIView+WebCacheOperation.m */; };
 		42F7877A1D950B5D0094AA05 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C361B2A6D3500D5F279 /* NSData+ImageContentType.m */; };
@@ -278,7 +281,7 @@
 		42F7886A1D950B5D0094AA05 /* ACEBrowserView.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */; };
 		42F7886B1D950B5D0094AA05 /* ACEJSCBaseJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */; };
 		42F7886C1D950B5D0094AA05 /* WidgetOneDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA867A18B1B93D000D7600 /* WidgetOneDelegate.h */; };
-		42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4247F33B1D50918A00D316C1 /* ACEBaseDefine.h */; };
+		42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4247F33B1D50918A00D316C1 /* ACEBaseDefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42F7886F1D950B5D0094AA05 /* RECommonFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C8E2EE1B1EE7E300C33492 /* RECommonFunctions.h */; };
 		42F788721D950B5D0094AA05 /* MMNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18081A47B4200050DD13 /* MMNavigationController.h */; };
 		42F788731D950B5D0094AA05 /* UIImageView+HighlightedWebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C4E1B2A6D3500D5F279 /* UIImageView+HighlightedWebCache.h */; };
@@ -365,7 +368,6 @@
 		4245EC941DED18C900C07B2D /* ACEBasicAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBasicAnimation.h; sourceTree = "<group>"; };
 		4245EC951DED18C900C07B2D /* ACEBasicAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBasicAnimation.m; sourceTree = "<group>"; };
 		4247F33B1D50918A00D316C1 /* ACEBaseDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseDefine.h; sourceTree = "<group>"; };
-		4247F33C1D50918A00D316C1 /* ACEBaseDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseDefine.m; sourceTree = "<group>"; };
 		424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCInvocation.h; sourceTree = "<group>"; };
 		424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCInvocation.m; sourceTree = "<group>"; };
 		4257D7221DF1148F004DE380 /* ACEWindowFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEWindowFilter.h; sourceTree = "<group>"; };
@@ -379,6 +381,11 @@
 		426DF1AA1CFD841600F4C53E /* ACEVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEVersion.h; sourceTree = "<group>"; };
 		426DF1AB1CFD841600F4C53E /* ACEVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEVersion.m; sourceTree = "<group>"; };
 		427260051D9B546900B941CF /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppCanKit.framework; path = "AppCanKit/build/Debug-iphoneos/AppCanKit.framework"; sourceTree = "<group>"; };
+		4272CCBE1E2486A500712C54 /* AppCanEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanEngine.h; sourceTree = "<group>"; };
+		4272CCBF1E2486A500712C54 /* AppCanEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCanEngine.m; sourceTree = "<group>"; };
+		4272CCD71E24C43900712C54 /* AppCanEnginePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanEnginePrivate.h; sourceTree = "<group>"; };
+		4272CCEF1E261D2F00712C54 /* ACEInterfaceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEInterfaceOrientation.h; sourceTree = "<group>"; };
+		4272CCF01E261D2F00712C54 /* ACEInterfaceOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEInterfaceOrientation.m; sourceTree = "<group>"; };
 		427890751DEEB57700B8476D /* ACEViewControllerAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEViewControllerAnimator.h; sourceTree = "<group>"; };
 		427890761DEEB57700B8476D /* ACEViewControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEViewControllerAnimator.m; sourceTree = "<group>"; };
 		427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACESubwidgetManager.h; sourceTree = "<group>"; };
@@ -388,7 +395,6 @@
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
 		42A615511C40CB9A00883148 /* ACEPluginInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEPluginInfo.h; sourceTree = "<group>"; };
 		42A615521C40CB9A00883148 /* ACEPluginInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEPluginInfo.m; sourceTree = "<group>"; };
-		42AFC6891DDC3A3900C22C9F /* AppCanEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanEngine.h; sourceTree = "<group>"; };
 		42CF21451C19059300F539B4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42CF21461C1906C600F539B4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		42CF21481C1906CD00F539B4 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -737,6 +743,9 @@
 				5AAA867918B1B93D000D7600 /* widgetone */,
 				426DF1AA1CFD841600F4C53E /* ACEVersion.h */,
 				426DF1AB1CFD841600F4C53E /* ACEVersion.m */,
+				4272CCBE1E2486A500712C54 /* AppCanEngine.h */,
+				4272CCBF1E2486A500712C54 /* AppCanEngine.m */,
+				4272CCD71E24C43900712C54 /* AppCanEnginePrivate.h */,
 			);
 			name = Classes;
 			path = ../../webkitCorePalm/Classes;
@@ -782,7 +791,8 @@
 				42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */,
 				42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */,
 				4247F33B1D50918A00D316C1 /* ACEBaseDefine.h */,
-				4247F33C1D50918A00D316C1 /* ACEBaseDefine.m */,
+				4272CCEF1E261D2F00712C54 /* ACEInterfaceOrientation.h */,
+				4272CCF01E261D2F00712C54 /* ACEInterfaceOrientation.m */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -1093,7 +1103,6 @@
 				B220D27B15A3152B00D02138 /* AppCanEngine-Prefix.pch */,
 				42CF21451C19059300F539B4 /* Info.plist */,
 				427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */,
-				42AFC6891DDC3A3900C22C9F /* AppCanEngine.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1105,7 +1114,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42AFC68A1DDC3A3900C22C9F /* AppCanEngine.h in Headers */,
+				42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */,
+				4272CCC01E2486A500712C54 /* AppCanEngine.h in Headers */,
 				42F787E51D950B5D0094AA05 /* DataAnalysisInfo.h in Headers */,
 				42F787E61D950B5D0094AA05 /* GCDAsyncUdpSocket.h in Headers */,
 				42F787E71D950B5D0094AA05 /* EBrowserViewBounceView.h in Headers */,
@@ -1121,6 +1131,7 @@
 				42F787F21D950B5D0094AA05 /* ASIFormDataRequest.h in Headers */,
 				42F787F31D950B5D0094AA05 /* SDWebImageCompat.h in Headers */,
 				42F787F41D950B5D0094AA05 /* MBProgressHUD.h in Headers */,
+				4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */,
 				42F787F51D950B5D0094AA05 /* BToastView.h in Headers */,
 				42F787F61D950B5D0094AA05 /* JSONParser.h in Headers */,
 				42F787F71D950B5D0094AA05 /* ACEMultiPopoverScrollView.h in Headers */,
@@ -1172,6 +1183,7 @@
 				42F788261D950B5D0094AA05 /* ASIDownloadCache.h in Headers */,
 				42F788271D950B5D0094AA05 /* UIImageView+WebCache.h in Headers */,
 				42F788281D950B5D0094AA05 /* ASIHTTPRequestConfig.h in Headers */,
+				4272CCF11E261D2F00712C54 /* ACEInterfaceOrientation.h in Headers */,
 				42F788291D950B5D0094AA05 /* ACELocalization.h in Headers */,
 				42F7882B1D950B5D0094AA05 /* MMDrawerVisualState.h in Headers */,
 				42F7882C1D950B5D0094AA05 /* EUExWidgetOne.h in Headers */,
@@ -1220,7 +1232,6 @@
 				42F7886A1D950B5D0094AA05 /* ACEBrowserView.h in Headers */,
 				42F7886B1D950B5D0094AA05 /* ACEJSCBaseJS.h in Headers */,
 				42F7886C1D950B5D0094AA05 /* WidgetOneDelegate.h in Headers */,
-				42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */,
 				42F7886F1D950B5D0094AA05 /* RECommonFunctions.h in Headers */,
 				42F788721D950B5D0094AA05 /* MMNavigationController.h in Headers */,
 				42F788731D950B5D0094AA05 /* UIImageView+HighlightedWebCache.h in Headers */,
@@ -1359,7 +1370,6 @@
 				42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */,
 				42F7875A1D950B5D0094AA05 /* PullDownRefreshHeaderView.m in Sources */,
 				42F7875B1D950B5D0094AA05 /* RECommonFunctions.m in Sources */,
-				42F7875C1D950B5D0094AA05 /* ACEBaseDefine.m in Sources */,
 				42F7875D1D950B5D0094AA05 /* MMDrawerController.m in Sources */,
 				42F7875F1D950B5D0094AA05 /* SDWebImageDecoder.m in Sources */,
 				42F787601D950B5D0094AA05 /* UIImage+MultiFormat.m in Sources */,
@@ -1373,6 +1383,7 @@
 				42F7876B1D950B5D0094AA05 /* sha1.c in Sources */,
 				42F7876C1D950B5D0094AA05 /* EUtility.m in Sources */,
 				42F7876E1D950B5D0094AA05 /* mztools.c in Sources */,
+				4272CCF21E261D2F00712C54 /* ACEInterfaceOrientation.m in Sources */,
 				42F7876F1D950B5D0094AA05 /* ASIInputStream.m in Sources */,
 				42F787701D950B5D0094AA05 /* SDImageCache.m in Sources */,
 				42F787711D950B5D0094AA05 /* BallView.m in Sources */,
@@ -1420,6 +1431,7 @@
 				42F787A01D950B5D0094AA05 /* EBrowserController.m in Sources */,
 				42F787A11D950B5D0094AA05 /* ACEVersion.m in Sources */,
 				42F787A21D950B5D0094AA05 /* EBrowserViewBounceView.m in Sources */,
+				4272CCC11E2486A500712C54 /* AppCanEngine.m in Sources */,
 				42F787A41D950B5D0094AA05 /* EBrowserToolBar.m in Sources */,
 				42F787A61D950B5D0094AA05 /* SBJSON.m in Sources */,
 				42F787A71D950B5D0094AA05 /* WWidgetUpdate.m in Sources */,

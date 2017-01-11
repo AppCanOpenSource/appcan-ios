@@ -96,11 +96,13 @@ const float AppCanFinalProgressValue = 0.9f;
     }
     [eBrwView notifyPageFinish];
     [eBrwView continueMultiPopoverLoading];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [AppCanEngine rootPageDidFinishLoading];
+    });
+    
 
-    if (!theApp.isFirstPageDidLoad) {
-        [theApp rootPageDidFinishLoading];
-        theApp.isFirstPageDidLoad = YES;
-    }
 }
 
 static NSUInteger kMaxErrorRetryCount = 5;

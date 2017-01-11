@@ -62,9 +62,6 @@
 + (instancetype)sharedManager;
 
 
-//all
-
--(NSString*)curWidgetPath:(WWidget*)inWgtObj;
 
 
 

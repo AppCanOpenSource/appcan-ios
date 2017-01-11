@@ -1,10 +1,10 @@
 /**
  *
- *	@file   	: ACEBaseDefine.m  in AppCanEngine
+ *	@file   	: ACEInterfaceOrientation.m  in AppCanEngine
  *
  *	@author 	: CeriNo
  * 
- *	@date   	: 16/8/2
+ *	@date   	: 2017/1/11
  *
  *	@copyright 	: 2016 The AppCan Open Source Project.
  *
@@ -22,7 +22,7 @@
  */
 
 
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
 
 
 ACEInterfaceOrientation ace_interfaceOrientationFromUIDeviceOrientation(UIDeviceOrientation orientation){
@@ -49,7 +49,7 @@ ACEInterfaceOrientation ace_interfaceOrientationFromUIDeviceOrientation(UIDevice
             return ACEInterfaceOrientationLandscapeRight;
             break;
         }
-
+            
     }
 }
 
@@ -80,7 +80,7 @@ ACEInterfaceOrientation ace_interfaceOrientationFromUIInterfaceOrientation(UIInt
 }
 
 UIInterfaceOrientationMask ace_interfaceOrientationMaskFromACEInterfaceOrientation(ACEInterfaceOrientation orientation){
-
+    
     UIInterfaceOrientationMask mask = 0;
     if (orientation & ACEInterfaceOrientationProtrait) {
         mask |= UIInterfaceOrientationMaskPortrait;
@@ -99,5 +99,3 @@ UIInterfaceOrientationMask ace_interfaceOrientationMaskFromACEInterfaceOrientati
     }
     return mask;
 }
-
-

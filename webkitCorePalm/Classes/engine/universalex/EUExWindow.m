@@ -53,7 +53,7 @@
 #import "ACEPOPAnimation.h"
 
 #import "ACEProgressDialog.h"
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
 
 #import "ACEConfigXML.h"
 #import "ACEAnimation.h"
@@ -3253,78 +3253,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         }
     }];
     
-    
 
-    
-
-//    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-//    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-//    CGRect sbFrame = [[UIApplication sharedApplication] statusBarFrame];
-//    if ([[UIApplication sharedApplication] isStatusBarHidden]) {
-//        UIApplication *app = [UIApplication sharedApplication];
-//        switch (app.statusBarOrientation) {
-//            case UIDeviceOrientationLandscapeLeft:
-//                sbFrame = CGRectMake([UIScreen mainScreen].bounds.size.width - 20, 0, 20, [UIScreen mainScreen].bounds.size.height);
-//                break;
-//            case UIDeviceOrientationLandscapeRight:
-//                sbFrame = CGRectMake(0, 0, 20, [UIScreen mainScreen].bounds.size.height);
-//                break;
-//            case UIDeviceOrientationPortrait:
-//                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
-//                break;
-//            case UIDeviceOrientationPortraitUpsideDown:
-//                sbFrame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 20, [UIScreen mainScreen].bounds.size.width, 20);
-//                break;
-//            default:
-//                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
-//                break;
-//        }
-//    }
-//    if (!eBrwMainFrm.mSBWnd) {
-//        eBrwMainFrm.mSBWnd = [[BStatusBarWindow alloc] initWithFrame:sbFrame andNotifyText:title];
-//        AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-//        [eBrwMainFrm.mSBWnd makeKeyAndVisible];
-//    } else {
-//        if (eBrwMainFrm.mSBWnd.mInitOrientation == statusBarOrientation) {
-//            if (eBrwMainFrm.mSBWnd.hidden == YES) {
-//                eBrwMainFrm.mSBWnd.hidden = NO;
-//                [eBrwMainFrm.mSBWnd setNotifyText:title];
-//                AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-//            } else {
-//                [eBrwMainFrm.mNotifyArray addObject:title];
-//                return;
-//            }
-//        } else {
-//            return;
-//        }
-//        
-//    }
-//    if (eBrwMainFrm.mSBWndTimer) {
-//        [eBrwMainFrm.mSBWndTimer invalidate];
-//        eBrwMainFrm.mSBWndTimer = nil;
-//    }
-//    eBrwMainFrm.mSBWndTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(closeStatusBarNotification) userInfo:nil repeats:NO];
-//    //添加本地通知在通知栏显示
-//    UILocalNotification *notification=[[UILocalNotification alloc] init];
-//    if (notification!=nil) {        NSDate *now = [NSDate date];
-//        //从现在开始，1秒以后通知
-//        notification.fireDate=[now dateByAddingTimeInterval:1.0];
-//        //使用本地时区
-//        notification.timeZone=[NSTimeZone defaultTimeZone];
-//        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-//        
-//        NSDictionary *msgDict = dictionaryArg(msg);
-//        if (msgDict) {
-//            [dict addEntriesFromDictionary:msgDict];
-//        }else{
-//            [dict setValue:stringArg(msg) forKey:@"userInforStr"];
-//        }
-//        [notification setUserInfo:dict];
-//        notification.alertBody = title;
-//        notification.hasAction = YES;
-//        //启动这个通知
-//        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-//    }
     
 }
 

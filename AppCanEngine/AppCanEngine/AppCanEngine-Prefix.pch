@@ -6,6 +6,8 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import <AppCanKit/AppCanKit.h>
+    #import "AppCanEngine.h"
+    #import "AppCanEnginePrivate.h"
     #import "ACELocalization.h"
 #endif
 //#define NSLog 

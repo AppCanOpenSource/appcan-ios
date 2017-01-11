@@ -69,25 +69,26 @@
     } else {
         wgtPath = self.widgetPath;
         NSString *wgtPathString = self.indexUrl;
-        NSRange range = [self.indexUrl rangeOfString:@"widget/plugin/"];
+        NSString *subWidgetIdentifier = [NSString stringWithFormat:@"%@/plugin",AppCanEngine.configuration.documentWidgetPath];
+        NSRange range = [self.indexUrl rangeOfString:subWidgetIdentifier];
         if (range.location != NSNotFound) {
             wgtPath = [wgtPathString substringToIndex:range.location+range.length];
             NSRange range1 = [wgtPath rangeOfString:@"file://"];
-            wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
+            wgtPath = [wgtPath substringFromIndex:range1.location + range1.length];
             wgtPath = [wgtPath stringByAppendingString:self.appId];
         }
+    }
+    NSFileManager *fManager = [NSFileManager defaultManager];
+    if (![fManager fileExistsAtPath:wgtPath]) {
+        [fManager createDirectoryAtPath:wgtPath withIntermediateDirectories:YES attributes:nil error:nil];
+        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtPath]];
     }
     return wgtPath;
 }
 
 - (NSString *)absResourcePath{
     if (self.wgtType == F_WWIDGET_MAINWIDGET) {
-        BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-        if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-            return  [BUtility getDocumentsPath:@"widget/wgtRes"];
-        }else {
-            return [BUtility getResPath:@"widget/wgtRes"];
-        }
+        return [BUtility wgtResPath:F_RES_PATH];
     }else {
         return [NSString stringWithFormat:@"%@/wgtRes",[self absWidgetPath]];
     }

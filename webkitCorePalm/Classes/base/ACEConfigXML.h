@@ -29,11 +29,13 @@
 //原始的config.xml文档,打包时生成,不可更改
 + (ONOXMLElement *)ACEOriginConfigXML;
 
-//widget中的config.xml文档,可以在自动更新时被修改
+//document中的config.xml文档,可以在自动更新时被修改
 //如果应用不支持自动更新,将会返回`ACEOriginConfigXML`
 + (ONOXMLElement *)ACEWidgetConfigXML;
 
-
-
+//document中的config.xml文档是否存在
++ (BOOL)isWidgetConfigXMLAvailable;
+//自动更新后,需调用此接口更新config.xml缓存
++ (void)updateWidgetConfigXML;
 
 @end

@@ -43,7 +43,7 @@
 #import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACInvoker.h>
 #import "ACEConfigXML.h"
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
 
 #import "ACEUINavigationController.h"
 #import "ACESubwidgetManager.h"
@@ -142,13 +142,13 @@ static BOOL isAppLaunchedByPush = NO;
 
 + (void)pushNotifyWithState:(uexWidgetPushStatus)state {
     
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
-    NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *pushNotifyBrwViewName = [defaults stringForKey:kUexPushNotifyBrwViewNameKey];
+    NSString *pushNotifyCallbackFunctionName = [defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
     if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
         return;
     }
-    EBrowserWindow *eBrwWnd = [[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] brwWndForKey:pushNotifyBrwViewName];
+    EBrowserWindow *eBrwWnd = [[AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] brwWndForKey:pushNotifyBrwViewName];
     if (!eBrwWnd) {
         return;
     }
@@ -187,17 +187,17 @@ static BOOL isAppLaunchedByPush = NO;
     
      [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onResume" arguments:nil];
     
-    if(!theApp.usePushControl) {//推送开关没有开启
+    if(!AppCanEngine.configuration.usePushControl) {//推送开关没有开启
         return;
     }
     
-    if ([theApp.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
         return;
     }
     
-    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",theApp.useBindUserPushURL];
+    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",AppCanEngine.configuration.useBindUserPushURL];
     NSURL *requestUrl = [NSURL URLWithString:urlStr];
-    NSString *appid = theApp.mwWgtMgr.mainWidget.appId ? theApp.mwWgtMgr.mainWidget.appId : @"";
+    NSString *appid = [WWidgetMgr sharedManager].mainWidget.appId ?: @"";
     NSString *appkey = [BUtility appKey] ? [BUtility appKey] : @"";
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ? [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] : @"";
     NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
@@ -212,7 +212,7 @@ static BOOL isAppLaunchedByPush = NO;
     [bodyDict setObject:@"1" forKey:@"count"];
     [bodyDict setObject:deviceToken forKey:@"deviceToken"];
     [bodyDict setObject:softToken forKey:@"softToken"];
-    NSString *useAppCanEMMTenantID = theApp.useAppCanEMMTenantID ? theApp.useAppCanEMMTenantID : @"";
+    NSString *useAppCanEMMTenantID = AppCanEngine.configuration.useAppCanEMMTenantID ?: @"";
     [bodyDict setObject:useAppCanEMMTenantID forKey:@"tenantMark"];
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
     [request setRequestMethod:@"POST"];
@@ -885,9 +885,9 @@ static BOOL isAppLaunchedByPush = NO;
         }
         
         if ([dict objectForKey:@"taskId"]) {
-            NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/%@",theApp.useBindUserPushURL, [dict objectForKey:@"taskId"]];
+            NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/%@",AppCanEngine.configuration.useBindUserPushURL, [dict objectForKey:@"taskId"]];
             NSURL *requestUrl = [NSURL URLWithString:urlStr];
-            NSString *appid = theApp.mwWgtMgr.mainWidget.appId ?: @"";
+            NSString *appid = [WWidgetMgr sharedManager].mainWidget.appId ?: @"";
             NSString *appkey = [BUtility appKey] ?: @"";
             NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ?: @"";
             
@@ -911,16 +911,16 @@ static BOOL isAppLaunchedByPush = NO;
             [request setRequestHeaders:headerDict];
             [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
             
-            if (theApp.useCertificateControl) {
+            if (AppCanEngine.configuration.useCertificateControl) {
                 SecIdentityRef identity = NULL;
                 SecTrustRef trust = NULL;
                 SecCertificateRef certChain = NULL;
                 NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-                [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+                [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
                 [request setClientCertificateIdentity:identity];
             }
             
-            if (theApp.validatesSecureCertificate) {
+            if (AppCanEngine.configuration.validatesSecureCertificate) {
                 [request setValidatesSecureCertificate:YES];
                 
             } else {
@@ -953,7 +953,7 @@ static BOOL isAppLaunchedByPush = NO;
         
         NSString *softToken = [EUtility md5SoftToken];
         //线程处理
-        NSString *urlStr =[NSString stringWithFormat:@"%@/report",theApp.useBindUserPushURL];
+        NSString *urlStr =[NSString stringWithFormat:@"%@/report",AppCanEngine.configuration.useBindUserPushURL];
         NSURL *requestUrl = [NSURL URLWithString:urlStr];
         NSMutableDictionary * postData = [NSMutableDictionary dictionaryWithCapacity:4];
         NSString *msgId = [dict objectForKey:@"msgId"];
@@ -973,7 +973,7 @@ static BOOL isAppLaunchedByPush = NO;
         SecCertificateRef certChain=NULL;
         
         NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-        [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+        [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
         
         ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
         [request setRequestMethod:@"POST"];
@@ -982,12 +982,12 @@ static BOOL isAppLaunchedByPush = NO;
         [request setPostValue:@"open" forKey:@"eventType"];
         [request setPostValue:timeSp forKey:@"occuredAt"];
         
-        if (theApp.useCertificateControl) {
+        if (AppCanEngine.configuration.useCertificateControl) {
             [request setClientCertificateIdentity:identity];
         }else{
             [request setClientCertificateIdentity:nil];
         }
-        if (theApp.validatesSecureCertificate) {
+        if (AppCanEngine.configuration.validatesSecureCertificate) {
             [request setValidatesSecureCertificate:YES];
             
         } else {
@@ -1028,7 +1028,7 @@ static BOOL isAppLaunchedByPush = NO;
 }
 - (void)delPushInfo:(NSMutableArray *)inArguments {
     
-    if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
         
         NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
         NSString *appkey = [BUtility appKey];
@@ -1058,13 +1058,13 @@ static BOOL isAppLaunchedByPush = NO;
         [paramDict setObject:deviceToken forKey:@"deviceToken"];
         [paramDict setObject:userDict forKey:@"user"];
         
-        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations",theApp.useBindUserPushURL];
+        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations",AppCanEngine.configuration.useBindUserPushURL];
         
         ASIFormDataRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->headerDict = %@-->body = %@",headerDict,paramDict);
         [requestSetPushInfo setRequestMethod:@"POST"];
         [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setPostBody:[[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
         [requestSetPushInfo setTimeOutSeconds:60];
         @weakify(requestSetPushInfo);
         [requestSetPushInfo setCompletionBlock:^{
@@ -1087,14 +1087,14 @@ static BOOL isAppLaunchedByPush = NO;
     } else {
         @autoreleasepool {
             NSString *softToken = [EUtility md5SoftToken];
-            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",theApp.useBindUserPushURL,softToken];
+            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",AppCanEngine.configuration.useBindUserPushURL,softToken];
             SecIdentityRef identity = NULL;
             SecTrustRef trust = NULL;
             SecCertificateRef certChain=NULL;
             NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
-            if (theApp.useCertificateControl) {
+            if (AppCanEngine.configuration.useCertificateControl) {
                 [request setValidatesSecureCertificate:YES];
                 [request setClientCertificateIdentity:identity];
             }else{
@@ -1115,7 +1115,7 @@ static BOOL isAppLaunchedByPush = NO;
 
 - (void)sendPushUserMsg:(id)userInfo{
     
-    if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
         
         NSString *softToken = [EUtility md5SoftToken];
 
@@ -1158,28 +1158,23 @@ static BOOL isAppLaunchedByPush = NO;
         [paramDict setObject:softToken forKey:@"softToken"];
         [paramDict setObject:userDict forKey:@"user"];
         
-        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->headerDict = %@-->body = %@",headerDict,paramDict);
-        
-        urlStr = [NSString stringWithFormat:@"%@4.0/installations",theApp.useBindUserPushURL];
+        urlStr = [NSString stringWithFormat:@"%@4.0/installations",AppCanEngine.configuration.useBindUserPushURL];
         
         ASIHTTPRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         //requestSetPushInfo = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
         
         [requestSetPushInfo setRequestMethod:@"POST"];
         [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setPostBody:[[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
         
         [requestSetPushInfo setTimeOutSeconds:60];
         @weakify(requestSetPushInfo);
-        
-        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->theApp.validatesSecureCertificate is %d-->theApp.useCertificateControl = %d",theApp.validatesSecureCertificate,theApp.useCertificateControl);
-        
-        if (theApp.useCertificateControl) {
+        if (AppCanEngine.configuration.useCertificateControl) {
             SecIdentityRef identity = NULL;
             SecTrustRef trust = NULL;
             SecCertificateRef certChain = NULL;
             NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
             
             [requestSetPushInfo setClientCertificateIdentity:identity];
             
@@ -1189,7 +1184,7 @@ static BOOL isAppLaunchedByPush = NO;
             
         }
         
-        if (theApp.validatesSecureCertificate) {
+        if (AppCanEngine.configuration.validatesSecureCertificate) {
             
             [requestSetPushInfo setValidatesSecureCertificate:YES];
             
@@ -1218,13 +1213,13 @@ static BOOL isAppLaunchedByPush = NO;
             NSDictionary *dict = (NSDictionary*)userInfo;
             NSString *softToken = [EUtility md5SoftToken];
             NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
-            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",theApp.useBindUserPushURL,softToken];
+            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",AppCanEngine.configuration.useBindUserPushURL,softToken];
             
             SecIdentityRef identity = NULL;
             SecTrustRef trust = NULL;
             SecCertificateRef certChain=NULL;
             NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
             
             ASIFormDataRequest *FormatReq =[[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
             [FormatReq setPostValue:[dict objectForKey:@"uId"] forKey:@"userId"];
@@ -1233,7 +1228,7 @@ static BOOL isAppLaunchedByPush = NO;
             [FormatReq setPostValue:softToken forKey:@"softToken"];
             [FormatReq setPostValue:appId forKey:@"appId"];
             [FormatReq setPostValue:[NSNumber numberWithInt:0] forKey:@"platform"];
-            if (theApp.useCertificateControl) {
+            if (AppCanEngine.configuration.useCertificateControl) {
                 [FormatReq setValidatesSecureCertificate:YES];
                 [FormatReq setClientCertificateIdentity:identity];
             }else{
@@ -1248,13 +1243,13 @@ static BOOL isAppLaunchedByPush = NO;
 }
 
 - (void)setPushState:(NSMutableArray*)inArguments{
-    if(theApp.usePushControl == NO) {
+    if(AppCanEngine.configuration.usePushControl == NO) {
         return;
     }
     ACArgsUnpack(NSNumber *shouldPush) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(shouldPush);
     
-    [BUtility writeLog:[NSString stringWithFormat:@"-----setPushState------>>,theApp.usePushControl==%d",theApp.usePushControl]];
+
     
     
     if (shouldPush.boolValue) {

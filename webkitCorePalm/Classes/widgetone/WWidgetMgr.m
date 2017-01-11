@@ -27,6 +27,7 @@
 #import "EUExWidgetOne.h"
 #import "WidgetOneDelegate.h"
 #import "FileEncrypt.h"
+#import "ACEConfigXML.h"
 
 
 NSString * webappShowAactivety;
@@ -50,68 +51,10 @@ NSString * webappShowAactivety;
 }
 
 
--(void)dealloc{
 
-
-	[wgtDict release];
-	[wgtArr release];
-	[super dealloc];
-}
 #pragma mark mainWidget
 
-//get wgtPath by wgtObj
-- (NSString*)curWidgetPath:(WWidget*)inWgtObj {
-    
-    WWidget *wgtObj = inWgtObj;
-    
-    NSString *absPath = [BUtility getDocumentsPath:@""];
-    
-    NSString *wgtPath = nil;
-    
-    if (wgtObj.wgtType==F_WWIDGET_MAINWIDGET) {
-        
-        wgtPath = [NSString stringWithFormat:@"%@/apps/%@",absPath,wgtObj.appId];
-        
-    } else {
-        
-        wgtPath = wgtObj.widgetPath;
-        
-        NSString *wgtPathString = wgtObj.indexUrl;
-        
-        NSRange range = [wgtObj.indexUrl rangeOfString:@"widget/plugin/"];
-        
-        if (range.location != NSNotFound) {
-            
-            wgtPath = [wgtPathString substringToIndex:range.location+range.length];
-            
-            NSRange range1 = [wgtPath rangeOfString:@"file://"];
-            
-            wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
-            
-            wgtPath = [wgtPath stringByAppendingString:wgtObj.appId];
-            
-        } else {
-            
-            
-        }
-        
-    }
-    
-    NSFileManager *fManager =[[NSFileManager alloc] init];
-    
-    if ([fManager fileExistsAtPath:wgtPath]==NO) {
-        
-        [fManager createDirectoryAtPath:wgtPath withIntermediateDirectories:YES attributes:nil error:nil];
-        
-        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtPath]];
-        
-    }
-    
-    [fManager release];
-    
-    return wgtPath;
-    
-}
+
 - (void)initMainWidget {
     
 	NSString * queryMainWidget = [NSString stringWithFormat:@"select * from %@ where wgtType=%d",SQL_WGTS_TABLE,F_WWIDGET_MAINWIDGET];
@@ -123,33 +66,21 @@ NSString * webappShowAactivety;
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
     
     NSString *configPath = nil;
-    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-        
-        if ([BUtility getSDKVersion] < 5.0) {
-            
-            configPath = [BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-            
-        } else {
-            
-            configPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-            
-        }
-        
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+        configPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     } else {
-        
-        configPath=[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        
+        configPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     }
     
     NSMutableDictionary * tmpWgtDict = [self wgtParameters:configPath];
-    
 	SpecConfigParser * widgetXml = [[SpecConfigParser alloc] init];
-    
 	NSString * mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
     
-	[widgetXml release];
     
-    WidgetOneDelegate * app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
+    WidgetOneDelegate * app = nil;
+    if ([[UIApplication sharedApplication].delegate isKindOfClass:[WidgetOneDelegate class]]) {
+        app = [UIApplication sharedApplication].delegate;
+    }
     
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
@@ -169,18 +100,13 @@ NSString * webappShowAactivety;
     NSString * logServerIp = [tmpWgtDict objectForKey:CONFIG_TAG_LOGSERVERIP];
     
     if (logServerIp && ![wgtobj.logServerIp isEqualToString:logServerIp]) {
-        
         wgtobj.logServerIp = logServerIp;
-        
     }
-    
 	if (wgtobj!=nil) {
 		wgtobj.openAdStatus = 0;//不显示广告
 		if ([wgtobj.ver isEqualToString:mVer]) {
 			self.mainWidget = wgtobj;
 			[widgetSql close_database];
-			[widgetSql release];
-			[tempArr removeAllObjects];
 			return;
 		}
 		//remove table
@@ -189,21 +115,19 @@ NSString * webappShowAactivety;
 	}
 	//得到mainWidget,config.xml
 	
-	ACENSLog(@"tmpWgtDict retainCount=%d",[tmpWgtDict retainCount]);
-	NSString *tmpWgtPath =F_MAINWIDGET_NAME;
 
+	NSString * tmpWgtPath = F_MAINWIDGET_NAME;
     NSString * tmpWgtOneId = [BUtility appKey];
     if (tmpWgtOneId) {
         [tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
     }
-    
 	[tmpWgtDict setObject:tmpWgtPath forKey:CONFIG_TAG_WIDGETPATH];
 	[tmpWgtDict setObject:[NSNumber numberWithInt:F_WWIDGET_MAINWIDGET] forKey:CONFIG_TAG_WIDGETTYPE];
 		
 	wgtobj = [self dictToWgt:tmpWgtDict];
 	
-	if (wgtobj.showMySpace==1) {
-		wgtobj.showMySpace =(WIDGETREPORT_SPACESTATUS_OPEN | WIDGETREPORT_SPACESTATUS_EXTEN_OPEN);
+	if (wgtobj.showMySpace == 1) {
+		wgtobj.showMySpace = (WIDGETREPORT_SPACESTATUS_OPEN | WIDGETREPORT_SPACESTATUS_EXTEN_OPEN);
 	} 
 	//写数据操作
 	[self writeWgtToDB:wgtobj createTab:YES];
@@ -212,41 +136,29 @@ NSString * webappShowAactivety;
     
 	NSString * resPath = nil ;
     
-    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-        
-        if ([BUtility getSDKVersion] < 5.0) {
-            
-            resPath=[BUtility getCachePath:@""];
-            
-        } else {
-            
-            resPath=[BUtility getDocumentsPath:@""];
-            
-        }
-        
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+        resPath = [BUtility getDocumentsPath:@""];
     } else {
-        
-        resPath=[BUtility getResPath:@""];
-        
+        resPath = [BUtility getResPath:@""];
     }
     
-	wgtobj.widgetPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.widgetPath];	
-	if ([BUtility isSimulator]==YES) {
+	wgtobj.widgetPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.widgetPath];
+    
+	if ([BUtility isSimulator]) {
 		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH]) {
-			wgtobj.indexUrl =[NSString stringWithFormat:@"%@/%@",resPath,wgtobj.indexUrl];
+			wgtobj.indexUrl = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.indexUrl];
 		}
 		wgtobj.iconPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.iconPath];
 	}else{
 		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtobj.indexUrl hasPrefix:F_HTTPS_PATH]) {
-			wgtobj.indexUrl =[NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.indexUrl];
+			wgtobj.indexUrl = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.indexUrl];
 		}
 		wgtobj.iconPath = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.iconPath];
 	}
 	wgtobj.openAdStatus = 0;//不显示广告。3.30
 	self.mainWidget = wgtobj;
 	[widgetSql close_database];
-	[widgetSql release];
-	[tempArr removeAllObjects];
+
 }
 
 //更新数据库
@@ -281,7 +193,7 @@ NSString * webappShowAactivety;
 	}
 	[arr removeAllObjects];
 	[widgetSql close_database];
-	[widgetSql release];
+
 }
 
 - (NSMutableDictionary*)wgtParameters:(NSString*)inFileName{
@@ -302,9 +214,6 @@ NSString * webappShowAactivety;
             
             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
             NSString *data = [encryptObj decryptWithPath:url appendData:nil];
-            
-            [encryptObj release];
-            
             configData = [data dataUsingEncoding:NSUTF8StringEncoding];
         }
         
@@ -313,7 +222,6 @@ NSString * webappShowAactivety;
 		xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
 		//
 		[tmpDict removeAllObjects];
-		[configParser release];
 	}
     
     
@@ -321,8 +229,7 @@ NSString * webappShowAactivety;
     webappShowAactivety = nil;
 	if ([showActiveStr isEqualToString:@"true"]) {
 		webappShowAactivety = @"yes";
-	}else
-    {webappShowAactivety = @"no";}
+	}else{webappShowAactivety = @"no";}
     
 	return xmlDict;
 }
@@ -352,16 +259,16 @@ NSString * webappShowAactivety;
 	loginWgt.appId = @"9999998";
 	loginWgt.widgetPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@/%@",self.mainWidget.appId,loginWgt.appId]];
 	if (!wgtDict) {
-		wgtDict = [[NSMutableDictionary alloc] initWithCapacity:0];
+		wgtDict = [NSMutableDictionary dictionary];
 	}
 	[wgtDict setObject:loginWgt forKey:loginWgt.appId];	
-	[loginWgt release];
+
 	WWidget *moreWgt = [[WWidget alloc] init];
 	moreWgt.indexUrl =F_WIDGET_MOREWIDGET_URL;
 	moreWgt.appId = @"9999997";
 	moreWgt.widgetPath=[BUtility getDocumentsPath:[NSString stringWithFormat:@"apps/%@/%@",self.mainWidget.appId,moreWgt.appId]];
 	[wgtDict setObject:moreWgt forKey:moreWgt.appId];
-	[moreWgt release];
+
 	
 }
 #pragma mark commonWidget
@@ -369,18 +276,13 @@ NSString * webappShowAactivety;
 - (WWidget *)wgtDataByAppId:(NSString*)inAppId{
     
     NSString *tmpAppId = [NSString stringWithString:inAppId];
-    
     //查询缓存
     WWidget *wgtObj =[wgtDict objectForKey:tmpAppId];
-    
     //解析config.xml
     NSString *configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
     ACENSLog(@"configPath=%@",configPath);
     SpecConfigParser *widgetXml = [[SpecConfigParser alloc] init];
     NSString *mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
-    [widgetXml release];
-    
-    
     if ([wgtObj.ver isEqualToString:mVer]) {
         return wgtObj;
     }
@@ -396,12 +298,11 @@ NSString * webappShowAactivety;
         if ([wgtObj.ver isEqualToString:mVer]) {
             [wgtDict setObject:wgtObj forKey:wgtObj.appId];
             [widgetSql close_database];
-            [widgetSql release];
+
             [tempArr removeAllObjects];
             return wgtObj;
         }
     }
-    //
     if ([[NSFileManager defaultManager] fileExistsAtPath:configPath]) {
         NSMutableDictionary *tmpWgtDict = [self wgtParameters:configPath];
         NSString *tmpWgtOneId = [BUtility appKey];
@@ -438,7 +339,7 @@ NSString * webappShowAactivety;
         wgtObj=nil;
     }
     [widgetSql close_database];
-    [widgetSql release];
+
     [tempArr removeAllObjects];
     return wgtObj;
 }
@@ -457,8 +358,6 @@ NSString * webappShowAactivety;
 		NSString *tmpWgtOneId = [BUtility appKey];
 		NSString *wgtPath=[NSString stringWithFormat:@"%@/%@",curWgtPath,pluginId];
 		if (tmpWgtOneId) {
-			//ACENSLog(@"tmpWgtOneId retaincount =%d",[tmpWgtOneId retainCount]);
-			ACENSLog(@"tmpWgtDict retaincount =%d",[tmpWgtDict retainCount]);
 			[tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
 		}
 		[tmpWgtDict setObject:wgtPath forKey:CONFIG_TAG_WIDGETPATH];
@@ -504,23 +403,7 @@ NSString * webappShowAactivety;
 		deleteWgt = [wgtSql deleteSql:[deleteComWgt UTF8String]];
 	}
 	[wgtSql close_database];
-	[wgtSql release];
 	[tmpArr removeAllObjects];
-	/*NSString *wgtPath;
-	//删除文件夹
-	if ([inAppId isEqualToString:F_WIDGET_MYSPACE]) {
-		wgtPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_APPS,self.wMainWgt.appId,F_NAME_MYSPACE]];
-	}else {
-		wgtPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_NAME_WIDGETS,inAppId]];
-	}
-	NSFileManager *fMan = [NSFileManager defaultManager];
-	if ([fMan fileExistsAtPath:wgtPath]) {
-		BOOL removeSuccess = [fMan removeItemAtPath:wgtPath error:nil];
-		if (removeSuccess) {
-			return F_WIDGET_REMOVE_SUCCESS;
-		}
-	}
-	//[fMan release];*/
 	return deleteWgt;
 }
 #pragma mark util
@@ -650,60 +533,54 @@ NSString * webappShowAactivety;
     }
     
 	[tmpDict removeAllObjects];
-	return [tmpWgt autorelease];
+	return tmpWgt;
 }
 
 //create request folder
 -(void)createReqFolder{
 	NSFileManager *fManager = [NSFileManager defaultManager];
 	if (self.mainWidget) {
-		NSString *absMainPath =[self curWidgetPath:self.mainWidget];
+		NSString *absMainPath = self.mainWidget.absWidgetPath;
 		NSString *videoPath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_VIDEO];
 		NSString *audioPath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_AUDIO];
 		NSString *photoPath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_PHOTO];
 		NSString *myspacePath = [NSString stringWithFormat:@"%@/%@",absMainPath,F_NAME_MYSPACE];
-    
-        if ([fManager fileExistsAtPath:absMainPath]==NO) {
+        if (![fManager fileExistsAtPath:absMainPath]) {
             [fManager createDirectoryAtPath:videoPath withIntermediateDirectories:YES attributes:nil error:nil];
              [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:absMainPath]];
         }
-        
-		if([fManager fileExistsAtPath:videoPath]==NO){
+		if(![fManager fileExistsAtPath:videoPath]){
 			[fManager createDirectoryAtPath:videoPath withIntermediateDirectories:YES attributes:nil error:nil];
 		}
-        
-		if([fManager fileExistsAtPath:audioPath]==NO){
+		if(![fManager fileExistsAtPath:audioPath]){
 			[fManager createDirectoryAtPath:audioPath withIntermediateDirectories:YES attributes:nil error:nil];
 		}
-		if([fManager fileExistsAtPath:photoPath]==NO){
+		if(![fManager fileExistsAtPath:photoPath]){
 			[fManager createDirectoryAtPath:photoPath withIntermediateDirectories:YES attributes:nil error:nil];
 		}
-		if([fManager fileExistsAtPath:myspacePath]==NO){
+		if(![fManager fileExistsAtPath:myspacePath]){
 			[fManager createDirectoryAtPath:myspacePath withIntermediateDirectories:YES attributes:nil error:nil];
 		}
 		
 	}
 	NSString *wgtFolders = [BUtility getDocumentsPath:F_NAME_WIDGETS];
-	if ([fManager fileExistsAtPath:wgtFolders]==NO) {
+	if (![fManager fileExistsAtPath:wgtFolders]) {
 		[fManager createDirectoryAtPath:wgtFolders withIntermediateDirectories:YES attributes:nil error:nil];
         [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtFolders]];
 
 	}
-	[fManager release];
+
 }
 //init load
 - (void) loadMainWidget {	
 	[self initMainWidget];
 	[self createReqFolder];
 	if ([BUtility getAppCanDevMode]) {
-		[ self unZipNormal];
+		[self unZipNormal];
+         [self createTmpFolder];
 	}else {
 		[self initLoginAndMoreWidget];
 	}
-    //开发模式
-    if ([BUtility getAppCanDevMode]) {
-        [self createTmpFolder];
-    }
 }
 #pragma mark develop_version
 -(void)createTmpFolder{
@@ -711,25 +588,22 @@ NSString * webappShowAactivety;
 	NSString *absPath = [BUtility getDocumentsPath:@"widgetone/widgetapp"];
 	for (int i =1; i<21; i++) {
 		NSString *tmpPath = [NSString stringWithFormat:@"%@/%d",absPath,i];
-		if([fManager fileExistsAtPath:tmpPath]==NO){
+		if(![fManager fileExistsAtPath:tmpPath]){
 			[fManager createDirectoryAtPath:tmpPath withIntermediateDirectories:YES attributes:nil error:nil];
 		}
 	}
 }
 
 -(void)unZipNormal{
-	ZipArchive *zipObj = [[ZipArchive alloc] init];
-	NSString *sourceWgt = [BUtility getResPath:@"widget/hiAppcan.zip"];
-	NSString *outPath =[BUtility getDocumentsPath:@"widgetone/widgetapp/hiAppcan"];
-	NSString *configPath = [NSString stringWithFormat:@"%@/config.xml",outPath];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:configPath]) {
-		if ([[NSFileManager defaultManager] fileExistsAtPath:sourceWgt]==YES) {
-			[zipObj UnzipOpenFile:sourceWgt]; 
-			[zipObj UnzipFileTo:outPath overWrite:NO];
-			[zipObj UnzipCloseFile];
-		}
-	}
-	[zipObj release];
+    ZipArchive *zipObj = [[ZipArchive alloc] init];
+    NSString *sourceWgt = [BUtility getResPath:@"widget/hiAppcan.zip"];
+    NSString *outPath =[BUtility getDocumentsPath:@"widgetone/widgetapp/hiAppcan"];
+    NSString *configPath = [NSString stringWithFormat:@"%@/config.xml",outPath];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:configPath] && [[NSFileManager defaultManager] fileExistsAtPath:sourceWgt]) {
+        [zipObj UnzipOpenFile:sourceWgt];
+        [zipObj UnzipFileTo:outPath overWrite:NO];
+        [zipObj UnzipCloseFile];
+    }
 }
 
 
@@ -775,7 +649,7 @@ NSString * webappShowAactivety;
 		}
 		[doSql insertSql:[insertStrSQL UTF8String]];
 		[doSql close_database];
-		[doSql release];
+
 	}
 }
 
@@ -790,7 +664,6 @@ NSString * webappShowAactivety;
 	wgtArr =[[NSMutableArray alloc] initWithArray:tmpArr];
 	NSUInteger wgtsNum = [wgtArr count];
 	[widgetObj close_database];
-	[widgetObj release];
 	[tmpArr removeAllObjects];
 	return (int)wgtsNum;
 }
@@ -802,38 +675,24 @@ NSString * webappShowAactivety;
 	return nil;
 }
 
-#pragma mark -update 
+#pragma mark - update
 - (BOOL)isNeetUpdateWgt {
     
-    if (!theApp.useUpdateWgtHtmlControl) {
+    if (!AppCanEngine.configuration.useUpdateWgtHtmlControl) {
         return NO;
     }
-    NSString *newConfigPath = nil;
-    NSString *appConfigPath = nil;
-    if ([BUtility getSDKVersion] < 5.0) {
-        newConfigPath = [BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-    } else {
-        newConfigPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+    if (![ACEConfigXML isWidgetConfigXMLAvailable]) {
+        return YES;
     }
-    appConfigPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-    //new
-    SpecConfigParser *newWidgetXml = [[SpecConfigParser alloc] init];
-    NSString *mNewVer = [newWidgetXml initwithReqData:newConfigPath queryPara:CONFIG_TAG_VERSION type:YES];
-    if (!mNewVer) {
-        mNewVer = @"";
-    }
-    [newWidgetXml release];
-    //app
-    SpecConfigParser *appWidgetXml = [[SpecConfigParser alloc] init];
-    NSString *mAppVer = [appWidgetXml initwithReqData:appConfigPath queryPara:CONFIG_TAG_VERSION type:YES];
-    [appWidgetXml release];
-    
-    return [self version:mAppVer isGreaterThan:mNewVer];
+    NSString *originWidgetVersion = [ACEConfigXML ACEOriginConfigXML][@"version"];
+    NSParameterAssert(originWidgetVersion != nil);
+    NSString *documentWidgetVersion = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
+    return [self version:originWidgetVersion isGreaterThan:documentWidgetVersion];
         
 }
 
 - (BOOL)version:(NSString *)version1 isGreaterThan:(NSString *)version2 {
-    
+
     NSArray *versions1 = [version1 componentsSeparatedByString:@"."];
     NSArray *versions2 = [version2 componentsSeparatedByString:@"."];
     

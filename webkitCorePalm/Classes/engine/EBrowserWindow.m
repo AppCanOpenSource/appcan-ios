@@ -321,7 +321,7 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 
 
 -(void)wndSeqChange{
-    EBrowserController *topController = [ACESubwidgetManager defaultManager].topWidgetController ?: theApp.meBrwCtrler;
+    EBrowserController *topController = [ACESubwidgetManager defaultManager].topWidgetController ?: AppCanEngine.rootWebViewController;
 
     
     EBrowserWindow *topWindow = topController.aboveWindow;

@@ -49,7 +49,7 @@
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEJSCHandler.h"
 #import "ACEJSCBaseJS.h"
-
+#import "AppCanEngine.h"
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -105,7 +105,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         return;
     }
     self.JSCHandler = [[ACEJSCHandler alloc]initWithEBrowserView:self.superDelegate];
-    if(!theApp.useRC4EncryptWithLocalstorage){
+    if(!AppCanEngine.configuration.useRC4EncryptWithLocalstorage){
         [context evaluateScript:[BUtility getRC4LocalStoreJSKey]];
     }
     

@@ -173,12 +173,8 @@
 				case F_WWIDGET_MAINWIDGET:{
 					NSString *resPath = nil;
                     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-                    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-                        if ([BUtility getSDKVersion]<5.0) {
-                            resPath =[BUtility getCachePath:@""];
-                        }else {
-                            resPath =[BUtility getDocumentsPath:@""];
-                        }
+                    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+                        resPath = [BUtility getDocumentsPath:@""];
                     }else {
                         resPath =[BUtility getResPath:@""];
                     }

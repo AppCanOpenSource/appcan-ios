@@ -27,9 +27,9 @@
 @class RESideMenu;
 @class ACEPluginParser;
 @interface WidgetOneDelegate: NSObject <UIApplicationDelegate>
-@property (nonatomic, strong) ACEPluginParser *pluginObj;
+
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, strong) EBrowserController *meBrwCtrler;
+//@property (nonatomic, strong) EBrowserController *meBrwCtrler;
 @property (nonatomic, strong) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, assign) BOOL userStartReport;
 @property (nonatomic, assign) BOOL useEmmControl;
@@ -56,7 +56,7 @@
 @property (nonatomic, strong) NSString *useAppCanUpdateURL;
 @property (nonatomic, assign) BOOL useAppCanMDMURLControl;
 @property (nonatomic, retain) NSMutableDictionary *thirdInfoDict;
-@property (nonatomic, assign) BOOL isFirstPageDidLoad;
+
 
 @property (nonatomic, strong) ACEWebViewController *leftWebController;
 @property (nonatomic, strong) ACEWebViewController *rightWebController;
@@ -80,8 +80,8 @@
 
 - (instancetype)initWithDevMode;
 
-//-(NSString *)getPayPublicRsaKey;
--(void)rootPageDidFinishLoading;
+
+
 @end
 
 #define theApp ((WidgetOneDelegate *)[[UIApplication sharedApplication] delegate])
