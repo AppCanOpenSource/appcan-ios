@@ -230,14 +230,11 @@ Keychain API expects as a validly constructed container class.
 	// could contain multiple result sets to be handled
 	NSDictionary * resultsInfo = [dictionaryToConvert objectForKey:(__bridge id)kSecValueData];
 	
-	NSString * error;
-	NSData * xmlData = [NSPropertyListSerialization dataFromPropertyList:resultsInfo 
-                                                                  format:NSPropertyListXMLFormat_v1_0 
-                                                        errorDescription:&error];
-	
+	NSError *error;
+    NSData *xmlData = [NSPropertyListSerialization dataWithPropertyList:resultsInfo format:NSPropertyListXMLFormat_v1_0  options:0 error:&error];
 	if (error != nil) 
     { 
-		NSLog(@"dictionaryToSecItemFormat: Error! %@", error);
+		NSLog(@"dictionaryToSecItemFormat: Error! %@", error.localizedDescription);
 	}
 	
     if (xmlData)

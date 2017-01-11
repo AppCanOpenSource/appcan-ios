@@ -33,14 +33,13 @@
 #import "WidgetOneDelegate.h"
 #import "WWidgetUpdate.h"
 #import "NSString+SBJSON.h"
-#import "SFHFKeychainUtils.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "ACEInterfaceOrientation.h"
 
 #import <AppCanKit/ACInvoker.h>
 #import "ACEConfigXML.h"
-//#import <usr/in>
+
 #define KAlertWithUpdateTag 1000
 
 

@@ -72,7 +72,7 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
 
 /**
  *  保证参数满足一定的condition
- *  用法参考NSAssert,当condition不满足时,会输出debug日志并退出当前scope
+ *  用法参考NSAssert,当condition不满足时,会输出error日志并退出当前scope
  *
  *  @note 此宏只应该在插件接口中被使用
  *  @note 传入1~2个参数
@@ -84,7 +84,7 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
  - (NSString *)test:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSNumber *inSpeed) = inArguments;
     NSInteger speed = inSpeed.floatValue;
-    UEX_PARAM_GUARD(speed > 0,@"1"); //如果speed <= 0,会直接输出debug日志并退出test方法,返回值为@"1"
+    UEX_PARAM_GUARD(speed > 0,@"1"); //如果speed <= 0,会直接输出日志并退出test方法,返回值为@"1"
     return @"2";
  }
  
@@ -95,7 +95,7 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
 
 /**
  *  保证参数非nil
- *  用法参考NSAssert,当condition不满足时,会输出debug日志并退出当前scope
+ *  用法参考NSAssert,当condition不满足时,会输出error日志并退出当前scope
  *
  *  @note 此宏只应该在插件接口中被使用
  *  @note 传入1~2个参数
@@ -106,7 +106,7 @@ APPCAN_EXPORT UEX_ERROR kUexNoError;
  
  - (NSString *)test:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSNumber *inSpeed) = inArguments;
-    UEX_PARAM_GUARD_NOT_NIL(inSpeed,@"1"); //如果inSpeed 为nil,会直接输出debug日志并退出test方法,返回值为@"1"
+    UEX_PARAM_GUARD_NOT_NIL(inSpeed,@"1"); //如果inSpeed 为nil,会直接输出日志并退出test方法,返回值为@"1"
     return @"2";
  }
  

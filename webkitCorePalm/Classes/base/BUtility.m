@@ -35,7 +35,6 @@
 #import "WidgetOneDelegate.h"
 #import "EBrowserMainFrame.h"
 
-#import "SFHFKeychainUtils.h"
 
 //mac begin
 #include <sys/socket.h> // Per msqr 
@@ -48,7 +47,6 @@
 #import <objc/message.h>
 //mac end
 #import "AllConfigParser.h"
-#import "SFHFKeychainUtils.h"
 #import "OpenUDID.h"
 
 #import "FileEncrypt.h"
@@ -1256,74 +1254,6 @@ static NSString *clientCertificatePwd = nil;
 
 
 +(NSString *)macAddress{ 
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-//    {
-//        NSString *identifier = [[NSBundle mainBundle] bundleIdentifier];
-//        
-//        NSString *uniqueID =  [SFHFKeychainUtils getPasswordForUsername:@"username"andServiceName:identifier error:nil];
-//        if (uniqueID)
-//        {
-//            return uniqueID;
-//        }
-//        else
-//        {
-//            
-//            CFUUIDRef puuid = CFUUIDCreate(nil);
-//            CFStringRef uuidStr = CFUUIDCreateString(nil, puuid);
-//            NSString *idFVendor =(NSString*) CFStringCreateCopy(NULL, uuidStr);
-//            CFRelease(uuidStr);
-//            CFRelease(puuid);
-//            //            NSUUID * identifierVendor = [UIDevice currentDevice].identifierForVendor;
-//            //            NSString * idFVendor = [identifierVendor UUIDString];
-//            //    NSLog(@"应用本次安装唯一标示符是%@",idFVendor);
-//            [SFHFKeychainUtils storeUsername:@"username" andPassword:idFVendor forServiceName:identifier updateExisting:1 error:nil];
-//            return idFVendor;
-//        }
-//    } else
-//    {
-//        int                 mib[6];
-//        size_t              len;
-//        char                *buf;
-//        unsigned char       *ptr;
-//        struct if_msghdr    *ifm;
-//        struct sockaddr_dl  *sdl;
-//        
-//        mib[0] = CTL_NET;
-//        mib[1] = AF_ROUTE;
-//        mib[2] = 0;
-//        mib[3] = AF_LINK;
-//        mib[4] = NET_RT_IFLIST;
-//        
-//        if ((mib[5] = if_nametoindex("en0")) == 0) {
-//            printf("Error: if_nametoindex error\n");
-//            return NULL;
-//        }
-//        
-//        if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
-//            printf("Error: sysctl, take 1\n");
-//            return NULL;
-//        }
-//        
-//        if ((buf = malloc(len)) == NULL) {
-//            printf("Could not allocate memory. error!\n");
-//            return NULL;
-//        }
-//        
-//        if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
-//            printf("Error: sysctl, take 2");
-//            free(buf);
-//            return NULL;
-//        }
-//        
-//        ifm = (struct if_msghdr *)buf;
-//        sdl = (struct sockaddr_dl *)(ifm + 1);
-//        ptr = (unsigned char *)LLADDR(sdl);
-//        NSString *outstring = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
-//                               *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
-//        free(buf);
-//        
-//        return outstring;
-//    }
     if([self isSimulator]){
         return @"";
     }
