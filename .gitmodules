@@ -1,0 +1,9 @@
+[submodule "Carthage/Checkouts/AppCanKit"]
+	path = Carthage/Checkouts/AppCanKit
+	url = https://github.com/ios-plugin/AppCanKit.git
+[submodule "Carthage/Checkouts/Ono"]
+	path = Carthage/Checkouts/Ono
+	url = https://github.com/ios-plugin/Ono.git
+[submodule "Carthage/Checkouts/pop"]
+	path = Carthage/Checkouts/pop
+	url = https://github.com/ios-plugin/pop.git
