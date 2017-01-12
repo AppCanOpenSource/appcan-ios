@@ -23,7 +23,6 @@
 @class EBrowser;
 @class WWidgetMgr;
 @class WWidget;
-@class BallView;
 @class WWidgetUpdate;
 @class ACEUINavigationController;
 @class EBrowserWindow;
@@ -55,7 +54,7 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, strong) EBrowser *meBrw;
 @property (nonatomic, assign) BOOL ballHasShow;
 @property (nonatomic, assign) int mFlag;
-@property (nonatomic, strong) BallView *ballView;
+
 @property (nonatomic, readonly) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, readonly)EBrowserWidgetContainer *brwWidgetContainer;
 @property (nonatomic, readonly)EBrowserWindow *rootWindow;

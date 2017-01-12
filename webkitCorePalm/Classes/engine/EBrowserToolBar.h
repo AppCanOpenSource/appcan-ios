@@ -17,7 +17,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "AppCenter.h"
+
 @class EBrowserController;
 
 #define	MENU_WIDTH  320
@@ -61,7 +61,7 @@
 @property (nonatomic,strong)UIButton *barbtn;
 @property (nonatomic,weak)EBrowserController *eBrwCtrler;
 @property (nonatomic,assign)int mFlag;
-//-(void)drawViewWithBrwWnd:(EBrowserWindow *)eBrwWnd_;
+
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler;
-- (void)LoadSpace;
+
 @end

@@ -50,6 +50,7 @@
         if ([BUtility getAppCanDevMode] || [self.meBrwCtrler.mwWgtMgr.mainWidget getMySpaceStatus]) {
             self.meBrwToolBar =[[EBrowserToolBar alloc] initWithFrame:CGRectMake(BOTTOM_LOCATION_VERTICAL_X,BOTTOM_LOCATION_VERTICAL_Y, BOTTOM_VIEW_WIDTH,BOTTOM_VIEW_HEIGHT) BrwCtrler:eInBrwCtrler];
             [self addSubview:self.meBrwToolBar];
+
         }
 	}
 
@@ -66,7 +67,7 @@
 
     [self.meBrwToolBar removeFromSuperview];
     self.meBrwToolBar = nil;
-    self.mAppCenter = nil;
+
 
 
 }

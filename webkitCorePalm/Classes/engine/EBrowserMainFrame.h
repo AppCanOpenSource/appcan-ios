@@ -23,7 +23,7 @@
 @class EBrowserToolBar;
 @class EBrowserController;
 @class EBrowserView;
-@class AppCenter;
+
 
 
 
@@ -40,7 +40,7 @@
 @property (nonatomic, weak)EBrowserController *meBrwCtrler;
 @property (nonatomic, strong)EBrowserWidgetContainer *meBrwWgtContainer;
 @property (nonatomic, strong)EBrowserToolBar *meBrwToolBar;
-@property (nonatomic, strong)AppCenter *mAppCenter;
+
 
 
 

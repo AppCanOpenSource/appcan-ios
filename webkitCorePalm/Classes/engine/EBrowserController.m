@@ -81,14 +81,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 	}else {
 		self.meBrwMainFrm.meBrwToolBar.hidden = YES;
 	}
-	if (mySpaceValue & WIDGETREPORT_SPACESTATUS_EXTEN_OPEN){
-		//显示更多
-        [self.meBrwMainFrm.mAppCenter.sView showMoreAppBtn:YES];
-	}else {
-		//隐藏更多
-        [self.meBrwMainFrm.mAppCenter.sView showMoreAppBtn:NO];
-        
-	}
+
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"componentStatusUpdate" object:nil];
 }
 
@@ -106,7 +99,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         _meBrw = [[EBrowser alloc] init];
         _meBrw.meBrwCtrler = self;
         _meBrwMainFrm.meBrwWgtContainer = [[EBrowserWidgetContainer alloc] initWithFrame:[UIScreen mainScreen].bounds browserController:self widget:widget];
-        [_meBrwMainFrm addSubview:_meBrwMainFrm.meBrwWgtContainer];
+        [_meBrwMainFrm insertSubview:_meBrwMainFrm.meBrwWgtContainer atIndex:0];
     }
     
     return self;

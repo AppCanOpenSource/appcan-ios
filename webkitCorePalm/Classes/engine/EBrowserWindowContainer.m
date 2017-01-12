@@ -24,7 +24,6 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowser.h"
 #import "BUtility.h"
-#import "AppCenter.h"
 #import "WWidget.h"
 #import "ACEWebViewController.h"
 #import "WidgetOneDelegate.h"
@@ -180,13 +179,6 @@
 	if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
 		eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
 		eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
-	}
-	if (!self.superview) {
-		if (self.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-			if (self.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-				[self.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_FAIL retAppId:eInBrwView.mwWgt.appId];
-			}
-		}
 	}
 	[eSuperBrwWnd notifyLoadPageErrorOfBrwView:eInBrwView];
 }
