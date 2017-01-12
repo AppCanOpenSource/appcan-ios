@@ -25,7 +25,7 @@
 @class EBrowserView;
 @class AppCenter;
 
-@class BStatusBarView;
+
 
 #define F_EBRW_MAINFRM_AD_TYPE_TOP			0
 #define F_EBRW_MAINFRM_AD_TYPE_MIDDLE		1
