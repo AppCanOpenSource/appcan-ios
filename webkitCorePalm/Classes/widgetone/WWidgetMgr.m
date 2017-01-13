@@ -28,7 +28,7 @@
 #import "WidgetOneDelegate.h"
 #import "FileEncrypt.h"
 #import "ACEConfigXML.h"
-
+#import "ACEDes.h"
 
 NSString * webappShowAactivety;
 
@@ -77,10 +77,7 @@ NSString * webappShowAactivety;
 	NSString * mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
     
     
-    WidgetOneDelegate * app = nil;
-    if ([[UIApplication sharedApplication].delegate isKindOfClass:[WidgetOneDelegate class]]) {
-        app = [UIApplication sharedApplication].delegate;
-    }
+
     
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
@@ -91,8 +88,10 @@ NSString * webappShowAactivety;
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
     if([obfuscationStr isEqualToString:@"true"]){
         wgtobj.obfuscation = F_WWIDGET_OBFUSCATION;
+        ACEDes.decryptionEnable = YES;
     }else {
         wgtobj.obfuscation = F_WWIDGET_NO_OBFUSCATION;
+
     }
     
     NSString * logServerIp = [tmpWgtDict objectForKey:CONFIG_TAG_LOGSERVERIP];

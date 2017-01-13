@@ -133,10 +133,6 @@ void ACENSLog (NSString *format, ...);
 +(NSString*)wgtResPath:(NSString*)inUrl;
 + (UIColor *) colorWithHexString: (NSString *) stringToConvert;
 +(BOOL) isValidateOrientation:(UIInterfaceOrientation)inOrientation;
-
-/*
- *判断是否有某个字符
- */
 +(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubString;
 +(int)fileisDirectoy:(NSString *)fileName;
 +(NSString *)AESDecryptFile:(NSString *)srcFile;
@@ -183,12 +179,12 @@ void ACENSLog (NSString *format, ...);
 +(NSString *)getMainWidgetConfigLogserverip;
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
 + (NSString *)bundleIdentifier;
-
 + (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
-
-
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
-#pragma mark - IDE
+
+
+
+
 
 + (NSString *)dynamicPluginFrameworkFolderPath;
 
