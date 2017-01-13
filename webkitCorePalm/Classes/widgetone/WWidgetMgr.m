@@ -91,10 +91,8 @@ NSString * webappShowAactivety;
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
     if([obfuscationStr isEqualToString:@"true"]){
         wgtobj.obfuscation = F_WWIDGET_OBFUSCATION;
-        app.enctryptcj = F_WWIDGET_ENCRYPTCJ;
     }else {
         wgtobj.obfuscation = F_WWIDGET_NO_OBFUSCATION;
-        app.enctryptcj = F_WWIDGET_NO_ENCRYPTCJ;
     }
     
     NSString * logServerIp = [tmpWgtDict objectForKey:CONFIG_TAG_LOGSERVERIP];

@@ -1128,22 +1128,24 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSString *)bundleIdentifier {
-
-    Class packageInfo = NSClassFromString(@"PackageInfo");
-    NSString *appcanIndentifier =  @"com.zywx.appcan";
-    if (packageInfo) {
-        appcanIndentifier = [packageInfo ac_invoke:@"getBundleIdentifier"];
-    }else{
-        ACLogError(@"AppCan PackageInfo 不存在!!");
+    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication isKindOfClass:[WidgetOneDelegate class]];
+    if (isWidgetOneDelegate) {
+        Class packageInfo = NSClassFromString(@"PackageInfo");
+        NSString *appcanIndentifier =  @"com.zywx.appcan";
+        if (packageInfo) {
+            appcanIndentifier = [packageInfo ac_invoke:@"getBundleIdentifier"];
+        }else{
+            ACLogError(@"AppCan PackageInfo 不存在!!");
+        }
+        return appcanIndentifier;
     }
-
-    return appcanIndentifier;
-
-
+    return [[NSBundle mainBundle].infoDictionary objectForKey:(__bridge NSString*)kCFBundleIdentifierKey];
+   
 }
 
 + (NSString *)appKey{
-    if (!appCanDevelopmetMode) {
+    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication isKindOfClass:[WidgetOneDelegate class]];
+    if (!appCanDevelopmetMode && isWidgetOneDelegate) {
         Class Beqtucontent = NSClassFromString(@"Beqtucontent");
         if (Beqtucontent) {
             return [Beqtucontent ac_invoke:@"getContentPath"];
@@ -1159,6 +1161,7 @@ static NSString *clientCertificatePwd = nil;
     return nil;
 }
 + (NSString *)appId{
+    
     NSString * appIdStr =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"appid"];
     if (appIdStr &&[appIdStr length]>1) {
         return appIdStr;
