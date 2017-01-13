@@ -28,9 +28,13 @@
 #import "ACEDes.h"
 #import "ACEConfigXML.h"
 #import <AppCanKit/AppCanKit.h>
+
 #import <objc/message.h>
 #import "EBrowserController.h"
 #import "ACEUINavigationController.h"
+#import "WWidgetMgr.h"
+#import "EBrowserView.h"
+#import "WWidget.h"
 
 @interface ACEDefaultConfiguration : NSObject<AppCanEngineConfiguration>
 @property (nonatomic, assign) BOOL userStartReport;
@@ -487,6 +491,16 @@ static ACEUINavigationController *_mainWidgetController;
     }];
 }
 
+
+#pragma mark - AppCanGlobalObjectGetter
+
++ (id<AppCanWebViewEngineObject>)getAppCanRootWebViewEngine{
+    return self.rootWebViewController.rootView;
+}
+
++ (id<AppCanWidgetObject>)getAppCanMainWidget{
+    return [[WWidgetMgr sharedManager] mainWidget];
+}
 
 
 @end

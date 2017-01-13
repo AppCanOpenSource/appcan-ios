@@ -68,7 +68,7 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 + (void)addOpeningAnimationWithID:(ACEAnimationID)animationID fromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration configuration:(NSDictionary *)config completionHandler:(ACEAnimateCompletionBlock)completion{
     Class animateClass = _animations[@(animationID)];
     if (!animateClass) {
-        completion(NO);
+        if(completion) completion(NO);
         return;
     }
     [animateClass addOpeningAnimationWithID:animationID fromView:fromView toView:toView duration:duration configuration:config completionHandler:completion];
@@ -77,7 +77,7 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 + (void)addClosingAnimationWithID:(ACEAnimationID)animationID fromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration configuration:(NSDictionary *)config completionHandler:(ACEAnimateCompletionBlock)completion{
     Class animateClass = _animations[@(animationID)];
     if (!animateClass) {
-        completion(NO);
+        if(completion) completion(NO);
         return;
     }
     [animateClass addClosingAnimationWithID:animationID fromView:fromView toView:toView duration:duration configuration:config completionHandler:completion];

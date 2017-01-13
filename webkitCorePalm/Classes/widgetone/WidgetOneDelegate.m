@@ -49,7 +49,7 @@
 #import "ACEPluginParser.h"
 #import "ACEJSCHandler.h"
 #import "ACEBrowserView.h"
-#import <AppCanKit/AppCanGlobalObjectGetter.h>
+
 #import <AppCanKit/ACInvoker.h>
 #import "ACEConfigXML.h"
 #import <UserNotifications/UserNotifications.h>
@@ -513,16 +513,6 @@
 
 
 
-
-#pragma mark - AppCanGlobalObjectGetter
-
-- (id<AppCanWebViewEngineObject>)getAppCanRootWebViewEngine{
-    return AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
-}
-
-- (id<AppCanWidgetObject>)getAppCanMainWidget{
-    return AppCanEngine.rootWebViewController.mwWgtMgr.mainWidget;
-}
 
 #pragma mark - UNUserNotificationCenterDelegate
 

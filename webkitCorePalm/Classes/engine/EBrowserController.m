@@ -582,6 +582,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
 - (EBrowserWindowContainer *)rootWindowContainer{
     return self.brwWidgetContainer.meRootBrwWndContainer;
 }
-
+- (EBrowserView *)rootView{
+    return self.rootWindow.meBrwView;
+}
 
 @end

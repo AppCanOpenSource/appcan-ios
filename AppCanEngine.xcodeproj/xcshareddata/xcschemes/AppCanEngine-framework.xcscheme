@@ -14,6 +14,34 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F82D394D1AA6199E00DAC057"
+               BuildableName = "Ono.framework"
+               BlueprintName = "Ono iOS"
+               ReferencedContainer = "container:Carthage/Checkouts/Ono/Ono.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0B6BE74719FFD3B900762101"
+               BuildableName = "pop.framework"
+               BlueprintName = "pop-ios-framework"
+               ReferencedContainer = "container:Carthage/Checkouts/pop/pop.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "421AE5221CF57181001A5053"
                BuildableName = "AppCanKit.framework"
                BlueprintName = "AppCanKit"

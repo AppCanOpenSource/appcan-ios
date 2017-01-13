@@ -40,10 +40,10 @@
 		427890781DEEB57700B8476D /* ACEViewControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 427890761DEEB57700B8476D /* ACEViewControllerAnimator.m */; };
 		427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */; };
 		427A79201DDE95B800E85BA4 /* ACESubwidgetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */; };
-		42AFECBB1E276333007A7D3F /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AFECB91E276333007A7D3F /* Ono.framework */; };
-		42AFECBC1E276333007A7D3F /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AFECBA1E276333007A7D3F /* pop.framework */; };
 		42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CF2D651DDADBD80060C610 /* ACEConfigXML.h */; };
 		42CF2D6A1DDADBD80060C610 /* ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D661DDADBD80060C610 /* ACEConfigXML.m */; };
+		42F18AAE1E27851900A20E2A /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F18AAC1E27851900A20E2A /* Ono.framework */; };
+		42F18AAF1E27851900A20E2A /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F18AAD1E27851900A20E2A /* pop.framework */; };
 		42F787451D950B5D0094AA05 /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 		42F787461D950B5D0094AA05 /* EBrowserHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F718B1B93D000D7600 /* EBrowserHistory.m */; };
 		42F787481D950B5D0094AA05 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBE1A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.m */; };
@@ -396,6 +396,8 @@
 		42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCBaseJS.m; sourceTree = "<group>"; };
 		42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCHandler.h; sourceTree = "<group>"; };
 		42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCHandler.m; sourceTree = "<group>"; };
+		42F18AAC1E27851900A20E2A /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ono.framework; path = "../../../Library/Developer/Xcode/DerivedData/AppCanPlugin-ebtpqpzgmgsghkebfigkjegezjpq/Build/Products/Debug-iphoneos/Ono.framework"; sourceTree = "<group>"; };
+		42F18AAD1E27851900A20E2A /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/AppCanPlugin-ebtpqpzgmgsghkebfigkjegezjpq/Build/Products/Debug-iphoneos/pop.framework"; sourceTree = "<group>"; };
 		42F788841D950B5D0094AA05 /* AppCanEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCanEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42F788A71D9513E80094AA05 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ono.framework; path = "../../appcan-test-report/_UnitTest/AppCanPlugin_4.0/AppCanPlugin/uexFrameworks/Ono.framework"; sourceTree = "<group>"; };
 		42F788A81D9513E80094AA05 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../appcan-test-report/_UnitTest/AppCanPlugin_4.0/AppCanPlugin/uexFrameworks/pop.framework"; sourceTree = "<group>"; };
@@ -558,8 +560,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42AFECBB1E276333007A7D3F /* Ono.framework in Frameworks */,
-				42AFECBC1E276333007A7D3F /* pop.framework in Frameworks */,
+				42F18AAE1E27851900A20E2A /* Ono.framework in Frameworks */,
+				42F18AAF1E27851900A20E2A /* pop.framework in Frameworks */,
 				42F787C81D950B5D0094AA05 /* libxml2.tbd in Frameworks */,
 				42F787C91D950B5D0094AA05 /* libsqlite3.tbd in Frameworks */,
 				42F787CA1D950B5D0094AA05 /* ImageIO.framework in Frameworks */,
@@ -998,6 +1000,8 @@
 		B220D27615A3152B00D02138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42F18AAC1E27851900A20E2A /* Ono.framework */,
+				42F18AAD1E27851900A20E2A /* pop.framework */,
 				42AFECB91E276333007A7D3F /* Ono.framework */,
 				42AFECBA1E276333007A7D3F /* pop.framework */,
 				427260051D9B546900B941CF /* AppCanKit.framework */,
@@ -1436,17 +1440,14 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
 					"$(BUILD_DIR)",
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Ono/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/pop/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/webkitCorePalm/Classes/plugin/**";
 				INFOPLIST_FILE = "$(SRCROOT)/AppCanEngine/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path @loader_path/Frameworks @loader_path";
@@ -1484,17 +1485,14 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../webkitCorePalm/Classes/plugin",
 					"$(BUILD_DIR)",
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Checkouts/Ono/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Carthage/Checkouts/pop/build/Debug-iphoneos",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/../webkitCorePalm/Classes/plugin/**";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/webkitCorePalm/Classes/plugin/**";
 				INFOPLIST_FILE = "$(SRCROOT)/AppCanEngine/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path @loader_path/Frameworks @loader_path";

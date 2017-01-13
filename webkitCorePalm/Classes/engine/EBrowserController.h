@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
 @property (nonatomic, assign)BOOL isAppCanRootViewController;
 @property (nonatomic, strong)WWidget *widget;
 @property (nonatomic, strong)ACEWidgetInfo *widgetInfo;
-
+@property (nonatomic, readonly)EBrowserView *rootView;
 
 
 - (instancetype)initWithMainWidget;

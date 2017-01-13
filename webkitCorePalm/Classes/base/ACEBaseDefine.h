@@ -48,7 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - AppCanEngine
 
-
+@class UNUserNotificationCenter;
+@class UNNotification;
+@class UNNotificationResponse;
 @protocol AppCanEngine <NSObject>
 
 @property (nonatomic,readonly,class)__kindof UINavigationController *mainWidgetController;
