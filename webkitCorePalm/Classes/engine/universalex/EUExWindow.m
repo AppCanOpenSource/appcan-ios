@@ -258,7 +258,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
         NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
         NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
-        return [NSURL fileURLWithPath:urlStr relativeToURL:baseURL].standardizedURL;
+        NSURL *url = [NSURL URLWithString:urlStr relativeToURL:baseURL];
+        return [NSURL URLWithString:url.absoluteString].standardizedURL;
     }
 
     NSURL *url = [NSURL URLWithString:urlStr];
