@@ -273,7 +273,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     //relativePath
 
-    urlStr = [[self.EBrwView.curUrl URLByDeletingLastPathComponent].absoluteString stringByAppendingPathComponent:urlStr];
+    NSURLComponents *components = [NSURLComponents componentsWithURL:self.EBrwView.curUrl resolvingAgainstBaseURL: NO];
+    components.query = nil;
+    components.fragment = nil;
+    NSURL *currentURL = [components URL];
+    urlStr = [[currentURL URLByDeletingLastPathComponent].absoluteString stringByAppendingPathComponent:urlStr];
     url = [NSURL URLWithString:urlStr];
     if (url.isFileURL) {
         url = url.standardizedURL;
