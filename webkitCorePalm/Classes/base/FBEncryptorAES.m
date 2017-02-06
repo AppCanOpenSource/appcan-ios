@@ -21,7 +21,7 @@
 //
 
 #import "FBEncryptorAES.h"
-#import "NSData+Base64.h"
+//#import "NSData+Base64.h"
 #import "BUtility.h"
 @implementation FBEncryptorAES
 
@@ -129,12 +129,12 @@
     NSData* data = [self encryptData:[string dataUsingEncoding:NSUTF8StringEncoding]
                                  key:[keyString dataUsingEncoding:NSUTF8StringEncoding]
                                   iv:nil];
-    return [data base64EncodedStringWithSeparateLines:separateLines];
+    return [data base64EncodedStringWithOptions:0];
 }
 
 + (NSString*)decryptBase64String:(NSString*)encryptedBase64String keyString:(NSString*)keyString
 {
-    NSData* encryptedData = [NSData dataFromBase64String:encryptedBase64String];
+    NSData* encryptedData = [[NSData alloc]initWithBase64EncodedString:encryptedBase64String options:0];
     NSData* data = [self decryptData:encryptedData
                                  key:[keyString dataUsingEncoding:NSUTF8StringEncoding]
                                   iv:nil];

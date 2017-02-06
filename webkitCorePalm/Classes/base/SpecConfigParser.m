@@ -55,7 +55,6 @@
         FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
         NSString *data = [encryptObj decryptWithPath:url appendData:nil];
         
-        [encryptObj release];
         
         xmlData = (NSMutableData *)[data dataUsingEncoding:NSUTF8StringEncoding];
     }
@@ -119,15 +118,11 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
 	[alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
 	[BUtility exitWithClearData];
-	[alertView release];
 }
 
 - (void)dealloc {
-	[resultData release];
 	resultData = nil;
-	[mParser release];
 	mParser = nil;
-    [super dealloc];
 }
 
 @end

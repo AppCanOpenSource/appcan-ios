@@ -178,6 +178,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
     [self.JSCHandler clean];
     self.JSContext[ACEJSCHandlerInjectField] = nil;
     self.JSCHandler = nil;
+    self.JSContext = nil;
     [self reset];
     self.currentUrl = nil;
     self.delegate = nil;

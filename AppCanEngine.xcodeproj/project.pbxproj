@@ -84,30 +84,30 @@
 		42F787771D950B5D0094AA05 /* EBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F318B1B93D000D7600 /* EBrowser.m */; };
 		42F787791D950B5D0094AA05 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C531B2A6D3500D5F279 /* UIView+WebCacheOperation.m */; };
 		42F7877A1D950B5D0094AA05 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C361B2A6D3500D5F279 /* NSData+ImageContentType.m */; };
-		42F7877B1D950B5D0094AA05 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F7877B1D950B5D0094AA05 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */; };
 		42F7877C1D950B5D0094AA05 /* BUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859C18B1B93D000D7600 /* BUIAlertView.m */; };
 		42F7877D1D950B5D0094AA05 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863418B1B93D000D7600 /* ASINetworkQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7877E1D950B5D0094AA05 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C451B2A6D3500D5F279 /* SDWebImagePrefetcher.m */; };
-		42F787801D950B5D0094AA05 /* BToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859A18B1B93D000D7600 /* BToastView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787801D950B5D0094AA05 /* BToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859A18B1B93D000D7600 /* BToastView.m */; };
 		42F787811D950B5D0094AA05 /* EBrowserHistoryEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F918B1B93D000D7600 /* EBrowserHistoryEntry.m */; };
 		42F787821D950B5D0094AA05 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EB81A448EFD00DC7397 /* MMDrawerBarButtonItem.m */; };
 		42F787831D950B5D0094AA05 /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		42F787841D950B5D0094AA05 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C401B2A6D3500D5F279 /* SDWebImageDownloaderOperation.m */; };
 		42F787851D950B5D0094AA05 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C4D1B2A6D3500D5F279 /* UIImage+WebP.m */; };
 		42F787871D950B5D0094AA05 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862818B1B93D000D7600 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F787881D950B5D0094AA05 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787881D950B5D0094AA05 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; };
 		42F787891D950B5D0094AA05 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
 		42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863718B1B93D000D7600 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867D18B1B93D000D7600 /* WWidget.m */; };
 		42F7878E1D950B5D0094AA05 /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; };
 		42F7878F1D950B5D0094AA05 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863918B1B93D000D7600 /* AsyncSocket.m */; };
-		42F787901D950B5D0094AA05 /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787901D950B5D0094AA05 /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; };
 		42F787911D950B5D0094AA05 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B018B1B93D000D7600 /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787931D950B5D0094AA05 /* EUExWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861F18B1B93D000D7600 /* EUExWindow.m */; };
 		42F787941D950B5D0094AA05 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C3E1B2A6D3500D5F279 /* SDWebImageDownloader.m */; };
 		42F787951D950B5D0094AA05 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
 		42F787961D950B5D0094AA05 /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C421B2A6D3500D5F279 /* SDWebImageManager.m */; };
-		42F7879A1D950B5D0094AA05 /* ACEDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18041A47A9B70050DD13 /* ACEDrawerViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F7879A1D950B5D0094AA05 /* ACEDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334D18041A47A9B70050DD13 /* ACEDrawerViewController.m */; };
 		42F7879B1D950B5D0094AA05 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C4F1B2A6D3500D5F279 /* UIImageView+HighlightedWebCache.m */; };
 		42F7879D1D950B5D0094AA05 /* EBrowserViewAnimition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860118B1B93D000D7600 /* EBrowserViewAnimition.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F7879E1D950B5D0094AA05 /* ACEJSCBaseJS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */; };
@@ -125,7 +125,6 @@
 		42F787AE1D950B5D0094AA05 /* EUExWidgetOne.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861D18B1B93D000D7600 /* EUExWidgetOne.m */; };
 		42F787AF1D950B5D0094AA05 /* ACEPluginInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A615521C40CB9A00883148 /* ACEPluginInfo.m */; };
 		42F787B01D950B5D0094AA05 /* ACEJSCHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */; };
-		42F787B11D950B5D0094AA05 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B618B1B93D000D7600 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787B21D950B5D0094AA05 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AA18B1B93D000D7600 /* NSString+SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787B31D950B5D0094AA05 /* EBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FF18B1B93D000D7600 /* EBrowserView.m */; };
 		42F787B41D950B5D0094AA05 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
@@ -133,7 +132,7 @@
 		42F787B61D950B5D0094AA05 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; };
 		42F787B71D950B5D0094AA05 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862318B1B93D000D7600 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787B81D950B5D0094AA05 /* EBrowserWindowContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */; };
-		42F787BA1D950B5D0094AA05 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787BA1D950B5D0094AA05 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; };
 		42F787BC1D950B5D0094AA05 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EC01A448EFD00DC7397 /* UIViewController+MMDrawerController.m */; };
 		42F787BD1D950B5D0094AA05 /* EUExWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861918B1B93D000D7600 /* EUExWidget.m */; };
 		42F787BF1D950B5D0094AA05 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865618B1B93D000D7600 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -248,7 +247,6 @@
 		42F788461D950B5D0094AA05 /* EUExWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA861E18B1B93D000D7600 /* EUExWindow.h */; };
 		42F788471D950B5D0094AA05 /* EBrowserWindowContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860818B1B93D000D7600 /* EBrowserWindowContainer.h */; };
 		42F788481D950B5D0094AA05 /* SDWebImageDownloaderOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C3F1B2A6D3500D5F279 /* SDWebImageDownloaderOperation.h */; };
-		42F788491D950B5D0094AA05 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B518B1B93D000D7600 /* NSData+Base64.h */; };
 		42F7884A1D950B5D0094AA05 /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85A918B1B93D000D7600 /* NSString+SBJSON.h */; };
 		42F7884C1D950B5D0094AA05 /* CBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */; };
 		42F7884E1D950B5D0094AA05 /* SDWebImageDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C3B1B2A6D3500D5F279 /* SDWebImageDecoder.h */; };
@@ -437,8 +435,6 @@
 		5AAA85B218B1B93D000D7600 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		5AAA85B318B1B93D000D7600 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		5AAA85B518B1B93D000D7600 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		5AAA85B618B1B93D000D7600 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		5AAA85B918B1B93D000D7600 /* SpecConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecConfigParser.h; sourceTree = "<group>"; };
 		5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecConfigParser.m; sourceTree = "<group>"; };
 		5AAA85BB18B1B93D000D7600 /* UpdateParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateParser.h; sourceTree = "<group>"; };
@@ -744,8 +740,6 @@
 				5AAA85A318B1B93D000D7600 /* JSON */,
 				5AAA85B318B1B93D000D7600 /* MBProgressHUD.h */,
 				5AAA85B418B1B93D000D7600 /* MBProgressHUD.m */,
-				5AAA85B518B1B93D000D7600 /* NSData+Base64.h */,
-				5AAA85B618B1B93D000D7600 /* NSData+Base64.m */,
 				42A615511C40CB9A00883148 /* ACEPluginInfo.h */,
 				42A615521C40CB9A00883148 /* ACEPluginInfo.m */,
 				42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */,
@@ -1153,7 +1147,6 @@
 				42F788461D950B5D0094AA05 /* EUExWindow.h in Headers */,
 				42F788471D950B5D0094AA05 /* EBrowserWindowContainer.h in Headers */,
 				42F788481D950B5D0094AA05 /* SDWebImageDownloaderOperation.h in Headers */,
-				42F788491D950B5D0094AA05 /* NSData+Base64.h in Headers */,
 				42F7884A1D950B5D0094AA05 /* NSString+SBJSON.h in Headers */,
 				42F7884C1D950B5D0094AA05 /* CBrowserWindow.h in Headers */,
 				42F7884E1D950B5D0094AA05 /* SDWebImageDecoder.h in Headers */,
@@ -1377,7 +1370,6 @@
 				42F787AE1D950B5D0094AA05 /* EUExWidgetOne.m in Sources */,
 				42F787AF1D950B5D0094AA05 /* ACEPluginInfo.m in Sources */,
 				42F787B01D950B5D0094AA05 /* ACEJSCHandler.m in Sources */,
-				42F787B11D950B5D0094AA05 /* NSData+Base64.m in Sources */,
 				42F787B21D950B5D0094AA05 /* NSString+SBJSON.m in Sources */,
 				42F787B31D950B5D0094AA05 /* EBrowserView.m in Sources */,
 				42F787B41D950B5D0094AA05 /* MMDrawerVisualState.m in Sources */,
