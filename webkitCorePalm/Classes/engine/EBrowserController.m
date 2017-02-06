@@ -740,21 +740,13 @@ static BOOL userCustomLoadingImageEnabled = NO;
     ACEInterfaceOrientation nowOrientation = ace_interfaceOrientationFromUIDeviceOrientation([[UIDevice currentDevice] orientation]);
     
 	if (aboveWndContainer && (aboveWndContainer.mwWgt.orientation & nowOrientation)) {
-        ACLogDebug(@"will log");
         [[[meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView callbackWithFunctionKeyPath:@"uexDevice.onOrientationChange" arguments:ACArgsPack(@(nowOrientation)) completion:^(JSValue * _Nonnull returnValue) {
-            ACLogDebug(@"logged");
+
         }];
 
 	}
 }
 
-- (void)didReceiveMemoryWarning {
-	//[BUtility writeLog:@"Ebrowser controller receive memory warning"];
-	//ACENSLog(@"init the start view :the uesdMemory is %f,the have memory is %f",[BUtility usedMemory],[BUtility availableMemory]);
-	//ACENSLog(@"warning :the uesdMemory is %f",[BUtility usedMemory]);
-    [super didReceiveMemoryWarning] ;
-
-}
 
 
 @end
