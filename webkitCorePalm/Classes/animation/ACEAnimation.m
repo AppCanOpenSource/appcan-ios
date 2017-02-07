@@ -23,14 +23,13 @@
 
 
 #import "ACEAnimation.h"
-#import <AppCanKit/ACEXTRuntimeExtensions.h>
-
+#import <objc/runtime.h>
 
 ACEAnimationID kACEAnimationNone = 0;
 
 @implementation ACEAnimations
 
-static NSMutableDictionary<NSNumber *,Class> *_animations;
+static NSMutableDictionary<NSNumber *,NSString *> *_animations;
 
 
 + (void)load{
@@ -42,14 +41,27 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 }
 
 + (void)getAllAnimations{
-    unsigned int count = 0;
-    Class *classes = ac_copyClassListConformingToProtocol(@protocol(ACEAnimation), &count);
-    for (int i = 0; i < count; i++) {
-        Class cls = classes[i];
-        for (NSNumber * idNumber in [cls availableAnimationIDs]) {
-            _animations[idNumber] = cls;
+    unsigned classCount = 0;
+    Class *allClasses = objc_copyClassList(&classCount);
+    if (!classCount || !allClasses) {
+        return;
+    }
+    Protocol *proto = @protocol(ACEAnimation);
+    @autoreleasepool {
+        for (int i = 0;i < classCount;i++) {
+            Class class = allClasses[i];           
+            if (!class_respondsToSelector(class, @selector(methodSignatureForSelector:))) {
+                continue;
+            }
+            if (!class_conformsToProtocol(class, proto)) {
+                continue;
+            }
+            for (NSNumber * idNumber in [class availableAnimationIDs]) {
+                _animations[idNumber] = NSStringFromClass(class);
+            }
         }
     }
+    free(allClasses);
 }
 
 + (BOOL)isAnimationValid:(ACEAnimationID)animationID{
@@ -57,7 +69,8 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 }
 
 + (ACEAnimationID)closeAnimationForOpenAnimation:(ACEAnimationID)openAnimationID{
-    Class animateClass = _animations[@(openAnimationID)];
+    NSString *className = _animations[@(openAnimationID)];
+    Class animateClass = NSClassFromString(className);
     if (!animateClass) {
         return kACEAnimationNone;
     }
@@ -66,7 +79,8 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 
 
 + (void)addOpeningAnimationWithID:(ACEAnimationID)animationID fromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration configuration:(NSDictionary *)config completionHandler:(ACEAnimateCompletionBlock)completion{
-    Class animateClass = _animations[@(animationID)];
+    NSString *className = _animations[@(animationID)];
+    Class animateClass = NSClassFromString(className);
     if (!animateClass) {
         if(completion) completion(NO);
         return;
@@ -75,7 +89,8 @@ static NSMutableDictionary<NSNumber *,Class> *_animations;
 }
 
 + (void)addClosingAnimationWithID:(ACEAnimationID)animationID fromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration configuration:(NSDictionary *)config completionHandler:(ACEAnimateCompletionBlock)completion{
-    Class animateClass = _animations[@(animationID)];
+    NSString *className = _animations[@(animationID)];
+    Class animateClass = NSClassFromString(className);
     if (!animateClass) {
         if(completion) completion(NO);
         return;
