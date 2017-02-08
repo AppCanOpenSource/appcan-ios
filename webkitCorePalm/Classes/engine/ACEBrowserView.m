@@ -50,6 +50,7 @@
 #import "ACEJSCHandler.h"
 #import "ACEJSCBaseJS.h"
 #import "AppCanEngine.h"
+#import "ACEUINavigationController.h"
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -543,11 +544,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
     UIActivityIndicatorView * indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [indicator setCenter:CGPointMake([BUtility getScreenWidth]/2, [BUtility getScreenHeight]/2)];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue]>=5.0)
-    {
-        indicator.color = [UIColor redColor];
-    }
-    self.indicatorView=indicator;
+    indicator.color = [UIColor redColor];
+
+    self.indicatorView = indicator;
     [self addSubview:self.indicatorView];
     
     self.scrollView.decelerationRate = 1.0;
@@ -562,12 +561,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
     meBrwWnd = eInBrwWnd;
 
 
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 5.0) {
-        mScrollView = super.scrollView;
-    }else {
-        mScrollView = [self.subviews objectAtIndex:0];
-    }
-    //mScrollView = [self.subviews objectAtIndex:0];
+
+    mScrollView = super.scrollView;
+
     [self setView];
     if (inWndType == ACEEBrowserViewTypeSlibingBottom) {
         [self registerKeyboardListener:nil];
@@ -654,17 +650,17 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     
     if (![[[touch.view class] description] isEqualToString:@"UIWebBrowserView"]) {
-        
         return NO;
-        
     }
-    
+
     return YES;
     
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    NSLog(@"Recognize Simultaneously");
     return YES;
+
 }
 /*
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender_{
@@ -856,8 +852,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	// Cleanup the HTML document by removing all content
 	// This time, this hack free some additional memory on some websites, mainly big ones with a lot of content
 	//[self stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
-	[self stringByEvaluatingJavaScriptFromString:@"var body=document.getElementsByTagName('body')[0];body.style.backgroundColor=(body.style.backgroundColor=='')?'white':'';"];
-	[self stringByEvaluatingJavaScriptFromString:@"document.open();document.close()"];
+	//[self stringByEvaluatingJavaScriptFromString:@"var body=document.getElementsByTagName('body')[0];body.style.backgroundColor=(body.style.backgroundColor=='')?'white':'';"];
+	//[self stringByEvaluatingJavaScriptFromString:@"document.open();document.close()"];
 
 	self.delegate = nil;
 }

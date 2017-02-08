@@ -332,7 +332,6 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
     }
     if (!self.isTopWindow && self == topWindow) {
         self.isTopWindow = YES;
-        [self updateSwipeCloseEnableStatus];
         [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowAppear" arguments:nil];
         return;
     }
@@ -349,8 +348,5 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
 #pragma mark - Update Swipe Close Status
 
 
--(void)updateSwipeCloseEnableStatus{
-    self.meBrwCtrler.aceNaviController.canDragBack = self.enableSwipeClose;
-}
 
 @end

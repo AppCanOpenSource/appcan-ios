@@ -284,6 +284,9 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
     unsigned count = 0;
     BOOL isVersion4 = NO;
     Method *classMethods = class_copyMethodList(cls, &count);
+    if (!classMethods) {
+        return NO;
+    }
     for (NSInteger i = 0;i < count;i++){
         Method method = classMethods[i];
         const char *methodName = sel_getName(method_getName(method));
@@ -292,6 +295,7 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
             break;
         }
     }
+    free (classMethods);
     [cacheDict setValue:@(isVersion4) forKey:clsName];
     return isVersion4;
 }

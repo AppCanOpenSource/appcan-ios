@@ -1784,16 +1784,15 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSDictionary *info) = inArguments;
     NSNumber *flag = numberArg(info[@"enable"]);
     self.EBrwView.meBrwWnd.enableSwipeClose = flag ? flag.boolValue : YES;
-    [self.EBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+
 }
 
 
 // DEPRECATED
 - (void)setRightSwipeEnable:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSNumber *flag) = inArguments;
-    
     self.EBrwView.meBrwWnd.enableSwipeClose = flag ? flag.boolValue : YES;
-    [self.EBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+
 }
 
 

@@ -19,7 +19,7 @@
 #import "WWidgetMgr.h"
 #import "WidgetSQL.h"
 #import "AllConfigParser.h"
-#import "SpecConfigParser.h"
+
 #import "BUtility.h"
 #import "WWidget.h"
 #import "UpdateParser.h"
@@ -71,12 +71,8 @@ NSString * webappShowAactivety;
     } else {
         configPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     }
-    
     NSMutableDictionary * tmpWgtDict = [self wgtParameters:configPath];
-	SpecConfigParser * widgetXml = [[SpecConfigParser alloc] init];
-	NSString * mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
-    
-    
+    NSString *mVer = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
 
     
 	//数据库里存在，
@@ -277,9 +273,7 @@ NSString * webappShowAactivety;
     WWidget *wgtObj =[wgtDict objectForKey:tmpAppId];
     //解析config.xml
     NSString *configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
-    ACENSLog(@"configPath=%@",configPath);
-    SpecConfigParser *widgetXml = [[SpecConfigParser alloc] init];
-    NSString *mVer = [widgetXml initwithReqData:configPath queryPara:CONFIG_TAG_VERSION type:YES];
+    NSString *mVer = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
     if ([wgtObj.ver isEqualToString:mVer]) {
         return wgtObj;
     }

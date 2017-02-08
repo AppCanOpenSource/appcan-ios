@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 @class WWidget;
 
-@class SpecConfigParser;
+
 @class UpdateParser;
 #define F_WIDGETONEVERSION					@"widgetone_version"
 #define F_WIDGETONE_REGIST_URL				@"http://wgb.tx100.com/mobile/wg-reg.wg" //内网

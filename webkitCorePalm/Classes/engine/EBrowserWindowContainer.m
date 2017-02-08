@@ -124,7 +124,7 @@
 
 	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
     if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        if (eSuperBrwWnd.isSliding) {
+        if (eSuperBrwWnd.isSliding || eSuperBrwWnd.webController) {
             return;
         }
         [self addViewToACEWebViewController:eSuperBrwWnd];

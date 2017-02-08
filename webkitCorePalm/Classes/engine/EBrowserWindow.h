@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 
 
 + (void)postWindowSequenceChange;
-- (void)updateSwipeCloseEnableStatus;
+
 
 
 

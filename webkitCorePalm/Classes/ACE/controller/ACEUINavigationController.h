@@ -17,13 +17,13 @@
  */
 #import <UIKit/UIKit.h>
 
-#import "MMNavigationController.h"
+
 #import "ACEInterfaceOrientation.h"
 @class EBrowserController;
-@class ACEWebViewController;
 
 
-@interface ACEUINavigationController : MMNavigationController
+
+@interface ACEUINavigationController : UINavigationController
 
 
 
@@ -38,8 +38,6 @@
 - (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated;
 
 @end
-
-
 
 
 

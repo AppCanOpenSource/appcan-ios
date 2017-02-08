@@ -29,4 +29,5 @@
 @property (nonatomic,strong) NSDictionary *closeAnimationConfig;
 
 
+
 @end

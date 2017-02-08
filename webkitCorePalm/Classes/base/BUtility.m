@@ -1306,7 +1306,7 @@ static NSString *clientCertificatePwd = nil;
         EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
         
         
-		NSString *absPath = [meBrwView.meBrwCtrler.mwWgtMgr curWidgetPath:eBrwWndContainer.mwWgt];
+		NSString *absPath = eBrwWndContainer.mwWgt.absWidgetPath;
 
 		NSString *relativePath=nil;
 		if ([inPath hasPrefix:F_APP_PATH]) {

@@ -24,11 +24,49 @@
 #import "ACEViewControllerAnimator.h"
 #import "ACEWebViewController.h"
 #import "EBrowserWindow.h"
-@interface ACEUINavigationController ()<UINavigationControllerDelegate,UIViewControllerTransitioningDelegate>
+
+
+
+@interface ACEUINavigationFullscreenPopGestureDelegate : NSObject<UIGestureRecognizerDelegate>
+@property (nonatomic, weak) ACEUINavigationController *navigationController;
+@end
+
+@implementation ACEUINavigationFullscreenPopGestureDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer{
+    if (self.navigationController.viewControllers.count <= 1) {
+        return NO;
+    }
+    UIViewController *topViewController = self.navigationController.viewControllers.lastObject;
+    if (![topViewController isKindOfClass:[ACEWebViewController class]]) {
+        return NO;
+    }
+    if (!((ACEWebViewController *)topViewController).browserWindow.enableSwipeClose) {
+        return NO;
+    }
+    if ([[self.navigationController valueForKey:@"_isTransitioning"] boolValue]) {
+        return NO;
+    }
+    CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+    if (translation.x <= 0) {
+        return NO;
+    }
+    return YES;
+    
+}
 
 @end
 
+
+@interface ACEUINavigationController ()<UINavigationControllerDelegate,UIViewControllerTransitioningDelegate>
+@property (nonatomic,strong)UIPanGestureRecognizer *fullscreenPopGestureRecognizer;
+@property (nonatomic,strong)ACEUINavigationFullscreenPopGestureDelegate *fullscreenPopGestureRecognizerDelegate;
+@end
+
 @implementation ACEUINavigationController
+
+
+
 
 
 - (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated{
@@ -36,12 +74,28 @@
     for (NSInteger i = controllers.count - 2; i >= 0 ; i--) {
         if (controllers[i + 1] == childController) {
             [self popToViewController:controllers[i] animated:animated];
-            return;
+            break;
         }
     }
 }
 
-
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
+    
+    
+    if (![self.interactivePopGestureRecognizer.view.gestureRecognizers containsObject:self.fullscreenPopGestureRecognizer]) {
+        [self.interactivePopGestureRecognizer.view addGestureRecognizer:self.fullscreenPopGestureRecognizer];
+        NSArray *internalTargets = [self.interactivePopGestureRecognizer valueForKey:@"targets"];
+        id internalTarget = [internalTargets.firstObject valueForKey:@"target"];
+        SEL internalAction = NSSelectorFromString(@"handleNavigationTransition:");
+        self.fullscreenPopGestureRecognizer.delegate = self.fullscreenPopGestureRecognizerDelegate;
+        [self.fullscreenPopGestureRecognizer addTarget:internalTarget action:internalAction];
+        self.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
+    if (![self.viewControllers containsObject:viewController]) {
+        [super pushViewController:viewController animated:animated];
+    }
+}
 
 - (instancetype)initWithEBrowserController:(EBrowserController *)rootController{
     self = [super initWithRootViewController:rootController];
@@ -51,6 +105,11 @@
         _rootController = rootController;
         self.delegate = self;
         self.transitioningDelegate = self;
+        
+        _fullscreenPopGestureRecognizer = [[UIPanGestureRecognizer alloc]init];
+        _fullscreenPopGestureRecognizer.maximumNumberOfTouches = 1;
+        _fullscreenPopGestureRecognizerDelegate = [[ACEUINavigationFullscreenPopGestureDelegate alloc] init];
+        _fullscreenPopGestureRecognizerDelegate.navigationController = self;
         
     }
     return self;
