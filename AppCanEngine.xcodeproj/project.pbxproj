@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		427F06BF1C190C27001E17B5 /* AppCanPluginDevEngine */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 427F06C01C190C27001E17B5 /* Build configuration list for PBXAggregateTarget "AppCanPluginDevEngine" */;
-			buildPhases = (
-				427F06C51C190CF1001E17B5 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = AppCanPluginDevEngine;
-			productName = AppCanPluginDevEngine;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		4245EC961DED18C900C07B2D /* ACEBasicAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4245EC941DED18C900C07B2D /* ACEBasicAnimation.h */; };
 		4245EC971DED18C900C07B2D /* ACEBasicAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4245EC951DED18C900C07B2D /* ACEBasicAnimation.m */; };
@@ -52,11 +38,11 @@
 		42F7874D1D950B5D0094AA05 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864918B1B93D000D7600 /* unzip.c */; };
 		42F7874E1D950B5D0094AA05 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; };
 		42F7874F1D950B5D0094AA05 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
-		42F787501D950B5D0094AA05 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787501D950B5D0094AA05 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787521D950B5D0094AA05 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787531D950B5D0094AA05 /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
 		42F787541D950B5D0094AA05 /* UpdateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BC18B1B93D000D7600 /* UpdateParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F787551D950B5D0094AA05 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862E18B1B93D000D7600 /* ASIHTTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787551D950B5D0094AA05 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862E18B1B93D000D7600 /* ASIHTTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787561D950B5D0094AA05 /* WidgetOneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867B18B1B93D000D7600 /* WidgetOneDelegate.m */; };
 		42F787571D950B5D0094AA05 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C511B2A6D3500D5F279 /* UIImageView+WebCache.m */; };
 		42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AE18B1B93D000D7600 /* SBJsonBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -93,15 +79,15 @@
 		42F787831D950B5D0094AA05 /* ACEJSCInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */; };
 		42F787841D950B5D0094AA05 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C401B2A6D3500D5F279 /* SDWebImageDownloaderOperation.m */; };
 		42F787851D950B5D0094AA05 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C4D1B2A6D3500D5F279 /* UIImage+WebP.m */; };
-		42F787871D950B5D0094AA05 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862818B1B93D000D7600 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787871D950B5D0094AA05 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862818B1B93D000D7600 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787881D950B5D0094AA05 /* SpecConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BA18B1B93D000D7600 /* SpecConfigParser.m */; };
 		42F787891D950B5D0094AA05 /* ACEPluginViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 464272DD1BCE562E00F4BE36 /* ACEPluginViewContainer.m */; };
-		42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863718B1B93D000D7600 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863718B1B93D000D7600 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA867D18B1B93D000D7600 /* WWidget.m */; };
 		42F7878E1D950B5D0094AA05 /* ACEMultiPopoverScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */; };
 		42F7878F1D950B5D0094AA05 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863918B1B93D000D7600 /* AsyncSocket.m */; };
 		42F787901D950B5D0094AA05 /* ACELocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D0AF411BBB8641002249AE /* ACELocalization.m */; };
-		42F787911D950B5D0094AA05 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B018B1B93D000D7600 /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787911D950B5D0094AA05 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B018B1B93D000D7600 /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787931D950B5D0094AA05 /* EUExWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861F18B1B93D000D7600 /* EUExWindow.m */; };
 		42F787941D950B5D0094AA05 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C3E1B2A6D3500D5F279 /* SDWebImageDownloader.m */; };
 		42F787951D950B5D0094AA05 /* ACEBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */; };
@@ -129,17 +115,17 @@
 		42F787B41D950B5D0094AA05 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBC1A448EFD00DC7397 /* MMDrawerVisualState.m */; };
 		42F787B51D950B5D0094AA05 /* ACEBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */; };
 		42F787B61D950B5D0094AA05 /* ACEUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFC1A42B9CA00F501B3 /* ACEUINavigationController.m */; };
-		42F787B71D950B5D0094AA05 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862318B1B93D000D7600 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787B71D950B5D0094AA05 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862318B1B93D000D7600 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787B81D950B5D0094AA05 /* EBrowserWindowContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860918B1B93D000D7600 /* EBrowserWindowContainer.m */; };
 		42F787BA1D950B5D0094AA05 /* ACEProgressDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D653CB1C33C23E000231E4 /* ACEProgressDialog.m */; };
 		42F787BC1D950B5D0094AA05 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EC01A448EFD00DC7397 /* UIViewController+MMDrawerController.m */; };
 		42F787BD1D950B5D0094AA05 /* EUExWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA861918B1B93D000D7600 /* EUExWidget.m */; };
-		42F787BF1D950B5D0094AA05 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865618B1B93D000D7600 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787BF1D950B5D0094AA05 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA865618B1B93D000D7600 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787C01D950B5D0094AA05 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864B18B1B93D000D7600 /* zip.c */; };
-		42F787C11D950B5D0094AA05 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = DE90F5391904E6D00084EC10 /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787C11D950B5D0094AA05 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = DE90F5391904E6D00084EC10 /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787C21D950B5D0094AA05 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA863B18B1B93D000D7600 /* AsyncUdpSocket.m */; };
 		42F787C31D950B5D0094AA05 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C341B2A6D3500D5F279 /* MKAnnotationView+WebCache.m */; };
-		42F787C41D950B5D0094AA05 /* FBEncryptorAES.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85A218B1B93D000D7600 /* FBEncryptorAES.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787C41D950B5D0094AA05 /* FBEncryptorAES.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85A218B1B93D000D7600 /* FBEncryptorAES.m */; };
 		42F787C51D950B5D0094AA05 /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C3A1B2A6D3500D5F279 /* SDWebImageCompat.m */; };
 		42F787C81D950B5D0094AA05 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF391C1FF86200294DE1 /* libxml2.tbd */; };
 		42F787C91D950B5D0094AA05 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF214C1C19070F00F539B4 /* libsqlite3.tbd */; };
@@ -1161,9 +1147,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		42F787431D950B5D0094AA05 /* AppCanEngine-framework */ = {
+		42F787431D950B5D0094AA05 /* AppCanEngine */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42F788811D950B5D0094AA05 /* Build configuration list for PBXNativeTarget "AppCanEngine-framework" */;
+			buildConfigurationList = 42F788811D950B5D0094AA05 /* Build configuration list for PBXNativeTarget "AppCanEngine" */;
 			buildPhases = (
 				42F787441D950B5D0094AA05 /* Sources */,
 				42F787C61D950B5D0094AA05 /* Frameworks */,
@@ -1175,7 +1161,7 @@
 			);
 			dependencies = (
 			);
-			name = "AppCanEngine-framework";
+			name = AppCanEngine;
 			productName = AppCanEngine;
 			productReference = 42F788841D950B5D0094AA05 /* AppCanEngine.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1188,9 +1174,6 @@
 			attributes = {
 				LastUpgradeCheck = 0810;
 				TargetAttributes = {
-					427F06BF1C190C27001E17B5 = {
-						CreatedOnToolsVersion = 7.1;
-					};
 					42F787431D950B5D0094AA05 = {
 						ProvisioningStyle = Automatic;
 					};
@@ -1209,8 +1192,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42F787431D950B5D0094AA05 /* AppCanEngine-framework */,
-				427F06BF1C190C27001E17B5 /* AppCanPluginDevEngine */,
+				42F787431D950B5D0094AA05 /* AppCanEngine */,
 			);
 		};
 /* End PBXProject section */
@@ -1226,19 +1208,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		427F06C51C190CF1001E17B5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "sh AppCanEngine/buildEngineForPluginDevelopment.sh";
-		};
 		42F788801D950B5D0094AA05 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1373,26 +1342,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		427F06C11C190C27001E17B5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				ENABLE_STRICT_OBJC_MSGSEND = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		427F06C21C190C27001E17B5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				ENABLE_STRICT_OBJC_MSGSEND = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		42F788821D950B5D0094AA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1560,16 +1509,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		427F06C01C190C27001E17B5 /* Build configuration list for PBXAggregateTarget "AppCanPluginDevEngine" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				427F06C11C190C27001E17B5 /* Debug */,
-				427F06C21C190C27001E17B5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		42F788811D950B5D0094AA05 /* Build configuration list for PBXNativeTarget "AppCanEngine-framework" */ = {
+		42F788811D950B5D0094AA05 /* Build configuration list for PBXNativeTarget "AppCanEngine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42F788821D950B5D0094AA05 /* Debug */,

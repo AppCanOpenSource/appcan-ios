@@ -72,7 +72,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "42F787431D950B5D0094AA05"
                BuildableName = "AppCanEngine.framework"
-               BlueprintName = "AppCanEngine-framework"
+               BlueprintName = "AppCanEngine"
                ReferencedContainer = "container:AppCanEngine.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -90,7 +90,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42F787431D950B5D0094AA05"
             BuildableName = "AppCanEngine.framework"
-            BlueprintName = "AppCanEngine-framework"
+            BlueprintName = "AppCanEngine"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -112,7 +112,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42F787431D950B5D0094AA05"
             BuildableName = "AppCanEngine.framework"
-            BlueprintName = "AppCanEngine-framework"
+            BlueprintName = "AppCanEngine"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -130,7 +130,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "42F787431D950B5D0094AA05"
             BuildableName = "AppCanEngine.framework"
-            BlueprintName = "AppCanEngine-framework"
+            BlueprintName = "AppCanEngine"
             ReferencedContainer = "container:AppCanEngine.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

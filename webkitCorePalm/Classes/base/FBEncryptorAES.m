@@ -139,8 +139,8 @@
                                  key:[keyString dataUsingEncoding:NSUTF8StringEncoding]
                                   iv:nil];
     if (data) {
-        return [[[NSString alloc] initWithData:data
-                                      encoding:NSUTF8StringEncoding] autorelease];
+        return [[NSString alloc] initWithData:data
+                                      encoding:NSUTF8StringEncoding];
     } else {
         return nil;
     }
