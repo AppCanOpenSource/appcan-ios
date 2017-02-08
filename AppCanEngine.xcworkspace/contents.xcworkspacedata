@@ -2,15 +2,18 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Carthage/Checkouts/pop/pop.xcodeproj">
+      location = "group:AppCanEngine.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Carthage/Checkouts/Ono/Ono.xcodeproj">
+      location = "group:AppCanEngineDebug/AppCanEngineDebug.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Carthage/Checkouts/AppCanKit/AppCanKit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:AppCanEngine.xcodeproj">
+      location = "group:Carthage/Checkouts/pop/pop.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/Ono/Ono.xcodeproj">
    </FileRef>
 </Workspace>
