@@ -48,8 +48,6 @@ struct EngineInfo {
     let description: String
     let buildNumber: Int
     let date: String
-    let xcodeVersion = "8.1"
-
 }
 
 extension EngineInfo{
@@ -130,7 +128,7 @@ extension EngineInfo{
     
     var package: String{
         get{
-            return "iOS_Engine_\(version.major).\(version.minor).\(version.build)_\(date)_\(build)_Xcode\(xcodeVersion)\(suffix)"
+            return "iOS_Engine_\(version.major).\(version.minor).\(version.build)_\(date)_\(build)\(suffix)"
         }
     }
     private var dssVersion: String{
@@ -140,7 +138,7 @@ extension EngineInfo{
     }
     private var versionString: String{
         get{
-            return "sdksuit_\(version.major).\(version.minor)_\(date)_\(build)_Xcode\(xcodeVersion)\(suffix)"
+            return "sdksuit_\(version.major).\(version.minor)_\(date)_\(build)\(suffix)"
         }
     }
     

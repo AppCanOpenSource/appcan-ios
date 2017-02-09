@@ -27,7 +27,6 @@
 		4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 427260071D9B58FE00B941CF /* AppCanEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42D0AF461BBB879C002249AE /* AppCanEngineLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42D0AF481BBB879C002249AE /* AppCanEngineLocalization.strings */; };
 		42D96D4B1DAB7B69001ABB17 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D4A1DAB7B69001ABB17 /* VideoToolbox.framework */; };
-		42D96D511DAB7BDB001ABB17 /* AppCanKitSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D4C1DAB7B88001ABB17 /* AppCanKitSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42D96D561DAB92B4001ABB17 /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D551DAB92B4001ABB17 /* AppCanKit.framework */; };
 		42D96D571DAB92B9001ABB17 /* AppCanKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42D96D551DAB92B4001ABB17 /* AppCanKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
@@ -80,7 +79,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				42D96D571DAB92B9001ABB17 /* AppCanKit.framework in Embed Frameworks */,
-				42D96D511DAB7BDB001ABB17 /* AppCanKitSwift.framework in Embed Frameworks */,
 				4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */,
 				423A42801D951E70008AA1B1 /* Ono.framework in Embed Frameworks */,
 				423A42811D951E70008AA1B1 /* pop.framework in Embed Frameworks */,
@@ -109,7 +107,6 @@
 		42D0AF471BBB879C002249AE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppCanEngineLocalization.strings; sourceTree = "<group>"; };
 		42D0AF491BBB879D002249AE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppCanEngineLocalization.strings"; sourceTree = "<group>"; };
 		42D96D4A1DAB7B69001ABB17 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
-		42D96D4C1DAB7B88001ABB17 /* AppCanKitSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKitSwift.framework; sourceTree = "<group>"; };
 		42D96D551DAB92B4001ABB17 /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppCanKit.framework; sourceTree = "<group>"; };
 		42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		42FFC8001B625EC60058E363 /* PackageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageInfo.h; sourceTree = "<group>"; };
@@ -344,7 +341,6 @@
 			isa = PBXGroup;
 			children = (
 				42D96D551DAB92B4001ABB17 /* AppCanKit.framework */,
-				42D96D4C1DAB7B88001ABB17 /* AppCanKitSwift.framework */,
 				427260071D9B58FE00B941CF /* AppCanEngine.framework */,
 				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
 				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
