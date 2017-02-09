@@ -16,4 +16,7 @@
    <FileRef
       location = "group:Carthage/Checkouts/Ono/Ono.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:AppCanEnginePackager/AppCanEnginePackager.xcodeproj">
+   </FileRef>
 </Workspace>
