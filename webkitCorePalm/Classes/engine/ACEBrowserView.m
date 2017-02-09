@@ -658,7 +658,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    NSLog(@"Recognize Simultaneously");
     return YES;
 
 }
