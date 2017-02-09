@@ -16,86 +16,220 @@
  *
  */
 #import "ACEUINavigationController.h"
+#import "BUtility.h"
+#import "ACEConfigXML.h"
+#import "ACEBaseViewController.h"
+#import "EBrowserController.h"
+#import "WWidget.h"
+#import "ACEViewControllerAnimator.h"
+#import "ACEWebViewController.h"
+#import "EBrowserWindow.h"
 
-@interface ACEUINavigationController ()<UIGestureRecognizerDelegate, UINavigationControllerDelegate>
 
+
+@interface ACEUINavigationFullscreenPopGestureDelegate : NSObject<UIGestureRecognizerDelegate>
+@property (nonatomic, weak) ACEUINavigationController *navigationController;
+@end
+
+@implementation ACEUINavigationFullscreenPopGestureDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer{
+    if (self.navigationController.viewControllers.count <= 1) {
+        return NO;
+    }
+    UIViewController *topViewController = self.navigationController.viewControllers.lastObject;
+    if (![topViewController isKindOfClass:[ACEWebViewController class]]) {
+        return NO;
+    }
+    if (!((ACEWebViewController *)topViewController).browserWindow.enableSwipeClose) {
+        return NO;
+    }
+    if ([[self.navigationController valueForKey:@"_isTransitioning"] boolValue]) {
+        return NO;
+    }
+    CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+    if (translation.x <= 0) {
+        return NO;
+    }
+    return YES;
+    
+}
+
+@end
+
+
+@interface ACEUINavigationController ()<UINavigationControllerDelegate,UIViewControllerTransitioningDelegate>
+@property (nonatomic,strong)UIPanGestureRecognizer *fullscreenPopGestureRecognizer;
+@property (nonatomic,strong)ACEUINavigationFullscreenPopGestureDelegate *fullscreenPopGestureRecognizerDelegate;
 @end
 
 @implementation ACEUINavigationController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+
+
+
+- (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated{
+    NSArray *controllers = self.childViewControllers;
+    for (NSInteger i = controllers.count - 2; i >= 0 ; i--) {
+        if (controllers[i + 1] == childController) {
+            [self popToViewController:controllers[i] animated:animated];
+            break;
+        }
+    }
+}
+
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
     
-    if (self.navigationBar &&  [self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)])
-    {
-//        [self.navigationBar setBackgroundImage:[UIImage imageNamed:UM_IMAGE_PATH_NAVBAR] forBarMetrics:UIBarMetricsDefault];
-        
+    
+    if (![self.interactivePopGestureRecognizer.view.gestureRecognizers containsObject:self.fullscreenPopGestureRecognizer]) {
+        [self.interactivePopGestureRecognizer.view addGestureRecognizer:self.fullscreenPopGestureRecognizer];
+        NSArray *internalTargets = [self.interactivePopGestureRecognizer valueForKey:@"targets"];
+        id internalTarget = [internalTargets.firstObject valueForKey:@"target"];
+        SEL internalAction = NSSelectorFromString(@"handleNavigationTransition:");
+        self.fullscreenPopGestureRecognizer.delegate = self.fullscreenPopGestureRecognizerDelegate;
+        [self.fullscreenPopGestureRecognizer addTarget:internalTarget action:internalAction];
+        self.interactivePopGestureRecognizer.enabled = NO;
     }
     
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.navigationBar.frame.size.width, self.navigationBar.frame.size.height)];
-//    
-//    view.backgroundColor = [UIColor purpleColor];
-//    
-//    [self.navigationBar addSubview:view];
-//    
-//    [view release];
+    if (![self.viewControllers containsObject:viewController]) {
+        [super pushViewController:viewController animated:animated];
+    }
+}
+
+- (instancetype)initWithEBrowserController:(EBrowserController *)rootController{
+    self = [super initWithRootViewController:rootController];
+    if (self) {
+        [self setNavigationBarHidden:YES];
+        _supportedOrientation = rootController.widget.orientation;
+        _rootController = rootController;
+        self.delegate = self;
+        self.transitioningDelegate = self;
+        
+        _fullscreenPopGestureRecognizer = [[UIPanGestureRecognizer alloc]init];
+        _fullscreenPopGestureRecognizer.maximumNumberOfTouches = 1;
+        _fullscreenPopGestureRecognizerDelegate = [[ACEUINavigationFullscreenPopGestureDelegate alloc] init];
+        _fullscreenPopGestureRecognizerDelegate.navigationController = self;
+        
+    }
+    return self;
+}
+
+
+
+- (BOOL)prefersStatusBarHidden{
+    for (ACEBaseViewController *controller in self.viewControllers.reverseObjectEnumerator) {
+        if (![controller isKindOfClass:[ACEBaseViewController class]]) {
+            continue;
+        }
+        if (controller.shouldHideStatusBarNumber) {
+            return controller.shouldHideStatusBarNumber.boolValue;
+        }
+    }
+    NSNumber *UIStatusBarHidden = [NSBundle mainBundle].infoDictionary[@"UIStatusBarHidden"];
+    return UIStatusBarHidden ? UIStatusBarHidden.boolValue : NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    for (ACEBaseViewController *controller in self.viewControllers.reverseObjectEnumerator) {
+        if (![controller isKindOfClass:[ACEBaseViewController class]]) {
+            continue;
+        }
+        if (controller.statusBarStyleNumber) {
+            return controller.statusBarStyleNumber.integerValue;
+        }
+    }
+    return [super preferredStatusBarStyle];
+}
+
+
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    return ace_interfaceOrientationMaskFromACEInterfaceOrientation(self.supportedOrientation);
+}
+
+- (BOOL)shouldAutorotate{
+    if (self.rotateOnce) {
+        self.rotateOnce = NO;
+        return YES;
+    }
+    return self.canAutoRotate;
+}
+
+
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    if (self.presentOrientationNumber) {
+        return self.presentOrientationNumber.integerValue;
+    }
+    UIInterfaceOrientationMask mask = self.supportedInterfaceOrientations;
+    if (mask & UIInterfaceOrientationMaskPortrait) {
+        return UIInterfaceOrientationPortrait;
+    }
+    if (mask & UIInterfaceOrientationMaskLandscapeRight) {
+        return UIInterfaceOrientationLandscapeRight;
+    }
+    if (mask & UIInterfaceOrientationMaskLandscapeLeft) {
+        return UIInterfaceOrientationLandscapeLeft;
+    }
+    return UIInterfaceOrientationPortraitUpsideDown;
+
+}
+
+
+
+#pragma mark - UINavigationControllerDelegate
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC{
     
     
-    
-//    if (isSysVersionAbove7_0) {
-//        self.navigationBar.barTintColor = [UIColor purpleColor];
-//    } else {
-//        self.navigationBar.tintColor = [UIColor purpleColor];
-//        [self.navigationBar setTranslucent: YES];
-//    }
-    
-    
-//    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
-//    {
-//        self.interactivePopGestureRecognizer.delegate = self;
-////        self.delegate = self;
-//    }
-    
+    switch (operation) {
+        case UINavigationControllerOperationPush:{
+            if (![toVC isKindOfClass:[ACEWebViewController class]]) {
+                return nil;
+            }
+
+            EBrowserWindow *window = [(ACEWebViewController *)toVC browserWindow];
+            return [ACEViewControllerAnimator openingAnimatorWithAnimationID:window.openAnimationID duration:window.openAnimationDuration config:window.openAnimationConfig];
+        }
+        case UINavigationControllerOperationPop:{
+            if (![fromVC isKindOfClass:[ACEWebViewController class]]) {
+                return nil;
+            }
+            
+            EBrowserWindow *window = [(ACEWebViewController *)fromVC browserWindow];
+            return [ACEViewControllerAnimator closingAnimatorWithAnimationID:window.openAnimationID duration:window.openAnimationDuration config:window.openAnimationConfig];
+            
+        }
+        default:
+            return nil;
+    }
+}
+
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source{
+    if (![presented isKindOfClass:[ACEUINavigationController class]]) {
+        return nil;
+    }
+    ACEUINavigationController *navi = (ACEUINavigationController *)presented;
+    WWidget *widget = navi.rootController.widget;
+    return [ACEViewControllerAnimator openingAnimatorWithAnimationID:widget.openAnimation duration:widget.openAnimationDuration config:widget.openAnimationConfig];
     
 }
 
-// Hijack the push method to disable the gesture
-
-//- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
-//{
-//    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
-//        self.interactivePopGestureRecognizer.enabled = NO;
-//    
-//    [super pushViewController:viewController animated:animated];
-//}
-//
-//#pragma mark UINavigationControllerDelegate
-//
-//- (void)navigationController:(UINavigationController *)navigationController
-//       didShowViewController:(UIViewController *)viewController
-//                    animated:(BOOL)animate
-//{
-//    // Enable the gesture again once the new controller is shown
-//    
-//    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)])
-//        self.interactivePopGestureRecognizer.enabled = YES;
-//}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed{
+    if (![dismissed isKindOfClass:[ACEUINavigationController class]]) {
+        return nil;
+    }
+    
+    ACEUINavigationController *navi = (ACEUINavigationController *)dismissed;
+    WWidget *widget = navi.rootController.widget;
+    return [ACEViewControllerAnimator closingAnimatorWithAnimationID:widget.closeAnimation duration:widget.closeAnimationDuration config:widget.closeAnimationConfig];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
+                    
+                    
 @end

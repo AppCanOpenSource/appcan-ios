@@ -27,7 +27,7 @@
 @class EBrowserView;
 
 
-
+extern NSString *const ACEJSCHandlerInjectField;
 
 
 

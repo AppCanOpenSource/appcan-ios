@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<widget appId="11584812" channelCode="0000" height="480" pid="" sreensize="4.5" version="00.00.0000" viewmode="application" widgetId="" width="320"> 
+  <name>engineDebug</name>
+  <description/>  
+  <author email=""/>  
+  <icon src="icon.png"/>  
+  <license href=""/>  
+  <content encoding="utf-8" src="index.html"/>  
+  <updateurl/>  
+  <logserverip/>  
+  <showmyspace>false</showmyspace>
+  <obfuscation>false</obfuscation>  
+  <bgcolor>#fefefe</bgcolor>  
+  <orientation>5</orientation>
+<debug enable="true"/>
+<partobfuscation>false</partobfuscation>
+<webapp/>
+</widget>

@@ -27,17 +27,13 @@
 #import "EBrowserToolBar.h"
 #import "EBrowser.h"
 #import "WWidget.h"
-#import "BAnimation.h"
 #import "BUtility.h"
-#import "JSON.h"
-#import "EUExBaseDefine.h"
 #import "ASIFormDataRequest.h"
 #import "WidgetOneDelegate.h"
 #import <Security/Security.h>
-#import "BAnimation.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "JSONKit.h"
+
 #import "EUtility.h"
 
 #import "DataAnalysisInfo.h"
@@ -46,9 +42,12 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACInvoker.h>
-#import "ONOXMLElement+ACEConfigXML.h"
-#import "ACEBaseDefine.h"
-#import <Foundation/Foundation.h>
+#import "ACEConfigXML.h"
+#import "ACEInterfaceOrientation.h"
+
+#import "ACEUINavigationController.h"
+#import "ACESubwidgetManager.h"
+
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -56,14 +55,197 @@
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
 #define UEX_EXITAPP_ALERT_CANCLE @"取消"
 
+static NSString *const kUexPushNotifyBrwViewNameKey=@"kUexPushNotifyBrwViewNameKey";
+static NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFunctionNameKey";
 
 
-
-@interface EUExWidget()
+@interface EUExWidget()<AppCanApplicationEventObserver>
 @property (nonatomic,readonly)EBrowserView *EBrwView;
 @end
 
 @implementation EUExWidget
+
+typedef NS_ENUM(NSInteger,uexWidgetPushStatus){
+    uexWidgetPushWhenAppLaunched = 0,
+    uexWidgetPushWhenAppInBackground,
+    uexWidgetPushWhenAppInForeground
+};
+
+
+
+
+
+#pragma marl - Application Event
+
+
+
+
++ (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    [self onReceivePushNotification:userInfo];
+}
+
++ (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [self onReceivePushNotification:userInfo];
+}
+
+
+
++ (void)onReceivePushNotification:(NSDictionary *)userInfo{
+    if (!userInfo) {
+        return;
+    }
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:userInfo forKey:@"allPushData"];
+    [ud setObject:userInfo[@"userInfo"] forKey:@"pushData"];
+    switch ([UIApplication sharedApplication].applicationState) {
+        case UIApplicationStateBackground:
+            return;
+        case UIApplicationStateActive:
+            [self pushNotifyWithState:uexWidgetPushWhenAppInForeground];
+            break;
+        case UIApplicationStateInactive:
+            [self pushNotifyWithState:uexWidgetPushWhenAppInBackground];
+            break;
+    }
+}
+
+
+static BOOL isAppLaunchedByPush = NO;
+
+
++ (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    //应用从未启动到启动，获取推送信息
+    if (launchOptions && [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] ) {
+        isAppLaunchedByPush = YES;
+        NSDictionary *dict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        NSString *userData = [dict objectForKey:@"userInfo"];
+        if (dict) {
+            [[NSUserDefaults standardUserDefaults] setObject:dict forKey:@"allPushData"];
+        }
+        if (userData != nil) {
+            [[NSUserDefaults standardUserDefaults] setObject:userData forKey:@"pushData"];
+        }
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
+    
+    
+    
+    
+    return YES;
+}
+
++ (void)rootPageDidFinishLoading{
+    if(isAppLaunchedByPush){
+        [self pushNotifyWithState:uexWidgetPushWhenAppLaunched];
+    }
+}
+
++ (void)pushNotifyWithState:(uexWidgetPushStatus)state {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *pushNotifyBrwViewName = [defaults stringForKey:kUexPushNotifyBrwViewNameKey];
+    NSString *pushNotifyCallbackFunctionName = [defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
+    if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
+        return;
+    }
+    EBrowserWindow *eBrwWnd = [[AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] brwWndForKey:pushNotifyBrwViewName];
+    if (!eBrwWnd) {
+        return;
+    }
+    [eBrwWnd.meBrwView callbackWithFunctionKeyPath:pushNotifyCallbackFunctionName arguments:@[@(state)]];
+
+    
+}
+
+
+
+
+
++ (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSString *cbString = [url query];
+    for (NSURLQueryItem *item in components.queryItems){
+        [params setValue:item.value forKey:item.name];
+    }
+    if (params.count > 0) {
+        cbString = [params ac_JSONFragment];
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onLoadByOtherApp" arguments:ACArgsPack(cbString)];
+    });
+    
+    
+    return YES;
+}
+
++ (void)applicationWillResignActive:(UIApplication *)application{
+    [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onSuspend" arguments:nil];
+}
+
++ (void)applicationDidBecomeActive:(UIApplication *)application{
+    
+     [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onResume" arguments:nil];
+    
+    if(!AppCanEngine.configuration.usePushControl) {//推送开关没有开启
+        return;
+    }
+    
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
+        return;
+    }
+    
+    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",AppCanEngine.configuration.useBindUserPushURL];
+    NSURL *requestUrl = [NSURL URLWithString:urlStr];
+    NSString *appid = [WWidgetMgr sharedManager].mainWidget.appId ?: @"";
+    NSString *appkey = [BUtility appKey] ? [BUtility appKey] : @"";
+    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ? [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] : @"";
+    NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
+    NSString *appverify = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
+    NSString *softToken = [EUtility md5SoftToken];
+    
+    NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithObject:appverify forKey:@"appverify"];
+    [headerDict setObject:@"application/json" forKey:@"Content-Type"];
+    NSString *masAppId = [NSString stringWithFormat:@"%@", appid];
+    [headerDict setObject:masAppId forKey:@"x-mas-app-id"];
+    NSMutableDictionary *bodyDict = [NSMutableDictionary dictionaryWithCapacity:5];
+    [bodyDict setObject:@"1" forKey:@"count"];
+    [bodyDict setObject:deviceToken forKey:@"deviceToken"];
+    [bodyDict setObject:softToken forKey:@"softToken"];
+    NSString *useAppCanEMMTenantID = AppCanEngine.configuration.useAppCanEMMTenantID ?: @"";
+    [bodyDict setObject:useAppCanEMMTenantID forKey:@"tenantMark"];
+    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
+    [request setRequestMethod:@"POST"];
+    [request setRequestHeaders:headerDict];
+    [request setTimeOutSeconds:60.0];
+    [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
+    
+    @weakify(request);
+    
+    [request setCompletionBlock:^{
+        @strongify(request);
+        if (200 == request.responseStatusCode) {
+            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseString is %@",request.responseString);
+        } else {
+            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
+        }
+    }];
+    
+    [request setFailedBlock:^{
+        @strongify(request);
+        ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
+        
+    }];
+    
+    [request startAsynchronous];
+    
+    
+   
+    
+}
+
 
 #pragma mark - EBrowserView Getter
 
@@ -107,8 +289,7 @@
 
 
 
-- (void)dealloc{
-}
+
 
 - (void)reloadWidgetByAppId:(NSMutableArray *)inArguments {
     ACArgsUnpack(NSString *appId) = inArguments;
@@ -142,7 +323,7 @@
 }
 
 - (WWidget*)getStartWgtByAppId:(NSString*)inAppId{
-    WWidgetMgr *wgtMgr = self.EBrwView.meBrwCtrler.mwWgtMgr;
+    WWidgetMgr *wgtMgr = [WWidgetMgr sharedManager];
     WWidget * mainWgt = [wgtMgr mainWidget];
     WWidget *startWgt = nil;
     startWgt = (WWidget*)[wgtMgr wgtPluginDataByAppId:inAppId curWgt:mainWgt];
@@ -165,7 +346,7 @@
         [cb executeWithArguments:ACArgsPack(err)];
     };
     
-    if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) == F_EBRW_FLAG_WIDGET_IN_OPENING) {
+    if (self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) {
         
         startWidgetResult = @2;
         err = uexErrorMake(1,@"widget正在加载");
@@ -173,30 +354,29 @@
         return;
     }
     
-    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *inForRet,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey) = inArguments;
+    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey) = inArguments;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
         inAppId = stringArg(info[@"appId"]);
         inAnimiId = numberArg(info[@"animId"]);
-        inForRet = stringArg(info[@"funcName"]);
+        closeCallbackFuncName = stringArg(info[@"funcName"]);
         inOpenerInfo = stringArg(info[@"info"]);
         inAnimiDuration = numberArg(info[@"animDuration"]);
         inAppkey = stringArg(info[@"appKey"]);
     }
     
     
+    
+    
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
+
     WWidget *wgtObj = [self getStartWgtByAppId:inAppId];
     if (!wgtObj) {//
         err = uexErrorMake(1,@"inAppId对应的widget未找到");
         return;
     }
-    int animiId = inAnimiId.intValue;
+
     NSTimeInterval animiDuration = 0.2f;
     if (inAnimiDuration && inAnimiDuration.floatValue > 0) {
         animiDuration = inAnimiDuration.floatValue / 1000;
@@ -205,96 +385,107 @@
     if(inAppkey){
         wgtObj.appKey = inAppkey;
     }
-    int mOrientaion =self.EBrwView.mwWgt.orientation;
-    int subOrientation = wgtObj.orientation;
-    
-    theApp.drawerController.canRotate = YES;
-    
-    if (subOrientation == mOrientaion || subOrientation == 15) {
-        
-        //nothing
-        
-    } else if (subOrientation == 2 || subOrientation == 10) {
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
-    } else if (subOrientation == 8) {
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
-    } else if (subOrientation == 1 || subOrientation == 5) {
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
-    } else if (subOrientation == 4) {
-        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-        [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
-    }
-    theApp.drawerController.canRotate = NO;
+    wgtObj.closeCallbackName = closeCallbackFuncName;
+    wgtObj.openMessage = inOpenerInfo;
+    wgtObj.openAnimation = inAnimiId.unsignedIntegerValue;
+    wgtObj.openAnimationDuration = animiDuration;
 
-    self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WIDGET_IN_OPENING;
-    EBrowserWidgetContainer *eBrwWgtContainer = self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
-    EBrowserWindowContainer *eCurBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.EBrwView];
-    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:inAppId];
-    if (eBrwWndContainer) {
-        eBrwWndContainer.mStartAnimiId = animiId;
-        eBrwWndContainer.mStartAnimiDuration = animiDuration;
-        eBrwWndContainer.meOpenerContainer = eCurBrwWndContainer;
-        eBrwWndContainer.mOpenerForRet = inForRet;
-        eBrwWndContainer.mOpenerInfo = inOpenerInfo;
-        [eBrwWgtContainer bringSubviewToFront:eBrwWndContainer];
-        
-        if ([BAnimation isMoveIn:animiId]) {
-            [BAnimation doMoveInAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
-        }else if ([BAnimation isPush:animiId]) {
-            [BAnimation doPushAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
-        }else {
-            [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:animiDuration];
-        }
-        
-        
-        [[eCurBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-        
-        EBrowserWindow *eAboveWnd = [eBrwWndContainer aboveWindow];
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-        if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-            NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-            [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-        }
-        if (eBrwWgtContainer.meRootBrwWndContainer == eBrwWndContainer) {
-            self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
-        }
-        if (self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-            if (self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-                [self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:inAppId];
-            }
-        }
-        self.EBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
-    } else {
-        eBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:CGRectMake(0, 0, eBrwWgtContainer.bounds.size.width, eBrwWgtContainer.bounds.size.height) BrwCtrler:self.EBrwView.meBrwCtrler Wgt:wgtObj];
-        eBrwWndContainer.mStartAnimiId = animiId;
-        eBrwWndContainer.mStartAnimiDuration = animiDuration;
-        eBrwWndContainer.meOpenerContainer = eCurBrwWndContainer;
-        eBrwWndContainer.mOpenerForRet = inForRet;
-        eBrwWndContainer.mOpenerInfo = inOpenerInfo;
-        [eBrwWgtContainer.mBrwWndContainerDict setObject:eBrwWndContainer forKey:inAppId];
-        if ([inAppId isEqualToString:@"9999997"] || [inAppId isEqualToString:@"9999998"]) {
-            [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:inOpenerInfo];
-        } else {
-            [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:nil];
-        }
-    }
-    startWidgetResult = @0;
+    
+    
+
+    BOOL ret = [[ACESubwidgetManager defaultManager] launchWidget:wgtObj];
+    
+    startWidgetResult = ret ? @0 : @1;
+    
+    
+
+    //theApp.drawerController.canRotate = YES;
+    
+    
+//    
+//    
+//    if (subOrientation == mOrientaion || subOrientation == 15) {
+//        
+//        //nothing
+//        
+//    } else if (subOrientation == 2 || subOrientation == 10) {
+//        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+//        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
+//    } else if (subOrientation == 8) {
+//        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+//        [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
+//    } else if (subOrientation == 1 || subOrientation == 5) {
+//        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+//        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+//    } else if (subOrientation == 4) {
+//        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",subOrientation] forKey:@"subwgtOrientaion"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
+//        [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
+//    }
+//    //theApp.drawerController.canRotate = NO;
+//
+//    self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WIDGET_IN_OPENING;
+//    EBrowserWidgetContainer *eBrwWgtContainer = self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
+//    EBrowserWindowContainer *eCurBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.EBrwView];
+//    EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:inAppId];
+//    if (eBrwWndContainer) {
+//        eBrwWndContainer.mStartAnimiId = animiId;
+//        eBrwWndContainer.mStartAnimiDuration = animiDuration;
+//        eBrwWndContainer.meOpenerContainer = eCurBrwWndContainer;
+//        eBrwWndContainer.mOpenerForRet = inForRet;
+//        eBrwWndContainer.mOpenerInfo = inOpenerInfo;
+//        [eBrwWgtContainer bringSubviewToFront:eBrwWndContainer];
+//        
+//        if ([BAnimation isMoveIn:animiId]) {
+//            [BAnimation doMoveInAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
+//        }else if ([BAnimation isPush:animiId]) {
+//            [BAnimation doPushAnimition:eBrwWndContainer animiId:animiId animiTime:animiDuration];
+//        }else {
+//            [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:animiId AnimiTime:animiDuration];
+//        }
+//        
+//        
+//        [[eCurBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
+//        
+//        EBrowserWindow *eAboveWnd = [eBrwWndContainer aboveWindow];
+//        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
+//
+//        if (eBrwWgtContainer.meRootBrwWndContainer == eBrwWndContainer) {
+//            self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag &= ~F_TOOLBAR_FLAG_FINISH_WIDGET;
+//        }
+//        if (self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
+//            if (self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
+//                [self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:inAppId];
+//            }
+//        }
+//        self.EBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
+//    } else {
+//        eBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:CGRectMake(0, 0, eBrwWgtContainer.bounds.size.width, eBrwWgtContainer.bounds.size.height) BrwCtrler:self.EBrwView.meBrwCtrler Wgt:wgtObj];
+//        eBrwWndContainer.mStartAnimiId = animiId;
+//        eBrwWndContainer.mStartAnimiDuration = animiDuration;
+//        eBrwWndContainer.meOpenerContainer = eCurBrwWndContainer;
+//        eBrwWndContainer.mOpenerForRet = inForRet;
+//        eBrwWndContainer.mOpenerInfo = inOpenerInfo;
+//        [eBrwWgtContainer.mBrwWndContainerDict setObject:eBrwWndContainer forKey:inAppId];
+//        if ([inAppId isEqualToString:@"9999997"] || [inAppId isEqualToString:@"9999998"]) {
+//            [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:inOpenerInfo];
+//        } else {
+//            [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidgetWithQuery:nil];
+//        }
+//    }
+    
     //子widget启动上报代码
     //    NSString *inKey=[BUtility appKey];
     
 //    AppCanAnalysis
-    Class  analysisClass =  NSClassFromString(@"AppCanAnalysis");//判断类是否存在，如果存在子widget上报
+    Class  analysisClass =  NSClassFromString(@"AppCanAnalysis") ?:NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
     if (analysisClass) {
         
         //过滤掉无appkey的子应用上报(plugin类型)
-        if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_PLUGINWIDGET || !inAppkey || inAppkey.length == 0) {
+        if (self.EBrwView.meBrwCtrler.isAppCanRootViewController || !inAppkey || inAppkey.length == 0) {
             return;
         }
         id analysisObject = [[analysisClass alloc] init];
@@ -305,23 +496,7 @@
         [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
         
     }
-    
-//    UexDataAnalysisAppCanAnalysis
-    Class  uexAnalysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
-    if (analysisClass) {
-        
-        //过滤掉无appkey的子应用上报(plugin类型)
-        if (eBrwWndContainer.mwWgt.wgtType == F_WWIDGET_PLUGINWIDGET || !inAppkey || inAppkey.length == 0) {
-            return;
-        }
-        id analysisObject = [[analysisClass alloc] init];
-        
-        [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
-        [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
-        [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
-        [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
-        
-    }
+
 }
 
 - (void)finishWidget:(NSMutableArray *)inArguments {
@@ -334,6 +509,16 @@
         useWgtBg = numberArg(info[@"finishMode"]);
         inAnimiId = numberArg(info[@"animId"]);
     }
+    
+    
+    
+    WWidget *wgtObj = appID ? [[ACESubwidgetManager defaultManager] launchedWidgetWithID:appID] : self.EBrwView.meBrwCtrler.widget;
+    wgtObj.closeAnimation = inAnimiId ? inAnimiId.unsignedIntegerValue : [ACEAnimations closeAnimationForOpenAnimation:wgtObj.openAnimation];
+    wgtObj.closeAnimationDuration = 0.2;
+    [[ACESubwidgetManager defaultManager]finishWidget:wgtObj withCallbackResult:inRet];
+    
+    
+    /*
     BOOL isWgtBG  = useWgtBg.boolValue;
     
     NSString * mainwgtOrientation = [BUtility getMainWidgetConfigInterface];
@@ -342,7 +527,9 @@
     int mOrientaion = [[BUtility getMainWidgetConfigInterface]intValue];
     
     int subOrientation =self.EBrwView.mwWgt.orientation;
-    theApp.drawerController.canRotate = YES;
+    
+#warning TODO
+    //theApp.drawerController.canRotate = YES;
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     if (subOrientation == mOrientaion || mOrientaion == 15) {
         
@@ -373,7 +560,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
         [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
     }
-    theApp.drawerController.canRotate = NO;
+    //theApp.drawerController.canRotate = NO;
     
     EBrowserWidgetContainer *eBrwWgtContainer = self.EBrwView.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
     EBrowserWindowContainer *eBrwWndContainer = nil;
@@ -471,11 +658,8 @@
     if (self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter && self.EBrwView.meBrwCtrler.meBrwMainFrm.mAppCenter.sView.hidden == NO) {
         return;
     }
-    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
-    
+
+    */
 }
 
 - (void)closeWindowAfterAnimation:(EBrowserWindow*)brwWnd_ {
@@ -504,7 +688,6 @@
         NSString *viewName = [ePopView.curUrl absoluteString];
         NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
         [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-        [[self.EBrwView brwWidgetContainer] pushReuseBrwView:ePopView];
         [brwWnd_.mPopoverBrwViewDict removeAllObjects];
         brwWnd_.mPopoverBrwViewDict = nil;
     }
@@ -518,11 +701,7 @@
     [brwWnd_.mMuiltPopoverDict removeAllObjects];
     brwWnd_.mMuiltPopoverDict = nil;
     
-    if (self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
-        brwWnd_.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
-        [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-    }
+
     if ((brwWnd_.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
         if ((brwWnd_.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
             brwWnd_.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
@@ -544,10 +723,7 @@
             [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
         }
     }
-    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
 }
 
 
@@ -578,8 +754,8 @@
     
 }
 - (NSString *)getOpenerInfo:(NSMutableArray *)inArguments {
-    EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.EBrwView];
-    NSString *info = eBrwWndContainer.mOpenerInfo;
+    
+    NSString *info = self.EBrwView.meBrwCtrler.widget.openMessage;
     [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbGetOpenerInfo" arguments:ACArgsPack(@0,@0,info)];
     return info;
 }
@@ -635,7 +811,7 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        WWidgetMgr *wgtMgrObj = [[WWidgetMgr alloc]init];
+        WWidgetMgr *wgtMgrObj = [WWidgetMgr sharedManager];
         NSMutableDictionary *updateDict = [wgtMgrObj wgtUpdate:currentWidget];
         
         NSInteger statusCode = [[updateDict objectForKey:@"statusCode"] integerValue];
@@ -698,65 +874,8 @@
     return pushDataStr;
 }
 
-+ (void)applicationDidBecomeActive:(UIApplication *)application {
-    
-    //4.0推送，角标清零逻辑
-    
-    if(!theApp.usePushControl) {//推送开关没有开启
-        return;
-    }
-    
-    if ([theApp.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
-        return;
-    }
-    
-    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",theApp.useBindUserPushURL];
-    NSURL *requestUrl = [NSURL URLWithString:urlStr];
-    NSString *appid = theApp.mwWgtMgr.mainWidget.appId ? theApp.mwWgtMgr.mainWidget.appId : @"";
-    NSString *appkey = [BUtility appKey] ? [BUtility appKey] : @"";
-    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ? [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] : @"";
-    NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
-    NSString *appverify = [BUtility getVarifyAppMd5Code:appid AppKey:appkey time:time];
-    NSString *softToken = [EUtility md5SoftToken];
-    
-    NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithObject:appverify forKey:@"appverify"];
-    [headerDict setObject:@"application/json" forKey:@"Content-Type"];
-    NSString *masAppId = [NSString stringWithFormat:@"%@", appid];
-    [headerDict setObject:masAppId forKey:@"x-mas-app-id"];
-    NSMutableDictionary *bodyDict = [NSMutableDictionary dictionaryWithCapacity:5];
-    [bodyDict setObject:@"1" forKey:@"count"];
-    [bodyDict setObject:deviceToken forKey:@"deviceToken"];
-    [bodyDict setObject:softToken forKey:@"softToken"];
-    NSString *useAppCanEMMTenantID = theApp.useAppCanEMMTenantID ? theApp.useAppCanEMMTenantID : @"";
-    [bodyDict setObject:useAppCanEMMTenantID forKey:@"tenantMark"];
-    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
-    [request setRequestMethod:@"POST"];
-    [request setRequestHeaders:headerDict];
-    [request setTimeOutSeconds:60.0];
-    [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
-    
-    @weakify(request);
-    
-    [request setCompletionBlock:^{
-        @strongify(request);
-        if (200 == request.responseStatusCode) {
-            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseString is %@",request.responseString);
-        } else {
-            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
-        }
-    }];
-    
-    [request setFailedBlock:^{
-        @strongify(request);
-        ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
-        
-    }];
-    
-    [request startAsynchronous];
-    
-}
+
+
 
 - (void)sendReportRead:(NSString *)pushDataStr{
     @autoreleasepool {
@@ -766,9 +885,9 @@
         }
         
         if ([dict objectForKey:@"taskId"]) {
-            NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/%@",theApp.useBindUserPushURL, [dict objectForKey:@"taskId"]];
+            NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/%@",AppCanEngine.configuration.useBindUserPushURL, [dict objectForKey:@"taskId"]];
             NSURL *requestUrl = [NSURL URLWithString:urlStr];
-            NSString *appid = theApp.mwWgtMgr.mainWidget.appId ?: @"";
+            NSString *appid = [WWidgetMgr sharedManager].mainWidget.appId ?: @"";
             NSString *appkey = [BUtility appKey] ?: @"";
             NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] ?: @"";
             
@@ -790,18 +909,18 @@
             ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
             [request setRequestMethod:@"POST"];
             [request setRequestHeaders:headerDict];
-            [request setPostBody:(NSMutableData *)[[bodyDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+            [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
             
-            if (theApp.useCertificateControl) {
+            if (AppCanEngine.configuration.useCertificateControl) {
                 SecIdentityRef identity = NULL;
                 SecTrustRef trust = NULL;
                 SecCertificateRef certChain = NULL;
                 NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-                [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+                [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
                 [request setClientCertificateIdentity:identity];
             }
             
-            if (theApp.validatesSecureCertificate) {
+            if (AppCanEngine.configuration.validatesSecureCertificate) {
                 [request setValidatesSecureCertificate:YES];
                 
             } else {
@@ -834,7 +953,7 @@
         
         NSString *softToken = [EUtility md5SoftToken];
         //线程处理
-        NSString *urlStr =[NSString stringWithFormat:@"%@/report",theApp.useBindUserPushURL];
+        NSString *urlStr =[NSString stringWithFormat:@"%@/report",AppCanEngine.configuration.useBindUserPushURL];
         NSURL *requestUrl = [NSURL URLWithString:urlStr];
         NSMutableDictionary * postData = [NSMutableDictionary dictionaryWithCapacity:4];
         NSString *msgId = [dict objectForKey:@"msgId"];
@@ -854,7 +973,7 @@
         SecCertificateRef certChain=NULL;
         
         NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-        [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+        [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
         
         ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
         [request setRequestMethod:@"POST"];
@@ -863,12 +982,12 @@
         [request setPostValue:@"open" forKey:@"eventType"];
         [request setPostValue:timeSp forKey:@"occuredAt"];
         
-        if (theApp.useCertificateControl) {
+        if (AppCanEngine.configuration.useCertificateControl) {
             [request setClientCertificateIdentity:identity];
         }else{
             [request setClientCertificateIdentity:nil];
         }
-        if (theApp.validatesSecureCertificate) {
+        if (AppCanEngine.configuration.validatesSecureCertificate) {
             [request setValidatesSecureCertificate:YES];
             
         } else {
@@ -909,9 +1028,9 @@
 }
 - (void)delPushInfo:(NSMutableArray *)inArguments {
     
-    if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
         
-        NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+        NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
         NSString *appkey = [BUtility appKey];
         NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
         NSString *varifyAppStr = [BUtility getVarifyAppMd5Code:appId AppKey:appkey time:time];
@@ -939,13 +1058,13 @@
         [paramDict setObject:deviceToken forKey:@"deviceToken"];
         [paramDict setObject:userDict forKey:@"user"];
         
-        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations",theApp.useBindUserPushURL];
+        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations",AppCanEngine.configuration.useBindUserPushURL];
         
         ASIFormDataRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->headerDict = %@-->body = %@",headerDict,paramDict);
         [requestSetPushInfo setRequestMethod:@"POST"];
         [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:(NSMutableData *)[[paramDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setPostBody:[[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
         [requestSetPushInfo setTimeOutSeconds:60];
         @weakify(requestSetPushInfo);
         [requestSetPushInfo setCompletionBlock:^{
@@ -968,14 +1087,14 @@
     } else {
         @autoreleasepool {
             NSString *softToken = [EUtility md5SoftToken];
-            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",theApp.useBindUserPushURL,softToken];
+            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",AppCanEngine.configuration.useBindUserPushURL,softToken];
             SecIdentityRef identity = NULL;
             SecTrustRef trust = NULL;
             SecCertificateRef certChain=NULL;
             NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
-            if (theApp.useCertificateControl) {
+            if (AppCanEngine.configuration.useCertificateControl) {
                 [request setValidatesSecureCertificate:YES];
                 [request setClientCertificateIdentity:identity];
             }else{
@@ -996,12 +1115,12 @@
 
 - (void)sendPushUserMsg:(id)userInfo{
     
-    if ([theApp.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
         
         NSString *softToken = [EUtility md5SoftToken];
-        NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
+
+        NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
         NSString *appkey = [BUtility appKey];
-        
         NSTimeInterval time = [[NSDate date]timeIntervalSince1970];
         NSString *varifyAppStr = [BUtility getVarifyAppMd5Code:appId AppKey:appkey time:time];
         
@@ -1039,28 +1158,23 @@
         [paramDict setObject:softToken forKey:@"softToken"];
         [paramDict setObject:userDict forKey:@"user"];
         
-        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->headerDict = %@-->body = %@",headerDict,paramDict);
-        
-        urlStr = [NSString stringWithFormat:@"%@4.0/installations",theApp.useBindUserPushURL];
+        urlStr = [NSString stringWithFormat:@"%@4.0/installations",AppCanEngine.configuration.useBindUserPushURL];
         
         ASIHTTPRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         //requestSetPushInfo = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
         
         [requestSetPushInfo setRequestMethod:@"POST"];
         [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:(NSMutableData *)[[paramDict JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
+        [requestSetPushInfo setPostBody:[[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
         
         [requestSetPushInfo setTimeOutSeconds:60];
         @weakify(requestSetPushInfo);
-        
-        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->theApp.validatesSecureCertificate is %d-->theApp.useCertificateControl = %d",theApp.validatesSecureCertificate,theApp.useCertificateControl);
-        
-        if (theApp.useCertificateControl) {
+        if (AppCanEngine.configuration.useCertificateControl) {
             SecIdentityRef identity = NULL;
             SecTrustRef trust = NULL;
             SecCertificateRef certChain = NULL;
             NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
             
             [requestSetPushInfo setClientCertificateIdentity:identity];
             
@@ -1070,7 +1184,7 @@
             
         }
         
-        if (theApp.validatesSecureCertificate) {
+        if (AppCanEngine.configuration.validatesSecureCertificate) {
             
             [requestSetPushInfo setValidatesSecureCertificate:YES];
             
@@ -1098,14 +1212,14 @@
         @autoreleasepool {
             NSDictionary *dict = (NSDictionary*)userInfo;
             NSString *softToken = [EUtility md5SoftToken];
-            NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.appId;
-            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",theApp.useBindUserPushURL,softToken];
+            NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
+            NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",AppCanEngine.configuration.useBindUserPushURL,softToken];
             
             SecIdentityRef identity = NULL;
             SecTrustRef trust = NULL;
             SecCertificateRef certChain=NULL;
             NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
             
             ASIFormDataRequest *FormatReq =[[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
             [FormatReq setPostValue:[dict objectForKey:@"uId"] forKey:@"userId"];
@@ -1114,7 +1228,7 @@
             [FormatReq setPostValue:softToken forKey:@"softToken"];
             [FormatReq setPostValue:appId forKey:@"appId"];
             [FormatReq setPostValue:[NSNumber numberWithInt:0] forKey:@"platform"];
-            if (theApp.useCertificateControl) {
+            if (AppCanEngine.configuration.useCertificateControl) {
                 [FormatReq setValidatesSecureCertificate:YES];
                 [FormatReq setClientCertificateIdentity:identity];
             }else{
@@ -1129,13 +1243,13 @@
 }
 
 - (void)setPushState:(NSMutableArray*)inArguments{
-    if(theApp.usePushControl == NO) {
+    if(AppCanEngine.configuration.usePushControl == NO) {
         return;
     }
     ACArgsUnpack(NSNumber *shouldPush) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(shouldPush);
     
-    [BUtility writeLog:[NSString stringWithFormat:@"-----setPushState------>>,theApp.usePushControl==%d",theApp.usePushControl]];
+
     
     
     if (shouldPush.boolValue) {
@@ -1186,7 +1300,7 @@
 
 - (void)closeLoading:(NSMutableArray *)inArguments{
     BOOL userCloseLoading = NO;
-    ONOXMLElement *config = [ONOXMLElement ACEOriginConfigXML];
+    ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
     ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
     if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
         userCloseLoading = YES;

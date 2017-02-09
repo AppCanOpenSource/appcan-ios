@@ -20,10 +20,11 @@
 
 @interface ACEBaseViewController : UIViewController<UIGestureRecognizerDelegate>
 
-@property (nonatomic,assign) int wgtOrientation;
-@property (nonatomic, assign) BOOL canAutorotate;
-@property (nonatomic, assign) BOOL canRotate;
-@property (nonatomic, assign) BOOL isStatusBarHidden;
-@property (nonatomic, assign) UIStatusBarStyle ACEStatusBarStyle;
+
+
+
+@property (nonatomic,strong)NSNumber * statusBarStyleNumber;
+@property (nonatomic,strong)NSNumber * shouldHideStatusBarNumber;
+
 
 @end

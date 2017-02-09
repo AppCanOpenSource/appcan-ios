@@ -17,7 +17,10 @@
  */
 
 #import "MMDrawerController.h"
-
+@class ACEUINavigationController;
 @interface ACEDrawerViewController : MMDrawerController
+
+@property (nonatomic,strong) ACEUINavigationController *mainContentController;
+
 
 @end

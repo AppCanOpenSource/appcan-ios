@@ -33,7 +33,7 @@
 #import "ACEPluginViewContainer.h"
 #import "ACEBrowserView.h"
 #import "ACEJSCInvocation.h"
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
 void PluginLog (NSString *format, ...) {
     #ifdef Plugin_OUTPUT_LOG_CONSOLE
 	va_list args;
@@ -324,11 +324,11 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     return [BUtility getAppCanDevMode];
 }
 + (EBrowserView *)rootBrwoserView{
-    return theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
+    return AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
 }
 
 + (EBrowserView *)topBrowserView{
-    return [theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView;
+    return [AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView;
 }
 
 + (void)evaluatingJavaScriptInRootWnd:(NSString*)script_{
@@ -544,11 +544,12 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 NSString * const cUexPluginCallbackInRootWindow = @"uexPluginCallbackInRootWindow";
 NSString * const cUexPluginCallbackInFrontWindow = @"uexPluginCallbackInFrontWindow";
 
-+(UIColor*)ColorFromString:(NSString*)inColor{
++ (UIColor*)ColorFromString:(NSString*)inColor{
+
+    
     UIColor *color =[UIColor blackColor];
     if (inColor && inColor.length != 0) {
-        BGColor bgColor = [BUtility bgColorFromNSString:inColor];
-        color = [UIColor colorWithRed:bgColor.rgba.r/255.0f green:bgColor.rgba.g/255.0f blue:bgColor.rgba.b/255.0f alpha:bgColor.rgba.a/255.0f];
+        color = [UIColor ac_ColorWithHTMLColorString:inColor];
     }
     return color;
 }

@@ -46,52 +46,16 @@
 @synthesize openAdStatus;
 @synthesize preload;
 @synthesize appKey;
--(void)dealloc{
-	[widgetOneId release];
-	widgetOneId =nil;
-	[widgetId release];
-	widgetId = nil;
-	[ver release];
-	ver = nil;
-	[appId release];
-	appId = nil;
-	[channelCode release];
-	channelCode = nil;
-	[imei release];
-	imei = nil;
-	[md5Code release];
-	md5Code = nil;
-	[widgetName release];
-	widgetName = nil;
-	[widgetPath release];
-	widgetPath =nil;
-	[iconPath release];
-	iconPath = nil;
-	[indexUrl release];
-	indexUrl = nil;
-	[logServerIp release];
-	logServerIp = nil;
-	[updateUrl release];
-	updateUrl = nil;
-	[email release];
-	email = nil;
-	[desc release];
-	desc = nil;
-	[author release];
-	author = nil;
-	[license release];
-	license = nil;
-	[super dealloc];
-}
+
 -(BOOL)getMySpaceStatus{
-	if ((showMySpace & WIDGETREPORT_SPACESTATUS_OPEN)==WIDGETREPORT_SPACESTATUS_OPEN) {
+	if (showMySpace & WIDGETREPORT_SPACESTATUS_OPEN) {
 		return YES;
 	}
 	return NO;
 
 }
 -(BOOL)getMoreWgtsStatus{
-	if ((showMySpace & WIDGETREPORT_SPACESTATUS_EXTEN_OPEN)==WIDGETREPORT_SPACESTATUS_EXTEN_OPEN) {
+	if (showMySpace & WIDGETREPORT_SPACESTATUS_EXTEN_OPEN) {
 		return YES;
 	}
 	return NO;
@@ -100,30 +64,31 @@
 - (NSString *)absWidgetPath{
     NSString *absPath = [BUtility getDocumentsPath:@""];
     NSString *wgtPath = nil;
-    if (self.wgtType==F_WWIDGET_MAINWIDGET) {
+    if (self.wgtType == F_WWIDGET_MAINWIDGET) {
         wgtPath = [NSString stringWithFormat:@"%@/apps/%@",absPath,self.appId];
     } else {
         wgtPath = self.widgetPath;
         NSString *wgtPathString = self.indexUrl;
-        NSRange range = [self.indexUrl rangeOfString:@"widget/plugin/"];
+        NSString *subWidgetIdentifier = [NSString stringWithFormat:@"%@/plugin",AppCanEngine.configuration.documentWidgetPath];
+        NSRange range = [self.indexUrl rangeOfString:subWidgetIdentifier];
         if (range.location != NSNotFound) {
             wgtPath = [wgtPathString substringToIndex:range.location+range.length];
             NSRange range1 = [wgtPath rangeOfString:@"file://"];
-            wgtPath = [wgtPath substringFromIndex:range1.location+range1.length];
+            wgtPath = [wgtPath substringFromIndex:range1.location + range1.length];
             wgtPath = [wgtPath stringByAppendingString:self.appId];
         }
+    }
+    NSFileManager *fManager = [NSFileManager defaultManager];
+    if (![fManager fileExistsAtPath:wgtPath]) {
+        [fManager createDirectoryAtPath:wgtPath withIntermediateDirectories:YES attributes:nil error:nil];
+        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtPath]];
     }
     return wgtPath;
 }
 
 - (NSString *)absResourcePath{
-    if (self.wgtType==F_WWIDGET_MAINWIDGET) {
-        BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-        if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-            return  [BUtility getDocumentsPath:@"widget/wgtRes"];
-        }else {
-            return [BUtility getResPath:@"widget/wgtRes"];
-        }
+    if (self.wgtType == F_WWIDGET_MAINWIDGET) {
+        return [BUtility wgtResPath:F_RES_PATH];
     }else {
         return [NSString stringWithFormat:@"%@/wgtRes",[self absWidgetPath]];
     }

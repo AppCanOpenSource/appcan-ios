@@ -163,13 +163,7 @@
 }
 */
 
-- (void)dealloc {
-	[mIndicatorView release];
-	mIndicatorView = nil;
-	[mTextView release];
-	mTextView = nil;
-    [super dealloc];
-}
+
 /*
 -(UIImageView*)createIndicatorImgWithFrame:(CGRect)inFrame{
     UIImageView *imgView =[[[UIImageView alloc] initWithFrame:inFrame] autorelease];

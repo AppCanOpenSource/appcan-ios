@@ -17,7 +17,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "AppCenter.h"
+
 @class EBrowserController;
 
 #define	MENU_WIDTH  320
@@ -54,17 +54,14 @@
 #define F_TOOLBAR_FLAG_FINISH_WIDGET	0x1
 
 @interface EBrowserToolBar : UIView{
-	UIButton *barbtn;
-	EBrowserController *eBrwCtrler;
 	CGGradientRef gradient;
 	BOOL screenIsPortraitTag;
-	int mFlag;
 }
-@property(nonatomic,assign) int flag;
-@property(nonatomic,retain)UIButton *barbtn;
-@property(nonatomic,assign)EBrowserController *eBrwCtrler;
-@property int mFlag;
-//-(void)drawViewWithBrwWnd:(EBrowserWindow *)eBrwWnd_;
+@property (nonatomic,assign) int flag;
+@property (nonatomic,strong)UIButton *barbtn;
+@property (nonatomic,weak)EBrowserController *eBrwCtrler;
+@property (nonatomic,assign)int mFlag;
+
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler;
-- (void)LoadSpace;
+
 @end

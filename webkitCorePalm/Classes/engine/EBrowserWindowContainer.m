@@ -24,9 +24,6 @@
 #import "EBrowserMainFrame.h"
 #import "EBrowser.h"
 #import "BUtility.h"
-#import "BAnimation.h"
-//#import "AliPayInfo.h"
-#import "AppCenter.h"
 #import "WWidget.h"
 #import "ACEWebViewController.h"
 #import "WidgetOneDelegate.h"
@@ -36,9 +33,8 @@
 #import "RESideMenu.h"
 #import "ACEPOPAnimation.h"
 #import "EUtility.h"
+#import "ACEAnimation.h"
 
-NSString *const kUexPushNotifyBrwViewNameKey=@"kUexPushNotifyBrwViewNameKey";
-NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFunctionNameKey";
 
 @implementation EBrowserWindowContainer
 
@@ -48,66 +44,34 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 @synthesize mwWgt;
 @synthesize meOpenerContainer;
 @synthesize mOpenerForRet;
-@synthesize mOpenerInfo;
-@synthesize mAliPayInfo;
+
 @synthesize mStartAnimiId;
 @synthesize mStartAnimiDuration;
 @synthesize mFlag;
 
 - (void)dealloc {
-    
-	if (mwWgt) {
-		mwWgt = nil;
-	}
-	if (mOpenerInfo) {
-		mOpenerInfo = NULL;
-	}
+    mwWgt = nil;
 	if (mOpenerForRet) {
 		mOpenerForRet = NULL;
 	}
-	if (mAliPayInfo) {
-		mAliPayInfo = NULL;
-	}
-
-
 	if (meRootBrwWnd) {
 		if (meRootBrwWnd.superview) {
 			[meRootBrwWnd removeFromSuperview];
 		}
 		meRootBrwWnd = NULL;
 	}
-
 	if (mBrwWndDict) {
 		NSArray *brwWndArray = [mBrwWndDict allValues];
 		for (EBrowserWindow *brwWnd in brwWndArray) {
 			if (brwWnd.superview) {
 				[brwWnd removeFromSuperview];
 			}
-//			[brwWnd release];
 		}
 		[mBrwWndDict removeAllObjects];
 		mBrwWndDict = NULL;
 	}
 }
 
-- (void)removeAllUnActiveBrwWnd {
-    if (mBrwWndDict) {
-		NSArray *brwWndArray = [mBrwWndDict allValues];
-		for (EBrowserWindow *brwWnd in brwWndArray) {
-            if (brwWnd == [self aboveWindow]) {
-                continue;
-            }
-            if (brwWnd == meRootBrwWnd) {
-                [brwWnd cleanAllBrwViews];
-                continue;
-            }
-			if (brwWnd.superview) {
-				[brwWnd removeFromSuperview];
-			}
-            [mBrwWndDict removeObjectForKey:brwWnd.meBrwView.muexObjName];
-		}
-	}
-}
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt {
     self = [super initWithFrame:frame];
@@ -120,7 +84,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 		self.mwWgt = inWgt;
 		meOpenerContainer = nil;
 		mOpenerForRet = nil;
-		mOpenerInfo = nil;
+
 		mFlag = 0;
 		meRootBrwWnd = [[EBrowserWindow alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt UExObjName:F_BRW_WND_ROOT_NAME];
 		[mBrwWndDict setObject:meRootBrwWnd forKey:F_BRW_WND_ROOT_NAME];
@@ -137,22 +101,19 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 	//[superBrwWnd notifyLoadPageStartOfBrwView:eInBrwView];
 }
 
-- (void)addViewToACEWebViewController:(EBrowserWindow *)view
-{
-    
-    ACENSLog(@"NavWindowTest addViewToACEWebViewController view= %@", view);
+- (void)addViewToACEWebViewController:(EBrowserWindow *)view{
     
     ACEWebViewController *webController = [[ACEWebViewController alloc] init];
-    
     
 //    testController.view = view;
     webController.browserWindow = view;
     view.webController = webController;
     if (view.webWindowType == ACEWebWindowTypeNavigation) {
-        [meBrwCtrler.navigationController pushViewController:webController animated:YES];
+        [meBrwCtrler.aceNaviController pushViewController:webController animated:YES];
+         [EBrowserWindow postWindowSequenceChange];
     } else if (view.webWindowType == ACEWebWindowTypePresent) {
-        [meBrwCtrler.navigationController presentViewController:webController animated:YES completion:^{
-            //
+        [meBrwCtrler.aceNaviController presentViewController:webController animated:YES completion:^{
+             [EBrowserWindow postWindowSequenceChange];
         }];
     }
     
@@ -162,29 +123,16 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
 
 	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
-    
     if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
-        
-        if (eSuperBrwWnd.isSliding) {
+        if (eSuperBrwWnd.isSliding || eSuperBrwWnd.webController) {
             return;
         }
-        
         [self addViewToACEWebViewController:eSuperBrwWnd];
-        
-        ///prev window
-//        if (eCurBrwWnd) {
-//            [eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-//        }
         [eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-        
-        
-        if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
+        if (eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) {
             eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
             eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         }
-        
-        
         return;
     }
     
@@ -206,40 +154,23 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 		} else {
 			[self bringSubviewToFront:eSuperBrwWnd];
 		}
-        if([ACEPOPAnimation isPopAnimation:eSuperBrwWnd.mOpenAnimiId]){
-            ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eSuperBrwWnd.popAnimationInfo];
-            config.duration=eSuperBrwWnd.mOpenAnimiDuration;
+        
+        [ACEAnimations addOpeningAnimationWithID:eSuperBrwWnd.openAnimationID
+                                        fromView:self
+                                          toView:eSuperBrwWnd
+                                        duration:eSuperBrwWnd.openAnimationDuration
+                                   configuration:eSuperBrwWnd.openAnimationConfig
+                               completionHandler:nil];
 
-
-
-            [ACEPOPAnimation doAnimationInView:eSuperBrwWnd
-                                          type:(ACEPOPAnimateType)(eSuperBrwWnd.mOpenAnimiId)
-                                 configuration:config
-                                          flag:ACEPOPAnimateWhenWindowOpening
-                                    completion:^{
-                                        eSuperBrwWnd.usingPopAnimation=YES;
-                                    }];
-        }else if ([BAnimation isMoveIn:eSuperBrwWnd.mOpenAnimiId]) {
-            [BAnimation doMoveInAnimition:eSuperBrwWnd animiId:eSuperBrwWnd.mOpenAnimiId animiTime:eSuperBrwWnd.mOpenAnimiDuration];
-        } else {
-            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWnd.mOpenAnimiId AnimiTime:eSuperBrwWnd.mOpenAnimiDuration];
-        }
-		if (eCurBrwWnd) {
-			[eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-		}
+        [eCurBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
 		[eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-		if ((eSuperBrwWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-			NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eSuperBrwWnd.meBrwView.mAdType, eSuperBrwWnd.meBrwView.mAdDisplayTime, eSuperBrwWnd.meBrwView.mAdIntervalTime, eSuperBrwWnd.meBrwView.mAdFlag];
-			[eSuperBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-		}
 
-		if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
+		if (eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) {
 			eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
 			eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
 		}
-
-
 	}
+    [EBrowserWindow postWindowSequenceChange];
 	[eSuperBrwWnd notifyLoadPageFinishOfBrwView:eInBrwView];
 }
 
@@ -248,13 +179,6 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 	if ((eSuperBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
 		eSuperBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
 		eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
-	}
-	if (!self.superview) {
-		if (self.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-			if (self.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-				[self.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_FAIL retAppId:eInBrwView.mwWgt.appId];
-			}
-		}
 	}
 	[eSuperBrwWnd notifyLoadPageErrorOfBrwView:eInBrwView];
 }
@@ -277,13 +201,11 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
 
 - (EBrowserWindow*)aboveWindow {
     EBrowserWindow *aBrowserWin = nil;
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    ACEUINavigationController *navController = nil;
-    if (app.drawerController) {
-        navController = (ACEUINavigationController *)app.drawerController.centerViewController;
-    } else {
-        navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
-    }
+
+    ACEUINavigationController *navController = self.meBrwCtrler.aceNaviController;
+
+    
+    
     if ([navController.viewControllers count] > 1) {
         ACEWebViewController *webController = (ACEWebViewController *)navController.topViewController;
         if (webController != nil && [webController isKindOfClass:[ACEWebViewController class]]) {
@@ -303,32 +225,7 @@ NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCallbackFu
     return aBrowserWin;
 }
 
-- (void)pushNotify {
-    
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString *pushNotifyBrwViewName=[defaults stringForKey:kUexPushNotifyBrwViewNameKey];
-    NSString *pushNotifyCallbackFunctionName=[defaults stringForKey:kUexPushNotifyCallbackFunctionNameKey];
-    
-    NSString *appStateStr = @"";
-    if ([defaults objectForKey:@"appStateOfGetPushData"]) {
-        appStateStr = [defaults objectForKey:@"appStateOfGetPushData"];
-    }
-    
-    //NSLog(@"appcan-->EBrowserWindowContainer.m-->pushNotify-->appStateOfGetPushData-->%@",appStateStr);
-    
-    
-    if (!pushNotifyBrwViewName || !pushNotifyCallbackFunctionName) {
-        return;
-    }
-    EBrowserWindow *eBrwWnd = [self brwWndForKey:pushNotifyBrwViewName];
-    if (!eBrwWnd) {
-        return;
-    }
-    NSString *pushNotifyStr = [NSString stringWithFormat:@"if(%@!= null){%@(\'%@\');}",pushNotifyCallbackFunctionName,pushNotifyCallbackFunctionName,appStateStr];
-    
-    [EUtility brwView:eBrwWnd.meBrwView evaluateScript:pushNotifyStr];
-    
-}
+
 
 
 - (void)clean {

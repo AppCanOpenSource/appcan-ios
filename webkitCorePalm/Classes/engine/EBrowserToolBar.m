@@ -29,7 +29,6 @@
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowserView.h"
-#import "BAnimation.h"
 #import "EBrowserController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -46,10 +45,8 @@
 @synthesize flag;
 
 - (void)dealloc {
-	//yangfan MOD--->leaks
-	[barbtn release];
 	barbtn = nil;
-	[super dealloc];
+
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -72,45 +69,32 @@
 			if (!result && err) {
 				ACENSLog(@"Failed to delete: %@ (error: %@)", filePath, err);
 			}
-		}    
-		[fileMgr release];
+		}
 		exit(0);
 	}
 }
 
 - (void)setMenubtn  {
 	[self setNeedsDisplay];
-	
-	if(isPad){
-		[self setFrame:CGRectMake(768-66,BOTTOM_IPAD_LOCATION_VERTICAL_Y,BOTTOM_IPAD_ITEM_WIDTH,BOTTOM_IPAD_ITEM_HEIGHT)];
-	}else{
-		[self setFrame:CGRectMake(320-33,BOTTOM_LOCATION_VERTICAL_Y,BOTTOM_ITEM_WIDTH,BOTTOM_ITEM_HEIGHT)];
-	}
 	[self setUserInteractionEnabled:YES];
-	UIPanGestureRecognizer *gesture = [[[UIPanGestureRecognizer alloc] 
-										initWithTarget:self 
-										action:@selector(btnDragged:)] autorelease];
+	UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(btnDragged:)];
 	[self addGestureRecognizer:gesture];
 	
 //  初始化barbtn
 	barbtn = [UIButton buttonWithType:UIButtonTypeCustom]; 
 	
 	if(isPad){
+        [self setFrame:CGRectMake(768-66,BOTTOM_IPAD_LOCATION_VERTICAL_Y,BOTTOM_IPAD_ITEM_WIDTH,BOTTOM_IPAD_ITEM_HEIGHT)];
 		[barbtn setFrame:CGRectMake(0, 0, BOTTOM_IPAD_ITEM_WIDTH, BOTTOM_IPAD_ITEM_HEIGHT)];
+        [barbtn setBackgroundImage:[UIImage imageNamed:@"img/my_space_entry_icon-72.png"] forState:UIControlStateNormal];
 	}else{
-	[barbtn setFrame:CGRectMake(0, 0, BOTTOM_ITEM_WIDTH, BOTTOM_ITEM_HEIGHT)];
+        [self setFrame:CGRectMake(320-33,BOTTOM_LOCATION_VERTICAL_Y,BOTTOM_ITEM_WIDTH,BOTTOM_ITEM_HEIGHT)];
+        [barbtn setFrame:CGRectMake(0, 0, BOTTOM_ITEM_WIDTH, BOTTOM_ITEM_HEIGHT)];
+        [barbtn setBackgroundImage:[UIImage imageNamed:@"img/my_space_entry_icon.png"] forState:UIControlStateNormal];
 	}
 	[barbtn setBackgroundColor:[UIColor clearColor]];
-	if(isPad){
-		[barbtn setBackgroundImage:[UIImage imageNamed:@"img/my_space_entry_icon-72.png"] forState:UIControlStateNormal];
-	}else{
-		[barbtn setBackgroundImage:[UIImage imageNamed:@"img/my_space_entry_icon.png"] forState:UIControlStateNormal];
-	}
-	if (![BUtility getAppCanDevMode]) {
-		[barbtn addTarget:self action:@selector(LoadSpace) forControlEvents:UIControlEventTouchUpInside];
-	} else {
-		[barbtn addTarget:self action:@selector(finishWgt) forControlEvents:UIControlEventTouchUpInside];
-	}
+    [barbtn addTarget:self action:@selector(finishWgt) forControlEvents:UIControlEventTouchUpInside];
+	
 	[self addSubview:barbtn];
 }
 
@@ -131,12 +115,11 @@
             NSString * exit = ACELocalized(UEX_EXITAPP_ALERT_EXIT);
             NSString * cancel = ACELocalized(UEX_EXITAPP_ALERT_CANCLE);
             
-            UIAlertView *widgetOneConfirmView = [[[UIAlertView alloc]
-                                                 initWithTitle:title
-                                                 message:message
-                                                 delegate:self
-                                                 cancelButtonTitle:nil
-                                                 otherButtonTitles:exit,cancel,nil] autorelease];
+            UIAlertView *widgetOneConfirmView = [[UIAlertView alloc] initWithTitle:title
+                                                                           message:message
+                                                                          delegate:self
+                                                                 cancelButtonTitle:nil
+                                                                 otherButtonTitles:exit,cancel,nil];
             [widgetOneConfirmView show];
             return;
         }
@@ -149,82 +132,14 @@
 	//强制转屏
 	UIInterfaceOrientation cOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	if ((cOrientation == UIInterfaceOrientationLandscapeLeft) || (cOrientation == UIInterfaceOrientationLandscapeRight)) {
-		if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-			[[UIDevice currentDevice] performSelector:@selector(setOrientation:)
-										   withObject:(id)UIInterfaceOrientationPortrait];
-			eBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrwCtrler.mFlag = 1;
-		}
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+        eBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrwCtrler.mFlag = 1;
+		
 	}
 }
-- (void)LoadSpace{
-    
-    EBrowserWidgetContainer *eBrwWgtContainer = eBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
-    EBrowserView *eView = eBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView;
-    
-    if (flag==1) {
-        // EBrowserWidgetContainer *eBrwWgtContainer = eBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
-        [eView stringByEvaluatingJavaScriptFromString:@"if(uexWidget.onSpaceClick!=null){uexWidget.onSpaceClick(0,0,0);}"];
-    }
-    else{
-        //	EBrowserWidgetContainer *eBrwWgtContainer = eBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
-        EBrowserWindowContainer *eBrwWndContainer = [eBrwWgtContainer aboveWindowContainer];
-        if ((self.mFlag & F_TOOLBAR_FLAG_FINISH_WIDGET) == F_TOOLBAR_FLAG_FINISH_WIDGET) {
-            if (eBrwWndContainer != eBrwWgtContainer.meRootBrwWndContainer) {
-                NSString *finishWgtStr = [NSString stringWithFormat:@"uexWidget.finishWidget(\"\")"];
-                [[eBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:finishWgtStr];
-                return;
-            }
-        }
-        
-        if (!eView.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-            AppCenter *tmpCenter = [[AppCenter alloc] init];
-            eView.meBrwCtrler.meBrwMainFrm.mAppCenter = tmpCenter;
-            [tmpCenter release];
-        }
-        if (eView.meBrwCtrler.meBrwMainFrm.mAppCenter.showTag == YES) {
-            return;
-        }
-        [eView.meBrwCtrler.meBrwMainFrm.mAppCenter openAppCenterWithEBrwView:eView];
-        UIInterfaceOrientation cOrientation = [UIApplication sharedApplication].statusBarOrientation;
-        if ((cOrientation == UIInterfaceOrientationLandscapeLeft) || (cOrientation == UIInterfaceOrientationLandscapeRight)) {
-            eView.meBrwCtrler.mFlag = 0;
-            [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(transformScreen) userInfo:nil repeats:NO];
-        }else {
-            eView.meBrwCtrler.mFlag = 1;
-        }
-        
-        [BAnimation SwapAnimationWithView:eView.meBrwWnd.superview AnimiId:8 AnimiTime:2.0];
-        
-        [self setHidden:YES];
-        /*if (!eBrwCtrler.mwWgtMgr.wSpaceWgt) {
-         return;
-         }
-         EBrowserWidgetContainer *eBrwWgtContainer = eBrwCtrler.meBrwMainFrm.meBrwWgtContainer;
-         EBrowserWindowContainer *eBrwWndContainer = (EBrowserWindowContainer*)[eBrwWgtContainer.mBrwWndContainerDict objectForKey:eBrwCtrler.mwWgtMgr.wSpaceWgt.appId];
-         if (eBrwWndContainer) {
-         if ((eBrwWndContainer.mFlag & F_BRW_WND_CONTAINER_LOAD_WGT_DONE) == F_BRW_WND_CONTAINER_LOAD_WGT_DONE) {
-         [eBrwWgtContainer bringSubviewToFront:eBrwWndContainer];
-         [BAnimation SwapAnimationWithView:eBrwWgtContainer AnimiId:eBrwWndContainer.mStartAnimiId AnimiTime:0.2f];
-         [[eBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-         [[eBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-         } else {
-         eBrwWndContainer.meOpenerContainer = eBrwWgtContainer.meRootBrwWndContainer;
-         [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidget];
-         }
-         if (self.hidden == NO) {
-         self.hidden = YES;
-         }
-         } else {
-         eBrwWndContainer = [[EBrowserWindowContainer alloc]initWithFrame:CGRectMake(0, 0, eBrwWgtContainer.bounds.size.width, eBrwWgtContainer.bounds.size.height) BrwCtrler:eBrwCtrler Wgt:eBrwCtrler.mwWgtMgr.wSpaceWgt];
-         eBrwWndContainer.mStartAnimiId = eBrwWndContainer.mStartAnimiId;
-         [eBrwWgtContainer.mBrwWndContainerDict setObject:eBrwWndContainer forKey:eBrwCtrler.mwWgtMgr.wSpaceWgt.appId];
-         eBrwWndContainer.meOpenerContainer = eBrwWgtContainer.meRootBrwWndContainer;
-         [eBrwWndContainer.meRootBrwWnd.meBrwView loadWidget];
-         }*/
-    }
-}
 
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler {
+
+- (instancetype)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler {
 	if (self = [super initWithFrame:frame]) {
 		eBrwCtrler = eInBrwCtrler;
 		[self setMenubtn];
@@ -235,14 +150,13 @@
 {
 	CGPoint translation = [gesture  translationInView:self];
 	// move btn
-	if (self.frame.origin.x+ translation.x<0||self.frame.origin.x+ translation.x>([BUtility getScreenWidth]-barbtn.frame.size.width)) {
+	if (self.frame.origin.x + translation.x < 0 || self.frame.origin.x + translation.x >([BUtility getScreenWidth] - barbtn.frame.size.width)) {
 		return;
 	}
-	if (self.frame.origin.y+translation.y <0||self.frame.origin.y+translation.y>([BUtility getScreenHeight]-barbtn.frame.size.height)) {
+	if (self.frame.origin.y + translation.y < 0 || self.frame.origin.y+translation.y > ([BUtility getScreenHeight] - barbtn.frame.size.height)) {
 		return;
 	}
-	self.center = CGPointMake(self.center.x + translation.x, 
-								self.center.y + translation.y);
+	self.center = CGPointMake(self.center.x + translation.x,self.center.y + translation.y);
 	
 	// reset translation
 	[gesture setTranslation:CGPointZero inView:self];

@@ -22,7 +22,7 @@
 #import <sys/sysctl.h>
 #import <mach/mach.h>
 #import <netdb.h>
-#import "EUExAction.h"
+
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "WWidget.h"
 //#import "AppCanAnalysis.h"
@@ -34,8 +34,7 @@
 #import "WWidgetMgr.h"
 #import "WidgetOneDelegate.h"
 #import "EBrowserMainFrame.h"
-#import "EBrowserWidgetContainer.h"
-#import "SFHFKeychainUtils.h"
+
 
 //mac begin
 #include <sys/socket.h> // Per msqr 
@@ -48,7 +47,6 @@
 #import <objc/message.h>
 //mac end
 #import "AllConfigParser.h"
-#import "SFHFKeychainUtils.h"
 #import "OpenUDID.h"
 
 #import "FileEncrypt.h"
@@ -122,16 +120,7 @@ void ACENSLog (NSString *format, ...) {
 }
 
 
-NSString* getAppCanBundlePath( NSString * filename)  
-{  
-	NSBundle * libBundle = APPCANBUNDLE ;  
-	if ( libBundle && filename ){  
-		NSString * s=[[libBundle resourcePath ] stringByAppendingPathComponent : filename];  
-		ACENSLog ( @"%@" ,s);  
-		return s;  
-	}  
-	return nil ;  
-} 
+
 @implementation BUtility
 #pragma BaseJSKey
 /*
@@ -332,13 +321,9 @@ static BOOL appCanDevelopmetMode = NO;
 +(BOOL)getAppCanDevMode{
 	return appCanDevelopmetMode;
 }
-static NSString *appCanDocumentPath = nil;
 
-+(void)setAppCanDocument{
-	//获取documents路径
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	appCanDocumentPath =[[NSString alloc] initWithString:[paths objectAtIndex:0]] ;
-}
+
+
 
 static NSString *clientCertificatePwd = nil;
 +(void)setClientCertificatePwd:(NSString*)inPwd{
@@ -350,49 +335,7 @@ static NSString *clientCertificatePwd = nil;
     }
     return nil;
 }
-+ (BGColor)bgColorFromNSString:(NSString*)inColorStr {
-	BGColor c = {.hex = 0xffffffff};
-	if (!inColorStr || inColorStr.length == 0) {
-		return c;
-	}
-	NSInteger length = inColorStr.length;
-	const char * colorChars = [inColorStr UTF8String];
-	char str[] = "ffffff";
-	
-	// #f0f format
-	if(length == 4) {
-		str[0] = str[1] = colorChars[3];
-		str[2] = str[3] = colorChars[2];
-		str[4] = str[5] = colorChars[1];
-		c.hex = (unsigned int)(0xff000000 | strtol( str, NULL, 16 ));
-	} else if(length == 7) { //#ff00ff
-		str[0] = colorChars[5];
-		str[1] = colorChars[6];
-		str[2] = colorChars[3];
-		str[3] = colorChars[4];
-		str[4] = colorChars[1];
-		str[5] = colorChars[2];
-		c.hex = (unsigned int)(0xff000000 | strtol( str, NULL, 16 ));
-	} 
-	// rgba(255,0,255,255) format
-	else { 
-		unsigned char components[4] = {0,0,0,0};
-		int current = 0;
-		for( int i = 0; i < length && current < 4; i++ ) {
-			if( isdigit(colorChars[i]) ) {
-				components[current] = components[current] * 10 + colorChars[i] - '0'; 
-			}
-			else if( colorChars[i] == ',' || colorChars[i] == ')' ) {
-				current++;
-			}
-		}
-		c.rgba.r = components[0];
-		c.rgba.g = components[1];
-		c.rgba.b = components[2];
-		c.rgba.a = components[3];
-	}
-	return c;
-}
+
 
 + (NSString *) platform
 {
@@ -431,7 +374,7 @@ static NSString *clientCertificatePwd = nil;
         else {
             
             NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
-            //        int statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+
             int statusBarHeight = 20;
             if ([statusBarStyleIOS7 boolValue] == YES) {
                 rect =  CGRectMake(0, 0, appWidth, appHeight);
@@ -531,40 +474,25 @@ static NSString *clientCertificatePwd = nil;
 + (NSURL*)stringToUrl:(NSString*)inString {
 	
     NSRange range = [inString rangeOfString:@"#"];
-    
     if (range.location != NSNotFound) {
-        
         inString = [inString substringToIndex:range.location];
-        
     }
-    
     NSURL * url = nil;
-    
 	if ([BUtility isSimulator]==NO) {
         url = [NSURL URLWithString:inString];
         if(!url || url.absoluteString.length == 0){
             NSString * urlStr = [inString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             url = [NSURL URLWithString:urlStr];
         }
-        
 	} else {
-        
 		if ([inString hasPrefix:@"http://"]) {
-            
 			url = [NSURL URLWithString:inString];
-            
 		} else if([inString hasPrefix:@"file://"]){
-            
 			url = [NSURL URLWithString:[inString substringFromIndex:7]];
-            
 		} else {
-            
 			url = [NSURL fileURLWithPath:inString];
-            
-		}
-        
+        }
 	}
-    
 	return url;
     
 }
@@ -660,17 +588,13 @@ static NSString *clientCertificatePwd = nil;
 
 //得到documents的路径	
 +(NSString *)getDocumentsPath:(NSString *)fileName{
-	//num++;
-	//转换成utf8格式
-	//NSData *fileData = [fileName dataUsingEncoding:NSUTF8StringEncoding];
-	//NSString *fileUtf8Name = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
-	//获取documents路径
-	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	//NSString *documentsDirectory = [paths objectAtIndex:0];
-	//NSString *documentsDirectory =[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-	NSString *docPath = [appCanDocumentPath stringByAppendingPathComponent:fileName];
-	//[fileUtf8Name release];
-	return docPath;
+    static NSString *documentPath = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject retain];
+    });
+	return [documentPath stringByAppendingPathComponent:fileName];
+
 }
 //得到res 路径
 +(NSString *)getResPath:(NSString *)fileName{
@@ -735,51 +659,7 @@ static NSString *clientCertificatePwd = nil;
 //	}
 //	return NO;
 //}
-/*+(NSMutableArray*)convertToArray:(NSURL*)inURL{
- NSMutableArray *someArray = [[[NSMutableArray alloc] initWithCapacity:10] autorelease];
- //协议
- NSString *uexScheme = [inURL scheme];
- [someArray addObject:uexScheme];
- //类，方法
- NSString *uexHost = [inURL host];
- if ([uexHost rangeOfString:@"."].location!=NSNotFound) {
- NSArray * tmpArray = [uexHost componentsSeparatedByString:@"."];
- [someArray addObjectsFromArray:tmpArray];
- }
- //参数
- NSString *uexQuery=[inURL query];
- if (uexQuery!=nil) {
- NSArray * tmpArray = [uexQuery componentsSeparatedByString:@"&"];
- for (int i=0; i<[tmpArray count]; i++) {
- NSString *tmpPara = [tmpArray objectAtIndex:i];
- tmpPara =[tmpPara stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
- [someArray addObject:tmpPara];
- }
- }
- return someArray;
- }*/
-+(EUExAction *)convertToAction:(NSURL*)inURL{
-	EUExAction *action = [[[EUExAction alloc] init] autorelease];
-	//类，方法
-	NSString *uexHost = [inURL host];
-	if ([uexHost rangeOfString:@"."].location!=NSNotFound) {
-		NSArray * tmpArray = [uexHost componentsSeparatedByString:@"."];
-		action.mClassName = [tmpArray objectAtIndex:0];
-		action.mMethodName = [tmpArray objectAtIndex:1];
-	}
-	//参数
-	NSString *uexQuery=[inURL query];
-	if (uexQuery!=nil) {
-		NSArray * tmpArray = [uexQuery componentsSeparatedByString:@"&"];
-		for (int i=0; i<[tmpArray count]; i++) {
-			NSString *tmpPara = [tmpArray objectAtIndex:i];
-			tmpPara =[tmpPara stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-			[action.mArguments addObject:tmpPara];
-		}
-	}
-	ACENSLog(@"action class=%@;function=%@,para=%@",action.mClassName,action.mMethodName,[action.mArguments description]);
-	return action;
-}
+
 +(NSString *)getDeviceIdentifyNo{
 	//return [[UIDevice currentDevice] uniqueIdentifier];
     return [BUtility macAddress];
@@ -817,28 +697,20 @@ static NSString *clientCertificatePwd = nil;
 }
 + (NSString *)wgtResPath:(NSString*)inUrl{
 	if ([inUrl hasPrefix:F_RES_PATH]) {
-		inUrl = [inUrl substringFromIndex:5];
+		inUrl = [inUrl substringFromIndex:F_RES_PATH.length];
         NSString *wgtResPath = nil;
         BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-        if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-            if ([BUtility getSDKVersion]<5.0) {
-                wgtResPath =[BUtility getCachePath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
-            }else {
-                wgtResPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
-            }
+        if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+            wgtResPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/wgtRes/%@",AppCanEngine.configuration.originWidgetPath,inUrl]];
         }else {
-            wgtResPath =[BUtility getResPath:[NSString stringWithFormat:@"widget/wgtRes/%@",inUrl]];
+            wgtResPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/wgtRes/%@",AppCanEngine.configuration.documentWidgetPath,inUrl]];
         }
 		return wgtResPath;
 	}
 	return nil;
 }
 +(BOOL) isValidateOrientation:(UIInterfaceOrientation)inOrientation {
-	if (UIInterfaceOrientationIsPortrait(inOrientation)
-		|| UIInterfaceOrientationIsLandscape(inOrientation)) {
-		return YES;
-	}
-	return NO;
+    return UIInterfaceOrientationIsPortrait(inOrientation) || UIInterfaceOrientationIsLandscape(inOrientation);
 }
 +(void)writeLog:(NSString*)inLog{
 	//时间
@@ -1256,22 +1128,24 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSString *)bundleIdentifier {
-
-    Class packageInfo = NSClassFromString(@"PackageInfo");
-    NSString *appcanIndentifier =  @"com.zywx.appcan";
-    if (packageInfo) {
-        appcanIndentifier = [packageInfo ac_invoke:@"getBundleIdentifier"];
-    }else{
-        ACLogError(@"AppCan PackageInfo 不存在!!");
+    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication isKindOfClass:[WidgetOneDelegate class]];
+    if (isWidgetOneDelegate) {
+        Class packageInfo = NSClassFromString(@"PackageInfo");
+        NSString *appcanIndentifier =  @"com.zywx.appcan";
+        if (packageInfo) {
+            appcanIndentifier = [packageInfo ac_invoke:@"getBundleIdentifier"];
+        }else{
+            ACLogError(@"AppCan PackageInfo 不存在!!");
+        }
+        return appcanIndentifier;
     }
-
-    return appcanIndentifier;
-
-
+    return [[NSBundle mainBundle].infoDictionary objectForKey:(__bridge NSString*)kCFBundleIdentifierKey];
+   
 }
 
 + (NSString *)appKey{
-    if (!appCanDevelopmetMode) {
+    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication isKindOfClass:[WidgetOneDelegate class]];
+    if (!appCanDevelopmetMode && isWidgetOneDelegate) {
         Class Beqtucontent = NSClassFromString(@"Beqtucontent");
         if (Beqtucontent) {
             return [Beqtucontent ac_invoke:@"getContentPath"];
@@ -1287,6 +1161,7 @@ static NSString *clientCertificatePwd = nil;
     return nil;
 }
 + (NSString *)appId{
+    
     NSString * appIdStr =[[[NSBundle mainBundle] infoDictionary] objectForKey:@"appid"];
     if (appIdStr &&[appIdStr length]>1) {
         return appIdStr;
@@ -1296,7 +1171,7 @@ static NSString *clientCertificatePwd = nil;
 
 +(NSString *)getSubWidgetAppKeyByAppid:(NSString *)inAppId {
     
-    WWidgetMgr *wgtMgr = theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView .meBrwCtrler.mwWgtMgr;
+    WWidgetMgr *wgtMgr = [WWidgetMgr sharedManager];
     WWidget * mainWgt = [wgtMgr mainWidget];
     WWidget *startWgt = nil;
     startWgt = (WWidget*)[wgtMgr wgtPluginDataByAppId:inAppId curWgt:mainWgt];
@@ -1315,7 +1190,7 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (void)setAppCanViewActive:(int)wgtType opener:(NSString *)inOpener name:(NSString *)inName openReason:(int)inOpenReason mainWin:(int)inMainWnd appInfo:(NSDictionary *)appInfo {
-    if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
+    if (AppCanEngine.configuration.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
         NSString * fromUrlStr =[BUtility makeSpecUrl:inOpener];
         NSString * goUrlStr =[BUtility makeSpecUrl:inName];
         if ([fromUrlStr hasPrefix:@"file"]) {
@@ -1352,7 +1227,7 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (void)setAppCanViewBackground:(int)wgtType name:(NSString *)inName closeReason:(int)inCloseReason appInfo:(NSDictionary *)appInfo {
-    if (theApp.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
+    if (AppCanEngine.configuration.useDataStatisticsControl && wgtType == F_WWIDGET_MAINWIDGET) {
         NSString * closeUrl = [BUtility makeSpecUrl:inName];
         if ([closeUrl hasPrefix:@"file"]) {
             NSUInteger dest = [closeUrl rangeOfString:@"widget"].location;
@@ -1379,79 +1254,12 @@ static NSString *clientCertificatePwd = nil;
     }
 }
 
+
+
 +(NSString *)macAddress{ 
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-//    {
-//        NSString *identifier = [[NSBundle mainBundle] bundleIdentifier];
-//        
-//        NSString *uniqueID =  [SFHFKeychainUtils getPasswordForUsername:@"username"andServiceName:identifier error:nil];
-//        if (uniqueID)
-//        {
-//            return uniqueID;
-//        }
-//        else
-//        {
-//            
-//            CFUUIDRef puuid = CFUUIDCreate(nil);
-//            CFStringRef uuidStr = CFUUIDCreateString(nil, puuid);
-//            NSString *idFVendor =(NSString*) CFStringCreateCopy(NULL, uuidStr);
-//            CFRelease(uuidStr);
-//            CFRelease(puuid);
-//            //            NSUUID * identifierVendor = [UIDevice currentDevice].identifierForVendor;
-//            //            NSString * idFVendor = [identifierVendor UUIDString];
-//            //    NSLog(@"应用本次安装唯一标示符是%@",idFVendor);
-//            [SFHFKeychainUtils storeUsername:@"username" andPassword:idFVendor forServiceName:identifier updateExisting:1 error:nil];
-//            return idFVendor;
-//        }
-//    } else
-//    {
-//        int                 mib[6];
-//        size_t              len;
-//        char                *buf;
-//        unsigned char       *ptr;
-//        struct if_msghdr    *ifm;
-//        struct sockaddr_dl  *sdl;
-//        
-//        mib[0] = CTL_NET;
-//        mib[1] = AF_ROUTE;
-//        mib[2] = 0;
-//        mib[3] = AF_LINK;
-//        mib[4] = NET_RT_IFLIST;
-//        
-//        if ((mib[5] = if_nametoindex("en0")) == 0) {
-//            printf("Error: if_nametoindex error\n");
-//            return NULL;
-//        }
-//        
-//        if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
-//            printf("Error: sysctl, take 1\n");
-//            return NULL;
-//        }
-//        
-//        if ((buf = malloc(len)) == NULL) {
-//            printf("Could not allocate memory. error!\n");
-//            return NULL;
-//        }
-//        
-//        if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
-//            printf("Error: sysctl, take 2");
-//            free(buf);
-//            return NULL;
-//        }
-//        
-//        ifm = (struct if_msghdr *)buf;
-//        sdl = (struct sockaddr_dl *)(ifm + 1);
-//        ptr = (unsigned char *)LLADDR(sdl);
-//        NSString *outstring = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
-//                               *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
-//        free(buf);
-//        
-//        return outstring;
-//    }
     if([self isSimulator]){
         return @"";
     }
-    
     return [OpenUDID value];
 }
 
@@ -1486,7 +1294,7 @@ static NSString *clientCertificatePwd = nil;
             
 		}
         
-		NSString *resultStr =  resultStr = [NSString stringWithFormat:@"%@/%@",str,[inPath substringFromIndex:scheme.length+3]];
+		NSString * resultStr = [NSString stringWithFormat:@"%@/%@",str,[inPath substringFromIndex:scheme.length+3]];
         
 		return resultStr;
         
@@ -1498,8 +1306,8 @@ static NSString *clientCertificatePwd = nil;
         EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:meBrwView];
         
         
-		NSString *absPath =nil;
-		absPath=[meBrwView.meBrwCtrler.mwWgtMgr curWidgetPath:eBrwWndContainer.mwWgt];
+		NSString *absPath = eBrwWndContainer.mwWgt.absWidgetPath;
+
 		NSString *relativePath=nil;
 		if ([inPath hasPrefix:F_APP_PATH]) {
 			relativePath =[inPath substringFromIndex:6];
@@ -1507,16 +1315,7 @@ static NSString *clientCertificatePwd = nil;
 		if ([inPath hasPrefix:F_RES_PATH]) {
 			relativePath =[inPath substringFromIndex:6];
 			if (eBrwWndContainer.mwWgt.wgtType==F_WWIDGET_MAINWIDGET) {
-                BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-                if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-                    if ([BUtility getSDKVersion]<5.0) {
-                        absPath =[BUtility getCachePath:@"widget/wgtRes"];
-                    }else {
-                        absPath =[BUtility getDocumentsPath:@"widget/wgtRes"];
-                    }
-                }else {
-                    absPath =[BUtility getResPath:@"widget/wgtRes"];
-                }
+                absPath = [self wgtResPath:@"res://"];
 			}else {
 				absPath = [NSString stringWithFormat:@"%@/wgtRes",absPath];
 			}
@@ -1668,7 +1467,7 @@ static NSString *clientCertificatePwd = nil;
 + (NSString *)clientCertficatePath{
     NSString *basePath =nil;
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
         if ([BUtility getSDKVersion]<5.0) {
             basePath =[BUtility getCachePath:@""];
         }else {
@@ -1714,28 +1513,15 @@ static NSString *clientCertificatePwd = nil;
 }
 
 +(BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL{
-    float sdkVer =[[[UIDevice currentDevice] systemVersion] floatValue];
-    if (sdkVer<5.1){
-        const char* filePath = [[URL path] fileSystemRepresentation];
-        const char* attrName = "com.apple.MobileBackup";
-        u_int8_t attrValue = 1;
-        int result = setxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
-        return result == 0;
-    }else{
-
-#ifndef WIDGETONE_FOR_IDE_DEBUG
-        assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
-        NSError *error = nil;
-        BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
-                                      forKey: NSURLIsExcludedFromBackupKey error: &error];
-        if(!success){
-            ACENSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
-        }
-        return success;
-#endif
-    }
     
-    return NO;
+    assert([[NSFileManager defaultManager] fileExistsAtPath: [URL path]]);
+    NSError *error = nil;
+    return [URL setResourceValue: [NSNumber numberWithBool: YES]
+                          forKey: NSURLIsExcludedFromBackupKey error: &error];
+    
+    
+    
+    
 }
 +(float)getSDKVersion{
     return [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -1765,24 +1551,19 @@ static NSString *clientCertificatePwd = nil;
 
 +(void)evaluatingJavaScriptInRootWnd:(NSString*)script_ {
 	ACLogVerbose(@"exe script is %@", script_);
-	[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
+	[AppCanEngine.rootWebViewController.rootWindow.meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 
 +(void)evaluatingJavaScriptInFrontWnd:(NSString*)script_ {
 	ACLogVerbose(@"exe script is %@", script_);
-	[[theApp.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer aboveWindow].meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
+	[[AppCanEngine.rootWebViewController.rootWindow.winContainer aboveWindow].meBrwView performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:script_ waitUntilDone:NO];
 }
 // 获取config里设置的屏幕方向
-+(NSString * )getMainWidgetConfigInterface
-{
++(NSString * )getMainWidgetConfigInterface{
     NSString *inFileName = nil;
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-        if ([BUtility getSDKVersion]<5.0) {
-            inFileName=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }else {
-            inFileName=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+        inFileName=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     }else {
         inFileName=[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     }
@@ -1796,29 +1577,17 @@ static NSString *clientCertificatePwd = nil;
         BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
         
         if (isEncrypt) {
-            
-            //            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-            
-            
-            
-            
             NSURL *url = nil;
             if ([inFileName hasSuffix:@"file://"]) {
                 url = [BUtility stringToUrl:inFileName];;
             } else {
                 url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
             }
-            
             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
             NSString *data = [encryptObj decryptWithPath:url appendData:nil];
-            
             [encryptObj release];
-            
             configData = [data dataUsingEncoding:NSUTF8StringEncoding];
         }
-
-        
-        
 		NSMutableDictionary *tmpDict =[configParser initwithReqData:configData];
 		xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
 		//
@@ -1828,50 +1597,30 @@ static NSString *clientCertificatePwd = nil;
     } else {//目录不存在说明还没有拷贝到document目录，所以回到原始目录找config文件
         
         inFileName = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        
         NSData * configData = [NSData dataWithContentsOfFile:inFileName];
-        
         AllConfigParser * configParser = [[AllConfigParser alloc]init];
-        
         BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
-        
         if (isEncrypt) {
-            
             NSURL * url = nil;
-            
             if ([inFileName hasSuffix:@"file://"]) {
-                
                 url = [BUtility stringToUrl:inFileName];
-                
             } else {
-                
                 url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
-                
             }
-            
             FileEncrypt * encryptObj = [[FileEncrypt alloc]init];
-            
             NSString * data = [encryptObj decryptWithPath:url appendData:nil];
-            
             [encryptObj release];
-            
             configData = [data dataUsingEncoding:NSUTF8StringEncoding];
-            
         }
         
         NSMutableDictionary * tmpDict = [configParser initwithReqData:configData];
-        
         xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
-        
         [tmpDict removeAllObjects];
-        
         [configParser release];
-        
     }
     
     //
     NSString *interfice = [xmlDict objectForKey:CONFIG_TAG_ORIENTATION];
-    
     return interfice;
     
 }
@@ -1882,55 +1631,31 @@ static NSString *clientCertificatePwd = nil;
     
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
     
-    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-        
-        if ([BUtility getSDKVersion] < 5.0) {
-            
-            inFileName = [BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-            
-        } else {
-            
-            inFileName=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-            
-        }
-        
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+        inFileName = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     } else {
-        
-        inFileName=[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+        inFileName = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
         
     }
     
 	NSMutableDictionary * xmlDict = nil;
-    
+
 	if ([[NSFileManager defaultManager] fileExistsAtPath:inFileName]) {
 		NSData *configData = [NSData dataWithContentsOfFile:inFileName];
 		AllConfigParser *configParser=[[AllConfigParser alloc]init];
-        
         BOOL isEncrypt = [FileEncrypt isDataEncrypted:configData];
-        
         if (isEncrypt) {
-            
-            //            WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-            
-            
-            
-            
             NSURL *url = nil;
             if ([inFileName hasSuffix:@"file://"]) {
                 url = [BUtility stringToUrl:inFileName];;
             } else {
                 url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", inFileName]];
             }
-            
             FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
             NSString *data = [encryptObj decryptWithPath:url appendData:nil];
-            
             [encryptObj release];
-            
             configData = [data dataUsingEncoding:NSUTF8StringEncoding];
         }
-
-        
 		NSMutableDictionary *tmpDict =[configParser initwithReqData:configData];
 		xmlDict = [NSMutableDictionary dictionaryWithDictionary:tmpDict];
 		[tmpDict removeAllObjects];
@@ -1941,16 +1666,11 @@ static NSString *clientCertificatePwd = nil;
     return windowBackground;
 }
 
-+(NSString *)getMainWidgetConfigLogserverip
-{
++(NSString *)getMainWidgetConfigLogserverip{
     NSString *inFileName = nil;
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-        if ([BUtility getSDKVersion]<5.0) {
-            inFileName=[BUtility getCachePath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }else {
-            inFileName=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
-        }
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+        inFileName=[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     }else {
         inFileName=[BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
     }
@@ -1970,8 +1690,7 @@ static NSString *clientCertificatePwd = nil;
 }
 
 //szc 2014.3.10
-+ (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath
-{
++ (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath{
     BOOL retVal = YES; // If the file already exists, we'll return success…
     NSString * finalLocation = [toPath stringByAppendingPathComponent:[sourcePath lastPathComponent]];
     if (![[NSFileManager defaultManager] fileExistsAtPath:finalLocation])
@@ -2009,15 +1728,11 @@ static NSString *clientCertificatePwd = nil;
     unsigned long long time = time_*1000;
     NSString *md5StrIn = [NSString stringWithFormat:@"%@:%@:%lld",appId,appKey,time];
     NSData *md5Data = [md5StrIn dataUsingEncoding:NSUTF8StringEncoding];
-    
     CC_MD5_CTX md5;
     CC_MD5_Init(&md5);
-    
     CC_MD5_Update(&md5, [md5Data bytes], (int)[md5Data length]);
-    
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
     CC_MD5_Final(digest, &md5);
-    
     NSString *md5Str = [NSString stringWithFormat:
                         @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
                         digest[0], digest[1], digest[2], digest[3],

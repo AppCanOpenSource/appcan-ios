@@ -23,9 +23,9 @@
 @class EBrowserToolBar;
 @class EBrowserController;
 @class EBrowserView;
-@class AppCenter;
 
-@class BStatusBarView;
+
+
 
 #define F_EBRW_MAINFRM_AD_TYPE_TOP			0
 #define F_EBRW_MAINFRM_AD_TYPE_MIDDLE		1
@@ -34,41 +34,24 @@
 #define F_EBRW_MAINFRM_AD_HEIGHT_PHONE		50
 #define F_EBRW_MAINFRM_AD_HEIGHT_PAD		90
 
-@interface EBrowserMainFrame : UIView<UIAlertViewDelegate> {
-	EBrowserController *meBrwCtrler;
-	EBrowserWidgetContainer *meBrwWgtContainer;
-	EBrowserToolBar *meBrwToolBar;
-	EBrowserView *meAdBrwView;
-	AppCenter *mAppCenter;
-	NSTimer *mAdDisplayTimer;
-	NSTimer *mAdIntervalTimer;
-	int mAdDisplayTime;
-	int mAdIntervalTime;
-	int mAdType;
 
-}
+@interface EBrowserMainFrame : UIView
 
-@property (nonatomic, assign)EBrowserController *meBrwCtrler;
-@property (nonatomic, assign)EBrowserWidgetContainer *meBrwWgtContainer;
-@property (nonatomic, assign)EBrowserToolBar *meBrwToolBar;
-@property (nonatomic, retain)EBrowserView *meAdBrwView;
-@property (nonatomic, retain)AppCenter *mAppCenter;
-@property (nonatomic, assign)NSTimer *mAdDisplayTimer;
-@property (nonatomic, assign)NSTimer *mAdIntervalTimer;
+@property (nonatomic, weak)EBrowserController *meBrwCtrler;
+@property (nonatomic, strong)EBrowserWidgetContainer *meBrwWgtContainer;
+@property (nonatomic, strong)EBrowserToolBar *meBrwToolBar;
 
 
-@property int mAdDisplayTime;
-@property int mAdIntervalTime;
-@property int mAdType;
+
+
 
 - (void)setVerticalFrame;
 - (void)setHorizontalFrame;
-- (id)initWithFrame: (CGRect)frame BrwCtrler: (EBrowserController*)eInBrwCtrler;
+- (instancetype)initWithFrame: (CGRect)frame BrwCtrler: (EBrowserController*)eInBrwCtrler;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView;
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;
-- (void)invalidateAdTimers;
-- (void)displayDone;
+
 @end
 
 

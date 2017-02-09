@@ -17,6 +17,8 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "ACEAnimation.h"
+
 
 #define F_WWIDGET_NO_OBFUSCATION	0
 #define F_WWIDGET_OBFUSCATION		1
@@ -44,86 +46,63 @@
 
 
 
-@interface WWidget : NSObject<AppCanWidgetObject> {
-	// 数据库中的主键id
-	int wId;
-	// 手机端WidgetOne系统的唯一标识
-	NSString *widgetOneId;
-	// 应用软件唯一的标识，对于不同的手机或者同一手机上的不同应用，该值唯一
-	NSString *widgetId;
-	// 应用程序标识
-	NSString *appId;
-	// Widget版本号（String类型）
-	NSString *ver;
-	// 渠道号
-	NSString *channelCode;
-	// 手机IMEI号码
-	NSString *imei;
-	// 上传参数校验码
-	NSString *md5Code;
-	// widget 名称
-	NSString *widgetName;
-	// widget 的Icon 路径
-	NSString *iconPath;
-	// widget 在sdcard的路径
-	NSString *widgetPath;
-	// widget首页 路径
-	NSString *indexUrl;
-	// 是否加密
-	int obfuscation;
-	//哪一类widget
-	int wgtType;
-	//LOGIP
-	NSString *logServerIp;
-	//updateUrl
-	NSString *updateUrl;
-	//showMySpace
-	int showMySpace;
-	//description
-	NSString *desc;
-	//email;
-	NSString *email;
-	//author
-	NSString *author;
-	//license
-	NSString *license; 
-	//orientation
-	int orientation;
-	//ad
-	int openAdStatus;
-	//preload
-	int preload;
-     NSString * appKey;
-	
-}
+@interface WWidget : NSObject<AppCanWidgetObject>
+
+// 数据库中的主键id
+@property (nonatomic,assign) int wId;
+// 是否加密
+@property (nonatomic,assign) int obfuscation;
+//哪一类widget
+@property (nonatomic,assign) int wgtType;
+@property (nonatomic,assign) int showMySpace;
+@property (nonatomic,assign) int orientation;
+@property (nonatomic,assign) int openAdStatus;
+@property (nonatomic,assign) int preload;
+
+// 手机端WidgetOne系统的唯一标识
+@property (nonatomic,strong) NSString *widgetOneId;
+// 应用软件唯一的标识，对于不同的手机或者同一手机上的不同应用，该值唯一
+@property (nonatomic,strong) NSString *widgetId;
+// 应用程序标识
+@property (nonatomic,strong) NSString *appId;
+@property (nonatomic,strong) NSString *appKey;
+// widget 名称
+@property (nonatomic,strong) NSString *widgetName;
+// Widget版本号
+@property (nonatomic,strong) NSString *ver;
+// 渠道号
+@property (nonatomic,strong) NSString *channelCode;
+// 手机IMEI号码
+@property (nonatomic,strong) NSString *imei;
+// 上传参数校验码
+@property (nonatomic,strong) NSString *md5Code;
+// widget 的Icon 路径
+@property (nonatomic,strong) NSString *iconPath;
+// widget 在sdcard的路径
+@property (nonatomic,strong) NSString *widgetPath;
+// widget首页 路径
+@property (nonatomic,strong) NSString *indexUrl;
+@property (nonatomic,strong) NSString *logServerIp;
+@property (nonatomic,strong) NSString *updateUrl;
+@property (nonatomic,strong) NSString *desc;
+@property (nonatomic,strong) NSString *email;
+@property (nonatomic,strong) NSString *author;
+@property (nonatomic,strong) NSString *license;
+@property (nonatomic,assign) BOOL isDebug;
+@property (nonatomic,assign) NSInteger enctryptcj;
+
+
+@property (nonatomic,strong) NSString *openMessage;
+@property (nonatomic,strong) NSString *closeCallbackName;
+@property (nonatomic,assign) ACEAnimationID openAnimation;
+@property (nonatomic,assign) NSTimeInterval openAnimationDuration;
+@property (nonatomic,strong) NSDictionary *openAnimationConfig;
+@property (nonatomic,assign) ACEAnimationID closeAnimation;
+@property (nonatomic,assign) NSTimeInterval closeAnimationDuration;
+@property (nonatomic,strong) NSDictionary *closeAnimationConfig;
+
 -(BOOL)getMySpaceStatus;
 -(BOOL)getMoreWgtsStatus;
-@property int wId;
-@property int obfuscation;
-@property int wgtType;
-@property int showMySpace;
-@property int orientation;
-@property int openAdStatus;
-@property int preload;
-@property (nonatomic,retain)	NSString *widgetOneId;
-@property (nonatomic,retain)	NSString *widgetId;
-@property (nonatomic,retain)	NSString *appId;
-@property (nonatomic,retain)	NSString *appKey;
-@property (nonatomic,retain)	NSString *widgetName;
-@property (nonatomic,retain)	NSString *ver;
-@property (nonatomic,retain)	NSString *channelCode;
-@property (nonatomic,retain)	NSString *imei;
-@property (nonatomic,retain)	NSString *md5Code;
-@property (nonatomic,retain)	NSString *iconPath;
-@property (nonatomic,retain)	NSString *widgetPath;
-@property (nonatomic,retain)	NSString *indexUrl;
-@property (nonatomic,retain)	NSString *logServerIp;
-@property (nonatomic,retain)	NSString *updateUrl;
-@property (nonatomic,retain)	NSString *desc;
-@property (nonatomic,retain)	NSString *email;
-@property (nonatomic,retain)	NSString *author;
-@property (nonatomic,retain)	NSString *license;
-@property (nonatomic,assign)    BOOL isDebug;
-@property (nonatomic, assign) NSInteger enctryptcj;
+
 
 @end

@@ -21,7 +21,7 @@
 
 #import "BUtility.h"
 #import "CBrowserWindow.h"
-#import "CBrowserMainFrame.h"
+
 #import "WWidget.h"
 #import "WWidgetMgr.h"
 #import "BUtility.h"
@@ -76,8 +76,8 @@
 @synthesize lastScrollPointY;
 @synthesize nowScrollPointY;
 */
-- (void)dealloc
-{
+- (void)dealloc{
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -217,6 +217,7 @@
         UExObjName:(NSString *)inUExObjName
               Type:(ACEEBrowserViewType)inWndType{
     if (self = [super initWithFrame:frame]) {
+
         _initialized = NO;
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
@@ -373,8 +374,6 @@
 
 
 
-
-//@property (nonatomic,assign) EBrowserController *meBrwCtrler;
 -(EBrowserController *)meBrwCtrler
 {
     return [_meBrowserView meBrwCtrler];
@@ -384,7 +383,10 @@
 {
     [_meBrowserView setMeBrwCtrler:inmeBrwCtrler];
 }
-//@property (nonatomic,assign) CBrowserWindow *mcBrwWnd;
+
+
+
+
 -(CBrowserWindow *)mcBrwWnd
 {
     return [_meBrowserView mcBrwWnd];
@@ -394,7 +396,7 @@
 {
     [_meBrowserView setMcBrwWnd:inmcBrwWnd];
 }
-//@property (nonatomic,assign) EBrowserWindow *meBrwWnd;
+
 -(EBrowserWindow *)meBrwWnd
 {
     return [_meBrowserView meBrwWnd];
@@ -537,47 +539,8 @@
     [_meBrowserView setMBottomBounceState:inmBottomBounceState];
 }
 
-//@property int mAdType;
--(int)mAdType
-{
-    return [_meBrowserView mAdType];
-}
 
-- (void)setMAdType:(int)inmAdType
-{
-    [_meBrowserView setMAdType:inmAdType];
-}
 
-//@property int mAdDisplayTime;
--(int)mAdDisplayTime
-{
-    return [_meBrowserView mAdDisplayTime];
-}
-
-- (void)setMAdDisplayTime:(int)inmAdDisplayTime
-{
-    [_meBrowserView setMAdDisplayTime:inmAdDisplayTime];
-}
-//@property int mAdIntervalTime;
--(int)mAdIntervalTime
-{
-    return [_meBrowserView mAdIntervalTime];
-}
-
-- (void)setMAdIntervalTime:(int)inmAdIntervalTime
-{
-    [_meBrowserView setMAdIntervalTime:inmAdIntervalTime];
-}
-//@property int mAdFlag;
--(int)mAdFlag
-{
-    return [_meBrowserView mAdFlag];
-}
-
-- (void)setMAdFlag:(int)inmAdFlag
-{
-    [_meBrowserView setMAdFlag:inmAdFlag];
-}
 //@property (nonatomic,retain)NSURL *currentUrl;
 -(NSURL *)currentUrl
 {

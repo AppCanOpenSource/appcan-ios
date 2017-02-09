@@ -35,6 +35,11 @@
 #import "ACEJSCBaseJS.h"
 #import "ACEBrowserView.h"
 #import "ACEMultiPopoverScrollView.h"
+
+#import "ACESubwidgetManager.h"
+#import <AppCanKit/ACGCDThrottle.h>
+
+
 @interface EBrowserWindow()
 @property(nonatomic,assign)BOOL isTopWindow;
 @end
@@ -52,158 +57,80 @@
 @synthesize meBrwHistory;
 @synthesize mOAuthWndName;
 @synthesize mwWgt;
-@synthesize mOpenAnimiId;
-@synthesize mOpenAnimiDuration;
 @synthesize mFlag;
 @synthesize mMuiltPopoverDict;
 
 
 
 - (void)dealloc {
-
-	if (meTopSlibingBrwView) {
-
-		if (meTopSlibingBrwView.superview) {
-			[meTopSlibingBrwView removeFromSuperview];
-		}
-		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meTopSlibingBrwView];
-
-		meTopSlibingBrwView = nil;
-	}
-	if (meBrwView) {
-
-		if (meBrwView.superview) {
-			[meBrwView removeFromSuperview];
-		}
-		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meBrwView];
-
-		meBrwView = nil;
-	}
-	if (meBottomSlibingBrwView) {
-
-		if (meBottomSlibingBrwView.superview) {
-			[meBottomSlibingBrwView removeFromSuperview];
-		}
-		[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:meBottomSlibingBrwView];
-
-		meBottomSlibingBrwView =nil;
-	}
-	if (mPreOpenArray) {
-		[mPreOpenArray removeAllObjects];
-		mPreOpenArray = nil;
-	}
-	if (mPopoverBrwViewDict) {
-		NSArray *popViewArray = [mPopoverBrwViewDict allValues];
-		for (EBrowserView *popView in popViewArray) {
-			if (popView.superview) {
-				[popView removeFromSuperview];
-			}
-			[[meBrwCtrler brwWidgetContainer] pushReuseBrwView:popView];
-
-		}
-		[mPopoverBrwViewDict removeAllObjects];
-
-		mPopoverBrwViewDict = nil;
-	}
-    //
-    if (mMuiltPopoverDict)
-    {
-        NSArray * mulitPopArray = [mMuiltPopoverDict allValues];
-        for (UIScrollView * popView in mulitPopArray)
-        {
-            if (popView.subviews) {
-                [popView removeFromSuperview];
-            }
-        }
-        [mMuiltPopoverDict removeAllObjects];
-        //        [mMuiltPopoverDict release];
-        mMuiltPopoverDict = nil;
+    [meTopSlibingBrwView removeFromSuperview];
+    meTopSlibingBrwView = nil;
+    [meBrwView removeFromSuperview];
+    meBrwView = nil;
+    [meBottomSlibingBrwView removeFromSuperview];
+    meBottomSlibingBrwView =nil;
+    [mPreOpenArray removeAllObjects];
+    mPreOpenArray = nil;
+    
+    NSArray *popViewArray = [mPopoverBrwViewDict allValues];
+    for (EBrowserView *popView in popViewArray) {
+        [popView removeFromSuperview];
     }
-    ////
-	if (meFrontWnd && [meFrontWnd isKindOfClass:[EBrowserWindow class]]) {
-		
+    [mPopoverBrwViewDict removeAllObjects];
+    mPopoverBrwViewDict = nil;
+    
+    NSArray * mulitPopArray = [mMuiltPopoverDict allValues];
+    for (UIScrollView * popView in mulitPopArray){
+        [popView removeFromSuperview];
+    }
+    [mMuiltPopoverDict removeAllObjects];
+    mMuiltPopoverDict = nil;
+    
+
+    if (meFrontWnd && [meFrontWnd isKindOfClass:[EBrowserWindow class]]) {
         if ([meFrontWnd respondsToSelector:@selector(setMeBackWnd:)]) {
-            
             [meFrontWnd setMeBackWnd:nil];
-            
         }
-        
-	}
+    }
     
     if (meBackWnd && [meBackWnd isKindOfClass:[EBrowserWindow class]]) {
-            
         if ([meBackWnd respondsToSelector:@selector(setMeFrontWnd:)]) {
-                
             [meBackWnd setMeFrontWnd:nil];
         }
-            
     }
     
-	
-    //
-	if (meBrwHistory) {
-
-		meBrwHistory = nil;
-	}
-
-	mOAuthWndName = nil;
-
+    meBrwHistory = nil;
+    mOAuthWndName = nil;
     [self deregisterWindowSequenceChange];
-    if(self.popAnimationInfo){
-        self.popAnimationInfo=nil;
-    }
-
 }
 
-- (void)cleanAllBrwViews {
-	if (meTopSlibingBrwView) {
-        [meTopSlibingBrwView cleanAllEexObjs];
-	}
-	if (meBrwView) {
-         [meBrwView cleanAllEexObjs];
-	}
-	if (meBottomSlibingBrwView) {
-        [meBottomSlibingBrwView cleanAllEexObjs];
-	}
-	if (mPopoverBrwViewDict) {
-		NSArray *popViewArray = [mPopoverBrwViewDict allValues];
-		for (EBrowserView *popView in popViewArray) {
-            [popView cleanAllEexObjs];
-		}
-	}
-}
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName {
     self = [super initWithFrame:frame];
     if (self) {
+
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = YES;
 		meBrwCtrler = eInBrwCtrler;
 		mwWgt = inWgt;
-		mOAuthWndName = nil;
-		meBrwView = [[meBrwCtrler brwWidgetContainer] popReuseBrwView];
-		if (meBrwView) {
-			[meBrwView reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
-		} else {
-			meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
-		}
-		ACENSLog(@"meBrwView retainCount is %d", meBrwView);
+
+        meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+		
 		[self addSubview:meBrwView];
 		mPopoverBrwViewDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
 		mMuiltPopoverDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
-		//self.autoresizesSubviews = YES;
+		self.autoresizesSubviews = YES;
 		self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		meFrontWnd = nil;
 		meBackWnd = nil;
 		if (mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
 			meBrwHistory = [[EBrowserHistory alloc]init];
 		}
-		mOpenAnimiId = 0;
+        _openAnimationID = kACEAnimationNone;
         _windowName = inUExObjName;
     }
-	ACENSLog(@"EBrowserWindow alloc is %x", self);
-    self.isTopWindow=NO;
-    self.enableSwipeClose=YES;
+    self.isTopWindow = NO;
+    self.enableSwipeClose = YES;
     [self registerWindowSequenceChange];
     return self;
 }
@@ -388,70 +315,38 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(wndSeqChange) name:cDidWindowSequenceChange object:nil];
 }
 -(void)deregisterWindowSequenceChange{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:cDidWindowSequenceChange object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
--(void)onWindowAppear{
 
-    [self updateSwipeCloseEnableStatus];
-    [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowAppear != null){uexWindow.onWindowAppear();}"];
-}
--(void)onWindowDisappear{
-
-
-    [self.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onWindowDisappear != null){uexWindow.onWindowDisappear();}"];
-}
 -(void)wndSeqChange{
+    EBrowserController *topController = [ACESubwidgetManager defaultManager].topWidgetController ?: AppCanEngine.rootWebViewController;
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:self.meBrwView];
-        if([eBrwWndContainer respondsToSelector:@selector(aboveWindow)]){
-            
-            EBrowserWindow * topWindow=[eBrwWndContainer aboveWindow];
+    
+    EBrowserWindow *topWindow = topController.aboveWindow;
+    if (self.isTopWindow && self != topWindow) {
+        self.isTopWindow = NO;
+        [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowDisappear" arguments:nil];
+        return;
+    }
+    if (!self.isTopWindow && self == topWindow) {
+        self.isTopWindow = YES;
+        [self.meBrwView callbackWithFunctionKeyPath:@"uexWindow.onWindowAppear" arguments:nil];
+        return;
+    }
 
-            if(self == topWindow && !_isTopWindow){
-
-                [self performSelectorOnMainThread:@selector(onWindowAppear) withObject:nil waitUntilDone:NO];
-                
-                
-                _isTopWindow=YES;
-                return;
-            }
-            if(self != topWindow && _isTopWindow){
-
-                [self performSelectorOnMainThread:@selector(onWindowDisappear) withObject:nil waitUntilDone:NO];
-                
-                _isTopWindow=NO;
-                return;
-            }
-            
-        }
-
-    });
     
 }
 
 +(void)postWindowSequenceChange{
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 50ull * NSEC_PER_MSEC);
-    dispatch_after(time, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-       [[NSNotificationCenter defaultCenter] postNotificationName:cDidWindowSequenceChange object:nil];
+    ac_dispatch_throttle(0.15, dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:cDidWindowSequenceChange object:nil];
     });
-    
 }
 
 #pragma mark - Update Swipe Close Status
--(void)updateSwipeCloseEnableStatus{
-    ACEUINavigationController *navController = nil;
-    WidgetOneDelegate *app = (WidgetOneDelegate *)[UIApplication sharedApplication].delegate;
-    if (app.drawerController) {
-        navController = (ACEUINavigationController *)app.drawerController.centerViewController;
-    } else {
-        navController = (ACEUINavigationController *)app.sideMenuViewController.contentViewController;
-    }
-    if(navController){
-        navController.canDragBack=self.enableSwipeClose;
-    }
-}
+
+
 
 @end

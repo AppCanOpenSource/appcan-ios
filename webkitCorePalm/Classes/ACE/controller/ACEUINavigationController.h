@@ -17,8 +17,28 @@
  */
 #import <UIKit/UIKit.h>
 
-#import "MMNavigationController.h"
 
-@interface ACEUINavigationController : MMNavigationController
+#import "ACEInterfaceOrientation.h"
+@class EBrowserController;
+
+
+
+@interface ACEUINavigationController : UINavigationController
+
+
+
+
+@property (nonatomic,strong)NSNumber * presentOrientationNumber;
+@property (nonatomic,assign)BOOL canAutoRotate;
+@property (nonatomic,assign)BOOL rotateOnce;
+@property (nonatomic,assign)ACEInterfaceOrientation supportedOrientation;
+@property (nonatomic,strong)EBrowserController *rootController;
+
+- (instancetype)initWithEBrowserController:(EBrowserController *)rootController;
+- (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated;
 
 @end
+
+
+
+
