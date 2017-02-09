@@ -57,7 +57,7 @@
 	sqlite3_stmt *statement; 
 	const char *sql = [sqlStr UTF8String];
 	if(sqlite3_prepare_v2(dbObject, sql, -1, &statement, NULL)==SQLITE_OK){		
-		NSString *fieldValue;
+		NSString *fieldValue = nil;
 		while (sqlite3_step(statement) == SQLITE_ROW) {
 			char *rowData = (char *)sqlite3_column_text(statement,1);  
 			if (rowData && !(strcmp(rowData, "(null)")==0)) {
@@ -173,12 +173,8 @@
 				case F_WWIDGET_MAINWIDGET:{
 					NSString *resPath = nil;
                     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-                    if (theApp.useUpdateWgtHtmlControl && isCopyFinish) {
-                        if ([BUtility getSDKVersion]<5.0) {
-                            resPath =[BUtility getCachePath:@""];
-                        }else {
-                            resPath =[BUtility getDocumentsPath:@""];
-                        }
+                    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+                        resPath = [BUtility getDocumentsPath:@""];
                     }else {
                         resPath =[BUtility getResPath:@""];
                     }

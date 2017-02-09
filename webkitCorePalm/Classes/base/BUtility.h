@@ -18,14 +18,7 @@
 
 
 
-//view跳转 控制
-#define F_APPCANREPORT_USE     YES
-//自定义事件 控制
-#define ACDATAANALYSISNOUSE    YES
-//更改Push动画为UIView动画  控制
-#define UIVIEW_ANIMATION_PUSH_USE  NO
 
-//[[[NSBundle mainBundle] infoDictionary] objectForKey:F_WIDGETONEVERSION]
 
 //协议路径
 #define F_HTTP_PATH			@"http://"
@@ -42,10 +35,6 @@
 #define F_WIDGETONE_APPS_NAME		@"apps"
 #define F_WIDGETONE_WIDGET_NAME		@"widget"
 
-//BUNDLE
-#define APPCANBUNDLE_NAME @"appCan.bundle"
-#define APPCANBUNDLE_PATH [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: APPCANBUNDLE_NAME] 
-#define APPCANBUNDLE [NSBundle bundleWithPath: APPCANBUNDLE_PATH]
 //encriypt
  
 #define JSENCRYPTKEY			@"ZYWXWIDGETENCRYPTFORWEBKIT20111101"
@@ -105,26 +94,16 @@ void rc4_crypt( struct rc4_state *s, unsigned char *data, int length);
 void ACENSLog (NSString *format, ...);
 
 
-NSString *getAppCanBundlePath(NSString *filename);
 
-typedef union _BGColor {
-	struct _rgba { 
-		unsigned char r,g,b,a;
-	} rgba;
-	unsigned int hex; 
-} BGColor;
-@class EUExAction;
+
+
+
 @class EBrowserView;
-@interface BUtility : NSObject {
+@interface BUtility : NSObject
 
-}
-//base js
-
-//+(NSString*)getBaseJSKey;
 //rc4 js
 +(NSString*)getRC4LocalStoreJSKey;
-//doc path
-+(void)setAppCanDocument;
+
 //dev
 +(void)setAppCanDevMode:(NSString*)inValue;
 +(BOOL)getAppCanDevMode;
@@ -140,7 +119,7 @@ typedef union _BGColor {
 + (CGRect)getApplicationInitFrame;
 +(NSString*)getScreenWAndH;
 +(float)getSystemVersion;
-+(BOOL) isIpad;
++(BOOL)isIpad;
 +(BOOL)isSimulator;
 +(NSString*)getDeviceVer;
 +(NSString*)makeSpecUrl:(NSString*)inStr;
@@ -149,15 +128,11 @@ typedef union _BGColor {
 +(NSString *)getResPath:(NSString *)fileName;
 +(int)lastIndexOf:(NSString*)baseString findChar:(char)inChar;
 //+(NSMutableArray*)convertToArray:(NSURL*)inURL;
-+(EUExAction *)convertToAction:(NSURL*)inURL;
+
 +(NSURL*)stringToUrl:(NSString *)inString;
 +(NSString*)wgtResPath:(NSString*)inUrl;
 + (UIColor *) colorWithHexString: (NSString *) stringToConvert;
 +(BOOL) isValidateOrientation:(UIInterfaceOrientation)inOrientation;
-+ (BGColor)bgColorFromNSString:(NSString*)inColorStr;
-/*
- *判断是否有某个字符
- */
 +(BOOL)isHaveString:(NSString *)inSouceString subSting:(NSString *)inSubString;
 +(int)fileisDirectoy:(NSString *)fileName;
 +(NSString *)AESDecryptFile:(NSString *)srcFile;
@@ -204,12 +179,12 @@ typedef union _BGColor {
 +(NSString *)getMainWidgetConfigLogserverip;
 + (BOOL)copyMissingFile:(NSString *)sourcePath toPath:(NSString *)toPath;
 + (NSString *)bundleIdentifier;
-
 + (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
-
-
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
-#pragma mark - IDE
+
+
+
+
 
 + (NSString *)dynamicPluginFrameworkFolderPath;
 

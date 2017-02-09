@@ -18,7 +18,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define F_BRW_WND_CONTAINER_LOAD_WGT_DONE					0x1
+
 
 #define F_BRW_WND_CONTAINER_BRW_WND_DICT_SIZE				30
 #define F_BRW_WND_ROOT_NAME									@"root"
@@ -26,10 +26,9 @@
 @class EBrowserController;
 @class EBrowserWindow;
 @class EBrowserView;
-@class AliPayInfo;
 
-extern NSString *const kUexPushNotifyBrwViewNameKey;
-extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
+
+
 
 @interface EBrowserWindowContainer : UIView
 @property (nonatomic, weak) EBrowserController *meBrwCtrler;
@@ -38,8 +37,7 @@ extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
 @property (nonatomic, weak) WWidget *mwWgt;
 @property (nonatomic, weak) EBrowserWindowContainer *meOpenerContainer;
 @property (nonatomic, strong) NSString *mOpenerForRet;
-@property (nonatomic, strong) NSString *mOpenerInfo;
-@property (nonatomic, strong) AliPayInfo *mAliPayInfo;
+
 @property (nonatomic, assign)int mStartAnimiId;
 @property (nonatomic, assign)float mStartAnimiDuration;
 @property (nonatomic, assign)int mFlag;
@@ -50,9 +48,8 @@ extern NSString *const kUexPushNotifyCallbackFunctionNameKey;
 - (void)notifyLoadPageErrorOfBrwView: (EBrowserView*)eInBrwView;
 - (EBrowserWindow*)aboveWindow;
 - (EBrowserWindow*)brwWndForKey: (id)inKey;
-- (void)removeAllUnActiveBrwWnd;
+
 - (void)removeFromWndDict:(id)inKey;
-- (void)pushNotify;
 - (void)clean;
 + (EBrowserWindowContainer *)getBrowserWindowContaier:(EBrowserView *)browserView;
 @end

@@ -16,30 +16,7 @@
  *
  */
 
-//#define F_EBRW_VIEW_TYPE_MAIN				0
-//#define F_EBRW_VIEW_TYPE_SLIBING_TOP		1
-//#define F_EBRW_VIEW_TYPE_SLIBING_BOTTOM		2
-//#define F_EBRW_VIEW_TYPE_POPOVER			3
-//#define F_EBRW_VIEW_TYPE_AD					4
 
-#define F_PAGEINFO_DICT_SIZE				1
-
-#define F_EBRW_VIEW_FLAG_LOAD_FINISHED				0x1
-#define F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE			0x2
-#define F_EBRW_VIEW_FLAG_SHOW_KEYBOARD				0x4
-#define F_EBRW_VIEW_FLAG_FORBID_ROTATE				0x8
-#define F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING	0x10
-#define F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_LOADING	0x20
-#define F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_REFRESH	0x40
-#define F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_REFRESH	0x80
-#define F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN			0x100
-#define F_EBRW_VIEW_FLAG_HAS_AD						0x200
-#define F_EBRW_VIEW_FLAG_OAUTH                      0x400
-#define F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED        0x800
-#define F_EBRW_VIEW_FLAG_CUSTOM_PROCESS_DATA        0x1000
- 
-#define WIDGETREPORT_WIDGETSTATUS_OPEN		@"001"
-#define WIDGETREPORT_WIDGETSTATUS_CLOSE		@"000"
 
 #import <UIKit/UIKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
@@ -59,12 +36,6 @@
 	int mFlag;
 	int mTopBounceState;
 	int mBottomBounceState;
-	int mAdType;
-	int mAdDisplayTime;
-	int mAdIntervalTime;
-	int mAdFlag;
-    int mAnalysis;
-    
     BOOL isSwiped;
 }
 @property (nonatomic,strong) UIActivityIndicatorView * indicatorView;
@@ -88,10 +59,6 @@
 @property int mFlag;
 @property int mTopBounceState;
 @property int mBottomBounceState;
-@property int mAdType;
-@property int mAdDisplayTime;
-@property int mAdIntervalTime;
-@property int mAdFlag;
 @property (nonatomic,retain) NSURL * currentUrl;
 @property (nonatomic) BOOL isMuiltPopover;
 

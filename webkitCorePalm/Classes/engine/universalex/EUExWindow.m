@@ -30,20 +30,15 @@
 #import "FileEncrypt.h"
 #import "WWidget.h"
 #import "EBrowserHistoryEntry.h"
-#import "JSON.h"
-#import "BAnimation.h"
 #import "BToastView.h"
 #import "EBrowserViewBounceView.h"
 #import <QuartzCore/CALayer.h>
-#import "WWidgetMgr.h"
 
-#import "EUExBaseDefine.h"
 #import "EBrowserViewAnimition.h"
 #import "BAnimationTransform.h"
 #import "ACEWebViewController.h"
 #import "WidgetOneDelegate.h"
 #import "ACEDrawerViewController.H"
-#import "JSONKit.h"
 #import "RESideMenu.h"
 #import "UIViewController+RESideMenu.h"
 #import "ACEUINavigationController.h"
@@ -58,9 +53,14 @@
 #import "ACEPOPAnimation.h"
 
 #import "ACEProgressDialog.h"
-#import "ACEBaseDefine.h"
+#import "ACEInterfaceOrientation.h"
+
+#import "ACEConfigXML.h"
+#import "ACEAnimation.h"
+
 #import "ACEWindowFilter.h"
 #import <UserNotifications/UserNotifications.h>
+
 
 #define kWindowConfirmViewTag (-9999)
 
@@ -258,7 +258,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
         NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
         NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
-        return [NSURL fileURLWithPath:urlStr relativeToURL:baseURL].standardizedURL;
+        NSURL *url = [NSURL URLWithString:urlStr relativeToURL:baseURL];
+        return [NSURL URLWithString:url.absoluteString].standardizedURL;
     }
 
     NSURL *url = [NSURL URLWithString:urlStr];
@@ -421,6 +422,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                   data:inData
                               dataType:inDataType.integerValue
                             windowType:ACEWebWindowTypePresent
+                           animationID:kACEAnimationNone
+                     animationDuration:kDefaultAnimationDuration
                              extraInfo:extraInfo];
 }
 
@@ -436,6 +439,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                 data:(NSString *)data
                             dataType:(UexWindowOpenDataType)dataType
                           windowType:(ACEWebWindowType)windowType
+                         animationID:(ACEAnimationID)animationID
+                   animationDuration:(NSTimeInterval)animationDuration
                            extraInfo:(NSDictionary *)extraInfo {
     
     EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
@@ -447,6 +452,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     
     [eBrwWndContainer removeFromWndDict:windowName];
+    eBrwWnd.openAnimationID = animationID;
+    eBrwWnd.openAnimationDuration = animationDuration;
     eBrwWnd.webWindowType = windowType;
     eBrwWnd.winContainer = eBrwWndContainer;
     [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:windowName];
@@ -456,14 +463,13 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     eCurBrwWnd.meFrontWnd = eBrwWnd;
     if (extraInfo) {
         [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:eBrwWnd.meBrwView];
-        [eBrwWnd setPopAnimationInfo: dictionaryArg(extraInfo[@"animationInfo"])];
-        
+        [eBrwWnd setOpenAnimationConfig:dictionaryArg(extraInfo[@"animationInfo"])];
     }
     self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WINDOW_IN_OPENING;
     eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN;
     eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_OPENING;
     eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
-    eBrwWnd.mOpenAnimiId = 0;
+    
     [self helpWindow:eBrwWnd loadData:data withDataType:dataType openFlag:UexWindowOpenFlagNone];
 }
 
@@ -481,7 +487,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         inWindowName = stringArg(info[@"name"]);
         inDataType = numberArg(info[@"dataType"]);
         inData = stringArg(info[@"data"]);
-        inAniID = numberArg(info[@"animiID"]);
+        inAniID = numberArg(info[@"animID"]);
         inFlag = numberArg(info[@"flag"]);
         inAniDuration = numberArg(info[@"animDuration"]);
         extraInfo = dictionaryArg(info[@"extras"]);
@@ -510,17 +516,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
         return;
     }
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
+
     
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || flag & UexWindowOpenFlagEnableSwipeClose) {
         [self openWindowControllerWithName:inWindowName
                                       data:inData
                                   dataType:inDataType.integerValue
                                 windowType:ACEWebWindowTypeNavigation
+                               animationID:inAniID.unsignedIntegerValue
+                         animationDuration:getAnimationDuration(inAniDuration)
                                  extraInfo:extraInfo];
         return;
     }
@@ -537,6 +542,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (!eBrwWnd) {
         eBrwWnd = [[EBrowserWindow alloc]initWithFrame:CGRectMake(0, 0, eBrwWndContainer.bounds.size.width, eBrwWndContainer.bounds.size.height) BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt UExObjName:inWindowName];
+        eBrwWnd.winContainer = eBrwWndContainer;
         [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inWindowName];
     } else {
         eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
@@ -548,7 +554,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (extraInfo) {
         [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:eBrwWnd.meBrwView];
-        [eBrwWnd setPopAnimationInfo: dictionaryArg(extraInfo[@"animationInfo"])];
+        [eBrwWnd setOpenAnimationConfig: dictionaryArg(extraInfo[@"animationInfo"])];
     }
     
     self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WINDOW_IN_OPENING;
@@ -556,10 +562,10 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_OPENING;
     eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
     
-    eBrwWnd.mOpenAnimiId = [inAniID intValue];
-    eBrwWnd.mOpenAnimiDuration = getAnimationDuration(inAniDuration);
+    eBrwWnd.openAnimationID = [inAniID unsignedIntegerValue];
+    eBrwWnd.openAnimationDuration = getAnimationDuration(inAniDuration);
     if (eBrwWnd.hidden == YES) {
-        eBrwWnd.mOpenAnimiId = 0;
+        eBrwWnd.openAnimationID = kACEAnimationNone;
     }
     BOOL skipLoading = (inData.length == 0);
     if (!skipLoading) {
@@ -604,40 +610,30 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 
-#warning Animation 
 
-- (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd withAnimationId:(NSInteger)animationID animationDuration:(NSTimeInterval)animationDuration{
+
+- (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd withAnimationId:(ACEAnimationID)animationID animationDuration:(NSTimeInterval)animationDuration{
     EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
     EBrowserWindowContainer *eBrwWndContainer = eCurBrwWnd.winContainer;
     [eBrwWndContainer bringSubviewToFront:eBrwWnd];
     
-    if([ACEPOPAnimation isPopAnimation:eBrwWnd.mOpenAnimiId]){
-        ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:eBrwWnd.popAnimationInfo];
-        config.duration=eBrwWnd.mOpenAnimiDuration;
-        [ACEPOPAnimation doAnimationInView:eBrwWnd
-                                      type:(ACEPOPAnimateType)(eBrwWnd.mOpenAnimiId)
-                             configuration:config
-                                      flag:ACEPOPAnimateWhenWindowOpening
-                                completion:^{
-                                    eBrwWnd.usingPopAnimation=YES;
-                                }];
-    }else if ([BAnimation isMoveIn:eBrwWnd.mOpenAnimiId]) {
-        [BAnimation doMoveInAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
-    }else if ([BAnimation isPush:eBrwWnd.mOpenAnimiId]) {
-        [BAnimation doPushAnimition:eBrwWnd animiId:eBrwWnd.mOpenAnimiId animiTime:eBrwWnd.mOpenAnimiDuration];
-    }else {
-        [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:eBrwWnd.mOpenAnimiId AnimiTime:eBrwWnd.mOpenAnimiDuration];
-    }
+    
+    
+    [ACEAnimations addOpeningAnimationWithID:eBrwWnd.openAnimationID
+                                    fromView:eCurBrwWnd
+                                      toView:eBrwWnd
+                                    duration:animationDuration
+                               configuration:eBrwWnd.openAnimationConfig
+                           completionHandler:nil];
+    
+
     
     [self.EBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
     [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
     
     [self reportWindowOpeningEventWithSourceWindow:eCurBrwWnd newOpenedWindow:eBrwWnd openedURL:eBrwWnd.meBrwView.curUrl];
     
-    if ((eBrwWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eBrwWnd.meBrwView.mAdType, eBrwWnd.meBrwView.mAdDisplayTime, eBrwWnd.meBrwView.mAdIntervalTime, eBrwWnd.meBrwView.mAdFlag];
-        [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
     eBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
     self.EBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
     
@@ -646,7 +642,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (void)helpBringWindowToFront:(EBrowserWindow *)eBrwWnd{
-    [self helpBringWindowToFront:eBrwWnd withAnimationId:eBrwWnd.mOpenAnimiId animationDuration:eBrwWnd.mOpenAnimiDuration];
+    [self helpBringWindowToFront:eBrwWnd withAnimationId:eBrwWnd.openAnimationID animationDuration:eBrwWnd.openAnimationDuration];
     
 }
 
@@ -831,6 +827,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (!self.EBrwView.meBrwWnd) {
         return;
     }
+    if (self.EBrwView.mType == ACEEBrowserViewTypeSlibingTop || self.EBrwView.mType == ACEEBrowserViewTypeSlibingBottom) {
+        return;
+    }
     
     ACArgsUnpack(NSNumber *inAnimID,NSNumber *inAnimDuration) = inArguments;
     
@@ -841,34 +840,45 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     
     EBrowserWindow *eBrwWnd = self.EBrwView.meBrwWnd;
-    if (eBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
-        if (self.EBrwView.mType == ACEEBrowserViewTypePopover) {
-            [self.EBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
-            [self.EBrwView removeFromSuperview];
-        } else if (self.EBrwView.mType == ACEEBrowserViewTypeMain) {
-            ACEWebViewController *webController = eBrwWnd.webController;
-            [webController.navigationController popViewControllerAnimated:YES];
+    
+    if (self.EBrwView.mType == ACEEBrowserViewTypePopover) {
+        
+        if (self.EBrwView.isMuiltPopover) {
+            //多浮动窗口不做处理
+            return;
         }
-        [EBrowserWindow postWindowSequenceChange];
-        return;
-    }
-    if (eBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        if (self.EBrwView.mType == ACEEBrowserViewTypePopover) {
-            [self.EBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
-            [self.EBrwView removeFromSuperview];
-        } else if (self.EBrwView.mType == ACEEBrowserViewTypeMain) {
-            ACEWebViewController *webController = eBrwWnd.webController;
-            [webController dismissViewControllerAnimated:YES completion:nil];
-        }
-        [EBrowserWindow postWindowSequenceChange];
-        return;
+        //浮动窗口直接关闭
+        [eBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
+        [self.EBrwView removeFromSuperview];
     }
     
+    //以下是在主窗口中调用close的情况
     
-    EBrowserWindowContainer *eBrwWndContainer = eBrwWnd.winContainer;
+    NSInteger animiId = inAnimID.integerValue;
+    NSTimeInterval aniDuration = getAnimationDuration(inAnimDuration);
+
+
     
-    switch (self.EBrwView.mType) {
-        case ACEEBrowserViewTypeMain: {
+
+    if (animiId == -1){
+        animiId = [ACEAnimations closeAnimationForOpenAnimation:eBrwWnd.openAnimationID];
+    }
+    eBrwWnd.webController.closeAnimationID = animiId;
+    eBrwWnd.webController.closeAnimationDuration = aniDuration;
+    
+    switch (eBrwWnd.webWindowType) {
+        case ACEWebWindowTypeNavigation:{
+            [eBrwWnd.meBrwCtrler.aceNaviController closeChildViewController:eBrwWnd.webController animated:YES];
+            break;
+        }
+        case ACEWebWindowTypePresent:{
+            [eBrwWnd.webController dismissViewControllerAnimated:YES completion:^{
+                [EBrowserWindow postWindowSequenceChange];
+            }];
+            break;
+        }
+        case ACEWebWindowTypeNormal:{
+            EBrowserWindowContainer *eBrwWndContainer = eBrwWnd.winContainer;
             if (self.EBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
                 return;
             }
@@ -878,92 +888,27 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_CLOSING;
             eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
             eBrwWnd.meFrontWnd.meBackWnd = eBrwWnd.meBackWnd;
-#warning Animation
-            NSInteger animiId = inAnimID.integerValue;
-            NSTimeInterval aniDuration = getAnimationDuration(inAnimDuration);
-            
-            if (animiId == -1) {
-                if(eBrwWnd.usingPopAnimation){
-                    animiId = [ACEPOPAnimation reverseAnimationId:eBrwWnd.mOpenAnimiId];
-                }else{
-                    animiId = [BAnimation ReverseAnimiId:eBrwWnd.mOpenAnimiId];
-                }
-                
-            }
-            
-            [eBrwWndContainer removeFromWndDict:self.EBrwView.muexObjName];
+            [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
             eBrwWnd.mFlag = 0;
             
-            if([ACEPOPAnimation isPopAnimation:animiId]){
-                NSDictionary *animateInfo=eBrwWnd.popAnimationInfo;
-                if([inArguments count]>=3 && [inArguments[2] JSONValue] && [[inArguments[2] JSONValue] isKindOfClass:[NSDictionary class]]){
-                    animateInfo=[inArguments[2] JSONValue];
-                }
-                ACEPOPAnimateConfiguration *config=[ACEPOPAnimateConfiguration configurationWithInfo:animateInfo];
-                config.duration=aniDuration;
-                [ACEPOPAnimation doAnimationInView:eBrwWnd
-                                              type:(ACEPOPAnimateType)animiId
-                                     configuration:config
-                                              flag:ACEPOPAnimateWhenWindowClosing
-                                        completion:^{
-                                            [eBrwWnd clean];
-                                            if (eBrwWnd.superview) {
-                                                [eBrwWnd removeFromSuperview];
-                                            }
-                                            [self closeWindowAfterAnimation:eBrwWnd];
-                                            
-                                        }];
-            }else if(animiId>=13 && animiId<=16) {
-                [self moveeBrwWnd:eBrwWnd andTime:(float)aniDuration andAnimiId:(int)animiId];
-            }else {
-                if ([BAnimation isPush:(int)animiId]) {
-                    [BAnimation doPushCloseAnimition:eBrwWnd animiId:(int)animiId animiTime:aniDuration completion:^(BOOL finished) {
-                        [eBrwWnd clean];
-                        if (eBrwWnd.superview) {
-                            [eBrwWnd removeFromSuperview];
-                        }
-                        [self closeWindowAfterAnimation:eBrwWnd];
-                        
-                    }];
-                }else {
-                    [BAnimation SwapAnimationWithView:eBrwWndContainer AnimiId:(int)animiId AnimiTime:aniDuration];
-                    [eBrwWnd clean];
-                    if (eBrwWnd.superview) {
-                        [eBrwWnd removeFromSuperview];
-                    }
-                    [self closeWindowAfterAnimation:eBrwWnd];
-                    
-                }
-                
+            [ACEAnimations addClosingAnimationWithID:animiId fromView:eBrwWnd toView:eBrwWndContainer duration:aniDuration configuration:nil completionHandler:^(BOOL finished) {
+                [eBrwWnd clean];
+                [eBrwWnd removeFromSuperview];
+                [self closeWindowAfterAnimation:eBrwWnd];
                 NSArray * allLivingWindows = [eBrwWndContainer subviews];
                 EBrowserWindow * presentLayerWindows = [allLivingWindows lastObject];
                 [presentLayerWindows.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-            }
-            
+                [EBrowserWindow postWindowSequenceChange];
+            }];
             break;
-        }
-            
-        case ACEEBrowserViewTypePopover: {
-            if (self.EBrwView.isMuiltPopover) {
-                return;
-            }
-            [self.EBrwView.meBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
-            [self.EBrwView removeFromSuperview];
-            break;
-        }
-        case ACEEBrowserViewTypeAd: {
-            self.EBrwView.meBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-            self.EBrwView.hidden = YES;
-            [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-            return;
-            
-        }
-        case ACEEBrowserViewTypeSlibingTop:
-        case ACEEBrowserViewTypeSlibingBottom: {
-            return;
         }
     }
-    [EBrowserWindow postWindowSequenceChange];
+
+    
+    
+    
+
+    
 }
 
 - (void)closeWindowAfterAnimation:(EBrowserWindow*)brwWnd{
@@ -981,7 +926,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (brwWnd.meBottomSlibingBrwView) {
         [brwWnd.meBottomSlibingBrwView removeFromSuperview];
-        brwWnd.meBottomSlibingBrwView = NULL;
+        brwWnd.meBottomSlibingBrwView = nil;
     }
     if (brwWnd.mPopoverBrwViewDict) {
         NSArray *popViewArray = [brwWnd.mPopoverBrwViewDict allValues];
@@ -1005,11 +950,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         brwWnd.mMuiltPopoverDict = nil;
     }
     
-    if (self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView) {
-        brwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        self.EBrwView.meBrwCtrler.meBrwMainFrm.meAdBrwView.hidden = YES;
-        [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-    }
+
     if ((brwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) && (brwWnd.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING)) {
         brwWnd.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
     }
@@ -1034,55 +975,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         }
     }
     
-    if ((eAboveWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-        NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eAboveWnd.meBrwView.mAdType, eAboveWnd.meBrwView.mAdDisplayTime, eAboveWnd.meBrwView.mAdIntervalTime, eAboveWnd.meBrwView.mAdFlag];
-        [eAboveWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-    }
+
 }
 
-
-- (void)moveeBrwWnd:(EBrowserWindow*)temp andTime:(float)aniDuration andAnimiId:(int)animiId{
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:aniDuration];
-    [UIView setAnimationDelegate:self];
-    //	[UIView setAnimationDidStopSelector:@selector(animationFinish:finished:context:)];
-    switch(animiId)
-    {
-        case 13:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.x=frame.origin.x+[BUtility getScreenWidth];
-            [temp setFrame:frame];
-        }
-            break;
-        case 14:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.x=frame.origin.x-[BUtility getScreenWidth];
-            [temp setFrame:frame];
-        }
-            break;
-        case 15:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.y=frame.origin.y+[BUtility getScreenHeight];
-            [temp setFrame:frame];
-        }
-            break;
-        case 16:
-        {
-            CGRect frame= temp.frame ;
-            frame.origin.y=frame.origin.y-[BUtility getScreenHeight];
-            [temp setFrame:frame];
-        }
-            break;
-            
-        default:
-            break;
-            
-    }
-    [UIView commitAnimations];
-}
 
 
 
@@ -1131,21 +1026,21 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if ([self.EBrwView canGoForward]){
         [self.webViewEngine evaluateScript:@"window.history.forward()"];
-        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:UEX_CSUCCESS];
+        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:0];
         return UEX_TRUE;
         
     }else{
-        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:UEX_CFAILED];
+        [self callbackWithKeyPath:@"uexWindow.cbPageForward" intData:1];
         return UEX_FALSE;
     }
 }
 - (UEX_BOOL)pageBack:(NSMutableArray *)inArguments{
     if ([self.EBrwView canGoBack]){
         [self.webViewEngine evaluateScript:@"window.history.back()"];
-        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:UEX_CSUCCESS];
+        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:0];
         return UEX_TRUE;
     }else{
-        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:UEX_CFAILED];
+        [self callbackWithKeyPath:@"uexWindow.cbPageBack" intData:1];
         return UEX_FALSE;
     }
 }
@@ -1169,14 +1064,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (!eBrwWnd.meBackWnd){
         return;
     }
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
+
     NSInteger animiId = [inAnimId integerValue];
     NSTimeInterval animiDuration = getAnimationDuration(inAnimDuration);
     
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
     [self helpBringWindowToFront:eBrwWnd.meBackWnd withAnimationId:animiId animationDuration:animiDuration];
 }
 
@@ -1191,17 +1083,14 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     
     EBrowserWindow *eBrwWnd = self.EBrwView.meBrwWnd;
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
+
     if (!eBrwWnd.meFrontWnd) {
         return;
     }
     NSInteger animiId = [inAnimID integerValue];
     NSTimeInterval animiDuration = getAnimationDuration(inAnimDuration);
     
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        [eBrwMainFrm invalidateAdTimers];
-    }
+
     [self helpBringWindowToFront:eBrwWnd.meFrontWnd withAnimationId:animiId animationDuration:animiDuration];
     
 }
@@ -1288,16 +1177,15 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     CGFloat x = inX.floatValue;
     CGFloat y = inY.floatValue;
     NSTimeInterval duration = inAnimDuration.doubleValue / 1000;
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(onSetWindowFrameFinish)];
-    [self.EBrwView.meBrwWnd setFrame:CGRectMake(x, y, self.EBrwView.meBrwWnd.frame.size.width, self.EBrwView.meBrwWnd.frame.size.height)];
-    [UIView commitAnimations];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:duration]];
-}
-- (void)onSetWindowFrameFinish {
-    [self.webViewEngine callbackWithFunctionKeyPath:@"uexWindow.onSetWindowFrameFinish" arguments:nil];
+    
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         [self.EBrwView.meBrwWnd setFrame:CGRectMake(x, y, self.EBrwView.meBrwWnd.frame.size.width, self.EBrwView.meBrwWnd.frame.size.height)];
+                     }
+                     completion:^(BOOL finished) {
+                         [self.webViewEngine callbackWithFunctionKeyPath:@"uexWindow.onSetWindowFrameFinish" arguments:nil];
+    }];
+    
 }
 
 
@@ -1318,7 +1206,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (NSString *)getWindowName:(NSMutableArray *)inArguments{
-    return self.EBrwView.meBrwWnd.meBrwView.muexObjName;
+    return self.EBrwView.meBrwWnd.windowName;
 }
 
 - (NSNumber *)getWidth:(NSMutableArray *)inArguments{
@@ -1369,7 +1257,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
         
-        ACEWebViewController *webController = (ACEWebViewController *)eCurBrwWnd.webController;
+        ACEWebViewController *webController = eCurBrwWnd.webController;
         
         if (webController == webController.navigationController.topViewController) {
             [self callbackWithKeyPath:F_CB_WINDOW_GET_STATE intData:0];
@@ -1880,10 +1768,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         [self.EBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
         [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
         [self reportWindowOpeningEventWithSourceWindow:eCurBrwWnd newOpenedWindow:eBrwWnd openedURL:eBrwWnd.meBrwView.curUrl];
-        if ((eBrwWnd.meBrwView.mFlag & F_EBRW_VIEW_FLAG_HAS_AD) == F_EBRW_VIEW_FLAG_HAS_AD) {
-            NSString *openAdStr = [NSString stringWithFormat:@"uexWindow.openAd(\'%d\',\'%d\',\'%d\',\'%d\')",eBrwWnd.meBrwView.mAdType, eBrwWnd.meBrwView.mAdDisplayTime, eBrwWnd.meBrwView.mAdIntervalTime, eBrwWnd.meBrwView.mAdFlag];
-            [eBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:openAdStr];
-        }
+
         eBrwWnd.mFlag &= ~F_EBRW_WND_FLAG_IN_OPENING;
         self.EBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WINDOW_IN_OPENING;
         
@@ -1896,19 +1781,18 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 #pragma mark 设置是否允许侧滑关闭
 
 - (void)setSwipeCloseEnable:(NSMutableArray *)inArguments{
-    if([inArguments count] < 1){
-        return;
-    }
-    id info = [inArguments[0] JSONValue];
-    if(!info || ![info isKindOfClass:[NSDictionary class]]){
-        return;
-    }
-    BOOL canSwipeClose=YES;
-    if([info objectForKey:@"enable"]){
-        canSwipeClose=[[info objectForKey:@"enable"]boolValue];
-    }
-    self.EBrwView.meBrwWnd.enableSwipeClose=canSwipeClose;
-    [self.EBrwView.meBrwWnd updateSwipeCloseEnableStatus];
+    ACArgsUnpack(NSDictionary *info) = inArguments;
+    NSNumber *flag = numberArg(info[@"enable"]);
+    self.EBrwView.meBrwWnd.enableSwipeClose = flag ? flag.boolValue : YES;
+
+}
+
+
+// DEPRECATED
+- (void)setRightSwipeEnable:(NSMutableArray *)inArguments{
+    ACArgsUnpack(NSNumber *flag) = inArguments;
+    self.EBrwView.meBrwWnd.enableSwipeClose = flag ? flag.boolValue : YES;
+
 }
 
 
@@ -3059,7 +2943,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (indexStr) {
         [dict setObject:indexStr forKey:APP_JSON_KEY_MULTIPOPSELECTEDNUM];
     }
-    NSString *info = [dict JSONFragment];
+    NSString *info = [dict ac_JSONFragment];
     [self callbackWithKeyPath:@"uexWindow.cbOpenMultiPopover" jsonData:info];
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
@@ -3077,7 +2961,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     if (indexStr) {
         [dict setObject:indexStr forKey:APP_JSON_KEY_MULTIPOPSELECTEDNUM];
     }
-    NSString *info = [dict JSONFragment];
+    NSString *info = [dict ac_JSONFragment];
     
     [self callbackWithKeyPath:@"uexWindow.cbOpenMultiPopover" jsonData:info];
 }
@@ -3200,48 +3084,45 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 - (void)setAutorotateEnable:(NSMutableArray *)inArguments {
     ACArgsUnpack(NSString *autoRotate) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(autoRotate);
-    NSString * orientaion = [BUtility getMainWidgetConfigInterface];
-    [[NSUserDefaults standardUserDefaults] setObject:orientaion forKey:@"subwgtOrientaion"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-    BOOL isAutorotate = ![autoRotate boolValue];
-    theApp.drawerController.canAutorotate = isAutorotate;
+    self.EBrwView.meBrwCtrler.aceNaviController.canAutoRotate = ![autoRotate boolValue];
+
 }
 - (void)setOrientation:(NSMutableArray *)inArguments{
-    ACArgsUnpack(NSNumber *orientation) = inArguments;
-    UEX_PARAM_GUARD_NOT_NIL(orientation);
+    ACArgsUnpack(NSNumber *orientationNumber) = inArguments;
+    UEX_PARAM_GUARD_NOT_NIL(orientationNumber);
+    ACEInterfaceOrientation orientation = orientationNumber.integerValue;
+    if (orientation == 0) {
+        orientation = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"orientation"].stringValue.integerValue;
+    }
     
-    int orientationNumber = [orientation intValue];
-    theApp.drawerController.canRotate = YES;
-    [[NSUserDefaults standardUserDefaults] setObject:orientation.stringValue forKey:@"subwgtOrientaion"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeTheOrientation" object:nil];
-    switch (orientationNumber){
-        case 1:
-        case 5:{
+    ACEUINavigationController *navi = self.EBrwView.meBrwCtrler.aceNaviController;
+    
+    navi.supportedOrientation = orientation;
+    navi.rotateOnce = YES;
+    switch (orientation){
+        case ACEInterfaceOrientationProtrait:
+        case ACEInterfaceOrientationVertical:{
             [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
             break;
         }
-        case 3:
-        case 8:
-        case 10:{
+        case ACEInterfaceOrientationLandscapeRight:{
             [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
             break;
         }
-        case 2:
-        case 9:{
+        case ACEInterfaceOrientationLandscapeLeft:
+        case ACEInterfaceOrientationHorizontal:{
             [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
             break;
         }
-        case 4:{
+        case ACEInterfaceOrientationProtraitUpsideDown:{
             [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
             break;
         }
         default:
-            return;
+            navi.rotateOnce = NO;
             break;
     }
     
-    
-    theApp.drawerController.canRotate = NO;
     
     
 }
@@ -3290,21 +3171,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 #pragma mark - StatusBar API
 
 - (void)hideStatusBar:(NSArray *)inArgument {
-    theApp.drawerController.isStatusBarHidden = YES;
-    if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
-        [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    } else {
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-    }
+    self.EBrwView.meBrwCtrler.shouldHideStatusBarNumber = @(YES);
+    [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
+
+    
 }
 
 - (void)showStatusBar:(NSArray *)inArgument {
-    theApp.drawerController.isStatusBarHidden = NO;
-    if (![[[[NSBundle mainBundle]infoDictionary] objectForKey:@"UIViewControllerBasedStatusBarAppearance"] boolValue]) {
-        [[UIApplication sharedApplication]setStatusBarHidden:NO];
-    } else {
-        [theApp.drawerController setNeedsStatusBarAppearanceUpdate];
-    }
+    self.EBrwView.meBrwCtrler.shouldHideStatusBarNumber = @(NO);
+    [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
+    
 }
 
 //设置状态条上字体的颜色
@@ -3312,20 +3188,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSNumber *colorFlag) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(colorFlag);
     NSInteger flag = colorFlag.integerValue;
-    __kindof ACEBaseViewController *controller = theApp.drawerController;
-    if (self.EBrwView.meBrwWnd.webController) {
-        controller = self.EBrwView.meBrwWnd.webController;
-    }
+    __kindof ACEBaseViewController *controller = self.EBrwView.meBrwWnd.webController ?: self.EBrwView.meBrwCtrler;
+    
     switch (flag) {
         case 0:
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-            controller.ACEStatusBarStyle = UIStatusBarStyleLightContent;
-            [controller setNeedsStatusBarAppearanceUpdate];
+            controller.statusBarStyleNumber = @(UIStatusBarStyleLightContent);
+            [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
             break;
         case 1:
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-            controller.ACEStatusBarStyle = UIStatusBarStyleDefault;
-            [controller setNeedsStatusBarAppearanceUpdate];
+            controller.statusBarStyleNumber = @(UIStatusBarStyleDefault);
+            [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
             break;
         default:
             break;
@@ -3385,78 +3257,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         }
     }];
     
-    
 
-    
-
-//    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-//    UIInterfaceOrientation statusBarOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-//    CGRect sbFrame = [[UIApplication sharedApplication] statusBarFrame];
-//    if ([[UIApplication sharedApplication] isStatusBarHidden]) {
-//        UIApplication *app = [UIApplication sharedApplication];
-//        switch (app.statusBarOrientation) {
-//            case UIDeviceOrientationLandscapeLeft:
-//                sbFrame = CGRectMake([UIScreen mainScreen].bounds.size.width - 20, 0, 20, [UIScreen mainScreen].bounds.size.height);
-//                break;
-//            case UIDeviceOrientationLandscapeRight:
-//                sbFrame = CGRectMake(0, 0, 20, [UIScreen mainScreen].bounds.size.height);
-//                break;
-//            case UIDeviceOrientationPortrait:
-//                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
-//                break;
-//            case UIDeviceOrientationPortraitUpsideDown:
-//                sbFrame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 20, [UIScreen mainScreen].bounds.size.width, 20);
-//                break;
-//            default:
-//                sbFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20);
-//                break;
-//        }
-//    }
-//    if (!eBrwMainFrm.mSBWnd) {
-//        eBrwMainFrm.mSBWnd = [[BStatusBarWindow alloc] initWithFrame:sbFrame andNotifyText:title];
-//        AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-//        [eBrwMainFrm.mSBWnd makeKeyAndVisible];
-//    } else {
-//        if (eBrwMainFrm.mSBWnd.mInitOrientation == statusBarOrientation) {
-//            if (eBrwMainFrm.mSBWnd.hidden == YES) {
-//                eBrwMainFrm.mSBWnd.hidden = NO;
-//                [eBrwMainFrm.mSBWnd setNotifyText:title];
-//                AudioServicesPlaySystemSound(eBrwMainFrm.mSBWnd.mAlertSoundID);
-//            } else {
-//                [eBrwMainFrm.mNotifyArray addObject:title];
-//                return;
-//            }
-//        } else {
-//            return;
-//        }
-//        
-//    }
-//    if (eBrwMainFrm.mSBWndTimer) {
-//        [eBrwMainFrm.mSBWndTimer invalidate];
-//        eBrwMainFrm.mSBWndTimer = nil;
-//    }
-//    eBrwMainFrm.mSBWndTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(closeStatusBarNotification) userInfo:nil repeats:NO];
-//    //添加本地通知在通知栏显示
-//    UILocalNotification *notification=[[UILocalNotification alloc] init];
-//    if (notification!=nil) {        NSDate *now = [NSDate date];
-//        //从现在开始，1秒以后通知
-//        notification.fireDate=[now dateByAddingTimeInterval:1.0];
-//        //使用本地时区
-//        notification.timeZone=[NSTimeZone defaultTimeZone];
-//        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:1];
-//        
-//        NSDictionary *msgDict = dictionaryArg(msg);
-//        if (msgDict) {
-//            [dict addEntriesFromDictionary:msgDict];
-//        }else{
-//            [dict setValue:stringArg(msg) forKey:@"userInforStr"];
-//        }
-//        [notification setUserInfo:dict];
-//        notification.alertBody = title;
-//        notification.hasAction = YES;
-//        //启动这个通知
-//        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-//    }
     
 }
 
@@ -3682,173 +3483,12 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 
 - (void)openAd:(NSMutableArray *)inArguments {
-    
-    ACArgsUnpack(NSNumber *inType,NSNumber *inDisplayTime,NSNumber *inInterval,NSNumber *inFlag) = inArguments;
-    
-    
-    
-    int type = F_EBRW_MAINFRM_AD_TYPE_TOP;
-    UexWindowOpenFlag flag = [inFlag integerValue];
-    CGRect ADFrame;
-    if (!self.EBrwView) {
-        return;
-    }
-    if (self.EBrwView.mType != ACEEBrowserViewTypeMain) {
-        return;
-    }
-    if (self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt.openAdStatus != 1) {
-        return;
-    }
-    self.EBrwView.mFlag |= F_EBRW_VIEW_FLAG_HAS_AD;
-    EBrowserWindow *eBrwWnd = (EBrowserWindow*)self.EBrwView.meBrwWnd;
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    
-    type = [inType intValue];
-    self.EBrwView.mAdType = type;
-    
-    
-    self.EBrwView.mAdDisplayTime = [inDisplayTime intValue];
-    eBrwMainFrm.mAdDisplayTime = [inDisplayTime intValue];
-    
-    
-    self.EBrwView.mAdIntervalTime = [inInterval intValue];
-    eBrwMainFrm.mAdIntervalTime = [inInterval intValue];
-    
-    
-    
-    self.EBrwView.mAdFlag = flag;
-    
-    switch (type) {
-        case F_EBRW_MAINFRM_AD_TYPE_TOP:
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PAD);
-            } else {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PHONE);
-            }
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_MIDDLE:
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, eBrwWnd.bounds.size.height) ;
-            } else {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, eBrwWnd.bounds.size.height);
-            }
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_BOTTOM:
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, (eBrwWnd.bounds.size.height-F_EBRW_MAINFRM_AD_HEIGHT_PAD), eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PAD) ;
-            } else {
-                ADFrame = CGRectMake(0, (eBrwWnd.bounds.size.height-F_EBRW_MAINFRM_AD_HEIGHT_PHONE), eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PHONE);
-            }
-            break;
-        default:
-            type = 0;
-            if ([BUtility isIpad]) {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PAD);
-            } else {
-                ADFrame = CGRectMake(0, 0, eBrwWnd.bounds.size.width, F_EBRW_MAINFRM_AD_HEIGHT_PHONE);
-            }
-            break;
-    }
-    if (!eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView = [[EBrowserView alloc] initWithFrame:ADFrame BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt BrwWnd:eBrwWnd UExObjName:@"" Type:ACEEBrowserViewTypeAd];
-        eBrwMainFrm.mAdType = type;
-    } else {
-        eBrwMainFrm.meAdBrwView.hidden = NO;
-        eBrwMainFrm.meAdBrwView.meBrwWnd = eBrwWnd;
-        if (eBrwMainFrm.mAdType != type) {
-            eBrwMainFrm.mAdType = type;
-            [eBrwMainFrm.meAdBrwView setFrame:ADFrame];
-            eBrwMainFrm.meAdBrwView.hidden = YES;
-        }
-        if (eBrwMainFrm.meAdBrwView.hidden == NO) {
-            if (eBrwMainFrm.mAdDisplayTimer) {
-                if ([eBrwMainFrm.mAdDisplayTimer isValid]) {
-                    [eBrwMainFrm.mAdDisplayTimer invalidate];
-                }
-                eBrwMainFrm.mAdDisplayTimer = NULL;
-            }
-        } else {
-            if (eBrwMainFrm.mAdIntervalTimer) {
-                if ([eBrwMainFrm.mAdIntervalTimer isValid]) {
-                    [eBrwMainFrm.mAdIntervalTimer invalidate];
-                }
-                eBrwMainFrm.mAdIntervalTimer = NULL;
-            }
-        }
-    }
-    if (flag & UexWindowOpenFlagOpaque){
-        eBrwMainFrm.meAdBrwView.backgroundColor = [UIColor whiteColor];
-    }
-    eBrwMainFrm.meAdBrwView.mFlag = 0;
-    if (flag & UexWindowOpenFlagDisableCrossDomain) {
-        eBrwMainFrm.meAdBrwView.mFlag |= F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN;
-    }
-    int reportAdType = 0;
-    //NSString *adURL = @"http://app.tx100.com/adver/index.html";
-    NSString *adURL =  @"http://wgb.tx100.com/mobile/adver.wg";
-    switch (eBrwMainFrm.mAdType) {
-        case F_EBRW_MAINFRM_AD_TYPE_TOP:
-            reportAdType = 0;
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_MIDDLE:
-            //adURL = @"http://app.tx100.com/adver/adver_big.html";
-            reportAdType = 1;
-            break;
-        case F_EBRW_MAINFRM_AD_TYPE_BOTTOM:
-            reportAdType = 0;
-            break;
-        default:
-            break;
-    }
-    NSString *keyStr = [self.EBrwView.mwWgt.appId stringByAppendingString:@"BD7463CD-D608-BEB4-C633-EF3574213060"];
-    NSData *keyData = [keyStr dataUsingEncoding:NSUTF8StringEncoding];
-    CC_MD5_CTX md5;
-    CC_MD5_Init(&md5);
-    CC_MD5_Update(&md5, [keyData bytes],(CC_LONG)[keyData length]);
-    unsigned char digest[CC_MD5_DIGEST_LENGTH];
-    CC_MD5_Final(digest, &md5);
-    NSString *md5Str = [NSString stringWithFormat:
-                        @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-                        digest[0], digest[1], digest[2], digest[3],
-                        digest[4], digest[5], digest[6], digest[7],
-                        digest[8], digest[9], digest[10], digest[11],
-                        digest[12], digest[13], digest[14], digest[15]];
-    NSString *md5Key = [md5Str lowercaseString];
-    NSString *adURLQuery = NULL;
-    if ([BUtility isIpad]) {
-        adURLQuery = [NSString stringWithFormat:@"?appid=%@&pt=%d&dw=%d&dh=%d&md5=%@&type=%d", self.EBrwView.mwWgt.appId,0,768,1024,md5Key,reportAdType];
-    } else {
-        adURLQuery = [NSString stringWithFormat:@"?appid=%@&pt=%d&dw=%d&dh=%d&md5=%@&type=%d", self.EBrwView.mwWgt.appId,0,320,460,md5Key,reportAdType];
-    }
-    adURL = [adURL stringByAppendingString:adURLQuery];
-    ACENSLog(@"adURL is %@", adURL);
-    //adURL.length != 0
-    if (adURL && adURL.length > 0) {
-        
-        NSURL *url = [BUtility stringToUrl:adURL];
-        [eBrwMainFrm.meAdBrwView loadWithUrl:url];
-    } else {
-        [eBrwMainFrm bringSubviewToFront:eBrwMainFrm.meAdBrwView];
-        eBrwMainFrm.meAdBrwView.hidden = NO;
-    }
-    if (eBrwMainFrm.mAdDisplayTime > 0) {
-        eBrwMainFrm.mAdDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:eBrwMainFrm.mAdDisplayTime target:eBrwMainFrm selector:@selector(displayDone) userInfo:nil repeats:NO];
-    }
+    //deprecated
+
 }
 
 
 
-- (void)closeAD:(NSMutableArray *)inArguments {
-    if (self.EBrwView.mType != ACEEBrowserViewTypeMain) {
-        return;
-    }
-    EBrowserMainFrame *eBrwMainFrm = self.EBrwView.meBrwCtrler.meBrwMainFrm;
-    if (eBrwMainFrm.meAdBrwView) {
-        eBrwMainFrm.meAdBrwView.hidden = YES;
-        self.EBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_HAS_AD;
-        [self.EBrwView.meBrwCtrler.meBrwMainFrm invalidateAdTimers];
-    }
-}
 
 
 
@@ -3862,17 +3502,6 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 
 
-- (void)setRightSwipeEnable:(NSMutableArray *)inArguments{
-    
-    ACArgsUnpack(NSNumber *flagNum) = inArguments;
-    BOOL isNeedSwipeGestureRecognizer = flagNum ? flagNum.boolValue :  YES;
-    EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
-    if (eCurBrwWnd.webController){
-        ACEWebViewController * webViewController = eCurBrwWnd.webController;
-        webViewController.isNeedSwipeGestureRecognizer = isNeedSwipeGestureRecognizer;
-    }
-    
-}
 
 
 

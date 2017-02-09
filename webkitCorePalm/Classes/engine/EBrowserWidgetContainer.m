@@ -25,11 +25,12 @@
 #import	"EBrowserWindow.h"
 #import "EBrowserView.h"
 #import "BUtility.h"
-#import "BAnimation.h"
 #import "WWidgetMgr.h"
 #import "WWidget.h"
 #import "EBrowser.h"
-
+#import "ACEUINavigationController.h"
+#import "ACESubwidgetManager.h"
+#import <AppCanKit/ACEXTScope.h>
 #define F_BRW_WGT_CONTAINER_DICT_SIZE			5
 #define F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE		10
 
@@ -38,10 +39,10 @@
 @synthesize meBrwCtrler;
 @synthesize meRootBrwWndContainer;
 @synthesize mBrwWndContainerDict;
-@synthesize mReUseBrwViewArray;
+
 @synthesize mWWigets;
 
-- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler {
+- (id)initWithFrame:(CGRect)frame browserController:(EBrowserController *)eInBrwCtrler widget:(WWidget *)widget {
     self = [super initWithFrame:frame];
     if (self) {
 		//self.backgroundColor = [UIColor blackColor];
@@ -53,207 +54,111 @@
 		meBrwCtrler = eInBrwCtrler;
 		self.autoresizesSubviews = YES;
 		self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-		meRootBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:meBrwCtrler.mwWgtMgr.wMainWgt];
-		[mBrwWndContainerDict setObject:meRootBrwWndContainer forKey:meBrwCtrler.mwWgtMgr.wMainWgt.appId];
-		mReUseBrwViewArray = [[NSMutableArray alloc] initWithCapacity:F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE];
+		meRootBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:widget];
+		[mBrwWndContainerDict setObject:meRootBrwWndContainer forKey:widget.appId];
 		[self addSubview:meRootBrwWndContainer];
 	}
-	ACENSLog(@"EBrowserWidgetContainer alloc is %x", self);
     return self;
 }
 
 - (void)dealloc {
-
-	ACENSLog(@"EBrowserWidgetContainer dealloc is %x", self);
-	if (meRootBrwWndContainer) {
-
-		meRootBrwWndContainer = nil;
-	}
-    if (mWWigets) {
-        self.mWWigets=nil;
+    meRootBrwWndContainer = nil;
+    self.mWWigets=nil;
+    NSArray *brwWndContainerArray = [mBrwWndContainerDict allValues];
+    for (EBrowserWindowContainer *wndContainer in brwWndContainerArray){
+        [wndContainer removeFromSuperview];
     }
-	if (mBrwWndContainerDict) {
-		NSArray *brwWndContainerArray = [mBrwWndContainerDict allValues];
-		for (EBrowserWindowContainer *wndContainer in brwWndContainerArray){
-			if (wndContainer.superview) {
-				[wndContainer removeFromSuperview];
-			}
-
-		}
-		[mBrwWndContainerDict removeAllObjects];
-
-		mBrwWndContainerDict = nil;
-	}
-	if (mReUseBrwViewArray) {
-		for (EBrowserView* eBrwView in mReUseBrwViewArray) {
-			if (eBrwView.superview) {
-				[eBrwView removeFromSuperview];
-			}
-
-		}
-		[mReUseBrwViewArray removeAllObjects];
-
-		mReUseBrwViewArray = NULL;
-	}
-
+    [mBrwWndContainerDict removeAllObjects];
+    mBrwWndContainerDict = nil;
 }
 
-- (void)removeAllUnActiveBrwWndContainer {
-    if (mBrwWndContainerDict) {
-        NSArray *brwWndContainerArray = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict allValues];
-        for (EBrowserWindowContainer *brwWndContainer in brwWndContainerArray) {
-            if (brwWndContainer == meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer) {
-                [brwWndContainer removeAllUnActiveBrwWnd];
-                continue;
-            }
-            if (brwWndContainer == [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer]) {
-                [brwWndContainer removeAllUnActiveBrwWnd];
-                continue;
-            }
-            if (brwWndContainer.superview) {
-                [brwWndContainer removeFromSuperview];
-                [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict removeObjectForKey:brwWndContainer.mwWgt.appId];
 
-            }
-        }
-    }
-}
 
-- (EBrowserView*)popReuseBrwView {
-    [mReUseBrwViewArray removeAllObjects];
-    return nil;
-    /*
-	if (mReUseBrwViewArray.count == 0) {
-		return nil;
-	}
-	EBrowserView *eBrwView = [[mReUseBrwViewArray objectAtIndex:0] retain];
-	[mReUseBrwViewArray removeObject:eBrwView];
-	return eBrwView;
-     */
-}
 
-- (void)pushReuseBrwView:(EBrowserView*)inBrwView {
-    
-//    if (inBrwView.meBrwWnd.webWindowType == ACEWebWindowTypeNavigation) {
-//        
-//        return;
-//    }
-//
-    /*
-	[inBrwView reset];
-	if (mReUseBrwViewArray.count >= F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE) {
-		return;
-	}
-     [mReUseBrwViewArray addObject:inBrwView];
-     */
-	
-    
-}
-
-- (void)layoutSubviews {
-	ACENSLog(@"EBrowserWidgetContainer layoutSubviews!");
-	ACENSLog(@"wnd rect is:%f,%f,%f,%f", self.frame.origin.x, self.frame.origin.y, self.bounds.size.width, self.bounds.size.height);
-}
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
-//	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
-//    EBrowserWindowContainer *eSuperBrwWndContainer = (EBrowserWindowContainer*)eSuperBrwWnd.superview;
-    
     EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
-    
-
-    
-    
-	
 	[eSuperBrwWndContainer notifyLoadPageStartOfBrwView:eInBrwView];
 }
 
 - (void)notifyLoadPageFinishOfBrwView: (EBrowserView*)eInBrwView {
-    ACLogVerbose(@"window '%@' opened;",eInBrwView.meBrwWnd.meBrwView.muexObjName);
-	EBrowserWindow *eSuperBrwWnd = (EBrowserWindow*)(eInBrwView.meBrwWnd);
     
-    EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
+    
+    
+    ACLogVerbose(@"window '%@' opened;",eInBrwView.meBrwWnd.meBrwView.muexObjName);
+    
+    
+    
 
     
-    if (eSuperBrwWnd.webWindowType == ACEWebWindowTypeNavigation || eSuperBrwWnd.webWindowType == ACEWebWindowTypePresent) {
-        
+    if (eInBrwView.meBrwCtrler.aceNaviController.presentingViewController.presentedViewController == eInBrwView.meBrwCtrler.aceNaviController || eInBrwView.meBrwCtrler.isAppCanRootViewController) {
+        EBrowserWindowContainer *eSuperBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eInBrwView];
         [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-        
-        return;
-        
+    }else{
+        [[ACESubwidgetManager defaultManager]notifySubwidgetControllerLoadingCompleted:eInBrwView.meBrwCtrler];
     }
     
     
-//	EBrowserWindowContainer *eSuperBrwWndContainer = (EBrowserWindowContainer*)eSuperBrwWnd.superview;
-	EBrowserWindowContainer *eCurBrwWndContainer = [self.subviews objectAtIndex:self.subviews.count-1];
-    
-    if (!eSuperBrwWndContainer) {
-        for (EBrowserWindowContainer * brwWndContainer in self.subviews) {
-            if ([[brwWndContainer.mBrwWndDict allValues] containsObject:eSuperBrwWnd]) {
-                eSuperBrwWndContainer = brwWndContainer;
-                break;
-            }
-        }
-    }
-    
-    
-	if (!eSuperBrwWndContainer) {
-		eSuperBrwWndContainer = eCurBrwWndContainer;
-	}
-    
-	if (eSuperBrwWndContainer != eCurBrwWndContainer) {
-		if (eSuperBrwWndContainer.superview != self) {
-			[eSuperBrwWndContainer setBounds:self.bounds];
-			[self addSubview:eSuperBrwWndContainer];
-			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
-				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
-					if (![BUtility getAppCanDevMode]) {
-						if (meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden == NO) {
-							meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
-						}
-					}
-				}
-			}
-		} else {
-			[self bringSubviewToFront:eSuperBrwWndContainer];
-            
-            if (!eSuperBrwWnd.superview) {
-                [eSuperBrwWndContainer addSubview:eSuperBrwWnd];
-            }
-            
-			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
-				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
-					if (![BUtility getAppCanDevMode]) {
-						if (meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden == NO) {
-							meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
-						}
-					}
-				}
-			}
-		}
-		if ([BAnimation isMoveIn:eSuperBrwWndContainer.mStartAnimiId]) {
-            [BAnimation doMoveInAnimition:eSuperBrwWndContainer animiId:eSuperBrwWndContainer.mStartAnimiId animiTime:eSuperBrwWndContainer.mStartAnimiDuration];
-        } else {
-            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWndContainer.mStartAnimiId AnimiTime:eSuperBrwWndContainer.mStartAnimiDuration];
-        }
-		
-		if (eCurBrwWndContainer) {
-			[[eCurBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-		}
-		[eInBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-		if (eSuperBrwWndContainer != self.meRootBrwWndContainer) {
-			self.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag |= F_TOOLBAR_FLAG_FINISH_WIDGET;
-			self.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = NO;
-		}
-		if (self.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-			if (self.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-				[self.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:eSuperBrwWndContainer.mwWgt.appId];
-			}
-		}
-		eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
-	} else {
-		[eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-	}
+
+//	EBrowserWindowContainer *eCurBrwWndContainer = [self.subviews objectAtIndex:self.subviews.count-1];
+//    
+//
+//
+//    
+//	if (eSuperBrwWndContainer != eCurBrwWndContainer) {
+//		if (eSuperBrwWndContainer.superview != self) {
+//			[eSuperBrwWndContainer setBounds:self.bounds];
+//			[self addSubview:eSuperBrwWndContainer];
+//			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
+//				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
+//					if (![BUtility getAppCanDevMode]) {
+//						if (meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden == NO) {
+//							meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
+//						}
+//					}
+//				}
+//			}
+//		} else {
+//			[self bringSubviewToFront:eSuperBrwWndContainer];
+//            
+//            if (!eSuperBrwWnd.superview) {
+//                [eSuperBrwWndContainer addSubview:eSuperBrwWnd];
+//            }
+//            
+//			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
+//				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
+//					if (![BUtility getAppCanDevMode]) {
+//						if (meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden == NO) {
+//							meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		if ([BAnimation isMoveIn:eSuperBrwWndContainer.mStartAnimiId]) {
+//            [BAnimation doMoveInAnimition:eSuperBrwWndContainer animiId:eSuperBrwWndContainer.mStartAnimiId animiTime:eSuperBrwWndContainer.mStartAnimiDuration];
+//        } else {
+//            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWndContainer.mStartAnimiId AnimiTime:eSuperBrwWndContainer.mStartAnimiDuration];
+//        }
+//		
+//		if (eCurBrwWndContainer) {
+//			[[eCurBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
+//		}
+//		[eInBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
+//		if (eSuperBrwWndContainer != self.meRootBrwWndContainer) {
+//			self.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag |= F_TOOLBAR_FLAG_FINISH_WIDGET;
+//			self.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = NO;
+//		}
+//		if (self.meBrwCtrler.meBrwMainFrm.mAppCenter) {
+//			if (self.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
+//				[self.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:eSuperBrwWndContainer.mwWgt.appId];
+//			}
+//		}
+//		eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
+//	} else {
+//      [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
+//
+//	}
 
 }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>4.1.0</key>
+	<array>
+		<string>重构侧滑关闭组件</string>
+		<string>重构引擎动画</string>
+		<string>支持WidgetSDK</string>
+	</array>
+</dict>
+</plist>

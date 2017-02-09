@@ -483,7 +483,7 @@ NSString *const SDWebImageDownloadFinishNotification = @"SDWebImageDownloadFinis
     SecTrustRef trust = NULL;
     SecCertificateRef certChain=NULL;
     NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-    [BUtility extractIdentity:theApp.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
+    [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
     NSArray * certificates = [NSArray arrayWithObject:(__bridge id)(certChain)];
     
     NSURLCredential * urlCredential = [NSURLCredential credentialWithIdentity:identity certificates:certificates persistence:NSURLCredentialPersistencePermanent];

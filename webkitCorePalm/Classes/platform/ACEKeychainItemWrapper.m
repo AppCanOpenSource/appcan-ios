@@ -230,14 +230,11 @@ Keychain API expects as a validly constructed container class.
 	// could contain multiple result sets to be handled
 	NSDictionary * resultsInfo = [dictionaryToConvert objectForKey:(__bridge id)kSecValueData];
 	
-	NSString * error;
-	NSData * xmlData = [NSPropertyListSerialization dataFromPropertyList:resultsInfo 
-                                                                  format:NSPropertyListXMLFormat_v1_0 
-                                                        errorDescription:&error];
-	
+	NSError *error;
+    NSData *xmlData = [NSPropertyListSerialization dataWithPropertyList:resultsInfo format:NSPropertyListXMLFormat_v1_0  options:0 error:&error];
 	if (error != nil) 
     { 
-		NSLog(@"dictionaryToSecItemFormat: Error! %@", error);
+		NSLog(@"dictionaryToSecItemFormat: Error! %@", error.localizedDescription);
 	}
 	
     if (xmlData)
@@ -298,17 +295,14 @@ Keychain API expects as a validly constructed container class.
 		NSData * xmlData = (__bridge  NSData *) cfXmlData;
 		[returnDict removeObjectForKey:(__bridge id)kSecReturnData];
 		
-		NSString * errorDesc = nil;
+		NSError * error;
 		NSPropertyListFormat fmt;
-		NSDictionary * resultsInfo = (NSDictionary *) [NSPropertyListSerialization propertyListFromData:xmlData
-                                                                                       mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                                                                                 format:&fmt
-                                                                                       errorDescription: &errorDesc];
-		
-        if (resultsInfo)
+        NSDictionary * resultsInfo = [NSPropertyListSerialization propertyListWithData:xmlData options:NSPropertyListMutableContainersAndLeaves format:&fmt error:&error];
+        if (resultsInfo && !error){
             [returnDict setObject:resultsInfo forKey:(__bridge id)kSecValueData];
+        }
 		
-	} else { 
+	} else {
 		NSLog(@"secItemFormatToDictionary: format error.");
 	}
 	

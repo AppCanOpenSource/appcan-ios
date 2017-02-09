@@ -1,0 +1,3 @@
+github "ios-plugin/Ono" "master"
+github "ios-plugin/pop"	"master"
+github "ios-plugin/AppCanKit" "master"

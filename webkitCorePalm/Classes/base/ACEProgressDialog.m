@@ -40,31 +40,30 @@
     static ACEProgressDialog *dialog=nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        dialog=[[self alloc] init];
+        dialog = [[self alloc] init];
     });
     return dialog;
 }
 
-- (instancetype)init
-{
+- (instancetype)init{
     self = [super init];
     if (self) {
-        UIWindow *window=[[UIApplication sharedApplication].delegate window];
-        _HUD=[[MBProgressHUD alloc]initWithWindow:window];
-        _HUD.dimBackground=YES;
+        UIWindow *window = [[UIApplication sharedApplication].delegate window];
+        _HUD = [[MBProgressHUD alloc]initWithWindow:window];
+        _HUD.dimBackground = YES;
         [window addSubview:_HUD];
-        _tapGestureRecognizer=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
+        _tapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
         [_HUD addGestureRecognizer:_tapGestureRecognizer];
         
-        _canCancel=YES;
+        _canCancel = YES;
     }
     return self;
 }
 
 - (void)showWithTitle:(NSString *)title text:(NSString *)text canCancel:(BOOL)canCancel{
-    self.HUD.labelText=title?:@"";
-    self.HUD.detailsLabelText=text?:@"";
-    self.canCancel=canCancel;
+    self.HUD.labelText = title?:@"";
+    self.HUD.detailsLabelText = text?:@"";
+    self.canCancel = canCancel;
     
     dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -83,8 +82,8 @@
     if(!self.canCancel || gestureRecognizer != self.tapGestureRecognizer){
         return;
     }
-    CGPoint tapPoint=[gestureRecognizer locationInView:nil];
-    CGRect rect=[self indicatorRect];
+    CGPoint tapPoint = [gestureRecognizer locationInView:nil];
+    CGRect rect = [self indicatorRect];
     if(!CGRectContainsPoint(rect, tapPoint)){
         [self hide];
     }

@@ -24,7 +24,7 @@
 #import "EBrowserController.h"
 #import "EBrowser.h"
 #import "JSON.h"
-#import "EUExBaseDefine.h"
+
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
@@ -93,13 +93,7 @@
 
 - (void)getVersion:(NSMutableArray *)inArguments {
     ACLogInfo(@"uexWidgetOne.getVersion has been deprecated");
-    //[self jsFailedWithOpId:0 errorCode:0 errorDes:@"widgetone version has been deprecated"];
-//	NSString*version = [self.meBrwView.meBrwCtrler.mwWgtMgr WidgetOneVersion];
-//	if (version!=nil) {
-//		[self jsSuccessWithName:F_CB_WIDGETONE_GET_VERSION opId:0 dataType:UEX_CALLBACK_DATATYPE_TEXT strData:version];
-//	}else{
-//		[self jsFailedWithOpId:0 errorCode:0 errorDes:@"no version"];
-//	}
+
 }
 
 - (NSNumber *)getPlatform:(NSMutableArray *)inArguments {
@@ -212,7 +206,7 @@
 - (void)cleanCache:(NSMutableArray *)inArguments {
     NSNumber *result = @1;
 	if (self.EBrwView.mwWgt.wgtType == F_WWIDGET_MAINWIDGET) {
-		[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];
         result = @0;
 	}
@@ -222,7 +216,7 @@
 - (NSString *)getMainWidgetId:(NSMutableArray *)inArguments {
     
     NSString *appId = nil;
-	WWidget *widget = self.EBrwView.meBrwCtrler.mwWgtMgr.wMainWgt;
+	WWidget *widget = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget;
 	if (widget) {
 		appId = widget.appId;
 	}

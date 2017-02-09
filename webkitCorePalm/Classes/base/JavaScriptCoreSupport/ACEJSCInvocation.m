@@ -92,9 +92,7 @@
 
 
 
-- (void)dealloc{
-   //NSLog(@"JSInvocation dealloc");
-}
+
 + (ACEJSValueType)JSTypeOf:(JSValue *)value{
     
     if(!value || ![value isKindOfClass:[JSValue class]]){

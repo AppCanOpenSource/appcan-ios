@@ -22,8 +22,12 @@
 
 @interface ACEWebViewController : ACEBaseViewController
 
-@property (nonatomic, strong) EBrowserWindow *browserWindow;
+@property (nonatomic,strong) EBrowserWindow *browserWindow;
 
-@property (nonatomic, assign) BOOL isNeedSwipeGestureRecognizer;
+@property (nonatomic,assign) ACEAnimationID closeAnimationID;
+@property (nonatomic,assign) NSTimeInterval closeAnimationDuration;
+@property (nonatomic,strong) NSDictionary *closeAnimationConfig;
+
+
 
 @end

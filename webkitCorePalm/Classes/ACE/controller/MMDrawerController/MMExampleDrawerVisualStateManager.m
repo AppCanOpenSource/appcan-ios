@@ -65,7 +65,7 @@
                 
                 UIViewController * sideDrawerViewController;
                 CATransform3D transform;
-                CGFloat maxDrawerWidth;
+                CGFloat maxDrawerWidth = 0;
                 
                 if(drawerSide == MMDrawerSideLeft){
                     sideDrawerViewController = drawerController.leftDrawerViewController;
