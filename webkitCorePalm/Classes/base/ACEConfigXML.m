@@ -32,22 +32,7 @@
 static ONOXMLDocument * originDocument = nil;
 static ONOXMLDocument * widgetDocument = nil;
 
-//__attribute__((constructor)) static void buildDocuments (void){
-//    NSURL *originConfigURL = [[NSBundle mainBundle].resourceURL URLByAppendingPathComponent:@"widget/config.xml"];
-//    originDocument = [ONOXMLDocument XMLDocumentWithData:decrytedDataWithURL(originConfigURL) error:nil];
-//    
-//    
-//    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue]) {
-//        NSString *documentPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-//        NSURL *documentURL = [NSURL fileURLWithPath:documentPath];
-//        NSURL *widgetConfigURL = [documentURL URLByAppendingPathComponent:@"widget/config.xml"];
-//        
-//        NSData *data = decrytedDataWithURL(widgetConfigURL);
-//        if (data) {
-//            widgetDocument = [ONOXMLDocument XMLDocumentWithData:data error:nil];
-//        }
-//    }
-//}
+
 
 static NSData * _Nullable decrytedDataWithURL(NSURL * fileURL){
     NSData *originData = [NSData dataWithContentsOfURL:fileURL];
@@ -88,7 +73,7 @@ static NSData * _Nullable decrytedDataWithURL(NSURL * fileURL){
 }
 
 + (BOOL)isWidgetConfigXMLAvailable{
-    return widgetDocument == nil;
+    return widgetDocument != nil;
 }
 
 + (void)updateWidgetConfigXML{

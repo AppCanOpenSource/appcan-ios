@@ -240,4 +240,8 @@
     return ACEnginVersion();
 }
 
+- (void)restart:(NSMutableArray *)inArguments{
+    [AppCanEngine restart];
+}
+
 @end

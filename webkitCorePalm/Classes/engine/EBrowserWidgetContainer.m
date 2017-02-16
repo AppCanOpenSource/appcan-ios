@@ -31,14 +31,14 @@
 #import "ACEUINavigationController.h"
 #import "ACESubwidgetManager.h"
 #import <AppCanKit/ACEXTScope.h>
-#define F_BRW_WGT_CONTAINER_DICT_SIZE			5
-#define F_BRW_WGT_CONTAINER_REUSE_VIEW_SIZE		10
+
+
 
 @implementation EBrowserWidgetContainer
 
 @synthesize meBrwCtrler;
 @synthesize meRootBrwWndContainer;
-@synthesize mBrwWndContainerDict;
+
 
 @synthesize mWWigets;
 
@@ -46,7 +46,7 @@
     self = [super initWithFrame:frame];
     if (self) {
 		//self.backgroundColor = [UIColor blackColor];
-		mBrwWndContainerDict = [[NSMutableDictionary alloc]initWithCapacity:F_BRW_WGT_CONTAINER_DICT_SIZE];
+
         NSMutableDictionary *tempmWWigets = [[NSMutableDictionary alloc]initWithCapacity:1];
         self.mWWigets = tempmWWigets;
 
@@ -55,7 +55,6 @@
 		self.autoresizesSubviews = YES;
 		self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		meRootBrwWndContainer = [[EBrowserWindowContainer alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:widget];
-		[mBrwWndContainerDict setObject:meRootBrwWndContainer forKey:widget.appId];
 		[self addSubview:meRootBrwWndContainer];
 	}
     return self;
@@ -63,13 +62,7 @@
 
 - (void)dealloc {
     meRootBrwWndContainer = nil;
-    self.mWWigets=nil;
-    NSArray *brwWndContainerArray = [mBrwWndContainerDict allValues];
-    for (EBrowserWindowContainer *wndContainer in brwWndContainerArray){
-        [wndContainer removeFromSuperview];
-    }
-    [mBrwWndContainerDict removeAllObjects];
-    mBrwWndContainerDict = nil;
+    self.mWWigets = nil;
 }
 
 
@@ -99,66 +92,6 @@
     }
     
     
-
-//	EBrowserWindowContainer *eCurBrwWndContainer = [self.subviews objectAtIndex:self.subviews.count-1];
-//    
-//
-//
-//    
-//	if (eSuperBrwWndContainer != eCurBrwWndContainer) {
-//		if (eSuperBrwWndContainer.superview != self) {
-//			[eSuperBrwWndContainer setBounds:self.bounds];
-//			[self addSubview:eSuperBrwWndContainer];
-//			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
-//				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
-//					if (![BUtility getAppCanDevMode]) {
-//						if (meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden == NO) {
-//							meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
-//						}
-//					}
-//				}
-//			}
-//		} else {
-//			[self bringSubviewToFront:eSuperBrwWndContainer];
-//            
-//            if (!eSuperBrwWnd.superview) {
-//                [eSuperBrwWndContainer addSubview:eSuperBrwWnd];
-//            }
-//            
-//			if (eSuperBrwWndContainer.mwWgt.wgtType != F_WWIDGET_MAINWIDGET) {
-//				if (meBrwCtrler.meBrwMainFrm.meBrwToolBar) {
-//					if (![BUtility getAppCanDevMode]) {
-//						if (meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden == NO) {
-//							meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = YES;
-//						}
-//					}
-//				}
-//			}
-//		}
-//		if ([BAnimation isMoveIn:eSuperBrwWndContainer.mStartAnimiId]) {
-//            [BAnimation doMoveInAnimition:eSuperBrwWndContainer animiId:eSuperBrwWndContainer.mStartAnimiId animiTime:eSuperBrwWndContainer.mStartAnimiDuration];
-//        } else {
-//            [BAnimation SwapAnimationWithView:self AnimiId:eSuperBrwWndContainer.mStartAnimiId AnimiTime:eSuperBrwWndContainer.mStartAnimiDuration];
-//        }
-//		
-//		if (eCurBrwWndContainer) {
-//			[[eCurBrwWndContainer aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(1);}"];
-//		}
-//		[eInBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
-//		if (eSuperBrwWndContainer != self.meRootBrwWndContainer) {
-//			self.meBrwCtrler.meBrwMainFrm.meBrwToolBar.mFlag |= F_TOOLBAR_FLAG_FINISH_WIDGET;
-//			self.meBrwCtrler.meBrwMainFrm.meBrwToolBar.hidden = NO;
-//		}
-//		if (self.meBrwCtrler.meBrwMainFrm.mAppCenter) {
-//			if (self.meBrwCtrler.meBrwMainFrm.mAppCenter.startWgtShowLoading) {
-//				[self.meBrwCtrler.meBrwMainFrm.mAppCenter hideLoading:WIDGET_START_SUCCESS retAppId:eSuperBrwWndContainer.mwWgt.appId];
-//			}
-//		}
-//		eInBrwView.meBrwCtrler.meBrw.mFlag &= ~F_EBRW_FLAG_WIDGET_IN_OPENING;
-//	} else {
-//      [eSuperBrwWndContainer notifyLoadPageFinishOfBrwView:eInBrwView];
-//
-//	}
 
 }
 

@@ -51,10 +51,11 @@
 #import "ACEBrowserView.h"
 
 #import <AppCanKit/ACInvoker.h>
+#import <AppCanKit/ACEXTScope.h>
 #import "ACEConfigXML.h"
 #import <UserNotifications/UserNotifications.h>
 #import "AppCanEngine.h"
-
+#import "ACEWidgetUpdateUtility.h"
 
 #define ACE_USERAGENT @"AppCanUserAgent"
 
@@ -73,7 +74,7 @@
 }
 
 - (NSString *)documentWidgetPath{
-    return @"widget";
+    return ACEWidgetUpdateUtility.currentWidgetPath;
 }
 
 
@@ -154,6 +155,13 @@
     self = [super init];
     if (self != nil) {
         [self initializeDefaultSettings];
+        @weakify(self);
+        [[NSNotificationCenter defaultCenter]addObserverForName:AppCanEngineRestartNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                @strongify(self);
+                [self setupRootViewController];
+            });
+        }];
     }
     return self;
     
@@ -222,15 +230,22 @@
     self.mwWgtMgr = [WWidgetMgr sharedManager];
     //[self readAppCanJS];
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [self setupRootViewController];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    if (ACSystemVersion() >= 10) {
+        [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+    }
+    return [AppCanEngine application:application didFinishLaunchingWithOptions:launchOptions];
+    
+}
 
-    
-    
+- (void)setupRootViewController{
     _drawerController = [[ACEDrawerViewController alloc] initWithCenterViewController:AppCanEngine.mainWidgetController
                                                              leftDrawerViewController:nil
                                                             rightDrawerViewController:nil];
     
     _drawerController.mainContentController = AppCanEngine.mainWidgetController;
-
+    
     
     [_drawerController setMaximumRightDrawerWidth:200.0];
     [_drawerController setMaximumLeftDrawerWidth:200.0];
@@ -249,14 +264,11 @@
     
     self.window.rootViewController = _drawerController;
     [self.window makeKeyAndVisible];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    
-    if (ACSystemVersion() >= 10) {
-        [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-    }
-    return [AppCanEngine application:application didFinishLaunchingWithOptions:launchOptions];
-    
+
 }
+
+
+
 
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {

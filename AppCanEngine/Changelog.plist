@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.1.1</key>
+	<array>
+		<string>添加接口uexWidgetOne.restart</string>
+		<string>修复一个导致应用自动更新无效的bug</string>
+	</array>
 	<key>4.1.0</key>
 	<array>
 		<string>重构侧滑关闭组件</string>

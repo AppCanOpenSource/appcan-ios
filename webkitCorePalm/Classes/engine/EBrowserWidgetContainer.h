@@ -26,7 +26,6 @@
 @interface EBrowserWidgetContainer : UIView 
 @property (nonatomic, weak) EBrowserController *meBrwCtrler;
 @property (nonatomic, strong) EBrowserWindowContainer *meRootBrwWndContainer;
-@property (nonatomic, strong) NSMutableDictionary<NSString *,EBrowserWindowContainer *> *mBrwWndContainerDict;
 @property (nonatomic, strong) NSMutableDictionary *mWWigets;
 
 - (instancetype)initWithFrame:(CGRect)frame browserController:(EBrowserController*)eInBrwCtrler widget:(WWidget *)widget;
