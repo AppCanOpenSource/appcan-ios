@@ -34,7 +34,7 @@
 @property (nonatomic, weak) EBrowserController *meBrwCtrler;
 @property (nonatomic, strong) EBrowserWindow *meRootBrwWnd;
 @property (nonatomic, strong) NSMutableDictionary *mBrwWndDict;
-@property (nonatomic, weak) WWidget *mwWgt;
+@property (nonatomic, readonly) WWidget *mwWgt;
 @property (nonatomic, weak) EBrowserWindowContainer *meOpenerContainer;
 @property (nonatomic, strong) NSString *mOpenerForRet;
 

@@ -41,7 +41,7 @@
 @synthesize meBrwCtrler;
 @synthesize meRootBrwWnd;
 @synthesize mBrwWndDict;
-@synthesize mwWgt;
+
 @synthesize meOpenerContainer;
 @synthesize mOpenerForRet;
 
@@ -50,7 +50,7 @@
 @synthesize mFlag;
 
 - (void)dealloc {
-    mwWgt = nil;
+
 	if (mOpenerForRet) {
 		mOpenerForRet = NULL;
 	}
@@ -72,6 +72,9 @@
 	}
 }
 
+- (WWidget *)mwWgt{
+    return self.meBrwCtrler.widget;
+}
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt {
     self = [super initWithFrame:frame];
@@ -81,12 +84,12 @@
 		mStartAnimiId = 0;
 		mStartAnimiDuration = 0.2f;
 		meBrwCtrler = eInBrwCtrler;
-		self.mwWgt = inWgt;
+
 		meOpenerContainer = nil;
 		mOpenerForRet = nil;
 
 		mFlag = 0;
-		meRootBrwWnd = [[EBrowserWindow alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt UExObjName:F_BRW_WND_ROOT_NAME];
+		meRootBrwWnd = [[EBrowserWindow alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:meBrwCtrler.widget UExObjName:F_BRW_WND_ROOT_NAME];
 		[mBrwWndDict setObject:meRootBrwWnd forKey:F_BRW_WND_ROOT_NAME];
 		[self addSubview:meRootBrwWnd];
 		self.autoresizesSubviews = YES;

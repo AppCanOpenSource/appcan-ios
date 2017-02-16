@@ -31,7 +31,7 @@
 #import "EBrowserView.h"
 #import "WWidget.h"
 #import "ACEViewControllerAnimator.h"
-
+#import "AppCanEnginePrivate.h"
 
 
 
@@ -57,6 +57,10 @@
     self = [super init];
     if (self) {
         _subwidgetControllers = [NSMutableArray array];
+        [[NSNotificationCenter defaultCenter]addObserverForName:AppCanEngineRestartNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+            self.isLaunchingSubwidget = NO;
+            [self.subwidgetControllers removeAllObjects];
+        }];
     }
     return self;
 }
@@ -100,6 +104,8 @@
                     [popover reload];
                 }
                 [window.meBrwView reload];
+                [window.meTopSlibingBrwView reload];
+                [window.meBottomSlibingBrwView reload];
             }
             return;
         }

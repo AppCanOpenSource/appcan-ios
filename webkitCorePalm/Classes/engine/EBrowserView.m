@@ -379,11 +379,6 @@
     return [_meBrowserView meBrwCtrler];
 }
 
-- (void)setMeBrwCtrler:(EBrowserController *)inmeBrwCtrler
-{
-    [_meBrowserView setMeBrwCtrler:inmeBrwCtrler];
-}
-
 
 
 
@@ -412,10 +407,7 @@
     return [_meBrowserView mwWgt];
 }
 
-- (void)setMwWgt:(WWidget *)inmwWgt
-{
-    [_meBrowserView setMwWgt:inmwWgt];
-}
+
 //@property (nonatomic,copy) NSString *muexObjName;
 -(NSString *)muexObjName
 {

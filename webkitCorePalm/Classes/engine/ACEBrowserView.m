@@ -65,11 +65,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 @synthesize indicatorView ;
-@synthesize meBrwCtrler;
+
 
 @synthesize mcBrwWnd;
 @synthesize meBrwWnd;
-@synthesize mwWgt;
+
 @synthesize muexObjName;
 @synthesize mPageInfoDict;
 @synthesize mTopBounceView;
@@ -84,6 +84,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 @synthesize lastScrollPointY;
 @synthesize nowScrollPointY;
 
+
+- (WWidget *)mwWgt{
+    return self.meBrwCtrler.widget;
+}
+
+- (EBrowserController *)meBrwCtrler{
+    return self.meBrwWnd.meBrwCtrler;
+}
 
 
 - (JSContext *)JSContext{
@@ -197,9 +205,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)reset {
 	[self clean];
 	[self unRegisterKeyboardListener:nil];
-	meBrwCtrler = nil;
 	meBrwWnd = nil;
-	mwWgt = nil;
 	self.mType = 0;
 	mFlag = 0;
 	mTopBounceState = 0;
@@ -550,8 +556,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
     [self addSubview:self.indicatorView];
     
     self.scrollView.decelerationRate = 1.0;
-    meBrwCtrler = eInBrwCtrler;
-    mwWgt = inWgt;
     self.muexObjName = inUExObjName;
     mPageInfoDict = [[NSMutableDictionary alloc]initWithCapacity:F_PAGEINFO_DICT_SIZE];
     self.mType = inWndType;
@@ -676,7 +680,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
  */
 - (void)notifyPageStart {
 	mFlag &= ~F_EBRW_VIEW_FLAG_LOAD_FINISHED;
-	[meBrwCtrler.meBrw notifyLoadPageStartOfBrwView:self.superDelegate];
+	[self.meBrwCtrler.meBrw notifyLoadPageStartOfBrwView:self.superDelegate];
 
 
 }
@@ -714,7 +718,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 		case ACEEBrowserViewTypeMain:
             if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrowserView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
                 [self stringByEvaluatingJavaScriptFromString:@"if(window.uexStart){window.uexStart();}"];
-                meBrwCtrler.mFlag |= F_NEED_REPORT_APP_START;
+                self.meBrwCtrler.mFlag |= F_NEED_REPORT_APP_START;
             }
 			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
 			if ((meBrwWnd.mFlag & F_EBRW_WND_FLAG_HAS_PREOPEN) != 0) {
@@ -774,13 +778,13 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
     
     
-	[meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self.superDelegate];
+	[self.meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self.superDelegate];
 }
 
 - (void)notifyPageError {
 	switch (self.mType) {
 		case ACEEBrowserViewTypeMain:
-			[meBrwCtrler.meBrw notifyLoadPageErrorOfBrwView:self.superDelegate];
+			[self.meBrwCtrler.meBrw notifyLoadPageErrorOfBrwView:self.superDelegate];
 			break;
 		default:
 			return;
@@ -810,21 +814,21 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)loadWidgetWithQuery:(NSString*)inQuery {
 	NSURL *url = NULL;
-	if (!mwWgt) {
+	if (!self.mwWgt) {
 		return;
 	}
-	EBrowserWindowContainer *eBrwWndContainer = [meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict objectForKey:mwWgt.appId];
+    EBrowserWindowContainer *eBrwWndContainer = self.meBrwCtrler.rootWindowContainer;
 	if (!eBrwWndContainer) {
 		return;
 	}
 	if (inQuery && inQuery.length != 0) {
-		NSString *fullUrlStr = [NSString stringWithFormat:@"%@?%@",mwWgt.indexUrl,inQuery];
+		NSString *fullUrlStr = [NSString stringWithFormat:@"%@?%@",self.mwWgt.indexUrl,inQuery];
 		url = [BUtility stringToUrl:fullUrlStr];
 
 	} else {
-		url = [BUtility stringToUrl:mwWgt.indexUrl];
+		url = [BUtility stringToUrl:self.mwWgt.indexUrl];
 	}
-	if (mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+	if (self.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
 		FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
 		NSString *data = [encryptObj decryptWithPath:url appendData:nil];
 		EBrowserHistoryEntry *eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:url obfValue:YES];
@@ -836,9 +840,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
 
     //first view
-    int goType = eBrwWndContainer.meRootBrwWnd.meBrwView.mwWgt.wgtType;
+    int goType = eBrwWndContainer.meRootBrwWnd.meBrwView.self.mwWgt.wgtType;
     NSString *goViewName =[url absoluteString];
-    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWndContainer.meRootBrwWnd.meBrwView.mwWgt];
+    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:eBrwWndContainer.meRootBrwWnd.meBrwView.self.mwWgt];
     [BUtility setAppCanViewActive:goType opener:@"application://" name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
 }
 

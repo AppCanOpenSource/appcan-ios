@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 @property (nonatomic,weak) EBrowserWindow *meBackWnd;
 @property (nonatomic,strong) EBrowserHistory *meBrwHistory;
 @property (nonatomic,strong) NSString *mOAuthWndName;
-@property (nonatomic,strong) WWidget *mwWgt;
+@property (nonatomic,readonly) WWidget *mwWgt;
 
 @property (nonatomic,assign) int mFlag;
 @property (nonatomic,retain) NSMutableDictionary *mMuiltPopoverDict;

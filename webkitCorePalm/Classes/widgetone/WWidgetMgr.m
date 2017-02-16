@@ -29,6 +29,7 @@
 #import "FileEncrypt.h"
 #import "ACEConfigXML.h"
 #import "ACEDes.h"
+#import "AppCanEngine.h"
 
 NSString * webappShowAactivety;
 
@@ -67,12 +68,12 @@ NSString * webappShowAactivety;
     
     NSString *configPath = nil;
     if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
-        configPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+        configPath = [BUtility getDocumentsPath:[AppCanEngine.configuration.documentWidgetPath stringByAppendingPathComponent:@"config.xml"]];
     } else {
-        configPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+        configPath = [BUtility getResPath:[AppCanEngine.configuration.originWidgetPath stringByAppendingPathComponent:@"config.xml"]];
     }
     NSMutableDictionary * tmpWgtDict = [self wgtParameters:configPath];
-    NSString *mVer = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
+
 
     
 	//数据库里存在，
@@ -95,21 +96,26 @@ NSString * webappShowAactivety;
     if (logServerIp && ![wgtobj.logServerIp isEqualToString:logServerIp]) {
         wgtobj.logServerIp = logServerIp;
     }
-	if (wgtobj!=nil) {
-		wgtobj.openAdStatus = 0;//不显示广告
-		if ([wgtobj.ver isEqualToString:mVer]) {
-			self.mainWidget = wgtobj;
-			[widgetSql close_database];
-			return;
-		}
-		//remove table
-		const char *deleteTable = "drop table wgtTab";
-		[widgetSql operateSQL:deleteTable];
-	}
+//	if (wgtobj!=nil) {
+//		wgtobj.openAdStatus = 0;//不显示广告
+//		if ([wgtobj.ver isEqualToString:mVer]) {
+//			self.mainWidget = wgtobj;
+//			[widgetSql close_database];
+//			return;
+//		}
+//		//remove table
+//		const char *deleteTable = "drop table wgtTab";
+//		[widgetSql operateSQL:deleteTable];
+//	}
 	//得到mainWidget,config.xml
 	
 
-	NSString * tmpWgtPath = F_MAINWIDGET_NAME;
+	NSString * tmpWgtPath;
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
+        tmpWgtPath = AppCanEngine.configuration.documentWidgetPath;
+    }else{
+        tmpWgtPath = AppCanEngine.configuration.originWidgetPath;
+    }
     NSString * tmpWgtOneId = [BUtility appKey];
     if (tmpWgtOneId) {
         [tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
@@ -122,34 +128,29 @@ NSString * webappShowAactivety;
 	if (wgtobj.showMySpace == 1) {
 		wgtobj.showMySpace = (WIDGETREPORT_SPACESTATUS_OPEN | WIDGETREPORT_SPACESTATUS_EXTEN_OPEN);
 	} 
-	//写数据操作
-	[self writeWgtToDB:wgtobj createTab:YES];
+
     
-	//组合路径,第一次安装的时候 返回
-    
-	NSString * resPath = nil ;
+	NSString * basePath = nil;
     
     if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
-        resPath = [BUtility getDocumentsPath:@""];
+        basePath = [BUtility getDocumentsPath:@""];
     } else {
-        resPath = [BUtility getResPath:@""];
+        basePath = [BUtility getResPath:@""];
     }
     
-	wgtobj.widgetPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.widgetPath];
+    wgtobj.widgetPath = [basePath stringByAppendingPathComponent:wgtobj.widgetPath];
     
-	if ([BUtility isSimulator]) {
-		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH]) {
-			wgtobj.indexUrl = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.indexUrl];
-		}
-		wgtobj.iconPath = [NSString stringWithFormat:@"%@/%@",resPath,wgtobj.iconPath];
-	}else{
-		if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtobj.indexUrl hasPrefix:F_HTTPS_PATH]) {
-			wgtobj.indexUrl = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.indexUrl];
-		}
-		wgtobj.iconPath = [NSString stringWithFormat:@"file://%@/%@",resPath,wgtobj.iconPath];
-	}
+
+    if (![wgtobj.indexUrl hasPrefix:F_HTTP_PATH] && ![wgtobj.indexUrl hasPrefix:F_HTTPS_PATH]) {
+        wgtobj.indexUrl = [NSURL fileURLWithPath:[basePath stringByAppendingPathComponent:wgtobj.indexUrl]].standardizedURL.absoluteString;
+    }
+    wgtobj.iconPath = [NSURL fileURLWithPath:[basePath stringByAppendingPathComponent:wgtobj.iconPath]].standardizedURL.absoluteString;
+	
 	wgtobj.openAdStatus = 0;//不显示广告。3.30
 	self.mainWidget = wgtobj;
+    
+    //写数据操作
+    [self writeWgtToDB:wgtobj createTab:YES];
 	[widgetSql close_database];
 
 }

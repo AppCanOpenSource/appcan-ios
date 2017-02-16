@@ -12,12 +12,17 @@
 @class EBrowserController;
 
 
+
+APPCAN_EXPORT NSNotificationName const AppCanEngineRestartNotification;
+
+
 @interface AppCanEngine()
 @property (nonatomic,readonly,class)id<AppCanEngineConfiguration> configuration;
 @property (nonatomic,readonly,class)EBrowserController *rootWebViewController;
 
 
 + (void)rootPageDidFinishLoading;
++ (void)restart;
 @end
 
 

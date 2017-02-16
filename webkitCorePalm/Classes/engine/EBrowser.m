@@ -55,18 +55,17 @@
 
 
 - (void)stopAllNetService {
-    NSArray *brwWndContainerArray = [self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.mBrwWndContainerDict allValues];
-    for (EBrowserWindowContainer *brwWndContainer in brwWndContainerArray) {
-        NSArray *brwWndArray = [brwWndContainer.mBrwWndDict allValues];
-        for (EBrowserWindow* brwWnd in brwWndArray) {
-            [brwWnd.meBrwView stopAllNetService];
-            [brwWnd.meTopSlibingBrwView stopAllNetService];
-            [brwWnd.meBottomSlibingBrwView stopAllNetService];
-            for (EBrowserView *brwView in [brwWnd.mPopoverBrwViewDict allValues]) {
-                [brwView stopAllNetService];
-            }
+    EBrowserWindowContainer *brwWndContainer = self.meBrwCtrler.rootWindowContainer;
+    NSArray *brwWndArray = [brwWndContainer.mBrwWndDict allValues];
+    for (EBrowserWindow* brwWnd in brwWndArray) {
+        [brwWnd.meBrwView stopAllNetService];
+        [brwWnd.meTopSlibingBrwView stopAllNetService];
+        [brwWnd.meBottomSlibingBrwView stopAllNetService];
+        for (EBrowserView *brwView in [brwWnd.mPopoverBrwViewDict allValues]) {
+            [brwView stopAllNetService];
         }
     }
+    
 }
 
 
