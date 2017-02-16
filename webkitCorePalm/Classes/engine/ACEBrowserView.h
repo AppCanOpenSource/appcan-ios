@@ -39,10 +39,10 @@
     BOOL isSwiped;
 }
 @property (nonatomic,strong) UIActivityIndicatorView * indicatorView;
-@property (nonatomic,weak) EBrowserController *meBrwCtrler;
+@property (nonatomic,readonly) EBrowserController *meBrwCtrler;
 @property (nonatomic,strong) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,weak) EBrowserWindow *meBrwWnd;
-@property (nonatomic,weak) WWidget *mwWgt;
+@property (nonatomic,readonly) WWidget *mwWgt;
 @property (nonatomic,copy) NSString *muexObjName;
 @property (nonatomic,strong) NSMutableDictionary *mPageInfoDict;
 @property (nonatomic,strong) EBrowserViewBounceView *mTopBounceView;

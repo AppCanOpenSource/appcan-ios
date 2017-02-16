@@ -69,10 +69,10 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 
 
 
-@property (nonatomic,weak) EBrowserController *meBrwCtrler;
+@property (nonatomic,readonly) EBrowserController *meBrwCtrler;
 @property (nonatomic,weak) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,weak) EBrowserWindow *meBrwWnd;
-@property (nonatomic,weak) WWidget *mwWgt;
+@property (nonatomic,readonly) WWidget *mwWgt;
 
 @property (nonatomic,weak) NSMutableDictionary *mPageInfoDict;
 @property (nonatomic,strong) EBrowserViewBounceView *mTopBounceView;

@@ -1144,7 +1144,7 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSString *)appKey{
-    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication isKindOfClass:[WidgetOneDelegate class]];
+    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication.delegate isKindOfClass:[WidgetOneDelegate class]];
     if (!appCanDevelopmetMode && isWidgetOneDelegate) {
         Class Beqtucontent = NSClassFromString(@"Beqtucontent");
         if (Beqtucontent) {

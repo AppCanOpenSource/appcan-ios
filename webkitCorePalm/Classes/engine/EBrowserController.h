@@ -23,7 +23,6 @@
 @class EBrowser;
 @class WWidgetMgr;
 @class WWidget;
-@class WWidgetUpdate;
 @class ACEUINavigationController;
 @class EBrowserWindow;
 @class ACEWidgetInfo;

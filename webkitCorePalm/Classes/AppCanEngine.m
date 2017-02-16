@@ -109,13 +109,19 @@ static id<AppCanEngineConfiguration> _globalConfiguration;
 static EBrowserController *_rootController;
 static ACEUINavigationController *_mainWidgetController;
 
-
+NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestartNotification";
 
 @implementation AppCanEngine
 
 
 + (void)initializeWithConfiguration:(id<AppCanEngineConfiguration>)configuration{
     _globalConfiguration = configuration;
+    [self _initializeEngine];
+    
+}
+
+
++ (void)_initializeEngine{
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentsDirectory = [paths objectAtIndex:0];
@@ -141,8 +147,21 @@ static ACEUINavigationController *_mainWidgetController;
     _rootController.isAppCanRootViewController = YES;
     _mainWidgetController = [[ACEUINavigationController alloc] initWithEBrowserController:_rootController];
     _rootController.aceNaviController = _mainWidgetController;
-    
 }
+
++ (void)restart{
+    if ([BUtility getAppCanDevMode]) {
+        return;
+    }
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self _initializeEngine];
+        [[NSNotificationCenter defaultCenter] postNotificationName:AppCanEngineRestartNotification object:nil];
+    });
+}
+
+
 
 + (EBrowserController *)rootWebViewController{
     return _rootController;
@@ -328,40 +347,6 @@ static ACEUINavigationController *_mainWidgetController;
 
 + (void)applicationDidEnterBackground:(UIApplication *)application {
     
-//    
-//    id number = [[NSUserDefaults standardUserDefaults] objectForKey:F_UD_BadgeNumber];
-//    if (number) {
-//        
-//        [UIApplication sharedApplication].applicationIconBadgeNumber = [number intValue];
-//        [[NSUserDefaults standardUserDefaults] removeObjectForKey:F_UD_BadgeNumber];
-//        
-//    }
-//    
-//    [self.meBrwCtrler.meBrw stopAllNetService];
-//    //data analysis
-//    int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
-//    NSString * viewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-//    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
-//    [BUtility setAppCanViewBackground:type name:viewName closeReason:2 appInfo:appInfo];
-//    
-//    if ([[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
-//        
-//        NSArray * popViewArray = [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
-//        for (EBrowserView * ePopView in popViewArray) {
-//            int type =ePopView.mwWgt.wgtType;
-//            NSString *viewName =[ePopView.curUrl absoluteString];
-//            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
-//            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-//        }
-//        
-//    }
-//    
-//    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis")?:NSClassFromString(@"AppCanAnalysis");
-//    if (analysisClass) {//类不存在直接返回
-//        id analysisObject = [[analysisClass alloc] init];
-//        [analysisObject ac_invoke:@"setAppBecomeBackground"];
-//    }
-//    
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass applicationDidEnterBackground:application];
     }];
@@ -375,24 +360,7 @@ static ACEUINavigationController *_mainWidgetController;
         [pluginClass applicationWillEnterForeground:application];
     }];
     
-//    int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
-//    NSString * goViewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-//    if (!goViewName || [goViewName isKindOfClass:[NSNull class]]) {
-//        return;
-//        
-//    }
-//    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
-//    [BUtility setAppCanViewActive:type opener:@"application://" name:goViewName openReason:0 mainWin:0 appInfo:appInfo];
-//    if ([[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
-//        NSArray * popViewArray = [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
-//        for (EBrowserView * ePopView in popViewArray) {
-//            int type =ePopView.mwWgt.wgtType;
-//            NSString * viewName =[ePopView.curUrl absoluteString];
-//            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
-//            [BUtility setAppCanViewActive:type opener:goViewName name:viewName openReason:0 mainWin:1 appInfo:appInfo];
-//        }
-//        
-//    }
+
     
 }
 

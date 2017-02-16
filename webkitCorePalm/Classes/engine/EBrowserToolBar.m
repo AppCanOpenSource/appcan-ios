@@ -32,6 +32,8 @@
 #import "EBrowserController.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "ACESubwidgetManager.h"
+
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
 #define UEX_EXITAPP_ALERT_EXIT @"确定"
@@ -123,8 +125,12 @@
             [widgetOneConfirmView show];
             return;
         }
-        [eBrwWgtContainer.mBrwWndContainerDict removeObjectForKey:eCurBrwWndContainer.mwWgt.appId];
-        [eCurBrwWndContainer removeFromSuperview];
+        ACESubwidgetManager *manager = [ACESubwidgetManager defaultManager];
+        
+        
+        [manager finishWidget:[manager launchedWidgetWithID:eCurBrwWndContainer.mwWgt.appId] withCallbackResult:nil];
+        
+
         [[[eBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onStateChange!=null){uexWindow.onStateChange(0);}"];
     }
 }

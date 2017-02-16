@@ -31,7 +31,7 @@
 #import "WidgetSQL.h"
 #import "EBrowserToolBar.h"
 #import "WidgetOneDelegate.h"
-#import "WWidgetUpdate.h"
+
 #import "NSString+SBJSON.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -39,6 +39,7 @@
 
 #import <AppCanKit/ACInvoker.h>
 #import "ACEConfigXML.h"
+#import "ACEWidgetUpdateUtility.h"
 
 #define KAlertWithUpdateTag 1000
 
@@ -46,7 +47,12 @@
 
 @interface EBrowserController()
 @property (nonatomic,strong) NSMutableArray *mamList;
-@property (nonatomic,strong) WWidgetUpdate *mwWgtUpdate;
+
+@property (nonatomic,strong) id updateObj;
+@property (nonatomic,assign)BOOL startImageClosed;
+@property (nonatomic,assign)BOOL webViewCloseEventHandled;
+@property (nonatomic,assign)BOOL webViewCloseEventDisabled;
+@property (nonatomic,assign)BOOL appCloseEventHandled;
 @end
 
 
@@ -93,8 +99,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         _widget = widget;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHideEnterStatus:) name:@"componentStatusUpdate" object:nil];
         _mFlag = 0;
-        _mamList =[[NSMutableArray alloc] initWithCapacity:1];
-        _mwWgtUpdate = [[WWidgetUpdate alloc] init];
+        _mamList = [[NSMutableArray alloc] initWithCapacity:1];
         _meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[UIScreen mainScreen].bounds BrwCtrler:self];
         _meBrw = [[EBrowser alloc] init];
         _meBrw.meBrwCtrler = self;
@@ -124,7 +129,6 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
     _meBrwMainFrm = nil;
     _meBrw = nil;
     _mamList = nil;
-    _mwWgtUpdate = nil;
 }
 
 - (EBrowserWidgetContainer*)brwWidgetContainer {
@@ -152,9 +156,8 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 
 - (void)doUpdateWgt {
     
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    BOOL isNeedCopy = [self.mwWgtMgr isNeetUpdateWgt];
-    BOOL isCopyFinish = [[ud objectForKey:F_UD_WgtCopyFinish] boolValue];
+    BOOL isNeedCopy = ACEWidgetUpdateUtility.isWidgetCopyNeeded;
+    BOOL isCopyFinish = ACEWidgetUpdateUtility.isWidgetCopyFinished;
     
     /* 
      * 1.IDE 2.document存在widget
@@ -162,109 +165,37 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
      */
     
     BOOL appCanDevMode = [BUtility getAppCanDevMode];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *configPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@",F_MAINWIDGET_NAME,F_NAME_CONFIG]];
+
     
-    BOOL isExists = [fileManager fileExistsAtPath:configPath];
-    if (appCanDevMode && isExists) {
-        [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
+    
+    if (appCanDevMode && [ACEConfigXML isWidgetConfigXMLAvailable]) {
+        ACEWidgetUpdateUtility.isWidgetCopyFinished = YES;
         isCopyFinish = YES;
         isNeedCopy = NO;
     }
     if (isNeedCopy || !isCopyFinish) {
-        isCopyFinish = NO;
-        [ud setObject:@"NO" forKey:F_UD_WgtCopyFinish];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            BOOL isCopyFinishAndSuccess = [self copyWgtToDocument];
-            if (!isCopyFinishAndSuccess) {
-                return;
-            }
-            [ud setObject:@"YES" forKey:F_UD_WgtCopyFinish];
-            [ACEConfigXML updateWidgetConfigXML];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
-            });
-        });
-    }
-
-    //升级解压
-    NSString *updateWgtID = [ud objectForKey:F_UD_UpdateWgtID];
-    if (updateWgtID && isCopyFinish) {
-        //初始化Documents路径
-        NSArray *cacheList = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *folderPath = [cacheList objectAtIndex:0];
-        NSString *downWgtPath = [[NSString alloc] initWithFormat:@"%@/%@.zip",folderPath,updateWgtID];
-        NSFileManager *fileMgr =[NSFileManager defaultManager];
-        if ([fileMgr fileExistsAtPath:downWgtPath]) {
-            BOOL isOK = [self.mwWgtUpdate unZipUpdateWgt:downWgtPath];
-            if (isOK) {
-                ACENSLog(@"更新成功");
-                [self.mwWgtUpdate removeAllUD:updateWgtID];
-            }else {
-                ACENSLog(@"更新失败");
-                UIAlertView *alertView =[[UIAlertView alloc] initWithTitle:nil message:ACELocalized(@"文件解压失败") delegate:nil cancelButtonTitle:ACELocalized(@"确定") otherButtonTitles: nil];
-                alertView.tag = KAlertWithUpdateTag;
-                [alertView show];
-            }
+        NSError *error = nil;
+        isCopyFinish = [ACEWidgetUpdateUtility copyMainWidgetToDocumentWithError:&error];
+        ACEWidgetUpdateUtility.isWidgetCopyFinished = isCopyFinish;
+        if (!isCopyFinish) {
+            ACLogError(@"copy widget to documents failed: %@",error.localizedDescription);
+            return;
         }
+        [ACEConfigXML updateWidgetConfigXML];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
     }
-}
-
-- (BOOL)copyWgtToDocument {
     
-    NSError * error;
-    NSFileManager * fileMgr = [NSFileManager defaultManager];
-	NSString * wgtOldPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[AppCanEngine.configuration originWidgetPath]];
-    NSString * wgtNewPath = [BUtility getDocumentsPath:[AppCanEngine.configuration documentWidgetPath]];
-    
-
-    
-    BOOL folderFlag = NO;
-    
-    if (![fileMgr fileExistsAtPath:wgtNewPath isDirectory:&folderFlag] || !folderFlag) {
-        BOOL result = [fileMgr createDirectoryAtPath:wgtNewPath withIntermediateDirectories:YES attributes:nil error:&error];
-        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:wgtNewPath]];
-        if (!result || error) {
-            return NO;
+    if ([ACEWidgetUpdateUtility isMainWidgetNeedPatchUpdate]) {
+        ACEWidgetUpdateResult result = [ACEWidgetUpdateUtility installMainWidgetPatch];
+        if (result == ACEWidgetUpdateResultSuccess) {
+             self.widget = self.mwWgtMgr.mainWidget;
         }
+       
     }
     
-    if ([fileMgr fileExistsAtPath:wgtOldPath]) {
-        NSError * error;
-        NSDirectoryEnumerator * oldWgtEnumerator = [fileMgr enumeratorAtPath:wgtOldPath];
-        NSString * fileName = nil;
-        BOOL result;
-        while ((fileName = [oldWgtEnumerator nextObject])) {
-            NSString * oldFilePath = [wgtOldPath stringByAppendingPathComponent:fileName];
-            NSString * newFilePath = [wgtNewPath stringByAppendingPathComponent:fileName];
-            BOOL flag = YES;
-            if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
-                if (!flag) {
-                    if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
-                        if ([fileMgr fileExistsAtPath:newFilePath]) {
-                            result = [fileMgr removeItemAtPath:newFilePath error:&error];
-                            if (!result && error) {
-                                return NO;
-                            }
-                        }
-                        result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
-                        if (!result && error) {
-                            return NO;
-                        }
-                    }
-                } else {
-                    result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
-                    if (!result && error) {
-                        return NO;
-                    }
-                }
-            }
-        }
-    } else {
-        [BUtility exitWithClearData];
-        return NO;
-    }
-    return YES;
+    
+    
+    
 }
 
 
@@ -275,6 +206,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 
 - (void)presentStartImage{
+    self.startImageClosed = NO;
     self.meBrwMainFrm.hidden = YES;
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;
     NSString * launchImagePrefixFile = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UILaunchImageFile"] ;
@@ -287,16 +219,11 @@ static BOOL userCustomLoadingImageEnabled = NO;
         
         if ([userCustomLoadingImagePath hasPrefix:F_RES_PATH]) {
             userCustomLoadingImagePath = [userCustomLoadingImagePath substringFromIndex:F_RES_PATH.length];
-            BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
-            if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish){
-                userCustomLoadingImagePath = [[BUtility getDocumentsPath:@"widget/wgtRes"] stringByAppendingPathComponent:userCustomLoadingImagePath];
-            }else{
-                userCustomLoadingImagePath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,@"widget/wgtRes",userCustomLoadingImagePath]];
-            }
+            userCustomLoadingImagePath = [[WWidgetMgr sharedManager].mainWidget.absResourcePath stringByAppendingPathComponent:userCustomLoadingImagePath];
         }
         if ([userCustomLoadingImagePath hasPrefix:F_APP_PATH]) {
             userCustomLoadingImagePath = [userCustomLoadingImagePath substringFromIndex:F_APP_PATH.length];
-            userCustomLoadingImagePath = [[BUtility getDocumentsPath:@"widget"] stringByAppendingPathComponent:userCustomLoadingImagePath];
+            userCustomLoadingImagePath = [[WWidgetMgr sharedManager].mainWidget.absWidgetPath stringByAppendingPathComponent:userCustomLoadingImagePath];
         }
         userCustomLoadingImageEnabled = [[NSFileManager defaultManager]fileExistsAtPath:userCustomLoadingImagePath];
     }
@@ -384,23 +311,21 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 
 - (void)handleLoadingImageCloseEvent:(ACELoadingImageCloseEvent)event{
-    static BOOL loadingImageClosed = NO;
-    static BOOL webViewCloseEventHandled = NO;
-    static BOOL webViewCloseEventDisabled = NO;
-    static BOOL appCloseEventHandled = NO;
 
-    if (loadingImageClosed) {
+
+
+    if (self.startImageClosed) {
         return;
     }
     switch (event) {
         case ACELoadingImageCloseEventWebViewFinishLoading: {
-            if (webViewCloseEventHandled) {
+            if (self.webViewCloseEventHandled) {
                 break;
             }
-            webViewCloseEventHandled = YES;
+            self.webViewCloseEventHandled = YES;
             if (!userCustomLoadingImageEnabled){
                 [self closeLoadingImage];
-                loadingImageClosed = YES;
+                self.startImageClosed = YES;
             }
             
             break;
@@ -410,18 +335,18 @@ static BOOL userCustomLoadingImageEnabled = NO;
                 break;
             }
             userCustomLoadingImageEnabled = NO;
-            if ((webViewCloseEventDisabled && appCloseEventHandled)  || (!webViewCloseEventDisabled && webViewCloseEventHandled)) {
+            if ((self.webViewCloseEventDisabled && self.appCloseEventHandled)  || (!self.webViewCloseEventDisabled && self.webViewCloseEventHandled)) {
                 [self closeLoadingImage];
-                loadingImageClosed = YES;
+                self.startImageClosed = YES;
             }
             break;
         }
         case ACELoadingImageCloseEventAppLoadingTimeout: {
-            webViewCloseEventDisabled = YES;
-            appCloseEventHandled = YES;
+            self.webViewCloseEventDisabled = YES;
+            self.appCloseEventHandled = YES;
             if (!userCustomLoadingImageEnabled) {
                 [self closeLoadingImage];
-                loadingImageClosed = YES;
+                self.startImageClosed = YES;
             }
             break;
         }
@@ -474,16 +399,14 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-    if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
-        [self doUpdateWgt];
-    }
-
-    
-    
     [self.view addSubview:self.meBrwMainFrm];
     if (self.isAppCanRootViewController) {
         [self presentStartImage];
-        [self.meBrw start:self.mwWgtMgr.mainWidget];
+        if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
+            [self doUpdateWgt];
+            
+        }
+        [self.meBrw start:self.widget];
     }
     
 
@@ -517,14 +440,14 @@ static BOOL userCustomLoadingImageEnabled = NO;
             [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
         }
     }
-    if (AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) {//添加升级
+    if ((AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) && ![BUtility isSimulator]) {//添加升级
         NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
         Class  updateClass = NSClassFromString(@"EUExUpdate");
         if (!updateClass) {
             return;
         }
-        id analysisObject = [[updateClass alloc] init];
-        [analysisObject ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
+        self.updateObj = [[updateClass alloc] init];
+        [self.updateObj ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
     }
 }
 

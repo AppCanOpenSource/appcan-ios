@@ -10,27 +10,29 @@
 		420F733C1E4B254800B4C626 /* Changelog.plist in Resources */ = {isa = PBXBuildFile; fileRef = 420F733B1E4B254800B4C626 /* Changelog.plist */; };
 		4245EC961DED18C900C07B2D /* ACEBasicAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4245EC941DED18C900C07B2D /* ACEBasicAnimation.h */; };
 		4245EC971DED18C900C07B2D /* ACEBasicAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4245EC951DED18C900C07B2D /* ACEBasicAnimation.m */; };
-		4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4257D7221DF1148F004DE380 /* ACEWindowFilter.h */; };
+		4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4257D7221DF1148F004DE380 /* ACEWindowFilter.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4257D7251DF1148F004DE380 /* ACEWindowFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257D7231DF1148F004DE380 /* ACEWindowFilter.m */; };
 		4260408D1DEC297D00B49B5C /* ACEPOPAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 426040871DEC297D00B49B5C /* ACEPOPAnimation.h */; };
 		4260408E1DEC297D00B49B5C /* ACEPOPAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 426040881DEC297D00B49B5C /* ACEPOPAnimation.m */; };
 		426040911DEC297D00B49B5C /* BAnimationTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 4260408B1DEC297D00B49B5C /* BAnimationTransform.h */; };
 		426040921DEC297D00B49B5C /* BAnimationTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 4260408C1DEC297D00B49B5C /* BAnimationTransform.m */; };
-		426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 426040931DEC2BB300B49B5C /* ACEAnimation.h */; };
+		426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 426040931DEC2BB300B49B5C /* ACEAnimation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		426040961DEC2BB300B49B5C /* ACEAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 426040941DEC2BB300B49B5C /* ACEAnimation.m */; };
 		4272CCC01E2486A500712C54 /* AppCanEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCBE1E2486A500712C54 /* AppCanEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4272CCC11E2486A500712C54 /* AppCanEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4272CCBF1E2486A500712C54 /* AppCanEngine.m */; };
-		4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCD71E24C43900712C54 /* AppCanEnginePrivate.h */; };
+		4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCD71E24C43900712C54 /* AppCanEnginePrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4272CCF11E261D2F00712C54 /* ACEInterfaceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4272CCEF1E261D2F00712C54 /* ACEInterfaceOrientation.h */; };
 		4272CCF21E261D2F00712C54 /* ACEInterfaceOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4272CCF01E261D2F00712C54 /* ACEInterfaceOrientation.m */; };
 		427890771DEEB57700B8476D /* ACEViewControllerAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 427890751DEEB57700B8476D /* ACEViewControllerAnimator.h */; };
 		427890781DEEB57700B8476D /* ACEViewControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 427890761DEEB57700B8476D /* ACEViewControllerAnimator.m */; };
-		427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */; };
+		427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		427A79201DDE95B800E85BA4 /* ACESubwidgetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */; };
-		42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CF2D651DDADBD80060C610 /* ACEConfigXML.h */; };
+		42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42CF2D651DDADBD80060C610 /* ACEConfigXML.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42CF2D6A1DDADBD80060C610 /* ACEConfigXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D661DDADBD80060C610 /* ACEConfigXML.m */; };
 		42F18AAE1E27851900A20E2A /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F18AAC1E27851900A20E2A /* Ono.framework */; };
 		42F18AAF1E27851900A20E2A /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F18AAD1E27851900A20E2A /* pop.framework */; };
+		42F3E7A11E4D92420020B428 /* ACEWidgetUpdateUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F3E79F1E4D92420020B428 /* ACEWidgetUpdateUtility.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		42F3E7A21E4D92420020B428 /* ACEWidgetUpdateUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F3E7A01E4D92420020B428 /* ACEWidgetUpdateUtility.m */; };
 		42F787451D950B5D0094AA05 /* ACEKeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */; };
 		42F787461D950B5D0094AA05 /* EBrowserHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F718B1B93D000D7600 /* EBrowserHistory.m */; };
 		42F787481D950B5D0094AA05 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AF6EBE1A448EFD00DC7397 /* MMExampleDrawerVisualStateManager.m */; };
@@ -102,7 +104,6 @@
 		42F787A21D950B5D0094AA05 /* EBrowserViewBounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860318B1B93D000D7600 /* EBrowserViewBounceView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787A41D950B5D0094AA05 /* EBrowserToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85FD18B1B93D000D7600 /* EBrowserToolBar.m */; };
 		42F787A61D950B5D0094AA05 /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85AC18B1B93D000D7600 /* SBJSON.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42F787A71D950B5D0094AA05 /* WWidgetUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787A81D950B5D0094AA05 /* EBrowserWidgetContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860518B1B93D000D7600 /* EBrowserWidgetContainer.m */; };
 		42F787AA1D950B5D0094AA05 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85B218B1B93D000D7600 /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787AB1D950B5D0094AA05 /* BUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA859E18B1B93D000D7600 /* BUtility.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -197,7 +198,7 @@
 		42F788191D950B5D0094AA05 /* ASICacheDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA862418B1B93D000D7600 /* ASICacheDelegate.h */; };
 		42F7881A1D950B5D0094AA05 /* ACEPluginParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFEF311C1FF2C500294DE1 /* ACEPluginParser.h */; };
 		42F7881B1D950B5D0094AA05 /* ACEVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 426DF1AA1CFD841600F4C53E /* ACEVersion.h */; };
-		42F7881C1D950B5D0094AA05 /* BUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859D18B1B93D000D7600 /* BUtility.h */; };
+		42F7881C1D950B5D0094AA05 /* BUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859D18B1B93D000D7600 /* BUtility.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42F7881E1D950B5D0094AA05 /* ZipArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA865518B1B93D000D7600 /* ZipArchive.h */; };
 		42F7881F1D950B5D0094AA05 /* ASIDataCompressor.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA862518B1B93D000D7600 /* ASIDataCompressor.h */; };
 		42F788211D950B5D0094AA05 /* EBrowserHistoryEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F818B1B93D000D7600 /* EBrowserHistoryEntry.h */; };
@@ -258,9 +259,8 @@
 		42F788761D950B5D0094AA05 /* UIView+WebCacheOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C521B2A6D3500D5F279 /* UIView+WebCacheOperation.h */; };
 		42F788781D950B5D0094AA05 /* BUIAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859B18B1B93D000D7600 /* BUIAlertView.h */; };
 		42F7887A1D950B5D0094AA05 /* ASINetworkQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863318B1B93D000D7600 /* ASINetworkQueue.h */; };
-		42F7887B1D950B5D0094AA05 /* WWidgetUpdate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA868018B1B93D000D7600 /* WWidgetUpdate.h */; };
 		42F7887C1D950B5D0094AA05 /* SDWebImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C411B2A6D3500D5F279 /* SDWebImageManager.h */; };
-		42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */; };
+		42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42FAC5B71DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */; };
 /* End PBXBuildFile section */
 
@@ -354,6 +354,7 @@
 		427890761DEEB57700B8476D /* ACEViewControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEViewControllerAnimator.m; sourceTree = "<group>"; };
 		427A791D1DDE95B800E85BA4 /* ACESubwidgetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACESubwidgetManager.h; sourceTree = "<group>"; };
 		427A791E1DDE95B800E85BA4 /* ACESubwidgetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACESubwidgetManager.m; sourceTree = "<group>"; };
+		427CB8F81E4DAA3B009BC7BC /* libuexUpdate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuexUpdate.a; path = ../uexUpdate/EUExUpdate/uexUpdate/libuexUpdate.a; sourceTree = "<group>"; };
 		427F06C61C190D8D001E17B5 /* buildEngineForPluginDevelopment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildEngineForPluginDevelopment.sh; sourceTree = "<group>"; };
 		42A2F4A01BA2BDE5002CBB3B /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EUExBase+Bundle.m"; sourceTree = "<group>"; };
@@ -378,6 +379,8 @@
 		42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCHandler.m; sourceTree = "<group>"; };
 		42F18AAC1E27851900A20E2A /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ono.framework; path = "../../../Library/Developer/Xcode/DerivedData/AppCanPlugin-ebtpqpzgmgsghkebfigkjegezjpq/Build/Products/Debug-iphoneos/Ono.framework"; sourceTree = "<group>"; };
 		42F18AAD1E27851900A20E2A /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/AppCanPlugin-ebtpqpzgmgsghkebfigkjegezjpq/Build/Products/Debug-iphoneos/pop.framework"; sourceTree = "<group>"; };
+		42F3E79F1E4D92420020B428 /* ACEWidgetUpdateUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEWidgetUpdateUtility.h; sourceTree = "<group>"; };
+		42F3E7A01E4D92420020B428 /* ACEWidgetUpdateUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEWidgetUpdateUtility.m; sourceTree = "<group>"; };
 		42F788841D950B5D0094AA05 /* AppCanEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCanEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42F788A71D9513E80094AA05 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ono.framework; path = "../../appcan-test-report/_UnitTest/AppCanPlugin_4.0/AppCanPlugin/uexFrameworks/Ono.framework"; sourceTree = "<group>"; };
 		42F788A81D9513E80094AA05 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../appcan-test-report/_UnitTest/AppCanPlugin_4.0/AppCanPlugin/uexFrameworks/pop.framework"; sourceTree = "<group>"; };
@@ -500,8 +503,6 @@
 		5AAA867D18B1B93D000D7600 /* WWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidget.m; sourceTree = "<group>"; };
 		5AAA867E18B1B93D000D7600 /* WWidgetMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWidgetMgr.h; sourceTree = "<group>"; };
 		5AAA867F18B1B93D000D7600 /* WWidgetMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetMgr.m; sourceTree = "<group>"; };
-		5AAA868018B1B93D000D7600 /* WWidgetUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWidgetUpdate.h; sourceTree = "<group>"; };
-		5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetUpdate.m; sourceTree = "<group>"; };
 		5AE8735618B74DD20040BC9A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
 		76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAnalysisInfo.m; sourceTree = "<group>"; };
@@ -937,8 +938,8 @@
 				5AAA867D18B1B93D000D7600 /* WWidget.m */,
 				5AAA867E18B1B93D000D7600 /* WWidgetMgr.h */,
 				5AAA867F18B1B93D000D7600 /* WWidgetMgr.m */,
-				5AAA868018B1B93D000D7600 /* WWidgetUpdate.h */,
-				5AAA868118B1B93D000D7600 /* WWidgetUpdate.m */,
+				42F3E79F1E4D92420020B428 /* ACEWidgetUpdateUtility.h */,
+				42F3E7A01E4D92420020B428 /* ACEWidgetUpdateUtility.m */,
 			);
 			path = widgetone;
 			sourceTree = "<group>";
@@ -963,6 +964,7 @@
 		B220D27615A3152B00D02138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				427CB8F81E4DAA3B009BC7BC /* libuexUpdate.a */,
 				42F18AAC1E27851900A20E2A /* Ono.framework */,
 				42F18AAD1E27851900A20E2A /* pop.framework */,
 				42AFECB91E276333007A7D3F /* Ono.framework */,
@@ -1028,6 +1030,14 @@
 			files = (
 				42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */,
 				4272CCC01E2486A500712C54 /* AppCanEngine.h in Headers */,
+				427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */,
+				42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */,
+				42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */,
+				42F3E7A11E4D92420020B428 /* ACEWidgetUpdateUtility.h in Headers */,
+				4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */,
+				4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */,
+				426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */,
+				42F7881C1D950B5D0094AA05 /* BUtility.h in Headers */,
 				42F787E51D950B5D0094AA05 /* DataAnalysisInfo.h in Headers */,
 				42F787E71D950B5D0094AA05 /* EBrowserViewBounceView.h in Headers */,
 				42F787E81D950B5D0094AA05 /* ACEJSCHandler.h in Headers */,
@@ -1042,21 +1052,17 @@
 				42F787F21D950B5D0094AA05 /* ASIFormDataRequest.h in Headers */,
 				42F787F31D950B5D0094AA05 /* SDWebImageCompat.h in Headers */,
 				42F787F41D950B5D0094AA05 /* MBProgressHUD.h in Headers */,
-				4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */,
 				42F787F51D950B5D0094AA05 /* BToastView.h in Headers */,
 				42F787F61D950B5D0094AA05 /* JSONParser.h in Headers */,
 				42F787F71D950B5D0094AA05 /* ACEMultiPopoverScrollView.h in Headers */,
 				42F787F81D950B5D0094AA05 /* RESideMenu.h in Headers */,
 				42F787F91D950B5D0094AA05 /* ASIHTTPRequest.h in Headers */,
 				42F787FB1D950B5D0094AA05 /* ACEDes.h in Headers */,
-				42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */,
 				42F787FC1D950B5D0094AA05 /* EBrowserWindow.h in Headers */,
 				42F787FD1D950B5D0094AA05 /* WWidget.h in Headers */,
 				42F787FE1D950B5D0094AA05 /* WidgetSQL.h in Headers */,
 				42F787FF1D950B5D0094AA05 /* ASIDataDecompressor.h in Headers */,
-				426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */,
 				42F788001D950B5D0094AA05 /* Reachability.h in Headers */,
-				4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */,
 				42F788011D950B5D0094AA05 /* ACEPluginViewContainer.h in Headers */,
 				42F788021D950B5D0094AA05 /* SDImageCache.h in Headers */,
 				4260408D1DEC297D00B49B5C /* ACEPOPAnimation.h in Headers */,
@@ -1078,14 +1084,12 @@
 				42F788191D950B5D0094AA05 /* ASICacheDelegate.h in Headers */,
 				42F7881A1D950B5D0094AA05 /* ACEPluginParser.h in Headers */,
 				42F7881B1D950B5D0094AA05 /* ACEVersion.h in Headers */,
-				42F7881C1D950B5D0094AA05 /* BUtility.h in Headers */,
 				42F7881E1D950B5D0094AA05 /* ZipArchive.h in Headers */,
 				42F7881F1D950B5D0094AA05 /* ASIDataCompressor.h in Headers */,
 				42F788211D950B5D0094AA05 /* EBrowserHistoryEntry.h in Headers */,
 				42F788221D950B5D0094AA05 /* UIViewController+RESideMenu.h in Headers */,
 				42F788231D950B5D0094AA05 /* SBJsonParser.h in Headers */,
 				42F788241D950B5D0094AA05 /* NSObject+SBJSON.h in Headers */,
-				427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */,
 				42F788251D950B5D0094AA05 /* EBrowser.h in Headers */,
 				42F788261D950B5D0094AA05 /* ASIDownloadCache.h in Headers */,
 				42F788271D950B5D0094AA05 /* UIImageView+WebCache.h in Headers */,
@@ -1098,7 +1102,6 @@
 				42F7882E1D950B5D0094AA05 /* UpdateParser.h in Headers */,
 				42F7882F1D950B5D0094AA05 /* AsyncUdpSocket.h in Headers */,
 				42F788301D950B5D0094AA05 /* unzip.h in Headers */,
-				42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */,
 				42F788311D950B5D0094AA05 /* ACEJSCInvocation.h in Headers */,
 				42F788321D950B5D0094AA05 /* ACEDrawerViewController.h in Headers */,
 				42F788331D950B5D0094AA05 /* EBrowserController.h in Headers */,
@@ -1141,7 +1144,6 @@
 				42F788761D950B5D0094AA05 /* UIView+WebCacheOperation.h in Headers */,
 				42F788781D950B5D0094AA05 /* BUIAlertView.h in Headers */,
 				42F7887A1D950B5D0094AA05 /* ASINetworkQueue.h in Headers */,
-				42F7887B1D950B5D0094AA05 /* WWidgetUpdate.h in Headers */,
 				42F7887C1D950B5D0094AA05 /* SDWebImageManager.h in Headers */,
 				426040911DEC297D00B49B5C /* BAnimationTransform.h in Headers */,
 			);
@@ -1251,6 +1253,7 @@
 				42F787571D950B5D0094AA05 /* UIImageView+WebCache.m in Sources */,
 				42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */,
 				42F7875A1D950B5D0094AA05 /* PullDownRefreshHeaderView.m in Sources */,
+				42F3E7A21E4D92420020B428 /* ACEWidgetUpdateUtility.m in Sources */,
 				42F7875B1D950B5D0094AA05 /* RECommonFunctions.m in Sources */,
 				42F7875D1D950B5D0094AA05 /* MMDrawerController.m in Sources */,
 				42F7875F1D950B5D0094AA05 /* SDWebImageDecoder.m in Sources */,
@@ -1312,7 +1315,6 @@
 				4272CCC11E2486A500712C54 /* AppCanEngine.m in Sources */,
 				42F787A41D950B5D0094AA05 /* EBrowserToolBar.m in Sources */,
 				42F787A61D950B5D0094AA05 /* SBJSON.m in Sources */,
-				42F787A71D950B5D0094AA05 /* WWidgetUpdate.m in Sources */,
 				42F787A81D950B5D0094AA05 /* EBrowserWidgetContainer.m in Sources */,
 				426040921DEC297D00B49B5C /* BAnimationTransform.m in Sources */,
 				42F787AA1D950B5D0094AA05 /* SBJsonWriter.m in Sources */,

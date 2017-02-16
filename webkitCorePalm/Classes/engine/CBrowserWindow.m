@@ -203,7 +203,7 @@ static NSUInteger kMaxErrorRetryCount = 5;
         ONOXMLElement *configXML = [ACEConfigXML ACEOriginConfigXML];
         ONOXMLElement *errorXML = [configXML firstChildWithTag:@"error"];
         if (errorXML && errorXML[@"src"]) {
-            errorHTMLPath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,@"widget",errorXML[@"src"]]];
+            errorHTMLPath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,[AppCanEngine.configuration originWidgetPath],errorXML[@"src"]]];
         }
     });
     return errorHTMLPath;

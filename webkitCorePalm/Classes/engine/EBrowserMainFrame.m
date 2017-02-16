@@ -33,7 +33,7 @@
 
 
 @interface EBrowserMainFrame()
-
+@property (nonatomic,assign)BOOL startImageClosed;
 @end
 
 
@@ -52,6 +52,7 @@
             [self addSubview:self.meBrwToolBar];
 
         }
+        
 	}
 
 	return self;
@@ -107,20 +108,22 @@
 }
 
 - (void)notifyLoadingImageShouldClose{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        BOOL userCloseLoading = NO;
-        ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
-        ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
-        if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
-            userCloseLoading = YES;
-        }
-        if (!userCloseLoading) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-                [self.meBrwCtrler handleLoadingImageCloseEvent:ACELoadingImageCloseEventWebViewFinishLoading];
-            });
-        }
-    });
+    if (self.startImageClosed) {
+        return;
+    }
+    self.startImageClosed = YES;
+    BOOL userCloseLoading = NO;
+    ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
+    ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
+    if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
+        userCloseLoading = YES;
+    }
+    if (!userCloseLoading) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+            [self.meBrwCtrler handleLoadingImageCloseEvent:ACELoadingImageCloseEventWebViewFinishLoading];
+        });
+    }
+    
 }
 
 

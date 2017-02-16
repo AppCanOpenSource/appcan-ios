@@ -60,7 +60,9 @@
 @synthesize mFlag;
 @synthesize mMuiltPopoverDict;
 
-
+- (WWidget *)mwWgt{
+    return self.meBrwCtrler.widget;
+}
 
 - (void)dealloc {
     [meTopSlibingBrwView removeFromSuperview];
@@ -112,7 +114,7 @@
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = YES;
 		meBrwCtrler = eInBrwCtrler;
-		mwWgt = inWgt;
+	
 
         meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
 		

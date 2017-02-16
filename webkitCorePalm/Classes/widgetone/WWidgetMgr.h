@@ -93,4 +93,8 @@
 -(int)widgetNumber;
 //如果是配置增量升级的同时，配置升级插件引擎包，则需要判断是否拷贝，覆盖增量包;2013-1-26
 -(BOOL)isNeetUpdateWgt;
+
+
+- (void)loadMainWidget;
+
 @end

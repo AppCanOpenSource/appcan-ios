@@ -33,7 +33,7 @@
 
 
 #define F_WIDGETONE_APPS_NAME		@"apps"
-#define F_WIDGETONE_WIDGET_NAME		@"widget"
+
 
 //encriypt
  
