@@ -41,6 +41,7 @@
 #import "ACEConfigXML.h"
 #import "ACEWidgetUpdateUtility.h"
 
+#import "DataAnalysisInfo.h"
 #define KAlertWithUpdateTag 1000
 
 
@@ -398,56 +399,59 @@ static BOOL userCustomLoadingImageEnabled = NO;
 }
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+    [super viewDidLoad];
     [self.view addSubview:self.meBrwMainFrm];
+    
+    
+    
     if (self.isAppCanRootViewController) {
         [self presentStartImage];
         if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
             [self doUpdateWgt];
             
         }
-        [self.meBrw start:self.widget];
     }
-    
-
+    [self.meBrw start:self.widget];
     
     NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
     [self setExtraInfo:extraDic toEBrowserView:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView];
     
-    if ([BUtility getAppCanDevMode]) {
-        Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
-        if (!analysisClass) {
-            return;
+    if (self.isAppCanRootViewController) {
+        if ([BUtility getAppCanDevMode]) {
+            [ACEAnalysisObject() ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
         }
-        id analysisObject = [[analysisClass alloc] init];
-        [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
-    }
-    NSString * inKey = [BUtility appKey];
-    if (AppCanEngine.configuration.userStartReport) {
-        Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
-        if (analysisClass) {
+        NSString * inKey = [BUtility appKey];
+        if (AppCanEngine.configuration.userStartReport) {
+            Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
+            if (analysisClass) {
+                NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
+                id analysisObject = [[analysisClass alloc] init];
+                [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+                
+            }
+        }
+        if (AppCanEngine.configuration.userStartReport) {
+            static id emmDataAnalysisObj = nil;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
+                if (analysisClass) {
+                    emmDataAnalysisObj = [[analysisClass alloc] init];
+                }
+            });
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
-            id analysisObject = [[analysisClass alloc] init];
-            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
-
+            [emmDataAnalysisObj ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+            
         }
-    }
-    if (AppCanEngine.configuration.userStartReport) {
-        Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
-        if (analysisClass) {
-            NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
-            id analysisObject = [[analysisClass alloc] init];
-            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+        if ((AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) && ![BUtility isSimulator]) {//添加升级
+            NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
+            Class  updateClass = NSClassFromString(@"EUExUpdate");
+            if (!updateClass) {
+                return;
+            }
+            self.updateObj = [[updateClass alloc] init];
+            [self.updateObj ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
         }
-    }
-    if ((AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) && ![BUtility isSimulator]) {//添加升级
-        NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
-        Class  updateClass = NSClassFromString(@"EUExUpdate");
-        if (!updateClass) {
-            return;
-        }
-        self.updateObj = [[updateClass alloc] init];
-        [self.updateObj ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
     }
 }
 

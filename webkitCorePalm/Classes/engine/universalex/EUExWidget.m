@@ -387,23 +387,19 @@ static BOOL isAppLaunchedByPush = NO;
     startWidgetResult = ret ? @0 : @1;
     
     
-//子widget启动上报代码
-//AppCanAnalysis
-    Class  analysisClass =  NSClassFromString(@"AppCanAnalysis") ?:NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
-    if (analysisClass) {
-        
-        //过滤掉无appkey的子应用上报(plugin类型)
-        if (self.EBrwView.meBrwCtrler.isAppCanRootViewController || !inAppkey || inAppkey.length == 0) {
-            return;
-        }
-        id analysisObject = [[analysisClass alloc] init];
-        
-        [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
-        [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
-        [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
-        [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
-        
+    //子widget启动上报代码
+    //过滤掉无appkey的子应用上报(plugin类型)
+    if (self.EBrwView.meBrwCtrler.isAppCanRootViewController || !inAppkey || inAppkey.length == 0) {
+        return;
     }
+    id analysisObject = ACEAnalysisObject();
+    
+    [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
+    [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
+    [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
+    [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
+    
+    
 
 }
 
@@ -545,16 +541,7 @@ static BOOL isAppLaunchedByPush = NO;
 
 - (void)checkMAMUpdate:(NSMutableArray *)inArguments{
     
-    Class  analysisClass =  NSClassFromString(@"UexDataAnalysisAppCanAnalysis");//判断类是否存在，如果存在子widget上报
-    if (!analysisClass) {
-        analysisClass =  NSClassFromString(@"AppCanAnalysis");
-        if (!analysisClass) {
-            return;
-        }
-    }
-    
-    id analysisObject = [[analysisClass alloc] init];
-    [analysisObject ac_invoke:@"startWithAppKey:" arguments:ACArgsPack([BUtility appKey])];
+    [ACEAnalysisObject() ac_invoke:@"startWithAppKey:" arguments:ACArgsPack([BUtility appKey])];
     
 }
 

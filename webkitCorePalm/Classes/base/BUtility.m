@@ -25,7 +25,6 @@
 
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "WWidget.h"
-//#import "AppCanAnalysis.h"
 //#import "AppCanBase.h"
 #import "EBrowserView.h"
 #import "EBrowserWindowContainer.h"
@@ -52,6 +51,7 @@
 #import "FileEncrypt.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <AppCanKit/ACInvoker.h>
+#import "DataAnalysisInfo.h"
 
 
 void rc4_setup( struct rc4_state *s, unsigned char *key, int length ) 
@@ -1205,20 +1205,12 @@ static NSString *clientCertificatePwd = nil;
                 goUrlStr =[goUrlStr substringFromIndex:(dest+7)];
             }
         }
-        Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-        if (!analysisClass) {
-            analysisClass = NSClassFromString(@"AppCanAnalysis");
-            if (!analysisClass) {
-                return;
-            }
-        }
-        id analysisObject = class_createInstance(analysisClass,0);
+
         NSString *appcanViewBeconeActiveSelector = @"setAppCanViewBecomeActive:goView:startReason:mainWin:";
-        if ([analysisObject respondsToSelector:NSSelectorFromString(appcanViewBeconeActiveSelector)]) {
-            [analysisObject ac_invoke:appcanViewBeconeActiveSelector arguments:ACArgsPack(fromUrlStr,goUrlStr,@(inOpenReason),@(inMainWnd))];
+        if ([ACEAnalysisObject() respondsToSelector:NSSelectorFromString(appcanViewBeconeActiveSelector)]) {
+            [ACEAnalysisObject() ac_invoke:appcanViewBeconeActiveSelector arguments:ACArgsPack(fromUrlStr,goUrlStr,@(inOpenReason),@(inMainWnd))];
             //兼容旧的数据统计&兼容大众版的数据统计
         } else {
-            [analysisObject release];
             //新的数据统计使用通知告知统计插件
             NSDictionary * pageInfo = [NSDictionary dictionaryWithObjectsAndKeys:fromUrlStr,@"fromPage",goUrlStr,@"goPage",[NSString stringWithFormat:@"%d",inOpenReason],@"openReason",[NSString stringWithFormat:@"%d", inMainWnd],@"mainWindow",appInfo,@"appInfo", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanDataAnalysisPageBecomeActive" object:pageInfo];
@@ -1235,19 +1227,11 @@ static NSString *clientCertificatePwd = nil;
                 closeUrl =[closeUrl substringFromIndex:(dest+7)];
             }
         }
-        Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis");
-        if (!analysisClass) {
-            analysisClass = NSClassFromString(@"AppCanAnalysis");
-            if (!analysisClass) {
-                return;
-            }
-        }
-        id analysisObject = class_createInstance(analysisClass,0);
+
         NSString *appcanViewBecomeBackgroundSelector = @"setAppCanViewBecomeBackground:closeReason:";
-        if ([analysisObject respondsToSelector:NSSelectorFromString(appcanViewBecomeBackgroundSelector)]) {
-            [analysisObject ac_invoke:appcanViewBecomeBackgroundSelector arguments:ACArgsPack(closeUrl,@(inCloseReason))];
+        if ([ACEAnalysisObject() respondsToSelector:NSSelectorFromString(appcanViewBecomeBackgroundSelector)]) {
+            [ACEAnalysisObject() ac_invoke:appcanViewBecomeBackgroundSelector arguments:ACArgsPack(closeUrl,@(inCloseReason))];
         } else {
-            [analysisObject release];
             NSDictionary * pageInfo = [NSDictionary dictionaryWithObjectsAndKeys:closeUrl,@"closeUrl",[NSString stringWithFormat:@"%d",inCloseReason],@"closeReason",appInfo,@"appInfo", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanDataAnalysisPageBackground" object:pageInfo];
         }

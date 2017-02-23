@@ -328,14 +328,7 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 }
 
 + (void)applicationDidBecomeActive:(UIApplication *)application {
-//    
-//    //data analysis
-//    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis")?:NSClassFromString(@"AppCanAnalysis");
-//    if (analysisClass) {
-//        id analysisObject = [[analysisClass alloc] init];
-//        [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
-//    }
-//    
+  
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass applicationDidBecomeActive:application];
     }];
@@ -368,38 +361,6 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
     [self enumeratePluginClassesResponsingToSelector:_cmd withBlock:^(Class pluginClass, BOOL *stop) {
         [pluginClass applicationWillTerminate:application];
     }];
-    
-//    
-//    //data analysis
-//    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
-//    if (analysisClass) {//类不存在直接返回
-//        id analysisObject = [[analysisClass alloc] init];
-//        [analysisObject ac_invoke:@"setAppBecomeBackground"];
-//    }
-//    
-//    int type = [[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
-//    NSString * viewName =[[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
-//    NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt];
-//    [BUtility setAppCanViewBackground:type name:viewName closeReason:2 appInfo:appInfo];
-//    
-//    if ([[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict) {
-//        
-//        NSArray * popViewArray = [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].mPopoverBrwViewDict allValues];
-//        
-//        for (EBrowserView *ePopView in popViewArray) {
-//            
-//            int type =ePopView.mwWgt.wgtType;
-//            NSString *viewName =[ePopView.curUrl absoluteString];
-//            NSDictionary *appInfo = [DataAnalysisInfo getAppInfoWithCurWgt:ePopView.mwWgt];
-//            [BUtility setAppCanViewBackground:type name:viewName closeReason:0 appInfo:appInfo];
-//            
-//        }
-//        
-//    }
-//    
-//    [UIApplication sharedApplication].applicationIconBadgeNumber = -1;
-//    [[[self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.onTerminate();"];
-    
 }
 
 + (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
