@@ -360,7 +360,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 - (EBrowserView *)EBrwView{
     id brwView = [self webViewEngine];
     BOOL isEBrowserView = [brwView isKindOfClass:[EBrowserView class]];
-    NSAssert(isEBrowserView,@"uexWindow only use for EBrowserView *");
+    //NSAssert(isEBrowserView,@"uexWindow only use for EBrowserView *");
     return isEBrowserView ? brwView : nil;
 }
 
@@ -820,6 +820,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (void)close:(NSMutableArray *)inArguments{
+    double closeDelaySeconds = 0.25;
+    if (ACSystemVersion() < 9) {
+        closeDelaySeconds = 0.5;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(closeDelaySeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self _closeInternal:inArguments];
+    });
+}
+
+- (void)_closeInternal:(NSMutableArray *)inArguments{
     
     if (!self.EBrwView) {
         return;
