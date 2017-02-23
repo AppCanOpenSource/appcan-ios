@@ -106,7 +106,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 
 - (void)initializeJSCHandler{
-    _JSContext = nil;
+    if(_JSContext){
+        [self.JSCHandler clean];
+        _JSContext = nil;
+    }
+    
     JSContext *context = self.JSContext;
 
     if(!context){
@@ -184,7 +188,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
     self.indicatorView = nil;
     [self.JSCHandler clean];
-    self.JSContext[ACEJSCHandlerInjectField] = nil;
     self.JSCHandler = nil;
     self.JSContext = nil;
     [self reset];
