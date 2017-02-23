@@ -219,11 +219,9 @@
     
     
     
-    Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
-    if (analysisClass) {
-        id analysisObject = [[analysisClass alloc] init];
-        [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
-    }
+
+    [ACEAnalysisObject() ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
+    
     
 
 
@@ -331,11 +329,9 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     //data analysis
-    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis")?:NSClassFromString(@"AppCanAnalysis");
-    if (analysisClass) {
-        id analysisObject = [[analysisClass alloc] init];
-        [analysisObject ac_invoke:@"setAppBecomeActive" arguments:nil];
-    }
+
+    [ACEAnalysisObject() ac_invoke:@"setAppBecomeActive" arguments:nil];
+    
     [AppCanEngine applicationDidBecomeActive:application];
 }
 
@@ -370,11 +366,9 @@
         
     }
     
-    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis")?:NSClassFromString(@"AppCanAnalysis");
-    if (analysisClass) {//类不存在直接返回
-        id analysisObject = [[analysisClass alloc] init];
-        [analysisObject ac_invoke:@"setAppBecomeBackground"];
-    }
+
+    [ACEAnalysisObject() ac_invoke:@"setAppBecomeBackground"];
+
     
 
     [AppCanEngine applicationDidEnterBackground:application];
@@ -414,12 +408,9 @@
 
     
     
-    //data analysis
-    Class  analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
-    if (analysisClass) {//类不存在直接返回
-        id analysisObject = [[analysisClass alloc] init];
-        [analysisObject ac_invoke:@"setAppBecomeBackground"];
-    }
+
+    [ACEAnalysisObject() ac_invoke:@"setAppBecomeBackground"];
+    
     
     int type = [[AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.mwWgt.wgtType;
     NSString * viewName =[[[AppCanEngine.rootWebViewController.meBrwMainFrm.meBrwWgtContainer aboveWindowContainer] aboveWindow].meBrwView.curUrl absoluteString];
