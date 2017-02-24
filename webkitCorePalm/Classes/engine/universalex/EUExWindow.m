@@ -2153,7 +2153,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
 }
 
-- (void)setbounceParams:(NSMutableArray *)inArguments {
+- (void)setBounceParams:(NSMutableArray *)inArguments {
     
     ACArgsUnpack(NSNumber *inType,NSDictionary *bounceParams) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(inType);
