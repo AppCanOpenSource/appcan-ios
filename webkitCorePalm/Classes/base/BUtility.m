@@ -701,9 +701,9 @@ static NSString *clientCertificatePwd = nil;
         NSString *wgtResPath = nil;
         BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
         if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
-            wgtResPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/wgtRes/%@",AppCanEngine.configuration.originWidgetPath,inUrl]];
+            wgtResPath = [BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/wgtRes/%@",AppCanEngine.configuration.documentWidgetPath,inUrl]];
         }else {
-            wgtResPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/wgtRes/%@",AppCanEngine.configuration.documentWidgetPath,inUrl]];
+            wgtResPath = [BUtility getResPath:[NSString stringWithFormat:@"%@/wgtRes/%@",AppCanEngine.configuration.originWidgetPath,inUrl]];
         }
 		return wgtResPath;
 	}
