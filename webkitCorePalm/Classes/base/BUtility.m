@@ -312,14 +312,10 @@ static NSString *rc4JSKey = @"uexSecure={ls:localStorage,open:function(p){try{th
 #pragma appCanDevMode
 static BOOL appCanDevelopmetMode = NO;
 +(void)setAppCanDevMode:(NSString*)inValue{
-	if (inValue && [inValue isEqualToString:@"YES"]) {
-		appCanDevelopmetMode = YES;
-	}else {
-		appCanDevelopmetMode = NO;
-	}
+    //deprecated
 }
 +(BOOL)getAppCanDevMode{
-	return appCanDevelopmetMode;
+    return [AppCanEngine.configuration useInAppCanIDE];
 }
 
 

@@ -216,10 +216,6 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 #pragma mark - Application Delegate Event
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-
-    if(self.configuration.useInAppCanIDE){
-        [BUtility setAppCanDevMode:@"YES"];
-    }
     [ACEDes enable];
     
     if (self.configuration.useCloseAppWithJaibroken && [BUtility isJailbroken]) {
