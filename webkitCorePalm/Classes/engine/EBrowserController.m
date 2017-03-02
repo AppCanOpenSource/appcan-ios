@@ -361,10 +361,28 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)closeLoadingImage{
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mStartView removeFromSuperview];
-        self.mStartView = nil;
+        
         self.meBrwMainFrm.hidden = NO;
-
+        
+        static NSString *const kACELaunchImageFadingDurationInfoPlistKey = @"ACELaunchImageFading";
+        NSTimeInterval duration = numberArg([[NSBundle mainBundle] infoDictionary][kACELaunchImageFadingDurationInfoPlistKey]).doubleValue / 1000;
+        
+        void (^removal)() = ^{
+            [self.mStartView removeFromSuperview];
+            self.mStartView = nil;
+        };
+        
+        
+        if ( duration > 0) {
+            [UIView animateWithDuration:duration animations:^{
+                self.mStartView.alpha = 0;
+            } completion:^(BOOL finished) {
+                removal();
+            }];
+        }else{
+            removal();
+        }
+        
     });
 
 }

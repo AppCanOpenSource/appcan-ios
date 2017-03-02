@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.1.5</key>
+	<array>
+		<string>修正首次启动应用时初始化时间过长的问题</string>
+		<string>App启动页现在支持淡出动画效果</string>
+	</array>
 	<key>4.1.4</key>
 	<array>
 		<string>修复热升级后res://路径无法正确解析的问题</string>
