@@ -175,23 +175,28 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         isNeedCopy = NO;
     }
     if (isNeedCopy || !isCopyFinish) {
-        NSError *error = nil;
-        isCopyFinish = [ACEWidgetUpdateUtility copyMainWidgetToDocumentWithError:&error];
-        ACEWidgetUpdateUtility.isWidgetCopyFinished = isCopyFinish;
-        if (!isCopyFinish) {
-            ACLogError(@"copy widget to documents failed: %@",error.localizedDescription);
-            return;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSError *error = nil;
+            BOOL isCopyFinish = [ACEWidgetUpdateUtility copyMainWidgetToDocumentWithError:&error];
+            ACEWidgetUpdateUtility.isWidgetCopyFinished = isCopyFinish;
+            if (!isCopyFinish) {
+                ACLogError(@"copy widget to documents failed: %@",error.localizedDescription);
+                return;
+            }
+            [ACEConfigXML updateWidgetConfigXML];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
+            });
+        });
+        
+    }else{
+        if ([ACEWidgetUpdateUtility isMainWidgetNeedPatchUpdate]) {
+            ACEWidgetUpdateResult result = [ACEWidgetUpdateUtility installMainWidgetPatch];
+            if (result == ACEWidgetUpdateResultSuccess) {
+                self.widget = self.mwWgtMgr.mainWidget;
+            }
+            
         }
-        [ACEConfigXML updateWidgetConfigXML];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
-    }
-    
-    if ([ACEWidgetUpdateUtility isMainWidgetNeedPatchUpdate]) {
-        ACEWidgetUpdateResult result = [ACEWidgetUpdateUtility installMainWidgetPatch];
-        if (result == ACEWidgetUpdateResultSuccess) {
-             self.widget = self.mwWgtMgr.mainWidget;
-        }
-       
     }
     
     
