@@ -42,7 +42,7 @@
 		42F7874E1D950B5D0094AA05 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; };
 		42F7874F1D950B5D0094AA05 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		42F787501D950B5D0094AA05 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
-		42F787521D950B5D0094AA05 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42F787521D950B5D0094AA05 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; };
 		42F787531D950B5D0094AA05 /* EUExBase+Bundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2F4A11BA2BDE5002CBB3B /* EUExBase+Bundle.m */; };
 		42F787541D950B5D0094AA05 /* UpdateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85BC18B1B93D000D7600 /* UpdateParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F787551D950B5D0094AA05 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862E18B1B93D000D7600 /* ASIHTTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };

@@ -64,7 +64,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 
 @interface ACEJSCHandler()<ACEJSCHandler>
-
+@property (nonatomic,assign)BOOL disposed;
 @end
 
 
@@ -153,6 +153,9 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 - (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options{
+    if(self.disposed){
+        return nil;
+    }
     if(!ACEJSCGlobalPlugins){
         [self.class initializeGlobalPlugins];
     }
@@ -417,7 +420,9 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
     self.engine = nil;
+    self.ctx[ACEJSCHandlerInjectField] = nil;
     self.ctx = nil;
+    self.disposed = YES;
     
 
 }

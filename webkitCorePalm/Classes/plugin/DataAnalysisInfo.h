@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "WWidget.h"
 
+
+
+
+APPCAN_EXPORT id ACEAnalysisObject();
+
 @interface DataAnalysisInfo : NSObject
 
 + (NSDictionary *)getAppInfoWithCurWgt:(WWidget *)mwWgt;

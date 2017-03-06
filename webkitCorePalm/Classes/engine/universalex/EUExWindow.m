@@ -360,7 +360,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 - (EBrowserView *)EBrwView{
     id brwView = [self webViewEngine];
     BOOL isEBrowserView = [brwView isKindOfClass:[EBrowserView class]];
-    NSAssert(isEBrowserView,@"uexWindow only use for EBrowserView *");
+    //NSAssert(isEBrowserView,@"uexWindow only use for EBrowserView *");
     return isEBrowserView ? brwView : nil;
 }
 
@@ -820,6 +820,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 
 
 - (void)close:(NSMutableArray *)inArguments{
+    double closeDelaySeconds = 0.25;
+    if (ACSystemVersion() < 9) {
+        closeDelaySeconds = 0.5;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(closeDelaySeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self _closeInternal:inArguments];
+    });
+}
+
+- (void)_closeInternal:(NSMutableArray *)inArguments{
     
     if (!self.EBrwView) {
         return;
@@ -888,12 +898,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_CLOSING;
             eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
             eBrwWnd.meFrontWnd.meBackWnd = eBrwWnd.meBackWnd;
-            [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
             eBrwWnd.mFlag = 0;
-            
+            [eBrwWnd removeFromSuperview];
             [ACEAnimations addClosingAnimationWithID:animiId fromView:eBrwWnd toView:eBrwWndContainer duration:aniDuration configuration:nil completionHandler:^(BOOL finished) {
+                [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
                 [eBrwWnd clean];
-                [eBrwWnd removeFromSuperview];
                 [self closeWindowAfterAnimation:eBrwWnd];
                 NSArray * allLivingWindows = [eBrwWndContainer subviews];
                 EBrowserWindow * presentLayerWindows = [allLivingWindows lastObject];
@@ -2144,7 +2153,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
 }
 
-- (void)setbounceParams:(NSMutableArray *)inArguments {
+- (void)setBounceParams:(NSMutableArray *)inArguments {
     
     ACArgsUnpack(NSNumber *inType,NSDictionary *bounceParams) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(inType);

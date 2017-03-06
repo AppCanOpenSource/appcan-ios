@@ -107,8 +107,8 @@ extension EngineInfo{
         
         guard let lastBuildDate = ud.string(forKey: lastBuildDateKey),lastBuildDate == date else{
             ud.set(date, forKey: lastBuildDateKey)
-            ud.set(0, forKey: buildNumberKey)
-            buildNumber = 0
+            ud.set(1, forKey: buildNumberKey)
+            buildNumber = 1
             return
         }
         let number = ud.integer(forKey: buildNumberKey) + 1

@@ -41,6 +41,7 @@
 #import "ACEConfigXML.h"
 #import "ACEWidgetUpdateUtility.h"
 
+#import "DataAnalysisInfo.h"
 #define KAlertWithUpdateTag 1000
 
 
@@ -174,23 +175,28 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         isNeedCopy = NO;
     }
     if (isNeedCopy || !isCopyFinish) {
-        NSError *error = nil;
-        isCopyFinish = [ACEWidgetUpdateUtility copyMainWidgetToDocumentWithError:&error];
-        ACEWidgetUpdateUtility.isWidgetCopyFinished = isCopyFinish;
-        if (!isCopyFinish) {
-            ACLogError(@"copy widget to documents failed: %@",error.localizedDescription);
-            return;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSError *error = nil;
+            BOOL isCopyFinish = [ACEWidgetUpdateUtility copyMainWidgetToDocumentWithError:&error];
+            ACEWidgetUpdateUtility.isWidgetCopyFinished = isCopyFinish;
+            if (!isCopyFinish) {
+                ACLogError(@"copy widget to documents failed: %@",error.localizedDescription);
+                return;
+            }
+            [ACEConfigXML updateWidgetConfigXML];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
+            });
+        });
+        
+    }else{
+        if ([ACEWidgetUpdateUtility isMainWidgetNeedPatchUpdate]) {
+            ACEWidgetUpdateResult result = [ACEWidgetUpdateUtility installMainWidgetPatch];
+            if (result == ACEWidgetUpdateResultSuccess) {
+                self.widget = self.mwWgtMgr.mainWidget;
+            }
+            
         }
-        [ACEConfigXML updateWidgetConfigXML];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"AppCanWgtCopyFinishedNotification" object:nil];
-    }
-    
-    if ([ACEWidgetUpdateUtility isMainWidgetNeedPatchUpdate]) {
-        ACEWidgetUpdateResult result = [ACEWidgetUpdateUtility installMainWidgetPatch];
-        if (result == ACEWidgetUpdateResultSuccess) {
-             self.widget = self.mwWgtMgr.mainWidget;
-        }
-       
     }
     
     
@@ -355,10 +361,28 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 - (void)closeLoadingImage{
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mStartView removeFromSuperview];
-        self.mStartView = nil;
+        
         self.meBrwMainFrm.hidden = NO;
-
+        
+        static NSString *const kACELaunchImageFadingDurationInfoPlistKey = @"ACELaunchImageFading";
+        NSTimeInterval duration = numberArg([[NSBundle mainBundle] infoDictionary][kACELaunchImageFadingDurationInfoPlistKey]).doubleValue / 1000;
+        
+        void (^removal)() = ^{
+            [self.mStartView removeFromSuperview];
+            self.mStartView = nil;
+        };
+        
+        
+        if ( duration > 0) {
+            [UIView animateWithDuration:duration animations:^{
+                self.mStartView.alpha = 0;
+            } completion:^(BOOL finished) {
+                removal();
+            }];
+        }else{
+            removal();
+        }
+        
     });
 
 }
@@ -398,56 +422,59 @@ static BOOL userCustomLoadingImageEnabled = NO;
 }
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+    [super viewDidLoad];
     [self.view addSubview:self.meBrwMainFrm];
+    
+    
+    
     if (self.isAppCanRootViewController) {
         [self presentStartImage];
         if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
             [self doUpdateWgt];
             
         }
-        [self.meBrw start:self.widget];
     }
-    
-
+    [self.meBrw start:self.widget];
     
     NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
     [self setExtraInfo:extraDic toEBrowserView:self.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView];
     
-    if ([BUtility getAppCanDevMode]) {
-        Class analysisClass = NSClassFromString(@"UexDataAnalysisAppCanAnalysis") ?: NSClassFromString(@"AppCanAnalysis");
-        if (!analysisClass) {
-            return;
+    if (self.isAppCanRootViewController) {
+        if ([BUtility getAppCanDevMode]) {
+            [ACEAnalysisObject() ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
         }
-        id analysisObject = [[analysisClass alloc] init];
-        [analysisObject ac_invoke:@"setErrorReport:" arguments:ACArgsPack(@(YES))];
-    }
-    NSString * inKey = [BUtility appKey];
-    if (AppCanEngine.configuration.userStartReport) {
-        Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
-        if (analysisClass) {
+        NSString * inKey = [BUtility appKey];
+        if (AppCanEngine.configuration.userStartReport) {
+            Class analysisClass = NSClassFromString(@"EUExDataAnalysis");
+            if (analysisClass) {
+                NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
+                id analysisObject = [[analysisClass alloc] init];
+                [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+                
+            }
+        }
+        if (AppCanEngine.configuration.userStartReport) {
+            static id emmDataAnalysisObj = nil;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
+                if (analysisClass) {
+                    emmDataAnalysisObj = [[analysisClass alloc] init];
+                }
+            });
             NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
-            id analysisObject = [[analysisClass alloc] init];
-            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
-
+            [emmDataAnalysisObj ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+            
         }
-    }
-    if (AppCanEngine.configuration.userStartReport) {
-        Class analysisClass = NSClassFromString(@"UexEMMDataAnalysis");
-        if (analysisClass) {
-            NSMutableArray * array = [NSMutableArray arrayWithObjects:inKey,self.mwWgtMgr,self,nil];
-            id analysisObject = [[analysisClass alloc] init];
-            [analysisObject ac_invoke:@"startEveryReport:" arguments:ACArgsPack(array)];
+        if ((AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) && ![BUtility isSimulator]) {//添加升级
+            NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
+            Class  updateClass = NSClassFromString(@"EUExUpdate");
+            if (!updateClass) {
+                return;
+            }
+            self.updateObj = [[updateClass alloc] init];
+            [self.updateObj ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
         }
-    }
-    if ((AppCanEngine.configuration.useUpdateControl || AppCanEngine.configuration.useUpdateWgtHtmlControl) && ![BUtility isSimulator]) {//添加升级
-        NSMutableArray * dataArray = [NSMutableArray arrayWithObjects:self.mwWgtMgr.mainWidget.appId,inKey,self.mwWgtMgr.mainWidget.ver,@"",nil];////0:appid 1:appKey2:currentVer 3:更新地址  url
-        Class  updateClass = NSClassFromString(@"EUExUpdate");
-        if (!updateClass) {
-            return;
-        }
-        self.updateObj = [[updateClass alloc] init];
-        [self.updateObj ac_invoke:@"doUpdate:" arguments:ACArgsPack(dataArray)];
     }
 }
 
