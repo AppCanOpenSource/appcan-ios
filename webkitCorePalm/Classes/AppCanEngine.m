@@ -36,78 +36,60 @@
 #import "EBrowserView.h"
 #import "WWidget.h"
 
-@interface ACEDefaultConfiguration : NSObject<AppCanEngineConfiguration>
-@property (nonatomic, assign) BOOL userStartReport;
-@property (nonatomic, assign) BOOL useEmmControl;
-@property (nonatomic, assign) BOOL useOpenControl;
-@property (nonatomic, assign) BOOL useUpdateControl;
-@property (nonatomic, assign) BOOL useOnlineArgsControl;
-@property (nonatomic, assign) BOOL usePushControl;
-@property (nonatomic, assign) BOOL useDataStatisticsControl;
-@property (nonatomic, assign) BOOL useAuthorsizeIDControl;
-@property (nonatomic, assign) BOOL useCloseAppWithJaibroken;
-@property (nonatomic, assign) BOOL useRC4EncryptWithLocalstorage;
-@property (nonatomic, assign) BOOL useUpdateWgtHtmlControl;
-@property (nonatomic, assign) BOOL signVerifyControl;
-@property (nonatomic, assign) BOOL useCertificateControl;
-@property (nonatomic, assign) BOOL useIsHiddenStatusBarControl;
-@property (nonatomic, assign, readonly) BOOL useEraseAppDataControl;
-@property (nonatomic, strong) NSString *useStartReportURL;
-@property (nonatomic, strong) NSString *useAnalysisDataURL;
-@property (nonatomic, strong) NSString *useBindUserPushURL;
-@property (nonatomic, strong) NSString *useAppCanMAMURL;
-@property (nonatomic, strong) NSString *useAppCanMCMURL;
-@property (nonatomic, strong) NSString *useAppCanMDMURL;
-@property (nonatomic, strong) NSString *useCertificatePassWord;
-@property (nonatomic, strong) NSString *useAppCanUpdateURL;
-@property (nonatomic, assign) BOOL useAppCanMDMURLControl;
-@property (nonatomic, retain) NSMutableDictionary *thirdInfoDict;
-@property (nonatomic, assign) NSInteger enctryptcj;
 
-//4.0
-@property (nonatomic, strong) NSString * useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
-@property (nonatomic, strong) NSString * useAppCanAppStoreHost;//uexAppstroeMgr所需的host
-@property (nonatomic, strong) NSString * useAppCanMBaaSHost;//引擎中MBaaS读取的host
-@property (nonatomic, strong) NSString * useAppCanIMXMPPHost;//uexIM插件XMPP通道使用的host
-@property (nonatomic, strong) NSString * useAppCanIMHTTPHost;//uexIM插件HTTP通道使用的host
-@property (nonatomic, strong) NSString * useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
-@property (nonatomic, strong) NSString * useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
-@property (nonatomic, assign) BOOL validatesSecureCertificate;//是否校验证书
-@property (nonatomic, assign) BOOL useInAppCanIDE;
+@interface ACEConfigurationProxy : NSProxy
+@property (nonatomic,strong)NSObject<AppCanEngineConfiguration> *userConfiguration;
+@property (nonatomic,strong)__kindof WidgetOneDelegate *defaultConfiguration;
 
-
-@property (nonatomic,strong) NSString *originWidgetPath;
-@property (nonatomic,strong) NSString *documentWidgetPath;
 @end
+@implementation ACEConfigurationProxy
 
-@implementation ACEDefaultConfiguration
-
-- (instancetype)init{
-    self = [super init];
-    if (self) {
-        _useStartReportURL = @"";
-        _useAnalysisDataURL = @"";
-        _useAppCanMAMURL = @"";
-        _useAppCanMCMURL = @"";
-        _useAppCanMDMURL = @"";
-        _useAppCanEMMTenantID = @"";
-        _useAppCanAppStoreHost = @"";
-        _useAppCanMBaaSHost = @"";
-        _useAppCanIMXMPPHost = @"";
-        _useAppCanIMHTTPHost = @"";
-        _useAppCanTaskSubmitSSOHost = @"";
-        _useAppCanTaskSubmitHost = @"";
-        _originWidgetPath = @"widget";
-        _documentWidgetPath = @"widget";
-    }
+- (instancetype)initWithConfiguration:(NSObject<AppCanEngineConfiguration> *)userConfiguration{
+    _userConfiguration = userConfiguration;
     return self;
+}
+
+- (__kindof WidgetOneDelegate *)defaultConfiguration{
+    if(!_defaultConfiguration){
+        Class pseudo = NSClassFromString(@"WidgetOnePseudoDelegate");
+        if (pseudo) {
+            _defaultConfiguration = (__kindof WidgetOneDelegate *)[[pseudo alloc] init];
+        }else{
+            _defaultConfiguration = [[WidgetOneDelegate alloc]init];
+        }
+    }
+    return _defaultConfiguration;
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
+    NSMethodSignature *signature = [self.userConfiguration methodSignatureForSelector:selector];
+    if (signature) {
+        return signature;
+    }else{
+        return [self.defaultConfiguration methodSignatureForSelector:selector];
+    }
+}
+- (void)forwardInvocation:(NSInvocation *)invocation {
+    if ([self.userConfiguration respondsToSelector:invocation.selector]) {
+        return [invocation invokeWithTarget:self.userConfiguration];
+    }else{
+        return [invocation invokeWithTarget:self.defaultConfiguration];
+    }
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector{
+    return [self.userConfiguration respondsToSelector:aSelector] || [self.defaultConfiguration respondsToSelector:aSelector];
 }
 
 @end
 
-static id<AppCanEngineConfiguration> _globalConfiguration;
+
+
+
+static ACEConfigurationProxy *_configProxy;
 static EBrowserController *_rootController;
 static ACEUINavigationController *_mainWidgetController;
+
 
 NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestartNotification";
 
@@ -115,10 +97,69 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 
 
 + (void)initializeWithConfiguration:(id<AppCanEngineConfiguration>)configuration{
-    _globalConfiguration = configuration;
+    _configProxy = [[ACEConfigurationProxy alloc] initWithConfiguration:configuration];
+    
+    id appDelegate = [UIApplication sharedApplication].delegate;
+    if (![appDelegate isKindOfClass:[WidgetOneDelegate class]]) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [self injectAppDelegate];
+        });
+    }
+    
+    
     [self _initializeEngine];
     
 }
+
++ (void)injectAppDelegate{
+
+    Class appDelegateClass = [[UIApplication sharedApplication].delegate class];
+    
+    
+    __block NSInvocation *ace_methodSignatureForSelector_invocation = _swizzleMethodWithBlock(appDelegateClass, @selector(methodSignatureForSelector:), ^NSMethodSignature *(id obj,SEL sel){
+        NSMethodSignature *sig = [_configProxy methodSignatureForSelector:sel];
+        if (sig) {
+            return sig;
+        }
+        [ace_methodSignatureForSelector_invocation invokeWithTarget:obj];
+        id ret = nil;
+        [ace_methodSignatureForSelector_invocation getReturnValue:&ret];
+        return ret;
+    });
+    
+    __block NSInvocation *ace_forwardInvocation_invocation = _swizzleMethodWithBlock(appDelegateClass, @selector(forwardInvocation:), ^(id obj,NSInvocation * invocation){
+        if ([_configProxy respondsToSelector:invocation.selector]) {
+            [_configProxy forwardInvocation:invocation];
+        }else{
+            [ace_forwardInvocation_invocation invokeWithTarget:obj];
+        }
+    });
+}
+
+
+static NSInvocation* _swizzleMethodWithBlock(Class target,SEL origin,id block){
+    Method originSelMethod = class_getInstanceMethod(target, origin);
+    if (!originSelMethod) {
+        return nil;
+    }
+    IMP blockIMP = imp_implementationWithBlock(block);
+    NSString *blockSelectorString = [NSString stringWithFormat:@"_ace_block_%@_%p", NSStringFromSelector(origin), block];
+    SEL blockSel = sel_registerName([blockSelectorString cStringUsingEncoding:NSUTF8StringEncoding]);
+    
+    const char* originSelMethodArgs = method_getTypeEncoding(originSelMethod);
+    NSMethodSignature *originSignature = [NSMethodSignature signatureWithObjCTypes:originSelMethodArgs];
+    NSInvocation *originInvocation = [NSInvocation invocationWithMethodSignature:originSignature];
+    class_addMethod(target,origin,class_getMethodImplementation(target, origin),originSelMethodArgs);
+    class_addMethod(target,blockSel, blockIMP, originSelMethodArgs);
+    method_exchangeImplementations(class_getInstanceMethod(target, origin), class_getInstanceMethod(target, blockSel));
+    return originInvocation;
+}
+
+
+
+
+
 
 
 + (void)_initializeEngine{
@@ -194,15 +235,7 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 
 
 + (id<AppCanEngineConfiguration>)configuration{
-    static id<AppCanEngineConfiguration> dafaultConfiguration = nil;
-    if (!_globalConfiguration) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            dafaultConfiguration = [[ACEDefaultConfiguration alloc] init];
-        });
-        return dafaultConfiguration;
-    }
-    return _globalConfiguration;
+    return (id<AppCanEngineConfiguration>)_configProxy;
 }
 
 #pragma mark - UIAlertViewDelgate
@@ -214,6 +247,7 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 }
 
 #pragma mark - Application Delegate Event
+
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [ACEDes enable];

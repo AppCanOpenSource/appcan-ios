@@ -37,7 +37,7 @@
 #import "EBrowserViewAnimition.h"
 #import "BAnimationTransform.h"
 #import "ACEWebViewController.h"
-#import "WidgetOneDelegate.h"
+#import "WidgetOneDelegatePrivate.h"
 #import "ACEDrawerViewController.H"
 #import "RESideMenu.h"
 #import "UIViewController+RESideMenu.h"

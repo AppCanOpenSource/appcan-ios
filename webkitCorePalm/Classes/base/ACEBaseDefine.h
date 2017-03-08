@@ -28,21 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - AppCanEngineConfiguration
 
 @protocol AppCanEngineConfiguration <NSObject>
+
+@optional
+//AppCanWidget文件夹相对于.app的路径,默认值"widget"
 @property (nonatomic,readonly) NSString *originWidgetPath;
-@property (nonatomic,readonly) NSString *documentWidgetPath;
-@property (nonatomic,readonly) BOOL userStartReport;
-@property (nonatomic,readonly) BOOL useUpdateControl;
-@property (nonatomic,readonly) BOOL usePushControl;
-@property (nonatomic,readonly) BOOL useDataStatisticsControl;
-@property (nonatomic,readonly) BOOL useCloseAppWithJaibroken;
-@property (nonatomic,readonly) BOOL useRC4EncryptWithLocalstorage;
-@property (nonatomic,readonly) BOOL useUpdateWgtHtmlControl;
-@property (nonatomic,readonly) BOOL useCertificateControl;
-@property (nonatomic,readonly) NSString *useBindUserPushURL;
-@property (nonatomic,readonly) NSString *useCertificatePassWord;
-@property (nonatomic,readonly) NSString *useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
-@property (nonatomic,readonly) BOOL validatesSecureCertificate;//是否校验证书
-@property (nonatomic,readonly) BOOL useInAppCanIDE;
 @end
 
 
@@ -56,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly,class)__kindof UINavigationController *mainWidgetController;
 
 
-+ (void)initializeWithConfiguration:(id<AppCanEngineConfiguration>)configuration;
++ (void)initializeWithConfiguration:(nullable id<AppCanEngineConfiguration>)configuration;
 
 //ApplicationDelegate方法
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions;

@@ -150,10 +150,6 @@
 		6CC603A8157DD65E00A3E13E /* WidgetOnePseudoDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetOnePseudoDelegate.m; sourceTree = "<group>"; };
 		6CC60441157DCC0F00A3E13E /* Beqtucontent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Beqtucontent.m; sourceTree = "<group>"; };
 		6CC604A7157DD65E00A3E13E /* Beqtucontent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beqtucontent.h; sourceTree = "<group>"; };
-		6CD1DC32159ADD8A003C3083 /* EUExBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExBase.h; sourceTree = "<group>"; };
-		6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUExBaseDefine.h; sourceTree = "<group>"; };
-		6CD1DC34159ADD8A003C3083 /* EUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUtility.h; sourceTree = "<group>"; };
-		6CD1DC36159ADD8A003C3083 /* WidgetOneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOneDelegate.h; sourceTree = "<group>"; };
 		B2403BF61833923A002530F6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B2403BF818339267002530F6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B2D89A9718338CF600C6F041 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -342,10 +338,6 @@
 			children = (
 				42D96D551DAB92B4001ABB17 /* AppCanKit.framework */,
 				427260071D9B58FE00B941CF /* AppCanEngine.framework */,
-				6CD1DC32159ADD8A003C3083 /* EUExBase.h */,
-				6CD1DC33159ADD8A003C3083 /* EUExBaseDefine.h */,
-				6CD1DC34159ADD8A003C3083 /* EUtility.h */,
-				6CD1DC36159ADD8A003C3083 /* WidgetOneDelegate.h */,
 			);
 			path = engine;
 			sourceTree = "<group>";

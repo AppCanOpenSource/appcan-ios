@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 The AppCan Open Source Project.
+ *  Copyright (C) 2017 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -57,46 +57,6 @@
 	}
 	return self;
 }
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-	return [super application:application didFinishLaunchingWithOptions:launchOptions];
-}
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
-{
-    return [super application:application handleOpenURL:url];
-}
-- (void)applicationWillResignActive:(UIApplication *)application {
-	[super applicationWillResignActive:application];
-}
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-	[super applicationDidBecomeActive:application];
-}
 
-- (void)applicationWillTerminate:(UIApplication *)application {
-	[super applicationWillTerminate:application];
-}
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-	[super application:app didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-	
-}
-// 注册APNs错误
-
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-	[super application:app didFailToRegisterForRemoteNotificationsWithError:err];
-	
-}
-// 接收推送通知
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-	[super application:application didReceiveRemoteNotification:userInfo];
-}
-
-- (void)dealloc
-{
-	[super dealloc];
-}
-//-(void)terminateWithException:(NSException*)e{
-//    [super terminateWithException:e];
-//}
 @end
