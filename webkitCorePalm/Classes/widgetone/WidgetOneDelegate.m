@@ -65,9 +65,12 @@
 
 @end
 
+
+
+
 @implementation WidgetOneDelegate
 
-
+@synthesize window = _window;
 
 
 - (NSString *)originWidgetPath{
