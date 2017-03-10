@@ -133,16 +133,6 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
 
 #pragma mark - UpdateTmpFolder
 
-+ (NSString *)updateTmpFolderPath{
-
-    return [NSTemporaryDirectory() stringByAppendingPathComponent:@"ACEUpdate"];
-}
-
-+ (void)cleanupUpdateTmpFolder{
-    if ([FileManager fileExistsAtPath:self.updateTmpFolderPath]) {
-        [FileManager removeItemAtPath:self.updateTmpFolderPath error:nil];
-    }
-}
 
 
 
@@ -208,27 +198,57 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     NSString *oldVersion = self.currentWidgetVersion;
     NSString *oldWidgetPath = [ACEDocumentPath() stringByAppendingPathComponent:[AppCanEngine.configuration documentWidgetPath]];
-    NSString *tmpFolderPath = self.updateTmpFolderPath;
+    
+    NSString *tmpWidgetPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ACEUpdate"];
+    NSString *tmpZipPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ACEUpdateZip"];
+    
+    
+    void (^cleanup)() = ^{
+        if ([FileManager fileExistsAtPath:tmpZipPath]) {
+            [FileManager removeItemAtPath:tmpZipPath error:nil];
+        }
+        if ([FileManager fileExistsAtPath:tmpWidgetPath]) {
+            [FileManager removeItemAtPath:tmpWidgetPath error:nil];
+        }
+    };
+    
     ZipArchive *zip = [[ZipArchive alloc] init];
-    [self cleanupUpdateTmpFolder];
+    cleanup();
 
     
     NSError *error = nil;
     @onExit{
-        [self cleanupUpdateTmpFolder];
+        cleanup();
     };
     
-    if (![FileManager copyItemAtPath:oldWidgetPath toPath:tmpFolderPath error:&error]) {
+    if (![FileManager copyItemAtPath:oldWidgetPath toPath:tmpWidgetPath error:&error]) {
         ACLogError(@"copy old widget to tmpFolder failed: %@",error.localizedDescription);
         return ACEWidgetUpdateResultError;
     }
 
     if (![zip UnzipOpenFile:zipPath]
-        || ![zip UnzipFileTo:tmpFolderPath overWrite:YES]
+        || ![zip UnzipFileTo:tmpZipPath overWrite:YES]
         || ![zip UnzipCloseFile]) {
         return ACEWidgetUpdateResultError;
     }
-    NSData *xmlData = [NSData dataWithContentsOfFile:[tmpFolderPath stringByAppendingPathComponent:@"config.xml"]];
+    
+    NSString *patchPath = tmpZipPath;
+    if (![FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:@"config.xml"]]) {
+        BOOL widgetFolderExist = [FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:@"widget"] isDirectory:&widgetFolderExist] && widgetFolderExist;
+        if (widgetFolderExist) {
+            ACLogDebug(@"EMM 4.0 zip patch");
+            patchPath = [tmpZipPath stringByAppendingPathComponent:@"widget"];
+        }else{
+            ACLogError(@"invalid update patch!");
+            return ACEWidgetUpdateResultError;
+        }
+    }
+    if (![self mergeFolderAtPath:patchPath intoPath:tmpWidgetPath error:&error]) {
+        ACLogError(@"merge patch into widget failed: %@",error.localizedDescription);
+        return ACEWidgetUpdateResultError;
+    };
+    
+    NSData *xmlData = [NSData dataWithContentsOfFile:[tmpWidgetPath stringByAppendingPathComponent:@"config.xml"]];
     ONOXMLDocument *configDocument = [ONOXMLDocument XMLDocumentWithData:xmlData error:&error];
     if (!configDocument) {
         ACLogError(@"read patched config.xml failed: %@",error.localizedDescription);
@@ -245,7 +265,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         [FileManager removeItemAtPath:newWidgetPath error:nil];
     }
     
-    if (![FileManager copyItemAtPath:tmpFolderPath toPath:newWidgetPath error:&error]) {
+    if (![FileManager copyItemAtPath:tmpWidgetPath toPath:newWidgetPath error:&error]) {
         ACLogError(@"copy tmpFolder to newWidgetPath failed: %@",error.localizedDescription);
         return ACEWidgetUpdateResultError;
     }
@@ -269,6 +289,39 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     [[WWidgetMgr sharedManager] loadMainWidget];
     return ACEWidgetUpdateResultSuccess;
 
+}
+
+
++ (BOOL)mergeFolderAtPath:(NSString *)src intoPath:(NSString *)dst error:(NSError **)error{
+    
+    __block NSError *err = nil;
+    @onExit{
+        if (error && err) {
+            *error = err;
+        }
+    };
+    NSDirectoryEnumerator *srcDirEnum = [FileManager enumeratorAtPath:src];
+    NSString *subPath;
+    while ((subPath = [srcDirEnum nextObject])) {
+        
+        NSString *srcFullPath =  [src stringByAppendingPathComponent:subPath];
+        NSString *potentialDstPath = [dst stringByAppendingPathComponent:subPath];
+        
+        BOOL isDirectory = [FileManager fileExistsAtPath:srcFullPath isDirectory:&isDirectory] && isDirectory;
+        
+
+        if (isDirectory && (![FileManager createDirectoryAtPath:potentialDstPath withIntermediateDirectories:YES attributes:nil error:&err] || err)) {
+            return NO;
+        }else {
+            if ([FileManager fileExistsAtPath:potentialDstPath] && (![FileManager removeItemAtPath:potentialDstPath error:&err] || err)) {
+                return NO;
+            }
+            if (![FileManager moveItemAtPath:srcFullPath toPath:potentialDstPath error:&err] || err) {
+                return NO;
+            }
+        }
+    }
+    return YES;
 }
 
 
