@@ -30,6 +30,7 @@
 #import <AppCanKit/ACEXTScope.h>
 #import "BUtility.h"
 #import "WWidgetMgr.h"
+#import "ACEConfigXML.h"
 @interface ACEWidgetUpdateUtility()
 
 
@@ -234,10 +235,13 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     NSString *patchPath = tmpZipPath;
     if (![FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:@"config.xml"]]) {
-        BOOL widgetFolderExist = [FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:@"widget"] isDirectory:&widgetFolderExist] && widgetFolderExist;
+        NSString *appid = [ACEConfigXML ACEOriginConfigXML][@"appId"];
+    
+        NSString *subpath = [NSString stringWithFormat:@"widget/%@",appid];
+        BOOL widgetFolderExist = [FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:subpath] isDirectory:&widgetFolderExist] && widgetFolderExist;
         if (widgetFolderExist) {
             ACLogDebug(@"EMM 4.0 zip patch");
-            patchPath = [tmpZipPath stringByAppendingPathComponent:@"widget"];
+            patchPath = [tmpZipPath stringByAppendingPathComponent:subpath];
         }else{
             ACLogError(@"invalid update patch!");
             return ACEWidgetUpdateResultError;
