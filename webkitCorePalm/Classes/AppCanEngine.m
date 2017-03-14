@@ -207,6 +207,12 @@ static NSInvocation* _swizzleMethodWithBlock(Class target,SEL origin,id block){
 + (EBrowserController *)rootWebViewController{
     return _rootController;
 }
+
++ (id<AppCanWidgetObject>)mainWidget{
+    return _rootController.widget;
+}
+
+
 + (__kindof UINavigationController *)mainWidgetController{
     return _mainWidgetController;
 }

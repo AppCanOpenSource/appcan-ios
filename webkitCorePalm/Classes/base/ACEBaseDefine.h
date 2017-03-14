@@ -24,7 +24,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <AppCanKit/AppCanKit.h>
 NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - AppCanEngineConfiguration
 
 @protocol AppCanEngineConfiguration <NSObject>
@@ -41,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class UNNotification;
 @class UNNotificationResponse;
 @protocol AppCanEngine <NSObject>
-
+@property (nonatomic,readonly,class)id<AppCanWidgetObject> mainWidget;
 @property (nonatomic,readonly,class)__kindof UINavigationController *mainWidgetController;
 
 
