@@ -35,6 +35,7 @@
 #import "WWidgetMgr.h"
 #import "EBrowserView.h"
 #import "WWidget.h"
+#import "EUtility.h"
 
 
 @interface ACEConfigurationProxy : NSProxy
@@ -96,6 +97,10 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 @implementation AppCanEngine
 
 
+
++ (NSString *)softToken{
+    return [EUtility md5SoftToken];
+}
 + (void)initializeWithConfiguration:(id<AppCanEngineConfiguration>)configuration{
     _configProxy = [[ACEConfigurationProxy alloc] initWithConfiguration:configuration];
     
