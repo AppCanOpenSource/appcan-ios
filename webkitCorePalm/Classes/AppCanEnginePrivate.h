@@ -8,7 +8,7 @@
 
 #ifndef AppCanEnginePrivate_h
 #define AppCanEnginePrivate_h
-#import "AppCanEngine.h"
+#import <AppCanEngine/AppCanEngine.h>
 
 @class EBrowserController;
 

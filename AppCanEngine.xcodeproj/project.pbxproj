@@ -239,7 +239,7 @@
 		42F7884C1D950B5D0094AA05 /* CBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */; };
 		42F7884E1D950B5D0094AA05 /* SDWebImageDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C3B1B2A6D3500D5F279 /* SDWebImageDecoder.h */; };
 		42F788511D950B5D0094AA05 /* EBrowserHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F618B1B93D000D7600 /* EBrowserHistory.h */; };
-		42F788561D950B5D0094AA05 /* EUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859F18B1B93D000D7600 /* EUtility.h */; };
+		42F788561D950B5D0094AA05 /* EUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859F18B1B93D000D7600 /* EUtility.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42F788571D950B5D0094AA05 /* mztools.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864818B1B93D000D7600 /* mztools.h */; };
 		42F788581D950B5D0094AA05 /* ACEProgressDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 42D653CA1C33C23E000231E4 /* ACEProgressDialog.h */; };
 		42F788591D950B5D0094AA05 /* SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85AB18B1B93D000D7600 /* SBJSON.h */; };
@@ -1035,6 +1035,7 @@
 				42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */,
 				4272CCC01E2486A500712C54 /* AppCanEngine.h in Headers */,
 				42B3D44E1E6E529900F215B3 /* WidgetOneDelegatePrivate.h in Headers */,
+				42F788561D950B5D0094AA05 /* EUtility.h in Headers */,
 				427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */,
 				42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */,
 				42CF2D681DDADBD80060C610 /* ACEConfigXML.h in Headers */,
@@ -1128,7 +1129,6 @@
 				42F7884C1D950B5D0094AA05 /* CBrowserWindow.h in Headers */,
 				42F7884E1D950B5D0094AA05 /* SDWebImageDecoder.h in Headers */,
 				42F788511D950B5D0094AA05 /* EBrowserHistory.h in Headers */,
-				42F788561D950B5D0094AA05 /* EUtility.h in Headers */,
 				42F788571D950B5D0094AA05 /* mztools.h in Headers */,
 				42F788581D950B5D0094AA05 /* ACEProgressDialog.h in Headers */,
 				42F788591D950B5D0094AA05 /* SBJSON.h in Headers */,
