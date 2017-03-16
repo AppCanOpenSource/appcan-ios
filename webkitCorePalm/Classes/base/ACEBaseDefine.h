@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol AppCanEngine <NSObject>
 @property (nonatomic,readonly,class)id<AppCanWidgetObject> mainWidget;
 @property (nonatomic,readonly,class)NSString *softToken;
+@property (nonatomic,readonly,class)NSString *uuid;
 @property (nonatomic,readonly,class)__kindof UINavigationController *mainWidgetController;
 @property (nonatomic,readonly,class)id<WidgetOneProperties,AppCanEngineConfiguration> configuration;
 

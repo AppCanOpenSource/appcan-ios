@@ -38,6 +38,7 @@
 #import "EUtility.h"
 
 
+
 @interface ACEConfigurationProxy : NSProxy
 @property (nonatomic,strong)NSObject<AppCanEngineConfiguration> *userConfiguration;
 @property (nonatomic,strong)__kindof WidgetOneDelegate *defaultConfiguration;
@@ -101,6 +102,10 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
 + (NSString *)softToken{
     return [EUtility md5SoftToken];
 }
++ (NSString *)uuid{
+    return [BUtility macAddress];
+}
+
 + (void)initializeWithConfiguration:(id<AppCanEngineConfiguration>)configuration{
     _configProxy = [[ACEConfigurationProxy alloc] initWithConfiguration:configuration];
     
