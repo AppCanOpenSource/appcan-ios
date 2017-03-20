@@ -52,6 +52,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 + (void)initializeWithConfiguration:(nullable id<AppCanEngineConfiguration>)configuration;
++ (id<AppCanWidgetObject>)subwidgetWithAppId:(NSString *)appId;
++ (void)openSubwidget:(id<AppCanWidgetObject>)widget;
++ (void)closeSubwidget:(id<AppCanWidgetObject>)widget;
+
 
 //ApplicationDelegate方法
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions;

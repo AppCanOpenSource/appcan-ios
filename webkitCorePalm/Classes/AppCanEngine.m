@@ -36,7 +36,7 @@
 #import "EBrowserView.h"
 #import "WWidget.h"
 #import "EUtility.h"
-
+#import "ACESubwidgetManager.h"
 
 
 @interface ACEConfigurationProxy : NSProxy
@@ -121,6 +121,19 @@ NSNotificationName const AppCanEngineRestartNotification = @"AppCanEngineRestart
     [self _initializeEngine];
     
 }
+
++ (id<AppCanWidgetObject>)subwidgetWithAppId:(NSString *)appId{
+    return [[WWidgetMgr sharedManager] wgtDataByAppId:appId];
+}
+
++ (void)openSubwidget:(id<AppCanWidgetObject>)widget{
+    [[ACESubwidgetManager defaultManager]launchWidget:widget];
+}
+
++ (void)closeSubwidget:(id<AppCanWidgetObject>)widget{
+    [[ACESubwidgetManager defaultManager]finishWidget:widget withCallbackResult:nil];
+}
+
 
 + (void)injectAppDelegate{
 
