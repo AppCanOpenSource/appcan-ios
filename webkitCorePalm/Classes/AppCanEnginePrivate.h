@@ -8,7 +8,8 @@
 
 #ifndef AppCanEnginePrivate_h
 #define AppCanEnginePrivate_h
-#import "AppCanEngine.h"
+#import <AppCanEngine/AppCanEngine.h>
+
 @class EBrowserController;
 
 
@@ -16,8 +17,11 @@
 APPCAN_EXPORT NSNotificationName const AppCanEngineRestartNotification;
 
 
+
+
+
 @interface AppCanEngine()
-@property (nonatomic,readonly,class)id<AppCanEngineConfiguration> configuration;
+
 @property (nonatomic,readonly,class)EBrowserController *rootWebViewController;
 
 

@@ -32,7 +32,7 @@ FOUNDATION_EXPORT const unsigned char AppCanEngineVersionString[];
 
 
 #import <AppCanEngine/ACEBaseDefine.h>
-
+#import <AppCanEngine/WidgetOneDelegate.h>
 
 
 @interface AppCanEngine: NSObject<AppCanEngine>

@@ -24,25 +24,16 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <AppCanKit/AppCanKit.h>
 NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - AppCanEngineConfiguration
 
 @protocol AppCanEngineConfiguration <NSObject>
+
+@optional
+//AppCanWidget文件夹相对于.app的路径,默认值"widget"
 @property (nonatomic,readonly) NSString *originWidgetPath;
-@property (nonatomic,readonly) NSString *documentWidgetPath;
-@property (nonatomic,readonly) BOOL userStartReport;
-@property (nonatomic,readonly) BOOL useUpdateControl;
-@property (nonatomic,readonly) BOOL usePushControl;
-@property (nonatomic,readonly) BOOL useDataStatisticsControl;
-@property (nonatomic,readonly) BOOL useCloseAppWithJaibroken;
-@property (nonatomic,readonly) BOOL useRC4EncryptWithLocalstorage;
-@property (nonatomic,readonly) BOOL useUpdateWgtHtmlControl;
-@property (nonatomic,readonly) BOOL useCertificateControl;
-@property (nonatomic,readonly) NSString *useBindUserPushURL;
-@property (nonatomic,readonly) NSString *useCertificatePassWord;
-@property (nonatomic,readonly) NSString *useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
-@property (nonatomic,readonly) BOOL validatesSecureCertificate;//是否校验证书
-@property (nonatomic,readonly) BOOL useInAppCanIDE;
 @end
 
 
@@ -51,12 +42,20 @@ NS_ASSUME_NONNULL_BEGIN
 @class UNUserNotificationCenter;
 @class UNNotification;
 @class UNNotificationResponse;
+@protocol WidgetOneProperties;
 @protocol AppCanEngine <NSObject>
-
+@property (nonatomic,readonly,class)id<AppCanWidgetObject> mainWidget;
+@property (nonatomic,readonly,class)NSString *softToken;
+@property (nonatomic,readonly,class)NSString *uuid;
 @property (nonatomic,readonly,class)__kindof UINavigationController *mainWidgetController;
+@property (nonatomic,readonly,class)id<WidgetOneProperties,AppCanEngineConfiguration> configuration;
 
 
-+ (void)initializeWithConfiguration:(id<AppCanEngineConfiguration>)configuration;
++ (void)initializeWithConfiguration:(nullable id<AppCanEngineConfiguration>)configuration;
++ (id<AppCanWidgetObject>)subwidgetWithAppId:(NSString *)appId;
++ (void)openSubwidget:(id<AppCanWidgetObject>)widget;
++ (void)closeSubwidget:(id<AppCanWidgetObject>)widget;
+
 
 //ApplicationDelegate方法
 + (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions;
@@ -83,7 +82,45 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@protocol WidgetOneProperties <NSObject>
 
+@property (nonatomic, readonly) NSString *documentWidgetPath;
+
+@property (nonatomic, readonly) BOOL userStartReport;
+@property (nonatomic, readonly) BOOL useEmmControl;
+@property (nonatomic, readonly) BOOL useOpenControl;
+@property (nonatomic, readonly) BOOL useUpdateControl;
+@property (nonatomic, readonly) BOOL useOnlineArgsControl;
+@property (nonatomic, readonly) BOOL usePushControl;
+@property (nonatomic, readonly) BOOL useDataStatisticsControl;
+@property (nonatomic, readonly) BOOL useAuthorsizeIDControl;
+@property (nonatomic, readonly) BOOL useCloseAppWithJaibroken;
+@property (nonatomic, readonly) BOOL useRC4EncryptWithLocalstorage;
+@property (nonatomic, readonly) BOOL useUpdateWgtHtmlControl;
+@property (nonatomic, readonly) BOOL signVerifyControl;
+@property (nonatomic, readonly) BOOL useCertificateControl;
+@property (nonatomic, readonly) BOOL useIsHiddenStatusBarControl;
+@property (nonatomic, readonly) BOOL useEraseAppDataControl;
+@property (nonatomic, readonly) NSString *useStartReportURL;
+@property (nonatomic, readonly) NSString *useAnalysisDataURL;
+@property (nonatomic, readonly) NSString *useBindUserPushURL;
+@property (nonatomic, readonly) NSString *useAppCanMAMURL;
+@property (nonatomic, readonly) NSString *useAppCanMCMURL;
+@property (nonatomic, readonly) NSString *useAppCanMDMURL;
+@property (nonatomic, readonly) NSString *useCertificatePassWord;
+@property (nonatomic, readonly) NSString *useAppCanUpdateURL;
+@property (nonatomic, readonly) BOOL useAppCanMDMURLControl;
+@property (nonatomic, readonly) BOOL useInAppCanIDE;
+//4.0
+@property (nonatomic, readonly) NSString *useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
+@property (nonatomic, readonly) NSString *useAppCanAppStoreHost;//uexAppstroeMgr所需的host
+@property (nonatomic, readonly) NSString *useAppCanMBaaSHost;//引擎中MBaaS读取的host
+@property (nonatomic, readonly) NSString *useAppCanIMXMPPHost;//uexIM插件XMPP通道使用的host
+@property (nonatomic, readonly) NSString *useAppCanIMHTTPHost;//uexIM插件HTTP通道使用的host
+@property (nonatomic, readonly) NSString *useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
+@property (nonatomic, readonly) NSString *useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
+@property (nonatomic, assign) BOOL validatesSecureCertificate;//是否校验证书
+@end
 
 
 

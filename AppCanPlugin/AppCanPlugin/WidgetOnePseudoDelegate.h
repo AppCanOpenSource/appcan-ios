@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 The AppCan Open Source Project.
+ *  Copyright (C) 2017 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -17,11 +17,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "WidgetOneDelegate.h"
+#import <AppCanEngine/AppCanEngine.h>
 
 
-@interface WidgetOnePseudoDelegate : WidgetOneDelegate {
-
-}
+@interface WidgetOnePseudoDelegate : WidgetOneDelegate
 
 @end

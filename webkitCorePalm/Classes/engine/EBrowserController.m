@@ -212,6 +212,12 @@ static BOOL userCustomLoadingImageEnabled = NO;
 
 
 - (void)presentStartImage{
+    
+    if (![[UIApplication sharedApplication].delegate isKindOfClass:[WidgetOneDelegate class]]) {
+        return;
+    }
+    
+    
     self.startImageClosed = NO;
     self.meBrwMainFrm.hidden = YES;
     NSString * oritent = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"] ;

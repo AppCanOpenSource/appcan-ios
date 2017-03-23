@@ -105,7 +105,7 @@
         _rootController = rootController;
         self.delegate = self;
         self.transitioningDelegate = self;
-        
+        _canAutoRotate = YES;
         _fullscreenPopGestureRecognizer = [[UIPanGestureRecognizer alloc]init];
         _fullscreenPopGestureRecognizer.maximumNumberOfTouches = 1;
         _fullscreenPopGestureRecognizerDelegate = [[ACEUINavigationFullscreenPopGestureDelegate alloc] init];

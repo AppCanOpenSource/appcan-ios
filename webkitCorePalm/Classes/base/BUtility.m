@@ -310,7 +310,7 @@ static NSString *rc4JSKey = @"uexSecure={ls:localStorage,open:function(p){try{th
     return rc4JSKey;
 }
 #pragma appCanDevMode
-static BOOL appCanDevelopmetMode = NO;
+
 +(void)setAppCanDevMode:(NSString*)inValue{
     //deprecated
 }
@@ -1140,8 +1140,8 @@ static NSString *clientCertificatePwd = nil;
 }
 
 + (NSString *)appKey{
-    BOOL isWidgetOneDelegate = [UIApplication.sharedApplication.delegate isKindOfClass:[WidgetOneDelegate class]];
-    if (!appCanDevelopmetMode && isWidgetOneDelegate) {
+
+    if (![self getAppCanDevMode]) {
         Class Beqtucontent = NSClassFromString(@"Beqtucontent");
         if (Beqtucontent) {
             return [Beqtucontent ac_invoke:@"getContentPath"];

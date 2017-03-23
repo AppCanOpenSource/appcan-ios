@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 The AppCan Open Source Project.
+ *  Copyright (C) 2017 The AppCan Open Source Project.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,19 +18,10 @@
 
 
 
-@class EBrowserController;
-@class EBrowser;
-@class WWidgetMgr;
-//@class PluginParser;
-@class ACEWebViewController;
-@class ACEDrawerViewController;
-@class RESideMenu;
-@class ACEPluginParser;
-@interface WidgetOneDelegate: NSObject <UIApplicationDelegate>
 
-@property (nonatomic, strong) UIWindow *window;
-//@property (nonatomic, strong) EBrowserController *meBrwCtrler;
-@property (nonatomic, strong) WWidgetMgr *mwWgtMgr;
+
+@interface WidgetOneDelegate: NSObject
+
 @property (nonatomic, assign) BOOL userStartReport;
 @property (nonatomic, assign) BOOL useEmmControl;
 @property (nonatomic, assign) BOOL useOpenControl;
@@ -45,7 +36,7 @@
 @property (nonatomic, assign) BOOL signVerifyControl;
 @property (nonatomic, assign) BOOL useCertificateControl;
 @property (nonatomic, assign) BOOL useIsHiddenStatusBarControl;
-@property (nonatomic, assign, readonly) BOOL useEraseAppDataControl;
+@property (nonatomic, assign) BOOL useEraseAppDataControl;
 @property (nonatomic, strong) NSString *useStartReportURL;
 @property (nonatomic, strong) NSString *useAnalysisDataURL;
 @property (nonatomic, strong) NSString *useBindUserPushURL;
@@ -55,34 +46,17 @@
 @property (nonatomic, strong) NSString *useCertificatePassWord;
 @property (nonatomic, strong) NSString *useAppCanUpdateURL;
 @property (nonatomic, assign) BOOL useAppCanMDMURLControl;
-@property (nonatomic, retain) NSMutableDictionary *thirdInfoDict;
-
-
-@property (nonatomic, strong) ACEWebViewController *leftWebController;
-@property (nonatomic, strong) ACEWebViewController *rightWebController;
-@property (nonatomic, strong) ACEDrawerViewController *drawerController;
-@property (nonatomic, strong) RESideMenu *sideMenuViewController;
-@property (nonatomic, assign) NSInteger enctryptcj;
-
-
+@property (nonatomic, assign) BOOL useInAppCanIDE;
 //4.0
-@property (nonatomic, strong) NSString * useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
-@property (nonatomic, strong) NSString * useAppCanAppStoreHost;//uexAppstroeMgr所需的host
-@property (nonatomic, strong) NSString * useAppCanMBaaSHost;//引擎中MBaaS读取的host
-@property (nonatomic, strong) NSString * useAppCanIMXMPPHost;//uexIM插件XMPP通道使用的host
-@property (nonatomic, strong) NSString * useAppCanIMHTTPHost;//uexIM插件HTTP通道使用的host
-@property (nonatomic, strong) NSString * useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
-@property (nonatomic, strong) NSString * useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
+@property (nonatomic, strong) NSString *useAppCanEMMTenantID;//EMM单租户场景下默认的租户ID
+@property (nonatomic, strong) NSString *useAppCanAppStoreHost;//uexAppstroeMgr所需的host
+@property (nonatomic, strong) NSString *useAppCanMBaaSHost;//引擎中MBaaS读取的host
+@property (nonatomic, strong) NSString *useAppCanIMXMPPHost;//uexIM插件XMPP通道使用的host
+@property (nonatomic, strong) NSString *useAppCanIMHTTPHost;//uexIM插件HTTP通道使用的host
+@property (nonatomic, strong) NSString *useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
+@property (nonatomic, strong) NSString *useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
 @property (nonatomic, assign) BOOL validatesSecureCertificate;//是否校验证书
-
-
-@property (nonatomic, assign, readonly) BOOL useInAppCanIDE;
-
-- (instancetype)initWithDevMode;
-
-
-
 @end
 
-#define theApp ((WidgetOneDelegate *)[[UIApplication sharedApplication] delegate])
+
 

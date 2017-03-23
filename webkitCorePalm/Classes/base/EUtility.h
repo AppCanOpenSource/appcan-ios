@@ -123,14 +123,13 @@ extern NSString * const cUexPluginCallbackInRootWindow;
 extern NSString * const cUexPluginCallbackInFrontWindow;
 
 /**
- *  @deprecated 3.3引擎推荐使用browserView:callbackWithFunctionKeyPath:arguments:方法
  *  @method 回调网页js
  *
  *  @param pluginName   回调的插件名
  *  @param functionName 回调的方法名
  *  @param obj          回调给网页的对象（NSDictionary、NSArray、NSString、NSNumber,nil)
  *  @param type         回调的方式（json字符串还是json对象）
- *  @param targetBrwView 要回调的网页 请传cUexPluginCallbackTargetRootWindow(回调给起始Window）cUexPluginCallbackTargetFrontWindow(回调给最前端Window) 或者(EBrowserView *)实例
+ *  @param target       要回调的网页 请传cUexPluginCallbackTargetRootWindow(回调给起始Window）cUexPluginCallbackTargetFrontWindow(回调给最前端Window) 或者(EBrowserView *)实例
  *
  *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:self.meBrwView];//,回调给当前网页
  *  @example [EUtility uexPlugin:@"uexDemo" callbackByName:@"cbOpen" withObject:@{@"result":@"success"} andType:uexPluginCallbackWithJsonString inTarget:cUexPluginCallbackInRootWindow];//回调给root窗口
@@ -160,7 +159,7 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
  *
  *  @param pluginName 插件名
  *  @param key        插件bundle中Localizable.string里声明的字符串key
- *  @param defaultValue 如果有传入第二个参数，即为defaultValue key匹配失败时会返回此值
+ *         defaultValue 如果有传入第二个参数，即为defaultValue key匹配失败时会返回此值
  *  @return key对应的国际化字符串
  */
 + (NSString *)uexPlugin:(NSString *)pluginName localizedString:(NSString *)key,...;

@@ -18,6 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "WidgetOneDelegate.h"
+#import "WidgetOneDelegatePrivate.h"
 #import "EBrowserController.h"
 #import "EBrowserMainFrame.h"
 #import "EBrowserWidgetContainer.h"
@@ -60,13 +61,16 @@
 #define ACE_USERAGENT @"AppCanUserAgent"
 
 
-@interface WidgetOneDelegate()<RESideMenuDelegate,UNUserNotificationCenterDelegate,AppCanEngineConfiguration>
-@property (nonatomic,assign,readwrite)BOOL useInAppCanIDE;
+@interface WidgetOneDelegate()<RESideMenuDelegate,UNUserNotificationCenterDelegate>
+
 @end
+
+
+
 
 @implementation WidgetOneDelegate
 
-
+@synthesize window = _window;
 
 
 - (NSString *)originWidgetPath{
@@ -109,7 +113,7 @@
     //https密钥
     self.useCertificatePassWord = @"pwd";
     //擦除信息
-    _useEraseAppDataControl = YES;
+    self.useEraseAppDataControl = YES;
     //https 密钥控制
     self.useCertificateControl = YES;
     //应用内是否显示状态条
@@ -491,7 +495,6 @@
 
 - (void)dealloc {
 
-    _window = nil;
     _mwWgtMgr = nil;
     self.useAppCanMAMURL = nil;
     self.useAppCanMCMURL=nil;
