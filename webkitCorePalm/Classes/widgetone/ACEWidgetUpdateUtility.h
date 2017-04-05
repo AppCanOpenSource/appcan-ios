@@ -76,5 +76,14 @@ typedef NS_ENUM(NSInteger,ACEWidgetUpdateResult) {
 + (ACEWidgetUpdateResult)installMainWidgetPatch;
 
 
+
+/**
+ 
+ @note
+ @param subWidgetPatchZipPath  解压该路径下的zip包.
+ @discussion
+ */
++ (void)unZipSubWidgetNeedPatchUpdate:(NSString *)subWidgetPatchZipPath;
+
 @end
 NS_ASSUME_NONNULL_END

@@ -272,8 +272,34 @@ NSString * webappShowAactivety;
     NSString *tmpAppId = [NSString stringWithString:inAppId];
     //查询缓存
     WWidget *wgtObj =[wgtDict objectForKey:tmpAppId];
+    
     //解析config.xml
-    NSString *configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
+    
+    NSString *configPath = @"";
+    NSString *newVersion = @"";
+    BOOL isNewVersion = NO;
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:tmpAppId]) {
+        
+        newVersion = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:tmpAppId]];
+                      
+        configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@/%@", F_NAME_WIDGETS, tmpAppId, newVersion, F_NAME_CONFIG]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:configPath]) {
+            
+            isNewVersion = YES;
+            
+        } else {
+            
+            configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
+            
+        }
+    } else {
+        
+        configPath =[BUtility getDocumentsPath:[NSString stringWithFormat:@"%@/%@/%@",F_NAME_WIDGETS,tmpAppId,F_NAME_CONFIG]];
+        
+    }
+    //热修复路径
+    
     NSString *mVer = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
     if ([wgtObj.ver isEqualToString:mVer]) {
         return wgtObj;
@@ -290,15 +316,19 @@ NSString * webappShowAactivety;
         if ([wgtObj.ver isEqualToString:mVer]) {
             [wgtDict setObject:wgtObj forKey:wgtObj.appId];
             [widgetSql close_database];
-
+            
             [tempArr removeAllObjects];
             return wgtObj;
         }
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:configPath]) {
+        
         NSMutableDictionary *tmpWgtDict = [self wgtParameters:configPath];
         NSString *tmpWgtOneId = [BUtility appKey];
         NSString *wgtPath=[NSString stringWithFormat:@"%@/%@",F_NAME_WIDGETS,tmpAppId];
+        if (isNewVersion) {
+            wgtPath = [wgtPath stringByAppendingPathComponent:newVersion];
+        }
         if (tmpWgtOneId) {
             [tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
         }
@@ -331,7 +361,7 @@ NSString * webappShowAactivety;
         wgtObj=nil;
     }
     [widgetSql close_database];
-
+    
     [tempArr removeAllObjects];
     return wgtObj;
 }
