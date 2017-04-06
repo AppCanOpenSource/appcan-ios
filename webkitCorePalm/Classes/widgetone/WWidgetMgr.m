@@ -46,7 +46,6 @@ NSString * webappShowAactivety;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[self alloc]init];
-        [manager loadMainWidget];
     });
     return manager;
 }

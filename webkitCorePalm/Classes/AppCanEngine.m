@@ -206,7 +206,7 @@ static NSInvocation* _swizzleMethodWithBlock(Class target,SEL origin,id block){
             ACLogSetGlobalLogMode(ACLogModeDebug);
         }
     }
-    
+    [[WWidgetMgr sharedManager] loadMainWidget];
     _rootController = [[EBrowserController alloc] initWithMainWidget];
     _rootController.isAppCanRootViewController = YES;
     _mainWidgetController = [[ACEUINavigationController alloc] initWithEBrowserController:_rootController];
