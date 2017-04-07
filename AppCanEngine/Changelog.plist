@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.1.6</key>
+	<array>
+		<string>引擎现在默认允许自动转屏</string>
+		<string>WidgetOneSDK兼容性更新</string>
+	</array>
 	<key>4.1.5</key>
 	<array>
 		<string>修正首次启动应用时初始化时间过长的问题</string>
