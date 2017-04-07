@@ -308,6 +308,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     //创建临时目录做文件中转站
     NSString *tmpPatchPath = [BUtility getDocumentsPath:@"uexAppStoreMgrSubWidget"];
+    [fileMgr removeItemAtPath:tmpPatchPath error:nil];
     [fileMgr createDirectoryAtPath:tmpPatchPath withIntermediateDirectories:YES attributes:nil error:nil];
     
     if ([zip UnzipOpenFile:subWidgetPatchZipPath] &&
@@ -361,7 +362,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
             NSArray *widgetPathFolderList = [fileMgr contentsOfDirectoryAtPath:tmpPatchPath error:nil];
             
             subAppID = [NSString stringWithFormat:@"%@", [widgetPathFolderList firstObject]];
-
+            
             //拼接上appID
             NSString *tmpWidgetPath = [tmpPatchPath stringByAppendingPathComponent:subAppID];
             outputPath = [outputPath stringByAppendingPathComponent:subAppID];
@@ -381,7 +382,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
             if ([ACEWidgetUpdateUtility copyItemsFromPath:tmpWidgetPath toPath:outputPath]) {
                 
                 NSLog(@"appcan-->old-->Engine-->ACEWidgetUpdateUtility.m-->unZipSubWidgetNeedPatchUpdate-->outputPath = %@", outputPath);
-
+                
                 [fileMgr removeItemAtPath:tmpPatchPath error:nil];
                 [fileMgr removeItemAtPath:subWidgetPatchZipPath error:nil];
                 
@@ -395,7 +396,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         if (newVersion && newVersion.length > 0){
             
             [StandardUserDefaults setObject:newVersion forKey:subAppID];
-
+            
         }
     }
     
