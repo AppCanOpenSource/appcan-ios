@@ -61,6 +61,9 @@ static NSString *const ACEMainWidgetPatchZipPathUserDefaultsKey =     @"AppCanMa
 static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidgetVersionUserDefaultsKey";
 
 
+
+
+
 #pragma mark - Class Properties
 
 
@@ -293,6 +296,164 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     [[WWidgetMgr sharedManager] loadMainWidget];
     return ACEWidgetUpdateResultSuccess;
 
+}
+
++ (void)unZipSubWidgetNeedPatchUpdate:(NSString *)subWidgetPatchZipPath {
+    
+    ZipArchive *zip = [[ZipArchive alloc] init];
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+    
+    //解压后的widget包的最终路径
+    NSString *outputPath = [BUtility getDocumentsPath:@"widgets"];
+    
+    //创建临时目录做文件中转站
+    NSString *tmpPatchPath = [BUtility getDocumentsPath:@"uexAppStoreMgrSubWidget"];
+    [fileMgr removeItemAtPath:tmpPatchPath error:nil];
+    [fileMgr createDirectoryAtPath:tmpPatchPath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    if ([zip UnzipOpenFile:subWidgetPatchZipPath] &&
+        [zip UnzipFileTo:tmpPatchPath overWrite:YES] &&
+        [zip UnzipCloseFile]) {
+        
+        
+        NSString *newVersion = @"";
+        NSString *subAppID = @"";
+        
+        //先解压到临时目录,由于不同的EMM后台zip包的目录也不同,在copy前需判断zip包的目录结构
+        
+        NSArray *fileList = [fileMgr contentsOfDirectoryAtPath:tmpPatchPath error:nil];
+        
+        if ([fileList containsObject:@"widget"] && [fileList containsObject:@"plugin"]) {
+            
+            NSString  *tmpWidgetPath = [tmpPatchPath stringByAppendingPathComponent:@"widget"];
+            
+            NSArray *widgetPathFolderList = [fileMgr contentsOfDirectoryAtPath:tmpWidgetPath error:nil];
+            
+            subAppID = [NSString stringWithFormat:@"%@", [widgetPathFolderList firstObject]];
+            //拼接上appID
+            tmpWidgetPath = [tmpWidgetPath stringByAppendingPathComponent:subAppID];
+            outputPath = [outputPath stringByAppendingPathComponent:subAppID];
+            
+            NSError *error;
+            //新版补丁包config.xml目录结构: widget(plugin并列)/appID/config.xml
+            NSData *xmlData = [NSData dataWithContentsOfFile:[tmpWidgetPath stringByAppendingPathComponent:@"config.xml"]];
+            ONOXMLDocument *configDocument = [ONOXMLDocument XMLDocumentWithData:xmlData error:&error];
+            if (!configDocument) {
+                ACLogError(@"read patched config.xml failed: %@",error.localizedDescription);
+            }
+            newVersion = configDocument.rootElement[@"version"];
+            
+            //widgets/appId/version/config.xml 最终子应用的目录
+            outputPath =[outputPath stringByAppendingPathComponent:newVersion];
+            
+            if ([ACEWidgetUpdateUtility copyItemsFromPath:tmpWidgetPath toPath:outputPath ]) {
+                
+                NSLog(@"appcan-->Engine-->ACEWidgetUpdateUtility.m-->unZipSubWidgetNeedPatchUpdate-->outputPath = %@", outputPath);
+                
+                [fileMgr removeItemAtPath:tmpPatchPath error:nil];
+                [fileMgr removeItemAtPath:subWidgetPatchZipPath error:nil];
+                
+            } else {
+                NSLog(@"新版本的补丁包--->>更新失败");
+            }
+            
+        } else {
+            
+            NSArray *widgetPathFolderList = [fileMgr contentsOfDirectoryAtPath:tmpPatchPath error:nil];
+            
+            subAppID = [NSString stringWithFormat:@"%@", [widgetPathFolderList firstObject]];
+            
+            //拼接上appID
+            NSString *tmpWidgetPath = [tmpPatchPath stringByAppendingPathComponent:subAppID];
+            outputPath = [outputPath stringByAppendingPathComponent:subAppID];
+            
+            NSError *error;
+            //旧版补丁包zip目录  appID/config.xml
+            NSData *xmlData = [NSData dataWithContentsOfFile:[tmpWidgetPath stringByAppendingPathComponent:@"config.xml"]];
+            ONOXMLDocument *configDocument = [ONOXMLDocument XMLDocumentWithData:xmlData error:&error];
+            if (!configDocument) {
+                ACLogError(@"old read patched config.xml failed: %@",error.localizedDescription);
+            }
+            newVersion = configDocument.rootElement[@"version"];
+            
+            //widgets/appId/version/config.xml 最终子应用的目录
+            outputPath =[outputPath stringByAppendingPathComponent:newVersion];
+            
+            if ([ACEWidgetUpdateUtility copyItemsFromPath:tmpWidgetPath toPath:outputPath]) {
+                
+                NSLog(@"appcan-->old-->Engine-->ACEWidgetUpdateUtility.m-->unZipSubWidgetNeedPatchUpdate-->outputPath = %@", outputPath);
+                
+                [fileMgr removeItemAtPath:tmpPatchPath error:nil];
+                [fileMgr removeItemAtPath:subWidgetPatchZipPath error:nil];
+                
+            } else {
+                
+                NSLog(@"旧版本的补丁包--->>更新失败");
+                
+            }
+        }
+        
+        if (newVersion && newVersion.length > 0){
+            
+            [StandardUserDefaults setObject:newVersion forKey:subAppID];
+            
+        }
+    }
+    
+}
+
+
+
++ (BOOL)copyItemsFromPath:(NSString *)fromPath toPath:(NSString *)toPath {
+    
+    NSError * error;
+    NSFileManager * fileMgr = [NSFileManager defaultManager];
+    
+    BOOL folderFlag = YES;
+    
+    if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
+        BOOL result = [fileMgr createDirectoryAtPath:toPath withIntermediateDirectories:NO attributes:nil error:&error];
+        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:toPath]];
+        if (!result && error) {
+            return NO;
+        }
+    }
+    
+    if ([fileMgr fileExistsAtPath:fromPath]) {
+        NSError * error;
+        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:fromPath];
+        NSString * fileName = nil;
+        BOOL result;
+        while ((fileName = [fromEnumerator nextObject])) {
+            NSString * oldFilePath = [fromPath stringByAppendingPathComponent:fileName];
+            NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
+            BOOL flag = YES;
+            if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
+                if (!flag) {
+                    if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
+                        if ([fileMgr fileExistsAtPath:newFilePath]) {
+                            result = [fileMgr removeItemAtPath:newFilePath error:&error];
+                            if (!result && error) {
+                                return NO;
+                            }
+                        }
+                        result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
+                        if (!result && error) {
+                            return NO;
+                        }
+                    }
+                } else {
+                    result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
+                    if (!result && error) {
+                        return NO;
+                    }
+                }
+            }
+        }
+    } else {
+        return NO;
+    }
+    return YES;
 }
 
 

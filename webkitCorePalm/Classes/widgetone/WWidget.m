@@ -75,7 +75,9 @@
             wgtPath = [wgtPathString substringToIndex:range.location+range.length];
             NSRange range1 = [wgtPath rangeOfString:@"file://"];
             wgtPath = [wgtPath substringFromIndex:range1.location + range1.length];
-            wgtPath = [wgtPath stringByAppendingString:self.appId];
+            //wgtPath = [wgtPath stringByAppendingString:self.appId];
+            wgtPath = [wgtPath stringByAppendingPathComponent:self.appId];
+
         }
     }
     NSFileManager *fManager = [NSFileManager defaultManager];
