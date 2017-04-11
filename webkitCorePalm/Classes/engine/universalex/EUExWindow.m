@@ -1441,7 +1441,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             NSString *text = [temp text];
             NSMutableDictionary *retDict = [[NSMutableDictionary alloc]initWithCapacity:5];
             [retDict setObject:@(buttonIndex) forKey:@"index"];
-            [retDict setValue:text forKey:@"value"];
+            [retDict setValue:text forKey:@"data"];
             [self callbackWithKeyPath:F_CB_WINDOW_PROMPT jsonData:[retDict ac_JSONFragment]];
             [self.promptCB executeWithArguments:ACArgsPack(@(buttonIndex),text)];
             self.promptCB = nil;

@@ -63,3 +63,15 @@ archives/*
 
 
 
+
+AppCanEngine/AppCanKit.framework/Headers/ACArguments.h
+
+*.h
+
+*.plist
+
+*.modulemap
+
+*.xcscheme
+
+*.xcscheme
