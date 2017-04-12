@@ -396,7 +396,7 @@ static BOOL isAppLaunchedByPush = NO;
     
     [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
     [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
-    [analysisObject ac_invoke:@"setAppVersion:" arguments:ACArgsPack(wgtObj.ver)];
+    [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
     [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
     
     
