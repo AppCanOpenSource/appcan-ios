@@ -1369,17 +1369,19 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     ACArgsUnpack(NSString *inTitle,NSString *inMessage,NSString *inDefaultValue,NSArray *inButtonLabels,NSString *placeHolder) = inArguments;
     NSString *inButtonLabelStr = inArguments.count > 3 ? stringArg(inArguments[3]) : nil;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
+    NSInteger mode = 0;
     if (info) {
         inTitle = stringArg(info[@"title"]);
         inMessage = stringArg(info[@"message"]);
         inButtonLabels = arrayArg(info[@"buttonLabels"]);
         inButtonLabelStr = stringArg(info[@"buttonLabels"]);
+        mode = [numberArg(info[@"mode"]) integerValue];
     }
     if (!inButtonLabels) {
         inButtonLabels = [inButtonLabelStr componentsSeparatedByString:@","];
     }
-    inTitle = inTitle?:@" ";
-    
+    inTitle = inTitle ?: @" ";
+
     self.promptCB = JSFunctionArg(inArguments.lastObject);
     self.mbAlertView = [[BUIAlertView alloc]initWithType:ACEBUIAlertViewTypePrompt];
     self.mbAlertView.mAlertView = [[UIAlertView alloc] initWithTitle:inTitle
@@ -1387,8 +1389,17 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                                             delegate:self
                                                    cancelButtonTitle:nil
                                                    otherButtonTitles:nil];
+    switch (mode) {
+        case 1:
+            self.mbAlertView.mAlertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+            break;
+        default:
+            self.mbAlertView.mAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+            break;
+    }
     
-    self.mbAlertView.mAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    
+    
     UITextField * temp = [self.mbAlertView.mAlertView textFieldAtIndex:0];
     temp.text = inDefaultValue;
     temp.placeholder = placeHolder;

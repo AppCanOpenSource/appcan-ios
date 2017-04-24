@@ -4,17 +4,19 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "91D75592FAC7257879DA679CAC0B6A91666FE034" : 9223372036854775807,
+    "9A76F17C6068412484158A754CBD274391008322" : 9223372036854775807,
+    "F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3" : 9223372036854775807,
     "6DF796DA1B02B35BB78D8952E86824D016B918DA" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5353B620-D1E2-4163-BA36-DE268F9BA9C6",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "91D75592FAC7257879DA679CAC0B6A91666FE034" : "appcan-test-report\/",
+    "9A76F17C6068412484158A754CBD274391008322" : "appcan-ios\/Carthage\/Checkouts\/Ono\/",
+    "F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3" : "appcan-ios\/Carthage\/Checkouts\/pop\/",
     "6DF796DA1B02B35BB78D8952E86824D016B918DA" : "appcan-ios\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "AppCanEngine",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AppCanEngine\/AppCanEngine.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AppCanEngine.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AppCanOpenSource\/appcan-ios.git",
@@ -22,9 +24,14 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6DF796DA1B02B35BB78D8952E86824D016B918DA"
     },
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AppCanOpenSource\/appcan-test-report.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ios-plugin\/Ono.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "91D75592FAC7257879DA679CAC0B6A91666FE034"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9A76F17C6068412484158A754CBD274391008322"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ios-plugin\/pop.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3"
     }
   ]
 }
