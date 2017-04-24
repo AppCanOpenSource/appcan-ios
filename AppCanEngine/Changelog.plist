@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.1.7</key>
+	<array>
+		<string>修复一个导致res://路径解析失败的bug</string>
+		<string>修复一个导致子应用上报版本号异常的bug</string>
+		<string>支持子应用热修复</string>
+		<string>uexWindow.prompt接口支持密码输入样式</string>
+		<string>更新AppCanKit版本</string>
+	</array>
 	<key>4.1.6</key>
 	<array>
 		<string>引擎现在默认允许自动转屏</string>
