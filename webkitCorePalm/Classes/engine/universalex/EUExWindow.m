@@ -1375,6 +1375,8 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         inMessage = stringArg(info[@"message"]);
         inButtonLabels = arrayArg(info[@"buttonLabels"]);
         inButtonLabelStr = stringArg(info[@"buttonLabels"]);
+        inDefaultValue = stringArg(info[@"defaultValue"]);
+        placeHolder = stringArg(info[@"hint"]);
         mode = [numberArg(info[@"mode"]) integerValue];
     }
     if (!inButtonLabels) {
