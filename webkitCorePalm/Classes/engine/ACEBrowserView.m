@@ -713,6 +713,12 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
     BOOL isStatusBarHidden = [[[NSBundle mainBundle].infoDictionary valueForKey:@"UIStatusBarHidden"] boolValue];
     [self loadUEXScript];
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"showStatusBar"]) {
+        
+        isStatusBarHidden = [[[NSUserDefaults standardUserDefaults] objectForKey:@"showStatusBar"] boolValue];
+    }
+    
     initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
     [self stringByEvaluatingJavaScriptFromString:initStr];
     

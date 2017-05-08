@@ -77,7 +77,18 @@
             wgtPath = [wgtPath substringFromIndex:range1.location + range1.length];
             //wgtPath = [wgtPath stringByAppendingString:self.appId];
             wgtPath = [wgtPath stringByAppendingPathComponent:self.appId];
-
+            
+        }else{
+            
+            subWidgetIdentifier = @"widget/plugin/";
+            NSRange range = [self.indexUrl rangeOfString:subWidgetIdentifier];
+            if (range.location != NSNotFound) {
+                wgtPath = [wgtPathString substringToIndex:range.location+range.length];
+                NSRange range1 = [wgtPath rangeOfString:@"file://"];
+                wgtPath = [wgtPath substringFromIndex:range1.location + range1.length];
+                wgtPath = [wgtPath stringByAppendingPathComponent:self.appId];
+                
+            }
         }
     }
     NSFileManager *fManager = [NSFileManager defaultManager];
