@@ -3195,14 +3195,17 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 - (void)hideStatusBar:(NSArray *)inArgument {
     self.EBrwView.meBrwCtrler.shouldHideStatusBarNumber = @(YES);
     [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
+    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"showStatusBar"];
 
     
 }
 
 - (void)showStatusBar:(NSArray *)inArgument {
+    
     self.EBrwView.meBrwCtrler.shouldHideStatusBarNumber = @(NO);
     [self.EBrwView.meBrwCtrler.aceNaviController setNeedsStatusBarAppearanceUpdate];
-    
+    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"showStatusBar"];
+
 }
 
 //设置状态条上字体的颜色

@@ -48,6 +48,7 @@
 #import "ACEUINavigationController.h"
 #import "ACESubwidgetManager.h"
 
+#import <UserNotifications/UserNotifications.h>
 
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
@@ -88,7 +89,12 @@ typedef NS_ENUM(NSInteger,uexWidgetPushStatus){
     [self onReceivePushNotification:userInfo];
 }
 
-
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
+    
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    [self onReceivePushNotification:userInfo];
+    
+}
 
 + (void)onReceivePushNotification:(NSDictionary *)userInfo{
     if (!userInfo) {
