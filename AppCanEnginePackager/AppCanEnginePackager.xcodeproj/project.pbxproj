@@ -26,12 +26,6 @@
 		420F732D1E4B189400B4C626 /* LzmaSDK_ObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */; };
 		420F732E1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */; };
 		420F732F1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		420F73321E4B18E900B4C626 /* Swiftline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420F73311E4B18E900B4C626 /* Swiftline.framework */; };
-		420F73331E4B199D00B4C626 /* Swiftline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420F73311E4B18E900B4C626 /* Swiftline.framework */; };
-		420F73341E4B199D00B4C626 /* Swiftline.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 420F73311E4B18E900B4C626 /* Swiftline.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		420F73361E4B1C9800B4C626 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420F73351E4B1C9800B4C626 /* Zip.framework */; };
-		420F73371E4B1C9B00B4C626 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420F73351E4B1C9800B4C626 /* Zip.framework */; };
-		420F73381E4B1C9B00B4C626 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 420F73351E4B1C9800B4C626 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		422D82081E4C08CC00399EEA /* XcodeBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422D82071E4C08CC00399EEA /* XcodeBuild.swift */; };
 		422D820C1E4C0DF100399EEA /* EngineInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422D820B1E4C0DF100399EEA /* EngineInfo.swift */; };
 /* End PBXBuildFile section */
@@ -53,8 +47,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				420F73341E4B199D00B4C626 /* Swiftline.framework in Embed Frameworks */,
-				420F73381E4B1C9B00B4C626 /* Zip.framework in Embed Frameworks */,
 				420F732F1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -67,8 +59,6 @@
 		420F71371E4B0DEC00B4C626 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		420F713E1E4B0EEE00B4C626 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LzmaSDK_ObjC.framework; sourceTree = "<group>"; };
-		420F73311E4B18E900B4C626 /* Swiftline.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swiftline.framework; path = Carthage/Build/Mac/Swiftline.framework; sourceTree = SOURCE_ROOT; };
-		420F73351E4B1C9800B4C626 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = Carthage/Build/Mac/Zip.framework; sourceTree = SOURCE_ROOT; };
 		422D82071E4C08CC00399EEA /* XcodeBuild.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeBuild.swift; sourceTree = "<group>"; };
 		422D820B1E4C0DF100399EEA /* EngineInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,12 +68,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				420F73331E4B199D00B4C626 /* Swiftline.framework in Frameworks */,
 				420F732D1E4B189400B4C626 /* LzmaSDK_ObjC.framework in Frameworks */,
 				420F732E1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Frameworks */,
-				420F73321E4B18E900B4C626 /* Swiftline.framework in Frameworks */,
-				420F73371E4B1C9B00B4C626 /* Zip.framework in Frameworks */,
-				420F73361E4B1C9800B4C626 /* Zip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,8 +95,6 @@
 		420F712F1E4B0DEC00B4C626 /* AppCanEnginePackager */ = {
 			isa = PBXGroup;
 			children = (
-				420F73351E4B1C9800B4C626 /* Zip.framework */,
-				420F73311E4B18E900B4C626 /* Swiftline.framework */,
 				420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */,
 				420F71371E4B0DEC00B4C626 /* Info.plist */,
 				420F713E1E4B0EEE00B4C626 /* main.swift */,

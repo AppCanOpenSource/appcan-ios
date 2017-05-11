@@ -96,6 +96,16 @@ typedef NS_ENUM(NSInteger,uexWidgetPushStatus){
     
 }
 
++ (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(NSUInteger))completionHandler{
+    
+    NSDictionary * userInfo = notification.request.content.userInfo;
+    
+    [self onReceivePushNotification:userInfo];
+    
+    
+}
 + (void)onReceivePushNotification:(NSDictionary *)userInfo{
     if (!userInfo) {
         return;
@@ -873,7 +883,7 @@ static BOOL isAppLaunchedByPush = NO;
 
 - (void)sendPushUserMsg:(id)userInfo{
     
-    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound &&[AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"mms"].location == NSNotFound) {
         
         NSString *softToken = [EUtility md5SoftToken];
 
