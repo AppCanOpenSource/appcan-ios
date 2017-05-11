@@ -7,6 +7,7 @@
 		<string>修复res://协议首次启动地址不正确的问题</string>
 		<string>修复设置状态栏无效的问题</string>
 		<string>修复iOS10+上收到推送消息后前端无法获取设置的回调函数和推送数据</string>
+		<string>setPushInfo绑定推送接口兼容小企业版mms</string>
 	</array>
 	<key>4.1.7</key>
 	<array>

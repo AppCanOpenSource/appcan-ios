@@ -28,6 +28,12 @@
 		420F732F1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		422D82081E4C08CC00399EEA /* XcodeBuild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422D82071E4C08CC00399EEA /* XcodeBuild.swift */; };
 		422D820C1E4C0DF100399EEA /* EngineInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422D820B1E4C0DF100399EEA /* EngineInfo.swift */; };
+		42A72B981EC3F1E0006DD55A /* Swiftline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A72B961EC3F1E0006DD55A /* Swiftline.framework */; };
+		42A72B991EC3F1E0006DD55A /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A72B971EC3F1E0006DD55A /* Zip.framework */; };
+		42A72B9A1EC3F1F5006DD55A /* Swiftline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A72B961EC3F1E0006DD55A /* Swiftline.framework */; };
+		42A72B9B1EC3F1F5006DD55A /* Swiftline.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A72B961EC3F1E0006DD55A /* Swiftline.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42A72B9C1EC3F1F5006DD55A /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A72B971EC3F1E0006DD55A /* Zip.framework */; };
+		42A72B9D1EC3F1F5006DD55A /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A72B971EC3F1E0006DD55A /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				42A72B9B1EC3F1F5006DD55A /* Swiftline.framework in Embed Frameworks */,
+				42A72B9D1EC3F1F5006DD55A /* Zip.framework in Embed Frameworks */,
 				420F732F1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -61,6 +69,8 @@
 		420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LzmaSDK_ObjC.framework; sourceTree = "<group>"; };
 		422D82071E4C08CC00399EEA /* XcodeBuild.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeBuild.swift; sourceTree = "<group>"; };
 		422D820B1E4C0DF100399EEA /* EngineInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineInfo.swift; sourceTree = "<group>"; };
+		42A72B961EC3F1E0006DD55A /* Swiftline.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swiftline.framework; path = Carthage/Build/Mac/Swiftline.framework; sourceTree = SOURCE_ROOT; };
+		42A72B971EC3F1E0006DD55A /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = Carthage/Build/Mac/Zip.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +78,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42A72B991EC3F1E0006DD55A /* Zip.framework in Frameworks */,
+				42A72B9A1EC3F1F5006DD55A /* Swiftline.framework in Frameworks */,
 				420F732D1E4B189400B4C626 /* LzmaSDK_ObjC.framework in Frameworks */,
 				420F732E1E4B18AF00B4C626 /* LzmaSDK_ObjC.framework in Frameworks */,
+				42A72B9C1EC3F1F5006DD55A /* Zip.framework in Frameworks */,
+				42A72B981EC3F1E0006DD55A /* Swiftline.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +109,8 @@
 		420F712F1E4B0DEC00B4C626 /* AppCanEnginePackager */ = {
 			isa = PBXGroup;
 			children = (
+				42A72B961EC3F1E0006DD55A /* Swiftline.framework */,
+				42A72B971EC3F1E0006DD55A /* Zip.framework */,
 				420F732C1E4B189400B4C626 /* LzmaSDK_ObjC.framework */,
 				420F71371E4B0DEC00B4C626 /* Info.plist */,
 				420F713E1E4B0EEE00B4C626 /* main.swift */,
