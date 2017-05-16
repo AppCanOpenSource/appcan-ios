@@ -529,6 +529,24 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     
     return softToken;
 }
+/**
+ 获取租户标识逻辑
+ */
++(NSString *)getTenantIdentifier{
+    NSString *tenantId = @"";
+    NSString *useAppCanEMMTenantID = ((WidgetOneDelegate *)[[UIApplication sharedApplication] delegate]).useAppCanEMMTenantID;
+    if ([useAppCanEMMTenantID isKindOfClass:[NSString class]]&&[useAppCanEMMTenantID length]>0) {
+        tenantId = useAppCanEMMTenantID;
+    }else {
+        //打包时未设置，则使用EMM设置的租户标识
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *tenantIdEmmStr = [defaults objectForKey:@"tenantAccount"];
+        if ([tenantIdEmmStr isKindOfClass:[NSString class]]&&[tenantIdEmmStr length]>0) {
+            tenantId = tenantIdEmmStr;
+        }
+    }
+    return tenantId;
+}
 +(NSString*)getCachePath:(NSString*)fileName{
     return [BUtility getCachePath:fileName];
 }
