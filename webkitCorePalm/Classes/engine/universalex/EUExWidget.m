@@ -207,11 +207,11 @@ static BOOL isAppLaunchedByPush = NO;
         return;
     }
     
-    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"gateway"].location == NSNotFound) {//URL里包含“gateway”的才是v4后台，否则没有清零逻辑。
         return;
     }
     
-    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",AppCanEngine.configuration.useBindUserPushURL];
+    NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/",AppCanEngine.configuration.useBindUserPushURL];
     NSURL *requestUrl = [NSURL URLWithString:urlStr];
     NSString *appid = [WWidgetMgr sharedManager].mainWidget.appId ?: @"";
     NSString *appkey = [BUtility appKey] ? [BUtility appKey] : @"";
@@ -796,7 +796,7 @@ static BOOL isAppLaunchedByPush = NO;
 }
 - (void)delPushInfo:(NSMutableArray *)inArguments {
     
-    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound &&[AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"mms"].location == NSNotFound) {
         
         NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
         NSString *appkey = [BUtility appKey];
@@ -822,7 +822,7 @@ static BOOL isAppLaunchedByPush = NO;
         //租户标识
         NSString *tenantMark = [EUtility getTenantIdentifier];
         
-        if (!deviceToken || ![deviceToken isEqualToString:@"(null)"]) {
+        if (!deviceToken || [deviceToken isEqualToString:@"(null)"]) {
             deviceToken = @"";
         }
         
@@ -931,6 +931,9 @@ static BOOL isAppLaunchedByPush = NO;
         
         //设备标识 deviceToken
         NSString *deviceToken = [dict objectForKey:@"deviceToken"];
+        if (!deviceToken || [deviceToken isEqualToString:@"(null)"]) {
+            deviceToken = @"";
+        }
         //租户标识
         NSString *tenantMark = [EUtility getTenantIdentifier];
         
