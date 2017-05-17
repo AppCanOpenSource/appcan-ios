@@ -207,11 +207,11 @@ static BOOL isAppLaunchedByPush = NO;
         return;
     }
     
-    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push/gateway"].location == NSNotFound) {//URL里包含“push/gateway”的才是4.0后台，否则没有清零逻辑。(暂时以这个区分判断)
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"gateway"].location == NSNotFound) {//URL里包含“gateway”的才是v4后台，否则没有清零逻辑。
         return;
     }
     
-    NSString *urlStr =[NSString stringWithFormat:@"%@/4.0/count/",AppCanEngine.configuration.useBindUserPushURL];
+    NSString *urlStr =[NSString stringWithFormat:@"%@4.0/count/",AppCanEngine.configuration.useBindUserPushURL];
     NSURL *requestUrl = [NSURL URLWithString:urlStr];
     NSString *appid = [WWidgetMgr sharedManager].mainWidget.appId ?: @"";
     NSString *appkey = [BUtility appKey] ? [BUtility appKey] : @"";
@@ -796,7 +796,7 @@ static BOOL isAppLaunchedByPush = NO;
 }
 - (void)delPushInfo:(NSMutableArray *)inArguments {
     
-    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound) {
+    if ([AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"push"].location == NSNotFound &&[AppCanEngine.configuration.useBindUserPushURL rangeOfString:@"mms"].location == NSNotFound) {
         
         NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
         NSString *appkey = [BUtility appKey];
@@ -818,15 +818,24 @@ static BOOL isAppLaunchedByPush = NO;
         //设备标识 deviceToken
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
+        NSString *softToken = [EUtility md5SoftToken];
+        //租户标识
+        NSString *tenantMark = [EUtility getTenantIdentifier];
         
-        if (!deviceToken || ![deviceToken isEqualToString:@"(null)"]) {
+        if (!deviceToken || [deviceToken isEqualToString:@"(null)"]) {
             deviceToken = @"";
         }
         
         [paramDict setObject:deviceToken forKey:@"deviceToken"];
+        [paramDict setObject:softToken forKey:@"softToken"];
         [paramDict setObject:userDict forKey:@"user"];
-        
-        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations",AppCanEngine.configuration.useBindUserPushURL];
+        //新增请求来源和请求类型字段，以便后端跟踪问题
+        [paramDict setObject:@"iOS-Engine" forKey:@"from"];
+        [paramDict setObject:@"unbind" forKey:@"requestType"];
+        [paramDict setObject:tenantMark forKey:@"tenantMark"];
+        //注册地址变更
+        NSString *accessBindUserPushURL = [AppCanEngine.configuration.useBindUserPushURL stringByReplacingOccurrencesOfString:@"gateway" withString:@"access"];
+        NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations", accessBindUserPushURL];
         
         ASIFormDataRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->headerDict = %@-->body = %@",headerDict,paramDict);
@@ -902,9 +911,11 @@ static BOOL isAppLaunchedByPush = NO;
         NSMutableDictionary *paramDict = [NSMutableDictionary dictionaryWithCapacity:5];
         
         //user信息
-        [userDict setObject:[dict objectForKey:@"uId"] forKey:@"userId"];
-        [userDict setObject:[dict objectForKey:@"uNickName"] forKey:@"username"];
-        
+        NSString *uId = [dict objectForKey:@"uId"];
+        NSString *uNickName = [dict objectForKey:@"uNickName"];
+        [userDict setObject:uId forKey:@"userId"];
+        [userDict setObject:uNickName forKey:@"username"];
+
         //请求头信息
         [headerDict setObject:@"text/plain;charset=UTF-8" forKey:@"Content-Type"];
         [headerDict setObject:@"*/*" forKey:@"Accept"];
@@ -920,13 +931,28 @@ static BOOL isAppLaunchedByPush = NO;
         
         //设备标识 deviceToken
         NSString *deviceToken = [dict objectForKey:@"deviceToken"];
+        if (!deviceToken || [deviceToken isEqualToString:@"(null)"]) {
+            deviceToken = @"";
+        }
+        //租户标识
+        NSString *tenantMark = [EUtility getTenantIdentifier];
         
         [paramDict setObject:@"IOS" forKey:@"deviceType"];
         [paramDict setObject:deviceToken forKey:@"deviceToken"];
         [paramDict setObject:softToken forKey:@"softToken"];
         [paramDict setObject:userDict forKey:@"user"];
-        
-        urlStr = [NSString stringWithFormat:@"%@4.0/installations",AppCanEngine.configuration.useBindUserPushURL];
+        [paramDict setObject:@"iOS-Engine" forKey:@"from"];
+        [paramDict setObject:tenantMark forKey:@"tenantMark"];
+        //新增请求来源和请求类型字段，以便后端跟踪问题
+        if((uId == nil || [uId length] == 0) && (uNickName == nil || [uNickName length] == 0)){
+            //未传入用户信息，认为是推送注册上报
+            [paramDict setObject:@"startUp" forKey:@"requestType"];
+        }else{
+            [paramDict setObject:@"bindUser" forKey:@"requestType"];
+        }
+        //注册地址变更
+        NSString *accessBindUserPushURL = [AppCanEngine.configuration.useBindUserPushURL stringByReplacingOccurrencesOfString:@"gateway" withString:@"access"];
+        urlStr = [NSString stringWithFormat:@"%@4.0/installations", accessBindUserPushURL];
         
         ASIHTTPRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         //requestSetPushInfo = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];

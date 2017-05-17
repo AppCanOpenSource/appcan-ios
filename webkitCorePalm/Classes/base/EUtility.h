@@ -326,6 +326,7 @@ extern NSString * const cUexPluginCallbackInFrontWindow;
 + (UIImage *)imageByScalingAndCroppingForSize:(UIImage *)image;
 + (NSString*)LogServerIp:(EBrowserView*)inBrwView;
 + (NSString*)md5SoftToken;
++ (NSString *)getTenantIdentifier;
 + (NSString*)getCachePath:(NSString*)fileName;
 @end
 
