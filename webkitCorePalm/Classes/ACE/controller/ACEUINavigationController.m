@@ -131,6 +131,9 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
+    if (![BUtility useIOS7Style]) {
+        return UIStatusBarStyleLightContent;
+    }
     for (ACEBaseViewController *controller in self.viewControllers.reverseObjectEnumerator) {
         if (![controller isKindOfClass:[ACEBaseViewController class]]) {
             continue;

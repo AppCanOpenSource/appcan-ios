@@ -101,10 +101,10 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getHideEnterStatus:) name:@"componentStatusUpdate" object:nil];
         _mFlag = 0;
         _mamList = [[NSMutableArray alloc] initWithCapacity:1];
-        _meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[UIScreen mainScreen].bounds BrwCtrler:self];
+        _meBrwMainFrm = [[EBrowserMainFrame alloc]initWithFrame:[BUtility getApplicationInitFrame] BrwCtrler:self];
         _meBrw = [[EBrowser alloc] init];
         _meBrw.meBrwCtrler = self;
-        _meBrwMainFrm.meBrwWgtContainer = [[EBrowserWidgetContainer alloc] initWithFrame:[UIScreen mainScreen].bounds browserController:self widget:widget];
+        _meBrwMainFrm.meBrwWgtContainer = [[EBrowserWidgetContainer alloc] initWithFrame:_meBrwMainFrm.bounds browserController:self widget:widget];
         [_meBrwMainFrm insertSubview:_meBrwMainFrm.meBrwWgtContainer atIndex:0];
     }
     

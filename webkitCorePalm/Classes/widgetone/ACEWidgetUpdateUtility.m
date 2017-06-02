@@ -412,7 +412,10 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     BOOL folderFlag = YES;
     
     if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
-        BOOL result = [fileMgr createDirectoryAtPath:toPath withIntermediateDirectories:NO attributes:nil error:&error];
+        BOOL result = [fileMgr createDirectoryAtPath:toPath
+                         withIntermediateDirectories:YES
+                                          attributes:nil
+                                               error:&error];
         [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:toPath]];
         if (!result && error) {
             return NO;

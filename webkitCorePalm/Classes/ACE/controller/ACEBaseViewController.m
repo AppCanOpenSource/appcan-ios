@@ -17,23 +17,24 @@
  */
 
 #import "ACEBaseViewController.h"
-
 #import "BUtility.h"
-
+#import "ACEUINavigationController.h"
 
 
 @interface ACEBaseViewController ()
-
 @end
 
 @implementation ACEBaseViewController
 
-
-- (void)dealloc{
-}
-
 - (void)viewDidLoad {
     self.automaticallyAdjustsScrollViewInsets = NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    if(self.navigationController && [self.navigationController isKindOfClass:[ACEUINavigationController class]]){
+        return self.navigationController.preferredStatusBarStyle;
+    }
+    return [super preferredStatusBarStyle];
 }
 
 @end

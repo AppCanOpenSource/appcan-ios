@@ -345,44 +345,31 @@ static NSString *clientCertificatePwd = nil;
 	return results;
 }
 + (int)getScreenWidth {
-	return [UIScreen mainScreen].applicationFrame.size.width;
+	return [UIScreen mainScreen].bounds.size.width;
 }
 
 + (int)getScreenHeight {
     return [UIScreen mainScreen].bounds.size.height;
 }
-+(CGRect)getApplicationInitFrame {
 
-    int appWidth = [UIScreen mainScreen].applicationFrame.size.width;
-    int appHeight = [UIScreen mainScreen].applicationFrame.size.height;
-    
-    CGRect rect = CGRectMake(0, 0, appWidth, appHeight);
-    
-    //if (isSysVersionAbove7_0){
-    if (ACSystemVersion() >= 7.0){
-        appWidth = [UIScreen mainScreen].bounds.size.width;
-        appHeight = [UIScreen mainScreen].bounds.size.height;
-        
-        NSNumber *statusBarHidden = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIStatusBarHidden"];
-        if ([statusBarHidden boolValue] == YES) {
-            rect = CGRectMake(0, 0, appWidth, appHeight);
-        }
-        else {
-            
-            NSNumber *statusBarStyleIOS7 = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"StatusBarStyleIOS7"];
++ (BOOL)useIOS7Style{
+    static BOOL useIOS7Style = YES;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary *infoDictionary = NSBundle.mainBundle.infoDictionary;
+        NSNumber *statusBarHidden = infoDictionary[@"UIStatusBarHidden"];
+        NSNumber *statusBarStyleIOS7 = infoDictionary[@"StatusBarStyleIOS7"];
+        useIOS7Style = statusBarHidden.boolValue || statusBarStyleIOS7.boolValue;
+    });
+    return useIOS7Style;
+}
 
-            int statusBarHeight = 20;
-            if ([statusBarStyleIOS7 boolValue] == YES) {
-                rect =  CGRectMake(0, 0, appWidth, appHeight);
-            }else{
-                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-                rect = CGRectMake(0, statusBarHeight, appWidth, appHeight - statusBarHeight);
-            }
-            
-        }
-
++ (CGRect)getApplicationInitFrame {
+    CGRect rect = [UIScreen mainScreen].bounds;
+    if (![self useIOS7Style]) {
+        rect.origin.y = 20;
+        rect.size.height -= 20;
     }
-    
     return rect;
 }
 + (NSString *)getScreenWAndH{

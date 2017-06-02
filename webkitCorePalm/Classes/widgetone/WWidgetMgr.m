@@ -30,6 +30,7 @@
 #import "ACEConfigXML.h"
 #import "ACEDes.h"
 #import "AppCanEngine.h"
+#import "ACEWidgetUpdateUtility.h"
 
 NSString * webappShowAactivety;
 
@@ -65,11 +66,15 @@ NSString * webappShowAactivety;
     
     BOOL isCopyFinish = [[[NSUserDefaults standardUserDefaults]objectForKey:F_UD_WgtCopyFinish] boolValue];
     
-    NSString *configPath = nil;
-    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
-        configPath = [BUtility getDocumentsPath:[AppCanEngine.configuration.documentWidgetPath stringByAppendingPathComponent:@"config.xml"]];
+    NSString *configPath, *tmpWgtPath, *basePath;
+    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish && ![ACEWidgetUpdateUtility isWidgetCopyNeeded]) {
+        tmpWgtPath = AppCanEngine.configuration.documentWidgetPath;
+        configPath = [BUtility getDocumentsPath:[tmpWgtPath stringByAppendingPathComponent:@"config.xml"]];
+        basePath = [BUtility getDocumentsPath:@""];
     } else {
-        configPath = [BUtility getResPath:[AppCanEngine.configuration.originWidgetPath stringByAppendingPathComponent:@"config.xml"]];
+        tmpWgtPath = AppCanEngine.configuration.originWidgetPath;
+        configPath = [BUtility getResPath:[tmpWgtPath stringByAppendingPathComponent:@"config.xml"]];
+        basePath = [BUtility getResPath:@""];
     }
     NSMutableDictionary * tmpWgtDict = [self wgtParameters:configPath];
 
@@ -109,12 +114,7 @@ NSString * webappShowAactivety;
 	//得到mainWidget,config.xml
 	
 
-	NSString * tmpWgtPath;
-    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
-        tmpWgtPath = AppCanEngine.configuration.documentWidgetPath;
-    }else{
-        tmpWgtPath = AppCanEngine.configuration.originWidgetPath;
-    }
+
     NSString * tmpWgtOneId = [BUtility appKey];
     if (tmpWgtOneId) {
         [tmpWgtDict setObject:tmpWgtOneId forKey:CONFIG_TAG_WIDGETONEID];
@@ -126,17 +126,7 @@ NSString * webappShowAactivety;
 	
 	if (wgtobj.showMySpace == 1) {
 		wgtobj.showMySpace = (WIDGETREPORT_SPACESTATUS_OPEN | WIDGETREPORT_SPACESTATUS_EXTEN_OPEN);
-	} 
-
-    
-	NSString * basePath = nil;
-    
-    if (AppCanEngine.configuration.useUpdateWgtHtmlControl && isCopyFinish) {
-        basePath = [BUtility getDocumentsPath:@""];
-    } else {
-        basePath = [BUtility getResPath:@""];
-    }
-    
+	}
     wgtobj.widgetPath = [basePath stringByAppendingPathComponent:wgtobj.widgetPath];
     
 

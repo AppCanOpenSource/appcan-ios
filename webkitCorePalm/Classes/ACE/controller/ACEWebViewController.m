@@ -32,12 +32,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-
-    CGRect rect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    _browserWindow.frame = rect;
+    _browserWindow.frame = [BUtility getApplicationInitFrame];
     [self.view addSubview:_browserWindow];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [BUtility useIOS7Style] ? UIColor.clearColor : UIColor.blackColor;
 }
 
 

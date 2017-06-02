@@ -541,7 +541,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     }
     
     if (!eBrwWnd) {
-        eBrwWnd = [[EBrowserWindow alloc]initWithFrame:CGRectMake(0, 0, eBrwWndContainer.bounds.size.width, eBrwWndContainer.bounds.size.height) BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt UExObjName:inWindowName];
+        eBrwWnd = [[EBrowserWindow alloc]initWithFrame:eBrwWndContainer.bounds BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt UExObjName:inWindowName];
         eBrwWnd.winContainer = eBrwWndContainer;
         [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inWindowName];
     } else {

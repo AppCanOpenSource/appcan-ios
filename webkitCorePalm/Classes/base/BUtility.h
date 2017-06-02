@@ -77,10 +77,7 @@
 #ifndef Plugin_OUTPUT_LOG_CONSOLE
 #define Plugin_OUTPUT_LOG_CONSOLE
 #endif
-
 #endif
-
-
 
 #define rgba(r,g,b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1]
 //rc4
@@ -92,11 +89,6 @@ void rc4_setup( struct rc4_state *s, unsigned char *key, int length);
 void rc4_crypt( struct rc4_state *s, unsigned char *data, int length);
 //Log
 void ACENSLog (NSString *format, ...);
-
-
-
-
-
 
 @class EBrowserView;
 @interface BUtility : NSObject
@@ -116,6 +108,7 @@ void ACENSLog (NSString *format, ...);
 //+(BOOL)isPhoneNumber:(NSString*)inPhoneNum;
 +(int)getScreenWidth;
 +(int)getScreenHeight;
++ (BOOL)useIOS7Style;
 + (CGRect)getApplicationInitFrame;
 +(NSString*)getScreenWAndH;
 +(float)getSystemVersion;
@@ -181,11 +174,6 @@ void ACENSLog (NSString *format, ...);
 + (NSString *)bundleIdentifier;
 + (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
-
-
-
-
-
 + (NSString *)dynamicPluginFrameworkFolderPath;
 
 @end
