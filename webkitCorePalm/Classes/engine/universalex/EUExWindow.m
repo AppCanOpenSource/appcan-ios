@@ -2926,7 +2926,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     EBrowserWindow *eBrwWnd = (EBrowserWindow*)self.EBrwView.meBrwWnd;
     EScrollView * multiPopover = [eBrwWnd.mMuiltPopoverDict objectForKey:popName];
     UIScrollView * scrollView = multiPopover.scrollView;
-    [scrollView setContentOffset: CGPointMake(scrollView.bounds.size.width * indexNum.integerValue, scrollView.contentOffset.y) animated: NO];
+    [scrollView setContentOffset: CGPointMake(scrollView.bounds.size.width * indexNum.integerValue, scrollView.contentOffset.y) animated: YES];
 }
 
 
