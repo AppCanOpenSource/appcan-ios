@@ -899,8 +899,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
             eBrwWnd.meFrontWnd.meBackWnd = eBrwWnd.meBackWnd;
             eBrwWnd.mFlag = 0;
-            [eBrwWnd removeFromSuperview];
+            //[eBrwWnd removeFromSuperview];
             [ACEAnimations addClosingAnimationWithID:animiId fromView:eBrwWnd toView:eBrwWndContainer duration:aniDuration configuration:nil completionHandler:^(BOOL finished) {
+                [eBrwWnd removeFromSuperview];
                 [eBrwWndContainer removeFromWndDict:self.EBrwView.meBrwWnd.windowName];
                 [eBrwWnd clean];
                 [self closeWindowAfterAnimation:eBrwWnd];
