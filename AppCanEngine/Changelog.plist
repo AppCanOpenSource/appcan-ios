@@ -4,6 +4,7 @@
 <dict>
 	<key>4.1.10</key>
 	<array>
+		<string>修复关闭窗口动画</string>
 		<string>修复禁用iOS7Style无效的问题</string>
 		<string>修复一个导致下载子应用闪退的问题</string>
 		<string>修复升级黑屏问题</string>
