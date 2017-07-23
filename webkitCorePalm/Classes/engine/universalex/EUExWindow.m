@@ -3306,7 +3306,12 @@ static NSString *const kChannelNotificationContentKey = @"content";
     
     ACArgsUnpack(NSString *channelId,id content) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(channelId);
-    UEX_PARAM_GUARD_NOT_NIL(content);
+//    UEX_PARAM_GUARD_NOT_NIL(content);
+    
+    if (content == nil) {
+        content = @"";
+    }
+    
     [self publishChannelNotificationWithChannelId:channelId content:content];
     
 }
