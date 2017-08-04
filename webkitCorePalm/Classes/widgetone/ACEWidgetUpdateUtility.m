@@ -478,8 +478,15 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         BOOL isDirectory = [FileManager fileExistsAtPath:srcFullPath isDirectory:&isDirectory] && isDirectory;
         
 
-        if (isDirectory && (![FileManager createDirectoryAtPath:potentialDstPath withIntermediateDirectories:YES attributes:nil error:&err] || err)) {
-            return NO;
+        if (isDirectory) {
+            if(![FileManager createDirectoryAtPath:potentialDstPath withIntermediateDirectories:YES attributes:nil error:&err] || err){
+                //return YES if the directory was created, YES if createIntermediates is set and the directory already exists, or NO if an error occurred.
+                return NO;
+            }else{
+                if(![self mergeFolderAtPath:srcFullPath intoPath:potentialDstPath error:&err]){
+                    return NO;
+                }
+            }
         }else {
             if ([FileManager fileExistsAtPath:potentialDstPath] && (![FileManager removeItemAtPath:potentialDstPath error:&err] || err)) {
                 return NO;
