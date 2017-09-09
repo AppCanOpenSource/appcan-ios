@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.1.12</key>
+	<array>
+		<string>修复窗口打开动画问题</string>
+	</array>
 	<key>4.1.11</key>
 	<array>
 		<string>修复补丁包合并时文件夹会导致丢失原有文件而可能导致启动黑屏的问题</string>
