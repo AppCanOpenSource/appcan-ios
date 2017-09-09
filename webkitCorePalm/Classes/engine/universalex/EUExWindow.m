@@ -524,7 +524,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
                                       data:inData
                                   dataType:inDataType.integerValue
                                 windowType:ACEWebWindowTypeNavigation
-                               animationID:inAniID.unsignedIntegerValue
+                               animationID:0
                          animationDuration:getAnimationDuration(inAniDuration)
                                  extraInfo:extraInfo];
         return;
