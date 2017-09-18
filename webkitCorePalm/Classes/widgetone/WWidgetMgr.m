@@ -289,7 +289,9 @@ NSString * webappShowAactivety;
     }
     //热修复路径
     
-    NSString *mVer = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
+    NSString *mVer = newVersion;
+    
+    //比对缓存的子应用信息与新的子应用信息的version，若相同，则直接用缓存；不相同，则更新信息
     if ([wgtObj.ver isEqualToString:mVer]) {
         return wgtObj;
     }
