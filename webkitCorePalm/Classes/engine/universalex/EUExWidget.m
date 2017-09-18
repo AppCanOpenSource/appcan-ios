@@ -405,7 +405,7 @@ static BOOL isAppLaunchedByPush = NO;
     
     //子widget启动上报代码
     //过滤掉无appkey的子应用上报(plugin类型)
-    if (self.EBrwView.meBrwCtrler.isAppCanRootViewController || !inAppkey || inAppkey.length == 0) {
+    if (!inAppkey || inAppkey.length == 0) {
         return;
     }
     id analysisObject = ACEAnalysisObject();
@@ -415,7 +415,12 @@ static BOOL isAppLaunchedByPush = NO;
     [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
     [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
     
+    id emmObject = ACEEMMObject();
     
+    [emmObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
+    [emmObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
+    [emmObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
+    [emmObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
 
 }
 
