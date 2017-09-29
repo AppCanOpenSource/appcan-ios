@@ -427,19 +427,38 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
 }
 
+#pragma mark - doUpdateWgt进入线程操作
+- (void)doUpdateWgtBlockFinish:(void(^)(BOOL isFinished))handle
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL isFinished = NO;
+        [self doUpdateWgt];
+        isFinished = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handle(isFinished);
+        });
+    });
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.meBrwMainFrm];
     
-    
-    
     if (self.isAppCanRootViewController) {
         [self presentStartImage];
         if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
-            [self doUpdateWgt];
-            
+            [self doUpdateWgtBlockFinish:^(BOOL isFinished) {
+                
+                [self workAfterDoUpdateWgtBlock];
+                
+            }];
         }
     }
+}
+
+#pragma mark - viewDidLoad中的doUpdateWgtBlockFinish执行完之后进行的操作
+- (void)workAfterDoUpdateWgtBlock
+{
     [self.meBrw start:self.widget];
     
     NSDictionary * extraDic = [BUtility getMainWidgetConfigWindowBackground];
@@ -483,8 +502,6 @@ static BOOL userCustomLoadingImageEnabled = NO;
         }
     }
 }
-
-
 
 //  控制屏幕方向
 
