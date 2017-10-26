@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.1.13</key>
+	<array>
+		<string>优化主应用补丁包更新速度，减少8badf00d崩溃几率</string>
+		<string>修复当子应用与主应用版本号相同时，会导致子应用无法正常升级(版本号不变)的bug</string>
+		<string>修复当数据统计插件存在时，EMM插件不会触发子应用的启动上报的bug</string>
+	</array>
 	<key>4.1.12</key>
 	<array>
 		<string>修复窗口打开动画问题</string>

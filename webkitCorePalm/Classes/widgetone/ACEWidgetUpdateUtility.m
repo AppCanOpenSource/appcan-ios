@@ -271,9 +271,9 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     if ([FileManager fileExistsAtPath:newWidgetPath]) {
         [FileManager removeItemAtPath:newWidgetPath error:nil];
     }
-    
-    if (![FileManager copyItemAtPath:tmpWidgetPath toPath:newWidgetPath error:&error]) {
-        ACLogError(@"copy tmpFolder to newWidgetPath failed: %@",error.localizedDescription);
+    //原copy改为move，缩短主应用补丁包更新时间，减少8badf00d崩溃几率。
+    if (![FileManager moveItemAtPath:tmpWidgetPath toPath:newWidgetPath error:&error]) {
+        ACLogError(@"move tmpFolder to newWidgetPath failed: %@",error.localizedDescription);
         return ACEWidgetUpdateResultError;
     }
     if (![oldWidgetPath isEqualToString:newWidgetPath] && ![FileManager removeItemAtPath:oldWidgetPath error:&error]) {

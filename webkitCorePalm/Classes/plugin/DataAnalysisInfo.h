@@ -13,6 +13,7 @@
 
 
 APPCAN_EXPORT id ACEAnalysisObject();
+APPCAN_EXPORT id ACEEMMObject();
 
 @interface DataAnalysisInfo : NSObject
 

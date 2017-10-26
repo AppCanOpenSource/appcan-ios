@@ -22,6 +22,22 @@ id ACEAnalysisObject(){
     return obj;
 }
 
+/**
+ 用于子应用启动时传递事件给uexEMM插件的对象
+
+ */
+id ACEEMMObject(){
+    static id obj = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Class emmClass = NSClassFromString(@"UexEMMAppCanAnalysis");
+        if (!emmClass) {
+            return;
+        }
+        obj = [[emmClass alloc] init];
+    });
+    return obj;
+}
 
 @implementation DataAnalysisInfo
 + (NSDictionary *)getAppInfoWithCurWgt:(WWidget *)curWgt{
