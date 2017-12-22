@@ -445,13 +445,15 @@ static BOOL userCustomLoadingImageEnabled = NO;
     [self.view addSubview:self.meBrwMainFrm];
     
     if (self.isAppCanRootViewController) {
+        
         [self presentStartImage];
+        
         if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
             [self doUpdateWgtBlockFinish:^(BOOL isFinished) {
-                
                 [self workAfterDoUpdateWgtBlock];
-                
             }];
+        } else {
+            [self workAfterDoUpdateWgtBlock];
         }
     }
 }
