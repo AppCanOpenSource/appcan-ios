@@ -860,6 +860,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         //浮动窗口直接关闭
         [eBrwWnd.mPopoverBrwViewDict removeObjectForKey:self.EBrwView.muexObjName];
         [self.EBrwView removeFromSuperview];
+        return;
     }
     
     //以下是在主窗口中调用close的情况
