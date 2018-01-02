@@ -764,7 +764,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
             
             //2015.5.18 新增onPopoverLoadFinishInRootWnd(name,url)接口
             initStr = [[NSString alloc] initWithFormat:@"if(uexWindow.onPopoverLoadFinishInRootWnd){uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");}",self.muexObjName,[self.request.URL absoluteString]];
-            [EUtility evaluatingJavaScriptInRootWnd:initStr];
+            //[EUtility evaluatingJavaScriptInRootWnd:initStr];
+            //修复回调页面错误问题，现在可以正确的回调给当前子应用的root页面
+            [self.meBrwCtrler.rootView stringByEvaluatingJavaScriptFromString:initStr];
             if ((mFlag & F_EBRW_VIEW_FLAG_OAUTH) == F_EBRW_VIEW_FLAG_OAUTH) {
                 NSString *changedUrl = [[self curUrl] absoluteString];
                 NSString *toBeExeJs = [NSString stringWithFormat:@"if(uexWindow.onOAuthInfo!=null){uexWindow.onOAuthInfo(\'%@\',\'%@\');}", self.muexObjName, changedUrl];
