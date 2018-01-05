@@ -248,6 +248,12 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
     if (customImage) {
         self.mStartView = [[UIImageView alloc] initWithImage:customImage];
+        
+        //JAYTAG-自定义启动图，用户传入的图片比较少，分辨率不全，需要进行缩放和截取，不拉伸。
+        //if (iPhoneX) {
+        self.mStartView.clipsToBounds = YES;
+        self.mStartView.contentMode =  UIViewContentModeScaleAspectFill;
+        //}
     }
     
     if (!self.mStartView) {
@@ -273,6 +279,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
                 launchImageName = [NSString stringWithFormat:@"%@-800-667h@2x", launchImagePrefixFile];
             } else if (iPhone6Plus) {
                 launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-736h@3x", launchImagePrefixFile];
+            } else if (iPhoneX) {
+                launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-812h@3x", launchImagePrefixFile];
             } else {
                 launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
             }
