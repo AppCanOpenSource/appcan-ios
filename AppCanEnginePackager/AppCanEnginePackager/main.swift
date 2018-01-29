@@ -76,12 +76,16 @@ do{
     let xmlURL = tmpFolderURL.appendingPathComponent("iosEngine.xml")
     try xml.write(to: xmlURL, atomically: true, encoding: .utf8)
     
+//MARK: locate Engine dSYM files
+    
+    let dSYMDirURL = rootURL.appendingPathComponent("dSYM", isDirectory: true)
+    
 //MARK: export engine archive
     let archiveURL = archiveFolderURL.appendingPathComponent("\(info.package).zip")
     if fm.fileExists(atPath: archiveURL.path){
         try fm.removeItem(at: archiveURL)
     }
-    try Zip.zipFiles(paths: [packageURL,xmlURL], zipFilePath: archiveURL, password: nil, progress: nil)
+    try Zip.zipFiles(paths: [packageURL,dSYMDirURL,xmlURL], zipFilePath: archiveURL, password: nil, progress: nil)
     
 //MARK: clean up
     try fm.removeItem(at: tmpFolderURL)
