@@ -288,7 +288,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 }
 
 
-- (void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(UIImageView *)inBrwView {
+- (void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(EBrowserView *)inBrwView {
     if ([extraDic objectForKey:@"opaque"]) {
         BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
         if (opaque) {
@@ -310,6 +310,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
             inBrwView.backgroundColor = [UIColor clearColor];
             
         }
+    }
+    
+    NSString *exeJS = [extraDic objectForKey:@"exeJS"];
+    if (exeJS) {
+        [inBrwView setExeJS:exeJS];
     }
 }
 
@@ -472,10 +477,237 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     
     [self helpWindow:eBrwWnd loadData:data withDataType:dataType openFlag:UexWindowOpenFlagNone];
 }
+//在上面的方法中增加了一个参数，用于打开公众号样式的窗口时调用
+- (void)openWindowControllerWithName:(NSString *)windowName
+                                data:(NSString *)data
+                            dataType:(UexWindowOpenDataType)dataType
+                          windowType:(ACEWebWindowType)windowType
+                         animationID:(ACEAnimationID)animationID
+                   animationDuration:(NSTimeInterval)animationDuration
+                           extraInfo:(NSDictionary *)extraInfo
+                       windowOptions:(ACEMPWindowOptions *)windowOptions {
+    
+    EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
+    EBrowserWindowContainer *eBrwWndContainer = eCurBrwWnd.winContainer;
+    EBrowserWindow *eBrwWnd =[[EBrowserWindow alloc]initWithFrame:eBrwWndContainer.bounds
+                                                        BrwCtrler:self.EBrwView.meBrwCtrler
+                                                              Wgt:self.EBrwView.mwWgt
+                                                       UExObjName:windowName
+                                                    windowOptions:windowOptions];
+    
+    
+    [eBrwWndContainer removeFromWndDict:windowName];
+    eBrwWnd.openAnimationID = animationID;
+    eBrwWnd.openAnimationDuration = animationDuration;
+    eBrwWnd.webWindowType = windowType;
+    eBrwWnd.winContainer = eBrwWndContainer;
+    [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:windowName];
+    eBrwWnd.hidden = NO;
+    eBrwWnd.meBackWnd = eCurBrwWnd;
+    eBrwWnd.meFrontWnd = nil;
+    eCurBrwWnd.meFrontWnd = eBrwWnd;
+    if (extraInfo) {
+        [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:eBrwWnd.meBrwView];
+        [eBrwWnd setOpenAnimationConfig:dictionaryArg(extraInfo[@"animationInfo"])];
+    }
+    self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WINDOW_IN_OPENING;
+    eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN;
+    eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_OPENING;
+    eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
+    
+    [self helpWindow:eBrwWnd loadData:data withDataType:dataType openFlag:UexWindowOpenFlagNone];
+}
 
+- (void)setWindowOptions:(NSMutableArray *)inArguments {
+    ACArgsUnpack(NSString *inWindowTitle,NSString *inIsBottomBarShow,NSString *inTitleBarBgColor,NSString *inTitleLeftIcon,NSString *inTitleRightIcon,NSArray *inMenuList) = inArguments;
+    
+    NSDictionary *inInfoDic = dictionaryArg(inArguments.firstObject);
+    
+    if (!inInfoDic) {
+        return;
+    }
+    
+    NSDictionary *inWindowOptionDic = dictionaryArg(inInfoDic[@"windowOptions"]);
+    if (inWindowOptionDic) {
+        inWindowTitle = stringArg(inWindowOptionDic[@"windowTitle"]);
+        inIsBottomBarShow = stringArg(inWindowOptionDic[@"isBottomBarShow"]);
+        inTitleBarBgColor = stringArg(inWindowOptionDic[@"titleBarBgColor"]);
+        inTitleLeftIcon = stringArg(inWindowOptionDic[@"titleLeftIcon"]);
+        inTitleRightIcon = stringArg(inWindowOptionDic[@"titleRightIcon"]);
+        inMenuList = arrayArg(inWindowOptionDic[@"menuList"]);
+    }
+    
+    ACEMPWindowOptions *tmpWindowOptions = self.EBrwView.meBrwWnd.windowOptions;
+    
+    if (inWindowTitle) {
+        tmpWindowOptions.windowTitle = inWindowTitle;
+    }
+    
+    if (inIsBottomBarShow != nil) {
+        tmpWindowOptions.isBottomBarShow = [inIsBottomBarShow boolValue];
+    }
+    
+    if (inTitleBarBgColor) {
+        tmpWindowOptions.titleBarBgColor = inTitleBarBgColor;
+    }
+    
+    if (inTitleLeftIcon) {
+        tmpWindowOptions.titleLeftIcon = [self absPath:inTitleLeftIcon];
+    }
+    
+    if (inTitleRightIcon) {
+        tmpWindowOptions.titleRightIcon = [self absPath:inTitleRightIcon];
+    }
+    
+    if (inMenuList) {
+        
+//        if (tmpWindowOptions.menuList.count == 0) {
+//            tmpWindowOptions.menuList = inMenuList;
+//        } else {
+//
+//            NSMutableArray *oldMutArray = [NSMutableArray arrayWithArray:tmpWindowOptions.menuList];
+//
+//            for (NSDictionary *subDic in inMenuList) {
+//                if (subDic[@"menuId"]) {
+//                    for (int i = 0; i < oldMutArray.count; i ++) {
+//                        NSDictionary *oldDic = oldMutArray[i];
+//                        if ([subDic[@"menuId"] isEqualToString:oldDic[@"menuId"]]) {
+//                            [oldMutArray setObject:subDic atIndexedSubscript:i];
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        
+        tmpWindowOptions.menuList = inMenuList;
+    }
+    
+    [self.EBrwView.meBrwWnd setMPWindowOptions:tmpWindowOptions];
+}
 
-
-
+- (void)openWithOptions:(NSMutableArray *)inArguments {
+    ACArgsUnpack(NSString *inWindowName,NSNumber *inDataType,NSString *inData,NSNumber *inAniID,__unused id w,__unused  id h,NSNumber *inFlag,NSNumber *inAniDuration,NSDictionary *extraInfo,NSString *inWindowStyle,NSDictionary *inWindowOptionDic) = inArguments;
+    
+    NSDictionary *info = dictionaryArg(inArguments.firstObject);
+    if (info) {
+        inWindowName = stringArg(info[@"name"]);
+        inDataType = numberArg(info[@"dataType"]);
+        inData = stringArg(info[@"data"]);
+        inAniID = numberArg(info[@"animID"]);
+        inFlag = numberArg(info[@"flag"]);
+        inAniDuration = numberArg(info[@"animDuration"]);
+        extraInfo = dictionaryArg(info[@"extras"]);
+        inWindowStyle = stringArg(info[@"windowStyle"]);
+        inWindowOptionDic = dictionaryArg(info[@"windowOptions"]);
+    }
+    
+    ACEMPWindowOptions *indexWindowOptions = nil;
+    if (inWindowOptionDic) {
+        
+        indexWindowOptions = [[ACEMPWindowOptions alloc] init];
+        
+        indexWindowOptions.flag = [inFlag intValue];
+        if (inWindowStyle) {
+            indexWindowOptions.windowStyle = [inWindowStyle intValue];
+        }
+        
+        indexWindowOptions.windowTitle = stringArg(inWindowOptionDic[@"windowTitle"]);
+        indexWindowOptions.isBottomBarShow = [stringArg(inWindowOptionDic[@"isBottomBarShow"]) boolValue];
+        indexWindowOptions.titleBarBgColor = stringArg(inWindowOptionDic[@"titleBarBgColor"]);
+        
+        if (stringArg(inWindowOptionDic[@"titleLeftIcon"])) {
+            indexWindowOptions.titleLeftIcon = [self absPath:stringArg(inWindowOptionDic[@"titleLeftIcon"])];
+        }
+        if (stringArg(inWindowOptionDic[@"titleRightIcon"])) {
+            indexWindowOptions.titleRightIcon = [self absPath:stringArg(inWindowOptionDic[@"titleRightIcon"])];
+        }
+        
+        indexWindowOptions.menuList = arrayArg(inWindowOptionDic[@"menuList"]);
+    }
+    
+    UEX_PARAM_GUARD_NOT_NIL(inWindowName);
+    UEX_PARAM_GUARD_NOT_NIL(inFlag);
+    
+    if ([ACEWindowFilter shouldBanWindowWithName:inWindowName]) {
+        ACLogDebug(@"forbid opening window '%@'",inWindowName);
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidgetOne.cbError" arguments:ACArgsPack(@0,@10,inWindowName)];
+        return;
+    }
+    
+    
+    
+    UexWindowOpenFlag flag = (UexWindowOpenFlag)[inFlag integerValue];
+    if (self.EBrwView.hidden == YES) {
+        return;
+    }
+    EBrowserWindow *eCurBrwWnd = self.EBrwView.meBrwWnd;
+    
+    if (eCurBrwWnd.webWindowType == ACEWebWindowTypePresent) {
+        return;
+    }
+    if ((self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WINDOW_IN_OPENING) == F_EBRW_FLAG_WINDOW_IN_OPENING) {
+        return;
+    }
+    
+    
+    
+    if (eCurBrwWnd.webWindowType == ACEWebWindowTypeNavigation || flag & UexWindowOpenFlagEnableSwipeClose) {
+        [self openWindowControllerWithName:inWindowName
+                                      data:inData
+                                  dataType:inDataType.integerValue
+                                windowType:ACEWebWindowTypeNavigation
+                               animationID:0
+                         animationDuration:getAnimationDuration(inAniDuration)
+                                 extraInfo:extraInfo
+                             windowOptions:indexWindowOptions];
+        return;
+    }
+    EBrowserWindowContainer *eBrwWndContainer = eCurBrwWnd.winContainer;
+    
+    
+    EBrowserWindow *eBrwWnd = [eBrwWndContainer brwWndForKey:inWindowName];
+    if (eBrwWnd == eCurBrwWnd && !(flag & UexWindowOpenFlagReload)) {
+        return;
+    }
+    if ((eBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_OPENING) == F_EBRW_WND_FLAG_IN_OPENING) {
+        return;
+    }
+    
+    if (!eBrwWnd) {
+        eBrwWnd = [[EBrowserWindow alloc]initWithFrame:eBrwWndContainer.bounds BrwCtrler:self.EBrwView.meBrwCtrler Wgt:self.EBrwView.mwWgt UExObjName:inWindowName windowOptions:indexWindowOptions];
+        eBrwWnd.winContainer = eBrwWndContainer;
+        [eBrwWndContainer.mBrwWndDict setObject:eBrwWnd forKey:inWindowName];
+    } else {
+        eBrwWnd.meBackWnd.meFrontWnd = eBrwWnd.meFrontWnd;
+        eBrwWnd.meFrontWnd.meBackWnd = eBrwWnd.meBackWnd;
+    }
+    
+    [self helpConfigWindow:eBrwWnd withOpenFlag:flag];
+    
+    
+    if (extraInfo) {
+        [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:eBrwWnd.meBrwView];
+        [eBrwWnd setOpenAnimationConfig: dictionaryArg(extraInfo[@"animationInfo"])];
+    }
+    
+    self.EBrwView.meBrwCtrler.meBrw.mFlag |= F_EBRW_FLAG_WINDOW_IN_OPENING;
+    eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN;
+    eBrwWnd.mFlag |= F_EBRW_WND_FLAG_IN_OPENING;
+    eBrwWnd.meBrwView.mFlag &= ~F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED;
+    
+    eBrwWnd.openAnimationID = [inAniID unsignedIntegerValue];
+    eBrwWnd.openAnimationDuration = getAnimationDuration(inAniDuration);
+    if (eBrwWnd.hidden == YES) {
+        eBrwWnd.openAnimationID = kACEAnimationNone;
+    }
+    BOOL skipLoading = (inData.length == 0);
+    if (!skipLoading) {
+        skipLoading = ![self helpWindow:eBrwWnd loadData:inData withDataType:(UexWindowOpenDataType)inDataType.integerValue openFlag:flag];
+    }
+    if (skipLoading) {
+        [self helpBringWindowToFront:eBrwWnd];
+    }
+}
 
 
 
@@ -1251,8 +1483,16 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         [self callbackWithKeyPath:@"uexWindow.cbGetUrlQuery" strData:queryData];
         return queryData;
     } else {
-        [self callbackWithKeyPath:@"uexWindow.cbGetUrlQuery" strData:@""];
-        return @"";
+        
+        NSArray *array = [curUrl.description componentsSeparatedByString:@"?"];
+        if (array && array.count > 1) {
+            queryData = [array objectAtIndex:1];
+        } else {
+            queryData = @"";
+        }
+        
+        [self callbackWithKeyPath:@"uexWindow.cbGetUrlQuery" strData:queryData];
+        return queryData;
     }
     
 }

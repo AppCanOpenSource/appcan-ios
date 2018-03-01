@@ -395,6 +395,27 @@ NSString * webappShowAactivety;
 	return pluginWgtObj;
 	
 }
+
+//公众号样式的窗口的参数从前端传入
+- (WWidget *)wgtOptionsDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt infoDic:(NSDictionary *)infoDic{
+    
+    NSMutableDictionary *tmpDict =[NSMutableDictionary dictionaryWithDictionary:infoDic];
+    WWidget * tmpWgtObj = [self dictToMPWgt:tmpDict];
+    
+    if (![BUtility isSimulator]) {
+        if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+            tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@",tmpWgtObj.indexUrl];
+        }
+        if (tmpWgtObj.iconPath) {
+            tmpWgtObj.iconPath = [NSString stringWithFormat:@"file://%@",tmpWgtObj.iconPath];
+        }
+    }
+    
+    tmpWgtObj.widgetPath = inCurWgt.widgetPath;
+    
+    return tmpWgtObj;
+}
+
 //delete wgt by appId
 -(BOOL)removeWgtByAppId:(NSString*)inAppId{
 	BOOL deleteWgt = NO;
@@ -547,6 +568,153 @@ NSString * webappShowAactivety;
     
 	[tmpDict removeAllObjects];
 	return tmpWgt;
+}
+
+#pragma mark - 公众号WWidget赋值
+//部分参数名称与原方法有出入，比如大小写、前缀
+- (WWidget *)dictToMPWgt:(NSMutableDictionary*)inDict{
+    
+    NSMutableDictionary *tmpDict =[NSMutableDictionary dictionaryWithDictionary:inDict];
+    WWidget *tmpWgt = [[WWidget alloc]init];
+    
+    //打开公众号时，前端传入的参数
+    //appId
+    NSString *tmpAppId = [tmpDict objectForKey:CONFIG_TAG_APPID];
+    if (tmpAppId) {
+        tmpWgt.appId =tmpAppId;
+    }
+    //appkey
+    NSString *appkey = [tmpDict objectForKey:@"appkey"];
+    if (appkey) {
+        tmpWgt.appKey = appkey;
+    }
+    //widgetName
+    NSString *widgetName = [tmpDict objectForKey:@"widgetName"];
+    if (widgetName) {
+        tmpWgt.widgetName = widgetName;
+    }
+    //17.description
+    NSString *desStr = [tmpDict objectForKey:CONFIG_TAG_DESCRIPTION];
+    if (desStr) {
+        tmpWgt.desc = desStr;
+    }
+    
+    //indexUrl 11
+    NSString *indexStr = [tmpDict objectForKey:@"indexUrl"];
+    if ([indexStr hasPrefix:F_HTTP_PATH] || [indexStr hasPrefix:F_HTTPS_PATH] ) {
+        tmpWgt.indexUrl =indexStr;
+    }else{
+        if ([indexStr isEqualToString:@"#"]) {
+            indexStr = @"index.html";
+        }
+        tmpWgt.indexUrl = [[self mainWidget].widgetPath stringByAppendingPathComponent:indexStr];
+    }
+    
+    //errorPath
+    NSString *errorPath =[tmpDict objectForKey:@"errorPath"];
+    if (errorPath) {
+        if ([errorPath hasPrefix:F_HTTP_PATH] || [errorPath hasPrefix:F_HTTPS_PATH] ) {
+            tmpWgt.errorPath = errorPath;
+        }else{
+            if ([errorPath isEqualToString:@"#"]) {
+                errorPath = @"index.html";
+            }
+            tmpWgt.errorPath = [[self mainWidget].widgetPath stringByAppendingPathComponent:errorPath];
+        }
+    }
+    
+    //加密 12
+    NSString *obfuscationStr = [tmpDict objectForKey:CONFIG_TAG_OBFUSCATION];
+    if([obfuscationStr isEqualToString:@"true"]){
+        tmpWgt.obfuscation = F_WWIDGET_OBFUSCATION; //加密
+    }else {
+        tmpWgt.obfuscation = F_WWIDGET_NO_OBFUSCATION;
+    }
+    //isDebug
+    NSString * isDebug = [tmpDict objectForKey:CONFIG_TAG_DEBUG];
+    if (isDebug) {
+        tmpWgt.isDebug = [isDebug boolValue];
+    } else{
+        tmpWgt.isDebug = NO;
+    }
+    //wgtType 13
+    NSString *wgtTypeStr = [tmpDict objectForKey:CONFIG_TAG_WIDGETTYPE];
+    if (wgtTypeStr) {
+        tmpWgt.wgtType = [wgtTypeStr intValue];
+    } else {
+        tmpWgt.wgtType = 4;
+    }
+    
+    
+    
+    
+    
+    /*
+     * 下面这些参数公众号方法里暂时没有传入
+     */
+    //widgetOneId 1
+    NSString *tmpWoId = [tmpDict objectForKey:CONFIG_TAG_WIDGETONEID];
+    if (tmpWoId) {
+        tmpWgt.widgetOneId = tmpWoId;
+    }
+    //ver 4
+    NSString *tmpVer = [[tmpDict objectForKey:CONFIG_TAG_WIDGET] objectForKey:CONFIG_TAG_VERSION];
+    if (tmpVer) {
+        tmpWgt.ver = tmpVer;
+    }
+    //channel 5
+    NSString *tmpChannelCode = [[tmpDict objectForKey:CONFIG_TAG_WIDGET] objectForKey:CONFIG_TAG_CHANNELCODE];
+    if (tmpChannelCode) {
+        tmpWgt.channelCode =tmpChannelCode;
+    }
+    //imei 6
+    tmpWgt.imei = [BUtility getDeviceIdentifyNo];
+    //logIP 14
+    NSString *logServerIpStr = [tmpDict objectForKey:CONFIG_TAG_LOGSERVERIP];
+    if (logServerIpStr) {
+        tmpWgt.logServerIp = logServerIpStr;
+    }
+    //updateUrl 15
+    NSString *updateUrlStr = [tmpDict objectForKey:CONFIG_TAG_UPDATEURL];
+    if (updateUrlStr) {
+        tmpWgt.updateUrl = updateUrlStr;
+    }
+    //16 showMySpace
+    NSString *showMySpaceStr = [tmpDict objectForKey:CONFIG_TAG_SHOWMYSPACE];
+    if (showMySpaceStr && [showMySpaceStr isEqualToString:@"true"]) {
+        tmpWgt.showMySpace = F_WIDGET_SHOWMYSPACE;
+    }
+    //author 18,19
+    NSString *authorStr = [[tmpDict objectForKey:CONFIG_TAG_AUTHOR] objectForKey:CONFIG_TAG_NAME];
+    NSString *emailStr = [[tmpDict objectForKey:CONFIG_TAG_AUTHOR] objectForKey:CONFIG_TAG_EMAIL];
+    if (authorStr) {
+        tmpWgt.author = authorStr;
+    }
+    if (emailStr) {
+        tmpWgt.email = emailStr;
+    }
+    //license 20
+    NSString *licenseStr = [[tmpDict objectForKey:CONFIG_TAG_LICENSE] objectForKey:CONFIG_TAG_HREF];
+    if (licenseStr) {
+        tmpWgt.license = licenseStr;
+    }
+    //orientation 21
+    NSString *orientationStr = [tmpDict objectForKey:CONFIG_TAG_ORIENTATION];
+    if (orientationStr) {
+        tmpWgt.orientation = [orientationStr intValue];
+    }else {
+        tmpWgt.orientation = 1;
+    }
+    //preload 22
+    NSString *preloadFlag = [tmpDict objectForKey:CONFIG_TAG_PRELOAD];
+    if (preloadFlag && [preloadFlag isEqualToString:@"true"]) {
+        tmpWgt.preload = 1;
+    }else {
+        tmpWgt.preload = 0;
+    }
+    
+    [tmpDict removeAllObjects];
+    return tmpWgt;
 }
 
 //create request folder

@@ -341,6 +341,129 @@ static BOOL isAppLaunchedByPush = NO;
     
     return startWgt;
 }
+
+//该类的实例化方法，暂时仅供startWidgetWithConfig使用
+- (WWidget*)getNewStartWgtByAppId:(NSString*)inAppId infoDic:(NSDictionary *)infoDic{
+    WWidgetMgr *wgtMgr = [WWidgetMgr sharedManager];
+    WWidget * mainWgt = [wgtMgr mainWidget];
+    WWidget *startWgt = nil;
+    startWgt = (WWidget*)[wgtMgr wgtOptionsDataByAppId:inAppId curWgt:mainWgt infoDic:infoDic];
+    
+    return startWgt;
+}
+
+- (void)startWidgetWithConfig:(NSMutableArray *)inArguments {
+    
+    __block NSNumber *startWidgetResult = @1;
+    __block UEX_ERROR err = kUexNoError;
+    ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
+    @onExit{
+        [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidgetWithConfig" arguments:ACArgsPack(@0,@2,startWidgetResult)];
+        [cb executeWithArguments:ACArgsPack(err)];
+    };
+    
+    if (self.EBrwView.meBrwCtrler.meBrw.mFlag & F_EBRW_FLAG_WIDGET_IN_OPENING) {
+        
+        startWidgetResult = @2;
+        err = uexErrorMake(1,@"widget正在加载");
+        
+        return;
+    }
+    
+    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey,NSDictionary *inIndexWindowOptionDic) = inArguments;
+    NSDictionary *info = dictionaryArg(inArguments.firstObject);
+    if (info) {
+        inAppId = stringArg(info[@"appId"]);
+        inAnimiId = numberArg(info[@"animId"]);
+        closeCallbackFuncName = stringArg(info[@"cbFuncName"]);
+        inOpenerInfo = stringArg(info[@"startInfo"]);
+        inAnimiDuration = numberArg(info[@"animDuration"]);
+        inAppkey = stringArg(info[@"appkey"]);
+        inIndexWindowOptionDic = dictionaryArg(info[@"indexWindowOptions"]);
+    }
+    
+    ACEMPWindowOptions *indexWindowOptions = nil;
+    if (inIndexWindowOptionDic) {
+        indexWindowOptions = [[ACEMPWindowOptions alloc] init];
+        indexWindowOptions.flag = [numberArg(inIndexWindowOptionDic[@"flag"]) intValue];
+        indexWindowOptions.windowStyle = [numberArg(inIndexWindowOptionDic[@"windowStyle"]) intValue];
+        
+        NSDictionary *optionDic = dictionaryArg(inIndexWindowOptionDic[@"windowOptions"]);
+        if (optionDic) {
+            indexWindowOptions.windowTitle = stringArg(optionDic[@"windowTitle"]);
+            indexWindowOptions.isBottomBarShow = [stringArg(optionDic[@"isBottomBarShow"]) boolValue];
+            indexWindowOptions.titleBarBgColor = stringArg(optionDic[@"titleBarBgColor"]);
+            
+            if (stringArg(optionDic[@"titleLeftIcon"])) {
+                indexWindowOptions.titleLeftIcon = [self absPath:stringArg(optionDic[@"titleLeftIcon"])];
+            }
+            if (stringArg(optionDic[@"titleRightIcon"])) {
+                indexWindowOptions.titleRightIcon = [self absPath:stringArg(optionDic[@"titleRightIcon"])];
+            }
+            
+            indexWindowOptions.menuList = arrayArg(optionDic[@"menuList"]);
+        }
+        
+        NSDictionary *extrasDic = dictionaryArg(inIndexWindowOptionDic[@"extras"]);
+        if (extrasDic) {
+            indexWindowOptions.extras = extrasDic;
+        }
+        
+        indexWindowOptions.uexWidget = self;
+    }
+    
+    
+    UEX_PARAM_GUARD_NOT_NIL(inAppId);
+    
+    
+    WWidget *wgtObj = [self getNewStartWgtByAppId:inAppId infoDic:info];
+    if (!wgtObj) {//
+        err = uexErrorMake(1,@"inAppId对应的widget未找到");
+        return;
+    }
+    
+    NSTimeInterval animiDuration = 0.2f;
+    if (inAnimiDuration && inAnimiDuration.floatValue > 0) {
+        animiDuration = inAnimiDuration.floatValue / 1000;
+    }
+    
+    if(inAppkey){
+        wgtObj.appKey = inAppkey;
+    }
+    wgtObj.closeCallbackName = closeCallbackFuncName;
+    wgtObj.openMessage = inOpenerInfo;
+    wgtObj.openAnimation = inAnimiId.unsignedIntegerValue;
+    wgtObj.openAnimationDuration = animiDuration;
+    
+    wgtObj.indexWindowOptions = indexWindowOptions;
+    
+    wgtObj.isFirstStartWithConfig = YES;
+    
+    BOOL ret = [[ACESubwidgetManager defaultManager] launchWidget:wgtObj];
+    
+    startWidgetResult = ret ? @0 : @1;
+    
+    
+    //子widget启动上报代码
+    //过滤掉无appkey的子应用上报(plugin类型)
+    if (!inAppkey || inAppkey.length == 0) {
+        return;
+    }
+    id analysisObject = ACEAnalysisObject();
+    
+    [analysisObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
+    [analysisObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
+    [analysisObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
+    [analysisObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
+    
+    id emmObject = ACEEMMObject();
+    
+    [emmObject ac_invoke:@"setAppChannel:" arguments:ACArgsPack(wgtObj.channelCode)];
+    [emmObject ac_invoke:@"setAppId:" arguments:ACArgsPack(wgtObj.appId)];
+    [emmObject ac_invoke:@"setWidgetVersion:" arguments:ACArgsPack(wgtObj.ver)];
+    [emmObject ac_invoke:@"startWithChildAppKey:" arguments:ACArgsPack(inAppkey)];
+}
+
 - (void)startWidget:(NSMutableArray *)inArguments {
     
     __block NSNumber *startWidgetResult = @1;

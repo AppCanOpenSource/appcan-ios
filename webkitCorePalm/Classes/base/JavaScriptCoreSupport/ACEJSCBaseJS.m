@@ -117,6 +117,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"prompt":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"actionSheet":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"open":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"openWithOptions":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"setWindowOptions":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"openPresentWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setLoadingImagePath":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"toggleSlidingWindow":ACE_METHOD_EXEC_OPT_DEFAULT,
@@ -224,6 +226,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     uexWidgetInfo.methods = [@{
                                @"reloadWidgetByAppId":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"startWidget":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"startWidgetWithConfig":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"finishWidget":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"removeWidget":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"getOpenerInfo":ACE_METHOD_EXEC_OPT_DEFAULT,

@@ -19,6 +19,9 @@
 #import <UIKit/UIKit.h>
 #import "ACEAnimation.h"
 
+#import "ACEMPBottomMenuBgView.h"
+#import "ACEMPTopView.h"
+
 
 @class EBrowser;
 @class EBrowserController;
@@ -34,6 +37,11 @@
 #define F_EBRW_WND_FLAG_IN_OPENING		0x2
 #define F_EBRW_WND_FLAG_HAS_PREOPEN		0x4
 #define F_EBRW_WND_FLAG_FINISH_PREOPEN	0x8
+
+#define NavHeightIPhoneX 88.0
+#define TabHeightIPhoneX 78.0
+#define NavHeightNormal 64.0
+#define TabHeightNormal 44.0
 
 typedef NS_ENUM(NSInteger, ACEWebWindowType) {
     ACEWebWindowTypeNormal, //普通类型
@@ -68,7 +76,12 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 @property (nonatomic,assign)NSTimeInterval openAnimationDuration;
 @property (nonatomic,strong)NSDictionary *openAnimationConfig;
 
+@property (nonatomic,strong) ACEMPWindowOptions *windowOptions;
+@property (nonatomic,strong) ACEMPTopView *acempTopView;
+@property (nonatomic,strong) ACEMPBottomMenuBgView *acempBottomBgView;
 
+//为uexWindow.openWithOptions方法新增加的实例化方法
+- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName windowOptions:(ACEMPWindowOptions *)windowOptions;
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName;
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView;
@@ -89,6 +102,8 @@ typedef NS_ENUM(NSInteger, ACEWebWindowType) {
 + (void)postWindowSequenceChange;
 
 
+//修改公众号窗口内容
+- (void)setMPWindowOptions:(ACEMPWindowOptions *)windowOptions;
 
 
 @end

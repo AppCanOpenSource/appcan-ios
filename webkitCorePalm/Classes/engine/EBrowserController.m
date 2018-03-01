@@ -411,7 +411,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
 }
 
--(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(UIImageView *)inBrwView{
+-(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(EBrowserView *)inBrwView{
     if ([extraDic objectForKey:@"opaque"]) {
         BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
         if (opaque) {

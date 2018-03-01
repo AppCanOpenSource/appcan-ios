@@ -66,6 +66,10 @@
 
 
 
+//公众号样式的窗口的参数从前端传入
+- (WWidget *)wgtOptionsDataByAppId:(NSString*)inWgtId curWgt:(WWidget*)inCurWgt infoDic:(NSDictionary *)infoDic;
+
+
 //space
 -(void)initLoginAndMoreWidget;
 

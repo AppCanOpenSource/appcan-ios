@@ -263,6 +263,14 @@
 		42F7887C1D950B5D0094AA05 /* SDWebImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C411B2A6D3500D5F279 /* SDWebImageManager.h */; };
 		42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FAC5B21DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		42FAC5B71DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FAC5B31DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m */; };
+		6973610E201F37B3008CC9F4 /* ACEDropdownMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 69736106201F37B2008CC9F4 /* ACEDropdownMenu.h */; };
+		6973610F201F37B3008CC9F4 /* ACEDropdownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 69736107201F37B2008CC9F4 /* ACEDropdownMenu.m */; };
+		69736110201F37B3008CC9F4 /* ACEMPBottomMenuBgView.h in Headers */ = {isa = PBXBuildFile; fileRef = 69736108201F37B2008CC9F4 /* ACEMPBottomMenuBgView.h */; };
+		69736111201F37B3008CC9F4 /* ACEMPBottomMenuBgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69736109201F37B2008CC9F4 /* ACEMPBottomMenuBgView.m */; };
+		69736112201F37B3008CC9F4 /* ACEMPTopView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6973610A201F37B2008CC9F4 /* ACEMPTopView.h */; };
+		69736113201F37B3008CC9F4 /* ACEMPTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6973610B201F37B2008CC9F4 /* ACEMPTopView.m */; };
+		69736114201F37B3008CC9F4 /* ACEMPWindowOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */; };
+		69736115201F37B3008CC9F4 /* ACEMPWindowOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -506,6 +514,14 @@
 		5AAA867E18B1B93D000D7600 /* WWidgetMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWidgetMgr.h; sourceTree = "<group>"; };
 		5AAA867F18B1B93D000D7600 /* WWidgetMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWidgetMgr.m; sourceTree = "<group>"; };
 		5AE8735618B74DD20040BC9A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		69736106201F37B2008CC9F4 /* ACEDropdownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDropdownMenu.h; sourceTree = "<group>"; };
+		69736107201F37B2008CC9F4 /* ACEDropdownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEDropdownMenu.m; sourceTree = "<group>"; };
+		69736108201F37B2008CC9F4 /* ACEMPBottomMenuBgView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMPBottomMenuBgView.h; sourceTree = "<group>"; };
+		69736109201F37B2008CC9F4 /* ACEMPBottomMenuBgView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPBottomMenuBgView.m; sourceTree = "<group>"; };
+		6973610A201F37B2008CC9F4 /* ACEMPTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMPTopView.h; sourceTree = "<group>"; };
+		6973610B201F37B2008CC9F4 /* ACEMPTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPTopView.m; sourceTree = "<group>"; };
+		6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMPWindowOptions.h; sourceTree = "<group>"; };
+		6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPWindowOptions.m; sourceTree = "<group>"; };
 		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
 		76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAnalysisInfo.m; sourceTree = "<group>"; };
 		B220D27715A3152B00D02138 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -759,6 +775,7 @@
 		5AAA85ED18B1B93D000D7600 /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				69736105201F37B2008CC9F4 /* mpWindow */,
 				4257D7221DF1148F004DE380 /* ACEWindowFilter.h */,
 				4257D7231DF1148F004DE380 /* ACEWindowFilter.m */,
 				4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */,
@@ -947,6 +964,21 @@
 			path = widgetone;
 			sourceTree = "<group>";
 		};
+		69736105201F37B2008CC9F4 /* mpWindow */ = {
+			isa = PBXGroup;
+			children = (
+				69736106201F37B2008CC9F4 /* ACEDropdownMenu.h */,
+				69736107201F37B2008CC9F4 /* ACEDropdownMenu.m */,
+				69736108201F37B2008CC9F4 /* ACEMPBottomMenuBgView.h */,
+				69736109201F37B2008CC9F4 /* ACEMPBottomMenuBgView.m */,
+				6973610A201F37B2008CC9F4 /* ACEMPTopView.h */,
+				6973610B201F37B2008CC9F4 /* ACEMPTopView.m */,
+				6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */,
+				6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */,
+			);
+			path = mpWindow;
+			sourceTree = "<group>";
+		};
 		B220D26915A3152B00D02138 = {
 			isa = PBXGroup;
 			children = (
@@ -1050,6 +1082,7 @@
 				42F787E91D950B5D0094AA05 /* EBrowserView.h in Headers */,
 				4245EC961DED18C900C07B2D /* ACEBasicAnimation.h in Headers */,
 				42F787EA1D950B5D0094AA05 /* MMDrawerController.h in Headers */,
+				69736110201F37B3008CC9F4 /* ACEMPBottomMenuBgView.h in Headers */,
 				42F787EB1D950B5D0094AA05 /* SBJsonBase.h in Headers */,
 				42F787EC1D950B5D0094AA05 /* UIImage+MultiFormat.h in Headers */,
 				42F787EE1D950B5D0094AA05 /* OpenUDID.h in Headers */,
@@ -1081,6 +1114,7 @@
 				42F7880E1D950B5D0094AA05 /* SDWebImageOperation.h in Headers */,
 				42F7880F1D950B5D0094AA05 /* ASIProgressDelegate.h in Headers */,
 				42F788111D950B5D0094AA05 /* EBrowserViewAnimition.h in Headers */,
+				6973610E201F37B3008CC9F4 /* ACEDropdownMenu.h in Headers */,
 				42F788131D950B5D0094AA05 /* ACEWebViewController.h in Headers */,
 				42F788141D950B5D0094AA05 /* NSData+ImageContentType.h in Headers */,
 				427890771DEEB57700B8476D /* ACEViewControllerAnimator.h in Headers */,
@@ -1097,6 +1131,7 @@
 				42F788231D950B5D0094AA05 /* SBJsonParser.h in Headers */,
 				42F788241D950B5D0094AA05 /* NSObject+SBJSON.h in Headers */,
 				42F788251D950B5D0094AA05 /* EBrowser.h in Headers */,
+				69736112201F37B3008CC9F4 /* ACEMPTopView.h in Headers */,
 				42F788261D950B5D0094AA05 /* ASIDownloadCache.h in Headers */,
 				42F788271D950B5D0094AA05 /* UIImageView+WebCache.h in Headers */,
 				42F788281D950B5D0094AA05 /* ASIHTTPRequestConfig.h in Headers */,
@@ -1112,6 +1147,7 @@
 				42F788321D950B5D0094AA05 /* ACEDrawerViewController.h in Headers */,
 				42F788331D950B5D0094AA05 /* EBrowserController.h in Headers */,
 				42F788341D950B5D0094AA05 /* AsyncSocket.h in Headers */,
+				69736114201F37B3008CC9F4 /* ACEMPWindowOptions.h in Headers */,
 				42F788351D950B5D0094AA05 /* FileEncrypt.h in Headers */,
 				42F788381D950B5D0094AA05 /* ASIInputStream.h in Headers */,
 				42F788391D950B5D0094AA05 /* SBJsonWriter.h in Headers */,
@@ -1255,6 +1291,7 @@
 				42F787551D950B5D0094AA05 /* ASIHTTPRequest.m in Sources */,
 				42F787561D950B5D0094AA05 /* WidgetOneDelegate.m in Sources */,
 				42F787571D950B5D0094AA05 /* UIImageView+WebCache.m in Sources */,
+				69736113201F37B3008CC9F4 /* ACEMPTopView.m in Sources */,
 				42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */,
 				42F7875A1D950B5D0094AA05 /* PullDownRefreshHeaderView.m in Sources */,
 				42F3E7A21E4D92420020B428 /* ACEWidgetUpdateUtility.m in Sources */,
@@ -1270,6 +1307,7 @@
 				42F787691D950B5D0094AA05 /* JSONParser.m in Sources */,
 				42F7876A1D950B5D0094AA05 /* ASIFormDataRequest.m in Sources */,
 				42F7876C1D950B5D0094AA05 /* EUtility.m in Sources */,
+				6973610F201F37B3008CC9F4 /* ACEDropdownMenu.m in Sources */,
 				42F7876E1D950B5D0094AA05 /* mztools.c in Sources */,
 				4272CCF21E261D2F00712C54 /* ACEInterfaceOrientation.m in Sources */,
 				42F7876F1D950B5D0094AA05 /* ASIInputStream.m in Sources */,
@@ -1278,6 +1316,7 @@
 				427A79201DDE95B800E85BA4 /* ACESubwidgetManager.m in Sources */,
 				42F787731D950B5D0094AA05 /* ioapi.c in Sources */,
 				42F787751D950B5D0094AA05 /* ASIDownloadCache.m in Sources */,
+				69736115201F37B3008CC9F4 /* ACEMPWindowOptions.m in Sources */,
 				42F787761D950B5D0094AA05 /* WWidgetMgr.m in Sources */,
 				42F787771D950B5D0094AA05 /* EBrowser.m in Sources */,
 				42F787791D950B5D0094AA05 /* UIView+WebCacheOperation.m in Sources */,
@@ -1324,6 +1363,7 @@
 				42F787AA1D950B5D0094AA05 /* SBJsonWriter.m in Sources */,
 				42F787AB1D950B5D0094AA05 /* BUtility.m in Sources */,
 				42F787AC1D950B5D0094AA05 /* UIViewController+RESideMenu.m in Sources */,
+				69736111201F37B3008CC9F4 /* ACEMPBottomMenuBgView.m in Sources */,
 				42F787AD1D950B5D0094AA05 /* NSObject+SBJSON.m in Sources */,
 				42F787AE1D950B5D0094AA05 /* EUExWidgetOne.m in Sources */,
 				42F787AF1D950B5D0094AA05 /* ACEPluginInfo.m in Sources */,

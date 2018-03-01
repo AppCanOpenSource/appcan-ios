@@ -18,6 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ACEAnimation.h"
+#import "ACEMPWindowOptions.h"
 
 
 #define F_WWIDGET_NO_OBFUSCATION	0
@@ -100,6 +101,13 @@
 @property (nonatomic,assign) ACEAnimationID closeAnimation;
 @property (nonatomic,assign) NSTimeInterval closeAnimationDuration;
 @property (nonatomic,strong) NSDictionary *closeAnimationConfig;
+
+@property (nonatomic,strong) ACEMPWindowOptions *indexWindowOptions;
+@property (nonatomic,assign) BOOL isFirstStartWithConfig;
+
+//公众号新增参数
+//子widget应用中页面无法加载时的错误页面路径，默认为主应用的。
+@property (nonatomic,strong) NSString *errorPath;
 
 -(BOOL)getMySpaceStatus;
 -(BOOL)getMoreWgtsStatus;
