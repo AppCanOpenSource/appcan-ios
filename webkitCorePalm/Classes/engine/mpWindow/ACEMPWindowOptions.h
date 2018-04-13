@@ -13,9 +13,14 @@
 
 @property (nonatomic, copy) NSString *windowTitle;
 @property (nonatomic, assign) BOOL isBottomBarShow;
+
 @property (nonatomic, copy) NSString *titleBarBgColor;
+@property (nonatomic, copy) NSString *titleTextColor;
+
 @property (nonatomic, copy) NSString *titleLeftIcon;
 @property (nonatomic, copy) NSString *titleRightIcon;
+@property (nonatomic, copy) NSString *titleCloseIcon;
+
 @property (nonatomic, retain) NSArray *menuList;
 
 @property (nonatomic, assign) int flag;

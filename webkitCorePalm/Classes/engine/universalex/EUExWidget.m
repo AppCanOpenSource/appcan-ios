@@ -389,16 +389,23 @@ static BOOL isAppLaunchedByPush = NO;
         indexWindowOptions.windowStyle = [numberArg(inIndexWindowOptionDic[@"windowStyle"]) intValue];
         
         NSDictionary *optionDic = dictionaryArg(inIndexWindowOptionDic[@"windowOptions"]);
+        
         if (optionDic) {
+            
             indexWindowOptions.windowTitle = stringArg(optionDic[@"windowTitle"]);
             indexWindowOptions.isBottomBarShow = [stringArg(optionDic[@"isBottomBarShow"]) boolValue];
+            
             indexWindowOptions.titleBarBgColor = stringArg(optionDic[@"titleBarBgColor"]);
+            indexWindowOptions.titleTextColor = stringArg(optionDic[@"titleTextColor"]);
             
             if (stringArg(optionDic[@"titleLeftIcon"])) {
                 indexWindowOptions.titleLeftIcon = [self absPath:stringArg(optionDic[@"titleLeftIcon"])];
             }
             if (stringArg(optionDic[@"titleRightIcon"])) {
                 indexWindowOptions.titleRightIcon = [self absPath:stringArg(optionDic[@"titleRightIcon"])];
+            }
+            if (stringArg(optionDic[@"titleCloseIcon"])) {
+                indexWindowOptions.titleCloseIcon = [self absPath:stringArg(optionDic[@"titleCloseIcon"])];
             }
             
             indexWindowOptions.menuList = arrayArg(optionDic[@"menuList"]);

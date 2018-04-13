@@ -519,7 +519,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
 }
 
 - (void)setWindowOptions:(NSMutableArray *)inArguments {
-    ACArgsUnpack(NSString *inWindowTitle,NSString *inIsBottomBarShow,NSString *inTitleBarBgColor,NSString *inTitleLeftIcon,NSString *inTitleRightIcon,NSArray *inMenuList) = inArguments;
+    ACArgsUnpack(NSString *inWindowTitle,NSString *inIsBottomBarShow,NSString *inTitleBarBgColor,NSString *inTitleTextColor,NSString *inTitleLeftIcon,NSString *inTitleRightIcon,NSString *inTitleCloseIcon,NSArray *inMenuList) = inArguments;
     
     NSDictionary *inInfoDic = dictionaryArg(inArguments.firstObject);
     
@@ -532,8 +532,10 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         inWindowTitle = stringArg(inWindowOptionDic[@"windowTitle"]);
         inIsBottomBarShow = stringArg(inWindowOptionDic[@"isBottomBarShow"]);
         inTitleBarBgColor = stringArg(inWindowOptionDic[@"titleBarBgColor"]);
+        inTitleTextColor = stringArg(inWindowOptionDic[@"titleTextColor"]);
         inTitleLeftIcon = stringArg(inWindowOptionDic[@"titleLeftIcon"]);
         inTitleRightIcon = stringArg(inWindowOptionDic[@"titleRightIcon"]);
+        inTitleCloseIcon = stringArg(inWindowOptionDic[@"titleCloseIcon"]);
         inMenuList = arrayArg(inWindowOptionDic[@"menuList"]);
     }
     
@@ -551,12 +553,20 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         tmpWindowOptions.titleBarBgColor = inTitleBarBgColor;
     }
     
+    if (inTitleTextColor) {
+        tmpWindowOptions.titleTextColor = inTitleTextColor;
+    }
+    
     if (inTitleLeftIcon) {
         tmpWindowOptions.titleLeftIcon = [self absPath:inTitleLeftIcon];
     }
     
     if (inTitleRightIcon) {
         tmpWindowOptions.titleRightIcon = [self absPath:inTitleRightIcon];
+    }
+    
+    if (inTitleCloseIcon) {
+        tmpWindowOptions.titleCloseIcon = [self absPath:inTitleCloseIcon];
     }
     
     if (inMenuList) {
@@ -613,13 +623,18 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         
         indexWindowOptions.windowTitle = stringArg(inWindowOptionDic[@"windowTitle"]);
         indexWindowOptions.isBottomBarShow = [stringArg(inWindowOptionDic[@"isBottomBarShow"]) boolValue];
+        
         indexWindowOptions.titleBarBgColor = stringArg(inWindowOptionDic[@"titleBarBgColor"]);
+        indexWindowOptions.titleTextColor = stringArg(inWindowOptionDic[@"titleTextColor"]);
         
         if (stringArg(inWindowOptionDic[@"titleLeftIcon"])) {
             indexWindowOptions.titleLeftIcon = [self absPath:stringArg(inWindowOptionDic[@"titleLeftIcon"])];
         }
         if (stringArg(inWindowOptionDic[@"titleRightIcon"])) {
             indexWindowOptions.titleRightIcon = [self absPath:stringArg(inWindowOptionDic[@"titleRightIcon"])];
+        }
+        if (stringArg(inWindowOptionDic[@"titleCloseIcon"])) {
+            indexWindowOptions.titleCloseIcon = [self absPath:stringArg(inWindowOptionDic[@"titleCloseIcon"])];
         }
         
         indexWindowOptions.menuList = arrayArg(inWindowOptionDic[@"menuList"]);

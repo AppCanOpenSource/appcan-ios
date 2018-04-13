@@ -28,15 +28,23 @@
     
     self.windowOptions = windowOption;
     
-    
-    self.backgroundColor = [self colorWithHexString:[NSString stringWithFormat:@"%@",self.windowOptions.titleBarBgColor]];
-    
+    if (self.windowOptions.titleBarBgColor) {
+        self.backgroundColor = [self colorWithHexString:[NSString stringWithFormat:@"%@",self.windowOptions.titleBarBgColor]];
+    } else {
+        self.backgroundColor = [UIColor whiteColor];
+    }
     
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.frame = CGRectMake(LeftWidth, frame.size.height-TitleHeight, frame.size.width-LeftWidth*2, TitleHeight);
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.text = [NSString stringWithFormat:@"%@",self.windowOptions.windowTitle];
-    _titleLabel.textColor = [UIColor whiteColor];
+    
+    if (self.windowOptions.titleTextColor) {
+        _titleLabel.textColor = [self colorWithHexString:[NSString stringWithFormat:@"%@",self.windowOptions.titleTextColor]];
+    } else {
+        _titleLabel.textColor = [UIColor blackColor];
+    }
+    
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.font = [UIFont systemFontOfSize:18.0];
     [self addSubview:_titleLabel];
@@ -53,6 +61,22 @@
     _leftBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [_leftBtn addTarget:self action:@selector(leftBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_leftBtn];
+    
+    _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _closeBtn.frame = CGRectMake(_leftBtn.frame.origin.x+_leftBtn.frame.size.width+15, frame.size.height-TitleHeight, LeftWidth-15*2, TitleHeight);
+    [_closeBtn setBackgroundColor:[UIColor clearColor]];
+    //[_leftBtn setTitle:@"Back" forState:UIControlStateNormal];
+    //[_leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    //_leftBtn.titleLabel.font = [UIFont systemFontOfSize:12.0];
+    _closeBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [_closeBtn addTarget:self action:@selector(closeBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_closeBtn];
+    if (self.windowOptions.titleCloseIcon && ![self.windowOptions.titleCloseIcon isEqualToString:@""]) {
+        [_closeBtn setImage:[UIImage imageNamed:self.windowOptions.titleCloseIcon] forState:UIControlStateNormal];
+        _closeBtn.hidden = NO;
+    } else {
+        _closeBtn.hidden = YES;
+    }
     
     _rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _rightBtn.frame = CGRectMake(frame.size.width-LeftWidth+15, frame.size.height-TitleHeight, LeftWidth-15*2, TitleHeight);
@@ -80,6 +104,21 @@
     if (self.windowOptions.titleRightIcon) {
         [_rightBtn setImage:[UIImage imageNamed:self.windowOptions.titleRightIcon] forState:UIControlStateNormal];
     }
+    if (self.windowOptions.titleCloseIcon && ![self.windowOptions.titleCloseIcon isEqualToString:@""]) {
+        [_closeBtn setImage:[UIImage imageNamed:self.windowOptions.titleCloseIcon] forState:UIControlStateNormal];
+        _closeBtn.hidden = NO;
+    } else {
+        _closeBtn.hidden = YES;
+    }
+}
+
+- (void)closeBtnClick
+{
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"4",@"type", nil];
+    NSString *jsStr = [dic ac_JSONFragment];
+    NSString *toBeExeJs = [NSString stringWithFormat:@"if(uexWindow.onMPWindowClicked!=null){uexWindow.onMPWindowClicked(%@);}",jsStr];
+    //ACENSLog(@"toBeExeJS: %@", toBeExeJs);
+    [self.meBrwView stringByEvaluatingJavaScriptFromString:toBeExeJs];
 }
 
 - (void)leftBtnClick

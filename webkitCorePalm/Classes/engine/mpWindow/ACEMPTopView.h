@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *leftBtn;
 @property (nonatomic, strong) UIButton *rightBtn;
+@property (nonatomic, strong) UIButton *closeBtn;
 
 - (id)initWithFrame:(CGRect)frame WindowOptions:(ACEMPWindowOptions *)windowOption meBrwView:(EBrowserView *)meBrwView;
 
