@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.2.15</key>
+	<array>
+		<string>修复uexWindow.close如果在浮动窗口执行时，也会关闭该浮动窗口所在的主窗口的问题。</string>
+		<string>修复uexWindow.onPopoverLoadFinishInRootWnd回调在子应用中收不到的问题</string>
+		<string>增加分辨率为1024*1024的图标，用于App Store展示，本引擎只能在4.1及以上版本的打包服务上使用</string>
+		<string>公众号窗口增加title字体颜色参数和关闭按钮</string>
+	</array>
 	<key>4.2.14</key>
 	<array>
 		<string>增加公众号样式窗口</string>
