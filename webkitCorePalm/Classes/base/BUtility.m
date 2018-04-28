@@ -486,7 +486,7 @@ static NSString *clientCertificatePwd = nil;
             url = [NSURL URLWithString:urlStr];
         }
 	} else {
-		if ([inString hasPrefix:@"http://"]) {
+		if ([inString hasPrefix:@"http://"] || [inString hasPrefix:@"https://"]) {
 			url = [NSURL URLWithString:inString];
 		} else if([inString hasPrefix:@"file://"]){
 			url = [NSURL URLWithString:[inString substringFromIndex:7]];

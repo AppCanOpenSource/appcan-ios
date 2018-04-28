@@ -378,7 +378,7 @@ NSString * webappShowAactivety;
 		WWidget * tmpWgtObj = [self dictToWgt:tmpWgtDict];
 		
 		if (![BUtility isSimulator]) {
-            if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+            if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH] && ![tmpWgtObj.indexUrl hasPrefix:F_HTTPS_PATH]) {
                 tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@",tmpWgtObj.indexUrl];
             }
             tmpWgtObj.iconPath = [NSString stringWithFormat:@"file://%@",tmpWgtObj.iconPath];
@@ -403,7 +403,7 @@ NSString * webappShowAactivety;
     WWidget * tmpWgtObj = [self dictToMPWgt:tmpDict];
     
     if (![BUtility isSimulator]) {
-        if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH]) {
+        if (![tmpWgtObj.indexUrl hasPrefix:F_HTTP_PATH] && ![tmpWgtObj.indexUrl hasPrefix:F_HTTPS_PATH]) {
             tmpWgtObj.indexUrl =[NSString stringWithFormat:@"file://%@",tmpWgtObj.indexUrl];
         }
         if (tmpWgtObj.iconPath) {

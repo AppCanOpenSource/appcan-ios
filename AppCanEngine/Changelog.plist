@@ -9,6 +9,7 @@
 		<string>增加分辨率为1024*1024的图标，用于App Store展示，本引擎只能在4.1及以上版本的打包服务上使用</string>
 		<string>公众号窗口增加title字体颜色参数和关闭按钮</string>
 		<string>添加系统库CoreFoundation</string>
+		<string>修复打开widget时，https链接的url会被拼接成本地文件路径的问题</string>
 	</array>
 	<key>4.2.14</key>
 	<array>
