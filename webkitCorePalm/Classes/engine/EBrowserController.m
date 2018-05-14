@@ -312,10 +312,19 @@ static BOOL userCustomLoadingImageEnabled = NO;
         
     }
     [self.view addSubview:self.mStartView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
-    });
     
+    BOOL userCloseLoading = NO;
+    ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
+    ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
+    if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
+        userCloseLoading = YES;
+    }
+    
+    if (!userCloseLoading) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
+        });
+    }
     
     if (userCustomLoadingImageEnabled) {
         NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
