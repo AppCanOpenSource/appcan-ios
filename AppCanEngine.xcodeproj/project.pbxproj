@@ -271,6 +271,8 @@
 		69736113201F37B3008CC9F4 /* ACEMPTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6973610B201F37B2008CC9F4 /* ACEMPTopView.m */; };
 		69736114201F37B3008CC9F4 /* ACEMPWindowOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */; };
 		69736115201F37B3008CC9F4 /* ACEMPWindowOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */; };
+		69A678FD20AABB4000CBFDCB /* ACETransitionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 69A678FB20AABB4000CBFDCB /* ACETransitionView.h */; };
+		69A678FE20AABB4000CBFDCB /* ACETransitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A678FC20AABB4000CBFDCB /* ACETransitionView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -522,6 +524,8 @@
 		6973610B201F37B2008CC9F4 /* ACEMPTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPTopView.m; sourceTree = "<group>"; };
 		6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMPWindowOptions.h; sourceTree = "<group>"; };
 		6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPWindowOptions.m; sourceTree = "<group>"; };
+		69A678FB20AABB4000CBFDCB /* ACETransitionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACETransitionView.h; sourceTree = "<group>"; };
+		69A678FC20AABB4000CBFDCB /* ACETransitionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACETransitionView.m; sourceTree = "<group>"; };
 		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
 		76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAnalysisInfo.m; sourceTree = "<group>"; };
 		B220D27715A3152B00D02138 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -975,6 +979,8 @@
 				6973610B201F37B2008CC9F4 /* ACEMPTopView.m */,
 				6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */,
 				6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */,
+				69A678FB20AABB4000CBFDCB /* ACETransitionView.h */,
+				69A678FC20AABB4000CBFDCB /* ACETransitionView.m */,
 			);
 			path = mpWindow;
 			sourceTree = "<group>";
@@ -1107,6 +1113,7 @@
 				4260408D1DEC297D00B49B5C /* ACEPOPAnimation.h in Headers */,
 				42F788061D950B5D0094AA05 /* SpecConfigParser.h in Headers */,
 				42F788071D950B5D0094AA05 /* MKAnnotationView+WebCache.h in Headers */,
+				69A678FD20AABB4000CBFDCB /* ACETransitionView.h in Headers */,
 				42F788081D950B5D0094AA05 /* EUExBase+Bundle.h in Headers */,
 				42F7880A1D950B5D0094AA05 /* ioapi.h in Headers */,
 				42F7880B1D950B5D0094AA05 /* UIViewController+MMDrawerController.h in Headers */,
@@ -1331,6 +1338,7 @@
 				42F787831D950B5D0094AA05 /* ACEJSCInvocation.m in Sources */,
 				42F787841D950B5D0094AA05 /* SDWebImageDownloaderOperation.m in Sources */,
 				426040961DEC2BB300B49B5C /* ACEAnimation.m in Sources */,
+				69A678FE20AABB4000CBFDCB /* ACETransitionView.m in Sources */,
 				42F787851D950B5D0094AA05 /* UIImage+WebP.m in Sources */,
 				42F787871D950B5D0094AA05 /* ASIDataDecompressor.m in Sources */,
 				42F787881D950B5D0094AA05 /* SpecConfigParser.m in Sources */,

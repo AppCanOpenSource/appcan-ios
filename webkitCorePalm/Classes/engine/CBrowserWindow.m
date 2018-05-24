@@ -77,9 +77,10 @@ const float AppCanFinalProgressValue = 0.9f;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     
-
-
     ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACEMP_TransitionView_Close_Notify object:eBrwView.superDelegate];
+    
     eBrwView.retryCount = 0;
     NSString * urlString = [webView.request URL].absoluteString;
     if ([webappShowAactivety isEqualToString:@"yes"] && [urlString hasPrefix:@"http"] ){
@@ -109,8 +110,11 @@ static NSUInteger kMaxErrorRetryCount = 5;
 
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-
+    
     ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACEMP_TransitionView_Close_Notify object:aceWebView.superDelegate];
+    
     [aceWebView notifyPageError];
     [aceWebView continueMultiPopoverLoading];
     

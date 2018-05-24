@@ -50,6 +50,8 @@
 
 #import <UserNotifications/UserNotifications.h>
 
+#import "ACETransitionView.h"
+
 
 #define UEX_EXITAPP_ALERT_TITLE @"退出提示"
 #define UEX_EXITAPP_ALERT_MESSAGE @"确定要退出程序吗"
@@ -62,6 +64,8 @@ static NSString *const kUexPushNotifyCallbackFunctionNameKey=@"kUexPushNotifyCal
 
 @interface EUExWidget()<AppCanApplicationEventObserver>
 @property (nonatomic,readonly)EBrowserView *EBrwView;
+//子应用启动过渡动画
+@property (nonatomic,strong)ACETransitionView *ACEMPTransitionView;
 @end
 
 @implementation EUExWidget
@@ -370,9 +374,12 @@ static BOOL isAppLaunchedByPush = NO;
         return;
     }
     
-    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey,NSDictionary *inIndexWindowOptionDic) = inArguments;
+    ACArgsUnpack(NSString *inWidgetName,NSString *inAppIcon,NSString *inAppLoadingStatus,NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey,NSDictionary *inIndexWindowOptionDic) = inArguments;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
+        inWidgetName = stringArg(info[@"widgetName"]);
+        inAppIcon = stringArg(info[@"appIcon"]);
+        inAppLoadingStatus = stringArg(info[@"appLoadingStatus"]);
         inAppId = stringArg(info[@"appId"]);
         inAnimiId = numberArg(info[@"animId"]);
         closeCallbackFuncName = stringArg(info[@"cbFuncName"]);
@@ -437,6 +444,15 @@ static BOOL isAppLaunchedByPush = NO;
     if(inAppkey){
         wgtObj.appKey = inAppkey;
     }
+    
+    if (inWidgetName) {
+        wgtObj.widgetName = inWidgetName;
+    }
+    if (inAppIcon) {
+        wgtObj.appIcon = [self absPath:inAppIcon];
+    }
+    wgtObj.appLoadingStatus = [inAppLoadingStatus boolValue];
+    
     wgtObj.closeCallbackName = closeCallbackFuncName;
     wgtObj.openMessage = inOpenerInfo;
     wgtObj.openAnimation = inAnimiId.unsignedIntegerValue;
@@ -449,6 +465,11 @@ static BOOL isAppLaunchedByPush = NO;
     BOOL ret = [[ACESubwidgetManager defaultManager] launchWidget:wgtObj];
     
     startWidgetResult = ret ? @0 : @1;
+    
+    
+    if (ret && wgtObj.appLoadingStatus) {
+        [self startACEMPTransitionViewWithWWidget:wgtObj];
+    }
     
     
     //子widget启动上报代码
@@ -1239,6 +1260,32 @@ static BOOL isAppLaunchedByPush = NO;
     }
 }
 
+#pragma mark - 子应用启动图
+- (void)startACEMPTransitionViewWithWWidget:(WWidget *)wgtObj{
+    
+    if (!wgtObj.appLoadingStatus) {
+        return;
+    }
+    
+    [self removeACEMPTransitionView];
+    
+    CGRect outFrame = self.EBrwView.meBrwWnd.frame;
+    outFrame.origin.y = self.EBrwView.meBrwWnd.frame.origin.y+self.EBrwView.meBrwWnd.frame.size.height;
+    self.ACEMPTransitionView = [[ACETransitionView alloc] initWithFrame:outFrame WWidget:wgtObj meBrwView:self.EBrwView];
+    [self.EBrwView addSubview:self.ACEMPTransitionView];
+    //[self.EBrwView bringSubviewToFront:self.ACEMPTransitionView];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.ACEMPTransitionView.frame = self.EBrwView.meBrwWnd.frame;
+    }];
+}
 
+- (void)removeACEMPTransitionView
+{
+    if (self.ACEMPTransitionView) {
+        [self.ACEMPTransitionView removeFromSuperview];
+        self.ACEMPTransitionView = nil;
+    }
+}
 
 @end

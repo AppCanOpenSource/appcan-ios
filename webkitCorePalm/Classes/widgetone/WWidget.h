@@ -21,6 +21,9 @@
 #import "ACEMPWindowOptions.h"
 
 
+#define ACEMP_TransitionView_Close_Notify @"ACEMP_TransitionView_Close_Notify"
+
+
 #define F_WWIDGET_NO_OBFUSCATION	0
 #define F_WWIDGET_OBFUSCATION		1
 
@@ -59,6 +62,14 @@
 @property (nonatomic,assign) int orientation;
 @property (nonatomic,assign) int openAdStatus;
 @property (nonatomic,assign) int preload;
+
+
+//子应用启动图相关
+//子应用图标
+@property (nonatomic,strong) NSString *appIcon;
+//打开子应用时是否使用启动图
+@property (nonatomic,assign) BOOL appLoadingStatus;
+
 
 // 手机端WidgetOne系统的唯一标识
 @property (nonatomic,strong) NSString *widgetOneId;
