@@ -7,6 +7,7 @@
 		<string>uexWindow.setLoadingImagePath中设置的启动图关闭时间优先级最高；在config中设置removeloading为true时，取消默认的启动图3秒超时</string>
 		<string>startWidgetWithConfig增加启动页开关</string>
 		<string>子应用启动图添加小圆点动画</string>
+		<string>增加uexWindow.removeLocalData方法</string>
 	</array>
 	<key>4.2.15</key>
 	<array>

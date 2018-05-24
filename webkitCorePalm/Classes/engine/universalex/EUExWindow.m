@@ -3728,8 +3728,30 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     
 }
 
-
-
+- (void)removeLocalData:(NSMutableArray*)inArguments
+{
+    if ([inArguments count] > 0) {
+        if (![inArguments[0] isKindOfClass:[NSString class]]) {
+            return;
+        }
+    }
+    
+    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
+    
+    if ([inArguments count] == 0) {
+        [df removeObjectForKey:kUexWindowValueDictKey];
+        [df synchronize];
+    } else {
+        NSMutableDictionary *dict = [[df valueForKey:kUexWindowValueDictKey] mutableCopy];
+        if ([dict objectForKey:inArguments[0]]) {
+            
+            [dict removeObjectForKey:inArguments[0]];
+            
+            [df setValue:dict forKey:kUexWindowValueDictKey];
+            [df synchronize];
+        }
+    }
+}
 
 #pragma mark - Share API
 

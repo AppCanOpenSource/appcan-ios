@@ -208,6 +208,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getHeight":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"putLocalData":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"getLocalData":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"removeLocalData":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"publishChannelNotificationForJson":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setIsSupportSwipeCallback":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"share":ACE_METHOD_EXEC_OPT_DEFAULT,
