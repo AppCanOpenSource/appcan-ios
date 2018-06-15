@@ -106,7 +106,91 @@
     [self deregisterWindowSequenceChange];
 }
 
+//为uexWindow.openWithOptions方法新增加的实例化方法
+- (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName windowOptions:(ACEMPWindowOptions *)windowOptions{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+        self.backgroundColor = [UIColor clearColor];
+        self.opaque = YES;
+        meBrwCtrler = eInBrwCtrler;
+        
+        _windowOptions = windowOptions;
+        if (_windowOptions && _windowOptions.windowStyle == 1) {
+            
+            self.backgroundColor = [UIColor whiteColor];
+            
+            frame.origin.x = 0;
+            CGRect webFrame = frame;
+            CGRect topFrame = frame;
+            CGRect bottomFrame = frame;
+            
+            if (iPhoneX) {
+                
+                if (self.windowOptions.isBottomBarShow == YES) {
+                    webFrame.size.height = frame.size.height - NavHeightIPhoneX - TabHeightIPhoneX;
+                } else {
+                    webFrame.size.height = frame.size.height - NavHeightIPhoneX;
+                }
+                webFrame.origin.y = NavHeightIPhoneX;
+                
+                topFrame.size.height = NavHeightIPhoneX;
+                
+                bottomFrame.origin.y = frame.size.height - TabHeightIPhoneX;
+                bottomFrame.size.height = TabHeightIPhoneX;
+            } else {
+                
+                if (self.windowOptions.isBottomBarShow == YES) {
+                    webFrame.size.height = frame.size.height - NavHeightNormal - TabHeightNormal;
+                } else {
+                    webFrame.size.height = frame.size.height - NavHeightNormal;
+                }
+                webFrame.origin.y = NavHeightNormal;
+                
+                topFrame.size.height = NavHeightNormal;
+                
+                bottomFrame.origin.y = frame.size.height - TabHeightNormal;
+                bottomFrame.size.height = TabHeightNormal;
+            }
+            
+            meBrwView = [[EBrowserView alloc]initWithFrame:webFrame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+            [self addSubview:meBrwView];
+            
+            _acempTopView = [[ACEMPTopView alloc] initWithFrame:topFrame WindowOptions:_windowOptions meBrwView:meBrwView];
+            _acempBottomBgView = [[ACEMPBottomMenuBgView alloc] initWithFrame:bottomFrame windowOptions:_windowOptions meBrwView:meBrwView];
+            [self addSubview:_acempTopView];
+            [self addSubview:_acempBottomBgView];
+            
+            if (_windowOptions.isBottomBarShow == YES) {
+                _acempBottomBgView.hidden = NO;
+            } else {
+                _acempBottomBgView.hidden = YES;
+            }
+        } else {
+            
+            meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+            [self addSubview:meBrwView];
+        }
+        
+        mPopoverBrwViewDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
+        mMuiltPopoverDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
+        self.autoresizesSubviews = YES;
+        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        meFrontWnd = nil;
+        meBackWnd = nil;
+        if (mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+            meBrwHistory = [[EBrowserHistory alloc]init];
+        }
+        _openAnimationID = kACEAnimationNone;
+        _windowName = inUExObjName;
+    }
+    self.isTopWindow = NO;
+    self.enableSwipeClose = YES;
+    [self registerWindowSequenceChange];
+    return self;
+}
 
+//原实例化方法，uexWindow.openWithOptions不走这个
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt UExObjName:(NSString*)inUExObjName {
     self = [super initWithFrame:frame];
     if (self) {
@@ -114,11 +198,66 @@
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = YES;
 		meBrwCtrler = eInBrwCtrler;
-	
-
-        meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+        
+        _windowOptions = inWgt.indexWindowOptions;
+        if (inWgt.isFirstStartWithConfig == YES && _windowOptions && _windowOptions.windowStyle == 1) {
+            
+            inWgt.isFirstStartWithConfig = NO;
+            
+            self.backgroundColor = [UIColor whiteColor];
+            
+            frame.origin.x = 0;
+            CGRect webFrame = frame;
+            CGRect topFrame = frame;
+            CGRect bottomFrame = frame;
+            
+            if (iPhoneX) {
+                
+                if (self.windowOptions.isBottomBarShow == YES) {
+                    webFrame.size.height = frame.size.height - NavHeightIPhoneX - TabHeightIPhoneX;
+                } else {
+                    webFrame.size.height = frame.size.height - NavHeightIPhoneX;
+                }
+                webFrame.origin.y = NavHeightIPhoneX;
+                
+                topFrame.size.height = NavHeightIPhoneX;
+                
+                bottomFrame.origin.y = frame.size.height - TabHeightIPhoneX;
+                bottomFrame.size.height = TabHeightIPhoneX;
+            } else {
+                
+                if (self.windowOptions.isBottomBarShow == YES) {
+                    webFrame.size.height = frame.size.height - NavHeightNormal - TabHeightNormal;
+                } else {
+                    webFrame.size.height = frame.size.height - NavHeightNormal;
+                }
+                webFrame.origin.y = NavHeightNormal;
+                
+                topFrame.size.height = NavHeightNormal;
+                
+                bottomFrame.origin.y = frame.size.height - TabHeightNormal;
+                bottomFrame.size.height = TabHeightNormal;
+            }
+            
+            meBrwView = [[EBrowserView alloc]initWithFrame:webFrame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+            [self addSubview:meBrwView];
+            
+            _acempTopView = [[ACEMPTopView alloc] initWithFrame:topFrame WindowOptions:_windowOptions meBrwView:meBrwView];
+            _acempBottomBgView = [[ACEMPBottomMenuBgView alloc] initWithFrame:bottomFrame windowOptions:_windowOptions meBrwView:meBrwView];
+            [self addSubview:_acempTopView];
+            [self addSubview:_acempBottomBgView];
+            
+            if (_windowOptions.isBottomBarShow == YES) {
+                _acempBottomBgView.hidden = NO;
+            } else {
+                _acempBottomBgView.hidden = YES;
+            }
+        } else {
+            
+            meBrwView = [[EBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
+            [self addSubview:meBrwView];
+        }
 		
-		[self addSubview:meBrwView];
 		mPopoverBrwViewDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
 		mMuiltPopoverDict = [[NSMutableDictionary alloc]initWithCapacity:F_POPOVER_BRW_VIEW_DICT_SIZE];
 		self.autoresizesSubviews = YES;
@@ -130,6 +269,12 @@
 		}
         _openAnimationID = kACEAnimationNone;
         _windowName = inUExObjName;
+        
+        NSDictionary *extraInfo = _windowOptions.extras;
+        if (extraInfo) {
+            [self setExtraInfo: dictionaryArg(extraInfo[@"extraInfo"]) toEBrowserView:meBrwView];
+            [self setOpenAnimationConfig: dictionaryArg(extraInfo[@"animationInfo"])];
+        }
     }
     self.isTopWindow = NO;
     self.enableSwipeClose = YES;
@@ -146,8 +291,12 @@
 	if (meBottomSlibingBrwView) {
 		[meBottomSlibingBrwView setFrame:CGRectMake(0, self.bounds.size.height-meBottomSlibingBrwView.bounds.size.height, self.bounds.size.width, meBottomSlibingBrwView.bounds.size.height)];
 	}
-	[meBrwView setFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
-
+    
+    if (self.windowOptions && self.windowOptions.windowStyle == 1) {
+        
+    } else {
+        [meBrwView setFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    }
 }
 
 - (void)notifyLoadPageStartOfBrwView: (EBrowserView*)eInBrwView {
@@ -347,8 +496,76 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
     });
 }
 
+- (void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(EBrowserView *)inBrwView {
+    if ([extraDic objectForKey:@"opaque"]) {
+        BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
+        if (opaque) {
+            if ([extraDic objectForKey:@"bgColor"]) {
+                NSString * bgStr = [extraDic objectForKey:@"bgColor"];
+                UIColor *color = [UIColor ac_ColorWithHTMLColorString:bgStr];
+                if (color) {
+                    inBrwView.image = nil;
+                    inBrwView.backgroundColor = color;
+                }else{
+                    UIImage *image = nil;
+                    if (self.windowOptions.uexWidget) {
+                        image = [UIImage imageWithContentsOfFile:[self.windowOptions.uexWidget absPath:bgStr]];
+                    }
+                    if (image) {
+                        inBrwView.image = image;
+                    }
+                }
+            }
+        } else {
+            inBrwView.image = nil;
+            inBrwView.backgroundColor = [UIColor clearColor];
+            
+        }
+    }
+    
+    NSString *exeJS = [extraDic objectForKey:@"exeJS"];
+    if (exeJS) {
+        [inBrwView setExeJS:exeJS];
+    }
+}
+
 #pragma mark - Update Swipe Close Status
 
-
+#pragma mark - 修改公众号窗口内容
+- (void)setMPWindowOptions:(ACEMPWindowOptions *)windowOptions
+{
+    self.windowOptions = windowOptions;
+    
+    [self.acempBottomBgView setSubViewWithWindowOptions:self.windowOptions];
+    [self.acempTopView resetWindowOptions:self.windowOptions];
+    
+    CGRect webFrame = meBrwView.frame;
+    if (self.windowOptions.isBottomBarShow == YES) {
+        
+        if (iPhoneX) {
+            webFrame.origin.y = NavHeightIPhoneX;
+            webFrame.size.height = self.frame.size.height - NavHeightIPhoneX - TabHeightIPhoneX;
+        } else {
+            webFrame.origin.y = NavHeightNormal;
+            webFrame.size.height = self.frame.size.height - NavHeightNormal - TabHeightNormal;
+        }
+    } else {
+        
+        if (iPhoneX) {
+            webFrame.origin.y = NavHeightIPhoneX;
+            webFrame.size.height = self.frame.size.height - NavHeightIPhoneX;
+        } else {
+            webFrame.origin.y = NavHeightNormal;
+            webFrame.size.height = self.frame.size.height - NavHeightNormal;
+        }
+    }
+    [meBrwView setFrame:webFrame];
+    
+    if (_windowOptions.isBottomBarShow == YES) {
+        _acempBottomBgView.hidden = NO;
+    } else {
+        _acempBottomBgView.hidden = YES;
+    }
+}
 
 @end

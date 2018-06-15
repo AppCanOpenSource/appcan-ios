@@ -248,6 +248,12 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
     if (customImage) {
         self.mStartView = [[UIImageView alloc] initWithImage:customImage];
+        
+        //JAYTAG-自定义启动图，用户传入的图片比较少，分辨率不全，需要进行缩放和截取，不拉伸。
+        //if (iPhoneX) {
+        self.mStartView.clipsToBounds = YES;
+        self.mStartView.contentMode =  UIViewContentModeScaleAspectFill;
+        //}
     }
     
     if (!self.mStartView) {
@@ -273,6 +279,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
                 launchImageName = [NSString stringWithFormat:@"%@-800-667h@2x", launchImagePrefixFile];
             } else if (iPhone6Plus) {
                 launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-736h@3x", launchImagePrefixFile];
+            } else if (iPhoneX) {
+                launchImageName = [NSString stringWithFormat:@"%@-1100-Portrait-2436h", launchImagePrefixFile];
             } else {
                 launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
             }
@@ -304,10 +312,19 @@ static BOOL userCustomLoadingImageEnabled = NO;
         
     }
     [self.view addSubview:self.mStartView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
-    });
     
+    BOOL userCloseLoading = NO;
+    ONOXMLElement *config = [ACEConfigXML ACEOriginConfigXML];
+    ONOXMLElement *loadingConfig = [config firstChildWithTag:@"removeloading"];
+    if (loadingConfig && [loadingConfig.stringValue isEqual:@"true"]) {
+        userCloseLoading = YES;
+    }
+    
+    if (!userCloseLoading) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventAppLoadingTimeout];
+        });
+    }
     
     if (userCustomLoadingImageEnabled) {
         NSNumber *launchTime = [[NSUserDefaults standardUserDefaults]objectForKey:kACECustomLoadingImageTimeKey];
@@ -403,7 +420,7 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
 }
 
--(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(UIImageView *)inBrwView{
+-(void)setExtraInfo:(NSDictionary *)extraDic toEBrowserView:(EBrowserView *)inBrwView{
     if ([extraDic objectForKey:@"opaque"]) {
         BOOL opaque = [[extraDic objectForKey:@"opaque"] boolValue];
         if (opaque) {

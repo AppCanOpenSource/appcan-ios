@@ -62,6 +62,8 @@
 @property (nonatomic,retain) NSURL * currentUrl;
 @property (nonatomic) BOOL isMuiltPopover;
 
+@property (nonatomic,strong) NSString *mExeJS;//前端传入的希望在页面加载后注入的JS代码
+
 @property (nonatomic,assign) EBrowserView * superDelegate;
 @property (nonatomic,weak,readonly)JSContext *JSContext;
 @property (nonatomic,assign)BOOL swipeCallbackEnabled;

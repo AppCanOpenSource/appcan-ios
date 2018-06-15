@@ -220,11 +220,20 @@
         _initialized = NO;
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
+        
+        frame.origin.y = 0;
+        
         _meBrowserView = [[ACEBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType BrwView:(EBrowserView *)self];
         
         _meBrowserView.superDelegate = self;
         
         [self addSubview:_meBrowserView];
+        
+        if (self.meBrwWnd.windowOptions) {
+            self.autoresizesSubviews = YES;
+            self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        }
+        
         _initialized = YES;
     }
     return self;
@@ -684,6 +693,9 @@
     return YES;
 }
 
+- (void)setExeJS:(NSString *)exeJS{
+    _meBrowserView.mExeJS = exeJS;
+}
 
 
 @end

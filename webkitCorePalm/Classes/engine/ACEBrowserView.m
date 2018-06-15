@@ -542,6 +542,12 @@ const CGFloat loadingVisibleHeight = 60.0f;
     return [self.request URL] ?: self.currentUrl;
 }
 
+- (void)loadExeJS{
+    if (_mExeJS) {
+        [self stringByEvaluatingJavaScriptFromString:_mExeJS];
+    }
+}
+
 - (void)loadUEXScript {
     [self initializeJSCHandler];
     
@@ -556,6 +562,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
     self.indicatorView = indicator;
     [self addSubview:self.indicatorView];
+    
+    
+    //JAYTAG --> xcode8编译会失败
+    //设置webView自带的scrollView，使得view充满屏幕
+    if(@available(iOS 11.0, *)){
+        [self.scrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+    }
+    
     
     self.scrollView.decelerationRate = 1.0;
     self.muexObjName = inUExObjName;
@@ -682,14 +696,15 @@ const CGFloat loadingVisibleHeight = 60.0f;
  */
 - (void)notifyPageStart {
 	mFlag &= ~F_EBRW_VIEW_FLAG_LOAD_FINISHED;
+    
+    [self loadExeJS];
+    
 	[self.meBrwCtrler.meBrw notifyLoadPageStartOfBrwView:self.superDelegate];
 
 
 }
 
 - (void)notifyPageFinish {
-    
-
     
     UIScrollView * subScrollView = NULL;
 	NSString * initStr = NULL;
@@ -712,7 +727,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
     } 
     
     BOOL isStatusBarHidden = [[[NSBundle mainBundle].infoDictionary valueForKey:@"UIStatusBarHidden"] boolValue];
+    //注入插件js
     [self loadUEXScript];
+    //自定义注入js
+    [self loadExeJS];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"showStatusBar"]) {
         
@@ -786,7 +804,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			break;
 
 	}
-    
     
 	[self.meBrwCtrler.meBrw notifyLoadPageFinishOfBrwView:self.superDelegate];
 }

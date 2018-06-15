@@ -153,6 +153,8 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 - (void)keyboardWillChangeFrame:(NSNotification *)notification;
 - (void)registerKeyboardChangeEvent;
 
+- (void)setExeJS:(NSString *)exeJS;
+
 
 @end
 

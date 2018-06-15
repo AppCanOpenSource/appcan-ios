@@ -18,6 +18,10 @@
 
 #import <Foundation/Foundation.h>
 #import "ACEAnimation.h"
+#import "ACEMPWindowOptions.h"
+
+
+#define ACEMP_TransitionView_Close_Notify @"ACEMP_TransitionView_Close_Notify"
 
 
 #define F_WWIDGET_NO_OBFUSCATION	0
@@ -58,6 +62,14 @@
 @property (nonatomic,assign) int orientation;
 @property (nonatomic,assign) int openAdStatus;
 @property (nonatomic,assign) int preload;
+
+
+//子应用启动图相关
+//子应用图标
+@property (nonatomic,strong) NSString *appIcon;
+//打开子应用时是否使用启动图
+@property (nonatomic,assign) BOOL appLoadingStatus;
+
 
 // 手机端WidgetOne系统的唯一标识
 @property (nonatomic,strong) NSString *widgetOneId;
@@ -100,6 +112,13 @@
 @property (nonatomic,assign) ACEAnimationID closeAnimation;
 @property (nonatomic,assign) NSTimeInterval closeAnimationDuration;
 @property (nonatomic,strong) NSDictionary *closeAnimationConfig;
+
+@property (nonatomic,strong) ACEMPWindowOptions *indexWindowOptions;
+@property (nonatomic,assign) BOOL isFirstStartWithConfig;
+
+//公众号新增参数
+//子widget应用中页面无法加载时的错误页面路径，默认为主应用的。
+@property (nonatomic,strong) NSString *errorPath;
 
 -(BOOL)getMySpaceStatus;
 -(BOOL)getMoreWgtsStatus;
