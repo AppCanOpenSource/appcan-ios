@@ -1230,7 +1230,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "buildProductPath=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nAppCanPluginProjectEnginePath=${SRCROOT}/AppCanPlugin/AppCanPlugin/engine/\nrm -rf ${AppCanPluginProjectEnginePath}/libAppCanEngine.a\nrm -rf ${AppCanPluginProjectEnginePath}/AppCanKit.framework\nrm -rf ${AppCanPluginProjectEnginePath}/AppCanKitSwift.framework\nrm -rf ${AppCanPluginProjectEnginePath}/AppCanEngine.framework\ncp -rf ${buildProductPath}/AppCanEngine.framework ${AppCanPluginProjectEnginePath}\ncp -rf ${buildProductPath}/AppCanKit.framework ${AppCanPluginProjectEnginePath}";
+			shellScript = "buildProductPath=${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}\nAppCanPluginProjectEnginePath=${SRCROOT}/AppCanPlugin/AppCanPlugin/engine/\nDSYMEnginePath=${SRCROOT}/dSYM/\nrm -rf ${DSYMEnginePath}\nrm -rf ${AppCanPluginProjectEnginePath}/libAppCanEngine.a\nrm -rf ${AppCanPluginProjectEnginePath}/AppCanKit.framework\nrm -rf ${AppCanPluginProjectEnginePath}/AppCanKitSwift.framework\nrm -rf ${AppCanPluginProjectEnginePath}/AppCanEngine.framework\ncp -rf ${buildProductPath}/AppCanEngine.framework ${AppCanPluginProjectEnginePath}\ncp -rf ${buildProductPath}/AppCanKit.framework ${AppCanPluginProjectEnginePath}\nmkdir ${DSYMEnginePath}\ncp -rf ${buildProductPath}/*.dSYM ${DSYMEnginePath}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
