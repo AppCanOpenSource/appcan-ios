@@ -3711,19 +3711,19 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     UEX_PARAM_GUARD_NOT_NIL(content);
     
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary *dict = [[df valueForKey:kUexWindowValueDictKey] mutableCopy];
+    NSMutableDictionary *dict = [[df objectForKey:kUexWindowValueDictKey] mutableCopy];
     if (!dict) {
         dict = [NSMutableDictionary dictionary];
     }
-    [dict setValue:content forKey:key];
-    [df setValue:dict forKey:kUexWindowValueDictKey];
+    [dict setObject:content forKey:key];
+    [df setObject:dict forKey:kUexWindowValueDictKey];
     [df synchronize];
 }
 
 - (NSObject *)getLocalData:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSString *key) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(key,nil);
-    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] valueForKey:kUexWindowValueDictKey];
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:kUexWindowValueDictKey];
     return dict[key];
     
 }
@@ -3742,12 +3742,12 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
         [df removeObjectForKey:kUexWindowValueDictKey];
         [df synchronize];
     } else {
-        NSMutableDictionary *dict = [[df valueForKey:kUexWindowValueDictKey] mutableCopy];
+        NSMutableDictionary *dict = [[df objectForKey:kUexWindowValueDictKey] mutableCopy];
         if ([dict objectForKey:inArguments[0]]) {
             
             [dict removeObjectForKey:inArguments[0]];
             
-            [df setValue:dict forKey:kUexWindowValueDictKey];
+            [df setObject:dict forKey:kUexWindowValueDictKey];
             [df synchronize];
         }
     }
