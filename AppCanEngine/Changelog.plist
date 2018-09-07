@@ -7,6 +7,7 @@
 		<string>修复iPhone X启动时闪黑屏问题</string>
 		<string>合并4.1分支的改动</string>
 		<string>优化putLocalData，getLocalData和removeLocalData方法</string>
+		<string>修复子应用补丁包升级后黑屏的bug</string>
 	</array>
 	<key>4.2.16</key>
 	<array>

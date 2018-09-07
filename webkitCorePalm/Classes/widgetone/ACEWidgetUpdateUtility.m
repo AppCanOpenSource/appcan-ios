@@ -411,25 +411,30 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     BOOL folderFlag = YES;
     
-    if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
-        BOOL result = [fileMgr createDirectoryAtPath:toPath
-                         withIntermediateDirectories:YES
-                                          attributes:nil
-                                               error:&error];
-        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:toPath]];
-        if (!result && error) {
-            return NO;
-        }
-    }
     
-    if ([fileMgr fileExistsAtPath:fromPath]) {
+    NSArray *strArr = [toPath componentsSeparatedByString:@"/"];
+    NSString *str = strArr.lastObject;
+    NSString *path = [toPath substringToIndex:toPath.length - str.length -1 ];
+    
+    NSString *pathStr;
+    if ([fileMgr fileExistsAtPath:path]) {
+        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
+        pathStr = [fromEnumerator nextObject];
+    }
+    if (pathStr) {
+        path = [path stringByAppendingPathComponent:pathStr];
+    }
+    //旧版本文件移到新目录中
+    if ([fileMgr fileExistsAtPath:path]) {
         NSError * error;
-        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:fromPath];
+        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
         NSString * fileName = nil;
         BOOL result;
-        while ((fileName = [fromEnumerator nextObject])) {
-            NSString * oldFilePath = [fromPath stringByAppendingPathComponent:fileName];
+        NSMutableArray *arr = [NSMutableArray array];
+        while ((fileName = [fromEnumerator nextObject])!= nil) {
+            NSString * oldFilePath = [path stringByAppendingPathComponent:fileName];
             NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
+            [arr addObject:newFilePath];
             BOOL flag = YES;
             if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
                 if (!flag) {
@@ -440,9 +445,58 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
                                 return NO;
                             }
                         }
-                        result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
+                        result =  [fileMgr moveItemAtPath:oldFilePath toPath:newFilePath error:&error];
                         if (!result && error) {
                             return NO;
+                        }
+                    }
+                } else {
+                    result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
+                    if (!result && error) {
+                        return NO;
+                    }
+                }
+            }
+        }
+        [fileMgr removeItemAtPath:path error:&error];
+    }
+    
+    if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
+        BOOL result = [fileMgr createDirectoryAtPath:toPath
+                         withIntermediateDirectories:YES
+                                          attributes:nil
+                                               error:&error];
+        [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:toPath]];
+        if (!result && error) {
+            return NO;
+        }
+    }
+    //补丁包升级
+    if ([fileMgr fileExistsAtPath:fromPath]) {
+        NSError * error;
+        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:fromPath];
+        NSString * fileName = nil;
+        BOOL result;
+        NSMutableArray *arr = [NSMutableArray array];
+        while ((fileName = [fromEnumerator nextObject])!= nil) {
+            NSString * oldFilePath = [fromPath stringByAppendingPathComponent:fileName];
+            NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
+            [arr addObject:newFilePath];
+            BOOL flag = YES;
+            if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
+                if (!flag) {
+                    if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
+                        if ([fileMgr fileExistsAtPath:newFilePath]) {
+                            result = [fileMgr removeItemAtPath:newFilePath error:&error];
+                            if (!result && error) {
+                                return NO;
+                            }
+                        }
+                        result =  [fileMgr moveItemAtPath:oldFilePath toPath:newFilePath error:&error];
+                        if (!result && error) {
+                            return NO;
+                        }else{
+                            [fileMgr removeItemAtPath:oldFilePath error:&error];
                         }
                     }
                 } else {
