@@ -406,6 +406,9 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
 
 + (BOOL)copyItemsFromPath:(NSString *)fromPath toPath:(NSString *)toPath {
     
+    //子应用解压后修改解压标识
+    [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
+    
     NSError * error;
     NSFileManager * fileMgr = [NSFileManager defaultManager];
     
