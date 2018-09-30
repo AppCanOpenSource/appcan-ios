@@ -416,53 +416,61 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     
     NSArray *strArr = [toPath componentsSeparatedByString:@"/"];
-    NSString *str = strArr.lastObject;
-    NSString *path = [toPath substringToIndex:toPath.length - str.length -1 ];
     
-    NSString *pathStr;
-    if ([fileMgr fileExistsAtPath:path]) {
-        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
-        pathStr = [fromEnumerator nextObject];
-    }
-    if (pathStr) {
-        path = [path stringByAppendingPathComponent:pathStr];
-    }
-    //旧版本文件移到新目录中
-    if ([fileMgr fileExistsAtPath:path]) {
-        NSError * error;
-        NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
-        NSString * fileName = nil;
-        BOOL result;
-        NSMutableArray *arr = [NSMutableArray array];
-        while ((fileName = [fromEnumerator nextObject])!= nil) {
-            NSString * oldFilePath = [path stringByAppendingPathComponent:fileName];
-            NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
-            [arr addObject:newFilePath];
-            BOOL flag = YES;
-            if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
-                if (!flag) {
-                    if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
-                        if ([fileMgr fileExistsAtPath:newFilePath]) {
-                            result = [fileMgr removeItemAtPath:newFilePath error:&error];
+    if (strArr.count > 3) {
+        NSString *thirdStr = [NSString stringWithFormat:@"%@",strArr[strArr.count - 3]];
+        if ([thirdStr isEqualToString:@"widgets"]) {
+            NSString *str = strArr.lastObject;
+            
+            NSString *path = [toPath substringToIndex:toPath.length - str.length -1 ];
+            
+            NSString *pathStr;
+            if ([fileMgr fileExistsAtPath:path]) {
+                NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
+                pathStr = [fromEnumerator nextObject];
+            }
+            if (pathStr) {
+                path = [path stringByAppendingPathComponent:pathStr];
+            }
+            //旧版本文件移到新目录中
+            if ([fileMgr fileExistsAtPath:path]) {
+                NSError * error;
+                NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
+                NSString * fileName = nil;
+                BOOL result;
+                NSMutableArray *arr = [NSMutableArray array];
+                while ((fileName = [fromEnumerator nextObject])!= nil) {
+                    NSString * oldFilePath = [path stringByAppendingPathComponent:fileName];
+                    NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
+                    [arr addObject:newFilePath];
+                    BOOL flag = YES;
+                    if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
+                        if (!flag) {
+                            if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
+                                if ([fileMgr fileExistsAtPath:newFilePath]) {
+                                    result = [fileMgr removeItemAtPath:newFilePath error:&error];
+                                    if (!result && error) {
+                                        return NO;
+                                    }
+                                }
+                                result =  [fileMgr moveItemAtPath:oldFilePath toPath:newFilePath error:&error];
+                                if (!result && error) {
+                                    return NO;
+                                }
+                            }
+                        } else {
+                            result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
                             if (!result && error) {
                                 return NO;
                             }
                         }
-                        result =  [fileMgr moveItemAtPath:oldFilePath toPath:newFilePath error:&error];
-                        if (!result && error) {
-                            return NO;
-                        }
-                    }
-                } else {
-                    result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
-                    if (!result && error) {
-                        return NO;
                     }
                 }
+                [fileMgr removeItemAtPath:path error:&error];
             }
         }
-        [fileMgr removeItemAtPath:path error:&error];
     }
+    
     
     if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
         BOOL result = [fileMgr createDirectoryAtPath:toPath
