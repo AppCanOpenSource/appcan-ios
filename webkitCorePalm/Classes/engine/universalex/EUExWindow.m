@@ -1138,6 +1138,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         case ACEWebWindowTypeNormal:{
             EBrowserWindowContainer *eBrwWndContainer = eBrwWnd.winContainer;
             if (self.EBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
+                [eBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.finishWidget();"];
                 return;
             }
             if (eBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) {
