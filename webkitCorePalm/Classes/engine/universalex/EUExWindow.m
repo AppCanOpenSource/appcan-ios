@@ -258,6 +258,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
         NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
         NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
+        urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //拼接url 为汉字或空格时无法识别修改
         NSURL *url = [NSURL URLWithString:urlStr relativeToURL:baseURL];
         return [NSURL URLWithString:url.absoluteString].standardizedURL;
     }
