@@ -466,10 +466,18 @@ static BOOL isAppLaunchedByPush = NO;
     
     startWidgetResult = ret ? @0 : @1;
     
+    if (wgtObj.indexUrl.length > 10) {
+        if (![[NSFileManager defaultManager]fileExistsAtPath:wgtObj.indexUrl]) {
+            startWidgetResult = @3;
+        }
+    }else{
+        startWidgetResult = @3;
+    }
     
     if (ret && wgtObj.appLoadingStatus) {
         [self startACEMPTransitionViewWithWWidget:wgtObj];
     }
+    
     
     
     //子widget启动上报代码
@@ -552,6 +560,17 @@ static BOOL isAppLaunchedByPush = NO;
     BOOL ret = [[ACESubwidgetManager defaultManager] launchWidget:wgtObj];
     
     startWidgetResult = ret ? @0 : @1;
+    
+    //判断子应用根视图是否存在
+    if (wgtObj.indexUrl.length > 10) {
+        if (![[NSFileManager defaultManager]fileExistsAtPath:wgtObj.indexUrl]) {
+            startWidgetResult = @3;
+        }
+    }else{
+        startWidgetResult = @3;
+    }
+    
+    
     
     
     //子widget启动上报代码
