@@ -233,6 +233,16 @@
     return [ACEViewControllerAnimator closingAnimatorWithAnimationID:widget.closeAnimation duration:widget.closeAnimationDuration config:widget.closeAnimationConfig];
 }
 
+
+//webView bug,前端调用子应用退出问题对应
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
+{
+    if (self.presentedViewController != nil) {
+        [super dismissViewControllerAnimated:flag completion:completion];
+    }
+}
+
+
                     
                     
 @end

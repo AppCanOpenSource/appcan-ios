@@ -506,6 +506,7 @@ static BOOL isAppLaunchedByPush = NO;
     __block UEX_ERROR err = kUexNoError;
     ACJSFunctionRef *cb = JSFunctionArg(inArguments.lastObject);
     @onExit{
+        NSLog(@"appCanEngine ---> Classes--->engine--->universalex ---> euexWidget-->startWidget :%d",startWidgetResult);
         [self.webViewEngine callbackWithFunctionKeyPath:@"uexWidget.cbStartWidget" arguments:ACArgsPack(@0,@2,startWidgetResult)];
         [cb executeWithArguments:ACArgsPack(err)];
     };
@@ -554,21 +555,31 @@ static BOOL isAppLaunchedByPush = NO;
     wgtObj.openAnimation = inAnimiId.unsignedIntegerValue;
     wgtObj.openAnimationDuration = animiDuration;
 
-    
-    
-
+    if(![[ACESubwidgetManager defaultManager] islaunchWidget:wgtObj]){
+        //判断子应用根视图是否存在
+        if (wgtObj.indexUrl.length > 10) {
+            if ([wgtObj.indexUrl rangeOfString:@"file://"].location !=NSNotFound) {
+                NSString *indexUrl = [wgtObj.indexUrl substringFromIndex:7];
+                if (![[NSFileManager defaultManager]fileExistsAtPath:indexUrl]) {
+                    
+                    NSString *path_header = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+                    NSLog(@"engine-------->>>>>>EUExWidget---->startWidget:沙盒路径；%@--->子应用路径:%@",path_header,wgtObj.indexUrl);
+                    startWidgetResult = @3;
+                    return;
+                }else{
+                    NSLog(@"engine-------->>>>>>EUExWidget---->startWidget 文件能取到");
+                }
+            }
+        }else{
+            startWidgetResult = @3;
+            return;
+        }
+    }
     BOOL ret = [[ACESubwidgetManager defaultManager] launchWidget:wgtObj];
     
     startWidgetResult = ret ? @0 : @1;
     
-    //判断子应用根视图是否存在
-    if (wgtObj.indexUrl.length > 10) {
-        if (![[NSFileManager defaultManager]fileExistsAtPath:wgtObj.indexUrl]) {
-            startWidgetResult = @3;
-        }
-    }else{
-        startWidgetResult = @3;
-    }
+    
     
     
     

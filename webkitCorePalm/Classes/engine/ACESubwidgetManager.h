@@ -42,6 +42,8 @@
 
 - (BOOL)launchWidget:(WWidget *)subwidget;
 
+- (BOOL)islaunchWidget:(WWidget *)subwidget;
+
 - (BOOL)finishWidget:(WWidget *)subwidget withCallbackResult:(NSString *)result;
 
 - (WWidget *)launchedWidgetWithID:(NSString *)appID;
