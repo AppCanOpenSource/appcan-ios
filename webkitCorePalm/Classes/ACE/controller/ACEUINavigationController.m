@@ -234,7 +234,7 @@
 }
 
 
-//webView bug,前端调用子应用退出问题对应
+//webView bug,前端调用相机，相册子应用退出问题对应
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
 {
     if (self.presentedViewController != nil) {

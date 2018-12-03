@@ -1817,7 +1817,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     [self.actionSheetCB executeWithArguments:ACArgsPack(@(buttonIndex))];
     self.actionSheetCB = nil;
     
-    //webView bug,前端调用子应用退出问题对应
+    //webView bug,前端调用原生相机，相册，子应用退出问题对应
     self.mActionSheet = nil;
     
 }

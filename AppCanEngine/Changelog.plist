@@ -9,6 +9,7 @@
 		<string>修复uexWindow.open 无法打开页面的bug</string>
 		<string>setTimeout callWithArguments: 闪退的问题处理</string>
 		<string>uexWidget.cbStartWidgetWithConfig 与uexWidget.cbStartWidget返回值添加类型3，子应用文件读取错误</string>
+		<string>webView bug,前端调用原生相机，相册，子应用退出问题对应</string>
 	</array>
 	<key>4.2.17</key>
 	<array>
