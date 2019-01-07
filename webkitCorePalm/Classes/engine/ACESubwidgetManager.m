@@ -65,6 +65,10 @@
     return self;
 }
 
+- (BOOL)islaunchWidget:(WWidget *)subwidget{
+    return self.isLaunchingSubwidget;
+}
+
 
 - (BOOL)launchWidget:(WWidget *)subwidget{
     if (self.isLaunchingSubwidget) {
