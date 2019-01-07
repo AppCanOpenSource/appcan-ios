@@ -3,7 +3,7 @@
  *	@file   	: ACEWidgetUpdateUtility.m  in AppCanEngine
  *
  *	@author 	: CeriNo
- * 
+ *
  *	@date   	: 2017/2/10
  *
  *	@copyright 	: 2017 The AppCan Open Source Project.
@@ -78,7 +78,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     NSString *originWidgetVersion = [ACEConfigXML ACEOriginConfigXML][@"version"];
     NSParameterAssert(originWidgetVersion != nil);
     NSString *documentWidgetVersion = [ACEConfigXML ACEWidgetConfigXML][@"version"] ?: @"";
-
+    
     return [self isVersion:originWidgetVersion greaterThanVersion:documentWidgetVersion];
 }
 
@@ -117,7 +117,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     if ([BUtility getAppCanDevMode]) {
         return widgetFolderPath;
     }
-
+    
     
     BOOL isFolder = NO;
     NSString *absWidgetPath = [ACEDocumentPath() stringByAppendingPathComponent:widgetFolderPath];
@@ -157,8 +157,8 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
 
 
 + (BOOL)copyMainWidgetToDocumentWithError:(NSError *__autoreleasing  _Nullable *)errPtr{
-
-
+    
+    
     NSString * wgtOldPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[AppCanEngine.configuration originWidgetPath]];
     NSString * wgtNewPath = [ACEDocumentPath() stringByAppendingPathComponent:[AppCanEngine.configuration documentWidgetPath]];
     
@@ -189,7 +189,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
 }
 
 + (ACEWidgetUpdateResult)installMainWidgetPatch{
-
+    
     
     if (!self.isWidgetUpdateEnabled || !self.isWidgetCopyFinished || !self.isMainWidgetNeedPatchUpdate) {
         return ACEWidgetUpdateResultNotNeeded;
@@ -218,7 +218,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     ZipArchive *zip = [[ZipArchive alloc] init];
     cleanup();
-
+    
     
     NSError *error = nil;
     @onExit{
@@ -229,7 +229,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         ACLogError(@"copy old widget to tmpFolder failed: %@",error.localizedDescription);
         return ACEWidgetUpdateResultError;
     }
-
+    
     if (![zip UnzipOpenFile:zipPath]
         || ![zip UnzipFileTo:tmpZipPath overWrite:YES]
         || ![zip UnzipCloseFile]) {
@@ -239,7 +239,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     NSString *patchPath = tmpZipPath;
     if (![FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:@"config.xml"]]) {
         NSString *appid = [ACEConfigXML ACEOriginConfigXML][@"appId"];
-    
+        
         NSString *subpath = [NSString stringWithFormat:@"widget/%@",appid];
         BOOL widgetFolderExist = [FileManager fileExistsAtPath:[tmpZipPath stringByAppendingPathComponent:subpath] isDirectory:&widgetFolderExist] && widgetFolderExist;
         if (widgetFolderExist) {
@@ -284,7 +284,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     if (![FileManager removeItemAtPath:zipPath error:&error]) {
         ACLogWarning(@"Warning ~> remove widget patch zip failed: %@",error.localizedDescription);
-
+        
     }
     [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
     [StandardUserDefaults setValue:nil forKey:ACEMainWidgetPatchZipPathUserDefaultsKey];
@@ -295,7 +295,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     [ACEConfigXML updateWidgetConfigXML];
     [[WWidgetMgr sharedManager] loadMainWidget];
     return ACEWidgetUpdateResultSuccess;
-
+    
 }
 
 + (void)unZipSubWidgetNeedPatchUpdate:(NSString *)subWidgetPatchZipPath {
@@ -406,10 +406,86 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
 
 + (BOOL)copyItemsFromPath:(NSString *)fromPath toPath:(NSString *)toPath {
     
+    //子应用解压后修改解压标识
+    [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
+    
     NSError * error;
     NSFileManager * fileMgr = [NSFileManager defaultManager];
     
     BOOL folderFlag = YES;
+    
+    
+    NSArray *strArr = [toPath componentsSeparatedByString:@"/"];
+    
+    
+    
+    if (strArr.count > 3) {
+        //判断是否为补丁包更新
+        NSString *thirdStr = [NSString stringWithFormat:@"%@",strArr[strArr.count - 3]];
+        if ([thirdStr isEqualToString:@"widgets"]) {
+            NSString *str = strArr.lastObject;
+            
+            NSString *path = [toPath substringToIndex:toPath.length - str.length -1 ];
+            
+            NSString *pathStr;
+            if ([fileMgr fileExistsAtPath:path]) {
+                NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
+                pathStr = [fromEnumerator nextObject];
+            }
+            
+            if (pathStr) {
+                path = [path stringByAppendingPathComponent:pathStr];
+            }
+            
+            if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
+                BOOL result = [fileMgr createDirectoryAtPath:toPath
+                                 withIntermediateDirectories:YES
+                                                  attributes:nil
+                                                       error:&error];
+                [BUtility addSkipBackupAttributeToItemAtURL:[NSURL fileURLWithPath:toPath]];
+                if (!result && error) {
+                    return NO;
+                }
+            }
+            
+            //旧版本文件移到新目录中
+            if ([fileMgr fileExistsAtPath:path]) {
+                NSError * error;
+                NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:path];
+                NSString * fileName = nil;
+                BOOL result;
+                NSMutableArray *arr = [NSMutableArray array];
+                while ((fileName = [fromEnumerator nextObject])!= nil) {
+                    NSString * oldFilePath = [path stringByAppendingPathComponent:fileName];
+                    NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
+                    [arr addObject:newFilePath];
+                    BOOL flag = YES;
+                    if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
+                        if (!flag) {
+                            if (![[fileName substringToIndex:1] isEqualToString:@"."]) {
+                                if ([fileMgr fileExistsAtPath:newFilePath]) {
+                                    result = [fileMgr removeItemAtPath:newFilePath error:&error];
+                                    if (!result && error) {
+                                        return NO;
+                                    }
+                                }
+                                result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
+                                if (!result && error) {
+                                    return NO;
+                                }
+                            }
+                        } else {
+                            result = [fileMgr createDirectoryAtPath:newFilePath withIntermediateDirectories:YES attributes:nil error:&error];
+                            if (!result && error) {
+                                return NO;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     if (![fileMgr fileExistsAtPath:toPath isDirectory:&folderFlag]) {//如果目标路径不存在则创建
         BOOL result = [fileMgr createDirectoryAtPath:toPath
@@ -427,9 +503,11 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         NSDirectoryEnumerator * fromEnumerator = [fileMgr enumeratorAtPath:fromPath];
         NSString * fileName = nil;
         BOOL result;
-        while ((fileName = [fromEnumerator nextObject])) {
+        NSMutableArray *arr = [NSMutableArray array];
+        while ((fileName = [fromEnumerator nextObject])!= nil) {
             NSString * oldFilePath = [fromPath stringByAppendingPathComponent:fileName];
             NSString * newFilePath = [toPath stringByAppendingPathComponent:fileName];
+            [arr addObject:newFilePath];
             BOOL flag = YES;
             if ([fileMgr fileExistsAtPath:oldFilePath isDirectory:&flag]) {
                 if (!flag) {
@@ -443,6 +521,8 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
                         result =  [fileMgr copyItemAtPath:oldFilePath toPath:newFilePath error:&error];
                         if (!result && error) {
                             return NO;
+                        }else{
+                            [fileMgr removeItemAtPath:oldFilePath error:&error];
                         }
                     }
                 } else {
@@ -477,7 +557,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         
         BOOL isDirectory = [FileManager fileExistsAtPath:srcFullPath isDirectory:&isDirectory] && isDirectory;
         
-
+        
         if (isDirectory) {
             if(![FileManager createDirectoryAtPath:potentialDstPath withIntermediateDirectories:YES attributes:nil error:&err] || err){
                 //return YES if the directory was created, YES if createIntermediates is set and the directory already exists, or NO if an error occurred.

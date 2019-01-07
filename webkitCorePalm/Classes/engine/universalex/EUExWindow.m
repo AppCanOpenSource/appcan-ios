@@ -258,6 +258,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         urlStr = [urlStr substringFromIndex:@"wgtroot://".length];
         NSString *wgtrootBasePath = self.EBrwView.mwWgt.widgetPath;
         NSURL *baseURL = [wgtrootBasePath hasPrefix:@"file://"] ? [NSURL URLWithString:wgtrootBasePath] : [NSURL fileURLWithPath:wgtrootBasePath];
+        urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //拼接url 为汉字或空格时无法识别修改
         NSURL *url = [NSURL URLWithString:urlStr relativeToURL:baseURL];
         return [NSURL URLWithString:url.absoluteString].standardizedURL;
     }
@@ -1138,6 +1139,7 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
         case ACEWebWindowTypeNormal:{
             EBrowserWindowContainer *eBrwWndContainer = eBrwWnd.winContainer;
             if (self.EBrwView == eBrwWndContainer.meRootBrwWnd.meBrwView) {
+                [eBrwWndContainer.meRootBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"uexWidget.finishWidget();"];
                 return;
             }
             if (eBrwWnd.mFlag & F_EBRW_WND_FLAG_IN_CLOSING) {
@@ -1814,6 +1816,9 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     [self callbackWithKeyPath:F_CB_WINDOW_ACTION_SHEET intData:buttonIndex];
     [self.actionSheetCB executeWithArguments:ACArgsPack(@(buttonIndex))];
     self.actionSheetCB = nil;
+    
+    //webView bug,前端调用原生相机，相册，子应用退出问题对应
+    self.mActionSheet = nil;
     
 }
 
