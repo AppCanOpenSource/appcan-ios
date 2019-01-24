@@ -1,2 +1,2 @@
 github "swiftline/swiftline"
-github "marmelroy/Zip"
+github "marmelroy/Zip" ==0.7.0

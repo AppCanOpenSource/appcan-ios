@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 3C5AF6EC1A4D36E7008F8A3D /* widget */; };
 		3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */; };
-		420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041821BABCD27000A57F5 /* libstdc++.6.0.9.tbd */; };
 		420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041841BABCD33000A57F5 /* libresolv.tbd */; };
 		420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041861BABCD3C000A57F5 /* libc++.tbd */; };
 		420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041881BABCD45000A57F5 /* libbz2.1.0.tbd */; };
@@ -167,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				696128432080BABE00CCE18C /* CoreFoundation.framework in Frameworks */,
 				42D96D4B1DAB7B69001ABB17 /* VideoToolbox.framework in Frameworks */,
 				6CC60376157DCCEF00A3E13E /* AudioToolbox.framework in Frameworks */,
@@ -179,10 +179,8 @@
 				4200418B1BABCD53000A57F5 /* libiconv.tbd in Frameworks */,
 				420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */,
 				42D96D561DAB92B4001ABB17 /* AppCanKit.framework in Frameworks */,
-				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */,
 				423A427F1D951E5C008AA1B1 /* pop.framework in Frameworks */,
-				420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
 				42B3D4751E6F9A2300F215B3 /* Foundation.framework in Frameworks */,
 				42B3D4741E6F9A2300F215B3 /* QuickLook.framework in Frameworks */,
