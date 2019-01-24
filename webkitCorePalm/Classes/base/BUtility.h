@@ -58,7 +58,14 @@
 
 #define iPhone6Plus ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && MAX([UIScreen mainScreen].bounds.size.height,[UIScreen mainScreen].bounds.size.width) == 736)
 
+//iPhone X he  iPhone XS
 #define iPhoneX ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && MAX([UIScreen mainScreen].bounds.size.height,[UIScreen mainScreen].bounds.size.width) == 812)
+
+//iPhone XR  828px × 1792px
+#define iPhoneXR [[[UIDevice currentDevice] model] isEqualToString:@"iPhone11,8"]
+
+//iPhone XS Max 1242px x 2688px
+#define iPhoneXS_Max ([[[UIDevice currentDevice] model] isEqualToString:@"iPhone11,4"] || [[[UIDevice currentDevice] model] isEqualToString:@"iPhone11,6"])
 
 
 #define APP_JSON_KEY_MULTIPOPNAME @"multiPopName"

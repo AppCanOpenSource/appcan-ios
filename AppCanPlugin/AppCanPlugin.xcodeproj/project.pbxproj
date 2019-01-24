@@ -9,14 +9,12 @@
 /* Begin PBXBuildFile section */
 		3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 3C5AF6EC1A4D36E7008F8A3D /* widget */; };
 		3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */; };
-		420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041821BABCD27000A57F5 /* libstdc++.6.0.9.tbd */; };
 		420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041841BABCD33000A57F5 /* libresolv.tbd */; };
 		420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041861BABCD3C000A57F5 /* libc++.tbd */; };
 		420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041881BABCD45000A57F5 /* libbz2.1.0.tbd */; };
 		4200418B1BABCD53000A57F5 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200418A1BABCD53000A57F5 /* libiconv.tbd */; };
 		4200418D1BABCD5C000A57F5 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200418C1BABCD5C000A57F5 /* libicucore.tbd */; };
 		4200418F1BABCD65000A57F5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200418E1BABCD65000A57F5 /* libsqlite3.tbd */; };
-		420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041901BABCD6F000A57F5 /* libstdc++.tbd */; };
 		420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041921BABCD79000A57F5 /* libxml2.tbd */; };
 		420041951BABCD80000A57F5 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041941BABCD80000A57F5 /* libz.tbd */; };
 		423A427E1D951E5C008AA1B1 /* Ono.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423A427C1D951E5C008AA1B1 /* Ono.framework */; };
@@ -92,14 +90,12 @@
 /* Begin PBXFileReference section */
 		3C5AF6EC1A4D36E7008F8A3D /* widget */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widget; sourceTree = "<group>"; };
 		3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
-		420041821BABCD27000A57F5 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		420041841BABCD33000A57F5 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		420041861BABCD3C000A57F5 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		420041881BABCD45000A57F5 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
 		4200418A1BABCD53000A57F5 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		4200418C1BABCD5C000A57F5 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		4200418E1BABCD65000A57F5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		420041901BABCD6F000A57F5 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		420041921BABCD79000A57F5 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		420041941BABCD80000A57F5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		423A427C1D951E5C008AA1B1 /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ono.framework; sourceTree = "<group>"; };
@@ -167,22 +163,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				696128432080BABE00CCE18C /* CoreFoundation.framework in Frameworks */,
 				42D96D4B1DAB7B69001ABB17 /* VideoToolbox.framework in Frameworks */,
 				6CC60376157DCCEF00A3E13E /* AudioToolbox.framework in Frameworks */,
 				42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */,
 				420041951BABCD80000A57F5 /* libz.tbd in Frameworks */,
 				420041931BABCD79000A57F5 /* libxml2.tbd in Frameworks */,
-				420041911BABCD6F000A57F5 /* libstdc++.tbd in Frameworks */,
 				4200418F1BABCD65000A57F5 /* libsqlite3.tbd in Frameworks */,
 				4200418D1BABCD5C000A57F5 /* libicucore.tbd in Frameworks */,
 				4200418B1BABCD53000A57F5 /* libiconv.tbd in Frameworks */,
 				420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */,
 				42D96D561DAB92B4001ABB17 /* AppCanKit.framework in Frameworks */,
-				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */,
 				423A427F1D951E5C008AA1B1 /* pop.framework in Frameworks */,
-				420041831BABCD27000A57F5 /* libstdc++.6.0.9.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
 				42B3D4751E6F9A2300F215B3 /* Foundation.framework in Frameworks */,
 				42B3D4741E6F9A2300F215B3 /* QuickLook.framework in Frameworks */,
@@ -253,14 +247,12 @@
 				42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */,
 				420041941BABCD80000A57F5 /* libz.tbd */,
 				420041921BABCD79000A57F5 /* libxml2.tbd */,
-				420041901BABCD6F000A57F5 /* libstdc++.tbd */,
 				4200418E1BABCD65000A57F5 /* libsqlite3.tbd */,
 				4200418C1BABCD5C000A57F5 /* libicucore.tbd */,
 				4200418A1BABCD53000A57F5 /* libiconv.tbd */,
 				420041881BABCD45000A57F5 /* libbz2.1.0.tbd */,
 				420041861BABCD3C000A57F5 /* libc++.tbd */,
 				420041841BABCD33000A57F5 /* libresolv.tbd */,
-				420041821BABCD27000A57F5 /* libstdc++.6.0.9.tbd */,
 				6CC60354157DCCEF00A3E13E /* Accelerate.framework */,
 				6CC60355157DCCEF00A3E13E /* AddressBook.framework */,
 				6CC60356157DCCEF00A3E13E /* AddressBookUI.framework */,

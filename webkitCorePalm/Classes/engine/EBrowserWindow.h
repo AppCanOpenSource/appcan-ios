@@ -38,10 +38,24 @@
 #define F_EBRW_WND_FLAG_HAS_PREOPEN		0x4
 #define F_EBRW_WND_FLAG_FINISH_PREOPEN	0x8
 
-#define NavHeightIPhoneX 88.0
-#define TabHeightIPhoneX 78.0
-#define NavHeightNormal 64.0
-#define TabHeightNormal 44.0
+
+//自定义公众号样式底部栏高度，不是原生tabbar
+#define ACECustomTabHeight (CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) > 20 ? 78.0 : 44.0)
+
+
+//状态栏、导航栏、tabbar高度，已兼容全面屏
+#define Height_StatusBar CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)
+#define ACENavHeight (44 + CGRectGetHeight([UIApplication sharedApplication].statusBarFrame))
+#define ACETabbarHeight (CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) > 20 ? 83.0 : 49.0)
+
+
+
+//#define Height_StatusBar [[UIApplication sharedApplication] statusBarFrame].size.height
+//#define Height_NavBar self.navigationController.navigationBar.frame.size.height
+//
+//#define Height_TopBar (Height_StatusBar+Height_NavBar)
+
+
 
 typedef NS_ENUM(NSInteger, ACEWebWindowType) {
     ACEWebWindowTypeNormal, //普通类型
