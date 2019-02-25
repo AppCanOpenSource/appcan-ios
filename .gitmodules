@@ -7,3 +7,9 @@
 [submodule "Carthage/Checkouts/pop"]
 	path = Carthage/Checkouts/pop
 	url = https://github.com/ios-plugin/pop.git
+[submodule "Carthage/Checkouts/swiftline"]
+	path = AppCanEnginePackager/Carthage/Checkouts/swiftline
+	url = https://github.com/swiftline/swiftline.git
+[submodule "Carthage/Checkouts/Zip"]
+	path = AppCanEnginePackager/Carthage/Checkouts/Zip
+	url = https://github.com/marmelroy/Zip.git

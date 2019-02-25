@@ -10,7 +10,6 @@
 		3C5AF6ED1A4D36E7008F8A3D /* widget in Resources */ = {isa = PBXBuildFile; fileRef = 3C5AF6EC1A4D36E7008F8A3D /* widget */; };
 		3C81BA991A4AA29F00C4B7C1 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */; };
 		420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041841BABCD33000A57F5 /* libresolv.tbd */; };
-		420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041861BABCD3C000A57F5 /* libc++.tbd */; };
 		420041891BABCD45000A57F5 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 420041881BABCD45000A57F5 /* libbz2.1.0.tbd */; };
 		4200418B1BABCD53000A57F5 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200418A1BABCD53000A57F5 /* libiconv.tbd */; };
 		4200418D1BABCD5C000A57F5 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4200418C1BABCD5C000A57F5 /* libicucore.tbd */; };
@@ -166,7 +165,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				420041871BABCD3C000A57F5 /* libc++.tbd in Frameworks */,
 				696128432080BABE00CCE18C /* CoreFoundation.framework in Frameworks */,
 				42D96D4B1DAB7B69001ABB17 /* VideoToolbox.framework in Frameworks */,
 				6CC60376157DCCEF00A3E13E /* AudioToolbox.framework in Frameworks */,
@@ -597,8 +595,9 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
@@ -621,8 +620,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zymobi.poc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -635,8 +636,9 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
@@ -659,8 +661,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zymobi.poc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -711,8 +715,9 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
@@ -735,8 +740,10 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zymobi.poc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
