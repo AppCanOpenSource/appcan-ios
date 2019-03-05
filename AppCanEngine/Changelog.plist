@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.3.20</key>
+	<array>
+		<string>Xcode10/Xcode10+以上版本 适配ios12，包括添加启动图及状态栏，导航栏和tabbar的高度 iPhoneXs，iPhoneiPhoneXs Max ,iPHoneXr</string>
+	</array>
 	<key>4.2.19</key>
 	<array>
 		<string>修复下载了config版本号不正确的主应用补丁包后无法再次更新补丁包的问题</string>
