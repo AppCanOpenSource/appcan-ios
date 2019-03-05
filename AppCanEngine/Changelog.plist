@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.2.19</key>
+	<array>
+		<string>修复下载了config版本号不正确的主应用补丁包后无法再次更新补丁包的问题</string>
+	</array>
 	<key>4.2.18</key>
 	<array>
 		<string>修复子应用更新问题</string>

@@ -194,10 +194,19 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     if (!self.isWidgetUpdateEnabled || !self.isWidgetCopyFinished || !self.isMainWidgetNeedPatchUpdate) {
         return ACEWidgetUpdateResultNotNeeded;
     }
-    NSString *zipPath = self.patchZipPath;
+    
+    //初始化Documents路径
+    NSArray *cacheList = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    //初始化临时文件路径
+    NSString *folderPath = [cacheList objectAtIndex:0];
+    
+    NSString *zipPath = [NSString stringWithFormat:@"%@/%@",folderPath,self.patchZipPath];
+    
     if (!zipPath || ![FileManager fileExistsAtPath:zipPath]) {
-        return ACEWidgetUpdateResultNotNeeded;
-        
+        zipPath = self.patchZipPath;
+        if (!zipPath || ![FileManager fileExistsAtPath:zipPath]) {
+            return ACEWidgetUpdateResultNotNeeded;
+        }
     }
     
     NSString *oldVersion = self.currentWidgetVersion;
@@ -264,6 +273,20 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     NSString *newVersion = configDocument.rootElement[@"version"];
     if (![self isVersion:newVersion greaterThanVersion:oldVersion]) {
         ACLogError(@"patched config.xml version is invalid!");
+        
+        /*
+         JayTag 2019.1.7
+         中化发现的问题：提交主应用补丁包时，如果config中的版本号与上传的版本号不一致，会导致永远无法更新新版本的补丁包。
+         定位的原因：经过排查，发现旧的逻辑中更新失败时不会清除<需要更新>这个状态，这个状态会导致后面启动上报获取到新版本的补丁包时不进行下载，而下次应用启动时会继续更新上次更新失败的补丁包。问题就出在，正常情况下，一次更新失败后（比如应用刚打开就关闭导致某一步文件操作未执行完），下次应用启动时重新更新成功即可使逻辑正常执行。但如果补丁包的版本等于或者比当前的版本低，则会导致每次更新都会失败，且不会清除<需要更新>这个状态，导致启动上报获取到的新版本也无法下载。
+         旧的逻辑：启动时会检查是否已经有下载好的补丁包需要解压更新，如果需要更新(ACEMainWidgetNeedPatchUpdateUserDefaultsKey)，就会执行当前方法进行更新（包括解压拷贝等操作），这时会判断补丁包zip文件路径是否存在、拷贝/移动/解压是否成功、config是否存在等，更新结束后（无论是否成功）会进行启动上报。启动上报获取到新版本的补丁包时会进行下载，但如果本地有未完成的更新则会不进行下载。
+         新的逻辑：因为补丁包的版本等于或者比当前的版本低导致更新失败时，清除补丁包和<需要更新>的状态。
+         优化思路：目前只是在这一种原因导致更新失败时做了清理，后面是否可以改成只要更新失败就做清理呢（把这里的清理操作移动到@onExit中即可）？弊端是，在更新失败后，下次更新前就要重新下载补丁包，会消耗更多的流量；优点是无论什么原因导致的更新失败（比如手机存储空间已满导致文件拷贝无法完成？），都不会影响到下次更新的流程。
+         */
+        [FileManager removeItemAtPath:zipPath error:nil];
+        [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
+        [StandardUserDefaults setValue:nil forKey:ACEMainWidgetPatchZipPathUserDefaultsKey];
+        [StandardUserDefaults synchronize];
+        
         return ACEWidgetUpdateResultError;
     }
     NSString *newWidgetPath = [ACEDocumentPath() stringByAppendingPathComponent:[self widgetPathForVersion:newVersion]];
@@ -406,8 +429,12 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
 
 + (BOOL)copyItemsFromPath:(NSString *)fromPath toPath:(NSString *)toPath {
     
+    /*
+     JayTag 2019.1.7
+     该标识供主应用使用，为使主应用正常更新，注释掉了这里
+     */
     //子应用解压后修改解压标识
-    [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
+    //[StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
     
     NSError * error;
     NSFileManager * fileMgr = [NSFileManager defaultManager];
