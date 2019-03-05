@@ -125,33 +125,15 @@
             CGRect topFrame = frame;
             CGRect bottomFrame = frame;
             
-            if (iPhoneX) {
-                
-                if (self.windowOptions.isBottomBarShow == YES) {
-                    webFrame.size.height = frame.size.height - NavHeightIPhoneX - TabHeightIPhoneX;
-                } else {
-                    webFrame.size.height = frame.size.height - NavHeightIPhoneX;
-                }
-                webFrame.origin.y = NavHeightIPhoneX;
-                
-                topFrame.size.height = NavHeightIPhoneX;
-                
-                bottomFrame.origin.y = frame.size.height - TabHeightIPhoneX;
-                bottomFrame.size.height = TabHeightIPhoneX;
+            if (self.windowOptions.isBottomBarShow == YES) {
+                webFrame.size.height = frame.size.height - ACENavHeight - ACECustomTabHeight;
             } else {
-                
-                if (self.windowOptions.isBottomBarShow == YES) {
-                    webFrame.size.height = frame.size.height - NavHeightNormal - TabHeightNormal;
-                } else {
-                    webFrame.size.height = frame.size.height - NavHeightNormal;
-                }
-                webFrame.origin.y = NavHeightNormal;
-                
-                topFrame.size.height = NavHeightNormal;
-                
-                bottomFrame.origin.y = frame.size.height - TabHeightNormal;
-                bottomFrame.size.height = TabHeightNormal;
+                webFrame.size.height = frame.size.height - ACENavHeight;
             }
+            webFrame.origin.y = ACENavHeight;
+            topFrame.size.height = ACENavHeight;
+            bottomFrame.origin.y = frame.size.height - ACECustomTabHeight;
+            bottomFrame.size.height = ACECustomTabHeight;
             
             meBrwView = [[EBrowserView alloc]initWithFrame:webFrame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
             [self addSubview:meBrwView];
@@ -211,33 +193,15 @@
             CGRect topFrame = frame;
             CGRect bottomFrame = frame;
             
-            if (iPhoneX) {
-                
-                if (self.windowOptions.isBottomBarShow == YES) {
-                    webFrame.size.height = frame.size.height - NavHeightIPhoneX - TabHeightIPhoneX;
-                } else {
-                    webFrame.size.height = frame.size.height - NavHeightIPhoneX;
-                }
-                webFrame.origin.y = NavHeightIPhoneX;
-                
-                topFrame.size.height = NavHeightIPhoneX;
-                
-                bottomFrame.origin.y = frame.size.height - TabHeightIPhoneX;
-                bottomFrame.size.height = TabHeightIPhoneX;
+            if (self.windowOptions.isBottomBarShow == YES) {
+                webFrame.size.height = frame.size.height - ACENavHeight - ACECustomTabHeight;
             } else {
-                
-                if (self.windowOptions.isBottomBarShow == YES) {
-                    webFrame.size.height = frame.size.height - NavHeightNormal - TabHeightNormal;
-                } else {
-                    webFrame.size.height = frame.size.height - NavHeightNormal;
-                }
-                webFrame.origin.y = NavHeightNormal;
-                
-                topFrame.size.height = NavHeightNormal;
-                
-                bottomFrame.origin.y = frame.size.height - TabHeightNormal;
-                bottomFrame.size.height = TabHeightNormal;
+                webFrame.size.height = frame.size.height - ACENavHeight;
             }
+            webFrame.origin.y = ACENavHeight;
+            topFrame.size.height = ACENavHeight;
+            bottomFrame.origin.y = frame.size.height - ACECustomTabHeight;
+            bottomFrame.size.height = ACECustomTabHeight;
             
             meBrwView = [[EBrowserView alloc]initWithFrame:webFrame BrwCtrler:eInBrwCtrler Wgt:mwWgt BrwWnd:self UExObjName:inUExObjName Type:ACEEBrowserViewTypeMain];
             [self addSubview:meBrwView];
@@ -541,23 +505,11 @@ NSString *const cDidWindowSequenceChange=@"uexWindowSequenceHasChanged";
     
     CGRect webFrame = meBrwView.frame;
     if (self.windowOptions.isBottomBarShow == YES) {
-        
-        if (iPhoneX) {
-            webFrame.origin.y = NavHeightIPhoneX;
-            webFrame.size.height = self.frame.size.height - NavHeightIPhoneX - TabHeightIPhoneX;
-        } else {
-            webFrame.origin.y = NavHeightNormal;
-            webFrame.size.height = self.frame.size.height - NavHeightNormal - TabHeightNormal;
-        }
+        webFrame.origin.y = ACENavHeight;
+        webFrame.size.height = self.frame.size.height - ACENavHeight - ACECustomTabHeight;
     } else {
-        
-        if (iPhoneX) {
-            webFrame.origin.y = NavHeightIPhoneX;
-            webFrame.size.height = self.frame.size.height - NavHeightIPhoneX;
-        } else {
-            webFrame.origin.y = NavHeightNormal;
-            webFrame.size.height = self.frame.size.height - NavHeightNormal;
-        }
+        webFrame.origin.y = ACENavHeight;
+        webFrame.size.height = self.frame.size.height - ACENavHeight;
     }
     [meBrwView setFrame:webFrame];
     

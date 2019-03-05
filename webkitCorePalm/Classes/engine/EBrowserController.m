@@ -281,6 +281,10 @@ static BOOL userCustomLoadingImageEnabled = NO;
                 launchImageName = [NSString stringWithFormat:@"%@-800-Portrait-736h@3x", launchImagePrefixFile];
             } else if (iPhoneX) {
                 launchImageName = [NSString stringWithFormat:@"%@-1100-Portrait-2436h", launchImagePrefixFile];
+            } else if (iPhoneXR) {
+                launchImageName = [NSString stringWithFormat:@"%@-828-1792h@2x", launchImagePrefixFile];
+            } else if (iPhoneXS_Max) {
+                launchImageName = [NSString stringWithFormat:@"%@-1400-Portrait-2688h", launchImagePrefixFile];
             } else {
                 launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
             }
