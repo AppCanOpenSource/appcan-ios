@@ -134,7 +134,6 @@
 		42F787C81D950B5D0094AA05 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FFEF391C1FF86200294DE1 /* libxml2.tbd */; };
 		42F787C91D950B5D0094AA05 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF214C1C19070F00F539B4 /* libsqlite3.tbd */; };
 		42F787CA1D950B5D0094AA05 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF214A1C1906E100F539B4 /* ImageIO.framework */; };
-		42F787CB1D950B5D0094AA05 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF21481C1906CD00F539B4 /* libstdc++.tbd */; };
 		42F787CC1D950B5D0094AA05 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42CF21461C1906C600F539B4 /* libz.tbd */; };
 		42F787CE1D950B5D0094AA05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B220D27715A3152B00D02138 /* Foundation.framework */; };
 		42F787CF1D950B5D0094AA05 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AD215A6B222003E73EA /* MediaPlayer.framework */; };
@@ -377,7 +376,6 @@
 		42B3D44F1E6E52AD00F215B3 /* WidgetOneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetOneDelegate.h; sourceTree = "<group>"; };
 		42CF21451C19059300F539B4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42CF21461C1906C600F539B4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		42CF21481C1906CD00F539B4 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		42CF214A1C1906E100F539B4 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		42CF214C1C19070F00F539B4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		42CF2D651DDADBD80060C610 /* ACEConfigXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEConfigXML.h; sourceTree = "<group>"; };
@@ -565,7 +563,6 @@
 				42F787C81D950B5D0094AA05 /* libxml2.tbd in Frameworks */,
 				42F787C91D950B5D0094AA05 /* libsqlite3.tbd in Frameworks */,
 				42F787CA1D950B5D0094AA05 /* ImageIO.framework in Frameworks */,
-				42F787CB1D950B5D0094AA05 /* libstdc++.tbd in Frameworks */,
 				42F787CC1D950B5D0094AA05 /* libz.tbd in Frameworks */,
 				42F787CE1D950B5D0094AA05 /* Foundation.framework in Frameworks */,
 				42F787CF1D950B5D0094AA05 /* MediaPlayer.framework in Frameworks */,
@@ -1016,7 +1013,6 @@
 				42FFEF391C1FF86200294DE1 /* libxml2.tbd */,
 				42CF214C1C19070F00F539B4 /* libsqlite3.tbd */,
 				42CF214A1C1906E100F539B4 /* ImageIO.framework */,
-				42CF21481C1906CD00F539B4 /* libstdc++.tbd */,
 				42CF21461C1906C600F539B4 /* libz.tbd */,
 				5AE8735618B74DD20040BC9A /* IOKit.framework */,
 				B2E52AD515A6B222003E73EA /* Accelerate.framework */,
