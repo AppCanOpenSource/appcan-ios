@@ -5,6 +5,7 @@
 	<key>4.3.20</key>
 	<array>
 		<string>Xcode10/Xcode10+以上版本 适配ios12，包括添加启动图及状态栏，导航栏和tabbar的高度 iPhoneXs，iPhoneiPhoneXs Max ,iPHoneXr</string>
+        <string>修复启动图在iPhone XS Max 拉伸bug</string>
 	</array>
 	<key>4.2.19</key>
 	<array>
