@@ -248,12 +248,6 @@ static BOOL userCustomLoadingImageEnabled = NO;
     }
     if (customImage) {
         self.mStartView = [[UIImageView alloc] initWithImage:customImage];
-        
-        //JAYTAG-自定义启动图，用户传入的图片比较少，分辨率不全，需要进行缩放和截取，不拉伸。
-        //if (iPhoneX) {
-        self.mStartView.clipsToBounds = YES;
-        self.mStartView.contentMode =  UIViewContentModeScaleAspectFill;
-        //}
     }
     
     if (!self.mStartView) {
@@ -282,9 +276,9 @@ static BOOL userCustomLoadingImageEnabled = NO;
             } else if (iPhoneX) {
                 launchImageName = [NSString stringWithFormat:@"%@-1100-Portrait-2436h", launchImagePrefixFile];
             } else if (iPhoneXR) {
-                launchImageName = [NSString stringWithFormat:@"%@-828-1792h@2x", launchImagePrefixFile];
+                launchImageName = [NSString stringWithFormat:@"%@-1200-Portrait-1792h@2x", launchImagePrefixFile];
             } else if (iPhoneXS_Max) {
-                launchImageName = [NSString stringWithFormat:@"%@-1400-Portrait-2688h", launchImagePrefixFile];
+                launchImageName = [NSString stringWithFormat:@"%@-1200-Portrait-2688h@3x", launchImagePrefixFile];
             } else {
                 launchImageName = [NSString stringWithFormat:@"%@", launchImagePrefixFile];
             }
@@ -293,7 +287,9 @@ static BOOL userCustomLoadingImageEnabled = NO;
         }
     }
     
-    
+   // JAYTAG-自定义启动图(系统启动图也有这个问题)，用户传入的图片比较少，分辨率不全，需要进行缩放和截取，不拉伸。
+    self.mStartView.clipsToBounds = YES;
+    self.mStartView.contentMode =  UIViewContentModeScaleAspectFill;
     
     self.mStartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     
