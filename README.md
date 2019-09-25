@@ -72,6 +72,16 @@ brew install carthage
 
 ## Xcode版本兼容问题
 
+### 2019更新
+
+1. 工程默认配置为适配Xcode10.1，Swift版本4.2。
+
+2. 由于Xcode10+版本的编译系统发生变化，默认采用“New Build System”。新编译系统的特性在此暂时不多说，对于AppCan引擎出包来说，比较直接的影响是引擎包大小能变小40%左右。但是它存在一点问题，在编译引擎包之后，可能导致一个脚本运行错误，甚至可能导致Xcode卡死（但是引擎包无影响）。
+
+3. 如果想要避免此问题，第一个办法是，可以在Xcode-->File-->Workspace settings中修改Build System为Legacy Build System。第二个办法是，在AppCanEnginePackager工程中的AppCanEngineArchive的scheme配置中，切换到BuildPhases标签，将其中的useModernBuildSystem值由"true"改为"false"。
+
+### 2018更新
+
 1. 升级Xcode版本后，swift版本可能会有不匹配的错误导致运行出错，重新执行步骤1即可（若装有多个Xcode，要注意将Xcode的CommandLineTools版本指定为你想用的那个版本，然后再执行步骤1）
 2. 由于AppCanEnginePackager工程中依赖的Github上的Zip工程有所更新，内部声明了要使用swift4.0。目前Cartfile中的配置是使用依赖库的最新版本，所以会导致在旧版Xcode（9.2以下）中可能出现编译错误，carthage update时出错。如果需要用低版本Xcode编译出包，可以修改一下AppCanEnginePackager/Cartfile.private文件，然后重新执行“如何生成引擎包”的"步骤1"。文件修改如下：
     ```
