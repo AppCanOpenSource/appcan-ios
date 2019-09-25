@@ -154,7 +154,7 @@
 					420F712C1E4B0DEC00B4C626 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = MMWCPWYKS6;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 					};
 					420F733D1E4BF9B100B4C626 = {
@@ -169,6 +169,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -205,7 +206,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "version=\"\"\nsummary=\"\"\nsuffix=\"\"\n\ncd \"${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/AppCanEnginePackager.app/Contents/MacOS/\"\n./AppCanEnginePackager -version $version -summary $summary -suffix $suffix -src $SRCROOT\nopen \"$SRCROOT/../archives\"\n";
+			shellScript = "version=\"\"\nsummary=\"\"\nsuffix=\"\"\nuseModernBuildSystem=\"false\"\n\ncd \"${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/AppCanEnginePackager.app/Contents/MacOS/\"\n./AppCanEnginePackager -version $version -summary $summary -suffix $suffix -src $SRCROOT -useModernBuildSystem $useModernBuildSystem\nopen \"$SRCROOT/../archives\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -340,7 +341,8 @@
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -362,7 +364,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
