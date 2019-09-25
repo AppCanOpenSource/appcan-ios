@@ -647,12 +647,25 @@
 }
 
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue * ))completion{
-    JSValue *func = [self.meBrowserView.JSContext ac_JSValueForKeyPath:JSKeyPath];
-    [func ac_callWithArguments:arguments completionHandler:completion];
+    if ([NSThread isMainThread]) {
+        JSValue *func = [self.meBrowserView.JSContext ac_JSValueForKeyPath:JSKeyPath];
+        [func ac_callWithArguments:arguments completionHandler:completion];
+    }else{
+        dispatch_async(dispatch_get_main_queue(),^{
+            JSValue *func = [self.meBrowserView.JSContext ac_JSValueForKeyPath:JSKeyPath];
+            [func ac_callWithArguments:arguments completionHandler:completion];
+        });
+    }
 }
 
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments{
-    [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
+    if ([NSThread isMainThread]) {
+        [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
+    }else{
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
+        });
+    }
 }
 
 - (nullable __kindof UIScrollView<AppCanScrollViewEventProducer> *)multiPopoverForName:(NSString *)multiPopoverName{
