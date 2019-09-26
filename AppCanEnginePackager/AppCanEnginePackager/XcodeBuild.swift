@@ -19,6 +19,7 @@ struct XcodeBuild{
     var scheme: String?
     var sdk: String?
     var currentDirectoryPath: String?
+    var useModernBuildSystem: String?
     func runSync(){
         let shell = Process()
         shell.launchPath = "/usr/bin/xcrun"
@@ -40,6 +41,16 @@ struct XcodeBuild{
         }
         if let sdk = sdk{
             args += ["-sdk",sdk]
+        }
+        // 不传入此参数则默认为true，即使用New Build System，可能存在兼容问题
+        if let useModernBuildSystem = useModernBuildSystem{
+            if (Bool(useModernBuildSystem) ?? true) {
+                args += ["-UseModernBuildSystem=YES"]
+                print("AppCanEnginePackager is using New Build System(Default).")
+            } else {
+                args += ["-UseModernBuildSystem=NO"]
+                print("AppCanEnginePackager is using Legacy Build System.")
+            }
         }
         args += [command]
         shell.arguments = args

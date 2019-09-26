@@ -21,8 +21,10 @@ guard let srcPath = args["src"] else{
 }
 rootURL = URL(fileURLWithPath: srcPath).deletingLastPathComponent()
 guard rootURL.lastPathComponent == "appcan-ios" else{
-    fatalError("Invalid rootURL")
+    fatalError("Invalid rootURL, root dir must be appcan-ios")
 }
+
+let useModernBuildSystem = args["useModernBuildSystem"]!;
 
 //MARK: - build engine
 let engineBuildCommand: (String) -> Void = { command in
@@ -31,7 +33,8 @@ let engineBuildCommand: (String) -> Void = { command in
                                 configuration: "Release",
                                 scheme: "AppCanEngine",
                                 sdk: "iphoneos",
-                                currentDirectoryPath: rootURL.path)
+                                currentDirectoryPath: rootURL.path,
+                                useModernBuildSystem: useModernBuildSystem)
     xcodebuild.runSync()
 }
 
@@ -89,7 +92,8 @@ do{
     
 //MARK: clean up
     try fm.removeItem(at: tmpFolderURL)
-
+    print("clean temp folder: \(tmpFolderURL.path)")
+    print("AppCanEnginePackager's work finished with output pakcage: \(archiveURL.path)")
 }catch let e as NSError{
     fatalError("error: \(e.localizedDescription)")
 }
