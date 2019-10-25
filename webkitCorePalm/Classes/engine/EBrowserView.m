@@ -18,6 +18,7 @@
 
 #import "EBrowserView.h"
 #import "ACEBrowserView.h"
+#import "EBrowserHistoryEntry.h"
 
 #import "BUtility.h"
 #import "CBrowserWindow.h"
@@ -355,9 +356,19 @@
 
 - (void)reload{
     if (_meBrowserView) {
-        [_meBrowserView reload];
+        if (_meBrowserView.mwWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+            
+            EBrowserHistoryEntry *eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:_meBrowserView.currentUrl obfValue:YES];
+            [_meBrowserView.meBrwWnd addHisEntry:eHisEntry];
+            FileEncrypt *encryptObj = [[FileEncrypt alloc]init];
+            NSString *data = [encryptObj decryptWithPath:_meBrowserView.currentUrl appendData:nil];
+            [_meBrowserView loadWithData:data baseUrl:_meBrowserView.currentUrl];
+        }else{
+            [_meBrowserView reload];
+        }
     }
 }
+
 - (void)stopLoading{
     if (_meBrowserView) {
         [_meBrowserView stopLoading];
