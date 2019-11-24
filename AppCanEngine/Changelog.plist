@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.4.22</key>
+	<array>
+		<string>修复某些情况下，高版本系统中的H5页面内的输入框点击时可能会被键盘遮挡无法露出的问题。</string>
+	</array>
 	<key>4.4.21</key>
 	<array>
 		<string>适配Swift4.2，初步适配iOS13中的JS交互问题</string>
