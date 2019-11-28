@@ -22,7 +22,7 @@
  */
 
 #import "ACEPOPAnimation.h"
-#import <pop/pop.h>
+#import <pop/POP.h>
 
 
 @interface ACECircleZoomAnimation : NSObject<ACEAnimation>
