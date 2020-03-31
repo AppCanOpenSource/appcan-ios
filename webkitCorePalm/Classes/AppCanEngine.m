@@ -196,10 +196,19 @@ static NSInvocation* _swizzleMethodWithBlock(Class target,SEL origin,id block){
         [BUtility copyMissingFile:defaultDBPath toPath:documentsDirectory];
     }
     //设置Debug日志
-    ONOXMLElement *debug = [[ACEConfigXML ACEWidgetConfigXML] firstChildWithTag:@"debug"];
+    ONOXMLElement *config = [ACEConfigXML ACEWidgetConfigXML];
+    if (!config) {
+        config = [ACEConfigXML ACEOriginConfigXML];
+    }
+    ONOXMLElement *debug = [config firstChildWithTag:@"debug"];
     NSString *debugEnable = debug[@"enable"];
+    NSString *debugValue = [debug stringValue];
     NSString *debugVerbose = debug[@"verbose"];
-    if (debugEnable.boolValue) {
+    if (debugEnable.boolValue || debugValue.boolValue) {
+        // 以下形式均满足：
+        // <debug enable="true"></debug>
+        // <debug>true</debug>
+        // <debug enable="true">true</debug>
         if (debugVerbose.boolValue) {
             ACLogSetGlobalLogMode(ACLogModeVerbose);
         }else{
