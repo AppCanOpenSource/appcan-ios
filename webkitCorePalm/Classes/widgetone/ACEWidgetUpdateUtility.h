@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger,ACEWidgetUpdateResult) {
  @param patchZipPath 更新需要的的patchZip包路径
  @discussion
  */
-+ (void)setMainWidgetNeedPatchUpdate:(NSString *)patchZipPath;
++ (void)setMainWidgetNeedPatchUpdate:(NSString * __nullable)patchZipPath;
 
 /**
  更新当前widget

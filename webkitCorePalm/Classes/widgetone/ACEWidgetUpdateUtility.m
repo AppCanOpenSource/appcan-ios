@@ -178,8 +178,13 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     return [StandardUserDefaults boolForKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
 }
 
-+ (void)setMainWidgetNeedPatchUpdate:(NSString *)patchZipPath{
-    [StandardUserDefaults setBool:YES forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
++ (void)setMainWidgetNeedPatchUpdate:(NSString * __nullable)patchZipPath{
+    BOOL isNeedPatchUpdate = NO;
+    if (patchZipPath) {
+        // 如果传入的补丁包路径存在，则意味着存在补丁包升级
+        isNeedPatchUpdate = YES;
+    }
+    [StandardUserDefaults setBool:isNeedPatchUpdate forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
     [StandardUserDefaults setValue:patchZipPath forKey:ACEMainWidgetPatchZipPathUserDefaultsKey];
     [StandardUserDefaults synchronize];
 }
@@ -192,6 +197,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     
     
     if (!self.isWidgetUpdateEnabled || !self.isWidgetCopyFinished || !self.isMainWidgetNeedPatchUpdate) {
+        ACLogInfo(@"installMainWidgetPatch ACEWidgetUpdateResultNotNeeded");
         return ACEWidgetUpdateResultNotNeeded;
     }
     
@@ -201,13 +207,6 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     NSString *folderPath = [cacheList objectAtIndex:0];
     
     NSString *zipPath = [NSString stringWithFormat:@"%@/%@",folderPath,self.patchZipPath];
-    
-    if (!zipPath || ![FileManager fileExistsAtPath:zipPath]) {
-        zipPath = self.patchZipPath;
-        if (!zipPath || ![FileManager fileExistsAtPath:zipPath]) {
-            return ACEWidgetUpdateResultNotNeeded;
-        }
-    }
     
     NSString *oldVersion = self.currentWidgetVersion;
     NSString *oldWidgetPath = [ACEDocumentPath() stringByAppendingPathComponent:[AppCanEngine.configuration documentWidgetPath]];
@@ -228,11 +227,23 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     ZipArchive *zip = [[ZipArchive alloc] init];
     cleanup();
     
-    
     NSError *error = nil;
     @onExit{
         cleanup();
+        // 更新补丁包逻辑全部执行完毕，无论成功与失败，全部清空。
+        if ([FileManager fileExistsAtPath:zipPath]) {
+            [FileManager removeItemAtPath:zipPath error:nil];
+        }
+        [[self class] setMainWidgetNeedPatchUpdate:nil];
     };
+    
+    if (!zipPath || ![FileManager fileExistsAtPath:zipPath]) {
+        zipPath = self.patchZipPath;
+        if (!zipPath || ![FileManager fileExistsAtPath:zipPath]) {
+            ACLogInfo(@"patch file is not exist, escape.");
+            return ACEWidgetUpdateResultNotNeeded;
+        }
+    }
     
     if (![FileManager copyItemAtPath:oldWidgetPath toPath:tmpWidgetPath error:&error]) {
         ACLogError(@"copy old widget to tmpFolder failed: %@",error.localizedDescription);
@@ -242,6 +253,7 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
     if (![zip UnzipOpenFile:zipPath]
         || ![zip UnzipFileTo:tmpZipPath overWrite:YES]
         || ![zip UnzipCloseFile]) {
+        ACLogError(@"unzip patch failed!!!");
         return ACEWidgetUpdateResultError;
     }
     
@@ -281,11 +293,14 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
          旧的逻辑：启动时会检查是否已经有下载好的补丁包需要解压更新，如果需要更新(ACEMainWidgetNeedPatchUpdateUserDefaultsKey)，就会执行当前方法进行更新（包括解压拷贝等操作），这时会判断补丁包zip文件路径是否存在、拷贝/移动/解压是否成功、config是否存在等，更新结束后（无论是否成功）会进行启动上报。启动上报获取到新版本的补丁包时会进行下载，但如果本地有未完成的更新则会不进行下载。
          新的逻辑：因为补丁包的版本等于或者比当前的版本低导致更新失败时，清除补丁包和<需要更新>的状态。
          优化思路：目前只是在这一种原因导致更新失败时做了清理，后面是否可以改成只要更新失败就做清理呢（把这里的清理操作移动到@onExit中即可）？弊端是，在更新失败后，下次更新前就要重新下载补丁包，会消耗更多的流量；优点是无论什么原因导致的更新失败（比如手机存储空间已满导致文件拷贝无法完成？），都不会影响到下次更新的流程。
+         2020.03.31
+         最新修改 by yipeng：已经按照上方的优化思路进行修改，现在出了最开始的判断return之外，其他的return情况都会执行@onExit中的代码，即将补丁包下载的状态归位，下次启动时会进行更新。因为已经遇到了可能影响到下次更新的流程。
+         另外备注：由于补丁包本地保存的地址在UD中保存了全路径而不是相对路径，正常使用不会出现问题，但是在xcode调试时，由于每次Run之后的沙箱ID会改变，因此按照原绝对路径寻找补丁包则永远不会成功。若要验证补丁包升级，要么第二次重启app时不要Run，而是手动点开app。要么就是把绝对路径修改为相对路径保存和使用。暂不更改。
          */
-        [FileManager removeItemAtPath:zipPath error:nil];
-        [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
-        [StandardUserDefaults setValue:nil forKey:ACEMainWidgetPatchZipPathUserDefaultsKey];
-        [StandardUserDefaults synchronize];
+//        [FileManager removeItemAtPath:zipPath error:nil];
+//        [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
+//        [StandardUserDefaults setValue:nil forKey:ACEMainWidgetPatchZipPathUserDefaultsKey];
+//        [StandardUserDefaults synchronize];
         
         return ACEWidgetUpdateResultError;
     }
@@ -309,8 +324,6 @@ static NSString *const ACEWidgetVersionUserDefaultsKey =            @"AppCanWidg
         ACLogWarning(@"Warning ~> remove widget patch zip failed: %@",error.localizedDescription);
         
     }
-    [StandardUserDefaults setBool:NO forKey:ACEMainWidgetNeedPatchUpdateUserDefaultsKey];
-    [StandardUserDefaults setValue:nil forKey:ACEMainWidgetPatchZipPathUserDefaultsKey];
     [StandardUserDefaults setValue:newVersion forKey:ACEWidgetVersionUserDefaultsKey];
     [StandardUserDefaults synchronize];
     
