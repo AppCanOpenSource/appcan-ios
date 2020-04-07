@@ -2,9 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.4.23</key>
+	<array>
+		<string>config.xml中debug开关在未开启增量更新开关时无法生效的问题，以及开关与Android引擎保持一定的统一。</string>
+		<string>修复因为某种原因导致补丁包更新失败之后，会影响下一次补丁包升级和重试的机会的问题。</string>
+		<string>兼容修复EMMv3的上报版本号错误问题。</string>
+	</array>
 	<key>4.4.22</key>
 	<array>
 		<string>修复某些情况下，高版本系统中的H5页面内的输入框点击时可能会被键盘遮挡无法露出的问题。</string>
+		<string>添加系统类库libbz2，coreML</string>
 	</array>
 	<key>4.4.21</key>
 	<array>
