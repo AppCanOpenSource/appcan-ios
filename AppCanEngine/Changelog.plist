@@ -5,6 +5,7 @@
 	<key>4.4.23</key>
 	<array>
 		<string>config.xml中debug开关在未开启增量更新开关时无法生效的问题，以及开关与Android引擎保持一定的统一。</string>
+		<string>修复补丁包更新时间长可能有黑屏现象的问题</string>
 		<string>修复因为某种原因导致补丁包更新失败之后，会影响下一次补丁包升级和重试的机会的问题。</string>
 		<string>兼容修复EMMv3的上报版本号错误问题。</string>
 	</array>
