@@ -191,6 +191,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         
     }else{
         if ([ACEWidgetUpdateUtility isMainWidgetNeedPatchUpdate]) {
+            [self handleLoadingImageCloseEvent:ACELoadingImageCloseEventCancelAppLoadingTimeout];
             ACEWidgetUpdateResult result = [ACEWidgetUpdateUtility installMainWidgetPatch];
             if (result == ACEWidgetUpdateResultSuccess) {
                 self.widget = self.mwWgtMgr.mainWidget;
@@ -208,6 +209,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
 
 
 static BOOL userCustomLoadingImageEnabled = NO;
+static BOOL isLoadingImageTimeoutCancelled = NO;
 
 
 
@@ -370,12 +372,22 @@ static BOOL userCustomLoadingImageEnabled = NO;
             }
             break;
         }
+        case ACELoadingImageCloseEventCancelAppLoadingTimeout: {
+            isLoadingImageTimeoutCancelled = YES;
+            ACLogInfo(@"AppCan4.0==>ACELoadingImageCloseEventCancelAppLoadingTimeout");
+            break;
+        }
         case ACELoadingImageCloseEventAppLoadingTimeout: {
-            self.webViewCloseEventDisabled = YES;
-            self.appCloseEventHandled = YES;
-            if (!userCustomLoadingImageEnabled) {
-                [self closeLoadingImage];
-                self.startImageClosed = YES;
+            if (!isLoadingImageTimeoutCancelled) {
+                self.webViewCloseEventDisabled = YES;
+                self.appCloseEventHandled = YES;
+                if (!userCustomLoadingImageEnabled) {
+                    [self closeLoadingImage];
+                    self.startImageClosed = YES;
+                }
+                ACLogInfo(@"AppCan4.0==>ACELoadingImageCloseEventAppLoadingTimeout");
+            }else{
+                ACLogInfo(@"AppCan4.0==>ACELoadingImageCloseEventAppLoadingTimeout is cancelled");
             }
             break;
         }
@@ -463,8 +475,6 @@ static BOOL userCustomLoadingImageEnabled = NO;
     
     if (self.isAppCanRootViewController) {
         
-        [self presentStartImage];
-        
         if (AppCanEngine.configuration.useUpdateWgtHtmlControl) {
             [self doUpdateWgtBlockFinish:^(BOOL isFinished) {
                 [self workAfterDoUpdateWgtBlock];
@@ -472,6 +482,8 @@ static BOOL userCustomLoadingImageEnabled = NO;
         } else {
             [self workAfterDoUpdateWgtBlock];
         }
+        // 将打开启动图的逻辑放在补丁包检查逻辑之后进行，目的是为了在补丁包安装的时候，取消启动图3秒自动消失的操作，防止补丁包更新时间过长而导致启动图消失后显示黑屏。
+        [self presentStartImage];
     }
 }
 

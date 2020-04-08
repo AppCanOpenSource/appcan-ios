@@ -41,6 +41,7 @@ APPCAN_EXPORT NSString *const kACECustomLoadingImageTimeKey;
 typedef NS_ENUM(NSInteger,ACELoadingImageCloseEvent){
     ACELoadingImageCloseEventWebViewFinishLoading,//网页加载完成的事件(用户手动closeLoading或者网页加载完成后0.5s)
     ACELoadingImageCloseEventCustomLoadingTimeout,//自定义启动图timer时间到的事件
+    ACELoadingImageCloseEventCancelAppLoadingTimeout,//取消默认的App加载时间超时的3s事件（用于等待补丁包升级等情况）
     ACELoadingImageCloseEventAppLoadingTimeout//默认的APP加载时间到的事件(3s)
 };
 
