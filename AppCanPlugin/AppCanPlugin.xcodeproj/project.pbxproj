@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		113BA83124208B62007CB582 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 113BA83024208B62007CB582 /* libbz2.tbd */; };
-		113BA83324208B72007CB582 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 113BA83224208B72007CB582 /* CoreML.framework */; };
 		11B367402358426C00FAF561 /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1134EF952358423D000244DA /* CallKit.framework */; };
 		11B367422358427A00FAF561 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B367412358427A00FAF561 /* AdSupport.framework */; };
 		11B367442358429300FAF561 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B367432358429300FAF561 /* UserNotifications.framework */; };
@@ -175,8 +173,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				113BA83324208B72007CB582 /* CoreML.framework in Frameworks */,
-				113BA83124208B62007CB582 /* libbz2.tbd in Frameworks */,
 				11B36746235842C000FAF561 /* libsqlite3.0.tbd in Frameworks */,
 				11B367442358429300FAF561 /* UserNotifications.framework in Frameworks */,
 				11B367422358427A00FAF561 /* AdSupport.framework in Frameworks */,
