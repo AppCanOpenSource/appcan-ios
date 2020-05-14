@@ -1732,8 +1732,8 @@ static NSString *clientCertificatePwd = nil;
 #pragma mark - change orientation
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation{
 //    [[UIDevice currentDevice] ac_invoke:[self rotateMethod] arguments:ACArgsPack(@(orientation))];
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-        SEL selector = NSSelectorFromString(@"setOrientation:");
+    SEL selector = NSSelectorFromString([self rotateMethod]);
+    if ([[UIDevice currentDevice] respondsToSelector:selector]) {
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice
                                                                                 instanceMethodSignatureForSelector:selector]];
         [invocation setSelector:selector];
