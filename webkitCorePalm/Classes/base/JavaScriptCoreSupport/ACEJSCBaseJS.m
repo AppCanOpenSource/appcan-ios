@@ -29,7 +29,47 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
 #define ACE_METHOD_EXEC_OPT_DEFAULT          @(ACEPluginMethodExecuteNormally)
 
+#define JS_APPCAN_ONJSPARSE_HEADER "AppCan_onJsParse:"
+#define JS_APPCAN_ONJSPARSE_HEADER_NSSTRING @JS_APPCAN_ONJSPARSE_HEADER
 
+#define F_UEX_DISPATCHER_SCRIPT @"javascript:"\
+                "  var uexCallback = {" \
+                "    queue: []," \
+                "    callback: function() {" \
+                "      var params = Array.prototype.slice.call(arguments, 0);" \
+                "      var id = params.shift();" \
+                "      var permanent = params.shift();" \
+                "      this.queue[id].apply(this, params);" \
+                "      if (!permanent) {" \
+                "        delete this.queue[id];" \
+                "     }" \
+                "    }" \
+                "  };"\
+                "function fo(){" \
+                "var args_all = Array.prototype.slice.call(arguments, 0);" \
+                "var uexName = args_all[0];" \
+                "var method = args_all[1];" \
+                "var args = Array.prototype.slice.call(args_all[2], 0);" \
+                "var aTypes = [];" \
+                "for (var i = 0;i < args.length;i++) {" \
+                "var arg = args[i];" \
+                "var type = typeof arg;" \
+                "if (type == \"function\") {" \
+                "          var callbackID = uexCallback.queue.length;" \
+                "          uexCallback.queue[callbackID] = arg;" \
+                "          args[i] = ''+callbackID" \
+                "        }"\
+                "aTypes[aTypes.length] = type;" \
+                "}" \
+                "var result =JSON.parse(prompt('" \
+                JS_APPCAN_ONJSPARSE_HEADER \
+                "'" \
+                "+ JSON.stringify({uexName:uexName,method:method,args:args,types:aTypes})));" \
+                " if (result.code != 200) {" \
+                "   console.log( \"method call error, code:\" + result.code + \", message: \" + result.result  );" \
+                "}" \
+                "window.uexDispatcher={};" \
+                "uexDispatcher.dispatch=function(){return fo(arguments[0],arguments[1],arguments[2]);};"
 
 
 
@@ -51,7 +91,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     [plugins enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, ACEPluginInfo * _Nonnull obj, BOOL * _Nonnull stop) {
         [js appendString:[self javaScriptForPlugin:obj]];
     }];
-    AppCanEngineJavaScriptCoreBaseJS = [js copy];
+    AppCanEngineJavaScriptCoreBaseJS = [NSString stringWithFormat:@"%@%@", F_UEX_DISPATCHER_SCRIPT, [js copy]];
     
 }
 

@@ -42,7 +42,8 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-#import <AppCanKit/ACJSValueSupport.h>
+#import "ACJSValueSupport.h"
+
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPluginViewContainer.h"
 @interface EBrowserView ()
@@ -240,15 +241,16 @@
     return self;
 }
 
-
-
-- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
+- (void)ac_evaluateJavaScript:(NSString *)script
 {
-    if (self.meBrowserView && self.meBrowserView.JSContext) {
-        return [_meBrowserView stringByEvaluatingJavaScriptFromString:script];
-        //return [self.meBrowserView.JSContext evaluateScript:script];
+    if (self.meBrowserView) {
+        [_meBrowserView ac_evaluateJavaScript:script];
     }
-    return nil;
+}
+
+- (void)stringByEvaluatingJavaScriptFromString:(NSString *)script
+{
+    [self ac_evaluateJavaScript];
 }
 /**
  **UIWebView的方法和属性**************************************

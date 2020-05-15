@@ -93,7 +93,7 @@ const float AppCanFinalProgressValue = 0.9f;
         NSString * logserveripStr = inCurWgt.logServerIp;
         NSString * srcString = [NSString stringWithFormat:@"http://%@:30060/target/target-script-min.js#anonymous",logserveripStr];
         NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
-        [eBrwView stringByEvaluatingJavaScriptFromString:script];
+        [eBrwView ac_evaluateJavaScript:script];
     }
     [eBrwView notifyPageFinish];
     [eBrwView continueMultiPopoverLoading];

@@ -116,6 +116,7 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
 
+- (NSString *)ac_evaluateJavaScript:(NSString *)script;
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
 
 @property (nonatomic) BOOL scalesPageToFit;

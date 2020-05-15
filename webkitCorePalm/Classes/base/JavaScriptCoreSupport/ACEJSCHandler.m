@@ -27,15 +27,20 @@
 #import <objc/runtime.h>
 #import "ACEJSCBaseJS.h"
 #import "ACEPluginParser.h"
-#import <AppCanKit/ACJSValueSupport.h>
-#import <AppCanKit/ACEXTScope.h>
-#import <AppCanKit/ACJSFunctionRefInternal.h>
 #import "ACEJSCInvocation.h"
 #import "EBrowserView.h"
 #import "ACEPluginInfo.h"
-#import <AppCanKit/ACInvoker.h>
 #import "EBrowserWindow.h"
 #import "ACEBrowserView.h"
+
+//#import <AppCanKit/ACJSValueSupport.h>
+//#import <AppCanKit/ACEXTScope.h>
+//#import <AppCanKit/ACJSFunctionRefInternal.h>
+//#import <AppCanKit/ACInvoker.h>
+#import <ACJSValueSupport.h>
+#import <AppCanKit/ACEXTScope.h>
+#import <AppCanKit/ACJSFunctionRefInternal.h>
+#import <AppCanKit/ACInvoker.h>
 
 #define ACE_LOG_TRACE(cmd)\
     _Pragma("clang diagnostic push")\
@@ -122,7 +127,6 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 - (void)initializeWithJSContext:(JSContext *)context{
-    context[ACEJSCHandlerInjectField] = self;
     NSString *baseJS = [ACEJSCBaseJS baseJS];
     [context evaluateScript:baseJS];
     [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
@@ -241,22 +245,23 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 - (NSMutableArray *)arrayFromArguments:(JSValue *)arguments count:(NSInteger)argCount{
     NSMutableArray *array = [NSMutableArray array];
-    for (int i = 0; i < argCount; i++) {
-        JSValue *value = arguments[i];
-        if (value.ac_type != ACJSValueTypeFunction) {
-            id obj = [value toObject];
-            if (!obj || [obj isKindOfClass:[NSNull class]]) {
-                obj = [ACNil null];
-            }
-            [array addObject:obj];
-            continue;
-        }
-        id ref = [ACJSFunctionRef functionRefFromJSValue: value];
-        if (!ref) {
-            ref = [ACNil null];
-        }
-        [array addObject:ref];
-    }
+    // AppCanWKTODO
+//    for (int i = 0; i < argCount; i++) {
+//        ACJSValue *value = arguments[i];
+//        if (value.ac_type != ACJSValueTypeFunction) {
+//            id obj = [value toObject];
+//            if (!obj || [obj isKindOfClass:[NSNull class]]) {
+//                obj = [ACNil null];
+//            }
+//            [array addObject:obj];
+//            continue;
+//        }
+//        id ref = [ACJSFunctionRef functionRefFromJSValue: value];
+//        if (!ref) {
+//            ref = [ACNil null];
+//        }
+//        [array addObject:ref];
+//    }
     return array;
 }
 

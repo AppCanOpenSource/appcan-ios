@@ -63,7 +63,8 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
     if (!brwView || !JSKeyPath) {
         return;
     }
-    JSContext *ctx = brwView.meBrowserView.JSContext;
+    // AppCanWKTODO
+    JSContext *ctx = nil;
     if (!ctx || ![ctx isKindOfClass:[JSContext class]]) {
         return;
     }
