@@ -76,15 +76,16 @@ typedef NS_ENUM(NSInteger, ACJSValueType){
 - (void)ac_callWithArguments:(NSArray *)arguments;
 @end
 
-@interface JSContext(AppCanKit)
-
-/**
- *  根据keyPath获得对应的JSValue
- *  @example [ctx ac_JSValueForKeyPath:@"a.b.c"] 相当于 ctx[@"a"][@"b"][@"c"]
- *
- *  @return keyPath对应的JSValue
- */
-- (JSValue *)ac_JSValueForKeyPath:(NSString *)keyPath;
-@end
+// AppCanWKTODO 暂无实现方式
+//@interface JSContext(AppCanKit)
+//
+///**
+// *  根据keyPath获得对应的JSValue
+// *  @example [ctx ac_JSValueForKeyPath:@"a.b.c"] 相当于 ctx[@"a"][@"b"][@"c"]
+// *
+// *  @return keyPath对应的JSValue
+// */
+//- (JSValue *)ac_JSValueForKeyPath:(NSString *)keyPath;
+//@end
 
 

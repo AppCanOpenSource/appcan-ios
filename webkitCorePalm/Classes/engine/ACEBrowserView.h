@@ -20,6 +20,7 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
+#import "ACJSContext.h"
 #import "EBrowserView.h"
 @class EBrowserController;
 @class CBrowserMainFrame;
@@ -32,7 +33,7 @@
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
 @class ACEJSCHandler;
-@interface ACEBrowserView : WKWebView <UIGestureRecognizerDelegate>{
+@interface ACEBrowserView : WKWebView <ACJSContext, UIGestureRecognizerDelegate>{
 	int mFlag;
 	int mTopBounceState;
 	int mBottomBounceState;

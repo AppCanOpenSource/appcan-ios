@@ -41,6 +41,7 @@
 #import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACJSFunctionRefInternal.h>
 #import <AppCanKit/ACInvoker.h>
+#import <AppCanKit/ACJSON.h>
 
 #define ACE_LOG_TRACE(cmd)\
     _Pragma("clang diagnostic push")\
@@ -54,14 +55,9 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
 
 
-@protocol ACEJSCHandler <JSExport>
+@protocol ACEJSCHandler
 
-
-
-JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options);
-
-
-- (void)log:(JSValue *)value,...;
+- (void)log:(ACJSValue *)value,...;
 
 @end
 
@@ -70,6 +66,7 @@ JSExportAs(execute,-(id)executeWithPlugin:(NSString *)pluginName method:(NSStrin
 
 @interface ACEJSCHandler()<ACEJSCHandler>
 @property (nonatomic,assign)BOOL disposed;
+@property (nonatomic,weak)id<ACJSContext> ctx;
 @end
 
 
@@ -93,6 +90,10 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
         return;
     }
     [ACEJSCGlobalPlugins setObject:[NSNull null] forKey:pluginClassName];
+}
+
++ (BOOL)isAppCanJSBridgePayload:(NSString *)jsPayload{
+    return [jsPayload hasPrefix:JS_APPCAN_ONJSPARSE_HEADER_NSSTRING];
 }
 
 
@@ -126,13 +127,9 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 
-- (void)initializeWithJSContext:(JSContext *)context{
+- (void)initializeWithJSContext:(id<ACJSContext>)context{
     NSString *baseJS = [ACEJSCBaseJS baseJS];
-    [context evaluateScript:baseJS];
-    [context setExceptionHandler:^(JSContext *ctx, JSValue *exception) {
-        ACLogWarning(@"JS ERROR!ctx:%@ exception:%@",ctx,exception);
-        ctx.exception = exception;
-    }];
+    [context ac_evaluateJavaScript:baseJS];
     self.ctx = context;
 }
 
@@ -154,9 +151,22 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 
+/// 用于解析JS路由包内容
+- (id)executeWithAppCanJSBridgePayload:(NSString *)payloadStr {
+    // AppCanWKTODO 这里用于解析JS路由包内容
+    ACLogDebug(@"AppCan4.0===>executeWithAppCanJSBridgePayload:%@", payloadStr);
+    NSString *header = JS_APPCAN_ONJSPARSE_HEADER_NSSTRING;
+    NSString *payloadContent = [payloadStr substringFromIndex:[header length]];
+    NSMutableDictionary *responseDic = [payloadContent ac_JSONValue];
+    NSString *uexName = responseDic[@"uexName"];
+    NSString *method = responseDic[@"method"];
+    NSArray *argsArray = responseDic[@"args"];
+    NSArray *typesArray = responseDic[@"types"];
+    id result = [self executeWithPlugin:uexName method:method arguments:argsArray argumentsTypes:typesArray];
+    return result;
+}
 
-
-- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(JSValue *)arguments argCount:(NSInteger)argCount executeOptions:(ACEPluginMethodExecuteOptions)options{
+- (id)executeWithPlugin:(NSString *)pluginName method:(NSString *)methodName arguments:(NSArray *)arguments argumentsTypes:(NSArray *)types{
     if(self.disposed){
         return nil;
     }
@@ -181,15 +191,8 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
     if(![pluginInstance respondsToSelector:sel]){
         return nil;
     }
-    id args = nil;
-    if (options & ACEPluginMethodExecuteWithOriginJSValue) {
-        args = arguments;
-    }
     
-    if (!args) {
-        args = [self arrayFromArguments:arguments count:argCount];
-    }
-    
+    id args = [self arrayFromArguments:arguments andArgTypes:types];
 
     BOOL isAsync = [self selector:sel isAsynchronousMethodInClass:[pluginInstance class]];
     
@@ -243,25 +246,28 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 
-- (NSMutableArray *)arrayFromArguments:(JSValue *)arguments count:(NSInteger)argCount{
+- (NSMutableArray *)arrayFromArguments:(NSArray *)arguments andArgTypes:(NSArray *)argTypes{
     NSMutableArray *array = [NSMutableArray array];
     // AppCanWKTODO
-//    for (int i = 0; i < argCount; i++) {
-//        ACJSValue *value = arguments[i];
-//        if (value.ac_type != ACJSValueTypeFunction) {
-//            id obj = [value toObject];
-//            if (!obj || [obj isKindOfClass:[NSNull class]]) {
-//                obj = [ACNil null];
-//            }
-//            [array addObject:obj];
-//            continue;
-//        }
-//        id ref = [ACJSFunctionRef functionRefFromJSValue: value];
-//        if (!ref) {
-//            ref = [ACNil null];
-//        }
-//        [array addObject:ref];
-//    }
+    NSUInteger argCount = arguments.count;
+    for (int i = 0; i < argCount; i++) {
+        NSString *argType = argTypes[i];
+        NSObject *value = arguments[i];
+        if ([@"function" isEqualToString:argType]) {
+            id obj = [value toObject];
+            if (!obj || [obj isKindOfClass:[NSNull class]]) {
+                obj = [ACNil null];
+            }
+            [array addObject:obj];
+            continue;
+        }
+        id ref = [ACJSFunctionRef function];
+        if (!ref) {
+            ref = [ACNil null];
+        }
+        [array addObject:ref];
+    }
+    
     return array;
 }
 
@@ -425,7 +431,6 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
     [self.pluginDict removeAllObjects];
     self.eBrowserView = nil;
     self.engine = nil;
-    self.ctx[ACEJSCHandlerInjectField] = nil;
     self.ctx = nil;
     self.disposed = YES;
     

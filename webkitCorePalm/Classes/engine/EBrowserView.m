@@ -225,7 +225,7 @@
         
         frame.origin.y = 0;
         
-        _meBrowserView = [[ACEBrowserView alloc]initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType BrwView:(EBrowserView *)self];
+        _meBrowserView = [[ACEBrowserView alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType BrwView:(EBrowserView *)self];
         
         _meBrowserView.superDelegate = self;
         
@@ -248,9 +248,16 @@
     }
 }
 
-- (void)stringByEvaluatingJavaScriptFromString:(NSString *)script
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(id _Nullable, NSError * _Nullable))completionHandler {
+    if (self.meBrowserView) {
+        [_meBrowserView ac_evaluateJavaScript:javaScriptString completionHandler:completionHandler];
+    }
+}
+
+- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script
 {
-    [self ac_evaluateJavaScript];
+    [self ac_evaluateJavaScript:script];
+    return nil;
 }
 /**
  **UIWebView的方法和属性**************************************
@@ -263,7 +270,8 @@
 
 -(NSURLRequest *)request
 {
-    return [_meBrowserView request];
+    // AppCanWKTODO 暂无实现方式
+    return nil;
 }
 
 -(BOOL)canGoBack
@@ -285,55 +293,64 @@
 
 -(BOOL)scalesPageToFit
 {
-    return [_meBrowserView scalesPageToFit];
+//    return [_meBrowserView scalesPageToFit];
+    return YES;
 }
 
 - (void)setScalesPageToFit:(BOOL)scalesPageToFit
 {
-    [_meBrowserView setScalesPageToFit:scalesPageToFit];
+//    [_meBrowserView setScalesPageToFit:scalesPageToFit];
 }
 
 
 //@property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 -(UIDataDetectorTypes)dataDetectorTypes
 {
-    return [_meBrowserView dataDetectorTypes];
+    // AppCanWKTODO 暂无实现方式
+//    return [_meBrowserView dataDetectorTypes];
 }
 
 - (void)setDataDetectorTypes:(UIDataDetectorTypes)dataDetectorTypes
 {
-    [_meBrowserView setDataDetectorTypes:dataDetectorTypes];
+    // AppCanWKTODO 暂无实现方式
+//    [_meBrowserView setDataDetectorTypes:dataDetectorTypes];
 }
 
 //@property (nonatomic) BOOL allowsInlineMediaPlayback;
 -(BOOL)allowsInlineMediaPlayback
 {
-    return [_meBrowserView allowsInlineMediaPlayback];
+    // AppCanWKTODO 暂无实现方式
+//    return [_meBrowserView allowsInlineMediaPlayback];
 }
 
 - (void)setAllowsInlineMediaPlayback:(BOOL)allowsInlineMediaPlayback
 {
-    [_meBrowserView setAllowsInlineMediaPlayback:allowsInlineMediaPlayback];
+    // AppCanWKTODO 暂无实现方式
+//    [_meBrowserView setAllowsInlineMediaPlayback:allowsInlineMediaPlayback];
 }
 //@property (nonatomic) BOOL mediaPlaybackRequiresUserAction;
 -(BOOL)mediaPlaybackRequiresUserAction
 {
-    return [_meBrowserView mediaPlaybackRequiresUserAction];
+    // AppCanWKTODO 暂无实现方式
+//    return [_meBrowserView mediaPlaybackRequiresUserAction];
 }
 
 - (void)setMediaPlaybackRequiresUserAction:(BOOL)mediaPlaybackRequiresUserAction
 {
-    [_meBrowserView setMediaPlaybackRequiresUserAction:mediaPlaybackRequiresUserAction];
+    // AppCanWKTODO 暂无实现方式
+//    [_meBrowserView setMediaPlaybackRequiresUserAction:mediaPlaybackRequiresUserAction];
 }
 //@property (nonatomic) BOOL mediaPlaybackAllowsAirPlay;
 -(BOOL)mediaPlaybackAllowsAirPlay
 {
-    return [_meBrowserView mediaPlaybackAllowsAirPlay];
+    // AppCanWKTODO 暂无实现方式
+//    return [_meBrowserView mediaPlaybackAllowsAirPlay];
 }
 
 - (void)setMediaPlaybackAllowsAirPlay:(BOOL)mediaPlaybackAllowsAirPlay
 {
-    [_meBrowserView setMediaPlaybackAllowsAirPlay:mediaPlaybackAllowsAirPlay];
+    // AppCanWKTODO 暂无实现方式
+//    [_meBrowserView setMediaPlaybackAllowsAirPlay:mediaPlaybackAllowsAirPlay];
 }
 //***********************************************************
 
@@ -352,7 +369,7 @@
 - (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(NSURL *)baseURL
 {
     if (_meBrowserView) {
-        [_meBrowserView loadData:data MIMEType:MIMEType textEncodingName:textEncodingName baseURL:baseURL];
+        [_meBrowserView loadData:data MIMEType:MIMEType characterEncodingName:textEncodingName baseURL:baseURL];
     }
 }
 
@@ -656,17 +673,22 @@
 }
 
 - (void)evaluateScript:(NSString *)jsScript{
-    [self performSelectorOnMainThread:@selector(stringByEvaluatingJavaScriptFromString:) withObject:jsScript waitUntilDone:NO];
+    if ([NSThread isMainThread]) {
+        [self ac_evaluateJavaScript:jsScript completionHandler:nil];
+    }else{
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self ac_evaluateJavaScript:jsScript completionHandler:nil];
+        });
+    }
 }
 
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue * ))completion{
+    // AppCanWKTODO JSValue需要去掉
     if ([NSThread isMainThread]) {
-        JSValue *func = [self.meBrowserView.JSContext ac_JSValueForKeyPath:JSKeyPath];
-        [func ac_callWithArguments:arguments completionHandler:completion];
+        [self ac_evaluateJavaScript:JSKeyPath completionHandler:nil];
     }else{
         dispatch_async(dispatch_get_main_queue(),^{
-            JSValue *func = [self.meBrowserView.JSContext ac_JSValueForKeyPath:JSKeyPath];
-            [func ac_callWithArguments:arguments completionHandler:completion];
+            [self ac_evaluateJavaScript:JSKeyPath completionHandler:nil];
         });
     }
 }
@@ -723,5 +745,83 @@
     _meBrowserView.mExeJS = exeJS;
 }
 
+#pragma mark - WKNavigationDelegate
+
+/*! @abstract Invoked when a main frame navigation starts.
+ @param webView The web view invoking the delegate method.
+ @param navigation The navigation.
+ */
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation{
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didStartProvisionalNavigation");
+}
+
+/*! @abstract Invoked when a server redirect is received for the main
+ frame.
+ @param webView The web view invoking the delegate method.
+ @param navigation The navigation.
+ */
+- (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation *)navigation{
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didReceiveServerRedirectForProvisionalNavigation");
+}
+
+/*! @abstract Invoked when an error occurs while starting to load data for
+ the main frame.
+ @param webView The web view invoking the delegate method.
+ @param navigation The navigation.
+ @param error The error that occurred.
+ */
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
+}
+
+/*! @abstract Invoked when content starts arriving for the main frame.
+ @param webView The web view invoking the delegate method.
+ @param navigation The navigation.
+ */
+- (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation{
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didCommitNavigation");
+    [self notifyPageStart];
+}
+
+/*! @abstract Invoked when a main frame navigation completes.
+ @param webView The web view invoking the delegate method.
+ @param navigation The navigation.
+ */
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFinishNavigation");
+    [self notifyPageFinish];
+}
+
+/*! @abstract Invoked when an error occurs during a committed main frame
+ navigation.
+ @param webView The web view invoking the delegate method.
+ @param navigation The navigation.
+ @param error The error that occurred.
+ */
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFailNavigation");
+    [self notifyPageError];
+}
+
+/*! @abstract Invoked when the web view needs to respond to an authentication challenge.
+ @param webView The web view that received the authentication challenge.
+ @param challenge The authentication challenge.
+ @param completionHandler The completion handler you must invoke to respond to the challenge. The
+ disposition argument is one of the constants of the enumerated type
+ NSURLSessionAuthChallengeDisposition. When disposition is NSURLSessionAuthChallengeUseCredential,
+ the credential argument is the credential to use, or nil to indicate continuing without a
+ credential.
+ @discussion If you do not implement this method, the web view will respond to the authentication challenge with the NSURLSessionAuthChallengeRejectProtectionSpace disposition.
+ */
+//- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler{
+//
+//}
+
+/*! @abstract Invoked when the web view's web content process is terminated.
+ @param webView The web view whose underlying web content process was terminated.
+ */
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView API_AVAILABLE(macos(10.11), ios(9.0)){
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>webViewWebContentProcessDidTerminate");
+}
 
 @end

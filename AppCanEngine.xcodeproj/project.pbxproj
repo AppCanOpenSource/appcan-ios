@@ -526,7 +526,6 @@
 		6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPWindowOptions.m; sourceTree = "<group>"; };
 		6993C5DA246D492F00716E81 /* ACJSValueSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACJSValueSupport.h; sourceTree = "<group>"; };
 		6993C5DB246D493000716E81 /* ACJSValueSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSValueSupport.m; sourceTree = "<group>"; };
-		6993C5DE246EA65200716E81 /* ACJSContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACJSContext.h; sourceTree = "<group>"; };
 		69A678FB20AABB4000CBFDCB /* ACETransitionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACETransitionView.h; sourceTree = "<group>"; };
 		69A678FC20AABB4000CBFDCB /* ACETransitionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACETransitionView.m; sourceTree = "<group>"; };
 		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
@@ -681,10 +680,6 @@
 		42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */ = {
 			isa = PBXGroup;
 			children = (
-				42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */,
-				42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */,
-				42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */,
-				42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */,
 				424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */,
 				424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */,
 			);
@@ -991,9 +986,12 @@
 		6993C5D5246D426700716E81 /* ACJSBridge */ = {
 			isa = PBXGroup;
 			children = (
+				42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */,
+				42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */,
+				42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */,
+				42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */,
 				6993C5DA246D492F00716E81 /* ACJSValueSupport.h */,
 				6993C5DB246D493000716E81 /* ACJSValueSupport.m */,
-				6993C5DE246EA65200716E81 /* ACJSContext.h */,
 			);
 			path = ACJSBridge;
 			sourceTree = "<group>";

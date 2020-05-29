@@ -29,11 +29,8 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
 #define ACE_METHOD_EXEC_OPT_DEFAULT          @(ACEPluginMethodExecuteNormally)
 
-#define JS_APPCAN_ONJSPARSE_HEADER "AppCan_onJsParse:"
-#define JS_APPCAN_ONJSPARSE_HEADER_NSSTRING @JS_APPCAN_ONJSPARSE_HEADER
-
-#define F_UEX_DISPATCHER_SCRIPT @"javascript:"\
-                "  var uexCallback = {" \
+#define F_UEX_DISPATCHER_SCRIPT @""\
+                "var uexCallback = {" \
                 "    queue: []," \
                 "    callback: function() {" \
                 "      var params = Array.prototype.slice.call(arguments, 0);" \
@@ -42,9 +39,9 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                 "      this.queue[id].apply(this, params);" \
                 "      if (!permanent) {" \
                 "        delete this.queue[id];" \
-                "     }" \
+                "      }" \
                 "    }" \
-                "  };"\
+                "};"\
                 "function fo(){" \
                 "var args_all = Array.prototype.slice.call(arguments, 0);" \
                 "var uexName = args_all[0];" \
@@ -65,8 +62,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                 JS_APPCAN_ONJSPARSE_HEADER \
                 "'" \
                 "+ JSON.stringify({uexName:uexName,method:method,args:args,types:aTypes})));" \
-                " if (result.code != 200) {" \
-                "   console.log( \"method call error, code:\" + result.code + \", message: \" + result.result  );" \
+                "return result;"\
                 "}" \
                 "window.uexDispatcher={};" \
                 "uexDispatcher.dispatch=function(){return fo(arguments[0],arguments[1],arguments[2]);};"
@@ -114,7 +110,9 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     if([[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]]){
         return [[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]];
     }
-    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;var args = [];for(var i = 0; i < argCount; i++){args[i] = arguments[i];};return __uex_JSCHandler_.execute('%@','%@',args,argCount,%@);};",plugin,method,plugin,method,options];
+//    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;var args = [];for(var i = 0; i < argCount; i++){args[i] = arguments[i];};return uexDispatcher.dispatch('%@','%@',args,argCount,%@);};",plugin,method,plugin,method,options];
+    return [NSString stringWithFormat:@"%@.%@=function(){return uexDispatcher.dispatch('%@','%@',arguments);};",plugin,method,plugin,method];
+    
 }
 + (NSString *)javaScriptForProperty:(NSString *)property plugin:(NSString *)plugin value:(NSString *)value{
     return [NSString stringWithFormat:@"%@.%@=%@;",plugin,property,value];
@@ -255,6 +253,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getWindowName":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setPopoverVisibility":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setInlineMediaPlaybackEnable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"testJSBridge":ACE_METHOD_EXEC_OPT_DEFAULT,
 #ifdef DEBUG
                                @"test":ACE_METHOD_EXEC_OPT_DEFAULT,
 #endif

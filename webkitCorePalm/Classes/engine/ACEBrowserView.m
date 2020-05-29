@@ -53,7 +53,7 @@
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
-@interface ACEBrowserView()
+@interface ACEBrowserView()<WKUIDelegate>
 
 @end
 
@@ -92,36 +92,72 @@ const CGFloat loadingVisibleHeight = 60.0f;
     return self.meBrwWnd.meBrwCtrler;
 }
 
-
-- (JSContext *)JSContext{
-    JSContext *context = nil;
-    // AppCanWKTODO
-//    @try {
-//        context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-//    }@catch (...) {}
-//    _JSContext = context;
-    return context;
+/// 进行JS交互的对象，实现了ACJSContext协议。
+/// 目前的逻辑下，就直接返回ACEBrowserView本身了。
+- (id<ACJSContext>)JSContext{
+    return self;
 }
 
-
 - (void)initializeJSCHandler{
-    // AppCanWKTODO
-//    if(_JSContext){
-//        [self.JSCHandler clean];
-//        _JSContext = nil;
-//    }
-    
-//    JSContext *context = self.JSContext;
-//
-//    if(!context){
-//        return;
-//    }
-//    self.JSCHandler = [[ACEJSCHandler alloc]initWithEBrowserView:self.superDelegate];
-//    if(!AppCanEngine.configuration.useRC4EncryptWithLocalstorage){
-//        [context evaluateScript:[BUtility getRC4LocalStoreJSKey]];
-//    }
-    
-    [self.JSCHandler initializeWithJSContext:nil];
+    if (self.JSCHandler) {
+        [self.JSCHandler clean];
+    }else{
+        self.JSCHandler = [[ACEJSCHandler alloc] initWithEBrowserView:self.superDelegate];
+    }
+    [self.JSCHandler initializeWithJSContext:[self JSContext]];
+}
+
+- (BOOL)isAppCanJSBridgePayload:(NSString *)jsPayloadStr {
+    return [ACEJSCHandler isAppCanJSBridgePayload:jsPayloadStr];
+}
+
+/// 作为js中prompt接口的实现，默认需要有一个输入框一个按钮，点击确认按钮回传输入值
+/// 当然可以添加多个按钮以及多个输入框，不过completionHandler只有一个参数，如果有多个输入框，需要将多个输入框中的值通过某种方式拼接成一个字符串回传，js接收到之后再做处理
+
+/// 参数 prompt 为 prompt(<message>, <defaultValue>);中的<message>
+/// 参数defaultText 为 prompt(<message>, <defaultValue>);中的 <defaultValue>
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler {
+    ACLogDebug(@"AppCan4.0===>runJavaScriptTextInputPanelWithPrompt:%@ andDefaultText:%@", prompt, defaultText);
+    if ([self isAppCanJSBridgePayload:prompt]) {
+        // AppCanWKTODO 进入AppCanJS的解析路由
+        [self.JSCHandler executeWithAppCanJSBridgePayload:prompt];
+        completionHandler(@"");
+    }else{
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:prompt message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.text = defaultText;
+        }];
+        [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            completionHandler(alertController.textFields[0].text?:@"");
+        }])];
+        
+        [[self meBrwCtrler] presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+/// 此方法作为js的alert方法接口的实现，默认弹出窗口应该只有提示信息及一个确认按钮，当然可以添加更多按钮以及其他内容，但是并不会起到什么作用
+/// 点击确认按钮的相应事件需要执行completionHandler，这样js才能继续执行
+/// 参数 message为  js 方法 alert(<message>) 中的<message>
+-(void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ACELocalized(@"提示") message:message?:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler();
+    }])];
+    [[self meBrwCtrler] presentViewController:alertController animated:YES completion:nil];
+}
+
+/// 作为js中confirm接口的实现，需要有提示信息以及两个相应事件， 确认及取消，并且在completionHandler中回传相应结果，确认返回YES， 取消返回NO
+/// 参数 message为  js 方法 confirm(<message>) 中的<message>
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completionHandler{
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ACELocalized(@"提示") message:message?:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"取消") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(NO);
+    }])];
+    [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(YES);
+    }])];
+    [[self meBrwCtrler] presentViewController:alertController animated:YES completion:nil];
 }
 
 -(void)multiPopoverDelay{
@@ -633,11 +669,24 @@ const CGFloat loadingVisibleHeight = 60.0f;
     //[self addGestureRecognizer:singleTap];
     //singleTap.delegate = self;
     
+    self.navigationDelegate = BrwView;
+    self.UIDelegate = self;
 
 }
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(ACEEBrowserViewType)inWndType  BrwView:(EBrowserView *)BrwView{
-	self = [super initWithFrame:frame];
+    // AppCanWKTODO
+    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    // AppCanWKTODO 目前暂时不使用这个交互机制，而是使用prompt交互
+    //    // 在window.webkit.messageHandlers中注入一个JS对象
+    //    configuration.userContentController = [WKUserContentController new];
+    //    [configuration.userContentController addScriptMessageHandler:handler name:@"AppCan"];
+    WKPreferences *preferences = [WKPreferences new];
+    preferences.javaScriptCanOpenWindowsAutomatically = NO;
+    preferences.javaScriptEnabled = YES;
+    configuration.preferences = preferences;
+    // 初始化WKWebView
+    self = [super initWithFrame:frame configuration:configuration];
 	if (self) {
         [self reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType  BrwView:BrwView];
         self.lastScrollPointY = 0;
@@ -914,7 +963,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler {
     [self evaluateJavaScript:javaScriptString completionHandler:completionHandler];
 }
-    
 
 - (void)loadWithData:(NSString*)inData baseUrl:(NSURL*)inBaseUrl {
     self.currentUrl = inBaseUrl;
@@ -923,9 +971,52 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)loadWithUrl: (NSURL*)inUrl {
     self.currentUrl = inUrl;
+    NSString* urlString = [inUrl absoluteString];
+    [self loadAllUrl:urlString];
+}
 
-	NSURLRequest *request = [NSURLRequest requestWithURL:inUrl];
-	[self loadRequest:request];
+/**
+ 加载本地或在线页面（处理AppCan引擎逻辑下的多种情况）
+
+ @param urlString 需要加载的url
+ */
+- (void)loadAllUrl:(NSString *)urlString {
+    NSURL *url = nil;
+    if ([urlString hasPrefix:@"http://"] || [urlString hasPrefix:@"https://"]) {
+        // 在线资源
+        url = [NSURL URLWithString:urlString];
+        if (url) {
+            [self loadRequest:[NSURLRequest requestWithURL:url]];
+        }
+    } else {
+        // 本地资源
+        NSString *documentsRootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)lastObject];
+        NSString *mainBundleRootPath = [[NSBundle mainBundle] resourcePath];
+        ACLogDebug(@"AppCan4.0===>urlString===>%@", urlString);
+        // NSString *realUrlString = [urlString hasPrefix:@"file://"]?[urlString substringFromIndex:7]:urlString;
+        // url = [NSURL fileURLWithPath:realUrlString];
+        // note：这里之所以没有用fileUrlWithPath而是手动拼接file://再使用urlWithString方法，是为了防止将url中的特殊字符自动转义，从而导致?后面的参数失效甚至无法打开网页。
+        NSString *realUrlString = [urlString hasPrefix:@"file://"]?urlString:[NSString stringWithFormat:@"file://%@", urlString];
+        url = [NSURL URLWithString:realUrlString];
+        // allowingReadAccessToURL这个参数是WKWebView为了读取本地资源的时候设置允许读取的资源范围
+        NSString *allowingReadAccessToURL = nil;
+        if (url) {
+            if ([realUrlString containsString:mainBundleRootPath]) {
+                // 这种情况下，加载的页面是在app内的mainBundle的资源
+                allowingReadAccessToURL = mainBundleRootPath;
+            } else if ([realUrlString containsString:documentsRootPath]) {
+                // 这种情况下，加载的页面是已经拷贝到沙箱目录中了
+                allowingReadAccessToURL = documentsRootPath;
+            } else {
+                // 其他情况，目前来看是不存在的
+                allowingReadAccessToURL = realUrlString;
+            }
+            ACLogDebug(@"AppCan4.0===>allowingReadAccessToURL===>%@", allowingReadAccessToURL);
+            [self loadFileURL:url allowingReadAccessToURL:[NSURL fileURLWithPath:allowingReadAccessToURL]];
+        }else{
+            ACLogError(@"AppCan4.0===>url error, loadFileURL cancelled!");
+        }
+    }
 }
 
 - (void)cleanAllEexObjs {

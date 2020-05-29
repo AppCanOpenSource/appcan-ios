@@ -114,21 +114,22 @@
 
 @end
 
-@implementation JSContext(AppCanKit)
-
-- (JSValue *)ac_JSValueForKeyPath:(NSString *)keyPath{
-    JSValue *value = nil;
-    NSArray<NSString *> *components = [keyPath componentsSeparatedByString:@"."];
-    for (int i = 0; i < components.count; i++) {
-        if (!value) {
-            value = [self objectForKeyedSubscript:components[i]];
-        }else{
-            value = [value objectForKeyedSubscript:components[i]];
-        }
-    }
-    return value;
-}
-
-@end
+// AppCanWKTODO 暂无实现方式
+//@implementation JSContext(AppCanKit)
+//
+//- (JSValue *)ac_JSValueForKeyPath:(NSString *)keyPath{
+//    JSValue *value = nil;
+//    NSArray<NSString *> *components = [keyPath componentsSeparatedByString:@"."];
+//    for (int i = 0; i < components.count; i++) {
+//        if (!value) {
+//            value = [self objectForKeyedSubscript:components[i]];
+//        }else{
+//            value = [value objectForKeyedSubscript:components[i]];
+//        }
+//    }
+//    return value;
+//}
+//
+//@end
 
 

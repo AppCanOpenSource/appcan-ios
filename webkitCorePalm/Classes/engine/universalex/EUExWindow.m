@@ -3896,7 +3896,12 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 }
 
 
+#pragma mark - Test JS Bridge
 
+- (NSString *)testJSBridge:(NSMutableArray *)inArguments{
+    NSLog(@"AppCan4.0===>testJSBridge");
+    return @"testJSBridge OK";
+}
 
 
 @end
