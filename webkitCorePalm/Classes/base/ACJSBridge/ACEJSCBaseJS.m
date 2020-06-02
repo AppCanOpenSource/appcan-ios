@@ -40,6 +40,9 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                 "      if (!permanent) {" \
                 "        delete this.queue[id];" \
                 "      }" \
+                "    }," \
+                "    clean: function(id) {" \
+                "      delete this.queue[id];" \
                 "    }" \
                 "};"\
                 "function fo(){" \
@@ -58,17 +61,21 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                 "        }"\
                 "aTypes[aTypes.length] = type;" \
                 "}" \
-                "var result =JSON.parse(prompt('" \
+                "var result = prompt('" \
                 JS_APPCAN_ONJSPARSE_HEADER \
                 "'" \
-                "+ JSON.stringify({uexName:uexName,method:method,args:args,types:aTypes})));" \
-                "return result;"\
+                "+ JSON.stringify({uexName:uexName,method:method,args:args,types:aTypes}));" \
+                "return result;" \
                 "}" \
                 "window.uexDispatcher={};" \
                 "uexDispatcher.dispatch=function(){return fo(arguments[0],arguments[1],arguments[2]);};"
 
 
-
+//"   if(result.code == 200){"\
+//"     return result;"\
+//"   }else{"\
+//"     return undefined;"\
+//"   }" \
 
 
 

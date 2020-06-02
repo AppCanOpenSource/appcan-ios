@@ -270,8 +270,6 @@
 		69736113201F37B3008CC9F4 /* ACEMPTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6973610B201F37B2008CC9F4 /* ACEMPTopView.m */; };
 		69736114201F37B3008CC9F4 /* ACEMPWindowOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */; };
 		69736115201F37B3008CC9F4 /* ACEMPWindowOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */; };
-		6993C5DC246D493000716E81 /* ACJSValueSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 6993C5DA246D492F00716E81 /* ACJSValueSupport.h */; };
-		6993C5DD246D493000716E81 /* ACJSValueSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 6993C5DB246D493000716E81 /* ACJSValueSupport.m */; };
 		69A678FD20AABB4000CBFDCB /* ACETransitionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 69A678FB20AABB4000CBFDCB /* ACETransitionView.h */; };
 		69A678FE20AABB4000CBFDCB /* ACETransitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A678FC20AABB4000CBFDCB /* ACETransitionView.m */; };
 /* End PBXBuildFile section */
@@ -524,8 +522,6 @@
 		6973610B201F37B2008CC9F4 /* ACEMPTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPTopView.m; sourceTree = "<group>"; };
 		6973610C201F37B2008CC9F4 /* ACEMPWindowOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMPWindowOptions.h; sourceTree = "<group>"; };
 		6973610D201F37B2008CC9F4 /* ACEMPWindowOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMPWindowOptions.m; sourceTree = "<group>"; };
-		6993C5DA246D492F00716E81 /* ACJSValueSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACJSValueSupport.h; sourceTree = "<group>"; };
-		6993C5DB246D493000716E81 /* ACJSValueSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACJSValueSupport.m; sourceTree = "<group>"; };
 		69A678FB20AABB4000CBFDCB /* ACETransitionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACETransitionView.h; sourceTree = "<group>"; };
 		69A678FC20AABB4000CBFDCB /* ACETransitionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACETransitionView.m; sourceTree = "<group>"; };
 		76F105BC1BD0913F0064CDD1 /* DataAnalysisInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAnalysisInfo.h; sourceTree = "<group>"; };
@@ -677,15 +673,6 @@
 			path = animation;
 			sourceTree = "<group>";
 		};
-		42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */ = {
-			isa = PBXGroup;
-			children = (
-				424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */,
-				424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */,
-			);
-			path = JavaScriptCoreSupport;
-			sourceTree = "<group>";
-		};
 		5AAA858D18B1B93D000D7600 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,7 +698,6 @@
 			isa = PBXGroup;
 			children = (
 				6993C5D5246D426700716E81 /* ACJSBridge */,
-				42D9DEE41C40B0B50039E6E2 /* JavaScriptCoreSupport */,
 				42D0AF401BBB8641002249AE /* ACELocalization.h */,
 				42D0AF411BBB8641002249AE /* ACELocalization.m */,
 				DE90F5381904E6D00084EC10 /* OpenUDID.h */,
@@ -986,12 +972,12 @@
 		6993C5D5246D426700716E81 /* ACJSBridge */ = {
 			isa = PBXGroup;
 			children = (
+				424C9E471CC8CBFC0014E07E /* ACEJSCInvocation.h */,
+				424C9E481CC8CBFC0014E07E /* ACEJSCInvocation.m */,
 				42D9DEE51C40B0B50039E6E2 /* ACEJSCBaseJS.h */,
 				42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */,
 				42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */,
 				42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */,
-				6993C5DA246D492F00716E81 /* ACJSValueSupport.h */,
-				6993C5DB246D493000716E81 /* ACJSValueSupport.m */,
 			);
 			path = ACJSBridge;
 			sourceTree = "<group>";
@@ -1114,7 +1100,6 @@
 				42F787F91D950B5D0094AA05 /* ASIHTTPRequest.h in Headers */,
 				42F787FB1D950B5D0094AA05 /* ACEDes.h in Headers */,
 				42F787FC1D950B5D0094AA05 /* EBrowserWindow.h in Headers */,
-				6993C5DC246D493000716E81 /* ACJSValueSupport.h in Headers */,
 				42F787FD1D950B5D0094AA05 /* WWidget.h in Headers */,
 				42F787FE1D950B5D0094AA05 /* WidgetSQL.h in Headers */,
 				42F787FF1D950B5D0094AA05 /* ASIDataDecompressor.h in Headers */,
@@ -1358,7 +1343,6 @@
 				42FAC5B71DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.m in Sources */,
 				42F7878C1D950B5D0094AA05 /* Reachability.m in Sources */,
 				42F7878D1D950B5D0094AA05 /* WWidget.m in Sources */,
-				6993C5DD246D493000716E81 /* ACJSValueSupport.m in Sources */,
 				42F7878E1D950B5D0094AA05 /* ACEMultiPopoverScrollView.m in Sources */,
 				42CF2D6A1DDADBD80060C610 /* ACEConfigXML.m in Sources */,
 				42F7878F1D950B5D0094AA05 /* AsyncSocket.m in Sources */,

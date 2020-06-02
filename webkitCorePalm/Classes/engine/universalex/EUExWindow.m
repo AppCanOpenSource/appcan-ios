@@ -3900,6 +3900,9 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 - (NSString *)testJSBridge:(NSMutableArray *)inArguments{
     NSLog(@"AppCan4.0===>testJSBridge");
+    ACArgsUnpack(NSString *str, NSNumber *num, BOOL boolValue, NSArray *arrayValue, NSDictionary *dicValue, ACJSFunctionRef *function) = inArguments;
+    NSLog(@"%@,%@,%d,%@,%@", str, num, boolValue, arrayValue, dicValue);
+    [function executeWithArguments:@[@"data1", @"data2"]];
     return @"testJSBridge OK";
 }
 

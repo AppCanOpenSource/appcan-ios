@@ -33,11 +33,6 @@
 #import "EBrowserWindow.h"
 #import "ACEBrowserView.h"
 
-//#import <AppCanKit/ACJSValueSupport.h>
-//#import <AppCanKit/ACEXTScope.h>
-//#import <AppCanKit/ACJSFunctionRefInternal.h>
-//#import <AppCanKit/ACInvoker.h>
-#import <ACJSValueSupport.h>
 #import <AppCanKit/ACEXTScope.h>
 #import <AppCanKit/ACJSFunctionRefInternal.h>
 #import <AppCanKit/ACInvoker.h>
@@ -55,16 +50,8 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 
 
 
-@protocol ACEJSCHandler
 
-- (void)log:(ACJSValue *)value,...;
-
-@end
-
-
-
-
-@interface ACEJSCHandler()<ACEJSCHandler>
+@interface ACEJSCHandler()
 @property (nonatomic,assign)BOOL disposed;
 @property (nonatomic,weak)id<ACJSContext> ctx;
 @end
@@ -135,22 +122,6 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 
-
-
-
-- (void)log:(JSValue *)value, ...{
-    NSArray *args = [JSContext currentArguments];
-    NSMutableString *log = [NSMutableString string];
-    for (int i = 0; i < args.count; i++) {
-        [log appendFormat:@"%@",args[i]];
-    }
-    ACLogInfo(@"%@",log);
-}
-
-
-
-
-
 /// 用于解析JS路由包内容
 - (id)executeWithAppCanJSBridgePayload:(NSString *)payloadStr {
     // AppCanWKTODO 这里用于解析JS路由包内容
@@ -163,6 +134,11 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
     NSArray *argsArray = responseDic[@"args"];
     NSArray *typesArray = responseDic[@"types"];
     id result = [self executeWithPlugin:uexName method:method arguments:argsArray argumentsTypes:typesArray];
+//    NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
+//    [resultDic setObject:@"200" forKey:@"code"];
+//    [resultDic setObject:result forKey:@"result"];
+//    NSString *resultStr = [resultDic ac_JSONFragment];
+    result = [result isKindOfClass:[NSString class]] ? result : nil;
     return result;
 }
 
@@ -245,29 +221,28 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 
 
 
-
+/// 处理JS端传入的参数，按照需要将特定的参数类型进行转换使用
 - (NSMutableArray *)arrayFromArguments:(NSArray *)arguments andArgTypes:(NSArray *)argTypes{
     NSMutableArray *array = [NSMutableArray array];
     // AppCanWKTODO
     NSUInteger argCount = arguments.count;
     for (int i = 0; i < argCount; i++) {
         NSString *argType = argTypes[i];
-        NSObject *value = arguments[i];
-        if ([@"function" isEqualToString:argType]) {
-            id obj = [value toObject];
+        id value = arguments[i];
+        if ([@"function" isEqualToString:argType] && [value isKindOfClass:[NSString class]]) {
+            // 参数类型为JS方法，则特殊处理一下
+            id obj = [ACJSFunctionRef functionRefWithACJSContext:self.ctx fromFunctionId:value];
             if (!obj || [obj isKindOfClass:[NSNull class]]) {
                 obj = [ACNil null];
             }
             [array addObject:obj];
             continue;
         }
-        id ref = [ACJSFunctionRef function];
-        if (!ref) {
-            ref = [ACNil null];
+        if (!value) {
+            value = [ACNil null];
         }
-        [array addObject:ref];
+        [array addObject:value];
     }
-    
     return array;
 }
 

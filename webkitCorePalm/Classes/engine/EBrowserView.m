@@ -42,7 +42,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-#import "ACJSValueSupport.h"
+#import "ACEJSCInvocation.h"
 
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPluginViewContainer.h"
@@ -682,25 +682,23 @@
     }
 }
 
-- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue * ))completion{
-    // AppCanWKTODO JSValue需要去掉
-    if ([NSThread isMainThread]) {
-        [self ac_evaluateJavaScript:JSKeyPath completionHandler:nil];
-    }else{
-        dispatch_async(dispatch_get_main_queue(),^{
-            [self ac_evaluateJavaScript:JSKeyPath completionHandler:nil];
-        });
-    }
+/// 已经弃用
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue * ))completion DEPRECATED_MSG_ATTRIBUTE("AppCanKit: JavascriptCore 已经不再使用, 本方法过时，回调请使用 callbackWithFunctionKeyPath:arguments:withCompletionHandler: 代替"){
+    [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:nil];
+}
+
+/// 回调注入JS的主要方法
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion{
+    ACEJSCInvocation *invocation = [ACEJSCInvocation
+                                    invocationWithACJSContext:_meBrowserView
+                                    FunctionJs:JSKeyPath
+                                    arguments:arguments
+                                    completionHandler:completion];
+    [invocation invokeOnMainThread];
 }
 
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments{
-    if ([NSThread isMainThread]) {
-        [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
-    }else{
-        dispatch_async(dispatch_get_main_queue(),^{
-            [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments completion:nil];
-        });
-    }
+    [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:nil];
 }
 
 - (nullable __kindof UIScrollView<AppCanScrollViewEventProducer> *)multiPopoverForName:(NSString *)multiPopoverName{
@@ -771,7 +769,7 @@
  @param error The error that occurred.
  */
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
-    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
+    ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
 }
 
 /*! @abstract Invoked when content starts arriving for the main frame.
@@ -799,7 +797,7 @@
  @param error The error that occurred.
  */
 - (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
-    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFailNavigation");
+    ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailNavigation");
     [self notifyPageError];
 }
 

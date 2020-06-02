@@ -50,6 +50,8 @@
 #import "ACEJSCBaseJS.h"
 #import "AppCanEngine.h"
 #import "ACEUINavigationController.h"
+
+
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
@@ -120,8 +122,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     ACLogDebug(@"AppCan4.0===>runJavaScriptTextInputPanelWithPrompt:%@ andDefaultText:%@", prompt, defaultText);
     if ([self isAppCanJSBridgePayload:prompt]) {
         // AppCanWKTODO 进入AppCanJS的解析路由
-        [self.JSCHandler executeWithAppCanJSBridgePayload:prompt];
-        completionHandler(@"");
+        NSString *result = [self.JSCHandler executeWithAppCanJSBridgePayload:prompt];
+        completionHandler(result);
     }else{
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:prompt message:@"" preferredStyle:UIAlertControllerStyleAlert];
         [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -960,7 +962,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 /// 注入JS方法封装
 /// @param javaScriptString 需要注入执行的JS
-- (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler {
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(nullable void (^)(_Nullable id, NSError * _Nullable error))completionHandler {
     [self evaluateJavaScript:javaScriptString completionHandler:completionHandler];
 }
 

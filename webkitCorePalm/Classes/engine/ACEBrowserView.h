@@ -20,8 +20,9 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import "ACJSContext.h"
+#import <AppCanKit/ACJSContext.h>
 #import "EBrowserView.h"
+
 @class EBrowserController;
 @class CBrowserMainFrame;
 @class CBrowserWindow;

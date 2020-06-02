@@ -53,40 +53,14 @@ void PluginLog (NSString *format, ...) {
 + (void)browserView:(EBrowserView *)brwView
 callbackWithFunctionKeyPath:(NSString *)JSKeyPath
           arguments:(NSArray *)arguments
-         completion:(void (^)(JSValue *))completion{
-    __block BOOL errorOccured = YES;
-    @onExit{
-        if(errorOccured && completion){
-            completion(nil);
-        }
-    };
-    if (!brwView || !JSKeyPath) {
-        return;
-    }
-    // AppCanWKTODO
-    JSContext *ctx = nil;
-    if (!ctx || ![ctx isKindOfClass:[JSContext class]]) {
-        return;
-    }
-    JSValue *func = nil;
-    NSArray<NSString *> *components = [JSKeyPath componentsSeparatedByString:@"."];
-    for ( int i = 0; i < components.count; i++) {
-        if (!func) {
-            func = [ctx objectForKeyedSubscript:components[i]];
-        }else{
-            func = [func objectForKeyedSubscript:components[i]];
-        }
-    }
-    if (!func || [ACEJSCInvocation JSTypeOf:func] != ACEJSValueTypeFunction) {
-        return;
-    }
-    errorOccured = NO;
-    ACEJSCInvocation *invocation = [ACEJSCInvocation invocationWithFunction:func
-                                                                  arguments:arguments
-                                                          completionHandler:completion];
+         completion:(void (^)(JSValue *))completion DEPRECATED_MSG_ATTRIBUTE("AppCanEngine: JavascriptCore 已经不再使用, 本方法过时，回调请使用 AppCanWidgetObject协议中的callbackWithFunctionKeyPath系列方法代替"){
+    ACEJSCInvocation *invocation = [ACEJSCInvocation
+                                    invocationWithACJSContext:[brwView meBrowserView]
+                                    FunctionJs:JSKeyPath
+                                    arguments:arguments
+                                    completionHandler:nil];
     [invocation invokeOnMainThread];
 }
-
 
 //2015-09-23 by lkl
 + (void)uexPlugin:(NSString *)pluginName callbackByName:(NSString *)functionName withObject:(id)obj andType:(uexPluginCallbackType)type inTarget:(id)target{
