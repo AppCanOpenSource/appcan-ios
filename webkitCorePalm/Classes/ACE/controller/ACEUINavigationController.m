@@ -71,7 +71,7 @@
 {
     self = [super init];
     if (self) {
-        self.modalPresentationStyle = UIModalPresentationFullScreen;
+        self.modalPresentationStyle = UIModalPresentationOverFullScreen;
     }
     return self;
 }
