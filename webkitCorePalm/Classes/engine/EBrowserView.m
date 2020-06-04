@@ -21,7 +21,6 @@
 #import "EBrowserHistoryEntry.h"
 
 #import "BUtility.h"
-#import "CBrowserWindow.h"
 
 #import "WWidget.h"
 #import "WWidgetMgr.h"
@@ -417,19 +416,6 @@
     return [_meBrowserView meBrwCtrler];
 }
 
-
-
-
--(CBrowserWindow *)mcBrwWnd
-{
-    return [_meBrowserView mcBrwWnd];
-}
-
-- (void)setMcBrwWnd:(CBrowserWindow *)inmcBrwWnd
-{
-    [_meBrowserView setMcBrwWnd:inmcBrwWnd];
-}
-
 -(EBrowserWindow *)meBrwWnd
 {
     return [_meBrowserView meBrwWnd];
@@ -770,6 +756,16 @@
  */
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
     ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
+    // AppCanWKTODO
+    /*
+    ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACEMP_TransitionView_Close_Notify object:aceWebView.superDelegate];
+    
+    [aceWebView notifyPageError];
+    [aceWebView continueMultiPopoverLoading];
+     */
+    [self notifyPageError];
 }
 
 /*! @abstract Invoked when content starts arriving for the main frame.
@@ -778,7 +774,20 @@
  */
 - (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation{
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didCommitNavigation");
+    // AppCanWKTODO
+    /*
+    if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]) {
+        ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
+        navigation url
+        ACENSLog(@"didCommitNavigation url is %@", [webView.request URL]);
+        NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
+        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
+            [eBrwView.indicatorView startAnimating];
+        }
+        [eBrwView notifyPageStart];
+    }
     [self notifyPageStart];
+    */
 }
 
 /*! @abstract Invoked when a main frame navigation completes.
@@ -787,7 +796,38 @@
  */
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFinishNavigation");
+    // AppCanWKTODO
+    /*
+    if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]){
+        ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ACEMP_TransitionView_Close_Notify object:eBrwView.superDelegate];
+        
+        eBrwView.retryCount = 0;
+        NSString * urlString = [webView.request URL].absoluteString;
+        if ([webappShowAactivety isEqualToString:@"yes"] && [urlString hasPrefix:@"http"] ){
+            [eBrwView.indicatorView stopAnimating];
+        }
+        
+        WWidget *inCurWgt = eBrwView.mwWgt;
+        BOOL isDebug = inCurWgt.isDebug;
+        if (isDebug) {
+            NSString * logserveripStr = inCurWgt.logServerIp;
+            NSString * srcString = [NSString stringWithFormat:@"http://%@:30060/target/target-script-min.js#anonymous",logserveripStr];
+            NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
+            [eBrwView ac_evaluateJavaScript:script];
+        }
+        [eBrwView notifyPageFinish];
+        [eBrwView continueMultiPopoverLoading];
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [AppCanEngine rootPageDidFinishLoading];
+        });
+    }
+    
     [self notifyPageFinish];
+     */
 }
 
 /*! @abstract Invoked when an error occurs during a committed main frame
@@ -798,7 +838,107 @@
  */
 - (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
     ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailNavigation");
+    // AppCanWKTODO
     [self notifyPageError];
+}
+
+/*! @abstract Decides whether to allow or cancel a navigation.
+ @param webView The web view invoking the delegate method.
+ @param navigationAction Descriptive information about the action
+ triggering the navigation request.
+ @param decisionHandler The decision handler to call to allow or cancel the
+ navigation. The argument is one of the constants of the enumerated type WKNavigationActionPolicy.
+ @discussion If you do not implement this method, the web view will load the request or, if appropriate, forward it to another application.
+ */
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{
+    // AppCanWKTODO
+    /*
+    NSString * urlStr = navigationAction.request.URL.absoluteString;
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>decidePolicyForNavigationAction：%@", urlStr);
+    if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]) {
+        ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
+        NSURL *requestURL = [request URL];
+        if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
+            NSURL *oldURL = [eBrwView curUrl];
+            if (oldURL) {
+                if (![[requestURL host] isEqualToString:[oldURL host]]) {
+                    [[UIApplication sharedApplication] openURL:requestURL];
+                    return NO;
+                }
+            }
+        }
+        BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
+        if (!isFrame) {
+            //[self flushCommandQueue:eBrwView];
+            void (^showErrorPage)(void) = ^{
+                if (eBrwView.retryCount < kMaxErrorRetryCount) {
+                    eBrwView.retryCount++;
+                    NSString *errorPath = [self errorHTMLPath];
+                    NSURL *errorURL = [BUtility stringToUrl:errorPath];
+                    [eBrwView loadWithUrl:errorURL];
+                }
+            };
+            if ([requestURL isFileURL] && ![[NSFileManager defaultManager]fileExistsAtPath:requestURL.path]) {
+                showErrorPage();
+                return NO;
+            }
+            if ([[requestURL scheme].lowercaseString isEqualToString: @"http"] || [[requestURL scheme].lowercaseString isEqualToString: @"https"]) {
+                if (![BUtility isConnected]) {
+                    showErrorPage();
+                    return NO;
+                }
+            }
+            if (eBrwView.mType == ACEEBrowserViewTypeMain) {
+                WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.mainWidget;
+                EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eBrwView.superDelegate];
+                if (eBrwWndContainer) {
+                    wWgt = eBrwWndContainer.mwWgt;
+                }
+                if (wWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+                    EBrowserWindow *eBrwWnd = (EBrowserWindow*)eBrwView.meBrwWnd;
+                    EBrowserHistoryEntry *eHisEntry = [eBrwWnd curHisEntry];
+                    if (![eHisEntry.mUrl isEqual:requestURL]) {
+                        eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:requestURL obfValue:NO];
+                        [eBrwWnd addHisEntry:eHisEntry];
+                    }
+                }
+            }
+        }
+    }
+    
+    BOOL isFragmentJump = NO;
+    if (request.URL.fragment) {
+        NSString * nonFragmentURL = [request.URL.absoluteString stringByReplacingOccurrencesOfString:[@"#" stringByAppendingString:request.URL.fragment] withString:@""];
+        isFragmentJump = [nonFragmentURL isEqualToString:webView.request.URL.absoluteString];
+        
+    }
+    BOOL isTopLevelNavigation = [request.mainDocumentURL isEqual:request.URL];
+    BOOL isHTTPOrLocalFile = [request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"] || [request.URL.scheme isEqualToString:@"file"];
+    if (!isFragmentJump && isHTTPOrLocalFile && isTopLevelNavigation) {
+        
+        self.currentURL = request.URL;
+    }
+    
+    return YES;
+    */
+}
+
+/*! @abstract Decides whether to allow or cancel a navigation after its
+ response is known.
+ @param webView The web view invoking the delegate method.
+ @param navigationResponse Descriptive information about the navigation
+ response.
+ @param decisionHandler The decision handler to call to allow or cancel the
+ navigation. The argument is one of the constants of the enumerated type WKNavigationResponsePolicy.
+ @discussion If you do not implement this method, the web view will allow the response, if the web view can show it.
+ */
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler{
+    NSString * urlStr = navigationResponse.response.URL.absoluteString;
+    ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>decidePolicyForNavigationResponse：%@", urlStr);
+    // 允许加载
+    decisionHandler(WKNavigationResponsePolicyAllow);
+    // 不允许加载
+    //decisionHandler(WKNavigationResponsePolicyCancel);
 }
 
 /*! @abstract Invoked when the web view needs to respond to an authentication challenge.
@@ -822,4 +962,21 @@
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>webViewWebContentProcessDidTerminate");
 }
 
+#pragma mark - error page path
+/*
+- (NSString *)errorHTMLPath{
+    static NSString *errorHTMLPath = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        errorHTMLPath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"error/error.html"];
+        ONOXMLElement *configXML = [ACEConfigXML ACEOriginConfigXML];
+        ONOXMLElement *errorXML = [configXML firstChildWithTag:@"error"];
+        if (errorXML && errorXML[@"src"]) {
+            errorHTMLPath = [NSString pathWithComponents:@[[NSBundle mainBundle].resourcePath,[AppCanEngine.configuration originWidgetPath],errorXML[@"src"]]];
+        }
+    });
+    return errorHTMLPath;
+}
+
+ */
 @end

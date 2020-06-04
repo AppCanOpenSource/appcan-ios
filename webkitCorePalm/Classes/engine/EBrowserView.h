@@ -43,7 +43,6 @@
 
 @class EBrowserController;
 @class CBrowserMainFrame;
-@class CBrowserWindow;
 @class EBrowserWindow;
 @class WWidget;
 @class EBrowserViewBounceView;
@@ -71,7 +70,6 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 
 
 @property (nonatomic,readonly) EBrowserController *meBrwCtrler;
-@property (nonatomic,weak) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,weak) EBrowserWindow *meBrwWnd;
 @property (nonatomic,readonly) WWidget *mwWgt;
 

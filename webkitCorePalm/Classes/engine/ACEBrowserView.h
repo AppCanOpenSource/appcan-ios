@@ -25,7 +25,6 @@
 
 @class EBrowserController;
 @class CBrowserMainFrame;
-@class CBrowserWindow;
 @class EBrowserWindow;
 @class WWidget;
 @class EBrowserViewBounceView;
@@ -42,7 +41,6 @@
 }
 @property (nonatomic,strong) UIActivityIndicatorView * indicatorView;
 @property (nonatomic,readonly) EBrowserController *meBrwCtrler;
-@property (nonatomic,strong) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,weak) EBrowserWindow *meBrwWnd;
 @property (nonatomic,readonly) WWidget *mwWgt;
 @property (nonatomic,copy) NSString *muexObjName;

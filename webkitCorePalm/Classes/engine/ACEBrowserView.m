@@ -19,7 +19,6 @@
 #import "ACEBrowserView.h"
 
 #import "BUtility.h"
-#import "CBrowserWindow.h"
 
 #import "WWidget.h"
 #import "WWidgetMgr.h"
@@ -68,7 +67,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 @synthesize indicatorView ;
 
 
-@synthesize mcBrwWnd;
 @synthesize meBrwWnd;
 
 @synthesize muexObjName;
@@ -256,7 +254,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	mFlag = 0;
 	mTopBounceState = 0;
 	mBottomBounceState = 0;
-    mcBrwWnd = nil;
     muexObjName = nil;
     [mPageInfoDict removeAllObjects];
     mPageInfoDict = nil;
@@ -627,7 +624,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
     self.mType = inWndType;
     mFlag = 0;
     //self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    mcBrwWnd = [[CBrowserWindow alloc]init];
     meBrwWnd = eInBrwWnd;
 
 

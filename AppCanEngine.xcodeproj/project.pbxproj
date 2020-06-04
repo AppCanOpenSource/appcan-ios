@@ -41,7 +41,6 @@
 		42F787491D950B5D0094AA05 /* ACEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 333DFFFE1A42B9CA00F501B3 /* ACEWebViewController.m */; };
 		42F7874C1D950B5D0094AA05 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 33774C491B2A6D3500D5F279 /* UIImage+GIF.m */; };
 		42F7874D1D950B5D0094AA05 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA864918B1B93D000D7600 /* unzip.c */; };
-		42F7874E1D950B5D0094AA05 /* CBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */; };
 		42F7874F1D950B5D0094AA05 /* EBrowserWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA860718B1B93D000D7600 /* EBrowserWindow.m */; };
 		42F787501D950B5D0094AA05 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAA862618B1B93D000D7600 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		42F787521D950B5D0094AA05 /* DataAnalysisInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F105BD1BD0913F0064CDD1 /* DataAnalysisInfo.m */; };
@@ -235,7 +234,6 @@
 		42F788471D950B5D0094AA05 /* EBrowserWindowContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860818B1B93D000D7600 /* EBrowserWindowContainer.h */; };
 		42F788481D950B5D0094AA05 /* SDWebImageDownloaderOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C3F1B2A6D3500D5F279 /* SDWebImageDownloaderOperation.h */; };
 		42F7884A1D950B5D0094AA05 /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85A918B1B93D000D7600 /* NSString+SBJSON.h */; };
-		42F7884C1D950B5D0094AA05 /* CBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */; };
 		42F7884E1D950B5D0094AA05 /* SDWebImageDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 33774C3B1B2A6D3500D5F279 /* SDWebImageDecoder.h */; };
 		42F788511D950B5D0094AA05 /* EBrowserHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F618B1B93D000D7600 /* EBrowserHistory.h */; };
 		42F788561D950B5D0094AA05 /* EUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA859F18B1B93D000D7600 /* EUtility.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -437,8 +435,6 @@
 		5AAA85BC18B1B93D000D7600 /* UpdateParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateParser.m; sourceTree = "<group>"; };
 		5AAA85BF18B1B93D000D7600 /* WidgetSQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetSQL.h; sourceTree = "<group>"; };
 		5AAA85C018B1B93D000D7600 /* WidgetSQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetSQL.m; sourceTree = "<group>"; };
-		5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBrowserWindow.h; sourceTree = "<group>"; };
-		5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBrowserWindow.m; sourceTree = "<group>"; };
 		5AAA85F218B1B93D000D7600 /* EBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBrowser.h; sourceTree = "<group>"; };
 		5AAA85F318B1B93D000D7600 /* EBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBrowser.m; sourceTree = "<group>"; };
 		5AAA85F418B1B93D000D7600 /* EBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBrowserController.h; sourceTree = "<group>"; };
@@ -770,8 +766,6 @@
 				4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */,
 				3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */,
 				3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */,
-				5AAA85F018B1B93D000D7600 /* CBrowserWindow.h */,
-				5AAA85F118B1B93D000D7600 /* CBrowserWindow.m */,
 				5AAA85F218B1B93D000D7600 /* EBrowser.h */,
 				5AAA85F318B1B93D000D7600 /* EBrowser.m */,
 				5AAA85F418B1B93D000D7600 /* EBrowserController.h */,
@@ -1165,7 +1159,6 @@
 				42F788471D950B5D0094AA05 /* EBrowserWindowContainer.h in Headers */,
 				42F788481D950B5D0094AA05 /* SDWebImageDownloaderOperation.h in Headers */,
 				42F7884A1D950B5D0094AA05 /* NSString+SBJSON.h in Headers */,
-				42F7884C1D950B5D0094AA05 /* CBrowserWindow.h in Headers */,
 				42F7884E1D950B5D0094AA05 /* SDWebImageDecoder.h in Headers */,
 				42F788511D950B5D0094AA05 /* EBrowserHistory.h in Headers */,
 				42F788571D950B5D0094AA05 /* mztools.h in Headers */,
@@ -1285,7 +1278,6 @@
 				42F787491D950B5D0094AA05 /* ACEWebViewController.m in Sources */,
 				42F7874C1D950B5D0094AA05 /* UIImage+GIF.m in Sources */,
 				42F7874D1D950B5D0094AA05 /* unzip.c in Sources */,
-				42F7874E1D950B5D0094AA05 /* CBrowserWindow.m in Sources */,
 				4245EC971DED18C900C07B2D /* ACEBasicAnimation.m in Sources */,
 				42F7874F1D950B5D0094AA05 /* EBrowserWindow.m in Sources */,
 				42F787501D950B5D0094AA05 /* ASIDataCompressor.m in Sources */,
