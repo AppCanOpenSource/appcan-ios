@@ -238,7 +238,7 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
             [array addObject:obj];
             continue;
         }
-        if (!value) {
+        if (!value || [value isKindOfClass:[NSNull class]]) {
             value = [ACNil null];
         }
         [array addObject:value];

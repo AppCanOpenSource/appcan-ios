@@ -760,7 +760,6 @@
     /*
     if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]) {
         ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
-        navigation url
         ACENSLog(@"didCommitNavigation url is %@", [webView.request URL]);
         NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
         if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
@@ -768,8 +767,8 @@
         }
         [eBrwView notifyPageStart];
     }
+     */
     [self notifyPageStart];
-    */
 }
 
 /*! @abstract Invoked when a main frame navigation completes.
@@ -807,9 +806,9 @@
             [AppCanEngine rootPageDidFinishLoading];
         });
     }
+    */
     
     [self notifyPageFinish];
-     */
 }
 
 /*! @abstract Invoked when an error occurs during a committed main frame
