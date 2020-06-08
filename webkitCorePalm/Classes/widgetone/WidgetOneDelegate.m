@@ -170,44 +170,32 @@
     return self;
     
 }
+
 -(void)setAppCanUserAgent {
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *_userAgent=nil;
-    _userAgent =[ud objectForKey:ACE_USERAGENT];
+    __block NSString *_userAgent = nil;
+    _userAgent = [ud objectForKey:ACE_USERAGENT];
     
     if(_userAgent == nil) {
-        
-        UIWebView * sampleWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        NSString * originalUserAgent = [sampleWebView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
-        NSString * subS1 = @"AppleWebKit/";
-        NSRange range1 = [originalUserAgent rangeOfString:subS1];
-        
-        NSUInteger location1 = range1.location;
-        NSUInteger lenght1 = range1.length;
-        NSString * s1 = [originalUserAgent substringToIndex:location1+lenght1];
-        NSString * s2 = [originalUserAgent substringFromIndex:location1+lenght1];
-        
-        NSString * subS2 = @" ";
-        NSRange  rang2 = [s2 rangeOfString:subS2];
-        NSUInteger location2 = rang2.location;
-        NSUInteger length2 = rang2.length;
-        NSString * s21 = [s2 substringToIndex:location2 + length2];
-        NSString * s22 = [s2 substringFromIndex:location2 + length2];
-        
-        NSString * subS3 = @"Mobile/";
-        NSRange  rang3 = [s22 rangeOfString:subS3];
-        NSUInteger location3 = rang3.location;
-        NSMutableString *s32 = [[NSMutableString alloc]initWithString:s22];
-        [s32 insertString:@"Version/8.0 "atIndex:location3];
-        NSString * safari= [NSString stringWithFormat:@"Safari/%@Appcan/3.0",s21];
-        
-        _userAgent = [NSString stringWithFormat:@"%@%@%@ %@",s1,s21,s32,safari];
-        [ud setObject:_userAgent forKey:ACE_USERAGENT];
+        __block WKWebView * tempConfigWKWebView = [[WKWebView alloc] initWithFrame:CGRectZero];
+        [tempConfigWKWebView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id result, NSError * error) {
+            if (tempConfigWKWebView != nil && error == nil) {
+                NSString * originalUserAgent = result;
+                ACLogDebug(@"AppCan===>OriginalUserAgent===>%@", originalUserAgent);
+                NSString * acEngineUA= [NSString stringWithFormat:@"AppCan/%@ (WKWebView) ", @"4.5"];
+                _userAgent = [NSString stringWithFormat:@"%@ %@", originalUserAgent, acEngineUA];
+                [ud setObject:_userAgent forKey:ACE_USERAGENT];
+                NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
+                [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+                // 将修改后的UA设置为自定义UA
+                tempConfigWKWebView.customUserAgent = _userAgent;
+                ACLogDebug(@"AppCan===>FinalCustomUserAgent===>%@", _userAgent);
+            }else{
+                ACLogError(@"AppCan===>Fail to get origin UserAgent, error: %@", error);
+            }
+        }];
     }
-    NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
-
 }
 
 

@@ -45,6 +45,9 @@
 
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEPluginViewContainer.h"
+
+#import "ACEConfigXML.h"
+
 @interface EBrowserView ()
 @property (nonatomic,assign)BOOL initialized;
 @end
@@ -53,29 +56,7 @@
     float version;
     
 }
-/*
 
-@synthesize meBrwCtrler;
-
-@synthesize mcBrwWnd;
-@synthesize meBrwWnd;
-@synthesize mwWgt;
-@synthesize mPageInfoDict;
-@synthesize mTopBounceView;
-@synthesize mBottomBounceView;
-@synthesize mScrollView;
-@synthesize mType;
-@synthesize mFlag;
-@synthesize mTopBounceState;
-@synthesize mBottomBounceState;
-@synthesize mAdType;
-@synthesize mAdDisplayTime;
-@synthesize mAdIntervalTime;
-@synthesize mAdFlag;
-@synthesize isMuiltPopover;
-@synthesize lastScrollPointY;
-@synthesize nowScrollPointY;
-*/
 - (void)dealloc{
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -270,6 +251,7 @@
 -(NSURLRequest *)request
 {
     // AppCanWKTODO 暂无实现方式
+    ACLogError(@"AppCan===>EBrowserView===>request return nil, no implementation!");
     return nil;
 }
 
@@ -842,6 +824,8 @@
     [self notifyPageError];
 }
 
+static NSInteger kMaxErrorRetryCount = 5;
+
 /*! @abstract Decides whether to allow or cancel a navigation.
  @param webView The web view invoking the delegate method.
  @param navigationAction Descriptive information about the action
@@ -852,75 +836,82 @@
  */
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{
     // AppCanWKTODO
-    /*
-    NSString * urlStr = navigationAction.request.URL.absoluteString;
+
+    NSURL *requestURL = navigationAction.request.URL;
+    NSString * urlStr = requestURL.absoluteString;
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>decidePolicyForNavigationAction：%@", urlStr);
-    if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]) {
-        ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
-        NSURL *requestURL = [request URL];
-        if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
-            NSURL *oldURL = [eBrwView curUrl];
-            if (oldURL) {
-                if (![[requestURL host] isEqualToString:[oldURL host]]) {
-                    [[UIApplication sharedApplication] openURL:requestURL];
-                    return NO;
-                }
+    if (webView == nil || ![webView isKindOfClass:[ACEBrowserView class]]) {
+        return;
+    }
+    
+    ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
+    NSURL *oldURL = [eBrwView curUrl];
+    if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
+        if (oldURL) {
+            if (![[requestURL host] isEqualToString:[oldURL host]]) {
+                [[UIApplication sharedApplication] openURL:requestURL];
+                decisionHandler(WKNavigationActionPolicyCancel);
+                return;
             }
         }
-        BOOL isFrame = ![[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
-        if (!isFrame) {
-            //[self flushCommandQueue:eBrwView];
-            void (^showErrorPage)(void) = ^{
-                if (eBrwView.retryCount < kMaxErrorRetryCount) {
-                    eBrwView.retryCount++;
-                    NSString *errorPath = [self errorHTMLPath];
-                    NSURL *errorURL = [BUtility stringToUrl:errorPath];
-                    [eBrwView loadWithUrl:errorURL];
-                }
-            };
-            if ([requestURL isFileURL] && ![[NSFileManager defaultManager]fileExistsAtPath:requestURL.path]) {
+    }
+    //        BOOL isFrame = ![urlStr isEqualToString:[[request mainDocumentURL] absoluteString]];
+    // 判断是否开启了一个iframe
+    BOOL isFrame = ([navigationAction targetFrame] != nil);
+    if (!isFrame) {
+        //[self flushCommandQueue:eBrwView];
+        void (^showErrorPage)(void) = ^{
+            if (eBrwView.retryCount < kMaxErrorRetryCount) {
+                eBrwView.retryCount++;
+                NSString *errorPath = [self errorHTMLPath];
+                NSURL *errorURL = [BUtility stringToUrl:errorPath];
+                [eBrwView loadWithUrl:errorURL];
+            }
+        };
+        if ([requestURL isFileURL] && ![[NSFileManager defaultManager]fileExistsAtPath:requestURL.path]) {
+            showErrorPage();
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
+        if ([[requestURL scheme].lowercaseString isEqualToString: @"http"] || [[requestURL scheme].lowercaseString isEqualToString: @"https"]) {
+            if (![BUtility isConnected]) {
                 showErrorPage();
-                return NO;
+                decisionHandler(WKNavigationActionPolicyCancel);
+                return;
             }
-            if ([[requestURL scheme].lowercaseString isEqualToString: @"http"] || [[requestURL scheme].lowercaseString isEqualToString: @"https"]) {
-                if (![BUtility isConnected]) {
-                    showErrorPage();
-                    return NO;
-                }
+        }
+        if (eBrwView.mType == ACEEBrowserViewTypeMain) {
+            WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.mainWidget;
+            EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eBrwView.superDelegate];
+            if (eBrwWndContainer) {
+                wWgt = eBrwWndContainer.mwWgt;
             }
-            if (eBrwView.mType == ACEEBrowserViewTypeMain) {
-                WWidget *wWgt = eBrwView.meBrwCtrler.mwWgtMgr.mainWidget;
-                EBrowserWindowContainer *eBrwWndContainer = [EBrowserWindowContainer getBrowserWindowContaier:eBrwView.superDelegate];
-                if (eBrwWndContainer) {
-                    wWgt = eBrwWndContainer.mwWgt;
-                }
-                if (wWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
-                    EBrowserWindow *eBrwWnd = (EBrowserWindow*)eBrwView.meBrwWnd;
-                    EBrowserHistoryEntry *eHisEntry = [eBrwWnd curHisEntry];
-                    if (![eHisEntry.mUrl isEqual:requestURL]) {
-                        eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:requestURL obfValue:NO];
-                        [eBrwWnd addHisEntry:eHisEntry];
-                    }
+            if (wWgt.obfuscation == F_WWIDGET_OBFUSCATION) {
+                EBrowserWindow *eBrwWnd = (EBrowserWindow*)eBrwView.meBrwWnd;
+                EBrowserHistoryEntry *eHisEntry = [eBrwWnd curHisEntry];
+                if (![eHisEntry.mUrl isEqual:requestURL]) {
+                    eHisEntry = [[EBrowserHistoryEntry alloc]initWithUrl:requestURL obfValue:NO];
+                    [eBrwWnd addHisEntry:eHisEntry];
                 }
             }
         }
     }
     
+    // 处理锚点#跳转片段的逻辑
     BOOL isFragmentJump = NO;
-    if (request.URL.fragment) {
-        NSString * nonFragmentURL = [request.URL.absoluteString stringByReplacingOccurrencesOfString:[@"#" stringByAppendingString:request.URL.fragment] withString:@""];
-        isFragmentJump = [nonFragmentURL isEqualToString:webView.request.URL.absoluteString];
-        
+    if (requestURL.fragment) {
+        NSString * nonFragmentURL = [requestURL.absoluteString stringByReplacingOccurrencesOfString:[@"#" stringByAppendingString:requestURL.fragment] withString:@""];
+        isFragmentJump = [nonFragmentURL isEqualToString:oldURL.absoluteString];
     }
-    BOOL isTopLevelNavigation = [request.mainDocumentURL isEqual:request.URL];
-    BOOL isHTTPOrLocalFile = [request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"] || [request.URL.scheme isEqualToString:@"file"];
+    BOOL isTopLevelNavigation = [navigationAction.request.mainDocumentURL isEqual:requestURL];
+    BOOL isHTTPOrLocalFile = [requestURL.scheme isEqualToString:@"http"] || [requestURL.scheme isEqualToString:@"https"] || [requestURL.scheme isEqualToString:@"file"];
     if (!isFragmentJump && isHTTPOrLocalFile && isTopLevelNavigation) {
-        
-        self.currentURL = request.URL;
+        [self setCurrentUrl:requestURL];
     }
     
-    return YES;
-    */
+    decisionHandler(WKNavigationActionPolicyAllow);
+    return;
+
 }
 
 /*! @abstract Decides whether to allow or cancel a navigation after its
@@ -963,7 +954,7 @@
 }
 
 #pragma mark - error page path
-/*
+
 - (NSString *)errorHTMLPath{
     static NSString *errorHTMLPath = nil;
     static dispatch_once_t onceToken;
@@ -978,5 +969,4 @@
     return errorHTMLPath;
 }
 
- */
 @end
