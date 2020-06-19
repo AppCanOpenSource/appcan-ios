@@ -101,9 +101,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)initializeJSCHandler{
     if (self.JSCHandler) {
         [self.JSCHandler clean];
-    }else{
-        self.JSCHandler = [[ACEJSCHandler alloc] initWithEBrowserView:self.superDelegate];
     }
+    self.JSCHandler = [[ACEJSCHandler alloc] initWithEBrowserView:self.superDelegate];
     [self.JSCHandler initializeWithJSContext:[self JSContext]];
 }
 
