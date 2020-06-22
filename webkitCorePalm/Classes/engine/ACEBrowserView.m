@@ -49,6 +49,7 @@
 #import "ACEJSCBaseJS.h"
 #import "AppCanEngine.h"
 #import "ACEUINavigationController.h"
+#import "ACWKProcessPool.h"
 
 
 const CGFloat refreshKeyValue = -65.0f;
@@ -682,6 +683,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
     preferences.javaScriptCanOpenWindowsAutomatically = NO;
     preferences.javaScriptEnabled = YES;
     configuration.preferences = preferences;
+    // 使用单例WKProcessPool，这样可以共享localStorage
+    configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
+    configuration.websiteDataStore = [WKWebsiteDataStore defaultDataStore];
     // 初始化WKWebView
     self = [super initWithFrame:frame configuration:configuration];
 	if (self) {

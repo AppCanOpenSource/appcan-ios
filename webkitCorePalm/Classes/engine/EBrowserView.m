@@ -642,7 +642,9 @@
 
 - (void)evaluateScript:(NSString *)jsScript{
     if ([NSThread isMainThread]) {
-        [self ac_evaluateJavaScript:jsScript completionHandler:nil];
+        [self ac_evaluateJavaScript:jsScript completionHandler:^(id _Nullable result, NSError * _Nullable error){
+            ACLogDebug(@"AppCan===>evaluateScript===>completionHandler: error: %@", error);
+        }];
     }else{
         dispatch_async(dispatch_get_main_queue(),^{
             [self ac_evaluateJavaScript:jsScript completionHandler:nil];
