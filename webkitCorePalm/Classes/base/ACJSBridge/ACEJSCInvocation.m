@@ -89,6 +89,7 @@
             }
         }
         [callbackJsStr appendString:@");}"];
+        ACLogDebug(@"AppCan===>ACEJSCInvocation===>invoke===>%@", callbackJsStr);
         [_context ac_evaluateJavaScript:callbackJsStr completionHandler:_completionHandler];
     }
 }

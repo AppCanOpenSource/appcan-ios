@@ -138,6 +138,13 @@ NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
 //    [resultDic setObject:@"200" forKey:@"code"];
 //    [resultDic setObject:result forKey:@"result"];
 //    NSString *resultStr = [resultDic ac_JSONFragment];
+    if ([result isKindOfClass:[NSString class]]) {
+        result = result;
+    }else if([result isKindOfClass:[NSNumber class]]){
+        result = [NSString stringWithFormat:@"%@", result];
+    }else{
+        result = [result ac_JSONFragment];
+    }
     result = [result isKindOfClass:[NSString class]] ? result : nil;
     return result;
 }
