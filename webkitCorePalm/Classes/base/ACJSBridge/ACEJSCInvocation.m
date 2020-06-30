@@ -79,7 +79,10 @@
                 NSString *argToStr = [NSString stringWithFormat:@"%@", arg];
                 [callbackJsStr appendString:argToStr];
 //                }
-            }else{
+            }else if ([arg isKindOfClass:[ACNil class]]){
+                [callbackJsStr appendString:@"undefined"];
+            }
+            else{
                 // object类型
                 NSString *argToStr = [arg ac_JSONFragment];
                 [callbackJsStr appendString:argToStr];
