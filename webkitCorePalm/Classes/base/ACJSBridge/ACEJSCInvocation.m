@@ -65,6 +65,9 @@
             if ([arg isKindOfClass:[NSString class]]) {
                 // string类型
                 [callbackJsStr appendString:@"\'"];
+                // 去掉换行符，以免在JS中执行错误
+                arg = [arg stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+                arg = [arg stringByReplacingOccurrencesOfString:@"\n" withString:@""];
                 [callbackJsStr appendString:arg];
                 [callbackJsStr appendString:@"\'"];
             }else if([arg isKindOfClass:[NSNumber class]]){
