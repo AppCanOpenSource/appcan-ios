@@ -7,6 +7,7 @@
 		<string>（测试版）内核由UIWebView替换为WKWebView</string>
 		<string>增加AFNetworking.framework修改版(基于2.7版本源码)，去除UIWebView相关代码</string>
 		<string>修复LocalStorage在多页面使用时无法实时同步的问题</string>
+		<string>JS回调字符串参数中过滤换行符，防止回调出错。</string>
 	</array>
 	<key>4.4.23</key>
 	<array>
