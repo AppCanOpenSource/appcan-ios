@@ -221,6 +221,11 @@
     return self;
 }
 
+/**
+ 执行JS字符串
+
+ @param script JS代码
+ */
 - (void)ac_evaluateJavaScript:(NSString *)script
 {
     if (self.meBrowserView) {
@@ -228,6 +233,12 @@
     }
 }
 
+/**
+ 执行JS字符串
+
+ @param javaScriptString JS代码
+ @param completionHandler 执行结果
+ */
 - (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(id _Nullable, NSError * _Nullable))completionHandler {
     if (self.meBrowserView) {
         [_meBrowserView ac_evaluateJavaScript:javaScriptString completionHandler:completionHandler];
@@ -657,18 +668,18 @@
     [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:nil];
 }
 
-/// 回调注入JS的主要方法
+/// 回调注入JS的核心方法
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion{
-    ACEJSCInvocation *invocation = [ACEJSCInvocation
-                                    invocationWithACJSContext:_meBrowserView
-                                    FunctionJs:JSKeyPath
-                                    arguments:arguments
-                                    completionHandler:completion];
-    [invocation invokeOnMainThread];
+    [self.meBrowserView callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:completion];
 }
 
 - (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments{
     [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:nil];
+}
+
+// 执行JS中匿名function回调的核心方法
+- (void)callbackWithACJSFunctionRef:(ACJSFunctionRef *)functionRef withArguments:args withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion {
+    [self.meBrowserView callbackWithACJSFunctionRef:functionRef withArguments:args withCompletionHandler:completion];
 }
 
 - (nullable __kindof UIScrollView<AppCanScrollViewEventProducer> *)multiPopoverForName:(NSString *)multiPopoverName{

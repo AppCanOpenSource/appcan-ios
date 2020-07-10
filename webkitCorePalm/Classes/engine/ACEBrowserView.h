@@ -20,7 +20,7 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import <AppCanKit/ACJSContext.h>
+#import <AppCanKit/AppCanObjectProtocol.h>
 #import "EBrowserView.h"
 
 @class EBrowserController;

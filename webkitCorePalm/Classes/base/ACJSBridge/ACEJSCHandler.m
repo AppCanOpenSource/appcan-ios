@@ -57,9 +57,6 @@ static NSMutableDictionary *ACEJSCGlobalPlugins;
 @end
 
 
-
-NSString *const ACEJSCHandlerInjectField = @"__uex_JSCHandler_";
-
 @implementation ACEJSCHandler
 
 

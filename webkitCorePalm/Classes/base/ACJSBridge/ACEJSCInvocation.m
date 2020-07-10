@@ -28,6 +28,7 @@
 @property (nonatomic,weak)id<ACJSContext> context;
 @property (nonatomic,strong)NSString *functionJs;
 @property (nonatomic,strong)NSArray *arguments;
+@property (nonatomic,strong)ACJSFunctionRef *functionRef;
 @property (nonatomic,strong)void (^completionHandler)(id _Nullable, NSError * _Nullable);
 
 @end
@@ -45,6 +46,24 @@
         invocation.arguments = arguments;
         invocation.completionHandler = completionHandler;
     }
+    return invocation;
+}
+
++ (instancetype)invocationWithACJSContext:(id<ACJSContext>)context
+                      withACJSFunctionRef:(ACJSFunctionRef *)functionRef
+                            withArguments:(NSArray *)args
+                        completionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completionHandler{
+    // 处理JS匿名回调方法的逻辑，需要增加与引擎框架交互的协议参数，一起执行。
+    NSMutableArray *inArgs = [NSMutableArray array];
+    // functionId：本匿名回调在定义时，在框架中定义的方法ID，可以唯一标识JS中保存好的匿名方法。
+    [inArgs addObject:[functionRef getJSFunctionRefId]];
+    // flag：代表本callback是否还会有下一次回调，0没有，1有。此参数来自于Android逻辑，然而此处在iOS中默认为1，是因为在iOS引擎中我们利用ACJSFunctionRef实例的回收时机来判断是否应当回收前端的JS方法。参见本文件的dealloc方法。
+    NSString *flag = @"1";
+    [inArgs addObject:flag];
+    // 将插件回调的原本参数都加入进来。
+    [inArgs addObjectsFromArray:args];
+    ACEJSCInvocation *invocation = [ACEJSCInvocation invocationWithACJSContext:context FunctionJs:@"uexCallback.callback" arguments:inArgs completionHandler:completionHandler];
+    invocation.functionRef = functionRef;
     return invocation;
 }
 
@@ -109,6 +128,10 @@
 
 + (NSString *)randomJSName{
     return [[@"_" stringByAppendingString:[NSUUID UUID].UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+}
+
+- (void)dealloc {
+    self.functionRef = nil;
 }
 
 @end

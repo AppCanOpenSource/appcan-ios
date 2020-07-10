@@ -23,7 +23,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import <AppCanKit/ACJSContext.h>
+#import <AppCanKit/AppCanObjectProtocol.h>
 
 typedef NS_ENUM(NSInteger,ACEJSValueType){
     ACEJSValueTypeNotJSValue = -2,
@@ -49,6 +49,11 @@ typedef NS_ENUM(NSInteger,ACEJSValueType){
 + (instancetype)invocationWithACJSContext:(id<ACJSContext>)context
                                FunctionJs:(NSString *)functionJs
                                 arguments:(NSArray *)arguments
+                        completionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completionHandler;
+
++ (instancetype)invocationWithACJSContext:(id<ACJSContext>)context
+                      withACJSFunctionRef:(ACJSFunctionRef *)functionRef
+                            withArguments:(NSArray *)args
                         completionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completionHandler;
 
 - (void)invoke;

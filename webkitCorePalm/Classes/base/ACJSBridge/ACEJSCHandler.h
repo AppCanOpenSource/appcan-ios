@@ -22,12 +22,9 @@
  */
  
 #import <Foundation/Foundation.h>
-#import <AppCanKit/ACJSContext.h>
+#import <AppCanKit/AppCanObjectProtocol.h>
 
 @class EBrowserView;
-
-
-extern NSString *const ACEJSCHandlerInjectField;
 
 
 

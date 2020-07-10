@@ -45,6 +45,7 @@
 #import "ACEDrawerViewController.h"
 
 #import "ACEMultiPopoverScrollView.h"
+#import "ACEJSCInvocation.h"
 #import "ACEJSCHandler.h"
 #import "ACEJSCBaseJS.h"
 #import "AppCanEngine.h"
@@ -962,7 +963,46 @@ const CGFloat loadingVisibleHeight = 60.0f;
 /// 注入JS方法封装
 /// @param javaScriptString 需要注入执行的JS
 - (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(nullable void (^)(_Nullable id, NSError * _Nullable error))completionHandler {
+    if (!completionHandler) {
+        // 如果为nil，则给一个默认的用来接收错误。
+        completionHandler = ^(id result, NSError * error) {
+            if (error) {
+                ACLogDebug(@"AppCan===>ACEBrowserView===>ac_evaluateJavaScript: error = %@ javaScriptString = %@", error, javaScriptString);
+            }
+        };
+    }
     [self evaluateJavaScript:javaScriptString completionHandler:completionHandler];
+}
+
+/// JS回调（带参数的拼接JS字符串等操作）
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments {
+    [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:nil];
+}
+
+/**
+ JS回调的核心方法
+
+ @param JSKeyPath 需要回调的JS方法
+ @param arguments 参数数组
+ @param completion 执行结果
+ */
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion {
+    ACEJSCInvocation *invocation = [ACEJSCInvocation
+                                    invocationWithACJSContext:self
+                                    FunctionJs:JSKeyPath
+                                    arguments:arguments
+                                    completionHandler:completion];
+    [invocation invokeOnMainThread];
+}
+
+// 执行JS中匿名function回调的核心方法
+- (void)callbackWithACJSFunctionRef:(ACJSFunctionRef *)functionRef withArguments:args withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion {
+    ACEJSCInvocation *invocation = [ACEJSCInvocation
+                                    invocationWithACJSContext:self
+                                    withACJSFunctionRef:functionRef
+                                    withArguments:args
+                                    completionHandler:completion];
+    [invocation invokeOnMainThread];
 }
 
 - (void)loadWithData:(NSString*)inData baseUrl:(NSURL*)inBaseUrl {
