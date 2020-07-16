@@ -375,10 +375,22 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
 }
 
+/**
+ 触发WKWebView的内部刷新操作
+ 既然WKWebView那么久了，默认行为还是如此，那可能也有对应的
+ */
+- (void)invoke_updateVisibleContentRects {
+    if ([self respondsToSelector:@selector(_updateVisibleContentRects)]) {
+        ((void(*)(id,SEL,BOOL))objc_msgSend)(self, @selector(_updateVisibleContentRects),NO);
+    }
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	
+	// 防止个别页面在滚动过程中出现白色区域无法显示的问题
+    [self invoke_updateVisibleContentRects];
+    
 	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1){
         // AppCanWKTODO
 //        [super scrollViewDidScroll:scrollView];
