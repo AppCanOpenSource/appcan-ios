@@ -9,6 +9,7 @@
 		<string>修复LocalStorage在多页面使用时无法实时同步的问题</string>
 		<string>JS回调字符串参数中过滤换行符，防止回调出错。</string>
 		<string>修复回调参数为nil时导致闪退的问题</string>
+		<string>修复页面滚动时个别情况可能白屏不刷新内容的bug</string>
 	</array>
 	<key>4.4.23</key>
 	<array>
