@@ -4,6 +4,7 @@
 <dict>
 	<key>4.4.24</key>
 	<array>
+		<string>转屏问题及动画卡死问题处理</string>
 		<string>ZipperDown 解压漏洞处理</string>
 		<string>进入后台后屏幕旋转方法失效问题处理</string>
 		<string>删除coreML,libbz2系统类库</string>

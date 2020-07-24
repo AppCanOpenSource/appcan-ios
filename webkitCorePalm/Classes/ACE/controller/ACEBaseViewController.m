@@ -30,7 +30,7 @@
 {
     self = [super init];
     if (self) {
-        self.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
     }
     return self;
 }
@@ -47,7 +47,7 @@
 }
 
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion{
-    viewControllerToPresent.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    viewControllerToPresent.modalPresentationStyle = UIModalPresentationFullScreen;
     [super presentViewController:viewControllerToPresent animated:flag completion:completion];
 }
 
