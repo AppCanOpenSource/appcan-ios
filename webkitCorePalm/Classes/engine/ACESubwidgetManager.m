@@ -76,9 +76,11 @@
     }
     self.isLaunchingSubwidget = YES;
     EBrowserController *browserController = [[EBrowserController alloc] initWithwidget:subwidget];
+    browserController.modalPresentationStyle = UIModalPresentationFullScreen;
 
     ACEUINavigationController *meNav = [[ACEUINavigationController alloc] initWithEBrowserController:browserController];
     browserController.aceNaviController = meNav;
+    meNav.modalPresentationStyle = UIModalPresentationFullScreen;
     browserController.view.backgroundColor = [UIColor clearColor];//触发loadView
     
     [browserController.meBrw start:nil];

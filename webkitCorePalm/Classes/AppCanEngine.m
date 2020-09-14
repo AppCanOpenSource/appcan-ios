@@ -316,12 +316,32 @@ static NSInvocation* _swizzleMethodWithBlock(Class target,SEL origin,id block){
 
 + (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
-    NSString * devStr = [deviceToken description];
-    NSString * firstStr = [devStr stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    
-    if (firstStr) {
+    //适配iOS13
+    NSString *hexToken = @"";
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 13) {
+        if (![deviceToken isKindOfClass:[NSData class]]) {
+            //记录获取token失败的描述
+            return;
+        }
+        const unsigned *tokenBytes = (const unsigned *)[deviceToken bytes];
+        NSString *strToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                              ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                              ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                              ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+        hexToken = strToken;
+        NSLog(@"deviceToken1:%@", strToken);
+    } else {
+        NSString *token = [NSString
+                           stringWithFormat:@"%@",deviceToken];
+        token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
+        token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
+        token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+        hexToken = token;
+        NSLog(@"deviceToken2 is: %@", token);
+    }
+    if (hexToken) {
         NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        [userDefault setValue:firstStr forKey:@"deviceToken"];
+        [userDefault setValue:hexToken forKey:@"deviceToken"];
         [userDefault setValue:deviceToken forKey:@"device_Token"];
     }
     

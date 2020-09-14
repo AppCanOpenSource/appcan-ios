@@ -151,7 +151,9 @@
 
 -(BOOL) UnzipOpenFile:(NSString*) zipFile
 {
-	_unzFile = unzOpen( (const char*)[zipFile UTF8String] );
+    //替换某个字符
+    NSString *zipFileStr = [zipFile stringByReplacingOccurrencesOfString:@"../" withString:@""];
+	_unzFile = unzOpen( (const char*)[zipFileStr UTF8String] );
 	if( _unzFile )
 	{
 		unz_global_info  globalInfo = {0};

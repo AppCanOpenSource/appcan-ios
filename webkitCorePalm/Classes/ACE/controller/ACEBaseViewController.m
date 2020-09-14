@@ -26,6 +26,15 @@
 
 @implementation ACEBaseViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     self.automaticallyAdjustsScrollViewInsets = NO;
 }
@@ -35,6 +44,11 @@
         return self.navigationController.preferredStatusBarStyle;
     }
     return [super preferredStatusBarStyle];
+}
+
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion{
+    viewControllerToPresent.modalPresentationStyle = UIModalPresentationFullScreen;
+    [super presentViewController:viewControllerToPresent animated:flag completion:completion];
 }
 
 @end

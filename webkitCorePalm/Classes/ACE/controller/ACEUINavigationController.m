@@ -67,6 +67,14 @@
 
 
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
+    }
+    return self;
+}
 
 
 - (void)closeChildViewController:(UIViewController *)childController animated:(BOOL)animated{

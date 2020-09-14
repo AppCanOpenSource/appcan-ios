@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		113BA83124208B62007CB582 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 113BA83024208B62007CB582 /* libbz2.tbd */; };
-		113BA83324208B72007CB582 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 113BA83224208B72007CB582 /* CoreML.framework */; };
+		114D75C124580EDF00DF0045 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114D75C024580EDF00DF0045 /* ExternalAccessory.framework */; };
+		11973AAB245A6D210047EFB2 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11973AAA245A6D210047EFB2 /* GLKit.framework */; };
 		11B367402358426C00FAF561 /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1134EF952358423D000244DA /* CallKit.framework */; };
 		11B367422358427A00FAF561 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B367412358427A00FAF561 /* AdSupport.framework */; };
 		11B367442358429300FAF561 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B367432358429300FAF561 /* UserNotifications.framework */; };
@@ -97,6 +97,8 @@
 		1134EF952358423D000244DA /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		113BA83024208B62007CB582 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		113BA83224208B72007CB582 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
+		114D75C024580EDF00DF0045 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		11973AAA245A6D210047EFB2 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		11B367412358427A00FAF561 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		11B367432358429300FAF561 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		11B36745235842C000FAF561 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
@@ -175,8 +177,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				113BA83324208B72007CB582 /* CoreML.framework in Frameworks */,
-				113BA83124208B62007CB582 /* libbz2.tbd in Frameworks */,
+				11973AAB245A6D210047EFB2 /* GLKit.framework in Frameworks */,
+				114D75C124580EDF00DF0045 /* ExternalAccessory.framework in Frameworks */,
 				11B36746235842C000FAF561 /* libsqlite3.0.tbd in Frameworks */,
 				11B367442358429300FAF561 /* UserNotifications.framework in Frameworks */,
 				11B367422358427A00FAF561 /* AdSupport.framework in Frameworks */,
@@ -260,6 +262,8 @@
 		6CC60334157DCC0F00A3E13E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				11973AAA245A6D210047EFB2 /* GLKit.framework */,
+				114D75C024580EDF00DF0045 /* ExternalAccessory.framework */,
 				113BA83224208B72007CB582 /* CoreML.framework */,
 				113BA83024208B62007CB582 /* libbz2.tbd */,
 				11B36745235842C000FAF561 /* libsqlite3.0.tbd */,
