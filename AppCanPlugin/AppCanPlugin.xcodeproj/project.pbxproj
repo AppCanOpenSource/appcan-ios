@@ -40,6 +40,8 @@
 		42F6E8E41C5749E70073C6E0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F6E8E31C5749E70073C6E0 /* JavaScriptCore.framework */; };
 		42FFC8021B625EC60058E363 /* PackageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFC8011B625EC60058E363 /* PackageInfo.m */; };
 		696128432080BABE00CCE18C /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 696128422080BABE00CCE18C /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		69CA36152493295500ABC71C /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69CA36142493295500ABC71C /* AFNetworking.framework */; };
+		69CA3709249CA10E00ABC71C /* AFNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69CA36142493295500ABC71C /* AFNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CC6033A157DCC0F00A3E13E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */; };
 		6CC60340157DCC0F00A3E13E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6033E157DCC0F00A3E13E /* InfoPlist.strings */; };
 		6CC60342157DCC0F00A3E13E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC60341157DCC0F00A3E13E /* main.m */; };
@@ -83,6 +85,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				69CA3709249CA10E00ABC71C /* AFNetworking.framework in Embed Frameworks */,
 				42D96D571DAB92B9001ABB17 /* AppCanKit.framework in Embed Frameworks */,
 				4272600B1D9B590300B941CF /* AppCanEngine.framework in Embed Frameworks */,
 				423A42801D951E70008AA1B1 /* Ono.framework in Embed Frameworks */,
@@ -124,6 +127,7 @@
 		42FFC8011B625EC60058E363 /* PackageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInfo.m; sourceTree = "<group>"; };
 		46D6D7B316F1CB3800D8E883 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		696128422080BABE00CCE18C /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		69CA36142493295500ABC71C /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = "<group>"; };
 		6CC60331157DCC0F00A3E13E /* AppCanPlugin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppCanPlugin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CC60339157DCC0F00A3E13E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6CC6033D157DCC0F00A3E13E /* AppCanPlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCanPlugin-Info.plist"; sourceTree = "<group>"; };
@@ -179,6 +183,9 @@
 			files = (
 				11973AAB245A6D210047EFB2 /* GLKit.framework in Frameworks */,
 				114D75C124580EDF00DF0045 /* ExternalAccessory.framework in Frameworks */,
+				113BA83324208B72007CB582 /* CoreML.framework in Frameworks */,
+				69CA36152493295500ABC71C /* AFNetworking.framework in Frameworks */,
+				113BA83124208B62007CB582 /* libbz2.tbd in Frameworks */,
 				11B36746235842C000FAF561 /* libsqlite3.0.tbd in Frameworks */,
 				11B367442358429300FAF561 /* UserNotifications.framework in Frameworks */,
 				11B367422358427A00FAF561 /* AdSupport.framework in Frameworks */,
@@ -235,6 +242,7 @@
 		469DCDD0166EFA5100FC2F72 /* uexFrameworks */ = {
 			isa = PBXGroup;
 			children = (
+				69CA36142493295500ABC71C /* AFNetworking.framework */,
 				423A427C1D951E5C008AA1B1 /* Ono.framework */,
 				423A427D1D951E5C008AA1B1 /* pop.framework */,
 			);

@@ -38,11 +38,11 @@
 #define WIDGETREPORT_WIDGETSTATUS_CLOSE		@"000"
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 #import <AppCanKit/AppCanWindowObject.h>
 
 @class EBrowserController;
 @class CBrowserMainFrame;
-@class CBrowserWindow;
 @class EBrowserWindow;
 @class WWidget;
 @class EBrowserViewBounceView;
@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 };
 
 
-@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate,AppCanWebViewEngineObject,AppCanWindowObject>
+@interface EBrowserView : UIImageView<UIGestureRecognizerDelegate, WKNavigationDelegate,AppCanWebViewEngineObject,AppCanWindowObject>
 
 @property (nonatomic,assign) NSString *muexObjName;
 
@@ -70,7 +70,6 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 
 
 @property (nonatomic,readonly) EBrowserController *meBrwCtrler;
-@property (nonatomic,weak) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,weak) EBrowserWindow *meBrwWnd;
 @property (nonatomic,readonly) WWidget *mwWgt;
 
@@ -116,6 +115,12 @@ typedef NS_ENUM(NSInteger,ACEEBrowserViewType){
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
 
+
+/// 新的注入JS的方法封装，无返回值
+- (void)ac_evaluateJavaScript:(NSString *)script;
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler;
+
+/// 旧的注入JS方法封装，返回值始终是nil
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)script;
 
 @property (nonatomic) BOOL scalesPageToFit;

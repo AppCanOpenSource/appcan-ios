@@ -23,6 +23,9 @@
  
 #import <Foundation/Foundation.h>
 
+#define JS_APPCAN_ONJSPARSE_HEADER "AppCan_onJsParse:"
+#define JS_APPCAN_ONJSPARSE_HEADER_NSSTRING @JS_APPCAN_ONJSPARSE_HEADER
+
 @interface ACEJSCBaseJS : NSObject
 
 + (NSString *)baseJS;

@@ -18,8 +18,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
+
 @class EBrowserView;
+@class JSValue;
 
 void PluginLog(NSString *format, ...);
 
@@ -35,7 +36,7 @@ void PluginLog(NSString *format, ...);
 
 
 /**
-*  调用网页中的JS函数
+*  调用网页中的JS函数（本方法已经弃用，请直接使用AppCanWidgetObject协议中的方法）
 *
 *  @param brwView    回调的网页
 *  @param JSKeyPath  函数的路径,比如@"uexWidget.onSuspend"
@@ -66,7 +67,7 @@ void PluginLog(NSString *format, ...);
 *
 *  @warning 此方法为3.3引擎新增,3.2引擎请用brwView:evaluateScript:或者uexPlugin:callbackByName:withObject:andType:inTarget:方法
 */
-+ (void)browserView:(EBrowserView *)brwView callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue *returnValue))completion;
++ (void)browserView:(EBrowserView *)brwView callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments completion:(void (^)(JSValue *returnValue))completion DEPRECATED_MSG_ATTRIBUTE("AppCanEngine: JavascriptCore 已经不再使用, 本方法过时，回调请使用 AppCanWidgetObject协议中的callbackWithFunctionKeyPath系列方法代替");
 
 #pragma mark 在指定网页中执行JS脚本
 

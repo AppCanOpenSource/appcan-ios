@@ -3881,7 +3881,8 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 - (void)setInlineMediaPlaybackEnable:(NSMutableArray *)inArguments{
     ACArgsUnpack(NSNumber *enabled) = inArguments;
     UEX_PARAM_GUARD_NOT_NIL(enabled);
-    self.EBrwView.meBrowserView.allowsInlineMediaPlayback = enabled.boolValue;
+    // AppCanWKTODO
+//    self.EBrwView.meBrowserView.allowsInlineMediaPlayback = enabled.boolValue;
 }
 
 
@@ -3895,7 +3896,15 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 }
 
 
+#pragma mark - Test JS Bridge
 
+- (NSString *)testJSBridge:(NSMutableArray *)inArguments{
+    NSLog(@"AppCan4.0===>testJSBridge");
+    ACArgsUnpack(NSString *str, NSNumber *num, BOOL boolValue, NSArray *arrayValue, NSDictionary *dicValue, ACJSFunctionRef *function) = inArguments;
+    NSLog(@"%@,%@,%d,%@,%@", str, num, boolValue, arrayValue, dicValue);
+    [function executeWithArguments:@[@"data1", @"data2"]];
+    return @"testJSBridge OK";
+}
 
 
 @end

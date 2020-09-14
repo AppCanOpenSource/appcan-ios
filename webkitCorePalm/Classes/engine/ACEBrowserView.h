@@ -19,11 +19,12 @@
 
 
 #import <UIKit/UIKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <WebKit/WebKit.h>
+#import <AppCanKit/AppCanObjectProtocol.h>
 #import "EBrowserView.h"
+
 @class EBrowserController;
 @class CBrowserMainFrame;
-@class CBrowserWindow;
 @class EBrowserWindow;
 @class WWidget;
 @class EBrowserViewBounceView;
@@ -32,7 +33,7 @@
 @class EBrowserHistory;
 @class EBrowserHistoryEntry;
 @class ACEJSCHandler;
-@interface ACEBrowserView : UIWebView <UIGestureRecognizerDelegate>{
+@interface ACEBrowserView : WKWebView <ACJSContext, UIGestureRecognizerDelegate>{
 	int mFlag;
 	int mTopBounceState;
 	int mBottomBounceState;
@@ -40,7 +41,6 @@
 }
 @property (nonatomic,strong) UIActivityIndicatorView * indicatorView;
 @property (nonatomic,readonly) EBrowserController *meBrwCtrler;
-@property (nonatomic,strong) CBrowserWindow *mcBrwWnd;
 @property (nonatomic,weak) EBrowserWindow *meBrwWnd;
 @property (nonatomic,readonly) WWidget *mwWgt;
 @property (nonatomic,copy) NSString *muexObjName;
@@ -65,7 +65,7 @@
 @property (nonatomic,strong) NSString *mExeJS;//前端传入的希望在页面加载后注入的JS代码
 
 @property (nonatomic,assign) EBrowserView * superDelegate;
-@property (nonatomic,weak,readonly)JSContext *JSContext;
+//@property (nonatomic,weak,readonly)JSContext *JSContext;
 @property (nonatomic,assign)BOOL swipeCallbackEnabled;
 
 
@@ -77,6 +77,8 @@
 - (void)notifyPageError;
 - (void)loadUEXScript;
 - (void)loadWidgetWithQuery:(NSString*)inQuery;
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString;
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler;
 - (void)loadWithData:(NSString *)inData baseUrl:(NSURL *)inBaseUrl;
 - (void)loadWithUrl: (NSURL*)inUrl;
 - (void)setView;
