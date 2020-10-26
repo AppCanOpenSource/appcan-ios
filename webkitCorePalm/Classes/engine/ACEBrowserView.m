@@ -695,6 +695,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     WKPreferences *preferences = [WKPreferences new];
     preferences.javaScriptCanOpenWindowsAutomatically = NO;
     preferences.javaScriptEnabled = YES;
+    [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
     configuration.preferences = preferences;
     // 使用单例WKProcessPool，这样可以共享localStorage
     configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
