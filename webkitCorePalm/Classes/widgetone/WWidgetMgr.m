@@ -158,7 +158,7 @@ NSString * webappShowAactivety;
 	//更新
 	if([arr count]>0 && [arr objectAtIndex:0]!=nil){
 		WWidget *tmpWidget = (WWidget*)[arr objectAtIndex:0];
-		NSString *updateSQL = [NSString stringWithFormat:@"UPDATE %@ SET widgetOneId='%@',ver='%@',channelCode='%@',imei='%@',widgetName='%@',iconPath='%@',widgetPath='%@',indexUrl='%@',obfuscation=%d, logServerIp='%@',updateUrl='%@',showMySpace=%d,description='%@',author='%@',email='%@',license='%@',orientation=%d,preload=%d, WHERE id=%d",SQL_WGTS_TABLE,
+		NSString *updateSQL = [NSString stringWithFormat:@"UPDATE %@ SET widgetOneId='%@',ver='%@',channelCode='%@',imei='%@',widgetName='%@',iconPath='%@',widgetPath='%@',indexUrl='%@',obfuscation=%d, logServerIp='%@',updateUrl='%@',showMySpace=%d,description='%@',author='%@',email='%@',license='%@',orientation=%d,preload=%d WHERE id=%d",SQL_WGTS_TABLE,
 							   @"",wgtObj.ver,wgtObj.channelCode,wgtObj.imei, wgtObj.widgetName,wgtObj.iconPath,wgtObj.widgetPath,wgtObj.indexUrl,wgtObj.obfuscation,wgtObj.logServerIp,wgtObj.updateUrl,wgtObj.showMySpace,wgtObj.desc,wgtObj.author,wgtObj.email,wgtObj.license,wgtObj.orientation,wgtObj.preload, tmpWidget.wId];
 		[widgetSql updateSql:[updateSQL UTF8String]];
 		
