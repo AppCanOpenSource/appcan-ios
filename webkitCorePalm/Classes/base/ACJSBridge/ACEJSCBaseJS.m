@@ -29,10 +29,53 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
 
 #define ACE_METHOD_EXEC_OPT_DEFAULT          @(ACEPluginMethodExecuteNormally)
 
+#define F_UEX_DISPATCHER_SCRIPT @""\
+                "var uexCallback = {" \
+                "    queue: []," \
+                "    callback: function() {" \
+                "      var params = Array.prototype.slice.call(arguments, 0);" \
+                "      var id = params.shift();" \
+                "      var permanent = params.shift();" \
+                "      this.queue[id].apply(this, params);" \
+                "      if (!permanent) {" \
+                "        delete this.queue[id];" \
+                "      }" \
+                "    }," \
+                "    clean: function(id) {" \
+                "      delete this.queue[id];" \
+                "    }" \
+                "};"\
+                "function fo(){" \
+                "var args_all = Array.prototype.slice.call(arguments, 0);" \
+                "var uexName = args_all[0];" \
+                "var method = args_all[1];" \
+                "var args = Array.prototype.slice.call(args_all[2], 0);" \
+                "var aTypes = [];" \
+                "for (var i = 0;i < args.length;i++) {" \
+                "var arg = args[i];" \
+                "var type = typeof arg;" \
+                "if (type == \"function\") {" \
+                "          var callbackID = uexCallback.queue.length;" \
+                "          uexCallback.queue[callbackID] = arg;" \
+                "          args[i] = ''+callbackID" \
+                "        }"\
+                "aTypes[aTypes.length] = type;" \
+                "}" \
+                "var result = prompt('" \
+                JS_APPCAN_ONJSPARSE_HEADER \
+                "'" \
+                "+ JSON.stringify({uexName:uexName,method:method,args:args,types:aTypes}));" \
+                "return result;" \
+                "}" \
+                "window.uexDispatcher={};" \
+                "uexDispatcher.dispatch=function(){return fo(arguments[0],arguments[1],arguments[2]);};"
 
 
-
-
+//"   if(result.code == 200){"\
+//"     return result;"\
+//"   }else{"\
+//"     return undefined;"\
+//"   }" \
 
 
 
@@ -51,7 +94,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     [plugins enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, ACEPluginInfo * _Nonnull obj, BOOL * _Nonnull stop) {
         [js appendString:[self javaScriptForPlugin:obj]];
     }];
-    AppCanEngineJavaScriptCoreBaseJS = [js copy];
+    AppCanEngineJavaScriptCoreBaseJS = [NSString stringWithFormat:@"%@%@", F_UEX_DISPATCHER_SCRIPT, [js copy]];
     
 }
 
@@ -74,7 +117,9 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
     if([[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]]){
         return [[self exceptions]objectForKey:[NSString stringWithFormat:@"%@.%@",plugin,method]];
     }
-    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;var args = [];for(var i = 0; i < argCount; i++){args[i] = arguments[i];};return __uex_JSCHandler_.execute('%@','%@',args,argCount,%@);};",plugin,method,plugin,method,options];
+//    return [NSString stringWithFormat:@"%@.%@=function(){var argCount = arguments.length;var args = [];for(var i = 0; i < argCount; i++){args[i] = arguments[i];};return uexDispatcher.dispatch('%@','%@',args,argCount,%@);};",plugin,method,plugin,method,options];
+    return [NSString stringWithFormat:@"%@.%@=function(){return uexDispatcher.dispatch('%@','%@',arguments);};",plugin,method,plugin,method];
+    
 }
 + (NSString *)javaScriptForProperty:(NSString *)property plugin:(NSString *)plugin value:(NSString *)value{
     return [NSString stringWithFormat:@"%@.%@=%@;",plugin,property,value];
@@ -215,6 +260,7 @@ static NSString *AppCanEngineJavaScriptCoreBaseJS;
                                @"getWindowName":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setPopoverVisibility":ACE_METHOD_EXEC_OPT_DEFAULT,
                                @"setInlineMediaPlaybackEnable":ACE_METHOD_EXEC_OPT_DEFAULT,
+                               @"testJSBridge":ACE_METHOD_EXEC_OPT_DEFAULT,
 #ifdef DEBUG
                                @"test":ACE_METHOD_EXEC_OPT_DEFAULT,
 #endif

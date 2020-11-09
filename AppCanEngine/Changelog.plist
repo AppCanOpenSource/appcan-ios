@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.5.26</key>
+	<array>
+		<string>WKWebView请求不到本地路径文件的问题处理</string>
+	</array>
+	<key>4.5.25</key>
+	<array>
+		<string>（测试版）内核由UIWebView替换为WKWebView</string>
+		<string>增加AFNetworking.framework修改版(基于2.7版本源码)，去除UIWebView相关代码</string>
+		<string>修复LocalStorage在多页面使用时无法实时同步的问题</string>
+		<string>JS回调字符串参数中过滤换行符，防止回调出错。</string>
+		<string>修复回调参数为nil时导致闪退的问题</string>
+		<string>修复页面滚动时个别情况可能白屏不刷新内容的bug</string>
+	</array>
 	<key>4.4.24</key>
 	<array>
 		<string>转屏问题及动画卡死问题处理</string>
@@ -14,6 +27,7 @@
 	<key>4.4.23</key>
 	<array>
 		<string>config.xml中debug开关在未开启增量更新开关时无法生效的问题，以及开关与Android引擎保持一定的统一。</string>
+		<string>修复补丁包更新时间长可能有黑屏现象的问题</string>
 		<string>修复因为某种原因导致补丁包更新失败之后，会影响下一次补丁包升级和重试的机会的问题。</string>
 		<string>兼容修复EMMv3的上报版本号错误问题。</string>
 	</array>

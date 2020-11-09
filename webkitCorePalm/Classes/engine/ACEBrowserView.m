@@ -19,7 +19,6 @@
 #import "ACEBrowserView.h"
 
 #import "BUtility.h"
-#import "CBrowserWindow.h"
 
 #import "WWidget.h"
 #import "WWidgetMgr.h"
@@ -46,15 +45,19 @@
 #import "ACEDrawerViewController.h"
 
 #import "ACEMultiPopoverScrollView.h"
+#import "ACEJSCInvocation.h"
 #import "ACEJSCHandler.h"
 #import "ACEJSCBaseJS.h"
 #import "AppCanEngine.h"
 #import "ACEUINavigationController.h"
+#import "ACWKProcessPool.h"
+
+
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
-@interface ACEBrowserView()
-@property (nonatomic,weak,readwrite)JSContext *JSContext;
+@interface ACEBrowserView()<WKUIDelegate>
+
 @end
 
 
@@ -66,7 +69,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 @synthesize indicatorView ;
 
 
-@synthesize mcBrwWnd;
 @synthesize meBrwWnd;
 
 @synthesize muexObjName;
@@ -92,61 +94,102 @@ const CGFloat loadingVisibleHeight = 60.0f;
     return self.meBrwWnd.meBrwCtrler;
 }
 
-
-- (JSContext *)JSContext{
-    if (!_JSContext) {
-        JSContext *context = nil;
-        @try {
-            context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-        }@catch (...) {}
-        _JSContext = context;
-    }
-    return _JSContext;
+/// 进行JS交互的对象，实现了ACJSContext协议。
+/// 目前的逻辑下，就直接返回ACEBrowserView本身了。
+- (id<ACJSContext>)JSContext{
+    return self;
 }
 
-
 - (void)initializeJSCHandler{
-    if(_JSContext){
+    if (self.JSCHandler) {
         [self.JSCHandler clean];
-        _JSContext = nil;
     }
-    
-    JSContext *context = self.JSContext;
+    self.JSCHandler = [[ACEJSCHandler alloc] initWithEBrowserView:self.superDelegate];
+    [self.JSCHandler initializeWithJSContext:[self JSContext]];
+}
 
-    if(!context){
-        return;
+- (BOOL)isAppCanJSBridgePayload:(NSString *)jsPayloadStr {
+    return [ACEJSCHandler isAppCanJSBridgePayload:jsPayloadStr];
+}
+
+/// 作为js中prompt接口的实现，默认需要有一个输入框一个按钮，点击确认按钮回传输入值
+/// 当然可以添加多个按钮以及多个输入框，不过completionHandler只有一个参数，如果有多个输入框，需要将多个输入框中的值通过某种方式拼接成一个字符串回传，js接收到之后再做处理
+
+/// 参数 prompt 为 prompt(<message>, <defaultValue>);中的<message>
+/// 参数defaultText 为 prompt(<message>, <defaultValue>);中的 <defaultValue>
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler {
+    ACLogDebug(@"AppCan4.0===>runJavaScriptTextInputPanelWithPrompt:%@ andDefaultText:%@", prompt, defaultText);
+    if ([self isAppCanJSBridgePayload:prompt]) {
+        // AppCanWKTODO 进入AppCanJS的解析路由
+        NSString *result = [self.JSCHandler executeWithAppCanJSBridgePayload:prompt];
+        completionHandler(result);
+    }else{
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:prompt message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.text = defaultText;
+        }];
+        [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            completionHandler(alertController.textFields[0].text?:@"");
+        }])];
+        
+        [[self meBrwCtrler] presentViewController:alertController animated:YES completion:nil];
     }
-    self.JSCHandler = [[ACEJSCHandler alloc]initWithEBrowserView:self.superDelegate];
-    if(!AppCanEngine.configuration.useRC4EncryptWithLocalstorage){
-        [context evaluateScript:[BUtility getRC4LocalStoreJSKey]];
-    }
-    
-    [self.JSCHandler initializeWithJSContext:context];
+}
+
+/// 此方法作为js的alert方法接口的实现，默认弹出窗口应该只有提示信息及一个确认按钮，当然可以添加更多按钮以及其他内容，但是并不会起到什么作用
+/// 点击确认按钮的相应事件需要执行completionHandler，这样js才能继续执行
+/// 参数 message为  js 方法 alert(<message>) 中的<message>
+-(void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ACELocalized(@"提示") message:message?:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler();
+    }])];
+    [[self meBrwCtrler] presentViewController:alertController animated:YES completion:nil];
+}
+
+/// 作为js中confirm接口的实现，需要有提示信息以及两个相应事件， 确认及取消，并且在completionHandler中回传相应结果，确认返回YES， 取消返回NO
+/// 参数 message为  js 方法 confirm(<message>) 中的<message>
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completionHandler{
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ACELocalized(@"提示") message:message?:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"取消") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(NO);
+    }])];
+    [alertController addAction:([UIAlertAction actionWithTitle:ACELocalized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(YES);
+    }])];
+    [[self meBrwCtrler] presentViewController:alertController animated:YES completion:nil];
 }
 
 -(void)multiPopoverDelay{
-
-    [self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
+    [self evaluateJavaScript:@"window.uexOnload(0)" completionHandler:nil];
 }
+
 - (void)didShowKeyboard:(NSNotification *)notification
 {
-	NSString *strKeyboardStatus = [self stringByEvaluatingJavaScriptFromString:@"uexWindow.didShowKeyboard"];
-	int keyboardStatus = [strKeyboardStatus intValue];
-	if (keyboardStatus == 1) {
-		NSDictionary* info = [notification userInfo];
-		CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-		UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-		UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
-		if ([BUtility isValidateOrientation:(UIInterfaceOrientation)deviceOrientation] == NO) {
-			deviceOrientation = (UIDeviceOrientation)statusBarOrientation;
-		}
-		if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
-			[self setFrame: CGRectMake(self.frame.origin.x, self.frame.origin.y - kbSize.height, self.frame.size.width, self.frame.size.height)];
-		} else if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
-			[self setFrame: CGRectMake(self.frame.origin.x, self.frame.origin.y - kbSize.width, self.frame.size.width, self.frame.size.height)];
-		}
-		mFlag |= (F_EBRW_VIEW_FLAG_SHOW_KEYBOARD | F_EBRW_VIEW_FLAG_FORBID_ROTATE);
-	}
+    [self ac_evaluateJavaScript:@"uexWindow.didShowKeyboard" completionHandler:^(id result, NSError * error) {
+        if ([result isKindOfClass:[NSString class]]) {
+            NSString *strKeyboardStatus = result;
+            int keyboardStatus = [strKeyboardStatus intValue];
+            if (keyboardStatus == 1) {
+                NSDictionary* info = [notification userInfo];
+                CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+                UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+                UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+                if ([BUtility isValidateOrientation:(UIInterfaceOrientation)deviceOrientation] == NO) {
+                    deviceOrientation = (UIDeviceOrientation)statusBarOrientation;
+                }
+                if (UIDeviceOrientationIsPortrait(deviceOrientation)) {
+                    [self setFrame: CGRectMake(self.frame.origin.x, self.frame.origin.y - kbSize.height, self.frame.size.width, self.frame.size.height)];
+                } else if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
+                    [self setFrame: CGRectMake(self.frame.origin.x, self.frame.origin.y - kbSize.width, self.frame.size.width, self.frame.size.height)];
+                }
+                mFlag |= (F_EBRW_VIEW_FLAG_SHOW_KEYBOARD | F_EBRW_VIEW_FLAG_FORBID_ROTATE);
+            }
+        }else{
+            ACLogError(@"uexWindow.didShowKeyboard result error:%@", result);
+        }
+    }];
 }
 
 - (void)didHideKeyboard:(NSNotification *)notification
@@ -154,7 +197,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	if ((mFlag & F_EBRW_VIEW_FLAG_SHOW_KEYBOARD) == F_EBRW_VIEW_FLAG_SHOW_KEYBOARD) {
 		NSDictionary* info = [notification userInfo];
 		CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-		[self stringByEvaluatingJavaScriptFromString:@"uexWindow.didShowKeyboard=0"];
+        [self ac_evaluateJavaScript:@"uexWindow.didShowKeyboard=0"];
 		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
 		UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
 		if ([BUtility isValidateOrientation:(UIInterfaceOrientation)deviceOrientation] == NO) {
@@ -185,14 +228,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)dealloc {
-
+// AppCanWKTODO
     self.indicatorView = nil;
     [self.JSCHandler clean];
     self.JSCHandler = nil;
-    self.JSContext = nil;
+//    self.JSContext = nil;
     [self reset];
     self.currentUrl = nil;
-    self.delegate = nil;
+//    self.delegate = nil;
     [self loadWithData:@"" baseUrl:nil];
     [self stopLoading];
 
@@ -212,7 +255,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	mFlag = 0;
 	mTopBounceState = 0;
 	mBottomBounceState = 0;
-    mcBrwWnd = nil;
     muexObjName = nil;
     [mPageInfoDict removeAllObjects];
     mPageInfoDict = nil;
@@ -224,10 +266,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)setView {
     self.currentUrl = nil;
-	self.dataDetectorTypes = UIDataDetectorTypeNone;
-	self.allowsInlineMediaPlayback = NO;
-	[self setDelegate:mcBrwWnd];
-	[self setScalesPageToFit:NO];
+    // AppCanWKTODO
+//	self.dataDetectorTypes = UIDataDetectorTypeNone;
+//	self.allowsInlineMediaPlayback = NO;
+//	[self setDelegate:mcBrwWnd];
+//	[self setScalesPageToFit:NO];
 	[self setMultipleTouchEnabled:NO];
 	[self setUserInteractionEnabled:YES];
 	self.backgroundColor = [UIColor clearColor];
@@ -332,12 +375,25 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
 }
 
+/**
+ 触发WKWebView的内部刷新操作
+ 既然WKWebView那么久了，默认行为还是如此，那可能也有对应的
+ */
+- (void)invoke_updateVisibleContentRects {
+    if ([self respondsToSelector:@selector(_updateVisibleContentRects)]) {
+        ((void(*)(id,SEL,BOOL))objc_msgSend)(self, @selector(_updateVisibleContentRects),NO);
+    }
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	
+	// 防止个别页面在滚动过程中出现白色区域无法显示的问题
+    [self invoke_updateVisibleContentRects];
+    
 	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1){
-        [super scrollViewDidScroll:scrollView];
+        // AppCanWKTODO
+//        [super scrollViewDidScroll:scrollView];
         
     }
 	
@@ -348,13 +404,13 @@ const CGFloat loadingVisibleHeight = 60.0f;
 					[mTopBounceView setStatus:EBounceViewStatusPullToReload];
 					if (mTopBounceState != EBounceViewStatusPullToReload) {
 						mTopBounceState = EBounceViewStatusPullToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,0);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,0);}"];
 					}
 				} else if (scrollView.contentOffset.y < refreshKeyValue) {
 					[mTopBounceView setStatus:EBounceViewStatusReleaseToReload];
 					if (mTopBounceState != EBounceViewStatusReleaseToReload) {
 						mTopBounceState = EBounceViewStatusReleaseToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,1);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,1);}"];
 					}
                 } else {
                     mTopBounceState = EBounceViewStatusPullToReload;
@@ -363,12 +419,12 @@ const CGFloat loadingVisibleHeight = 60.0f;
 				if (scrollView.contentOffset.y > refreshKeyValue && scrollView.contentOffset.y < 0.0f) {
 					if (mTopBounceState != EBounceViewStatusPullToReload) {
 						mTopBounceState = EBounceViewStatusPullToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,0);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,0);}"];
 					}
 				} else if (scrollView.contentOffset.y < refreshKeyValue) {
 					if (mTopBounceState != EBounceViewStatusReleaseToReload) {
 						mTopBounceState = EBounceViewStatusReleaseToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,1);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,1);}"];
 					}
 				}
 			}
@@ -382,25 +438,25 @@ const CGFloat loadingVisibleHeight = 60.0f;
 					[mBottomBounceView setStatus:EBounceViewStatusPullToReload];
 					if (mBottomBounceState != EBounceViewStatusPullToReload) {
 						mBottomBounceState = EBounceViewStatusPullToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,0);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,0);}"];
 					}
 				} else if (scrollView.contentOffset.y > mScrollView.contentSize.height-refreshKeyValue-self.bounds.size.height) {
 					[mBottomBounceView setStatus:EBounceViewStatusReleaseToReload];
 					if (mBottomBounceState != EBounceViewStatusReleaseToReload) {
 						mBottomBounceState = EBounceViewStatusReleaseToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,1);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,1);}"];
 					}
 				}
 			} else {
 				if (scrollView.contentOffset.y > 0.0f && scrollView.contentOffset.y < mScrollView.contentSize.height-refreshKeyValue-self.bounds.size.height) {
 					if (mBottomBounceState != EBounceViewStatusPullToReload) {
 						mBottomBounceState = EBounceViewStatusPullToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,0);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,0);}"];
 					}
 				} else if (scrollView.contentOffset.y > mScrollView.contentSize.height-refreshKeyValue-self.bounds.size.height) {
 					if (mBottomBounceState != EBounceViewStatusReleaseToReload) {
 						mBottomBounceState = EBounceViewStatusReleaseToReload;
-						[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,1);}"];
+						[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,1);}"];
 					}
 				}
 			}
@@ -444,20 +500,20 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (kDistanceYOffset>70){
         //向上滑动超过70
         NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedUpward!=null){uexWindow.slipedUpward();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         
         jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedUpward!=null){uexWindow.onSlipedUpward();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         self.lastScrollPointY=scrollView.contentOffset.y;
     }
     else if (kDistanceYOffset<-70){
         //向下滑动超过70
         NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedDownward!=null){uexWindow.slipedDownward();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         
         
         jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedDownward!=null){uexWindow.onSlipedDownward();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         
         self.lastScrollPointY=scrollView.contentOffset.y;
     }
@@ -465,23 +521,24 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [super scrollViewDidEndDecelerating:scrollView];
+    // AppCanWKTODO
+//    [super scrollViewDidEndDecelerating:scrollView];
     
     
     if (scrollView.contentOffset.y <= 0) {
         NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedUpEdge!=null){uexWindow.slipedUpEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedUpEdge!=null){uexWindow.onSlipedUpEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         
     }
     
     float distence = scrollView.contentSize.height - scrollView.frame.size.height;
     if (scrollView.contentOffset.y >= distence) {
         NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.slipedDownEdge!=null){uexWindow.slipedDownEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSlipedDownEdge!=null){uexWindow.onSlipedDownEdge();}"];
-        [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+        [self ac_evaluateJavaScript:jsSuccessStr];
         
     }
     
@@ -495,7 +552,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         if (scrollView.contentOffset.y <= refreshKeyValue && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) == 0)) {
             mFlag |= F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING;
             mTopBounceState = EBounceViewStatusLoading;
-            [self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,2);}"];
+            [self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,2);}"];
         }
     }
     if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) != 0) {
@@ -517,7 +574,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 	
 	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1){
-        [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+        // AppCanWKTODO
+//        [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
         
     }
 	
@@ -525,26 +583,28 @@ const CGFloat loadingVisibleHeight = 60.0f;
 		if (scrollView.contentOffset.y <= refreshKeyValue && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING) == 0)) {
 			mFlag |= F_EBRW_VIEW_FLAG_BOUNCE_VIEW_TOP_LOADING;
 			mTopBounceState = EBounceViewStatusLoading;
-			[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,2);}"];
+			[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(0,2);}"];
 		}
 	}
 	if ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_REFRESH) != 0) {
 		if (scrollView.contentOffset.y >= mScrollView.contentSize.height-refreshKeyValue-self.bounds.size.height && ((mFlag & F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_LOADING) == 0)) {
 			mFlag |= F_EBRW_VIEW_FLAG_BOUNCE_VIEW_BOTTOM_LOADING;
 			mBottomBounceState = EBounceViewStatusLoading;
-			[self stringByEvaluatingJavaScriptFromString:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,2);}"];
+			[self ac_evaluateJavaScript:@"if(uexWindow.onBounceStateChange!=null){uexWindow.onBounceStateChange(1,2);}"];
 		}
 	}
 
 }
 
 -(NSURL*)curUrl{
-    return [self.request URL] ?: self.currentUrl;
+    // AppCanWKTODO
+//    return [self.request URL] ?: self.currentUrl;
+    return self.currentUrl;
 }
 
 - (void)loadExeJS{
     if (_mExeJS) {
-        [self stringByEvaluatingJavaScriptFromString:_mExeJS];
+        [self ac_evaluateJavaScript:_mExeJS];
     }
 }
 
@@ -577,7 +637,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
     self.mType = inWndType;
     mFlag = 0;
     //self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    mcBrwWnd = [[CBrowserWindow alloc]init];
     meBrwWnd = eInBrwWnd;
 
 
@@ -588,7 +647,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     if (inWndType == ACEEBrowserViewTypeSlibingBottom) {
         [self registerKeyboardListener:nil];
     }
-    self.keyboardDisplayRequiresUserAction = NO;
+    // AppCanWKTODO
+//    self.keyboardDisplayRequiresUserAction = NO;
 
     isSwiped = NO;
     //向右轻扫事件
@@ -620,11 +680,29 @@ const CGFloat loadingVisibleHeight = 60.0f;
     //[self addGestureRecognizer:singleTap];
     //singleTap.delegate = self;
     
+    self.navigationDelegate = BrwView;
+    self.UIDelegate = self;
 
 }
 
 - (id)initWithFrame:(CGRect)frame BrwCtrler:(EBrowserController*)eInBrwCtrler Wgt:(WWidget*)inWgt BrwWnd:(EBrowserWindow*)eInBrwWnd UExObjName:(NSString*)inUExObjName Type:(ACEEBrowserViewType)inWndType  BrwView:(EBrowserView *)BrwView{
-	self = [super initWithFrame:frame];
+    // AppCanWKTODO
+    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    // AppCanWKTODO 目前暂时不使用这个交互机制，而是使用prompt交互
+    //    // 在window.webkit.messageHandlers中注入一个JS对象
+    //    configuration.userContentController = [WKUserContentController new];
+    //    [configuration.userContentController addScriptMessageHandler:handler name:@"AppCan"];
+    WKPreferences *preferences = [WKPreferences new];
+    preferences.javaScriptCanOpenWindowsAutomatically = NO;
+    preferences.javaScriptEnabled = YES;
+    [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
+    configuration.preferences = preferences;
+    // 使用单例WKProcessPool，这样可以共享localStorage
+    configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
+    configuration.websiteDataStore = [WKWebsiteDataStore defaultDataStore];
+    // 初始化WKWebView
+    self = [super initWithFrame:frame configuration:configuration];
 	if (self) {
         [self reuseWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType  BrwView:BrwView];
         self.lastScrollPointY = 0;
@@ -640,7 +718,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         if (gesture.direction==UISwipeGestureRecognizerDirectionRight )
         {
             NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSwipeRight!=null){uexWindow.onSwipeRight();}"];
-            [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+            [self ac_evaluateJavaScript:jsSuccessStr];
         }
         isSwiped=YES;
         [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(noSwipe) userInfo:nil repeats:NO];
@@ -659,7 +737,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
         if (gesture.direction==UISwipeGestureRecognizerDirectionLeft)
         {
             NSString *jsSuccessStr = [NSString stringWithFormat:@"if(uexWindow.onSwipeLeft!=null){uexWindow.onSwipeLeft();}"];
-            [self stringByEvaluatingJavaScriptFromString:jsSuccessStr];
+            [self ac_evaluateJavaScript:jsSuccessStr];
         }
         isSwiped=YES;
         [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(noSwipe) userInfo:nil repeats:NO];
@@ -738,15 +816,15 @@ const CGFloat loadingVisibleHeight = 60.0f;
     }
     
     initStr = [[NSString alloc] initWithFormat:@"uexWidgetOne.platformVersion = \'%@\';uexWidgetOne.isFullScreen = %d;uexWidgetOne.iOS7Style = %d;", [[UIDevice currentDevice] systemVersion],isStatusBarHidden,iOS7Style];
-    [self stringByEvaluatingJavaScriptFromString:initStr];
+    [self ac_evaluateJavaScript:initStr];
     
     switch (self.mType) {
 		case ACEEBrowserViewTypeMain:
             if ((self == self.meBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrowserView) && ((self.meBrwCtrler.mFlag & F_NEED_REPORT_APP_START) != F_NEED_REPORT_APP_START)) {
-                [self stringByEvaluatingJavaScriptFromString:@"if(window.uexStart){window.uexStart();}"];
+                [self ac_evaluateJavaScript:@"if(window.uexStart){window.uexStart();}"];
                 self.meBrwCtrler.mFlag |= F_NEED_REPORT_APP_START;
             }
-			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
+			[self ac_evaluateJavaScript:@"window.uexOnload(0)"];
 			if ((meBrwWnd.mFlag & F_EBRW_WND_FLAG_HAS_PREOPEN) != 0) {
 				return;
 			}
@@ -756,39 +834,41 @@ const CGFloat loadingVisibleHeight = 60.0f;
 			if ((self.mFlag & F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) == F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) {
 				[self setFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, subScrollView.contentSize.height)];
 			}
-			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
-			[meBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"window.uexOnload(1)"];
+			[self ac_evaluateJavaScript:@"window.uexOnload(0)"];
+			[meBrwWnd.meBrwView ac_evaluateJavaScript:@"window.uexOnload(1)"];
 			break;
 		case ACEEBrowserViewTypeSlibingBottom:
             subScrollView = (UIScrollView*)[self.subviews objectAtIndex:0];
 			if ((self.mFlag & F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) == F_EBRW_VIEW_FLAG_USE_CONTENT_SIZE) {
 				[self setFrame:CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, subScrollView.contentSize.height)];
 			}
-			[self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
-			[meBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:@"window.uexOnload(2)"];
+			[self ac_evaluateJavaScript:@"window.uexOnload(0)"];
+			[meBrwWnd.meBrwView ac_evaluateJavaScript:@"window.uexOnload(2)"];
 			break;
         case ACEEBrowserViewTypePopover:{
 			id iFontSize = [self.mPageInfoDict objectForKey:@"pFontSize"];
 			if (iFontSize) {
 				NSNumber *fontSize = (NSNumber*)iFontSize;
 				NSString *toSetFontSize = [NSString stringWithFormat:@"document.body.style.fontSize=%dpx;", [fontSize intValue]];
-				[self stringByEvaluatingJavaScriptFromString:toSetFontSize];
+				[self ac_evaluateJavaScript:toSetFontSize];
 			}
             if(self.isMuiltPopover){
                 [self performSelector:@selector(multiPopoverDelay) withObject:nil afterDelay:0.2];
             }else{
-                [self stringByEvaluatingJavaScriptFromString:@"window.uexOnload(0)"];
+                [self ac_evaluateJavaScript:@"window.uexOnload(0)"];
             }
             
             //2015.5.18 新增onPopoverLoadFinishInRootWnd(name,url)接口
-            initStr = [[NSString alloc] initWithFormat:@"if(uexWindow.onPopoverLoadFinishInRootWnd){uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");}",self.muexObjName,[self.request.URL absoluteString]];
+            // AppCanWKTODO
+//            initStr = [[NSString alloc] initWithFormat:@"if(uexWindow.onPopoverLoadFinishInRootWnd){uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");}",self.muexObjName,[self.request.URL absoluteString]];
+            initStr = [[NSString alloc] initWithFormat:@"if(uexWindow.onPopoverLoadFinishInRootWnd){uexWindow.onPopoverLoadFinishInRootWnd(\"%@\",\"%@\");}",self.muexObjName,[self currentUrl]];
             //[EUtility evaluatingJavaScriptInRootWnd:initStr];
             //修复回调页面错误问题，现在可以正确的回调给当前子应用的root页面
-            [self.meBrwCtrler.rootView stringByEvaluatingJavaScriptFromString:initStr];
+            [self.meBrwCtrler.rootView ac_evaluateJavaScript:initStr];
             if ((mFlag & F_EBRW_VIEW_FLAG_OAUTH) == F_EBRW_VIEW_FLAG_OAUTH) {
                 NSString *changedUrl = [[self curUrl] absoluteString];
                 NSString *toBeExeJs = [NSString stringWithFormat:@"if(uexWindow.onOAuthInfo!=null){uexWindow.onOAuthInfo(\'%@\',\'%@\');}", self.muexObjName, changedUrl];
-                [self.meBrwWnd.meBrwView stringByEvaluatingJavaScriptFromString:toBeExeJs];
+                [self.meBrwWnd.meBrwView ac_evaluateJavaScript:toBeExeJs];
             }
 			if (meBrwWnd.mPreOpenArray) {
 				[meBrwWnd.mPreOpenArray removeObject:self.muexObjName];
@@ -881,11 +961,62 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	[self stopLoading];
 	// Cleanup the HTML document by removing all content
 	// This time, this hack free some additional memory on some websites, mainly big ones with a lot of content
-	//[self stringByEvaluatingJavaScriptFromString:@"uex.queue.commands = [];"];
-	//[self stringByEvaluatingJavaScriptFromString:@"var body=document.getElementsByTagName('body')[0];body.style.backgroundColor=(body.style.backgroundColor=='')?'white':'';"];
-	//[self stringByEvaluatingJavaScriptFromString:@"document.open();document.close()"];
+	//[self ac_evaluateJavaScript:@"uex.queue.commands = [];"];
+	//[self ac_evaluateJavaScript:@"var body=document.getElementsByTagName('body')[0];body.style.backgroundColor=(body.style.backgroundColor=='')?'white':'';"];
+	//[self ac_evaluateJavaScript:@"document.open();document.close()"];
+    // AppCanWKTODO
+//	self.delegate = nil;
+}
 
-	self.delegate = nil;
+/// 注入JS方法封装
+/// @param javaScriptString 需要注入执行的JS
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString {
+    [self evaluateJavaScript:javaScriptString completionHandler:nil];
+}
+
+/// 注入JS方法封装
+/// @param javaScriptString 需要注入执行的JS
+- (void)ac_evaluateJavaScript:(NSString *)javaScriptString completionHandler:(nullable void (^)(_Nullable id, NSError * _Nullable error))completionHandler {
+    if (!completionHandler) {
+        // 如果为nil，则给一个默认的用来接收错误。
+        completionHandler = ^(id result, NSError * error) {
+            if (error) {
+                ACLogDebug(@"AppCan===>ACEBrowserView===>ac_evaluateJavaScript: error = %@ javaScriptString = %@", error, javaScriptString);
+            }
+        };
+    }
+    [self evaluateJavaScript:javaScriptString completionHandler:completionHandler];
+}
+
+/// JS回调（带参数的拼接JS字符串等操作）
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments {
+    [self callbackWithFunctionKeyPath:JSKeyPath arguments:arguments withCompletionHandler:nil];
+}
+
+/**
+ JS回调的核心方法
+
+ @param JSKeyPath 需要回调的JS方法
+ @param arguments 参数数组
+ @param completion 执行结果
+ */
+- (void)callbackWithFunctionKeyPath:(NSString *)JSKeyPath arguments:(NSArray *)arguments withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion {
+    ACEJSCInvocation *invocation = [ACEJSCInvocation
+                                    invocationWithACJSContext:self
+                                    FunctionJs:JSKeyPath
+                                    arguments:arguments
+                                    completionHandler:completion];
+    [invocation invokeOnMainThread];
+}
+
+// 执行JS中匿名function回调的核心方法
+- (void)callbackWithACJSFunctionRef:(ACJSFunctionRef *)functionRef withArguments:args withCompletionHandler:(nullable void (^)(id _Nullable, NSError * _Nullable))completion {
+    ACEJSCInvocation *invocation = [ACEJSCInvocation
+                                    invocationWithACJSContext:self
+                                    withACJSFunctionRef:functionRef
+                                    withArguments:args
+                                    completionHandler:completion];
+    [invocation invokeOnMainThread];
 }
 
 - (void)loadWithData:(NSString*)inData baseUrl:(NSURL*)inBaseUrl {
@@ -895,9 +1026,52 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 - (void)loadWithUrl: (NSURL*)inUrl {
     self.currentUrl = inUrl;
+    NSString* urlString = [inUrl absoluteString];
+    [self loadAllUrl:urlString];
+}
 
-	NSURLRequest *request = [NSURLRequest requestWithURL:inUrl];
-	[self loadRequest:request];
+/**
+ 加载本地或在线页面（处理AppCan引擎逻辑下的多种情况）
+
+ @param urlString 需要加载的url
+ */
+- (void)loadAllUrl:(NSString *)urlString {
+    NSURL *url = nil;
+    if ([urlString hasPrefix:@"http://"] || [urlString hasPrefix:@"https://"]) {
+        // 在线资源
+        url = [NSURL URLWithString:urlString];
+        if (url) {
+            [self loadRequest:[NSURLRequest requestWithURL:url]];
+        }
+    } else {
+        // 本地资源
+        NSString *documentsRootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)lastObject];
+        NSString *mainBundleRootPath = [[NSBundle mainBundle] resourcePath];
+        ACLogDebug(@"AppCan4.0===>urlString===>%@", urlString);
+        // NSString *realUrlString = [urlString hasPrefix:@"file://"]?[urlString substringFromIndex:7]:urlString;
+        // url = [NSURL fileURLWithPath:realUrlString];
+        // note：这里之所以没有用fileUrlWithPath而是手动拼接file://再使用urlWithString方法，是为了防止将url中的特殊字符自动转义，从而导致?后面的参数失效甚至无法打开网页。
+        NSString *realUrlString = [urlString hasPrefix:@"file://"]?urlString:[NSString stringWithFormat:@"file://%@", urlString];
+        url = [NSURL URLWithString:realUrlString];
+        // allowingReadAccessToURL这个参数是WKWebView为了读取本地资源的时候设置允许读取的资源范围
+        NSString *allowingReadAccessToURL = nil;
+        if (url) {
+            if ([realUrlString containsString:mainBundleRootPath]) {
+                // 这种情况下，加载的页面是在app内的mainBundle的资源
+                allowingReadAccessToURL = mainBundleRootPath;
+            } else if ([realUrlString containsString:documentsRootPath]) {
+                // 这种情况下，加载的页面是已经拷贝到沙箱目录中了
+                allowingReadAccessToURL = documentsRootPath;
+            } else {
+                // 其他情况，目前来看是不存在的
+                allowingReadAccessToURL = realUrlString;
+            }
+            ACLogDebug(@"AppCan4.0===>allowingReadAccessToURL===>%@", allowingReadAccessToURL);
+            [self loadFileURL:url allowingReadAccessToURL:[NSURL fileURLWithPath:allowingReadAccessToURL]];
+        }else{
+            ACLogError(@"AppCan4.0===>url error, loadFileURL cancelled!");
+        }
+    }
 }
 
 - (void)cleanAllEexObjs {
