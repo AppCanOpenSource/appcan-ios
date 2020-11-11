@@ -5,6 +5,7 @@
 	<key>4.5.26</key>
 	<array>
 		<string>WKWebView请求不到本地路径文件的问题处理</string>
+		<string>回调字符串数据时对特殊字符增加转义符处理，防止JS执行时丢失特殊字符导致的回调失败等错误</string>
 	</array>
 	<key>4.5.25</key>
 	<array>
