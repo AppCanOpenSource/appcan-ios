@@ -1780,4 +1780,45 @@ static NSString *clientCertificatePwd = nil;
     return method;
 }
 
+# pragma mark JS交互，转义符
+
+/// 用于将回调给JS的字符串类型的数据增加转义，防止执行JS过程中出现错误
+/// @param string 需要转义的字符串
++ (NSString *)transcoding:(NSString *)inString {
+    //匹配需要转义的字符的正则表达式
+    NSString *pattern = @"\n|\r|\"|'|\\\\|&";
+    //根据正则表达式设定OC规则
+    NSRegularExpression *regular = [[NSRegularExpression alloc] initWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+    // 将字符串放入可变字符串方便后续操作
+    NSMutableString *resultMutableString = [[NSMutableString alloc] initWithString:inString];
+    //获取匹配结果
+    NSArray *results = [regular matchesInString:inString options:0 range:NSMakeRange(0, inString.length)];
+    //遍历结果
+    //注意：此处必须倒序遍历，这样才可以保证在替换了后面的字符串后，虽然更改了字符串长度，但是不会影响前面的匹配点位置
+    for (NSTextCheckingResult *result in results.reverseObjectEnumerator) {
+        NSString *partStr = [inString substringWithRange:result.range];
+        NSLog(@"%@ %@",NSStringFromRange(result.range), partStr);
+        if ([partStr isEqualToString:@"\\"]) {
+            [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
+                                      range:result.range withTemplate:@"\\\\\\\\"];
+        }else if ([partStr isEqualToString:@"\n"]) {
+            [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
+                                      range:result.range withTemplate:@"\\\\n"];
+        }else if ([partStr isEqualToString:@"\r"]) {
+            [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
+                                      range:result.range withTemplate:@"\\\\r"];
+        }else if ([partStr isEqualToString:@"\""]) {
+            [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
+                                      range:result.range withTemplate:@"\\\\\""];
+        }else if ([partStr isEqualToString:@"'"]) {
+            [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
+                                      range:result.range withTemplate:@"\\\\'"];
+        }else if ([partStr isEqualToString:@"&"]) {
+            [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
+                                      range:result.range withTemplate:@"\\\\&"];
+        }
+    }
+    return resultMutableString;
+}
+
 @end

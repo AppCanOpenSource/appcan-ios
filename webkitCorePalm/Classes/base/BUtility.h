@@ -186,4 +186,6 @@ void ACENSLog (NSString *format, ...);
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
 + (NSString *)dynamicPluginFrameworkFolderPath;
 
++ (NSString *)transcoding:(NSString *)inString;
+
 @end
