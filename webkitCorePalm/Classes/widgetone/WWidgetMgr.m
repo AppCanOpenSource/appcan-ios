@@ -32,8 +32,6 @@
 #import "AppCanEngine.h"
 #import "ACEWidgetUpdateUtility.h"
 
-NSString * webappShowAactivety;
-
 @interface WWidgetMgr()
 @property (nonatomic,strong,readwrite)WWidget* mainWidget;
 @end
@@ -77,8 +75,6 @@ NSString * webappShowAactivety;
         basePath = [BUtility getResPath:@""];
     }
     NSMutableDictionary * tmpWgtDict = [self wgtParameters:configPath];
-
-
     
 	//数据库里存在，
 	NSMutableArray *tempArr = [widgetSql selectWgt:queryMainWidget];
@@ -206,13 +202,6 @@ NSString * webappShowAactivety;
 		//
 		[tmpDict removeAllObjects];
 	}
-    
-    
-    NSString *showActiveStr = [xmlDict objectForKey:CONFIG_TAG_WEBAPP];
-    webappShowAactivety = nil;
-	if ([showActiveStr isEqualToString:@"true"]) {
-		webappShowAactivety = @"yes";
-	}else{webappShowAactivety = @"no";}
     
 	return xmlDict;
 }
@@ -441,6 +430,8 @@ NSString * webappShowAactivety;
 	return deleteWgt;
 }
 #pragma mark util
+/// 解析config.xml中的配置并实例化WWidget
+/// @param inDict config.xml读取出来的字典数据
 - (WWidget *)dictToWgt:(NSMutableDictionary*)inDict{
 	NSMutableDictionary *tmpDict =[NSMutableDictionary dictionaryWithDictionary:inDict];
 	
@@ -558,12 +549,19 @@ NSString * webappShowAactivety;
 	}else {
 		tmpWgt.preload = 0;
 	}
-    //isDebug
+    //isDebug 23
     NSString * isDebug = [tmpDict objectForKey:CONFIG_TAG_DEBUG];
     if (isDebug) {
         tmpWgt.isDebug = [isDebug boolValue];
     } else{
         tmpWgt.isDebug = NO;
+    }
+    //webApp 24
+    NSString *webAppValue = [tmpDict objectForKey:CONFIG_TAG_WEBAPP];
+    if ([webAppValue isEqualToString:@"true"]) {
+        tmpWgt.isWebApp = YES;
+    }else{
+        tmpWgt.isWebApp = NO;
     }
     
 	[tmpDict removeAllObjects];

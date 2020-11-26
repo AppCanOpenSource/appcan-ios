@@ -752,15 +752,12 @@
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
     ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
     // AppCanWKTODO
-    /*
     ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ACEMP_TransitionView_Close_Notify object:aceWebView.superDelegate];
     
-    [aceWebView notifyPageError];
-    [aceWebView continueMultiPopoverLoading];
-     */
     [self notifyPageError];
+    [aceWebView continueMultiPopoverLoading];
 }
 
 /*! @abstract Invoked when content starts arriving for the main frame.
@@ -770,18 +767,16 @@
 - (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation{
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didCommitNavigation");
     // AppCanWKTODO
-    /*
     if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]) {
         ACEBrowserView *eBrwView = (ACEBrowserView *)webView;
-        ACENSLog(@"didCommitNavigation url is %@", [webView.request URL]);
-        NSString * url =[NSString stringWithFormat:@"%@",[webView.request URL]];
-        if ([webappShowAactivety isEqualToString:@"yes"] && [url hasPrefix:@"http"] ){
+        ACENSLog(@"didCommitNavigation url is %@", [eBrwView curUrl]);
+        NSString * urlString = [NSString stringWithFormat:@"%@",[eBrwView curUrl]];
+        WWidget *inCurWgt = eBrwView.mwWgt;
+        if (inCurWgt.isWebApp && [urlString hasPrefix:@"http"] ){
             [eBrwView.indicatorView startAnimating];
         }
-        [eBrwView notifyPageStart];
+        [self notifyPageStart];
     }
-     */
-    [self notifyPageStart];
 }
 
 /*! @abstract Invoked when a main frame navigation completes.
@@ -791,19 +786,17 @@
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>didFinishNavigation");
     // AppCanWKTODO
-    /*
     if (webView != nil && [webView isKindOfClass:[ACEBrowserView class]]){
         ACEBrowserView * eBrwView = (ACEBrowserView *)webView;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:ACEMP_TransitionView_Close_Notify object:eBrwView.superDelegate];
-        
         eBrwView.retryCount = 0;
-        NSString * urlString = [webView.request URL].absoluteString;
-        if ([webappShowAactivety isEqualToString:@"yes"] && [urlString hasPrefix:@"http"] ){
-            [eBrwView.indicatorView stopAnimating];
-        }
         
         WWidget *inCurWgt = eBrwView.mwWgt;
+        NSString * urlString = [eBrwView curUrl].absoluteString;
+        if (inCurWgt.isWebApp && [urlString hasPrefix:@"http"] ){
+            [eBrwView.indicatorView stopAnimating];
+        }
         BOOL isDebug = inCurWgt.isDebug;
         if (isDebug) {
             NSString * logserveripStr = inCurWgt.logServerIp;
@@ -811,7 +804,7 @@
             NSString * script =  [NSString stringWithFormat:@"var x = document.createElement(\"SCRIPT\");x.setAttribute('src','%@');document.body.appendChild(x);",srcString];
             [eBrwView ac_evaluateJavaScript:script];
         }
-        [eBrwView notifyPageFinish];
+        [self notifyPageFinish];
         [eBrwView continueMultiPopoverLoading];
         
         static dispatch_once_t onceToken;
@@ -819,9 +812,6 @@
             [AppCanEngine rootPageDidFinishLoading];
         });
     }
-    */
-    
-    [self notifyPageFinish];
 }
 
 /*! @abstract Invoked when an error occurs during a committed main frame

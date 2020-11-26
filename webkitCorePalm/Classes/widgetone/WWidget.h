@@ -120,6 +120,9 @@
 //子widget应用中页面无法加载时的错误页面路径，默认为主应用的。
 @property (nonatomic,strong) NSString *errorPath;
 
+//<webapp>true</webapp>
+@property (nonatomic,assign) BOOL isWebApp;
+
 -(BOOL)getMySpaceStatus;
 -(BOOL)getMoreWgtsStatus;
 
