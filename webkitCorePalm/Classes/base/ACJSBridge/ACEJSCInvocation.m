@@ -23,6 +23,8 @@
 
 #import "ACEJSCInvocation.h"
 
+#import "BUtility.h"
+
 @interface ACEJSCInvocation()
 
 @property (nonatomic,weak)id<ACJSContext> context;
@@ -84,9 +86,8 @@
             if ([arg isKindOfClass:[NSString class]]) {
                 // string类型
                 [callbackJsStr appendString:@"\'"];
-                // 去掉换行符，以免在JS中执行错误
-                arg = [arg stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-                arg = [arg stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                // 给特殊符号增加转义符，以免在JS中执行错误
+                arg = [BUtility transcoding:arg];
                 [callbackJsStr appendString:arg];
                 [callbackJsStr appendString:@"\'"];
             }else if([arg isKindOfClass:[NSNumber class]]){
