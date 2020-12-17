@@ -298,26 +298,27 @@
 //@property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 -(UIDataDetectorTypes)dataDetectorTypes
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
 //    return [_meBrowserView dataDetectorTypes];
 }
 
 - (void)setDataDetectorTypes:(UIDataDetectorTypes)dataDetectorTypes
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
+    // 监测数据类型：用于设定电话号码、网址、电子邮件和日期等文字变为链接文字
 //    [_meBrowserView setDataDetectorTypes:dataDetectorTypes];
 }
 
 //@property (nonatomic) BOOL allowsInlineMediaPlayback;
 -(BOOL)allowsInlineMediaPlayback
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
 //    return [_meBrowserView allowsInlineMediaPlayback];
 }
 
 - (void)setAllowsInlineMediaPlayback:(BOOL)allowsInlineMediaPlayback
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
 //    [_meBrowserView setAllowsInlineMediaPlayback:allowsInlineMediaPlayback];
 }
 //@property (nonatomic) BOOL mediaPlaybackRequiresUserAction;
