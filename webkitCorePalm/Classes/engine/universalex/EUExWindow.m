@@ -27,7 +27,7 @@
 #import "EBrowser.h"
 #import "BUtility.h"
 #import "BUIAlertView.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 #import "WWidget.h"
 #import "EBrowserHistoryEntry.h"
 #import "BToastView.h"

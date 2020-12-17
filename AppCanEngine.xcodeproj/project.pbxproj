@@ -146,7 +146,6 @@
 		42F787D71D950B5D0094AA05 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AEB15A6B29A003E73EA /* CoreTelephony.framework */; };
 		42F787D81D950B5D0094AA05 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AEC15A6B29A003E73EA /* CoreVideo.framework */; };
 		42F787DA1D950B5D0094AA05 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AED15A6B29A003E73EA /* MobileCoreServices.framework */; };
-		42F787DB1D950B5D0094AA05 /* libACEDes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE81D4CC1A4D3D81005D3153 /* libACEDes.a */; };
 		42F787DC1D950B5D0094AA05 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AEE15A6B29A003E73EA /* OpenAL.framework */; };
 		42F787DD1D950B5D0094AA05 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE8735618B74DD20040BC9A /* IOKit.framework */; };
 		42F787DE1D950B5D0094AA05 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E52AEF15A6B29A003E73EA /* OpenGLES.framework */; };
@@ -173,7 +172,6 @@
 		42F787F71D950B5D0094AA05 /* ACEMultiPopoverScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */; };
 		42F787F81D950B5D0094AA05 /* RESideMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C8E2F01B1EE7E300C33492 /* RESideMenu.h */; };
 		42F787F91D950B5D0094AA05 /* ASIHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA862D18B1B93D000D7600 /* ASIHTTPRequest.h */; };
-		42F787FB1D950B5D0094AA05 /* ACEDes.h in Headers */ = {isa = PBXBuildFile; fileRef = 33859D2D1A70CB2F000B05B8 /* ACEDes.h */; };
 		42F787FC1D950B5D0094AA05 /* EBrowserWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA860618B1B93D000D7600 /* EBrowserWindow.h */; };
 		42F787FD1D950B5D0094AA05 /* WWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA867C18B1B93D000D7600 /* WWidget.h */; };
 		42F787FE1D950B5D0094AA05 /* WidgetSQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85BF18B1B93D000D7600 /* WidgetSQL.h */; };
@@ -220,7 +218,6 @@
 		42F788321D950B5D0094AA05 /* ACEDrawerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 334D18031A47A9B70050DD13 /* ACEDrawerViewController.h */; };
 		42F788331D950B5D0094AA05 /* EBrowserController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85F418B1B93D000D7600 /* EBrowserController.h */; };
 		42F788341D950B5D0094AA05 /* AsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863818B1B93D000D7600 /* AsyncSocket.h */; };
-		42F788351D950B5D0094AA05 /* FileEncrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */; };
 		42F788381D950B5D0094AA05 /* ASIInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA863118B1B93D000D7600 /* ASIInputStream.h */; };
 		42F788391D950B5D0094AA05 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA85B118B1B93D000D7600 /* SBJsonWriter.h */; };
 		42F7883A1D950B5D0094AA05 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAA864418B1B93D000D7600 /* crypt.h */; };
@@ -272,6 +269,7 @@
 		69A678FE20AABB4000CBFDCB /* ACETransitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A678FC20AABB4000CBFDCB /* ACETransitionView.m */; };
 		69F99DC524A0A1CB00A1EDC1 /* ACWKProcessPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 69F99DC324A0A1CB00A1EDC1 /* ACWKProcessPool.h */; };
 		69F99DC624A0A1CB00A1EDC1 /* ACWKProcessPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F99DC424A0A1CB00A1EDC1 /* ACWKProcessPool.m */; };
+		E864F6E3258B73590096B0EB /* ACEDesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E864F6E2258B73590096B0EB /* ACEDesKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -316,7 +314,6 @@
 		33774C511B2A6D3500D5F279 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		33774C521B2A6D3500D5F279 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		33774C531B2A6D3500D5F279 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
-		33859D2D1A70CB2F000B05B8 /* ACEDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEDes.h; sourceTree = "<group>"; };
 		33AF6EB71A448EFD00DC7397 /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
 		33AF6EB81A448EFD00DC7397 /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
 		33AF6EB91A448EFD00DC7397 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
@@ -335,7 +332,6 @@
 		33C8E2F31B1EE7E300C33492 /* UIViewController+RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RESideMenu.m"; sourceTree = "<group>"; };
 		3C5532F21AB83BF9001ACC5E /* ACEBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBrowserView.h; sourceTree = "<group>"; };
 		3C5532F31AB83BF9001ACC5E /* ACEBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBrowserView.m; sourceTree = "<group>"; };
-		3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEncrypt.h; sourceTree = "<group>"; };
 		420F733B1E4B254800B4C626 /* Changelog.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Changelog.plist; sourceTree = "<group>"; };
 		4214B40B1BE753300088E31B /* ACEMultiPopoverScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEMultiPopoverScrollView.h; sourceTree = "<group>"; };
 		4214B40C1BE753300088E31B /* ACEMultiPopoverScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEMultiPopoverScrollView.m; sourceTree = "<group>"; };
@@ -546,9 +542,13 @@
 		B2E52AFA15A6B2F1003E73EA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B2E52AFB15A6B2F1003E73EA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B2E52AFC15A6B2F1003E73EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		DE81D4CC1A4D3D81005D3153 /* libACEDes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libACEDes.a; sourceTree = "<group>"; };
 		DE90F5381904E6D00084EC10 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
 		DE90F5391904E6D00084EC10 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
+		E864F6E2258B73590096B0EB /* ACEDesKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ACEDesKit.framework; sourceTree = "<group>"; };
+		E8B5D7522589E4AD0007E333 /* libACEDes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libACEDes.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8B5D7562589F6050007E333 /* libACEDes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libACEDes.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8B5D7E3258B4B500007E333 /* libACEDes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libACEDes.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8B5D7E7258B4B7A0007E333 /* ACEDesKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ACEDesKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F78333931CE0722C00A52C8C /* ACEKeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEKeychainItemWrapper.h; sourceTree = "<group>"; };
 		F78333941CE0722C00A52C8C /* ACEKeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEKeychainItemWrapper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -570,13 +570,13 @@
 				42F787D11D950B5D0094AA05 /* MapKit.framework in Frameworks */,
 				42F787D21D950B5D0094AA05 /* Accelerate.framework in Frameworks */,
 				42F787D31D950B5D0094AA05 /* AudioToolbox.framework in Frameworks */,
+				E864F6E3258B73590096B0EB /* ACEDesKit.framework in Frameworks */,
 				42F787D41D950B5D0094AA05 /* AVFoundation.framework in Frameworks */,
 				42F787D51D950B5D0094AA05 /* CFNetwork.framework in Frameworks */,
 				42F787D61D950B5D0094AA05 /* CoreLocation.framework in Frameworks */,
 				42F787D71D950B5D0094AA05 /* CoreTelephony.framework in Frameworks */,
 				42F787D81D950B5D0094AA05 /* CoreVideo.framework in Frameworks */,
 				42F787DA1D950B5D0094AA05 /* MobileCoreServices.framework in Frameworks */,
-				42F787DB1D950B5D0094AA05 /* libACEDes.a in Frameworks */,
 				42F787DC1D950B5D0094AA05 /* OpenAL.framework in Frameworks */,
 				42F787DD1D950B5D0094AA05 /* IOKit.framework in Frameworks */,
 				42F787DE1D950B5D0094AA05 /* OpenGLES.framework in Frameworks */,
@@ -619,9 +619,7 @@
 		3356F9471A48517200F58330 /* des */ = {
 			isa = PBXGroup;
 			children = (
-				33859D2D1A70CB2F000B05B8 /* ACEDes.h */,
-				DE81D4CC1A4D3D81005D3153 /* libACEDes.a */,
-				3C5AF6E81A4D3213008F8A3D /* FileEncrypt.h */,
+				E864F6E2258B73590096B0EB /* ACEDesKit.framework */,
 			);
 			path = des;
 			sourceTree = "<group>";
@@ -1002,6 +1000,10 @@
 		B220D27615A3152B00D02138 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E8B5D7E7258B4B7A0007E333 /* ACEDesKit.framework */,
+				E8B5D7E3258B4B500007E333 /* libACEDes.a */,
+				E8B5D7562589F6050007E333 /* libACEDes.a */,
+				E8B5D7522589E4AD0007E333 /* libACEDes.a */,
 				427CB8F81E4DAA3B009BC7BC /* libuexUpdate.a */,
 				42F18AAC1E27851900A20E2A /* Ono.framework */,
 				42F18AAD1E27851900A20E2A /* pop.framework */,
@@ -1069,6 +1071,7 @@
 				42F7886D1D950B5D0094AA05 /* ACEBaseDefine.h in Headers */,
 				4272CCC01E2486A500712C54 /* AppCanEngine.h in Headers */,
 				42B3D44E1E6E529900F215B3 /* WidgetOneDelegatePrivate.h in Headers */,
+				42F7881C1D950B5D0094AA05 /* BUtility.h in Headers */,
 				42F788561D950B5D0094AA05 /* EUtility.h in Headers */,
 				427A791F1DDE95B800E85BA4 /* ACESubwidgetManager.h in Headers */,
 				42FAC5B51DCB0EA00072DFCF /* ACEScrollViewDelegateProxy.h in Headers */,
@@ -1077,7 +1080,6 @@
 				4272CCD81E24C43900712C54 /* AppCanEnginePrivate.h in Headers */,
 				4257D7241DF1148F004DE380 /* ACEWindowFilter.h in Headers */,
 				426040951DEC2BB300B49B5C /* ACEAnimation.h in Headers */,
-				42F7881C1D950B5D0094AA05 /* BUtility.h in Headers */,
 				42F787E51D950B5D0094AA05 /* DataAnalysisInfo.h in Headers */,
 				42F787E71D950B5D0094AA05 /* EBrowserViewBounceView.h in Headers */,
 				42F787E81D950B5D0094AA05 /* ACEJSCHandler.h in Headers */,
@@ -1098,7 +1100,6 @@
 				42F787F71D950B5D0094AA05 /* ACEMultiPopoverScrollView.h in Headers */,
 				42F787F81D950B5D0094AA05 /* RESideMenu.h in Headers */,
 				42F787F91D950B5D0094AA05 /* ASIHTTPRequest.h in Headers */,
-				42F787FB1D950B5D0094AA05 /* ACEDes.h in Headers */,
 				42F787FC1D950B5D0094AA05 /* EBrowserWindow.h in Headers */,
 				42F787FD1D950B5D0094AA05 /* WWidget.h in Headers */,
 				42F787FE1D950B5D0094AA05 /* WidgetSQL.h in Headers */,
@@ -1151,7 +1152,6 @@
 				42F788331D950B5D0094AA05 /* EBrowserController.h in Headers */,
 				42F788341D950B5D0094AA05 /* AsyncSocket.h in Headers */,
 				69736114201F37B3008CC9F4 /* ACEMPWindowOptions.h in Headers */,
-				42F788351D950B5D0094AA05 /* FileEncrypt.h in Headers */,
 				42F788381D950B5D0094AA05 /* ASIInputStream.h in Headers */,
 				42F788391D950B5D0094AA05 /* SBJsonWriter.h in Headers */,
 				42F7883A1D950B5D0094AA05 /* crypt.h in Headers */,
@@ -1417,6 +1417,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(BUILD_DIR)",
 					"$(inherited)",
+					"$(PROJECT_DIR)/webkitCorePalm/Classes/des",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";
@@ -1462,6 +1463,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(BUILD_DIR)",
 					"$(inherited)",
+					"$(PROJECT_DIR)/webkitCorePalm/Classes/des",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCanEngine/AppCanEngine-Prefix.pch";

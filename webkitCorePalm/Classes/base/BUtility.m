@@ -48,7 +48,7 @@
 #import "AllConfigParser.h"
 #import "OpenUDID.h"
 
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <AppCanKit/ACInvoker.h>
 #import "DataAnalysisInfo.h"

@@ -30,7 +30,7 @@
 #import "EBrowserWindowContainer.h"
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserToolBar.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 #import "EBrowserWindow.h"
 #import "EBrowserHistoryEntry.h"
 #import "EBrowserViewBounceView.h"

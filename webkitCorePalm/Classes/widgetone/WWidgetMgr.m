@@ -26,11 +26,11 @@
 #import "ZipArchive.h"
 #import "EUExWidgetOne.h"
 #import "WidgetOneDelegate.h"
-#import "FileEncrypt.h"
 #import "ACEConfigXML.h"
-#import "ACEDes.h"
 #import "AppCanEngine.h"
 #import "ACEWidgetUpdateUtility.h"
+
+#import <ACEDesKit/ACEDesKit.h>
 
 @interface WWidgetMgr()
 @property (nonatomic,strong,readwrite)WWidget* mainWidget;
@@ -85,7 +85,7 @@
     NSString *obfuscationStr = [tmpWgtDict objectForKey:CONFIG_TAG_OBFUSCATION];
     if([obfuscationStr isEqualToString:@"true"]){
         wgtobj.obfuscation = F_WWIDGET_OBFUSCATION;
-        ACEDes.decryptionEnable = YES;
+        [ACEDes setDecryptionEnable:YES];
     }else {
         wgtobj.obfuscation = F_WWIDGET_NO_OBFUSCATION;
 

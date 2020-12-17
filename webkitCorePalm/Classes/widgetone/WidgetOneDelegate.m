@@ -31,7 +31,7 @@
 #import "BUtility.h"
 #import <sys/utsname.h>
 #import "WWidget.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 //#import "PluginParser.h"
 #import "JSON.h"
 
@@ -43,7 +43,6 @@
 #import "ACEDrawerViewController.h"
 #import "MMExampleDrawerVisualStateManager.h"
 #import "ACEWebViewController.h"
-#import "ACEDes.h"
 #import "RESideMenu.h"
 #import "DataAnalysisInfo.h"
 #import "EUtility.h"

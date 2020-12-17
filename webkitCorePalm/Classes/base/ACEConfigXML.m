@@ -25,7 +25,7 @@
 #import "ACEConfigXML.h"
 
 #import "WidgetOneDelegate.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 
 
 @implementation ACEConfigXML
