@@ -120,6 +120,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *useAppCanTaskSubmitSSOHost;//uexTaskSubmit登陆所需host
 @property (nonatomic, readonly) NSString *useAppCanTaskSubmitHost;//uexTaskSubmit提交任务所需host
 @property (nonatomic, assign) BOOL validatesSecureCertificate;//是否校验证书
+
+@property (nonatomic, assign) BOOL useValidatesSecureCertificateControl;//是否校验证书（新增）
 @end
 
 
