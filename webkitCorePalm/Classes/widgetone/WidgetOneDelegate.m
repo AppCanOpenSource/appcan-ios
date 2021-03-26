@@ -80,6 +80,10 @@
     return ACEWidgetUpdateUtility.currentWidgetPath;
 }
 
+-(void)setUseValidatesSecureCertificateControl:(BOOL)useValidatesSecureCertificateControl{
+    self.validatesSecureCertificate = useValidatesSecureCertificateControl;
+    _useValidatesSecureCertificateControl = useValidatesSecureCertificateControl;
+}
 
 
 - (void)initializeDefaultSettings{

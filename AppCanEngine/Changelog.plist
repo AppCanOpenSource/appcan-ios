@@ -4,6 +4,7 @@
 <dict>
 	<key>4.5.27</key>
 	<array>
+		<string>适配Xcode12</string>
 		<string>修复解密库不兼容WKWebView的问题，并将解密库调整为动态framework依赖</string>
 		<string>调整安全浏览、媒体播放等行为的默认配置</string>
 	</array>
