@@ -203,6 +203,8 @@
         // 将缓存好的之前修改的UA设置为自定义UA（每次App启动都需要设置）
         tempConfigWKWebView.customUserAgent = _userAgent;
         ACLogDebug(@"AppCan===>FinalCustomUserAgent from NSUserDefaults===>%@", _userAgent);
+    NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
     }
 }
 
