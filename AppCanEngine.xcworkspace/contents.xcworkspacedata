@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../../../../../Desktop/&#x5de5;&#x4f5c;&#x8bb0;&#x5f55;/&#x5c71;&#x897f;&#x80fd;&#x4fe1;/ios_project/AppCanPlugin.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:AppCanEngine.xcodeproj">
    </FileRef>
    <FileRef

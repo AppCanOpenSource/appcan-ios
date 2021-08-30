@@ -752,6 +752,12 @@
  */
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
     ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
+    
+    NSURL *URL = webView.URL;
+    NSString *urlString = URL.absoluteURL;
+    if ([urlString containsString:@"https://itunes.apple.com/cn/app"]) {
+        [UIApplication.sharedApplication openURL:URL];
+    }
     // AppCanWKTODO
     ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
     
