@@ -5,6 +5,7 @@
 	<key>4.6.0</key>
 	<array>
 		<string>适配Xcode12打包</string>
+		<string>WKWebview 无法直接打开AppStore链接问题对应</string>
 	</array>
 	<key>4.5.27</key>
 	<array>
