@@ -11,7 +11,7 @@
 		<string>删除coreML,libbz2系统类库</string>
 		<string>iOS 13 devicetoken适配</string>
 		<string>iOS 13 子应用弹出页面格式适配</string>
-		<string>适配Xcode13</string>
+		<string>适配Xcode13，定制需求全局移除webapp开关，不显示页面加载进度条</string>
 	</array>
 	<key>4.4.23</key>
 	<array>
