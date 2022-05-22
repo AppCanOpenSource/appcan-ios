@@ -214,6 +214,9 @@ NSString * webappShowAactivety;
 		webappShowAactivety = @"yes";
 	}else{webappShowAactivety = @"no";}
     
+    // TODO 因临时深航定制需求，4.4引擎中屏蔽所有加载动画 by yipeng at 20220522
+    webappShowAactivety = @"no";
+    
 	return xmlDict;
 }
 
