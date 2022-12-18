@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.29</key>
+	<array>
+		<string>NewBuildSystem</string>
+		<string>解决 AppStore 审核问题：移除 SCRCException 相关代码</string>
+	</array>
 	<key>4.6.0</key>
 	<array>
 		<string>适配Xcode12打包</string>
