@@ -1733,6 +1733,43 @@ static NSString *clientCertificatePwd = nil;
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation{
 //    [[UIDevice currentDevice] ac_invoke:[self rotateMethod] arguments:ACArgsPack(@(orientation))];
     SEL selector = NSSelectorFromString([self rotateMethod]);
+ 
+#if __IPHONE_16_0 //兼容 Xcode13
+    if (@available(iOS 16.0, *)) {
+        UIWindowScene *windowScene = viewController.view.window.windowScene;
+        if (!windowScene) {
+            return;
+        }
+        [viewController setNeedsUpdateOfSupportedInterfaceOrientations];
+        UIWindowSceneGeometryPreferencesIOS *geometryPreferences = [[UIWindowSceneGeometryPreferencesIOS alloc] init];
+        switch (orientation) {
+            case UIInterfaceOrientationPortrait:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskPortrait;
+                break;
+            case UIInterfaceOrientationPortraitUpsideDown:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskPortraitUpsideDown;
+                break;
+            case UIInterfaceOrientationLandscapeLeft:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskLandscapeLeft;
+                break;
+            case UIInterfaceOrientationLandscapeRight:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskLandscapeRight;
+                break;
+            default:
+                break;
+        }
+        [windowScene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler:^(NSError * _Nonnull error) {
+            //业务代码
+            NSLog(@"menglc errorHandler error %@", error);
+            if (errorHandler) {
+                errorHandler(error);
+            }
+        }];
+        [viewController setNeedsUpdateOfSupportedInterfaceOrientations];
+        return;
+    }
+#endif
+    
     if ([[UIDevice currentDevice] respondsToSelector:selector]) {
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice
                                                                                 instanceMethodSignatureForSelector:selector]];
@@ -1742,6 +1779,8 @@ static NSString *clientCertificatePwd = nil;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
     }
+    [UIViewController attemptRotationToDeviceOrientation];
+     
 }
 
 + (NSString *)rotateMethod{

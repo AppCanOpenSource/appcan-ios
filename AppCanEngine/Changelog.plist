@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.30</key>
+	<array>
+		<string>适配ios16 屏幕选择</string>
+		<string>解决 ios16 无法旋转屏幕问题 </string>
+	</array>
 	<key>4.6.29</key>
 	<array>
 		<string>NewBuildSystem</string>
