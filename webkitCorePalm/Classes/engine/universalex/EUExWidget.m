@@ -520,7 +520,8 @@ static BOOL isAppLaunchedByPush = NO;
         return;
     }
     
-    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey) = inArguments;
+   
+    ACArgsUnpack(NSString *inAppId,NSNumber *inAnimiId,NSString *closeCallbackFuncName,NSString *inOpenerInfo,NSNumber *inAnimiDuration,NSString *inAppkey,NSString *exeJS) = inArguments;
     NSDictionary *info = dictionaryArg(inArguments.firstObject);
     if (info) {
         inAppId = stringArg(info[@"appId"]);
@@ -529,11 +530,11 @@ static BOOL isAppLaunchedByPush = NO;
         inOpenerInfo = stringArg(info[@"info"]);
         inAnimiDuration = numberArg(info[@"animDuration"]);
         inAppkey = stringArg(info[@"appKey"]);
+        exeJS = stringArg(info[@"exeJS"]);
     }
     
-    
-    
-    
+        NSLog(@"appCanEngine ---> Classes--->engine--->universalex ---> euexWidget-->startWidget exeJS:%@",exeJS);
+
     UEX_PARAM_GUARD_NOT_NIL(inAppId);
 
 
@@ -555,6 +556,10 @@ static BOOL isAppLaunchedByPush = NO;
     wgtObj.openMessage = inOpenerInfo;
     wgtObj.openAnimation = inAnimiId.unsignedIntegerValue;
     wgtObj.openAnimationDuration = animiDuration;
+    
+    if (exeJS) {
+        wgtObj.exeJS = exeJS;
+    }
 
     if(![[ACESubwidgetManager defaultManager] islaunchWidget:wgtObj]){
         //判断子应用根视图是否存在

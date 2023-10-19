@@ -1736,7 +1736,8 @@ static NSString *clientCertificatePwd = nil;
  
 #if __IPHONE_16_0 //兼容 Xcode13
     if (@available(iOS 16.0, *)) {
-        UIWindowScene *windowScene = viewController.view.window.windowScene;
+        NSArray *array = [[[UIApplication sharedApplication] connectedScenes] allObjects];
+        UIWindowScene *windowScene = [array firstObject];
         if (!windowScene) {
             return;
         }
@@ -1761,9 +1762,9 @@ static NSString *clientCertificatePwd = nil;
         [windowScene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler:^(NSError * _Nonnull error) {
             //业务代码
             NSLog(@"menglc errorHandler error %@", error);
-            if (errorHandler) {
-                errorHandler(error);
-            }
+           // if (errorHandler) {
+           //     errorHandler(error);
+           // }
         }];
         [viewController setNeedsUpdateOfSupportedInterfaceOrientations];
         return;

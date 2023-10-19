@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.33</key>
+	<array>
+		<string>uexWidget.startWidget 第一个data参数增加exeJS参数,注入js</string>
+	</array>
+	<key>4.6.32</key>
+	<array/>
+	<key>item 0</key>
+	<string>xcode14 转屏</string>
 	<key>4.6.30</key>
 	<array>
 		<string>适配ios16 屏幕选择</string>

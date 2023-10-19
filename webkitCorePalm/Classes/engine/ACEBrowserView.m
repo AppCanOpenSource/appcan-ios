@@ -603,6 +603,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)loadExeJS{
+    NSLog(@"engine--->uexWidget-->exeJS: %@", _mExeJS);
     if (_mExeJS) {
         [self ac_evaluateJavaScript:_mExeJS];
     }
@@ -701,7 +702,9 @@ const CGFloat loadingVisibleHeight = 60.0f;
         // Fallback on earlier versions
     } // 禁用苹果的欺诈性网站警告(Fraudulent Website Warning)
     [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
-//    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
+   // if (@available(iOS 10.0, *)){
+   //    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
+   // }
     configuration.preferences = preferences;
     // 使用单例WKProcessPool，这样可以共享localStorage
     configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
@@ -935,6 +938,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	if (!self.mwWgt) {
 		return;
 	}
+    
+    
+    //自定义注入JS
+    [self loadExeJS];
+
     EBrowserWindowContainer *eBrwWndContainer = self.meBrwCtrler.rootWindowContainer;
 	if (!eBrwWndContainer) {
 		return;
