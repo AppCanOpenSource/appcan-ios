@@ -2,11 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.29</key>
+	<array>
+		<string>NewBuildSystem</string>
+		<string>解决 AppStore 审核问题：移除 SCRCException 相关代码</string>
+	</array>
+	<key>4.6.0</key>
+	<array>
+		<string>适配Xcode12打包</string>
+		<string>WKWebview 无法直接打开AppStore链接问题对应</string>
+	</array>
+	<key>4.5.27</key>
+	<array>
+		<string>适配Xcode12，证书检测逻辑完善</string>
+		<string>修复解密库不兼容WKWebView的问题，并将解密库调整为动态framework依赖</string>
+		<string>调整安全浏览、媒体播放等行为的默认配置</string>
+	</array>
 	<key>4.5.26</key>
 	<array>
 		<string>修复多浮动窗口无法加载第二个之后的窗口的问题</string>
 		<string>WKWebView请求不到本地路径文件的问题处理</string>
 		<string>回调字符串数据时对特殊字符增加转义符处理，防止JS执行时丢失特殊字符导致的回调失败等错误</string>
+		<string>修复AppCanUserAgent标识丢失的问题</string>
 	</array>
 	<key>4.5.25</key>
 	<array>

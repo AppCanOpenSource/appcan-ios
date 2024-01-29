@@ -27,7 +27,7 @@
 #import "EBrowser.h"
 #import "BUtility.h"
 #import "BUIAlertView.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 #import "WWidget.h"
 #import "EBrowserHistoryEntry.h"
 #import "BToastView.h"
@@ -279,7 +279,11 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     components.query = nil;
     components.fragment = nil;
     NSURL *currentURL = [components URL];
-    urlStr = [[currentURL URLByDeletingLastPathComponent].absoluteString stringByAppendingPathComponent:urlStr];
+    NSURL *parrentURL = [currentURL URLByDeletingLastPathComponent];
+    NSString *parrentURLStr = parrentURL.absoluteString;
+    // 字符串如果采用stringByAppendingPathComponent，会导致将http:// 变为 http:/ 原因未知，可能是这个方法本来就不是处理http路径的吧。所以改为直接拼字符串就可以避免了。
+//    urlStr = [parrentURLStr stringByAppendingPathComponent:urlStr];
+    urlStr = [parrentURLStr stringByAppendingString:urlStr];
     url = [NSURL URLWithString:urlStr];
     if (url.isFileURL) {
         url = url.standardizedURL;

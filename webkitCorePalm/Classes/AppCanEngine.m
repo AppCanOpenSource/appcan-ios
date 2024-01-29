@@ -25,9 +25,9 @@
 #import "AppCanEngine.h"
 #import "ACEPluginParser.h"
 #import "BUtility.h"
-#import "ACEDes.h"
 #import "ACEConfigXML.h"
 #import <AppCanKit/AppCanKit.h>
+#import <ACEDesKit/ACEDesKit.h>
 
 #import <objc/message.h>
 #import "EBrowserController.h"

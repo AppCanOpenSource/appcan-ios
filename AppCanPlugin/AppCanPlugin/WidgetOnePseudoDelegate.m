@@ -54,6 +54,7 @@
         self.useAppCanTaskSubmitSSOHost = @"";
         self.useAppCanTaskSubmitHost = @"";
         self.validatesSecureCertificate = NO;
+        self.useValidatesSecureCertificateControl = NO;
 	}
 	return self;
 }

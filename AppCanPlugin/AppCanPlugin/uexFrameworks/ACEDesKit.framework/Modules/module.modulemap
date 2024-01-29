@@ -1,0 +1,6 @@
+framework module ACEDesKit {
+  umbrella header "ACEDesKit.h"
+
+  export *
+  module * { export * }
+}

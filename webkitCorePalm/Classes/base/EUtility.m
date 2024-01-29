@@ -244,7 +244,9 @@ callbackWithFunctionKeyPath:(NSString *)JSKeyPath
 
 
 + (NSURL*)brwViewUrl:(EBrowserView*)inBrwView {
-	return [inBrwView.request URL];
+    // AppCanWKTODO 替代实现方式
+    //	return [inBrwView.request URL];
+    return [inBrwView curUrl];
 }
 
 

@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface ACEDes : NSObject
-@property (nonatomic,assign,class)BOOL decryptionEnable;
 
 + (void)enable;
+
++ (void)setDecryptionEnable:(BOOL)enable;
+
++ (BOOL)decryptionEnable;
 
 @end

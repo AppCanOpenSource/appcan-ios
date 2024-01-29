@@ -31,7 +31,7 @@
 #import "EBrowserWindowContainer.h"
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserToolBar.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 #import "EBrowserWindow.h"
 #import "EBrowserViewBounceView.h"
 #import "WidgetOneDelegate.h"
@@ -298,26 +298,27 @@
 //@property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 -(UIDataDetectorTypes)dataDetectorTypes
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
 //    return [_meBrowserView dataDetectorTypes];
 }
 
 - (void)setDataDetectorTypes:(UIDataDetectorTypes)dataDetectorTypes
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
+    // 监测数据类型：用于设定电话号码、网址、电子邮件和日期等文字变为链接文字
 //    [_meBrowserView setDataDetectorTypes:dataDetectorTypes];
 }
 
 //@property (nonatomic) BOOL allowsInlineMediaPlayback;
 -(BOOL)allowsInlineMediaPlayback
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
 //    return [_meBrowserView allowsInlineMediaPlayback];
 }
 
 - (void)setAllowsInlineMediaPlayback:(BOOL)allowsInlineMediaPlayback
 {
-    // AppCanWKTODO 暂无实现方式
+    // AppCanWKTODO 移动到了WKWebViewConfiguration中配置
 //    [_meBrowserView setAllowsInlineMediaPlayback:allowsInlineMediaPlayback];
 }
 //@property (nonatomic) BOOL mediaPlaybackRequiresUserAction;
@@ -751,6 +752,16 @@
  */
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
     ACLogError(@"AppCan4.0===>WKNavigationDelegate==>didFailProvisionalNavigation: %@", error);
+    
+    NSDictionary *userInfo = error.userInfo;
+    NSString *urlString = userInfo[@"NSErrorFailingURLStringKey"];
+    NSLog(@"urlString:%@",urlString);
+    if ([urlString containsString:@"itms-appss://apps.apple.com/cn/app/"]) {
+        urlString = [urlString substringFromIndex:35];
+        urlString = [NSString stringWithFormat:@"https://itunes.apple.com/cn/app/%@",urlString];
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:urlString]];
+        NSLog(@"UIApplication.sharedApplication openURL:%@",urlString);
+    }
     // AppCanWKTODO
     ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
     

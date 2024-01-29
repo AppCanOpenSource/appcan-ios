@@ -30,7 +30,7 @@
 #import "EBrowserWindowContainer.h"
 #import "EBrowserWidgetContainer.h"
 #import "EBrowserToolBar.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 #import "EBrowserWindow.h"
 #import "EBrowserHistoryEntry.h"
 #import "EBrowserViewBounceView.h"
@@ -695,12 +695,23 @@ const CGFloat loadingVisibleHeight = 60.0f;
     WKPreferences *preferences = [WKPreferences new];
     preferences.javaScriptCanOpenWindowsAutomatically = NO;
     preferences.javaScriptEnabled = YES;
+    if (@available(iOS 13.0, *)) {
+        preferences.fraudulentWebsiteWarningEnabled = NO;
+    } else {
+        // Fallback on earlier versions
+    } // 禁用苹果的欺诈性网站警告(Fraudulent Website Warning)
     [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
 //    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
     configuration.preferences = preferences;
     // 使用单例WKProcessPool，这样可以共享localStorage
     configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
     configuration.websiteDataStore = [WKWebsiteDataStore defaultDataStore];
+    configuration.allowsInlineMediaPlayback = YES;
+    configuration.allowsPictureInPictureMediaPlayback = YES;
+    //    configuration.dataDetectorTypes = WKDataDetectorTypeAll; // 配置监测数据类型变为链接文字
+    //    configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile; // 设置默认手机模式还是桌面模式
+    configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAll;
+    configuration.requiresUserActionForMediaPlayback = YES; // 配置需要用户操作才进行媒体播放
     // 初始化WKWebView
     self = [super initWithFrame:frame configuration:configuration];
 	if (self) {

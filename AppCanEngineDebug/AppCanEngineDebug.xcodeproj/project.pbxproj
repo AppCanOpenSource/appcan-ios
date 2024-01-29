@@ -68,6 +68,10 @@
 		6CC60442157DCC0F00A3E13E /* Beqtucontent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC60441157DCC0F00A3E13E /* Beqtucontent.m */; };
 		B2403BF51833923A002530F6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2403BF71833923A002530F6 /* Localizable.strings */; };
 		DE9F08231A5FD6460055FD61 /* CBSchemesList.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE9F08221A5FD6460055FD61 /* CBSchemesList.plist */; };
+		E864F70A258B77260096B0EB /* ACEDesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E864F706258B77210096B0EB /* ACEDesKit.framework */; };
+		E864F70B258B77260096B0EB /* ACEDesKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E864F706258B77210096B0EB /* ACEDesKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E864F70C258B772B0096B0EB /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E864F707258B77210096B0EB /* AFNetworking.framework */; };
+		E864F70D258B772C0096B0EB /* AFNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E864F707258B77210096B0EB /* AFNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60367157DCCEF00A3E13E /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -78,7 +82,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E864F70B258B77260096B0EB /* ACEDesKit.framework in Embed Frameworks */,
 				420F70FE1E4B034600B4C626 /* AppCanKitSwift.framework in Embed Frameworks */,
+				E864F70D258B772C0096B0EB /* AFNetworking.framework in Embed Frameworks */,
 				420F70F51E4B034600B4C626 /* pop.framework in Embed Frameworks */,
 				420F70F21E4B034600B4C626 /* AppCanEngine.framework in Embed Frameworks */,
 				420F70FB1E4B034600B4C626 /* AppCanKit.framework in Embed Frameworks */,
@@ -158,6 +164,8 @@
 		DE94A2D818F7CE12000CA6E7 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		DE94A2DA18F7CE48000CA6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DE9F08221A5FD6460055FD61 /* CBSchemesList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBSchemesList.plist; sourceTree = "<group>"; };
+		E864F706258B77210096B0EB /* ACEDesKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ACEDesKit.framework; sourceTree = "<group>"; };
+		E864F707258B77210096B0EB /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +189,7 @@
 				420041851BABCD33000A57F5 /* libresolv.tbd in Frameworks */,
 				F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */,
 				420F71051E4B052700B4C626 /* Foundation.framework in Frameworks */,
+				E864F70C258B772B0096B0EB /* AFNetworking.framework in Frameworks */,
 				420F71041E4B052700B4C626 /* QuickLook.framework in Frameworks */,
 				420F71031E4B052700B4C626 /* ImageIO.framework in Frameworks */,
 				420F71021E4B052700B4C626 /* CoreText.framework in Frameworks */,
@@ -203,6 +212,7 @@
 				6CC6037D157DCCEF00A3E13E /* CoreTelephony.framework in Frameworks */,
 				6CC6037E157DCCEF00A3E13E /* CoreVideo.framework in Frameworks */,
 				6CC6037F157DCCEF00A3E13E /* MobileCoreServices.framework in Frameworks */,
+				E864F70A258B77260096B0EB /* ACEDesKit.framework in Frameworks */,
 				6CC60380157DCCEF00A3E13E /* OpenAL.framework in Frameworks */,
 				6CC60381157DCCEF00A3E13E /* OpenGLES.framework in Frameworks */,
 				6CC60382157DCCEF00A3E13E /* QuartzCore.framework in Frameworks */,
@@ -217,6 +227,8 @@
 		469DCDD0166EFA5100FC2F72 /* uexFrameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E864F706258B77210096B0EB /* ACEDesKit.framework */,
+				E864F707258B77210096B0EB /* AFNetworking.framework */,
 			);
 			path = uexFrameworks;
 			sourceTree = "<group>";
@@ -383,6 +395,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				"zh-Hans",
 			);
@@ -557,7 +570,6 @@
 		6CC6034A157DCC0F00A3E13E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "";
@@ -568,6 +580,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AppCanEngineDebug/uexFrameworks\"",
+					"$(PROJECT_DIR)/AppCanEngineDebug/uexFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -590,7 +603,6 @@
 		6CC6034B157DCC0F00A3E13E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "";
@@ -601,6 +613,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AppCanEngineDebug/uexFrameworks\"",
+					"$(PROJECT_DIR)/AppCanEngineDebug/uexFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -658,7 +671,6 @@
 		7EDE104515D118BA00C21FC7 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "";
@@ -669,6 +681,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AppCanEngineDebug/uexFrameworks\"",
+					"$(PROJECT_DIR)/AppCanEngineDebug/uexFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";

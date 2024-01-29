@@ -31,7 +31,7 @@
 #import "BUtility.h"
 #import <sys/utsname.h>
 #import "WWidget.h"
-#import "FileEncrypt.h"
+#import <ACEDesKit/ACEDesKit.h>
 //#import "PluginParser.h"
 #import "JSON.h"
 
@@ -43,7 +43,6 @@
 #import "ACEDrawerViewController.h"
 #import "MMExampleDrawerVisualStateManager.h"
 #import "ACEWebViewController.h"
-#import "ACEDes.h"
 #import "RESideMenu.h"
 #import "DataAnalysisInfo.h"
 #import "EUtility.h"
@@ -81,6 +80,10 @@
     return ACEWidgetUpdateUtility.currentWidgetPath;
 }
 
+-(void)setUseValidatesSecureCertificateControl:(BOOL)useValidatesSecureCertificateControl{
+    self.validatesSecureCertificate = useValidatesSecureCertificateControl;
+    _useValidatesSecureCertificateControl = useValidatesSecureCertificateControl;
+}
 
 
 - (void)initializeDefaultSettings{
@@ -177,7 +180,7 @@
     __block NSString *_userAgent = nil;
     _userAgent = [ud objectForKey:ACE_USERAGENT];
     
-    if(_userAgent == nil) {
+    if(_userAgent == nil || ![_userAgent isKindOfClass:[NSString class]] || [_userAgent length] == 0) {
         __block WKWebView * tempConfigWKWebView = [[WKWebView alloc] initWithFrame:CGRectZero];
         [tempConfigWKWebView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id result, NSError * error) {
             if (tempConfigWKWebView != nil && error == nil) {
@@ -195,6 +198,13 @@
                 ACLogError(@"AppCan===>Fail to get origin UserAgent, error: %@", error);
             }
         }];
+    }else{
+        __block WKWebView * tempConfigWKWebView = [[WKWebView alloc] initWithFrame:CGRectZero];
+        // 将缓存好的之前修改的UA设置为自定义UA（每次App启动都需要设置）
+        tempConfigWKWebView.customUserAgent = _userAgent;
+        ACLogDebug(@"AppCan===>FinalCustomUserAgent from NSUserDefaults===>%@", _userAgent);
+    NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
     }
 }
 
