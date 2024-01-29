@@ -207,6 +207,19 @@
         
         _meBrowserView = [[ACEBrowserView alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType BrwView:(EBrowserView *)self];
         
+        // iOS 16.4以上，需要单独开启调试开关来控制Safari调试模式
+        if (@available(iOS 16.4, *)) {
+            // 判断调试开关
+            BOOL isDebug = eInBrwCtrler.mwWgtMgr.mainWidget.isDebug;
+            // 先判断主应用debug开关，主应用开则全局开，主应用关则以当前页面所属应用的debug开关为准。
+            if (isDebug == NO) {
+                isDebug = inWgt.isDebug;
+            }
+            if (isDebug == YES) {
+                _meBrowserView.inspectable = YES;
+            }
+        }
+        
         _meBrowserView.superDelegate = self;
         
         [self addSubview:_meBrowserView];
