@@ -56,7 +56,7 @@
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
-@interface ACEBrowserView()<WKUIDelegate>
+@interface ACEBrowserView()<WKUIDelegate, WKHTTPCookieStoreObserver>
 
 @end
 
@@ -702,6 +702,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
         // Fallback on earlier versions
     } // 禁用苹果的欺诈性网站警告(Fraudulent Website Warning)
     [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+
+    //add by gao
+//    [configuration setValue:@YES forKey:@"_allowUniversalAccessFromFileURLs"];
+
    // if (@available(iOS 10.0, *)){
    //    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
    // }
@@ -709,6 +713,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
     // 使用单例WKProcessPool，这样可以共享localStorage
     configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
     configuration.websiteDataStore = [WKWebsiteDataStore defaultDataStore];
+    // 监听WKWebView中Cookie变动并尝试同步
+    if (@available(iOS 11.0, *)) {
+        [configuration.websiteDataStore.httpCookieStore addObserver:self];
+    }
     configuration.allowsInlineMediaPlayback = YES;
     configuration.allowsPictureInPictureMediaPlayback = YES;
     //    configuration.dataDetectorTypes = WKDataDetectorTypeAll; // 配置监测数据类型变为链接文字
@@ -724,6 +732,18 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
 	return self;
 }
+
+#pragma mark - WKHTTPCookieStoreObserver
+- (void)cookiesDidChangeInCookieStore:(WKHTTPCookieStore *)cookieStore {
+//    ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore");
+    [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> * _Nonnull cookies) {
+        for (NSHTTPCookie *cookie in cookies) {
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+//            ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore===>completionHandler: cookie: %@ %@", cookie.name, cookie.value);
+        }
+    }];
+}
+
 -(void)didSwipeRight:(id)sender
 {
     if (!isSwiped && self.swipeCallbackEnabled)
