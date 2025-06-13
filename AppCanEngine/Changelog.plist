@@ -2,14 +2,34 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.43</key>
+	<array>
+		<string>增加WKHTTPCookieStore向NSHTTPCookieStorage自动同步的逻辑</string>
+	</array>
+	<key>4.6.42</key>
+	<array>
+		<string>增加微信,阿里支付jsapi调用</string>
+	</array>
+	<key>4.6.41</key>
+	<array/>
+	<key>4.6.40</key>
+	<array>
+		<string>升级解密模块,解决wkwebview的post参数请求丢失bug</string>
+	</array>
+	<key>4.6.37</key>
+	<array>
+		<string>取消解密功能解决post 参数问题</string>
+	</array>
+	<key>4.6.34</key>
+	<array>
+		<string>在EBrowserView.m中增加[webvidew reload]</string>
+	</array>
 	<key>4.6.33</key>
 	<array>
 		<string>uexWidget.startWidget 第一个data参数增加exeJS参数,注入js</string>
 	</array>
 	<key>4.6.32</key>
 	<array/>
-	<key>item 0</key>
-	<string>xcode14 转屏</string>
 	<key>4.6.30</key>
 	<array>
 		<string>适配ios16 屏幕选择</string>
