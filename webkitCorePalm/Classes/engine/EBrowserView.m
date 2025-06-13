@@ -869,6 +869,15 @@ static NSInteger kMaxErrorRetryCount = 5;
     if (webView == nil || ![webView isKindOfClass:[ACEBrowserView class]]) {
         return;
     }
+ 
+    //add by gao  for invoke weixin app or alipay app
+    if ([urlStr containsString:@"weixin://wap/pay"] || [urlStr containsString:@"alipay://alipayclient"])
+    {
+        [[UIApplication sharedApplication] openURL:requestURL];
+        decisionHandler(WKNavigationActionPolicyCancel);
+        return;
+    }
+    //end by gao
     
     ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
     NSURL *oldURL = [eBrwView curUrl];
@@ -977,6 +986,7 @@ static NSInteger kMaxErrorRetryCount = 5;
  */
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView API_AVAILABLE(macos(10.11), ios(9.0)){
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>webViewWebContentProcessDidTerminate");
+    [webView reload];
 }
 
 #pragma mark - error page path

@@ -3390,20 +3390,20 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     switch (orientation){
         case ACEInterfaceOrientationProtrait:
         case ACEInterfaceOrientationVertical:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+            [BUtility rotateToOrientation:UIInterfaceOrientationPortrait withController:self.EBrwView.meBrwCtrler];
             break;
         }
         case ACEInterfaceOrientationLandscapeRight:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
+            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft withController:self.EBrwView.meBrwCtrler];
             break;
         }
         case ACEInterfaceOrientationLandscapeLeft:
         case ACEInterfaceOrientationHorizontal:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
+            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight withController:self.EBrwView.meBrwCtrler];
             break;
         }
         case ACEInterfaceOrientationProtraitUpsideDown:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
+            [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown withController:self.EBrwView.meBrwCtrler];
             break;
         }
         default:
@@ -3910,5 +3910,10 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     return @"testJSBridge OK";
 }
 
++ (void)applicationDidBecomeActive:(UIApplication *)application {
+    // by gao
+    NSLog(@"Appcan4.0--->EUExWindow--->applicationDidBecomeActive");
+    [[UIApplication sharedApplication].keyWindow reloadInputViews];
+}
 
 @end
