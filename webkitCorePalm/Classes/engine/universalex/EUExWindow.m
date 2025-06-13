@@ -3390,20 +3390,20 @@ static NSTimeInterval getAnimationDuration(NSNumber * durationMillSeconds){
     switch (orientation){
         case ACEInterfaceOrientationProtrait:
         case ACEInterfaceOrientationVertical:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+            [BUtility rotateToOrientation:UIInterfaceOrientationPortrait withController:self.EBrwView.meBrwCtrler];
             break;
         }
         case ACEInterfaceOrientationLandscapeRight:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft];
+            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeLeft withController:self.EBrwView.meBrwCtrler];
             break;
         }
         case ACEInterfaceOrientationLandscapeLeft:
         case ACEInterfaceOrientationHorizontal:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight];
+            [BUtility rotateToOrientation:UIInterfaceOrientationLandscapeRight withController:self.EBrwView.meBrwCtrler];
             break;
         }
         case ACEInterfaceOrientationProtraitUpsideDown:{
-            [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown];
+            [BUtility rotateToOrientation:UIInterfaceOrientationPortraitUpsideDown withController:self.EBrwView.meBrwCtrler];
             break;
         }
         default:
