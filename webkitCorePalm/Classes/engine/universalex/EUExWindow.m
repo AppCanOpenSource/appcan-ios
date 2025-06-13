@@ -3910,5 +3910,10 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
     return @"testJSBridge OK";
 }
 
++ (void)applicationDidBecomeActive:(UIApplication *)application {
+    // by gao
+    NSLog(@"Appcan4.0--->EUExWindow--->applicationDidBecomeActive");
+    [[UIApplication sharedApplication].keyWindow reloadInputViews];
+}
 
 @end
