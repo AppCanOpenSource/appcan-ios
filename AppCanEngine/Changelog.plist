@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.44</key>
+	<array>
+		<string>修复AppCanUserAgent丢失的问题</string>
+	</array>
 	<key>4.6.43</key>
 	<array>
 		<string>增加WKHTTPCookieStore向NSHTTPCookieStorage自动同步的逻辑</string>
