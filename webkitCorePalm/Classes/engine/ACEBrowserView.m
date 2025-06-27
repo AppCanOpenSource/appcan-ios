@@ -43,6 +43,7 @@
 #import <objc/message.h>
 #import "DataAnalysisInfo.h"
 #import "ACEDrawerViewController.h"
+#import "ACEVersion.h"
 
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEJSCInvocation.h"
@@ -624,7 +625,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
     self.indicatorView = indicator;
     [self addSubview:self.indicatorView];
     
-    
     //JAYTAG --> xcode8编译会失败
     //设置webView自带的scrollView，使得view充满屏幕
     if(@available(iOS 11.0, *)){
@@ -723,6 +723,12 @@ const CGFloat loadingVisibleHeight = 60.0f;
     //    configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile; // 设置默认手机模式还是桌面模式
     configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAll;
     configuration.requiresUserActionForMediaPlayback = YES; // 配置需要用户操作才进行媒体播放
+    
+    // 配置AppCanUserAgent关键字
+    NSString *engineVersion = [ACEVersion version];
+    NSString * acEngineUA= [NSString stringWithFormat:@"AppCan/%@ (WKWebView) ", engineVersion];
+    configuration.applicationNameForUserAgent = acEngineUA;
+    
     // 初始化WKWebView
     self = [super initWithFrame:frame configuration:configuration];
 	if (self) {

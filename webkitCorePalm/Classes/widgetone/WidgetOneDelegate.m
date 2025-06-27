@@ -143,8 +143,6 @@
     self.useAppCanTaskSubmitHost = @"";
     //是否校验证书
     self.validatesSecureCertificate = NO;
-    
-    [self setAppCanUserAgent];
 }
 
 - (instancetype)initWithDevMode{
@@ -173,41 +171,6 @@
     return self;
     
 }
-
--(void)setAppCanUserAgent {
-    
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    __block NSString *_userAgent = nil;
-    _userAgent = [ud objectForKey:ACE_USERAGENT];
-    
-    if(_userAgent == nil || ![_userAgent isKindOfClass:[NSString class]] || [_userAgent length] == 0) {
-        __block WKWebView * tempConfigWKWebView = [[WKWebView alloc] initWithFrame:CGRectZero];
-        [tempConfigWKWebView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id result, NSError * error) {
-            if (tempConfigWKWebView != nil && error == nil) {
-                NSString * originalUserAgent = result;
-                ACLogDebug(@"AppCan===>OriginalUserAgent===>%@", originalUserAgent);
-                NSString * acEngineUA= [NSString stringWithFormat:@"AppCan/%@ (WKWebView) ", @"4.5"];
-                _userAgent = [NSString stringWithFormat:@"%@ %@", originalUserAgent, acEngineUA];
-                [ud setObject:_userAgent forKey:ACE_USERAGENT];
-                NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
-                [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
-                // 将修改后的UA设置为自定义UA
-                tempConfigWKWebView.customUserAgent = _userAgent;
-                ACLogDebug(@"AppCan===>FinalCustomUserAgent===>%@", _userAgent);
-            }else{
-                ACLogError(@"AppCan===>Fail to get origin UserAgent, error: %@", error);
-            }
-        }];
-    }else{
-        __block WKWebView * tempConfigWKWebView = [[WKWebView alloc] initWithFrame:CGRectZero];
-        // 将缓存好的之前修改的UA设置为自定义UA（每次App启动都需要设置）
-        tempConfigWKWebView.customUserAgent = _userAgent;
-        ACLogDebug(@"AppCan===>FinalCustomUserAgent from NSUserDefaults===>%@", _userAgent);
-    NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:_userAgent, @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
-    }
-}
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
