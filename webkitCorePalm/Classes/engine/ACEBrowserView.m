@@ -726,7 +726,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
     // 配置AppCanUserAgent关键字
     NSString *engineVersion = [ACEVersion version];
-    NSString * acEngineUA= [NSString stringWithFormat:@"AppCan/%@ (WKWebView) ", engineVersion];
+    // note: 增加Mobile/15E148的原因是因为以前UIWebView时iPad中会携带Mobile字样，某项目（sh）会以此作为关键标识
+    NSString * acEngineUA= [NSString stringWithFormat:@"Mobile/15E148 AppCan/%@ (WKWebView) ", engineVersion];
     configuration.applicationNameForUserAgent = acEngineUA;
     
     // 初始化WKWebView
