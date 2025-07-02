@@ -4,7 +4,7 @@
 <dict>
 	<key>4.6.45</key>
 	<array>
-		<string>调整AppCanUserAgent，增加Mobile/15E148字样</string>
+		<string>调整AppCanUserAgent，增加Mobile/15E148字样， iPad机型增加iPad字样</string>
 	</array>
 	<key>4.6.44</key>
 	<array>
