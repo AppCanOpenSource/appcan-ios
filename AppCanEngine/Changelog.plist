@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.45</key>
+	<array>
+		<string>调整AppCanUserAgent，增加Mobile/15E148字样</string>
+	</array>
 	<key>4.6.44</key>
 	<array>
 		<string>修复AppCanUserAgent丢失的问题</string>
