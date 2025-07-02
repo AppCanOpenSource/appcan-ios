@@ -720,14 +720,22 @@ const CGFloat loadingVisibleHeight = 60.0f;
     configuration.allowsInlineMediaPlayback = YES;
     configuration.allowsPictureInPictureMediaPlayback = YES;
     //    configuration.dataDetectorTypes = WKDataDetectorTypeAll; // 配置监测数据类型变为链接文字
-    //    configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile; // 设置默认手机模式还是桌面模式
+    if (@available(iOS 13.0, *)) {
+        configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile; // 设置默认手机模式还是桌面模式
+    }
     configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAll;
     configuration.requiresUserActionForMediaPlayback = YES; // 配置需要用户操作才进行媒体播放
     
+    NSString *markIpad = @"";
+    if ([BUtility isIpad]) {
+        markIpad = @"iPad ";
+    } else {
+        markIpad = @"";
+    }
     // 配置AppCanUserAgent关键字
     NSString *engineVersion = [ACEVersion version];
     // note: 增加Mobile/15E148的原因是因为以前UIWebView时iPad中会携带Mobile字样，某项目（sh）会以此作为关键标识
-    NSString * acEngineUA= [NSString stringWithFormat:@"Mobile/15E148 AppCan/%@ (WKWebView) ", engineVersion];
+    NSString * acEngineUA= [NSString stringWithFormat:@"%@Mobile/15E148 AppCan/%@ (WKWebView) ", markIpad, engineVersion];
     configuration.applicationNameForUserAgent = acEngineUA;
     
     // 初始化WKWebView

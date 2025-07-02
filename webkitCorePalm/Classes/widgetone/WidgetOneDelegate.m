@@ -57,8 +57,6 @@
 #import "AppCanEngine.h"
 #import "ACEWidgetUpdateUtility.h"
 
-#define ACE_USERAGENT @"AppCanUserAgent"
-
 
 @interface WidgetOneDelegate()<RESideMenuDelegate,UNUserNotificationCenterDelegate>
 
