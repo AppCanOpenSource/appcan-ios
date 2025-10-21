@@ -752,10 +752,14 @@ const CGFloat loadingVisibleHeight = 60.0f;
 - (void)cookiesDidChangeInCookieStore:(WKHTTPCookieStore *)cookieStore {
 //    ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore");
     [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> * _Nonnull cookies) {
-        for (NSHTTPCookie *cookie in cookies) {
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-//            ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore===>completionHandler: cookie: %@ %@", cookie.name, cookie.value);
-        }
+        // 将所有对 NSHTTPCookieStorage 的操作派发到主线程
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (NSHTTPCookie *cookie in cookies) {
+                // 在主线程上安全地调用 setCookie:
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+//                ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore===>completionHandler: cookie: %@ %@", cookie.name, cookie.value);
+            }
+        });
     }];
 }
 
