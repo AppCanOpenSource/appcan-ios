@@ -750,18 +750,42 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
 #pragma mark - WKHTTPCookieStoreObserver
 - (void)cookiesDidChangeInCookieStore:(WKHTTPCookieStore *)cookieStore {
-//    ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore");
+    if (@available(iOS 15.0, *)) {
+        // iOS15以上可以安全的同步，15以下的情况若执行同步可能造成死循环。（iOS15以下的情况会在）
+//        ACLogDebug(@"AppCan===>syncCookies===>cookiesDidChangeInCookieStore");
+        // 防抖处理：取消之前的同步任务，0.5 秒后重新执行
+        NSTimeInterval interval = 0.5;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(syncCookiesFromWebView:) object:cookieStore];
+        [self performSelector:@selector(syncCookiesFromWebView:) withObject:cookieStore afterDelay:interval];
+    }
+}
+
+// 自定义方法，用于将WKHttpCookieStore同步给NSHTTPCookieStorage
+- (void)syncCookiesFromWebView:(WKHTTPCookieStore *)cookieStore {
+    ACLogDebug(@"AppCan===>syncCookies===>cookiesDidChangeInCookieStore===>syncCookiesFromWebView");
     [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> * _Nonnull cookies) {
-        // 将所有对 NSHTTPCookieStorage 的操作派发到主线程
-        dispatch_async(dispatch_get_main_queue(), ^{
-            for (NSHTTPCookie *cookie in cookies) {
-                // 在主线程上安全地调用 setCookie:
+        for (NSHTTPCookie *cookie in cookies) {
+            // 将所有对 NSHTTPCookieStorage 的操作派发到主线程
+            // 在主线程上安全地调用 setCookie:
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-//                ACLogDebug(@"AppCan===>cookiesDidChangeInCookieStore===>completionHandler: cookie: %@ %@", cookie.name, cookie.value);
-            }
-        });
+//                ACLogDebug(@"AppCan===>syncCookies===>cookiesDidChangeInCookieStore===>completionHandler: cookie: %@ %@", cookie.name, cookie.value);
+            });
+        }
     }];
 }
+
+// 自定义方法，用于将WKHttpCookieStore同步给NSHTTPCookieStorage
+- (void)syncCookiesFromWKSelf {
+    if (@available(iOS 15.0, *)) {
+        return;
+    }
+    ACLogDebug(@"AppCan===>syncCookiesFromWKSelf===>系统版本低于iOS15.0");
+    WKHTTPCookieStore *cookieStore = self.configuration.websiteDataStore.httpCookieStore;
+    [self syncCookiesFromWebView:cookieStore];
+}
+
+#pragma mark - WKHTTPCookieStoreObserver end
 
 -(void)didSwipeRight:(id)sender
 {
@@ -855,7 +879,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
             
             iOS7Style = 1;
         }
-    } 
+    }
+    
+    // iOS14及以下时需要在WKWebView初始化时主动同步WKHttpCookie到NSHTTPCookieStorage
+    [self syncCookiesFromWKSelf];
     
     BOOL isStatusBarHidden = [[[NSBundle mainBundle].infoDictionary valueForKey:@"UIStatusBarHidden"] boolValue];
     //注入插件js
