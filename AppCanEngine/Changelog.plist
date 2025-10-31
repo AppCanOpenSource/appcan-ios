@@ -2,9 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>4.6.46</key>
+	<key>4.6.47</key>
 	<array>
-		<string>修复iOS14后，43版本新增的Cookie同步机制可能的线程安全问题</string>
+		<string>修复iOS11-14系统中，43版本新增的Cookie同步机制导致循环调用问题</string>
 	</array>
 	<key>4.6.45</key>
 	<array>
