@@ -116,6 +116,8 @@
 @property (nonatomic,strong) ACEMPWindowOptions *indexWindowOptions;
 @property (nonatomic,assign) BOOL isFirstStartWithConfig;
 
+@property (nonatomic, strong) NSString *exeJS;
+
 //公众号新增参数
 //子widget应用中页面无法加载时的错误页面路径，默认为主应用的。
 @property (nonatomic,strong) NSString *errorPath;

@@ -32,6 +32,9 @@
 
 
 -(void)start:(WWidget*)inWWgt {
+    if (self.meBrwCtrler.widget.exeJS) {
+        [self.meBrwCtrler.rootWindow.meBrwView setExeJS:self.meBrwCtrler.widget.exeJS];
+    }
 	[self.meBrwCtrler.rootWindow.meBrwView loadWidgetWithQuery:NULL];
 }
 

@@ -138,7 +138,7 @@
 	//强制转屏
 	UIInterfaceOrientation cOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	if ((cOrientation == UIInterfaceOrientationLandscapeLeft) || (cOrientation == UIInterfaceOrientationLandscapeRight)) {
-        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait];
+        [BUtility rotateToOrientation:UIInterfaceOrientationPortrait withController:eBrwCtrler];
         eBrwCtrler.meBrwMainFrm.meBrwWgtContainer.meRootBrwWndContainer.meRootBrwWnd.meBrwView.meBrwCtrler.mFlag = 1;
 		
 	}

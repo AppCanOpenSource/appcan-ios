@@ -1730,6 +1730,7 @@ static NSString *clientCertificatePwd = nil;
 
 
 #pragma mark - change orientation
+
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation{
 //    [[UIDevice currentDevice] ac_invoke:[self rotateMethod] arguments:ACArgsPack(@(orientation))];
     SEL selector = NSSelectorFromString([self rotateMethod]);
@@ -1742,6 +1743,60 @@ static NSString *clientCertificatePwd = nil;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
     }
+}
+
++ (void)rotateToOrientation:(UIInterfaceOrientation)orientation withController:(UIViewController *)viewController{
+//    [[UIDevice currentDevice] ac_invoke:[self rotateMethod] arguments:ACArgsPack(@(orientation))];
+    SEL selector = NSSelectorFromString([self rotateMethod]);
+ 
+#if __IPHONE_16_0 //iOS16以上需要适配，且需要Xcode支持iOS 16 SDK，宏可以使低版本打包服务中不会打包失败，但代码不会生效
+    if (@available(iOS 16.0, *)) {
+        NSArray *array = [[[UIApplication sharedApplication] connectedScenes] allObjects];
+        UIWindowScene *windowScene = [array firstObject];
+        if (!windowScene) {
+            return;
+        }
+        [viewController setNeedsUpdateOfSupportedInterfaceOrientations];
+        UIWindowSceneGeometryPreferencesIOS *geometryPreferences = [[UIWindowSceneGeometryPreferencesIOS alloc] init];
+        switch (orientation) {
+            case UIInterfaceOrientationPortrait:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskPortrait;
+                break;
+            case UIInterfaceOrientationPortraitUpsideDown:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskPortraitUpsideDown;
+                break;
+            case UIInterfaceOrientationLandscapeLeft:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskLandscapeLeft;
+                break;
+            case UIInterfaceOrientationLandscapeRight:
+                geometryPreferences.interfaceOrientations = UIInterfaceOrientationMaskLandscapeRight;
+                break;
+            default:
+                break;
+        }
+        [windowScene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler:^(NSError * _Nonnull error) {
+            //业务代码
+            NSLog(@"menglc errorHandler error %@", error);
+           // if (errorHandler) {
+           //     errorHandler(error);
+           // }
+        }];
+        [viewController setNeedsUpdateOfSupportedInterfaceOrientations];
+        return;
+    }
+#endif
+    
+    if ([[UIDevice currentDevice] respondsToSelector:selector]) {
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice
+                                                                                instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = orientation;
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
+    [UIViewController attemptRotationToDeviceOrientation];
+     
 }
 
 + (NSString *)rotateMethod{

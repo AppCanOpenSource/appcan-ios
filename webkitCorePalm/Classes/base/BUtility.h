@@ -184,6 +184,7 @@ void ACENSLog (NSString *format, ...);
 + (NSString *)bundleIdentifier;
 + (NSString *)getVarifyAppMd5Code:(NSString *)appId AppKey:(NSString *)appKey time:(NSTimeInterval)time_;
 + (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
++ (void)rotateToOrientation:(UIInterfaceOrientation)orientation withController:(UIViewController *)viewController;
 + (NSString *)dynamicPluginFrameworkFolderPath;
 
 + (NSString *)transcoding:(NSString *)inString;

@@ -207,6 +207,19 @@
         
         _meBrowserView = [[ACEBrowserView alloc] initWithFrame:frame BrwCtrler:eInBrwCtrler Wgt:inWgt BrwWnd:eInBrwWnd UExObjName:inUExObjName Type:inWndType BrwView:(EBrowserView *)self];
         
+        // iOS 16.4以上，需要单独开启调试开关来控制Safari调试模式
+        if (@available(iOS 16.4, *)) {
+            // 判断调试开关
+            BOOL isDebug = eInBrwCtrler.mwWgtMgr.mainWidget.isDebug;
+            // 先判断主应用debug开关，主应用开则全局开，主应用关则以当前页面所属应用的debug开关为准。
+            if (isDebug == NO) {
+                isDebug = inWgt.isDebug;
+            }
+            if (isDebug == YES) {
+                _meBrowserView.inspectable = YES;
+            }
+        }
+        
         _meBrowserView.superDelegate = self;
         
         [self addSubview:_meBrowserView];
@@ -856,6 +869,15 @@ static NSInteger kMaxErrorRetryCount = 5;
     if (webView == nil || ![webView isKindOfClass:[ACEBrowserView class]]) {
         return;
     }
+ 
+    //add by gao  for invoke weixin app or alipay app
+    if ([urlStr containsString:@"weixin://wap/pay"] || [urlStr containsString:@"alipay://alipayclient"])
+    {
+        [[UIApplication sharedApplication] openURL:requestURL];
+        decisionHandler(WKNavigationActionPolicyCancel);
+        return;
+    }
+    //end by gao
     
     ACEBrowserView *eBrwView = ((ACEBrowserView *)webView);
     NSURL *oldURL = [eBrwView curUrl];
@@ -964,6 +986,7 @@ static NSInteger kMaxErrorRetryCount = 5;
  */
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView API_AVAILABLE(macos(10.11), ios(9.0)){
     ACLogDebug(@"AppCan4.0===>WKNavigationDelegate==>webViewWebContentProcessDidTerminate");
+    [webView reload];
 }
 
 #pragma mark - error page path

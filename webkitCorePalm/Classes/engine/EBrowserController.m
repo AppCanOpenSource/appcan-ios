@@ -106,6 +106,7 @@ static NSString *const kACEDefaultLoadingImagePathKey = @"AppCanLaunchImage";
         _meBrw.meBrwCtrler = self;
         _meBrwMainFrm.meBrwWgtContainer = [[EBrowserWidgetContainer alloc] initWithFrame:_meBrwMainFrm.bounds browserController:self widget:widget];
         [_meBrwMainFrm insertSubview:_meBrwMainFrm.meBrwWgtContainer atIndex:0];
+        NSLog(@"engine--->initWithwidget--->exeJS: %@", _widget.exeJS);
     }
     
     return self;

@@ -43,6 +43,7 @@
 #import <objc/message.h>
 #import "DataAnalysisInfo.h"
 #import "ACEDrawerViewController.h"
+#import "ACEVersion.h"
 
 #import "ACEMultiPopoverScrollView.h"
 #import "ACEJSCInvocation.h"
@@ -56,7 +57,7 @@
 const CGFloat refreshKeyValue = -65.0f;
 const CGFloat loadingVisibleHeight = 60.0f;
 
-@interface ACEBrowserView()<WKUIDelegate>
+@interface ACEBrowserView()<WKUIDelegate, WKHTTPCookieStoreObserver>
 
 @end
 
@@ -603,6 +604,7 @@ const CGFloat loadingVisibleHeight = 60.0f;
 }
 
 - (void)loadExeJS{
+    NSLog(@"engine--->uexWidget-->exeJS: %@", _mExeJS);
     if (_mExeJS) {
         [self ac_evaluateJavaScript:_mExeJS];
     }
@@ -622,7 +624,6 @@ const CGFloat loadingVisibleHeight = 60.0f;
 
     self.indicatorView = indicator;
     [self addSubview:self.indicatorView];
-    
     
     //JAYTAG --> xcode8编译会失败
     //设置webView自带的scrollView，使得view充满屏幕
@@ -701,17 +702,42 @@ const CGFloat loadingVisibleHeight = 60.0f;
         // Fallback on earlier versions
     } // 禁用苹果的欺诈性网站警告(Fraudulent Website Warning)
     [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
-//    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
+
+    //add by gao
+//    [configuration setValue:@YES forKey:@"_allowUniversalAccessFromFileURLs"];
+
+   // if (@available(iOS 10.0, *)){
+   //    [preferences setValue:@YES forKey:@"allowUniversalAccessFromFileURLs"];
+   // }
     configuration.preferences = preferences;
     // 使用单例WKProcessPool，这样可以共享localStorage
     configuration.processPool = [ACWKProcessPool sharedWKProcessPool];
     configuration.websiteDataStore = [WKWebsiteDataStore defaultDataStore];
+    // 监听WKWebView中Cookie变动并尝试同步
+    if (@available(iOS 11.0, *)) {
+        [configuration.websiteDataStore.httpCookieStore addObserver:self];
+    }
     configuration.allowsInlineMediaPlayback = YES;
     configuration.allowsPictureInPictureMediaPlayback = YES;
     //    configuration.dataDetectorTypes = WKDataDetectorTypeAll; // 配置监测数据类型变为链接文字
-    //    configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile; // 设置默认手机模式还是桌面模式
+    if (@available(iOS 13.0, *)) {
+        configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeMobile; // 设置默认手机模式还是桌面模式
+    }
     configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAll;
     configuration.requiresUserActionForMediaPlayback = YES; // 配置需要用户操作才进行媒体播放
+    
+    NSString *markIpad = @"";
+    if ([BUtility isIpad]) {
+        markIpad = @"iPad ";
+    } else {
+        markIpad = @"";
+    }
+    // 配置AppCanUserAgent关键字
+    NSString *engineVersion = [ACEVersion version];
+    // note: 增加Mobile/15E148的原因是因为以前UIWebView时iPad中会携带Mobile字样，某项目（sh）会以此作为关键标识
+    NSString * acEngineUA= [NSString stringWithFormat:@"%@Mobile/15E148 AppCan/%@ (WKWebView) ", markIpad, engineVersion];
+    configuration.applicationNameForUserAgent = acEngineUA;
+    
     // 初始化WKWebView
     self = [super initWithFrame:frame configuration:configuration];
 	if (self) {
@@ -721,6 +747,46 @@ const CGFloat loadingVisibleHeight = 60.0f;
     
 	return self;
 }
+
+#pragma mark - WKHTTPCookieStoreObserver
+- (void)cookiesDidChangeInCookieStore:(WKHTTPCookieStore *)cookieStore {
+    if (@available(iOS 15.0, *)) {
+        // iOS15以上可以安全的同步，15以下的情况若执行同步可能造成死循环。（iOS15以下的情况会在）
+//        ACLogDebug(@"AppCan===>syncCookies===>cookiesDidChangeInCookieStore");
+        // 防抖处理：取消之前的同步任务，0.5 秒后重新执行
+        NSTimeInterval interval = 0.5;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(syncCookiesFromWebView:) object:cookieStore];
+        [self performSelector:@selector(syncCookiesFromWebView:) withObject:cookieStore afterDelay:interval];
+    }
+}
+
+// 自定义方法，用于将WKHttpCookieStore同步给NSHTTPCookieStorage
+- (void)syncCookiesFromWebView:(WKHTTPCookieStore *)cookieStore {
+    ACLogDebug(@"AppCan===>syncCookies===>cookiesDidChangeInCookieStore===>syncCookiesFromWebView");
+    [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> * _Nonnull cookies) {
+        for (NSHTTPCookie *cookie in cookies) {
+            // 将所有对 NSHTTPCookieStorage 的操作派发到主线程
+            // 在主线程上安全地调用 setCookie:
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+//                ACLogDebug(@"AppCan===>syncCookies===>cookiesDidChangeInCookieStore===>completionHandler: cookie: %@ %@", cookie.name, cookie.value);
+            });
+        }
+    }];
+}
+
+// 自定义方法，用于将WKHttpCookieStore同步给NSHTTPCookieStorage
+- (void)syncCookiesFromWKSelf {
+    if (@available(iOS 15.0, *)) {
+        return;
+    }
+    ACLogDebug(@"AppCan===>syncCookiesFromWKSelf===>系统版本低于iOS15.0");
+    WKHTTPCookieStore *cookieStore = self.configuration.websiteDataStore.httpCookieStore;
+    [self syncCookiesFromWebView:cookieStore];
+}
+
+#pragma mark - WKHTTPCookieStoreObserver end
+
 -(void)didSwipeRight:(id)sender
 {
     if (!isSwiped && self.swipeCallbackEnabled)
@@ -813,7 +879,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
             
             iOS7Style = 1;
         }
-    } 
+    }
+    
+    // iOS14及以下时需要在WKWebView初始化时主动同步WKHttpCookie到NSHTTPCookieStorage
+    [self syncCookiesFromWKSelf];
     
     BOOL isStatusBarHidden = [[[NSBundle mainBundle].infoDictionary valueForKey:@"UIStatusBarHidden"] boolValue];
     //注入插件js
@@ -935,6 +1004,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	if (!self.mwWgt) {
 		return;
 	}
+    
+    
+    //自定义注入JS
+    [self loadExeJS];
+
     EBrowserWindowContainer *eBrwWndContainer = self.meBrwCtrler.rootWindowContainer;
 	if (!eBrwWndContainer) {
 		return;

@@ -2,6 +2,51 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.6.47</key>
+	<array>
+		<string>修复iOS11-14系统中，43版本新增的Cookie同步机制导致循环调用问题</string>
+	</array>
+	<key>4.6.45</key>
+	<array>
+		<string>调整AppCanUserAgent，增加Mobile/15E148字样， iPad机型增加iPad字样</string>
+	</array>
+	<key>4.6.44</key>
+	<array>
+		<string>修复AppCanUserAgent丢失的问题</string>
+	</array>
+	<key>4.6.43</key>
+	<array>
+		<string>增加WKHTTPCookieStore向NSHTTPCookieStorage自动同步的逻辑</string>
+	</array>
+	<key>4.6.42</key>
+	<array>
+		<string>增加微信,阿里支付jsapi调用</string>
+	</array>
+	<key>4.6.41</key>
+	<array/>
+	<key>4.6.40</key>
+	<array>
+		<string>升级解密模块,解决wkwebview的post参数请求丢失bug</string>
+	</array>
+	<key>4.6.37</key>
+	<array>
+		<string>取消解密功能解决post 参数问题</string>
+	</array>
+	<key>4.6.34</key>
+	<array>
+		<string>在EBrowserView.m中增加[webvidew reload]</string>
+	</array>
+	<key>4.6.33</key>
+	<array>
+		<string>uexWidget.startWidget 第一个data参数增加exeJS参数,注入js</string>
+	</array>
+	<key>4.6.32</key>
+	<array/>
+	<key>4.6.30</key>
+	<array>
+		<string>适配ios16 屏幕选择</string>
+		<string>解决 ios16 无法旋转屏幕问题 </string>
+	</array>
 	<key>4.6.29</key>
 	<array>
 		<string>NewBuildSystem</string>
