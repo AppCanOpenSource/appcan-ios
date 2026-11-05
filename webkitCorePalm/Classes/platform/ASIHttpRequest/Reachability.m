@@ -96,8 +96,8 @@
 */
 
 #import <sys/socket.h>
+// 通过公开头引入IPv4/IPv6声明，避免直接包含SDK内部的netinet6/in6.h。
 #import <netinet/in.h>
-#import <netinet6/in6.h>
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <netdb.h>
