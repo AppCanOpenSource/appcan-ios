@@ -27,18 +27,25 @@ guard rootURL.lastPathComponent == "appcan-ios" else{
 let useModernBuildSystem = args["useModernBuildSystem"]!;
 
 //MARK: - build engine
-let engineBuildCommand: (String) -> Void = { command in
+let engineBuildCommand: (String, String) throws -> Void = { command, derivedDataPath in
     let xcodebuild = XcodeBuild(path: .workspace(path: "AppCanEngine.xcworkspace"),
                                 command: command,
                                 configuration: "Release",
                                 scheme: "AppCanEngine",
                                 sdk: "iphoneos",
                                 currentDirectoryPath: rootURL.path,
-                                useModernBuildSystem: useModernBuildSystem)
-    xcodebuild.runSync()
+                                useModernBuildSystem: useModernBuildSystem,
+                                derivedDataPath: derivedDataPath,
+                                destination: "generic/platform=iOS")
+    try xcodebuild.runSync()
 }
 
 do{
+    // Xcode脚本传入真实BUILD_DIR；独立运行构建产物时，从.app所在的配置目录向上取Products。
+    let outerProducts = args["buildProductsDir"] ?? ProcessInfo.processInfo.environment["BUILD_DIR"] ??
+        Bundle.main.bundleURL.deletingLastPathComponent().deletingLastPathComponent().path
+    let engineDerivedDataPath = try XcodeBuild.packagerDerivedDataPath(buildProductsDirectory: outerProducts)
+    print("Packager engine DerivedData: \(engineDerivedDataPath)")
     // 先确定唯一版本并更新真正的构建输入，再编译；日常仍只维护Changelog。
     let resolved = try EngineInfo.resolveVersion(versionString: args["version"], summary: args["summary"])
     let enginePlistURL = rootURL.appendingPathComponent("AppCanEngine/Info.plist")
@@ -47,8 +54,8 @@ do{
     fflush(stdout)
 
     let info = EngineInfo(version: resolved.version, summary: resolved.summary, suffix: args["suffix"])
-    engineBuildCommand("clean")
-    engineBuildCommand("build")
+    try engineBuildCommand("clean", engineDerivedDataPath)
+    try engineBuildCommand("build", engineDerivedDataPath)
 
     // 基础工程从此位置链接引擎；版本不匹配时不得继续生成新包。
     let frameworkPlistURL = rootURL.appendingPathComponent("AppCanPlugin/AppCanPlugin/engine/AppCanEngine.framework/Info.plist")
