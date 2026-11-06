@@ -38,14 +38,21 @@ let engineBuildCommand: (String) -> Void = { command in
     xcodebuild.runSync()
 }
 
-engineBuildCommand("clean")
-engineBuildCommand("build")
-
-
-let info = EngineInfo(versionString: args["version"], summary: args["summary"], suffix: args["suffix"])
-
-
 do{
+    // 先确定唯一版本并更新真正的构建输入，再编译；日常仍只维护Changelog。
+    let resolved = try EngineInfo.resolveVersion(versionString: args["version"], summary: args["summary"])
+    let enginePlistURL = rootURL.appendingPathComponent("AppCanEngine/Info.plist")
+    try resolved.version.synchronizeInfoPlist(at: enginePlistURL)
+    print("Engine version synchronized before build: \(resolved.version.string)")
+    fflush(stdout)
+
+    let info = EngineInfo(version: resolved.version, summary: resolved.summary, suffix: args["suffix"])
+    engineBuildCommand("clean")
+    engineBuildCommand("build")
+
+    // 基础工程从此位置链接引擎；版本不匹配时不得继续生成新包。
+    let frameworkPlistURL = rootURL.appendingPathComponent("AppCanPlugin/AppCanPlugin/engine/AppCanEngine.framework/Info.plist")
+    try info.version.verifyInfoPlist(at: frameworkPlistURL)
     
     let archiveFolderURL = rootURL.appendingPathComponent("archives")
     let tmpFolderURL = archiveFolderURL.appendingPathComponent("tmp")
@@ -95,7 +102,8 @@ do{
     print("clean temp folder: \(tmpFolderURL.path)")
     print("AppCanEnginePackager's work finished with output pakcage: \(archiveURL.path)")
 }catch let e as NSError{
-    fatalError("error: \(e.localizedDescription)")
+    fputs("AppCanEnginePackager停止出包：\(e.localizedDescription)\n", stderr)
+    exit(1)
 }
 
 
