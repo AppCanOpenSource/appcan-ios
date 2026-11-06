@@ -20,7 +20,12 @@
 
 
 
-@interface WidgetOneDelegate: NSObject
+#import <UIKit/UIKit.h>
+
+@interface WidgetOneDelegate: NSObject <UIApplicationDelegate>
+
+// 单Scene兼容入口：与SceneDelegate.window始终引用同一个主窗口。
+@property (nonatomic, strong) UIWindow *window;
 
 @property (nonatomic, assign) BOOL userStartReport;
 @property (nonatomic, assign) BOOL useEmmControl;

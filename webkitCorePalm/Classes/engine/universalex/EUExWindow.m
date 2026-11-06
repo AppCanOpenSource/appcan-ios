@@ -3912,8 +3912,15 @@ static NSString *const kUexWindowValueDictKey = @"uexWindow.valueDict";
 
 + (void)applicationDidBecomeActive:(UIApplication *)application {
     // by gao
-    NSLog(@"Appcan4.0--->EUExWindow--->applicationDidBecomeActive");
-    [[UIApplication sharedApplication].keyWindow reloadInputViews];
+    ACLogInfo(@"AppCan--->EUExWindow--->applicationDidBecomeActive");
+    // 使用引擎维护的宿主窗口，单scene情况下适用，仅在它当前为Key Window时执行历史刷新操作。
+    UIWindow *window = application.delegate.window;
+    if (window.isKeyWindow) {
+        [window reloadInputViews];
+    } else {
+        ACLogInfo(@"AppCan--->EUExWindow--->applicationDidBecomeActive: skip reloadInputViews, window=%p, isKeyWindow=%d",
+                  (__bridge void *)window, window.isKeyWindow);
+    }
 }
 
 @end

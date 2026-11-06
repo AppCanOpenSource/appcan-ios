@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC4700010000000000000001 /* ACEWindowSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC4700010000000000000002 /* ACEWindowSceneDelegate.m */; };
 		879215BCC14C44B9BA51351D /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427260051D9B546900B941CF /* AppCanKit.framework */; };
 		420F733C1E4B254800B4C626 /* Changelog.plist in Resources */ = {isa = PBXBuildFile; fileRef = 420F733B1E4B254800B4C626 /* Changelog.plist */; };
 		4245EC961DED18C900C07B2D /* ACEBasicAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4245EC941DED18C900C07B2D /* ACEBasicAnimation.h */; };
@@ -274,6 +275,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC4700010000000000000002 /* ACEWindowSceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACEWindowSceneDelegate.m; sourceTree = "<group>"; };
+		AC4700010000000000000003 /* ACEWindowSceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACEWindowSceneDelegate.h; sourceTree = "<group>"; };
 		333DFFF91A42B9CA00F501B3 /* ACEBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEBaseViewController.h; sourceTree = "<group>"; };
 		333DFFFA1A42B9CA00F501B3 /* ACEBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEBaseViewController.m; sourceTree = "<group>"; };
 		333DFFFB1A42B9CA00F501B3 /* ACEUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEUINavigationController.h; sourceTree = "<group>"; };
@@ -942,6 +945,8 @@
 				42B3D44D1E6E529900F215B3 /* WidgetOneDelegatePrivate.h */,
 				42B3D44F1E6E52AD00F215B3 /* WidgetOneDelegate.h */,
 				5AAA867B18B1B93D000D7600 /* WidgetOneDelegate.m */,
+				AC4700010000000000000002 /* ACEWindowSceneDelegate.m */,
+				AC4700010000000000000003 /* ACEWindowSceneDelegate.h */,
 				5AAA867C18B1B93D000D7600 /* WWidget.h */,
 				5AAA867D18B1B93D000D7600 /* WWidget.m */,
 				5AAA867E18B1B93D000D7600 /* WWidgetMgr.h */,
@@ -1295,6 +1300,7 @@
 				42F787541D950B5D0094AA05 /* UpdateParser.m in Sources */,
 				42F787551D950B5D0094AA05 /* ASIHTTPRequest.m in Sources */,
 				42F787561D950B5D0094AA05 /* WidgetOneDelegate.m in Sources */,
+				AC4700010000000000000001 /* ACEWindowSceneDelegate.m in Sources */,
 				42F787571D950B5D0094AA05 /* UIImageView+WebCache.m in Sources */,
 				69736113201F37B3008CC9F4 /* ACEMPTopView.m in Sources */,
 				42F787591D950B5D0094AA05 /* SBJsonBase.m in Sources */,

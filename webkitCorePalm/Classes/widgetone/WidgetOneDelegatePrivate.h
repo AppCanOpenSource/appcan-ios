@@ -19,6 +19,7 @@
 
 
 #import "WidgetOneDelegate.h"
+#import <UserNotifications/UserNotifications.h>
 
 
 
@@ -43,7 +44,7 @@
 
 
 
-@interface WidgetOneDelegate ()<UIApplicationDelegate,AppCanEngineConfiguration>
+@interface WidgetOneDelegate ()<AppCanEngineConfiguration,UNUserNotificationCenterDelegate>
 @property (nonatomic, readonly) NSString *documentWidgetPath;
 @property (nonatomic, strong) WWidgetMgr *mwWgtMgr;
 @property (nonatomic, strong) ACEWebViewController *leftWebController;
@@ -56,4 +57,7 @@
 
 
 - (instancetype)initWithDevMode;
+
+- (UIWindow *)ace_connectWindowScene:(UIWindowScene *)scene;
+- (void)ace_disconnectWindow:(UIWindow *)window;
 @end

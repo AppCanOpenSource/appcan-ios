@@ -58,7 +58,7 @@
 #import "ACEWidgetUpdateUtility.h"
 
 
-@interface WidgetOneDelegate()<RESideMenuDelegate,UNUserNotificationCenterDelegate>
+@interface WidgetOneDelegate()<RESideMenuDelegate>
 
 @end
 
@@ -190,8 +190,11 @@
 
     self.mwWgtMgr = [WWidgetMgr sharedManager];
     //[self readAppCanJS];
-    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [self setupRootViewController];
+    // 采用Scene的宿主由UIKit在willConnect时提供窗口；保留未迁移宿主的旧路径。
+    if (!NSBundle.mainBundle.infoDictionary[@"UIApplicationSceneManifest"]) {
+        self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        [self setupRootViewController];
+    }
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     if (ACSystemVersion() >= 10) {
         [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
@@ -200,7 +203,37 @@
     
 }
 
+- (UIWindow *)ace_connectWindowScene:(UIWindowScene *)scene {
+    if (self.window.windowScene && self.window.windowScene != scene) {
+        // 全局引擎尚不支持多Scene；不把已有根控制器抢到第二个窗口。
+        ACLogError(@"AppCan only supports one application Scene");
+        return nil;
+    }
+    if (!self.window || self.window.windowScene != scene) {
+        self.window = [[UIWindow alloc] initWithWindowScene:scene];
+    }
+    if (self.drawerController.mainContentController != AppCanEngine.mainWidgetController) {
+        [self setupRootViewController];
+    } else {
+        self.window.rootViewController = self.drawerController;
+        [self.window makeKeyAndVisible];
+    }
+    [self.window layoutIfNeeded];
+    return self.window;
+}
+
+- (void)ace_disconnectWindow:(UIWindow *)window {
+    if (self.window != window) return;
+    window.rootViewController = nil;
+    self.window = nil;
+}
+
 - (void)setupRootViewController{
+    // restart可能发生在无窗口阶段，下次连接再挂载最新的引擎控制器。
+    if (!self.window) {
+        self.drawerController = nil;
+        return;
+    }
     _drawerController = [[ACEDrawerViewController alloc] initWithCenterViewController:AppCanEngine.mainWidgetController
                                                              leftDrawerViewController:nil
                                                             rightDrawerViewController:nil];
