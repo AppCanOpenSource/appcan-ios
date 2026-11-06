@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2015 - 2016 Kulykov Oleh <info@resident.name>
+ *   Copyright (c) 2015 - 2020 Oleh Kulykov <olehkulykov@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -207,5 +207,9 @@
  @return YES - all items processed, otherwice NO(check @b lastError property).
  */
 - (BOOL) write;
+
+#pragma mark - Unavailable
+- (nullable instancetype) init NS_UNAVAILABLE;
++ (nullable instancetype) new NS_UNAVAILABLE;
 
 @end

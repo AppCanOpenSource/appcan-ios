@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2015 - 2016 Kulykov Oleh <info@resident.name>
+ *   Copyright (c) 2015 - 2020 Oleh Kulykov <olehkulykov@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,20 @@
 #include "LzmaSDKObjC.h"
 
 /**
- @brief Lower case string of the 7zip file extension.
- @return @b 7z.
+ @brief Lower case string of the 7zip file extension. @b 7z.
  */
 LZMASDKOBJC_EXTERN NSString * const _Nonnull kLzmaSDKObjCFileExt7z;
 
 
 /**
- @brief Error domain for the reader errors.
- @return @b LzmaSDKObjC
+ @brief Error domain for the reader errors. @b LzmaSDKObjC
  */
 LZMASDKOBJC_EXTERN NSString * const _Nonnull kLzmaSDKObjCErrorDomain;
 
 
 /**
  @brief Error description when internal decoder/encoder not initialized
- due input params assertion.
+ due to input params assertion.
  */
 LZMASDKOBJC_EXTERN NSString * const _Nonnull kLzmaSDKObjCErrorDescrEncDecNotCreated;
 
@@ -159,6 +157,10 @@ LZMASDKOBJC_EXTERN NSString * const _Nonnull kLzmaSDKObjCErrorDescrEncDecNotCrea
  @param items Array with @b LzmaSDKObjCItem objects.
  */
 - (BOOL) test:(nullable NSArray<LzmaSDKObjCItem *> *) items;
+
+#pragma mark - Unavailable
+- (nullable instancetype) init NS_UNAVAILABLE;
++ (nullable instancetype) new NS_UNAVAILABLE;
 
 @end
 

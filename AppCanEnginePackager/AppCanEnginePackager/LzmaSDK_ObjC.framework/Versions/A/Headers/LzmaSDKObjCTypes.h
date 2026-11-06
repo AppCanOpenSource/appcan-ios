@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2015 - 2016 Kulykov Oleh <info@resident.name>
+ *   Copyright (c) 2015 - 2020 Oleh Kulykov <olehkulykov@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -38,13 +38,14 @@
 #endif
 
 typedef enum _LzmaSDKObjCFileType {
-	LzmaSDKObjCFileTypeUndefined = 0,
-	LzmaSDKObjCFileType7z = 1
+    LzmaSDKObjCFileTypeUndefined = 0,
+    LzmaSDKObjCFileType7z = 1
 } LzmaSDKObjCFileType;
 
 typedef enum _LzmaSDKObjCMethod {
-	LzmaSDKObjCMethodLZMA = 0,
-	LzmaSDKObjCMethodLZMA2 = 1
+    LzmaSDKObjCMethodLZMA = 0,
+    LzmaSDKObjCMethodLZMA2 = 1,
+    LzmaSDKObjCMethodPPMd = 2,
 } LzmaSDKObjCMethod;
 
 typedef void * (*LzmaSDKObjCGetVoidCallback)(void * context);

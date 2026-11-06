@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2015 - 2016 Kulykov Oleh <info@resident.name>
+ *   Copyright (c) 2015 - 2020 Oleh Kulykov <olehkulykov@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,62 @@
 
 
 #ifndef __LZMASDKOBJC_H__
-#define __LZMASDKOBJC_H__
+#define __LZMASDKOBJC_H__ 1
 
 
 /*
  *   Lzma SDK for Objective-C based on extended functionality of the C++ LZMA code
  *
- *   Changes on version 2.0.8 (current):
+ *   Changes on version 2.1.1 (current):
+ *   - Pull request #41: Enable ppmd for plain text compress.
+ *     Thanks to 'enefry'.
+ *
+ *   Changes on version 2.1.0:
+ *   - Pull request #40: Add crc functionality to public interface.
+ *     Thanks to 'jakubvano'.
+ *   - Pull request #39: Add direct NSData compression & decompression.
+ *     Thanks to 'jakubvano'.
+ *
+ *   Changes on version 2.0.21:
+ *   - Update C++ source to version 19.00.
+ *
+ *   Changes on version 2.0.20:
+ *   - Update C++ source to version 18.06.
+ *
+ *   Changes on version 2.0.19:
+ *   - Update C++ source to version 18.05.
+ *
+ *   Changes on version 2.0.18:
+ *   - Update C++ source to version 18.01.
+ *
+ *   Changes on version 2.0.17:
+ *   - Add packed size property to reader items.
+ *
+ *   Changes on version 2.0.16:
+ *   - Update C++ source to version 17.01.
+ *   - Extract only selected archive items in case of solid archive.
+ *
+ *   Changes on version 2.0.14:
+ *   - Update C++ source to version 17.00.
+ *
+ *   Changes on version 2.0.13:
+ *   - Add all default (de)coders.
+ *
+ *   Changes on version 2.0.12:
+ *   - Add BCJ2 and PPMdH (de)coders.
+ *
+ *   Changes on version 2.0.10:
+ *   - Update C++ source to version 16.04.
+ *
+ *   Changes on version 2.0.9:
+ *   - Update C++ source to version 16.03.
+ *
+ *   Changes on version 2.0.8:
  *   - Fix Cocoapod script.
  *
  *   Changes on version 2.0.5:
- *   - Omin some unused code.
- *   - Disable Unicode, used UTF8 instead.
+ *   - Remove unused code.
+ *   - Use UTF8 instead of Unicode.
  *
  *   Changes on version 2.0.3:
  *   - Remove redurant string conversion code.
@@ -56,7 +100,7 @@
  *     Use `NSLocalizedFailureReasonErrorKey` to get possible failure string.
  *
  *   Changes on version 1.1.4:
- *   - Update C++ source to version 16.02 (1602 - latest for now).
+ *   - Update C++ source to version 16.02.
  *
  *   Changes on version 1.1.3:
  *   - Update C++ source to version 16.00.
@@ -132,53 +176,13 @@
 
 
 #define LZMASDKOBJC_VERSION_MAJOR 2
-#define LZMASDKOBJC_VERSION_MINOR 0
-#define LZMASDKOBJC_VERSION_PATCH 8
+#define LZMASDKOBJC_VERSION_MINOR 1
+#define LZMASDKOBJC_VERSION_PATCH 1
 
 
 #import "LzmaSDKObjCTypes.h"
 #import "LzmaSDKObjCReader.h"
 #import "LzmaSDKObjCWriter.h"
-
-
-/**
- @brief Size in bytes of the read block size per single request.
- @detailed
- <li> @b CFilterCoder allocate buff for reading, was (1 << 20)
- <li> @b ISequentialOutStream max read block size, or available size, was (1 << 31)
- @warning This ammount of size will be allocated.
- */
-LZMASDKOBJC_EXTERN unsigned int kLzmaSDKObjCStreamReadSize;
-
-
-/**
- @brief Size in bytes for write per single request.
- @detailed
- <li> @b ISequentialOutStream max write block size, or available size, was (1 << 31)
- @warning This ammount of size will be allocated.
- */
-LZMASDKOBJC_EXTERN unsigned int kLzmaSDKObjCStreamWriteSize;
-
-
-/**
- @brief Size in bytes for internal decoder buffer for holding coded data.
- @detailed
- <li> Lzma CDecoder in buffer, buff with coded data, was (1 << 20)
- <li> Lzma2 CDecoder in buffer, buff with coded data, was (1 << 20)
- @warning This ammount of size will be allocated.
- */
-LZMASDKOBJC_EXTERN unsigned int kLzmaSDKObjCDecoderReadSize;
-
-
-/**
- @brief Size in bytes for internal decoder buffer for holding decoded data.
- @detailed
- <li> Lzma CDecoder out buffer, buff for decoded data, was (1 << 22)
- <li> Lzma2 CDecoder out buffer, buff for decoded data, was (1 << 22)
- @warning This ammount of size will be allocated.
- */
-LZMASDKOBJC_EXTERN unsigned int kLzmaSDKObjCDecoderWriteSize;
-
 
 
 /**

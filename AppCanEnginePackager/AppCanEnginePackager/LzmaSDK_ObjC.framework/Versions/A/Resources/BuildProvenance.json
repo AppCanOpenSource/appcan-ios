@@ -1,0 +1,24 @@
+{
+  "library": "LzmaSDK-ObjC",
+  "library_version": "2.1.1",
+  "source_repository": "https://github.com/OlehKulykov/LzmaSDKObjC",
+  "source_commit": "f029d5ca8190a605080ac82c2892ea5749d89c48",
+  "platform": "macOS",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "minimum_macos": "12.0",
+  "xcode": "27.1",
+  "macos_sdk": "27.0",
+  "configuration": "Release",
+  "source_patches": false,
+  "arm64_compression_roundtrip_verified": true,
+  "x86_64_link_verified": true,
+  "x86_64_runtime_verified": false,
+  "known_limitations": [
+    "addPath omits empty directories, as in original 2.0.8",
+    "Existing compiler and nullability warnings remain"
+  ],
+  "build_date": "2026-11-06"
+}
