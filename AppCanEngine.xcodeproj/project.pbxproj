@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		879215BCC14C44B9BA51351D /* AppCanKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427260051D9B546900B941CF /* AppCanKit.framework */; };
 		420F733C1E4B254800B4C626 /* Changelog.plist in Resources */ = {isa = PBXBuildFile; fileRef = 420F733B1E4B254800B4C626 /* Changelog.plist */; };
 		4245EC961DED18C900C07B2D /* ACEBasicAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4245EC941DED18C900C07B2D /* ACEBasicAnimation.h */; };
 		4245EC971DED18C900C07B2D /* ACEBasicAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4245EC951DED18C900C07B2D /* ACEBasicAnimation.m */; };
@@ -350,7 +351,7 @@
 		426040941DEC2BB300B49B5C /* ACEAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEAnimation.m; sourceTree = "<group>"; };
 		426DF1AA1CFD841600F4C53E /* ACEVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEVersion.h; sourceTree = "<group>"; };
 		426DF1AB1CFD841600F4C53E /* ACEVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEVersion.m; sourceTree = "<group>"; };
-		427260051D9B546900B941CF /* AppCanKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppCanKit.framework; path = "AppCanKit/build/Debug-iphoneos/AppCanKit.framework"; sourceTree = "<group>"; };
+		427260051D9B546900B941CF /* AppCanKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppCanKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4272CCBE1E2486A500712C54 /* AppCanEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanEngine.h; sourceTree = "<group>"; };
 		4272CCBF1E2486A500712C54 /* AppCanEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCanEngine.m; sourceTree = "<group>"; };
 		4272CCD71E24C43900712C54 /* AppCanEnginePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCanEnginePrivate.h; sourceTree = "<group>"; };
@@ -384,8 +385,8 @@
 		42D9DEE61C40B0B50039E6E2 /* ACEJSCBaseJS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCBaseJS.m; sourceTree = "<group>"; };
 		42D9DEE91C40B0B50039E6E2 /* ACEJSCHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEJSCHandler.h; sourceTree = "<group>"; };
 		42D9DEEA1C40B0B50039E6E2 /* ACEJSCHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEJSCHandler.m; sourceTree = "<group>"; };
-		42F18AAC1E27851900A20E2A /* Ono.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ono.framework; path = "../../../Library/Developer/Xcode/DerivedData/AppCanPlugin-ebtpqpzgmgsghkebfigkjegezjpq/Build/Products/Debug-iphoneos/Ono.framework"; sourceTree = "<group>"; };
-		42F18AAD1E27851900A20E2A /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = "../../../Library/Developer/Xcode/DerivedData/AppCanPlugin-ebtpqpzgmgsghkebfigkjegezjpq/Build/Products/Debug-iphoneos/pop.framework"; sourceTree = "<group>"; };
+		42F18AAC1E27851900A20E2A /* Ono.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Ono.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42F18AAD1E27851900A20E2A /* pop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = pop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42F3E79F1E4D92420020B428 /* ACEWidgetUpdateUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACEWidgetUpdateUtility.h; sourceTree = "<group>"; };
 		42F3E7A01E4D92420020B428 /* ACEWidgetUpdateUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACEWidgetUpdateUtility.m; sourceTree = "<group>"; };
 		42F788841D950B5D0094AA05 /* AppCanEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCanEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -558,6 +559,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				879215BCC14C44B9BA51351D /* AppCanKit.framework in Frameworks */,
 				42F18AAE1E27851900A20E2A /* Ono.framework in Frameworks */,
 				42F18AAF1E27851900A20E2A /* pop.framework in Frameworks */,
 				42F787C81D950B5D0094AA05 /* libxml2.tbd in Frameworks */,
