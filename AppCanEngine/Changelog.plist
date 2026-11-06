@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.7.48</key>
+	<array>
+		<string>（测试包）适配iOS27，最低支持iOS15，Xcode27</string>
+	</array>
 	<key>4.6.47</key>
 	<array>
 		<string>修复iOS11-14系统中，43版本新增的Cookie同步机制导致循环调用问题</string>
