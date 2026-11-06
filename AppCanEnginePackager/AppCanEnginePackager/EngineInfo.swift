@@ -83,13 +83,13 @@ extension EngineInfo{
         if
             let versionString = versionString,
             let summary = summary,
-            versionString.characters.count > 0{
+            !versionString.isEmpty{
             version = Version.from(string: versionString)
             description = summary
         }else{
             (version,description) = EngineInfo.parseChangelog()
         }
-        if let suffix = suffix,suffix.characters.count > 0{
+        if let suffix = suffix,!suffix.isEmpty{
             self.suffix = "_\(suffix)"
         }else{
             self.suffix = ""
