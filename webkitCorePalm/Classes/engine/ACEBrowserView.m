@@ -40,7 +40,6 @@
 #import "EBrowserHistory.h"
 #import "EBrowserHistoryEntry.h"
 #import <objc/runtime.h>
-#import <objc/message.h>
 #import "DataAnalysisInfo.h"
 #import "ACEDrawerViewController.h"
 #import "ACEVersion.h"
@@ -376,21 +375,10 @@ const CGFloat loadingVisibleHeight = 60.0f;
 	}
 }
 
-/**
- 触发WKWebView的内部刷新操作
- 既然WKWebView那么久了，默认行为还是如此，那可能也有对应的
- */
-- (void)invoke_updateVisibleContentRects {
-    if ([self respondsToSelector:@selector(_updateVisibleContentRects)]) {
-        ((void(*)(id,SEL,BOOL))objc_msgSend)(self, @selector(_updateVisibleContentRects),NO);
-    }
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	// 防止个别页面在滚动过程中出现白色区域无法显示的问题
-    [self invoke_updateVisibleContentRects];
+    // 为了AppStore上架需求，滚动区域刷新交由WKWebView公开行为处理。
     
 	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1){
         // AppCanWKTODO
