@@ -689,7 +689,8 @@ const CGFloat loadingVisibleHeight = 60.0f;
     } else {
         // Fallback on earlier versions
     } // 禁用苹果的欺诈性网站警告(Fraudulent Website Warning)
-    [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+    // 为了AppStore上架需求，关闭私有API调用。
+//    [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
 
     //add by gao
 //    [configuration setValue:@YES forKey:@"_allowUniversalAccessFromFileURLs"];
