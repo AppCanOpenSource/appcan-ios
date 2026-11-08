@@ -28,7 +28,7 @@
 #import "EBrowser.h"
 #import "WWidget.h"
 #import "BUtility.h"
-#import "ASIFormDataRequest.h"
+#import "ACEURLSession.h"
 #import "WidgetOneDelegate.h"
 #import <Security/Security.h>
 #import <objc/runtime.h>
@@ -203,6 +203,17 @@ static BOOL isAppLaunchedByPush = NO;
     [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onSuspend" arguments:nil];
 }
 
+/// 推送业务的配置适配层：请求类只接收参数，不依赖引擎或插件全局对象。
++ (void)postPushURL:(NSURL *)URL headers:(NSDictionary *)headers body:(NSData *)body
+validatesServerCertificate:(BOOL)validatesServerCertificate
+useClientCertificate:(BOOL)useClientCertificate completion:(ACEURLSessionCompletion)completion {
+    NSData *certificate = useClientCertificate ? [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]] : nil;
+    [ACEURLSession postURL:URL headers:headers body:body
+validatesServerCertificate:validatesServerCertificate
+    clientCertificateData:certificate certificatePassword:AppCanEngine.configuration.useCertificatePassWord
+               completion:completion];
+}
+
 + (void)applicationDidBecomeActive:(UIApplication *)application{
     
      [AppCanRootWebViewEngine() callbackWithFunctionKeyPath:@"uexWidget.onResume" arguments:nil];
@@ -234,32 +245,12 @@ static BOOL isAppLaunchedByPush = NO;
     [bodyDict setObject:softToken forKey:@"softToken"];
     NSString *useAppCanEMMTenantID = AppCanEngine.configuration.useAppCanEMMTenantID ?: @"";
     [bodyDict setObject:useAppCanEMMTenantID forKey:@"tenantMark"];
-    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
-    [request setRequestMethod:@"POST"];
-    [request setRequestHeaders:headerDict];
-    [request setTimeOutSeconds:60.0];
-    [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->headerDict = %@-->bodyDict = %@",headerDict, bodyDict);
-    
-    @weakify(request);
-    
-    [request setCompletionBlock:^{
-        @strongify(request);
-        if (200 == request.responseStatusCode) {
-            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseString is %@",request.responseString);
-        } else {
-            ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
-        }
+    [self postPushURL:requestUrl headers:headerDict
+                 body:[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]
+validatesServerCertificate:YES useClientCertificate:NO
+           completion:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+        ACLogDebug(@"AppCan EUExWidget 激活计数完成，HTTP=%ld，error=%@", (long)response.statusCode, error);
     }];
-    
-    [request setFailedBlock:^{
-        @strongify(request);
-        ACLogDebug(@"appcan-->AppCanEngine-->WidgetOneDelegate.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
-        
-    }];
-    
-    [request startAsynchronous];
     
     
    
@@ -867,48 +858,20 @@ static BOOL isAppLaunchedByPush = NO;
             [bodyDict setObject:@"1" forKey:@"count"];
             [bodyDict setObject:deviceToken forKey:@"deviceToken"];
             
-            ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
-            [request setRequestMethod:@"POST"];
-            [request setRequestHeaders:headerDict];
-            [request setPostBody:(NSMutableData *)[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]];
-            
-            if (AppCanEngine.configuration.useCertificateControl) {
-                SecIdentityRef identity = NULL;
-                SecTrustRef trust = NULL;
-                SecCertificateRef certChain = NULL;
-                NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-                [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
-                [request setClientCertificateIdentity:identity];
-            }
-            
-            if (AppCanEngine.configuration.validatesSecureCertificate) {
-                [request setValidatesSecureCertificate:YES];
-                
-            } else {
-                [request setValidatesSecureCertificate:NO];
-            }
-            
-            [request setTimeOutSeconds:60];
-            @weakify(request);
-            [request setCompletionBlock:^{
-                @strongify(request);
-                if (200 == request.responseStatusCode) {
-                    ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseString is %@",request.responseString);
+            [EUExWidget postPushURL:requestUrl headers:headerDict
+                              body:[[bodyDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]
+        validatesServerCertificate:AppCanEngine.configuration.validatesSecureCertificate
+              useClientCertificate:AppCanEngine.configuration.useCertificateControl
+                        completion:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+                // 保留旧成功条件及缓存清理；网络传输失败不执行原completion逻辑。
+                if (!error && response.statusCode == 200) {
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    //清除push消息
                     [defaults removeObjectForKey:@"pushData"];
                     [defaults removeObjectForKey:@"allPushData"];
                     [defaults synchronize];
-                } else {
-                    ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->request.responseStatusCode is %d--->[request error] = %@",request.responseStatusCode, [request error]);
                 }
+                ACLogDebug(@"AppCan EUExWidget taskId已读上报完成，HTTP=%ld，error=%@", (long)response.statusCode, error);
             }];
-            [request setFailedBlock:^{
-                @strongify(request);
-                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendReportRead-->setFailedBlock-->error is %@",[request error]);
-                
-            }];
-            [request startAsynchronous];
         }
         
         
@@ -916,57 +879,31 @@ static BOOL isAppLaunchedByPush = NO;
         //线程处理
         NSString *urlStr =[NSString stringWithFormat:@"%@/report",AppCanEngine.configuration.useBindUserPushURL];
         NSURL *requestUrl = [NSURL URLWithString:urlStr];
-        NSMutableDictionary * postData = [NSMutableDictionary dictionaryWithCapacity:4];
         NSString *msgId = [dict objectForKey:@"msgId"];
         if (msgId == nil || msgId.length == 0) {
             return;
         }
         
-        [postData setObject:[dict objectForKey:@"msgId"] forKey:@"msgId"];
-        [postData setObject:softToken forKey:@"softtoken"];
-        [postData setObject:@"open" forKey:@"eventType"];
         
         NSDate *datenow = [NSDate date];
         NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
         
-        SecIdentityRef identity = NULL;
-        SecTrustRef trust = NULL;
-        SecCertificateRef certChain=NULL;
-        
-        NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-        [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
-        
-        ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:requestUrl];
-        [request setRequestMethod:@"POST"];
-        [request setPostValue:[dict objectForKey:@"msgId"] forKey:@"msgId"];
-        [request setPostValue:softToken forKey:@"softToken"];
-        [request setPostValue:@"open" forKey:@"eventType"];
-        [request setPostValue:timeSp forKey:@"occuredAt"];
-        
-        if (AppCanEngine.configuration.useCertificateControl) {
-            [request setClientCertificateIdentity:identity];
-        }else{
-            [request setClientCertificateIdentity:nil];
-        }
-        if (AppCanEngine.configuration.validatesSecureCertificate) {
-            [request setValidatesSecureCertificate:YES];
-            
-        } else {
-            [request setValidatesSecureCertificate:NO];
-        }
-        
-        [request setTimeOutSeconds:60];
-        [request startSynchronous];
-        int status = request.responseStatusCode;
-        if (status == 200) {
-            NSError *error = request.error;
-            if (!error) {
+        NSDictionary *form = @{@"msgId": msgId, @"softToken": softToken,
+                               @"eventType": @"open", @"occuredAt": timeSp};
+        [EUExWidget postPushURL:requestUrl
+                       headers:@{@"Content-Type": @"application/x-www-form-urlencoded; charset=UTF-8"}
+                          body:[ACEURLSession formBodyWithParameters:form]
+    validatesServerCertificate:AppCanEngine.configuration.validatesSecureCertificate
+          useClientCertificate:AppCanEngine.configuration.useCertificateControl
+                    completion:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+            // 原同步请求结束后的处理移入回调，不改变JS接口或新增JS通知。
+            if (response.statusCode == 200 && !error) {
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                //清除push消息
                 [defaults removeObjectForKey:@"pushData"];
                 [defaults removeObjectForKey:@"allPushData"];
             }
-        }
+            ACLogDebug(@"AppCan EUExWidget msgId已读上报完成，HTTP=%ld，error=%@", (long)response.statusCode, error);
+        }];
         
         
     }
@@ -983,7 +920,8 @@ static BOOL isAppLaunchedByPush = NO;
     
     if (deviceToken) {
         NSDictionary *userDict = [NSDictionary dictionaryWithObjectsAndKeys:uid,@"uId",nickName,@"uNickName",deviceToken,@"deviceToken", nil];
-        [NSThread detachNewThreadSelector:@selector(sendPushUserMsg:) toTarget:self withObject:(id)userDict];
+        // NSURLSession自身异步执行，不再为同步等待网络单独创建线程。
+        [self sendPushUserMsg:userDict];
     }
     
 }
@@ -1030,53 +968,25 @@ static BOOL isAppLaunchedByPush = NO;
         NSString *accessBindUserPushURL = [AppCanEngine.configuration.useBindUserPushURL stringByReplacingOccurrencesOfString:@"gateway" withString:@"access"];
         NSString* urlStr = [NSString stringWithFormat:@"%@4.0/installations", accessBindUserPushURL];
         
-        ASIFormDataRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-        ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->headerDict = %@-->body = %@",headerDict,paramDict);
-        [requestSetPushInfo setRequestMethod:@"POST"];
-        [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:[[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
-        [requestSetPushInfo setTimeOutSeconds:60];
-        @weakify(requestSetPushInfo);
-        [requestSetPushInfo setCompletionBlock:^{
-            @strongify(requestSetPushInfo);
-            if (200 == requestSetPushInfo.responseStatusCode) {
-                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->request.responseString is %@",requestSetPushInfo.responseString);
-            } else {
-                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->request.responseStatusCode is %d--->[request error] = %@",requestSetPushInfo.responseStatusCode, [requestSetPushInfo error]);
-            }
+        [EUExWidget postPushURL:[NSURL URLWithString:urlStr] headers:headerDict
+                          body:[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]
+    validatesServerCertificate:YES useClientCertificate:NO
+                    completion:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+            ACLogDebug(@"AppCan EUExWidget 新后台解绑完成，HTTP=%ld，error=%@", (long)response.statusCode, error);
         }];
-        [requestSetPushInfo setFailedBlock:^{
-            @strongify(requestSetPushInfo);
-            ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->delPushInfo-->setFailedBlock-->error is %@",[requestSetPushInfo error]);
-            
-        }];
-        
-        [requestSetPushInfo startAsynchronous];
         
         
     } else {
         @autoreleasepool {
             NSString *softToken = [EUtility md5SoftToken];
             NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/unBindUser",AppCanEngine.configuration.useBindUserPushURL,softToken];
-            SecIdentityRef identity = NULL;
-            SecTrustRef trust = NULL;
-            SecCertificateRef certChain=NULL;
-            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
-            ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
-            if (AppCanEngine.configuration.useCertificateControl) {
-                [request setValidatesSecureCertificate:YES];
-                [request setClientCertificateIdentity:identity];
-            }else{
-                [request setValidatesSecureCertificate:NO];
-            }
-            [request setTimeOutSeconds:60];
-            [request setRequestMethod:@"POST"];
-            [request startSynchronous];
-            if (200 == request.responseStatusCode) {
-                NSString *responseStr = [request responseString];
-                [EUtility writeLog:[NSString stringWithFormat:@"responseStr------>>%@",responseStr]];
-            }
+            // 旧接口无body；保留useCertificateControl同时控制服务端校验和客户端身份的语义。
+            [EUExWidget postPushURL:[NSURL URLWithString:urlStr] headers:nil body:nil
+        validatesServerCertificate:AppCanEngine.configuration.useCertificateControl
+              useClientCertificate:AppCanEngine.configuration.useCertificateControl
+                        completion:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+                ACLogDebug(@"AppCan EUExWidget 旧后台解绑完成，HTTP=%ld，error=%@", (long)response.statusCode, error);
+            }];
         }
 
     }
@@ -1147,53 +1057,13 @@ static BOOL isAppLaunchedByPush = NO;
         NSString *accessBindUserPushURL = [AppCanEngine.configuration.useBindUserPushURL stringByReplacingOccurrencesOfString:@"gateway" withString:@"access"];
         urlStr = [NSString stringWithFormat:@"%@4.0/installations", accessBindUserPushURL];
         
-        ASIHTTPRequest *requestSetPushInfo = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-        //requestSetPushInfo = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
-        
-        [requestSetPushInfo setRequestMethod:@"POST"];
-        [requestSetPushInfo setRequestHeaders:headerDict];
-        [requestSetPushInfo setPostBody:[[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding] mutableCopy]];
-        
-        [requestSetPushInfo setTimeOutSeconds:60];
-        @weakify(requestSetPushInfo);
-        if (AppCanEngine.configuration.useCertificateControl) {
-            SecIdentityRef identity = NULL;
-            SecTrustRef trust = NULL;
-            SecCertificateRef certChain = NULL;
-            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust andCertChain:&certChain fromPKCS12Data:PKCS12Data];
-            
-            [requestSetPushInfo setClientCertificateIdentity:identity];
-            
-        } else {
-            
-            [requestSetPushInfo setClientCertificateIdentity:nil];
-            
-        }
-        
-        if (AppCanEngine.configuration.validatesSecureCertificate) {
-            
-            [requestSetPushInfo setValidatesSecureCertificate:YES];
-            
-        } else {
-            [requestSetPushInfo setValidatesSecureCertificate:NO];
-        }
-        
-        
-        [requestSetPushInfo setCompletionBlock:^{
-            @strongify(requestSetPushInfo);
-            if (200 == requestSetPushInfo.responseStatusCode) {
-                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->request.responseString is %@",requestSetPushInfo.responseString);
-            } else {
-                ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->request.responseStatusCode is %d--->[request error] = %@",requestSetPushInfo.responseStatusCode, [requestSetPushInfo error]);
-            }
+        [EUExWidget postPushURL:[NSURL URLWithString:urlStr] headers:headerDict
+                          body:[[paramDict ac_JSONFragment] dataUsingEncoding:NSUTF8StringEncoding]
+    validatesServerCertificate:AppCanEngine.configuration.validatesSecureCertificate
+          useClientCertificate:AppCanEngine.configuration.useCertificateControl
+                    completion:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+            ACLogDebug(@"AppCan EUExWidget 新后台注册或绑定完成，HTTP=%ld，error=%@", (long)response.statusCode, error);
         }];
-        [requestSetPushInfo setFailedBlock:^{
-            @strongify(requestSetPushInfo);
-            ACLogDebug(@"appcan-->Engine-->EUExWidget.m-->sendPushUserMsg-->setFailedBlock-->error is %@",[requestSetPushInfo error]);
-        }];
-        
-        [requestSetPushInfo startAsynchronous];
         
     } else {
         @autoreleasepool {
@@ -1202,27 +1072,20 @@ static BOOL isAppLaunchedByPush = NO;
             NSString *appId = self.EBrwView.meBrwCtrler.mwWgtMgr.mainWidget.appId;
             NSString *urlStr = [NSString stringWithFormat:@"%@msg/%@/bindUser",AppCanEngine.configuration.useBindUserPushURL,softToken];
             
-            SecIdentityRef identity = NULL;
-            SecTrustRef trust = NULL;
-            SecCertificateRef certChain=NULL;
-            NSData *PKCS12Data = [NSData dataWithContentsOfFile:[BUtility clientCertficatePath]];
-            [BUtility extractIdentity:AppCanEngine.configuration.useCertificatePassWord andIdentity:&identity andTrust:&trust  andCertChain:&certChain fromPKCS12Data:PKCS12Data];
-            
-            ASIFormDataRequest *FormatReq =[[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-            [FormatReq setPostValue:[dict objectForKey:@"uId"] forKey:@"userId"];
-            [FormatReq setPostValue:[dict objectForKey:@"uNickName"] forKey:@"userNick"];
-            [FormatReq setPostValue:[dict objectForKey:@"deviceToken"] forKey:@"deviceToken"];
-            [FormatReq setPostValue:softToken forKey:@"softToken"];
-            [FormatReq setPostValue:appId forKey:@"appId"];
-            [FormatReq setPostValue:[NSNumber numberWithInt:0] forKey:@"platform"];
-            if (AppCanEngine.configuration.useCertificateControl) {
-                [FormatReq setValidatesSecureCertificate:YES];
-                [FormatReq setClientCertificateIdentity:identity];
-            }else{
-                [FormatReq setValidatesSecureCertificate:NO];
-            }
-            [FormatReq setTimeOutSeconds:60];
-            [FormatReq startSynchronous];
+            NSMutableDictionary *form = [NSMutableDictionary dictionary];
+            // 保持原表单字段，platform仍以数字0传给编码器。
+            [form setValue:dict[@"uId"] forKey:@"userId"];
+            [form setValue:dict[@"uNickName"] forKey:@"userNick"];
+            [form setValue:dict[@"deviceToken"] forKey:@"deviceToken"];
+            [form setValue:softToken forKey:@"softToken"];
+            [form setValue:appId forKey:@"appId"];
+            form[@"platform"] = @0;
+            [EUExWidget postPushURL:[NSURL URLWithString:urlStr]
+                           headers:@{@"Content-Type": @"application/x-www-form-urlencoded; charset=UTF-8"}
+                              body:[ACEURLSession formBodyWithParameters:form]
+        validatesServerCertificate:AppCanEngine.configuration.useCertificateControl
+              useClientCertificate:AppCanEngine.configuration.useCertificateControl
+                        completion:nil];
         }
 
     }
