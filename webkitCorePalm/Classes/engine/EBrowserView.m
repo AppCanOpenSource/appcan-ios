@@ -772,8 +772,9 @@
     if ([urlString containsString:@"itms-appss://apps.apple.com/cn/app/"]) {
         urlString = [urlString substringFromIndex:35];
         urlString = [NSString stringWithFormat:@"https://itunes.apple.com/cn/app/%@",urlString];
-        [UIApplication.sharedApplication openURL:[NSURL URLWithString:urlString]];
-        NSLog(@"UIApplication.sharedApplication openURL:%@",urlString);
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:^(BOOL success) {
+            ACLogInfo(@"AppCan EBrowserView 商店URL打开结果=%@", success ? @"成功" : @"失败");
+        }];
     }
     // AppCanWKTODO
     ACEBrowserView *aceWebView = (ACEBrowserView *)webView;
@@ -873,7 +874,9 @@ static NSInteger kMaxErrorRetryCount = 5;
     //add by gao  for invoke weixin app or alipay app
     if ([urlStr containsString:@"weixin://wap/pay"] || [urlStr containsString:@"alipay://alipayclient"])
     {
-        [[UIApplication sharedApplication] openURL:requestURL];
+        [[UIApplication sharedApplication] openURL:requestURL options:@{} completionHandler:^(BOOL success) {
+            ACLogInfo(@"AppCan EBrowserView 支付URL打开结果=%@", success ? @"成功" : @"失败");
+        }];
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
@@ -884,7 +887,9 @@ static NSInteger kMaxErrorRetryCount = 5;
     if (((eBrwView.mFlag & F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) == F_EBRW_VIEW_FLAG_FIRST_LOAD_FINISHED) && (eBrwView.mFlag & F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) == F_EBRW_VIEW_FLAG_FORBID_CROSSDOMAIN) {
         if (oldURL) {
             if (![[requestURL host] isEqualToString:[oldURL host]]) {
-                [[UIApplication sharedApplication] openURL:requestURL];
+                [[UIApplication sharedApplication] openURL:requestURL options:@{} completionHandler:^(BOOL success) {
+                    ACLogInfo(@"AppCan EBrowserView 跨域URL外部打开结果=%@", success ? @"成功" : @"失败");
+                }];
                 decisionHandler(WKNavigationActionPolicyCancel);
                 return;
             }

@@ -730,12 +730,27 @@ validatesServerCertificate:YES useClientCertificate:NO
     UEX_PARAM_GUARD_NOT_NIL(inURL,UEX_FALSE);
     
     NSURL *url = [NSURL URLWithString:inURL];
-    BOOL openURL = [[UIApplication sharedApplication] openURL:url];
-    if (!openURL && anotherURL) {
-        url = [NSURL URLWithString:anotherURL];
-        openURL = [[UIApplication sharedApplication] openURL:url];
+    if (!url || url.scheme.length == 0) {
+        ACLogError(@"AppCan EUExWidget loadApp 首选URL无效，未发起打开请求");
+        return UEX_FALSE;
     }
-    return openURL ? UEX_TRUE : UEX_FALSE ;
+    // note: 打开URL已改为异步；返回值仅表示请求已发起，实际打开结果通过日志记录。
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+        ACLogInfo(@"AppCan EUExWidget loadApp 首选URL打开结果=%@", success ? @"成功" : @"失败");
+        if (success || !anotherURL) {
+            return;
+        }
+        // 仅在首选URL明确失败后尝试备用URL，不并行打开两个目标。
+        NSURL *fallbackURL = [NSURL URLWithString:anotherURL];
+        if (!fallbackURL || fallbackURL.scheme.length == 0) {
+            ACLogError(@"AppCan EUExWidget loadApp 备用URL无效，未发起打开请求");
+            return;
+        }
+        [[UIApplication sharedApplication] openURL:fallbackURL options:@{} completionHandler:^(BOOL fallbackSuccess) {
+            ACLogInfo(@"AppCan EUExWidget loadApp 备用URL打开结果=%@", fallbackSuccess ? @"成功" : @"失败");
+        }];
+    }];
+    return UEX_TRUE;
 }
 
 
