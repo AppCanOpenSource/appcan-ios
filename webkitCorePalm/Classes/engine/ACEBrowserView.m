@@ -702,9 +702,11 @@ const CGFloat loadingVisibleHeight = 60.0f;
     } else {
         // Fallback on earlier versions
     } // 禁用苹果的欺诈性网站警告(Fraudulent Website Warning)
-    // 为了AppStore上架需求，关闭私有API调用。
-//    [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+    // note: 此处使用私有API以保留4.6本地文件访问兼容；若AppStore上架出现相关问题，需排查此配置。
+    // note: 关闭后file://页面的fetch/XHR本地读取可能失败；AppCan不推荐此用法，建议改用uexFileMgr插件。
+    [preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
 
+    // note: allowUniversalAccessFromFileURLs曾因闪退被禁用，下方两种历史写法均继续保持注释。
     //add by gao
 //    [configuration setValue:@YES forKey:@"_allowUniversalAccessFromFileURLs"];
 
