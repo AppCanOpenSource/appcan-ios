@@ -1852,7 +1852,7 @@ static NSString *clientCertificatePwd = nil;
     //注意：此处必须倒序遍历，这样才可以保证在替换了后面的字符串后，虽然更改了字符串长度，但是不会影响前面的匹配点位置
     for (NSTextCheckingResult *result in results.reverseObjectEnumerator) {
         NSString *partStr = [inString substringWithRange:result.range];
-        NSLog(@"%@ %@",NSStringFromRange(result.range), partStr);
+        // NSLog(@"%@ %@",NSStringFromRange(result.range), partStr);
         if ([partStr isEqualToString:@"\\"]) {
             [regular replaceMatchesInString:resultMutableString options:NSMatchingReportCompletion
                                       range:result.range withTemplate:@"\\\\\\\\"];
