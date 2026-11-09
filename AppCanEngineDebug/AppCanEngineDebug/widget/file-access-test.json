@@ -1,0 +1,4 @@
+{
+    "probe": "appcan-wk-file-access",
+    "message": "本地JSON读取成功"
+}

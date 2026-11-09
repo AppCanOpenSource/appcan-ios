@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WK本地文件访问与存储测试</title>
+    <style>
+        body { font: 16px -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: max(20px, env(safe-area-inset-top)); padding-bottom: max(20px, env(safe-area-inset-bottom)); color: #222; background: #f5f5f5; }
+        h1 { font-size: 21px; }
+        p { line-height: 1.6; }
+        button { padding: 12px 20px; font-size: 17px; }
+        li { margin: 12px 0; padding: 12px; background: white; border-radius: 6px; }
+        ol { padding-left: 24px; }
+        .result, #environment { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; }
+        .result { display: block; margin-top: 8px; }
+        .pass { color: #146b32; }
+        .fail { color: #b42318; }
+    </style>
+</head>
+<body>
+    <a href="index.html">返回首页</a>
+    <h1>WK本地文件访问与存储测试</h1>
+    <p>测试当前引擎配置下的本地文件访问与存储能力。无需网络，每项超时8秒也会显示失败；fetch / XHR失败时请保留错误信息。</p>
+    <p>先运行一次，再退出并重新启动App、进入本页运行。两项存储显示“上次记录”才说明之前的数据仍可读取；请勿卸载App。</p>
+    <button id="run" type="button">开始测试</button>
+    <p id="summary" role="status">尚未运行</p>
+    <ol aria-live="polite">
+        <li>普通本地图片加载<span id="image" class="result">待测试</span></li>
+        <li>fetch读取同目录JSON<span id="fetch" class="result">待测试</span></li>
+        <li>XMLHttpRequest读取同目录JSON<span id="xhr" class="result">待测试</span></li>
+        <li>localStorage读写<span id="local" class="result">待测试</span></li>
+        <li>IndexedDB读写<span id="idb" class="result">待测试</span></li>
+    </ol>
+    <p>仅检查本页列出的能力，不代表跨目录、加密页面、Cookie或全部业务已通过。仅使用专用测试存储，不清理业务数据。</p>
+    <details><summary>当前页面与系统信息</summary><pre id="environment"></pre></details>
+    <script>
+        'use strict';
+        const storageKey = 'appcan.debug.wk-file-access';
+        const databaseName = 'AppCanDebugWKFileAccess';
+        let runStamp;
+
+        document.getElementById('environment').textContent = location.href + '\n' + navigator.userAgent;
+
+        // 校验样本内容，避免把空响应、错误页面或仅完成请求误判为成功。
+        function checkJSON(text) {
+            const data = JSON.parse(text);
+            if (data.probe !== 'appcan-wk-file-access') throw new Error('JSON样本内容不匹配');
+            return data.message;
+        }
+
+        function localImage() {
+            return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.onload = () => image.naturalWidth > 0 ? resolve('图片已解码') : reject(new Error('图片为空'));
+                image.onerror = () => reject(new Error('本地图片加载失败'));
+                image.src = 'css/icons/icon-ok.png?probe=' + Date.now();
+            });
+        }
+
+        async function localFetch() {
+            // 直接使用浏览器fetch，不经插件或原生代理绕过文件来源限制。
+            const response = await fetch('file-access-test.json?probe=' + Date.now(), { cache: 'no-store' });
+            if (!response.ok && response.status !== 0) throw new Error('响应状态=' + response.status);
+            return checkJSON(await response.text()) + '；响应状态=' + response.status;
+        }
+
+        function localXHR() {
+            return new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest();
+                request.open('GET', 'file-access-test.json?probe=' + Date.now(), true);
+                request.timeout = 7000;
+                request.onload = () => {
+                    try {
+                        // file://成功响应可能为0，必须再校验实际JSON内容。
+                        if (request.status !== 0 && request.status !== 200) throw new Error('响应状态=' + request.status);
+                        resolve(checkJSON(request.responseText) + '；响应状态=' + request.status);
+                    } catch (error) { reject(error); }
+                };
+                request.onerror = () => reject(new Error('XHR加载失败；status=' + request.status + '（可能被文件来源策略拦截）'));
+                request.ontimeout = () => reject(new Error('XHR超时'));
+                request.send();
+            });
+        }
+
+        function previousRecord(value) {
+            return '上次记录：' + (value || '无（首次运行或旧记录不可见）') + '\n本次记录：' + runStamp;
+        }
+
+        function localStorageTest() {
+            const previous = localStorage.getItem(storageKey);
+            localStorage.setItem(storageKey, runStamp);
+            if (localStorage.getItem(storageKey) !== runStamp) throw new Error('localStorage写入后读回不一致');
+            return previousRecord(previous);
+        }
+
+        function indexedDBTest() {
+            // 使用独立库；事务完成后才报成功，连接随后关闭，方便重新进入或重启复测。
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(databaseName, 1);
+                let failed = false;
+                request.onupgradeneeded = () => request.result.createObjectStore('probe');
+                request.onerror = () => reject(request.error || new Error('IndexedDB打开失败'));
+                request.onblocked = () => { failed = true; reject(new Error('IndexedDB被其他页面连接阻塞')); };
+                request.onsuccess = () => {
+                    const db = request.result;
+                    if (failed) { db.close(); return; }
+                    db.onversionchange = () => db.close();
+                    try {
+                        const transaction = db.transaction('probe', 'readwrite');
+                        const store = transaction.objectStore('probe');
+                        let previous;
+                        const read = store.get('lastRun');
+                        read.onsuccess = () => { previous = read.result; };
+                        store.put(runStamp, 'lastRun');
+                        const verify = store.get('lastRun');
+                        verify.onsuccess = () => {
+                            if (verify.result !== runStamp) transaction.abort();
+                        };
+                        transaction.oncomplete = () => { db.close(); resolve(previousRecord(previous)); };
+                        transaction.onabort = () => { db.close(); reject(transaction.error || new Error('IndexedDB事务中止或读回不一致')); };
+                    } catch (error) { db.close(); reject(error); }
+                };
+            });
+        }
+
+        // 每项独立显示结果：某一项失败或无响应，不阻止后面的存储检查。
+        async function runCase(id, action) {
+            const output = document.getElementById(id);
+            output.className = 'result';
+            output.textContent = '测试中…';
+            let timer;
+            try {
+                const timeout = new Promise((resolve, reject) => { timer = setTimeout(() => reject(new Error('8秒未完成，请同时查看Safari控制台')), 8000); });
+                const result = await Promise.race([Promise.resolve().then(action), timeout]);
+                output.className = 'result pass';
+                output.textContent = '成功：' + result;
+                return true;
+            } catch (error) {
+                output.className = 'result fail';
+                output.textContent = '失败：' + (error.name || 'Error') + '：' + (error.message || String(error));
+                return false;
+            } finally { clearTimeout(timer); }
+        }
+
+        document.getElementById('run').onclick = async function () {
+            this.disabled = true;
+            runStamp = new Date().toISOString();
+            document.getElementById('summary').textContent = '测试进行中…';
+            ['image', 'fetch', 'xhr', 'local', 'idb'].forEach(id => {
+                document.getElementById(id).textContent = '待测试';
+                document.getElementById(id).className = 'result';
+            });
+            let passed = 0;
+            for (const [id, action] of [['image', localImage], ['fetch', localFetch], ['xhr', localXHR], ['local', localStorageTest], ['idb', indexedDBTest]]) {
+                if (await runCase(id, action)) passed++;
+            }
+            document.getElementById('summary').textContent = '本轮完成：成功' + passed + '项，失败' + (5 - passed) + '项。';
+            this.disabled = false;
+        };
+    </script>
+</body>
+</html>
