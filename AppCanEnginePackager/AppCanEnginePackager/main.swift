@@ -82,6 +82,28 @@ func arm64UUID(at url: URL) throws -> String {
     return uuids[0]
 }
 
+/// 仅清理归档副本中的Finder元数据，避免修改基础工程原件；其他隐藏资源照常保留。
+func prepareArchiveSource(from source: URL, to destination: URL) throws {
+    let fm = FileManager.default
+    try fm.copyItem(at: source, to: destination)
+    var enumerationError: Error?
+    guard let entries = fm.enumerator(at: destination, includingPropertiesForKeys: nil,
+                                     errorHandler: { _, error in
+                                         enumerationError = error
+                                         return false
+                                     }) else {
+        throw CocoaError(.fileReadUnknown)
+    }
+    var metadataFiles: [URL] = []
+    for case let entry as URL in entries where entry.lastPathComponent == ".DS_Store" {
+        metadataFiles.append(entry)
+    }
+    if let error = enumerationError { throw error }
+    for entry in metadataFiles {
+        try fm.removeItem(at: entry)
+    }
+}
+
 func synchronizeReleaseFrameworks(from products: URL, to root: URL) throws {
     let fm = FileManager.default
     let names = ["AppCanEngine", "AppCanKit", "Ono", "pop"]
@@ -171,8 +193,10 @@ do{
     
 //MARK: generate 7z package
     let _7zURL = tmpFolderURL.appendingPathComponent("package.7z")
+    let archiveSource = tmpFolderURL.appendingPathComponent("AppCanPlugin", isDirectory: true)
+    try prepareArchiveSource(from: rootURL.appendingPathComponent("AppCanPlugin"), to: archiveSource)
     let writer = LzmaSDKObjCWriter(fileURL: _7zURL)
-    guard writer.addPath(rootURL.appendingPathComponent("AppCanPlugin").path, forPath: "AppCanPlugin") else{
+    guard writer.addPath(archiveSource.path, forPath: "AppCanPlugin") else{
         fatalError("AppCanPlugin not exist")
     }
     writer.method = LzmaSDKObjCMethodLZMA2 // or LzmaSDKObjCMethodLZMA
