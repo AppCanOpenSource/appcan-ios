@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>4.7.51</key>
+	<array>
+		<string>适配iOS27，最低支持iOS15，Xcode27</string>
+		<string>启动屏适配Storyboard模式</string>
+		<string>更新基础工程Ono、pop库</string>
+		<string>适配可变窗口尺寸情况下主应用存在黑边问题</string>
+	</array>
+	<key>4.7.50</key>
+	<array>
+		<string>适配iOS27，最低支持iOS15，Xcode27</string>
+		<string>启动屏适配Storyboard模式</string>
+		<string>更新基础工程Ono、pop库</string>
+	</array>
 	<key>4.7.49</key>
 	<array>
 		<string>适配iOS27，最低支持iOS15，Xcode27</string>
