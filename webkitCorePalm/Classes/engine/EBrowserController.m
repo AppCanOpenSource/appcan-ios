@@ -498,6 +498,23 @@ static BOOL isLoadingImageTimeoutCancelled = NO;
     }
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (!self.isAppCanRootViewController) {
+        return;
+    }
+
+    // 主应用在 Scene 连接前创建，布局时以实际父视图尺寸校准，保留旧状态栏区域。
+    CGRect frame = self.view.bounds;
+    if (![BUtility useIOS7Style]) {
+        frame.origin.y += 20;
+        frame.size.height = MAX(0, frame.size.height - 20);
+    }
+    if (!CGRectEqualToRect(self.meBrwMainFrm.frame, frame)) {
+        self.meBrwMainFrm.frame = frame;
+    }
+}
+
 #pragma mark - viewDidLoad中的doUpdateWgtBlockFinish执行完之后进行的操作
 - (void)workAfterDoUpdateWgtBlock
 {
