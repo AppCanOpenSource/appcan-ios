@@ -79,6 +79,7 @@
 		E864F6FC258B760D0096B0EB /* ACEDesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E864F6FA258B75EC0096B0EB /* ACEDesKit.framework */; };
 		E864F6FD258B760D0096B0EB /* ACEDesKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E864F6FA258B75EC0096B0EB /* ACEDesKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F72F4A241986243F008FB4E6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CC60367157DCCEF00A3E13E /* UIKit.framework */; };
+		F47A00000000000000000001 /* AppCanLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F47A00000000000000000003 /* AppCanLaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -180,6 +181,8 @@
 		DE94A2DA18F7CE48000CA6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DE9F08221A5FD6460055FD61 /* CBSchemesList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CBSchemesList.plist; sourceTree = "<group>"; };
 		E864F6FA258B75EC0096B0EB /* ACEDesKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ACEDesKit.framework; sourceTree = "<group>"; };
+		F47A00000000000000000003 /* AppCanLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AppCanLaunchScreen.storyboard; sourceTree = "<group>"; };
+		F47A00000000000000000006 /* generateLaunchAssets.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = generateLaunchAssets.sh; path = "Support/generateLaunchAssets.sh"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +338,8 @@
 			isa = PBXGroup;
 			children = (
 				3C81BA981A4AA29F00C4B7C1 /* Image.xcassets */,
+				F47A00000000000000000003 /* AppCanLaunchScreen.storyboard */,
+				F47A00000000000000000006 /* generateLaunchAssets.sh */,
 				469DCDD0166EFA5100FC2F72 /* uexFrameworks */,
 				6CC603A7157DD65E00A3E13E /* WidgetOnePseudoDelegate.h */,
 				6CC603A8157DD65E00A3E13E /* WidgetOnePseudoDelegate.m */,
@@ -406,6 +411,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6CC60349157DCC0F00A3E13E /* Build configuration list for PBXNativeTarget "AppCanPlugin" */;
 			buildPhases = (
+				F47A00000000000000000005 /* Sync AppCan Launch Brand */,
 				6CC6032D157DCC0F00A3E13E /* Sources */,
 				6CC6032F157DCC0F00A3E13E /* Resources */,
 				423F98A81DB77076007A382B /* ShellScript */,
@@ -460,6 +466,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F47A00000000000000000001 /* AppCanLaunchScreen.storyboard in Resources */,
 				6CC60340157DCC0F00A3E13E /* InfoPlist.strings in Resources */,
 				6CC60391157DCD9300A3E13E /* error in Resources */,
 				DE9F08231A5FD6460055FD61 /* CBSchemesList.plist in Resources */,
@@ -501,6 +508,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "#restore frameworks\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n    cd \"${SRCROOT}/AppCanPlugin/uexFrameworks/temp\"\n    for a in `ls -d */`\n    do\n        folder=\"${a%%/*}\"\n        rm -rf \"../${folder}\"\n        cp -rf \"${folder}\" \"../${folder}\"\n    done\n    cd ..\n    rm -rf temp\nfi\n";
+		};
+		F47A00000000000000000005 /* Sync AppCan Launch Brand */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = (
+				"${SRCROOT}/Support/generateLaunchAssets.sh",
+				"${SRCROOT}/AppCanPlugin/Image.xcassets/$(ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME).launchimage",
+			);
+			name = "Sync AppCan Launch Brand";
+			outputPaths = (
+				"${SRCROOT}/AppCanPlugin/Image.xcassets/ACELaunchBrand.imageset",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "/bin/bash \"${SRCROOT}/Support/generateLaunchAssets.sh\" \"${SRCROOT}/AppCanPlugin/Image.xcassets\" \"${SRCROOT}/AppCanPlugin/Image.xcassets/ACELaunchBrand.imageset\" \"${ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME}\" \"${TARGETED_DEVICE_FAMILY}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

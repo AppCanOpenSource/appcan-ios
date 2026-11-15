@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ACE-launch-controller">
+    <device id="retina6_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="25073"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ACE-launch-scene">
+            <objects>
+                <viewController id="ACE-launch-controller" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0wg-7R-iiI"/>
+                        <viewControllerLayoutGuide type="bottom" id="uWH-NJ-SYc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ACE-launch-root">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="ACELaunchBrand" translatesAutoresizingMaskIntoConstraints="NO" id="ACE-launch-image">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="ACE-launch-image" secondAttribute="bottom" id="ACE-launch-bottom"/>
+                            <constraint firstItem="ACE-launch-image" firstAttribute="leading" secondItem="ACE-launch-root" secondAttribute="leading" id="ACE-launch-leading"/>
+                            <constraint firstItem="ACE-launch-image" firstAttribute="top" secondItem="ACE-launch-root" secondAttribute="top" id="ACE-launch-top"/>
+                            <constraint firstAttribute="trailing" secondItem="ACE-launch-image" secondAttribute="trailing" id="ACE-launch-trailing"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ACE-launch-responder" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="0.0" y="-38"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ACELaunchBrand" width="414" height="736"/>
+    </resources>
+</document>

@@ -1,0 +1,8 @@
+{
+  "images": [
+    {"idiom":"iphone","scale":"2x","filename":"brand-iphone@2x.png"},
+    {"idiom":"iphone","scale":"3x","filename":"brand-iphone@3x.png"},
+    {"idiom":"ipad","scale":"2x","filename":"brand-ipad@2x.png"}
+  ],
+  "info": {"author":"xcode","version":1}
+}

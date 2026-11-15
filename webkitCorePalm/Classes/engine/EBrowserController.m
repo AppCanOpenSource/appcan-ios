@@ -253,6 +253,15 @@ static BOOL isLoadingImageTimeoutCancelled = NO;
         self.mStartView = [[UIImageView alloc] initWithImage:customImage];
     }
     
+    BOOL usesLaunchBrandImage = NO;
+    // 优先与系统启动Storyboard共用品牌资源，保持自定义图优先级及旧宿主选图兜底。
+    if (!self.mStartView) {
+        UIImage *brandImage = [UIImage imageNamed:@"ACELaunchBrand"];
+        if (brandImage) {
+            self.mStartView = [[UIImageView alloc] initWithImage:brandImage];
+            usesLaunchBrandImage = YES;
+        }
+    }
     if (!self.mStartView) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             if ([oritent isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] || [oritent isEqualToString:@"UIInterfaceOrientationLandscapeRight"]) {
@@ -299,7 +308,8 @@ static BOOL isLoadingImageTimeoutCancelled = NO;
     self.mStartView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     
     
-    if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && self.mStartView.frame.size.width > self.mStartView.frame.size.height){
+    // 新品牌图各方向均与Storyboard一致，仅等比裁剪；旧图和自定义图保留原横屏旋转。
+    if(!usesLaunchBrandImage && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && self.mStartView.frame.size.width > self.mStartView.frame.size.height){
         //iPhone 横屏应用,特殊处理
         self.mStartView.image = [UIImage imageWithCGImage:self.mStartView.image.CGImage scale:1 orientation:UIImageOrientationLeft];
     }
