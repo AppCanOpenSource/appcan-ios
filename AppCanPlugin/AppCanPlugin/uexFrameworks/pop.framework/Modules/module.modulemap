@@ -1,6 +1,6 @@
 framework module pop {
-  umbrella header "pop.h"
+    umbrella header "POP.h"
 
-  export *
-  module * { export * }
+    exclude header "POPAnimationPrivate.h"
+    exclude header "POPAnimatorPrivate.h"
 }
