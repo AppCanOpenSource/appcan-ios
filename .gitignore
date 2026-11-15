@@ -26,6 +26,8 @@ xcuserdata/
 *.ipa
 *.dSYM.zip
 *.dSYM
+!AppCanEnginePackager/PrebuiltSymbols/*.framework.dSYM/
+!AppCanEnginePackager/PrebuiltSymbols/*.framework.dSYM/**
 
 # CocoaPods
 #

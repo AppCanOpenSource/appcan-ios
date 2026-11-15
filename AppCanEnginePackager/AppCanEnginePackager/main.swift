@@ -40,6 +40,96 @@ let engineBuildCommand: (String, String) throws -> Void = { command, derivedData
     try xcodebuild.runSync()
 }
 
+enum FrameworkSymbolError: LocalizedError {
+    case missing(String)
+    case invalid(String)
+    case mismatch(String, String, String)
+
+    var errorDescription: String? {
+        switch self {
+        case .missing(let path): return "缺少引擎框架或dSYM：\(path)"
+        case .invalid(let path): return "无法读取非空arm64 UUID：\(path)"
+        case .mismatch(let name, let binary, let symbol):
+            return "\(name)框架与dSYM UUID不一致：\(binary) / \(symbol)"
+        }
+    }
+}
+
+/// dSYM在目标的构建脚本结束后才由Xcode生成，必须等整个xcodebuild返回再取同批产物。
+func arm64UUID(at url: URL) throws -> String {
+    let fm = FileManager.default
+    guard fm.fileExists(atPath: url.path) else { throw FrameworkSymbolError.missing(url.path) }
+    let size = (try fm.attributesOfItem(atPath: url.path)[.size] as? NSNumber)?.int64Value ?? 0
+    guard size > 0 else { throw FrameworkSymbolError.invalid(url.path) }
+
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/bin/xcrun")
+    process.arguments = ["dwarfdump", "--uuid", url.path]
+    let output = Pipe()
+    process.standardOutput = output
+    process.standardError = Pipe()
+    try process.run()
+    let data = output.fileHandleForReading.readDataToEndOfFile()
+    process.waitUntilExit()
+    let lines = String(data: data, encoding: .utf8)?.components(separatedBy: .newlines) ?? []
+    let uuids = lines.filter { $0.contains("(arm64)") }.compactMap { line -> String? in
+        guard let start = line.range(of: "UUID: "), let end = line.range(of: " (arm64)") else { return nil }
+        return String(line[start.upperBound..<end.lowerBound])
+    }
+    guard process.terminationStatus == 0, uuids.count == 1 else {
+        throw FrameworkSymbolError.invalid(url.path)
+    }
+    return uuids[0]
+}
+
+func synchronizeReleaseFrameworks(from products: URL, to root: URL) throws {
+    let fm = FileManager.default
+    let names = ["AppCanEngine", "AppCanKit", "Ono", "pop"]
+    let prebuiltSymbols = root.appendingPathComponent("AppCanEnginePackager/PrebuiltSymbols", isDirectory: true)
+    let symbols = root.appendingPathComponent("dSYM", isDirectory: true)
+
+    // Ono/pop由维护者按需手动同步；它们的固定符号必须与基础工程现有二进制配对。
+    // 引擎与Kit则取本次Release构建完成后的产物。
+    for name in names {
+        let isPrebuilt = name == "Ono" || name == "pop"
+        let parent = isPrebuilt ? "uexFrameworks" : "engine"
+        let framework = isPrebuilt
+            ? root.appendingPathComponent("AppCanPlugin/AppCanPlugin/\(parent)/\(name).framework", isDirectory: true)
+            : products.appendingPathComponent("\(name).framework", isDirectory: true)
+        let symbolRoot = isPrebuilt ? prebuiltSymbols : products
+        let binary = framework.appendingPathComponent(name)
+        let symbol = symbolRoot.appendingPathComponent("\(name).framework.dSYM/Contents/Resources/DWARF/\(name)")
+        let binaryUUID = try arm64UUID(at: binary)
+        let symbolUUID = try arm64UUID(at: symbol)
+        guard binaryUUID == symbolUUID else {
+            throw FrameworkSymbolError.mismatch(name, binaryUUID, symbolUUID)
+        }
+        print("\(name) dSYM UUID: \(binaryUUID)")
+    }
+
+    // 只更新引擎与Kit；不在每次出包时覆盖基础工程的Ono/pop。
+    // 输出目录每次重建，避免残留旧符号或未交付的Swift框架dSYM。
+    if fm.fileExists(atPath: symbols.path) { try fm.removeItem(at: symbols) }
+    try fm.createDirectory(at: symbols, withIntermediateDirectories: true, attributes: nil)
+    for name in names {
+        let isPrebuilt = name == "Ono" || name == "pop"
+        let parent = isPrebuilt ? "uexFrameworks" : "engine"
+        let destination = root.appendingPathComponent("AppCanPlugin/AppCanPlugin/\(parent)/\(name).framework", isDirectory: true)
+        if !isPrebuilt {
+            if fm.fileExists(atPath: destination.path) { try fm.removeItem(at: destination) }
+            try fm.copyItem(at: products.appendingPathComponent("\(name).framework", isDirectory: true), to: destination)
+        }
+        let symbolRoot = isPrebuilt ? prebuiltSymbols : products
+        try fm.copyItem(at: symbolRoot.appendingPathComponent("\(name).framework.dSYM", isDirectory: true),
+                        to: symbols.appendingPathComponent("\(name).framework.dSYM", isDirectory: true))
+        let binaryUUID = try arm64UUID(at: destination.appendingPathComponent(name))
+        let symbolUUID = try arm64UUID(at: symbols.appendingPathComponent("\(name).framework.dSYM/Contents/Resources/DWARF/\(name)"))
+        guard binaryUUID == symbolUUID else {
+            throw FrameworkSymbolError.mismatch(name, binaryUUID, symbolUUID)
+        }
+    }
+}
+
 do{
     // Xcode脚本传入真实BUILD_DIR；独立运行构建产物时，从.app所在的配置目录向上取Products。
     let outerProducts = args["buildProductsDir"] ?? ProcessInfo.processInfo.environment["BUILD_DIR"] ??
@@ -56,6 +146,10 @@ do{
     let info = EngineInfo(version: resolved.version, summary: resolved.summary, suffix: args["suffix"])
     try engineBuildCommand("clean", engineDerivedDataPath)
     try engineBuildCommand("build", engineDerivedDataPath)
+
+    let releaseProducts = URL(fileURLWithPath: engineDerivedDataPath)
+        .appendingPathComponent("Build/Products/Release-iphoneos", isDirectory: true)
+    try synchronizeReleaseFrameworks(from: releaseProducts, to: rootURL)
 
     // 基础工程从此位置链接引擎；版本不匹配时不得继续生成新包。
     let frameworkPlistURL = rootURL.appendingPathComponent("AppCanPlugin/AppCanPlugin/engine/AppCanEngine.framework/Info.plist")
