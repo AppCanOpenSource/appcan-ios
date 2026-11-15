@@ -1,0 +1,152 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/zhangyipeng/Library/Developer/Xcode/DerivedData/AppCanEngine-gaptbjgbocpzwnguakwnjigprlov/Build/Products/Release-iphoneos/Ono.framework/Ono'
+relocations:
+  - { offset: 0x38C80, size: 0x8, addend: 0x0, symName: _OnoVersionString, symObjAddr: 0x0, symBinAddr: 0x8F98, symSize: 0x0 }
+  - { offset: 0x38CB5, size: 0x8, addend: 0x0, symName: _OnoVersionNumber, symObjAddr: 0x20, symBinAddr: 0x8FB8, symSize: 0x0 }
+  - { offset: 0x38CF2, size: 0x8, addend: 0x0, symName: _ONOXPathFromCSS, symObjAddr: 0x0, symBinAddr: 0x4000, symSize: 0x100 }
+  - { offset: 0x38D0C, size: 0x8, addend: 0x0, symName: _ONOXMLDocumentErrorDomain, symObjAddr: 0x3DC8, symBinAddr: 0xC000, symSize: 0x0 }
+  - { offset: 0x3917D, size: 0x8, addend: 0x0, symName: _ONOXPathFromCSS, symObjAddr: 0x0, symBinAddr: 0x4000, symSize: 0x100 }
+  - { offset: 0x391B8, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke, symObjAddr: 0x100, symBinAddr: 0x4100, symSize: 0x214 }
+  - { offset: 0x39264, size: 0x8, addend: 0x0, symName: ___Block_byref_object_copy_, symObjAddr: 0x314, symBinAddr: 0x4314, symSize: 0x10 }
+  - { offset: 0x39289, size: 0x8, addend: 0x0, symName: ___Block_byref_object_dispose_, symObjAddr: 0x324, symBinAddr: 0x4324, symSize: 0x8 }
+  - { offset: 0x392FC, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6, symObjAddr: 0x32C, symBinAddr: 0x432C, symSize: 0x548 }
+  - { offset: 0x39485, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.1, symObjAddr: 0x385C, symBinAddr: 0x785C, symSize: 0x14 }
+  - { offset: 0x394A1, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.1, symObjAddr: 0x385C, symBinAddr: 0x785C, symSize: 0x14 }
+  - { offset: 0x394B6, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.1, symObjAddr: 0x385C, symBinAddr: 0x785C, symSize: 0x14 }
+  - { offset: 0x394C9, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.2, symObjAddr: 0x3870, symBinAddr: 0x7870, symSize: 0x14 }
+  - { offset: 0x394E5, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.2, symObjAddr: 0x3870, symBinAddr: 0x7870, symSize: 0x14 }
+  - { offset: 0x394FA, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.2, symObjAddr: 0x3870, symBinAddr: 0x7870, symSize: 0x14 }
+  - { offset: 0x3950D, size: 0x8, addend: 0x0, symName: ___ONOXPathFromCSS_block_invoke.6.cold.3, symObjAddr: 0x3884, symBinAddr: 0x7884, symSize: 0x24 }
+  - { offset: 0x39551, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40r48r, symObjAddr: 0x874, symBinAddr: 0x4874, symSize: 0x44 }
+  - { offset: 0x3957A, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s40r48r, symObjAddr: 0x8B8, symBinAddr: 0x48B8, symSize: 0x38 }
+  - { offset: 0x39599, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32s40s, symObjAddr: 0x8F0, symBinAddr: 0x48F0, symSize: 0x28 }
+  - { offset: 0x395C2, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s40s, symObjAddr: 0x918, symBinAddr: 0x4918, symSize: 0x28 }
+  - { offset: 0x395E1, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator dealloc]', symObjAddr: 0x940, symBinAddr: 0x4940, symSize: 0x54 }
+  - { offset: 0x39631, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator objectAtIndex:]', symObjAddr: 0x994, symBinAddr: 0x4994, symSize: 0x9C }
+  - { offset: 0x39678, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator allObjects]', symObjAddr: 0xA30, symBinAddr: 0x4A30, symSize: 0xD8 }
+  - { offset: 0x396FB, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator nextObject]', symObjAddr: 0xB08, symBinAddr: 0x4B08, symSize: 0x70 }
+  - { offset: 0x39732, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator xmlXPath]', symObjAddr: 0xB78, symBinAddr: 0x4B78, symSize: 0x10 }
+  - { offset: 0x39769, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator setXmlXPath:]', symObjAddr: 0xB88, symBinAddr: 0x4B88, symSize: 0x10 }
+  - { offset: 0x397A6, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator cursor]', symObjAddr: 0xB98, symBinAddr: 0x4B98, symSize: 0x10 }
+  - { offset: 0x397DD, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator setCursor:]', symObjAddr: 0xBA8, symBinAddr: 0x4BA8, symSize: 0x10 }
+  - { offset: 0x3981A, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator document]', symObjAddr: 0xBB8, symBinAddr: 0x4BB8, symSize: 0x10 }
+  - { offset: 0x39851, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator setDocument:]', symObjAddr: 0xBC8, symBinAddr: 0x4BC8, symSize: 0x14 }
+  - { offset: 0x39892, size: 0x8, addend: 0x0, symName: '-[ONOXPathEnumerator .cxx_destruct]', symObjAddr: 0xBDC, symBinAddr: 0x4BDC, symSize: 0x14 }
+  - { offset: 0x398C5, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult boolValue]', symObjAddr: 0xBF0, symBinAddr: 0x4BF0, symSize: 0x8 }
+  - { offset: 0x398FD, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult setBoolValue:]', symObjAddr: 0xBF8, symBinAddr: 0x4BF8, symSize: 0x8 }
+  - { offset: 0x39938, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult numericValue]', symObjAddr: 0xC00, symBinAddr: 0x4C00, symSize: 0x8 }
+  - { offset: 0x3996E, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult setNumericValue:]', symObjAddr: 0xC08, symBinAddr: 0x4C08, symSize: 0x8 }
+  - { offset: 0x399AC, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult stringValue]', symObjAddr: 0xC10, symBinAddr: 0x4C10, symSize: 0x8 }
+  - { offset: 0x399E4, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult setStringValue:]', symObjAddr: 0xC18, symBinAddr: 0x4C18, symSize: 0x8 }
+  - { offset: 0x39A23, size: 0x8, addend: 0x0, symName: '-[ONOXPathFunctionResult .cxx_destruct]', symObjAddr: 0xC20, symBinAddr: 0x4C20, symSize: 0xC }
+  - { offset: 0x39A56, size: 0x8, addend: 0x0, symName: '+[ONOXMLDocument XMLDocumentWithString:encoding:error:]', symObjAddr: 0xC2C, symBinAddr: 0x4C2C, symSize: 0x68 }
+  - { offset: 0x39ABD, size: 0x8, addend: 0x0, symName: '+[ONOXMLDocument XMLDocumentWithData:error:]', symObjAddr: 0xC94, symBinAddr: 0x4C94, symSize: 0xB0 }
+  - { offset: 0x39BA6, size: 0x8, addend: 0x0, symName: _ONOSetErrorFromXMLErrorPtr, symObjAddr: 0xD44, symBinAddr: 0x4D44, symSize: 0x148 }
+  - { offset: 0x39C41, size: 0x8, addend: 0x0, symName: '+[ONOXMLDocument HTMLDocumentWithString:encoding:error:]', symObjAddr: 0xE8C, symBinAddr: 0x4E8C, symSize: 0x68 }
+  - { offset: 0x39CA9, size: 0x8, addend: 0x0, symName: '+[ONOXMLDocument HTMLDocumentWithData:error:]', symObjAddr: 0xEF4, symBinAddr: 0x4EF4, symSize: 0xB0 }
+  - { offset: 0x39D88, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument initWithDocument:]', symObjAddr: 0xFA4, symBinAddr: 0x4FA4, symSize: 0xA4 }
+  - { offset: 0x39DFC, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument dealloc]', symObjAddr: 0x1048, symBinAddr: 0x5048, symSize: 0x4C }
+  - { offset: 0x39E4D, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument numberFormatter]', symObjAddr: 0x1094, symBinAddr: 0x5094, symSize: 0x54 }
+  - { offset: 0x39EA5, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument dateFormatter]', symObjAddr: 0x10E8, symBinAddr: 0x50E8, symSize: 0x94 }
+  - { offset: 0x39EFD, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument definePrefix:forDefaultNamespace:]', symObjAddr: 0x117C, symBinAddr: 0x517C, symSize: 0xBC }
+  - { offset: 0x39F53, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument elementWithNode:]', symObjAddr: 0x1238, symBinAddr: 0x5238, symSize: 0x5C }
+  - { offset: 0x39FAD, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument enumeratorWithXPathObject:]', symObjAddr: 0x1294, symBinAddr: 0x5294, symSize: 0x74 }
+  - { offset: 0x3A007, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument XPath:]', symObjAddr: 0x1308, symBinAddr: 0x5308, symSize: 0x6C }
+  - { offset: 0x3A050, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument functionResultByEvaluatingXPath:]', symObjAddr: 0x1374, symBinAddr: 0x5374, symSize: 0x6C }
+  - { offset: 0x3A099, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument enumerateElementsWithXPath:block:]', symObjAddr: 0x13E0, symBinAddr: 0x53E0, symSize: 0xC8 }
+  - { offset: 0x3A0EF, size: 0x8, addend: 0x0, symName: '___51-[ONOXMLDocument enumerateElementsWithXPath:block:]_block_invoke', symObjAddr: 0x14A8, symBinAddr: 0x54A8, symSize: 0xC }
+  - { offset: 0x3A16B, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32b, symObjAddr: 0x14B4, symBinAddr: 0x54B4, symSize: 0x10 }
+  - { offset: 0x3A194, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s, symObjAddr: 0x14C4, symBinAddr: 0x54C4, symSize: 0x8 }
+  - { offset: 0x3A1B3, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument enumerateElementsWithXPath:usingBlock:]', symObjAddr: 0x14CC, symBinAddr: 0x54CC, symSize: 0x74 }
+  - { offset: 0x3A209, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument firstChildWithXPath:]', symObjAddr: 0x1540, symBinAddr: 0x5540, symSize: 0x6C }
+  - { offset: 0x3A252, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument CSS:]', symObjAddr: 0x15AC, symBinAddr: 0x55AC, symSize: 0x6C }
+  - { offset: 0x3A29B, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument enumerateElementsWithCSS:block:]', symObjAddr: 0x1618, symBinAddr: 0x5618, symSize: 0xB4 }
+  - { offset: 0x3A307, size: 0x8, addend: 0x0, symName: '___49-[ONOXMLDocument enumerateElementsWithCSS:block:]_block_invoke', symObjAddr: 0x16CC, symBinAddr: 0x56CC, symSize: 0xC }
+  - { offset: 0x3A383, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument enumerateElementsWithCSS:usingBlock:]', symObjAddr: 0x16D8, symBinAddr: 0x56D8, symSize: 0x74 }
+  - { offset: 0x3A3D9, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument firstChildWithCSS:]', symObjAddr: 0x174C, symBinAddr: 0x574C, symSize: 0x6C }
+  - { offset: 0x3A422, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument version]', symObjAddr: 0x17B8, symBinAddr: 0x57B8, symSize: 0x74 }
+  - { offset: 0x3A45A, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument stringEncoding]', symObjAddr: 0x182C, symBinAddr: 0x582C, symSize: 0x84 }
+  - { offset: 0x3A50C, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument description]', symObjAddr: 0x18B0, symBinAddr: 0x58B0, symSize: 0x44 }
+  - { offset: 0x3A544, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument isEqual:]', symObjAddr: 0x18F4, symBinAddr: 0x58F4, symSize: 0x80 }
+  - { offset: 0x3A58D, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument hash]', symObjAddr: 0x1974, symBinAddr: 0x5974, symSize: 0x4 }
+  - { offset: 0x3A5C3, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument copyWithZone:]', symObjAddr: 0x1978, symBinAddr: 0x5978, symSize: 0x90 }
+  - { offset: 0x3A61D, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument initWithCoder:]', symObjAddr: 0x1A08, symBinAddr: 0x5A08, symSize: 0x110 }
+  - { offset: 0x3A6A8, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument encodeWithCoder:]', symObjAddr: 0x1B18, symBinAddr: 0x5B18, symSize: 0xCC }
+  - { offset: 0x3A709, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setVersion:]', symObjAddr: 0x1BE4, symBinAddr: 0x5BE4, symSize: 0x8 }
+  - { offset: 0x3A748, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setStringEncoding:]', symObjAddr: 0x1BEC, symBinAddr: 0x5BEC, symSize: 0x8 }
+  - { offset: 0x3A785, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument rootElement]', symObjAddr: 0x1BF4, symBinAddr: 0x5BF4, symSize: 0x8 }
+  - { offset: 0x3A7BC, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setRootElement:]', symObjAddr: 0x1BFC, symBinAddr: 0x5BFC, symSize: 0xC }
+  - { offset: 0x3A7FD, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setNumberFormatter:]', symObjAddr: 0x1C08, symBinAddr: 0x5C08, symSize: 0xC }
+  - { offset: 0x3A83E, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setDateFormatter:]', symObjAddr: 0x1C14, symBinAddr: 0x5C14, symSize: 0xC }
+  - { offset: 0x3A87F, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument xmlDocument]', symObjAddr: 0x1C20, symBinAddr: 0x5C20, symSize: 0x8 }
+  - { offset: 0x3A8B6, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setXmlDocument:]', symObjAddr: 0x1C28, symBinAddr: 0x5C28, symSize: 0x8 }
+  - { offset: 0x3A8F3, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument defaultNamespaces]', symObjAddr: 0x1C30, symBinAddr: 0x5C30, symSize: 0x8 }
+  - { offset: 0x3A92A, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument setDefaultNamespaces:]', symObjAddr: 0x1C38, symBinAddr: 0x5C38, symSize: 0xC }
+  - { offset: 0x3A96B, size: 0x8, addend: 0x0, symName: '-[ONOXMLDocument .cxx_destruct]', symObjAddr: 0x1C44, symBinAddr: 0x5C44, symSize: 0x54 }
+  - { offset: 0x3A99E, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement namespace]', symObjAddr: 0x1C98, symBinAddr: 0x5C98, symSize: 0x90 }
+  - { offset: 0x3A9D6, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement tag]', symObjAddr: 0x1D28, symBinAddr: 0x5D28, symSize: 0x74 }
+  - { offset: 0x3AA0E, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement lineNumber]', symObjAddr: 0x1D9C, symBinAddr: 0x5D9C, symSize: 0x40 }
+  - { offset: 0x3AA71, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement attributes]', symObjAddr: 0x1DDC, symBinAddr: 0x5DDC, symSize: 0xF4 }
+  - { offset: 0x3AB09, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement valueForAttribute:]', symObjAddr: 0x1ED0, symBinAddr: 0x5ED0, symSize: 0x98 }
+  - { offset: 0x3ABCD, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement valueForAttribute:inNamespace:]', symObjAddr: 0x1F68, symBinAddr: 0x5F68, symSize: 0xC4 }
+  - { offset: 0x3ACA0, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement parent]', symObjAddr: 0x202C, symBinAddr: 0x602C, symSize: 0x80 }
+  - { offset: 0x3ACD8, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement children]', symObjAddr: 0x20AC, symBinAddr: 0x60AC, symSize: 0x60 }
+  - { offset: 0x3AD10, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement firstChildWithTag:]', symObjAddr: 0x210C, symBinAddr: 0x610C, symSize: 0x8 }
+  - { offset: 0x3AD55, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement firstChildWithTag:inNamespace:]', symObjAddr: 0x2114, symBinAddr: 0x6114, symSize: 0x118 }
+  - { offset: 0x3ADC0, size: 0x8, addend: 0x0, symName: '___47-[ONOXMLElement firstChildWithTag:inNamespace:]_block_invoke', symObjAddr: 0x222C, symBinAddr: 0x622C, symSize: 0x30 }
+  - { offset: 0x3AE4C, size: 0x8, addend: 0x0, symName: _ONOXMLNodeMatchesTagInNamespace, symObjAddr: 0x225C, symBinAddr: 0x625C, symSize: 0xF8 }
+  - { offset: 0x3AEB7, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement childrenWithTag:]', symObjAddr: 0x2354, symBinAddr: 0x6354, symSize: 0x8 }
+  - { offset: 0x3AEFC, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement childrenWithTag:inNamespace:]', symObjAddr: 0x235C, symBinAddr: 0x635C, symSize: 0xE4 }
+  - { offset: 0x3AF56, size: 0x8, addend: 0x0, symName: '___45-[ONOXMLElement childrenWithTag:inNamespace:]_block_invoke', symObjAddr: 0x2440, symBinAddr: 0x6440, symSize: 0x10 }
+  - { offset: 0x3AFDE, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement childrenAtIndexes:]', symObjAddr: 0x2450, symBinAddr: 0x6450, symSize: 0x108 }
+  - { offset: 0x3B05A, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement indexesOfChildrenPassingTest:]', symObjAddr: 0x2558, symBinAddr: 0x6558, symSize: 0xB8 }
+  - { offset: 0x3B109, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement previousSibling]', symObjAddr: 0x2610, symBinAddr: 0x6610, symSize: 0x80 }
+  - { offset: 0x3B141, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement nextSibling]', symObjAddr: 0x2690, symBinAddr: 0x6690, symSize: 0x80 }
+  - { offset: 0x3B179, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement isBlank]', symObjAddr: 0x2710, symBinAddr: 0x6710, symSize: 0x40 }
+  - { offset: 0x3B1B1, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement stringValue]', symObjAddr: 0x2750, symBinAddr: 0x6750, symSize: 0x90 }
+  - { offset: 0x3B240, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement numberValue]', symObjAddr: 0x27E0, symBinAddr: 0x67E0, symSize: 0xB4 }
+  - { offset: 0x3B278, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement dateValue]', symObjAddr: 0x2894, symBinAddr: 0x6894, symSize: 0xB4 }
+  - { offset: 0x3B2B0, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement objectForKeyedSubscript:]', symObjAddr: 0x2948, symBinAddr: 0x6948, symSize: 0x4 }
+  - { offset: 0x3B2F5, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement objectAtIndexedSubscript:]', symObjAddr: 0x294C, symBinAddr: 0x694C, symSize: 0x4C }
+  - { offset: 0x3B33E, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement description]', symObjAddr: 0x2998, symBinAddr: 0x6998, symSize: 0x8C }
+  - { offset: 0x3B45B, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement isEqual:]', symObjAddr: 0x2A24, symBinAddr: 0x6A24, symSize: 0x80 }
+  - { offset: 0x3B4A4, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement hash]', symObjAddr: 0x2AA4, symBinAddr: 0x6AA4, symSize: 0x4 }
+  - { offset: 0x3B4DA, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement XPath:]', symObjAddr: 0x2AA8, symBinAddr: 0x6AA8, symSize: 0x8C }
+  - { offset: 0x3B534, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement functionResultByEvaluatingXPath:]', symObjAddr: 0x2B34, symBinAddr: 0x6B34, symSize: 0x9C }
+  - { offset: 0x3B5A6, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement enumerateElementsWithXPath:block:]', symObjAddr: 0x2BD0, symBinAddr: 0x6BD0, symSize: 0x98 }
+  - { offset: 0x3B5FC, size: 0x8, addend: 0x0, symName: '___50-[ONOXMLElement enumerateElementsWithXPath:block:]_block_invoke', symObjAddr: 0x2C68, symBinAddr: 0x6C68, symSize: 0xC }
+  - { offset: 0x3B678, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement enumerateElementsWithXPath:usingBlock:]', symObjAddr: 0x2C74, symBinAddr: 0x6C74, symSize: 0x144 }
+  - { offset: 0x3B72B, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement firstChildWithXPath:]', symObjAddr: 0x2DB8, symBinAddr: 0x6DB8, symSize: 0xA0 }
+  - { offset: 0x3B78C, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement CSS:]', symObjAddr: 0x2E58, symBinAddr: 0x6E58, symSize: 0x54 }
+  - { offset: 0x3B7EC, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement enumerateElementsWithCSS:block:]', symObjAddr: 0x2EAC, symBinAddr: 0x6EAC, symSize: 0xB4 }
+  - { offset: 0x3B858, size: 0x8, addend: 0x0, symName: '___48-[ONOXMLElement enumerateElementsWithCSS:block:]_block_invoke', symObjAddr: 0x2F60, symBinAddr: 0x6F60, symSize: 0xC }
+  - { offset: 0x3B8D4, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement enumerateElementsWithCSS:usingBlock:]', symObjAddr: 0x2F6C, symBinAddr: 0x6F6C, symSize: 0x64 }
+  - { offset: 0x3B940, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement firstChildWithCSS:]', symObjAddr: 0x2FD0, symBinAddr: 0x6FD0, symSize: 0xA0 }
+  - { offset: 0x3B9A1, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement xmlXPathObjectPtrWithXPath:]', symObjAddr: 0x3070, symBinAddr: 0x7070, symSize: 0x1C4 }
+  - { offset: 0x3BB5A, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement methodSignatureForSelector:]', symObjAddr: 0x3234, symBinAddr: 0x7234, symSize: 0x4C }
+  - { offset: 0x3BBA3, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement forwardInvocation:]', symObjAddr: 0x3280, symBinAddr: 0x7280, symSize: 0x54 }
+  - { offset: 0x3BBE8, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement copyWithZone:]', symObjAddr: 0x32D4, symBinAddr: 0x72D4, symSize: 0x74 }
+  - { offset: 0x3BC42, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement initWithCoder:]', symObjAddr: 0x3348, symBinAddr: 0x7348, symSize: 0x1A8 }
+  - { offset: 0x3BCC3, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement encodeWithCoder:]', symObjAddr: 0x34F0, symBinAddr: 0x74F0, symSize: 0x164 }
+  - { offset: 0x3BD40, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement document]', symObjAddr: 0x3654, symBinAddr: 0x7654, symSize: 0x18 }
+  - { offset: 0x3BD78, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setDocument:]', symObjAddr: 0x366C, symBinAddr: 0x766C, symSize: 0xC }
+  - { offset: 0x3BDB9, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setNamespace:]', symObjAddr: 0x3678, symBinAddr: 0x7678, symSize: 0x8 }
+  - { offset: 0x3BDF9, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setTag:]', symObjAddr: 0x3680, symBinAddr: 0x7680, symSize: 0x8 }
+  - { offset: 0x3BE39, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setLineNumber:]', symObjAddr: 0x3688, symBinAddr: 0x7688, symSize: 0x8 }
+  - { offset: 0x3BE77, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setAttributes:]', symObjAddr: 0x3690, symBinAddr: 0x7690, symSize: 0xC }
+  - { offset: 0x3BEB9, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setParent:]', symObjAddr: 0x369C, symBinAddr: 0x769C, symSize: 0xC }
+  - { offset: 0x3BEFB, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setPreviousSibling:]', symObjAddr: 0x36A8, symBinAddr: 0x76A8, symSize: 0xC }
+  - { offset: 0x3BF3D, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setNextSibling:]', symObjAddr: 0x36B4, symBinAddr: 0x76B4, symSize: 0xC }
+  - { offset: 0x3BF7F, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement rawXMLString]', symObjAddr: 0x36C0, symBinAddr: 0x76C0, symSize: 0x8 }
+  - { offset: 0x3BFB7, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setRawXMLString:]', symObjAddr: 0x36C8, symBinAddr: 0x76C8, symSize: 0x8 }
+  - { offset: 0x3BFF7, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setStringValue:]', symObjAddr: 0x36D0, symBinAddr: 0x76D0, symSize: 0x8 }
+  - { offset: 0x3C037, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setNumberValue:]', symObjAddr: 0x36D8, symBinAddr: 0x76D8, symSize: 0x8 }
+  - { offset: 0x3C077, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setDateValue:]', symObjAddr: 0x36E0, symBinAddr: 0x76E0, symSize: 0x8 }
+  - { offset: 0x3C0B7, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement xmlNode]', symObjAddr: 0x36E8, symBinAddr: 0x76E8, symSize: 0x8 }
+  - { offset: 0x3C0EE, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement setXmlNode:]', symObjAddr: 0x36F0, symBinAddr: 0x76F0, symSize: 0x8 }
+  - { offset: 0x3C12B, size: 0x8, addend: 0x0, symName: '-[ONOXMLElement .cxx_destruct]', symObjAddr: 0x36F8, symBinAddr: 0x76F8, symSize: 0x98 }
+  - { offset: 0x3C15F, size: 0x8, addend: 0x0, symName: ___ONOIdRegularExpression_block_invoke, symObjAddr: 0x3790, symBinAddr: 0x7790, symSize: 0x44 }
+  - { offset: 0x3C186, size: 0x8, addend: 0x0, symName: ___ONOClassRegularExpression_block_invoke, symObjAddr: 0x37D4, symBinAddr: 0x77D4, symSize: 0x44 }
+  - { offset: 0x3C1AD, size: 0x8, addend: 0x0, symName: ___ONOAttributeRegularExpression_block_invoke, symObjAddr: 0x3818, symBinAddr: 0x7818, symSize: 0x44 }
+...
