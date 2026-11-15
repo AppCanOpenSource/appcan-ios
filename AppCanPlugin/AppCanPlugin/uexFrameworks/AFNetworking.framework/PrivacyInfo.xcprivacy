@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+    AFNetworking 隐私清单，2026-11-13 由 AppCan 维护者编写，非 AFNetworking 官方提供。
+    依据：当前交付的 AFNetworking 4.0.1 二进制符号与选择子检查，未发现受管 API 调用
+    （无 systemUptime、mach_absolute_time、NSUserDefaults；attributesOfItemAtPath:error:
+    仅配合 NSFileSize 读取文件大小），也未发现跟踪或数据收集行为。
+    按苹果 TN3181（Debugging an invalid privacy manifest）：没有受管 API、没有跟踪域名、
+    没有数据收集时应省略对应字段，而不是保留空数组，因此本文件只声明 NSPrivacyTracking。
+    二进制检查不等于源码全量审计，替换框架版本或实现变化后须重新核对。
+    本清单只描述网络库自身，不代替调用方对业务请求数据、插件和服务端行为的声明。
+    接入时须随框架资源交付，并核对最终 APP 内的 Frameworks/AFNetworking.framework/PrivacyInfo.xcprivacy。
+    -->
+    <key>NSPrivacyTracking</key>
+    <false/>
+</dict>
+</plist>
